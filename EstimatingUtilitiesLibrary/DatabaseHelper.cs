@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary
         private const string DB_FMT = "O";
         //private const bool DEBUG = true;
 
-        static private SQLiteDatabase SQLiteDB; 
+        static private SQLiteDatabase SQLiteDB;
 
         static private Dictionary<TableBase, List<StackItem>> indexesToUpdate;
         static private bool isCompatbile;
@@ -142,8 +142,8 @@ namespace EstimatingUtilitiesLibrary
             File.Copy(tempPath, path, true);
 
             File.Delete(tempPath);
-           // watch.Stop();
-           // Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
+            // watch.Stop();
+            // Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
 
         static public void CreateDB(string path, bool isBidDB = true)
@@ -153,7 +153,8 @@ namespace EstimatingUtilitiesLibrary
             if (isBidDB)
             {
                 createAllBidTables();
-            } else
+            }
+            else
             {
                 createAllTemplateTables();
             }
@@ -192,7 +193,7 @@ namespace EstimatingUtilitiesLibrary
                 //Breaks Visual Scope in a page
                 //populatePageVisualConnections(bid.Drawings, bid.Connections);
                 bid.Estimate.Refresh();
-                
+
                 return bid;
             }
             else
@@ -207,46 +208,47 @@ namespace EstimatingUtilitiesLibrary
             {
                 createTemplateIndexes();
                 TECTemplates templates = new TECTemplates();
-                var watch = System.Diagnostics.Stopwatch.StartNew();
+                //var watch = System.Diagnostics.Stopwatch.StartNew();
                 templates = getTemplatesInfo();
-                watch.Stop();
-                Console.WriteLine("getTemplatesInfo: " + watch.ElapsedMilliseconds);
-                watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Stop();
+                //Console.WriteLine("getTemplatesInfo: " + watch.ElapsedMilliseconds);
+                //watch = System.Diagnostics.Stopwatch.StartNew();
                 getScopeManagerProperties(templates);
-                watch.Stop();
-                Console.WriteLine("getScopeManagerProperties: " + watch.ElapsedMilliseconds);
-                watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Stop();
+                //Console.WriteLine("getScopeManagerProperties: " + watch.ElapsedMilliseconds);
+                //watch = System.Diagnostics.Stopwatch.StartNew();
                 templates.SystemTemplates = getSystems();
-                watch.Stop();
-                Console.WriteLine("getSystems: " + watch.ElapsedMilliseconds);
-                watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Stop();
+                //Console.WriteLine("getSystems: " + watch.ElapsedMilliseconds);
+                //watch = System.Diagnostics.Stopwatch.StartNew();
                 templates.EquipmentTemplates = getOrphanEquipment();
-                watch.Stop();
-                Console.WriteLine("getOrphanEquipment: " + watch.ElapsedMilliseconds);
-                watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Stop();
+                //Console.WriteLine("getOrphanEquipment: " + watch.ElapsedMilliseconds);
+                //watch = System.Diagnostics.Stopwatch.StartNew();
                 templates.SubScopeTemplates = getOrphanSubScope();
-                watch.Stop();
-                Console.WriteLine("getOrphanSubScope: " + watch.ElapsedMilliseconds);
-                watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Stop();
+                //Console.WriteLine("getOrphanSubScope: " + watch.ElapsedMilliseconds);
+                //watch = System.Diagnostics.Stopwatch.StartNew();
                 templates.ControllerTemplates = getOrphanControllers();
-                watch.Stop();
-                Console.WriteLine("getOrphanControllers: " + watch.ElapsedMilliseconds);
-                watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Stop();
+                //Console.WriteLine("getOrphanControllers: " + watch.ElapsedMilliseconds);
+                //watch = System.Diagnostics.Stopwatch.StartNew();
                 templates.MiscCostTemplates = getMisc();
-                watch.Stop();
-                Console.WriteLine("getMisc: " + watch.ElapsedMilliseconds);
-                watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Stop();
+                //Console.WriteLine("getMisc: " + watch.ElapsedMilliseconds);
+                //watch = System.Diagnostics.Stopwatch.StartNew();
                 templates.PanelTemplates = getOrphanPanels();
-                watch.Stop();
-                Console.WriteLine("getOrphanPanels: " + watch.ElapsedMilliseconds);
+                //watch.Stop();
+                //Console.WriteLine("getOrphanPanels: " + watch.ElapsedMilliseconds);
                 ModelLinkingHelper.LinkTemplates(templates);
                 return templates;
-            } else
+            }
+            else
             {
                 return new TECTemplates();
             }
         }
-        
+
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();
@@ -425,7 +427,7 @@ namespace EstimatingUtilitiesLibrary
         }
         static private ObservableCollection<TECCost> getRatedCostsInComponent(Guid componentID)
         {
-            
+
             string command = "select " + ElectricalMaterialRatedCostTable.CostID.Name + ", " + ElectricalMaterialRatedCostTable.Quantity.Name + " from " + ElectricalMaterialRatedCostTable.TableName + " where ";
             command += ElectricalMaterialRatedCostTable.ComponentID.Name + " = '" + componentID;
             command += "'";
@@ -444,7 +446,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-            string command = "select "+ allFieldsInTableString(new PanelTable()) +" from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new PanelTable()) + " from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
             command += "(select " + SystemPanelTable.PanelID.Name + " from " + SystemPanelTable.TableName + " where ";
             command += SystemPanelTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -481,7 +483,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECSystem> children = new ObservableCollection<TECSystem>();
 
-            string command = "select "+ allFieldsInTableString(new SystemTable())+" from " + SystemTable.TableName;
+            string command = "select " + allFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
             command += " where " + SystemTable.SystemID.Name + " in ";
             command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName;
             command += " where " + SystemHierarchyTable.ParentID.Name + " = '";
@@ -499,7 +501,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECController> getControllersInSystem(Guid guid)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            string command = "select "+allFieldsInTableString(new ControllerTable())+" from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
             command += "(select " + SystemControllerTable.ControllerID.Name + " from " + SystemControllerTable.TableName + " where ";
             command += SystemControllerTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -517,7 +519,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECScopeBranch> getScopeBranchesInSystem(Guid guid)
         {
             ObservableCollection<TECScopeBranch> branches = new ObservableCollection<TECScopeBranch>();
-            string command = "select "+allFieldsInTableString(new ScopeBranchTable())+" from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
             command += "(select " + SystemScopeBranchTable.BranchID.Name + " from " + SystemScopeBranchTable.TableName + " where ";
             command += SystemScopeBranchTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -541,7 +543,7 @@ namespace EstimatingUtilitiesLibrary
         static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            string command = "select "+allFieldsInTableString(new MiscTable())+" from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
+            string command = "select " + allFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
             command += "(select " + SystemMiscTable.MiscID.Name + " from " + SystemMiscTable.TableName + " where ";
             command += SystemMiscTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -578,7 +580,7 @@ namespace EstimatingUtilitiesLibrary
             //command += "(select " + AssociatedCostTable.AssociatedCostID.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
             //command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
             //command += "')";
-            string command = "select " + ScopeAssociatedCostTable.AssociatedCostID.Name + ", "+ ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
+            string command = "select " + ScopeAssociatedCostTable.AssociatedCostID.Name + ", " + ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
             command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
             command += "'";
             DataTable DT = SQLiteDB.getDataFromCommand(command);
@@ -720,7 +722,7 @@ namespace EstimatingUtilitiesLibrary
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
-            string command = "select "+allFieldsInTableString(new EquipmentTable())+" from " + EquipmentTable.TableName;
+            string command = "select " + allFieldsInTableString(new EquipmentTable()) + " from " + EquipmentTable.TableName;
             command += " where " + EquipmentTable.EquipmentID.Name + " not in ";
             command += "(select " + SystemEquipmentTable.EquipmentID.Name;
             command += " from " + SystemEquipmentTable.TableName + ")";
@@ -776,7 +778,7 @@ namespace EstimatingUtilitiesLibrary
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
 
             string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
-                SubScopeDeviceTable.DeviceID.Name, SubScopeDeviceTable.TableName, 
+                SubScopeDeviceTable.DeviceID.Name, SubScopeDeviceTable.TableName,
                 SubScopeDeviceTable.SubScopeID.Name, subScopeID, SubScopeDeviceTable.Quantity.Name);
             explain(command);
             DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
@@ -997,7 +999,7 @@ namespace EstimatingUtilitiesLibrary
             { ioModules.Add(getIOModuleFromRow(row)); }
             return ioModules;
         }
-        
+
         static private TECSubScope getSubScopeInSubScopeConnection(Guid connectionID)
         {
             TECSubScope outScope = null;
@@ -1036,7 +1038,7 @@ namespace EstimatingUtilitiesLibrary
 
         static private TECManufacturer getManufacturerInController(Guid controllerID)
         {
-            
+
             string command = "select " + ControllerManufacturerTable.ManufacturerID.Name + " from " + ControllerManufacturerTable.TableName;
             command += " where " + ControllerManufacturerTable.ControllerID.Name + " = '";
             command += controllerID;
@@ -1147,7 +1149,7 @@ namespace EstimatingUtilitiesLibrary
 
             return controllers;
         }
-        
+
         static private ObservableCollection<TECConnection> getConnectionsInController(TECController controller)
         {
             var tables = getAllTableNames();
@@ -1205,7 +1207,7 @@ namespace EstimatingUtilitiesLibrary
             else
             { return null; }
         }
-        
+
         static private ObservableCollection<TECMisc> getMiscInBid()
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
@@ -1395,7 +1397,7 @@ namespace EstimatingUtilitiesLibrary
                 if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
                 {
                     string version = infoRow[BidInfoTable.DBVersion.Name].ToString();
-                    if(UtilitiesMethods.IsLowerVersion(lowestCompatible, version))
+                    if (UtilitiesMethods.IsLowerVersion(lowestCompatible, version))
                     {
                         isCompatbile = false;
                         return false;
@@ -1586,12 +1588,12 @@ namespace EstimatingUtilitiesLibrary
             //Console.WriteLine("getMiscInSystem: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
             controlledScope.ScopeBranches = getScopeBranchesInSystem(guid);
-           // watch.Stop();
-           // Console.WriteLine("getScopeBranchesInSystem: " + watch.ElapsedMilliseconds);
-           // watch = System.Diagnostics.Stopwatch.StartNew();
+            // watch.Stop();
+            // Console.WriteLine("getScopeBranchesInSystem: " + watch.ElapsedMilliseconds);
+            // watch = System.Diagnostics.Stopwatch.StartNew();
             getScopeChildren(controlledScope);
-           // watch.Stop();
-           // Console.WriteLine("getScopeChildren: " + watch.ElapsedMilliseconds);
+            // watch.Stop();
+            // Console.WriteLine("getScopeChildren: " + watch.ElapsedMilliseconds);
 
             return controlledScope;
         }
@@ -2201,7 +2203,7 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach(TECMisc misc in system.MiscCosts)
+            foreach (TECMisc misc in system.MiscCosts)
             {
                 addObject(new StackItem(change, system, misc, typeof(TECSystem), typeof(TECMisc)));
             }
@@ -2214,9 +2216,9 @@ namespace EstimatingUtilitiesLibrary
                 addObject(new StackItem(change, system, childScope));
                 saveFullSystem(childScope, scopeManager);
             }
-            foreach(KeyValuePair<TECScope, List<TECScope>> item in system.CharactersticInstances.GetFullDictionary())
+            foreach (KeyValuePair<TECScope, List<TECScope>> item in system.CharactersticInstances.GetFullDictionary())
             {
-                foreach(TECScope value in item.Value)
+                foreach (TECScope value in item.Value)
                 {
                     addRelationship(new StackItem(Change.AddRelationship, item.Key, value, typeof(TECScope), typeof(TECScope)));
                 }
@@ -2345,7 +2347,7 @@ namespace EstimatingUtilitiesLibrary
         private static void saveDeviceChildProperties(TECDevice device)
         {
             if (device.Manufacturer != null) { addObject(new StackItem(Change.Add, device, device.Manufacturer)); }
-            foreach(TECConnectionType type in device.ConnectionTypes)
+            foreach (TECConnectionType type in device.ConnectionTypes)
             {
                 addObject(new StackItem(Change.Add, device, type));
             }
@@ -2517,7 +2519,7 @@ namespace EstimatingUtilitiesLibrary
         private static void removeObjectFromTable(TableBase table, StackItem item)
         {
             var tableInfo = new TableInfo(table);
-            
+
             if (fieldsIncludeQuantity(tableInfo.Fields))
             {
                 var qty = getQuantityInParentCollection(item.TargetObject, item.ReferenceObject);
@@ -2564,7 +2566,7 @@ namespace EstimatingUtilitiesLibrary
                 { addToIndexUpdates(indexesToUpdate, item, table); }
                 else
                 { editObjectInTable(table, item); }
-                
+
 
             }
         }
@@ -2640,11 +2642,11 @@ namespace EstimatingUtilitiesLibrary
                 relevantObjects = new object[]
                 { item.TargetObject };
             }
-            if(tableInfo.PrimaryFields.Count == 1 && item.Change == Change.Remove)
+            if (tableInfo.PrimaryFields.Count == 1 && item.Change == Change.Remove)
             {
                 return assembleDataWithItem(data, item, tableInfo.PrimaryFields[0]);
             }
-            
+
             int currentField = 0;
             foreach (TableField field in tableInfo.Fields)
             {
@@ -3045,12 +3047,13 @@ namespace EstimatingUtilitiesLibrary
         {
             var tableInfo = new TableInfo(table);
             string command = "";
-            for(int x = 0; x < tableInfo.Fields.Count; x++)
+            for (int x = 0; x < tableInfo.Fields.Count; x++)
             {
-                if(x != tableInfo.Fields.Count - 1)
+                if (x != tableInfo.Fields.Count - 1)
                 {
-                    command += tableInfo.Name + "."+ tableInfo.Fields[x].Name + ", ";
-                }else
+                    command += tableInfo.Name + "." + tableInfo.Fields[x].Name + ", ";
+                }
+                else
                 {
                     command += tableInfo.Name + "." + tableInfo.Fields[x].Name;
                 }

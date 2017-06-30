@@ -253,9 +253,7 @@ namespace TECUserControlLibrary.ViewModels
             setupInterfaceDefaults();
             setupVMs();
         }
-
         
-
         #region Methods
         public void Refresh(TECTemplates templates)
         {
