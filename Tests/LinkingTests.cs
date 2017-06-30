@@ -108,22 +108,72 @@ namespace Tests
         }
         #endregion
 
-        #region System Linking
         [TestMethod]
-        public void SystemLinking()
+        public void ScopeChildrenLinking()
         {
-            foreach(TECSystem typical in bid.Systems)
+            foreach (TECSystem typical in bid.Systems)
             {
                 checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
                 checkScopeLocationLinks(typical, bid);
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.SystemInstances)
                 {
-                    checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
-                    checkScopeLocationLinks(typical, bid);
+                    checkScopeChildrenCatalogLinks(instance, bid.Catalogs);
+                    checkScopeLocationLinks(instance, bid);
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        checkScopeChildrenCatalogLinks(equip, bid.Catalogs);
+                        checkScopeLocationLinks(equip, bid);
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            checkScopeChildrenCatalogLinks(ss, bid.Catalogs);
+                            checkScopeLocationLinks(ss, bid);
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                checkScopeChildrenCatalogLinks(point, bid.Catalogs);
+                                checkScopeLocationLinks(point, bid);
+                            }
+                        }
+                    }
                 }
+                foreach (TECController control in typical.Controllers)
+                {
+                    checkScopeChildrenCatalogLinks(control, bid.Catalogs);
+                    checkScopeLocationLinks(control, bid);
+                }
+                foreach (TECPanel panel in typical.Panels)
+                {
+                    checkScopeChildrenCatalogLinks(panel, bid.Catalogs);
+                    checkScopeLocationLinks(panel, bid);
+                }
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    checkScopeChildrenCatalogLinks(equip, bid.Catalogs);
+                    checkScopeLocationLinks(equip, bid);
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        checkScopeChildrenCatalogLinks(ss, bid.Catalogs);
+                        checkScopeLocationLinks(ss, bid);
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            checkScopeChildrenCatalogLinks(point, bid.Catalogs);
+                            checkScopeLocationLinks(point, bid);
+                        }
+                    }
+                }
+            }
+            foreach(TECController control in bid.Controllers)
+            {
+                checkScopeChildrenCatalogLinks(control, bid.Catalogs);
+                checkScopeLocationLinks(control, bid);
+            }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                checkScopeChildrenCatalogLinks(panel, bid.Catalogs);
+                checkScopeLocationLinks(panel, bid);
             }
         }
 
+        #region System Linking
         [TestMethod]
         public void TypicalDictionaryLinking()
         {
@@ -229,6 +279,98 @@ namespace Tests
             }
         }
         #endregion
+
+        [TestMethod]
+        //Checks controller manufacturer is in catalogs.
+        public void ControllerLinking()
+        {
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                    }
+                }
+                foreach (TECController controller in typical.Controllers)
+                {
+                    Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                }
+            }
+            foreach (TECController controller in bid.Controllers)
+            {
+                Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+            }
+        }
+
+        [TestMethod]
+        //Checks panel connected to a controller in a bid and panel type in panel is in catalogs.
+        public void PanelLinking()
+        {
+            foreach(TECPanel panel in bid.Panels)
+            {
+                foreach(TECController panelControl in panel.Controllers)
+                {
+                    Assert.IsTrue(bid.Controllers.Contains(panelControl), "Controller in panel not found in bid.");
+                }
+                Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
+            }
+            foreach(TECSystem typical in bid.Systems)
+            {
+                foreach(TECPanel panel in typical.Panels)
+                {
+                    foreach (TECController panelControl in panel.Controllers)
+                    {
+                        Assert.IsTrue(typical.Controllers.Contains(panelControl), "Controller in panel not found in typical.");
+                    }
+                    Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
+                }
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECPanel panel in instance.Panels)
+                    {
+                        foreach (TECController panelControl in panel.Controllers)
+                        {
+                            Assert.IsTrue(instance.Controllers.Contains(panelControl), "Controller in panel not found in instance.");
+                        }
+                        Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        //Checks every device in subscope is in catalogs.
+        public void SubScopeLinking()
+        {
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            foreach (TECDevice dev in ss.Devices)
+                            {
+                                Assert.IsTrue(bid.Catalogs.Devices.Contains(dev));
+                            }
+                        }
+                    }
+                }
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECDevice dev in ss.Devices)
+                        {
+                            Assert.IsTrue(bid.Catalogs.Devices.Contains(dev));
+                        }
+                    }
+                }
+            }
+        }
 
         #region Connection Linking
         [TestMethod]
