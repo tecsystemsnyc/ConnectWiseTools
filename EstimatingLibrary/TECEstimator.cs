@@ -29,6 +29,11 @@ namespace EstimatingLibrary
 
         #region Cost and Labor
 
+        public double TECFieldLabor
+        {
+            get { return tecCost.Labor; }
+        }
+        
         public double PMPointLaborHours
         {
             get { return getPMPointHours(bid); }
