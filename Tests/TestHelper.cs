@@ -978,5 +978,24 @@ namespace Tests
                 return true;
             }
         }
+
+        public static bool IsInBid(TECSubScope subScope, TECBid bid)
+        {
+            foreach(TECSystem typical in bid.Systems)
+            {
+                if (typical.SubScope.Contains(subScope))
+                {
+                    return true;
+                }
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    if (instance.SubScope.Contains(subScope))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }
