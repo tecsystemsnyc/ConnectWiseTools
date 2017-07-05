@@ -17,6 +17,7 @@ namespace Tests
             DatabaseHelper.CreateDB(path);
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+
             AddToBidInfoTable();
             AddToBidParametersTable();
             AddToLaborConstantsTable();
@@ -84,6 +85,18 @@ namespace Tests
             AddToSystemMiscTable();
             AddToCharacteristicScopeInstanceScopeTable();
             
+            SQLiteDB.nonQueryCommand("END TRANSACTION");
+            SQLiteDB.Connection.Close();
+        }
+
+        public static void CreateTestTemplates(string path)
+        {
+            DatabaseHelper.CreateDB(path, DatabaseHelper.DBType.Templates);
+            SQLiteDB = new SQLiteDatabase(path);
+            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+
+            AddToLaborConstantsTable();
+
             SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }

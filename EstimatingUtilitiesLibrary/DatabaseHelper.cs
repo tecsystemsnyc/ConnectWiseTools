@@ -21,6 +21,8 @@ namespace EstimatingUtilitiesLibrary
 {
     public static class DatabaseHelper
     {
+        public enum DBType { Bid, Templates }
+
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
         private const string DB_FMT = "O";
         //private const bool DEBUG = true;
@@ -146,17 +148,21 @@ namespace EstimatingUtilitiesLibrary
             // Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
 
-        static public void CreateDB(string path, bool isBidDB = true)
+        static public void CreateDB(string path, DBType type = DBType.Bid)
         {
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
-            if (isBidDB)
+            if (type == DBType.Bid)
             {
                 createAllBidTables();
             }
-            else
+            else if (type == DBType.Templates)
             {
                 createAllTemplateTables();
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
             SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
