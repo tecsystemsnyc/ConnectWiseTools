@@ -34,7 +34,6 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -202,6 +201,16 @@
                    Grid.Row="6" Grid.Column="5"/>
         <TextBlock Text="{Binding Bid.Labor.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="6" Grid.Column="6"/>
+        <TextBlock Text="{Binding Bid.Estimate.TECFieldLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
+                   Grid.Row="6" Grid.Column="7"/>
+
+        <!--TEC Labor Subtotal-->
+        <TextBlock Text="TEC Labor Total:"
+                   Grid.Row="7" Grid.Column="6"
+                   HorizontalAlignment="Right"
+                   Margin="0 0 5 0"/>
+        <TextBlock Text="{Binding Bid.Estimate.TECLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
+                   Grid.Row="7" Grid.Column="7"/>
 
         <!--Subcontractor Labor Headers-->
         <TextBlock Text="Subcontractor Labor"
@@ -240,15 +249,16 @@
         <TextBlock Text="{Binding Bid.Estimate.ElectricalSuperLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="11" Grid.Column="7"
                  />
-
-
-        <!--Total Values-->
-        <TextBlock Text="Total"
-               Grid.Row="12" Grid.Column="7"/>
-        <TextBlock Text="{Binding Bid.Estimate.TotalLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
-                 Grid.Row="13" Grid.Column="7"
-                 />
         
+        <!--Subcontractor Labor Subtotal-->
+        <TextBlock Text="Subcontractor Labor Total:"
+                   Grid.Row="12" Grid.Column="5"
+                   Grid.ColumnSpan="2"
+                   HorizontalAlignment="Right"
+                   Margin="0 0 5 0"/>
+        <TextBlock Text="{Binding Bid.Estimate.SubcontractorLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
+                   Grid.Row="12" Grid.Column="7"/>
+
         <!--Boolean Modifiers-->
         <Grid Grid.Column="8" Grid.Row="9">
             <Grid.ColumnDefinitions>
@@ -282,6 +292,7 @@
                        TextAlignment="Center">Reload Coefficients<LineBreak/>and Rates</TextBlock>
         </Button>
 
+        <!--TEC Labor Borders-->
         <Border Grid.Column="1" 
                   Grid.Row="1"
                   Grid.ColumnSpan="7"
@@ -307,6 +318,20 @@
                 Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
+        <Border Grid.Column="1"
+                Grid.Row="6"
+                Grid.ColumnSpan="7"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+        
+        <!--Separation Border-->
+        <Border Grid.Column="0"
+                Grid.Row="8"
+                Grid.ColumnSpan="11"
+                BorderThickness="0 0 0 1"
+                BorderBrush="Black"/>
+
+        <!--Subcontractor Labor Borders-->
         <Border Grid.Column="1" 
                   Grid.Row="10"
                   Grid.ColumnSpan="7"
@@ -317,7 +342,5 @@
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"/>
-
-
     </Grid>
 </UserControl>

@@ -29,9 +29,16 @@ namespace EstimatingLibrary
 
         #region Cost and Labor
 
-        public double TECFieldLabor
+        public double TECFieldHours
         {
             get { return tecCost.Labor; }
+        }
+        public double TECFieldLaborCost
+        {
+            get
+            {
+                { return TECFieldHours * bid.Labor.CommRate; }
+            }
         }
         
         public double PMPointLaborHours
@@ -248,123 +255,125 @@ namespace EstimatingLibrary
             string message = "Propertychanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (!omitStrings.Contains(e.PropertyName))
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                object oldValue = args.OldValue;
-                object newValue = args.NewValue;
-                if (e.PropertyName == "Add")
+                if (e is PropertyChangedExtendedEventArgs<Object>)
                 {
-                    message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    if(!(oldValue is TECCatalogs))
+                    PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                    object oldValue = args.OldValue;
+                    object newValue = args.NewValue;
+                    if (e.PropertyName == "Add")
                     {
-                        if(newValue is TECSystem && oldValue is TECSystem)
+                        message = "Add change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        if (!(oldValue is TECCatalogs))
                         {
-                            handleInstanceAdded(newValue as TECSystem, oldValue as TECSystem);
-                        }
-                        else if (newValue is TECMisc && oldValue is TECSystem)
-                        {
-                            handleAddMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
-                        }
-                        else if (newValue is TECSubScopeConnection && oldValue is TECController)
-                        {
-                            if (!isTypical(newValue as TECSubScopeConnection))
+                            if (newValue is TECSystem && oldValue is TECSystem)
+                            {
+                                handleInstanceAdded(newValue as TECSystem, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECMisc && oldValue is TECSystem)
+                            {
+                                handleAddMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECSubScopeConnection && oldValue is TECController)
+                            {
+                                if (!isTypical(newValue as TECSubScopeConnection))
+                                {
+                                    addCost(newValue);
+                                    addPoints(newValue);
+                                }
+                            }
+                            else
                             {
                                 addCost(newValue);
                                 addPoints(newValue);
                             }
                         }
-                        else
-                        {
-                            addCost(newValue);
-                            addPoints(newValue);
-                        }
                     }
-                }
-                else if (e.PropertyName == "Remove")
-                {
-                    message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    if (!(oldValue is TECCatalogs))
+                    else if (e.PropertyName == "Remove")
                     {
-                        if (newValue is TECSystem && oldValue is TECSystem)
+                        message = "Remove change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        if (!(oldValue is TECCatalogs))
                         {
-                            handleInstanceRemoved(newValue as TECSystem, oldValue as TECSystem);
-                        }
-                        else if (newValue is TECMisc && oldValue is TECSystem)
-                        {
-                            handleRemoveMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
-                        }
-                        else if (newValue is TECSystem && oldValue is TECBid)
-                        {
-                            handleTypicalRemoved(newValue as TECSystem);
-                        }
-                        else if (newValue is TECSubScopeConnection && oldValue is TECController)
-                        {
-                            if (!isTypical(newValue as TECSubScopeConnection))
+                            if (newValue is TECSystem && oldValue is TECSystem)
+                            {
+                                handleInstanceRemoved(newValue as TECSystem, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECMisc && oldValue is TECSystem)
+                            {
+                                handleRemoveMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECSystem && oldValue is TECBid)
+                            {
+                                handleTypicalRemoved(newValue as TECSystem);
+                            }
+                            else if (newValue is TECSubScopeConnection && oldValue is TECController)
+                            {
+                                if (!isTypical(newValue as TECSubScopeConnection))
+                                {
+                                    removeCost(newValue);
+                                    removePoints(newValue);
+                                }
+                            }
+                            else
                             {
                                 removeCost(newValue);
                                 removePoints(newValue);
                             }
                         }
-                        else
-                        {
-                            removeCost(newValue);
-                            removePoints(newValue);
-                        }
-                    }
-                }
-                else if (omitStrings.Contains(e.PropertyName)) { }
-                else
-                {
-                    message = "Edit change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                    if (oldValue is TECSubScopeConnection && newValue is TECSubScopeConnection)
-                    {
-                        if(!isTypical(newValue as TECSubScopeConnection))
-                        {
-                            editCost(newValue, oldValue);
-                            editPoints(newValue, oldValue);
-                        }
                     }
                     else
                     {
-                        editCost(newValue, oldValue);
-                        editPoints(newValue, oldValue);
+                        message = "Edit change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-                        if (bid.GetType().GetProperty(e.PropertyName) != null)
+                        if (oldValue is TECSubScopeConnection && newValue is TECSubScopeConnection)
                         {
-                            var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
-                            if (list != null)
+                            if (!isTypical(newValue as TECSubScopeConnection))
                             {
-                                foreach (object item in list)
-                                {
-                                    addCost(item);
-                                    addPoints(item);
-                                }
+                                editCost(newValue, oldValue);
+                                editPoints(newValue, oldValue);
                             }
                         }
-                        if (newValue is TECBidParameters)
+                        else
                         {
-                            raiseMaterial();
-                            raiseTECTotals();
-                            raiseSubcontractorTotals();
-                        }
-                        else if (newValue is TECLabor)
-                        {
-                            raiseTECLabor();
-                            raiseElectricalLabor();
+                            editCost(newValue, oldValue);
+                            editPoints(newValue, oldValue);
+
+                            if (bid.GetType().GetProperty(e.PropertyName) != null)
+                            {
+                                var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
+                                if (list != null)
+                                {
+                                    foreach (object item in list)
+                                    {
+                                        addCost(item);
+                                        addPoints(item);
+                                    }
+                                }
+                            }
+                            if (newValue is TECBidParameters)
+                            {
+                                raiseMaterial();
+                                raiseTECTotals();
+                                raiseSubcontractorTotals();
+                            }
+                            else if (newValue is TECLabor)
+                            {
+                                raiseTECLabor();
+                                raiseElectricalLabor();
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                else
+                {
+                    message = "Property not compatible: " + e.PropertyName;
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
+                }
             }
         }
 
@@ -1014,6 +1023,9 @@ namespace EstimatingLibrary
         }
         private void raiseTECLabor()
         {
+            RaisePropertyChanged("TECFieldHours");
+            RaisePropertyChanged("TECFieldLaborCost");
+
             RaisePropertyChanged("PMPointLaborHours");
             RaisePropertyChanged("PMLaborHours");
             RaisePropertyChanged("PMLaborCost");
