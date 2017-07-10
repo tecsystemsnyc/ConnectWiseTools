@@ -489,7 +489,7 @@ namespace EstimatingLibrary
                 if (tecChanged)
                 {
                     raiseMaterial();
-                    raiseLabor();
+                    raiseTECLabor();
                 }
                 if (electricalChanged)
                 {
@@ -623,7 +623,6 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += getTECLaborCost(bid);
-            outCost += getMaterialLabor(bid);
             outCost += getExtendedMaterialCost();
             outCost += outCost * bid.Parameters.Escalation / 100;
             outCost += getTax(bid);
@@ -803,12 +802,7 @@ namespace EstimatingLibrary
 
             return cost;
         }
-
-        public double getMiscLaborCost(TECBid bid)
-        {
-            double cost = tecCost.Labor * bid.Labor.CommRate;
-            return cost;
-        }
+        
 
         /// <summary>
         /// Returns all TEC labor hours
@@ -836,7 +830,6 @@ namespace EstimatingLibrary
             outCost += getSoftLaborCost(bid);
             outCost += getGraphLaborCost(bid);
             outCost += getMaterialLabor(bid);
-            outCost += getMiscLaborCost(bid);
             return outCost;
         }
 
