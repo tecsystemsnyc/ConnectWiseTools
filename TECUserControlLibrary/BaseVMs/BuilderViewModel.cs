@@ -402,9 +402,12 @@ namespace TECUserControlLibrary.ViewModels
                 return saveNew(async);
             }
         }
-        protected bool load(bool async)
+        protected bool load(bool async, string path = null)
         {
-            string path = getLoadPath(workingFileParameters, ScopeDirectoryPath);
+            if(path == null)
+            {
+                path = getLoadPath(workingFileParameters, ScopeDirectoryPath);
+            }
             if (path != null)
             {
                 saveFilePath = path;
