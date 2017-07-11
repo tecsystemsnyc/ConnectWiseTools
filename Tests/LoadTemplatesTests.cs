@@ -360,8 +360,7 @@ namespace Tests
                     break;
                 }
             }
-
-            Guid expectedConnectionGuid = new Guid("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
+            
             Guid expectedIOGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
 
             bool hasIO = false;
@@ -374,15 +373,6 @@ namespace Tests
                 }
             }
 
-            bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
-            {
-                if (conn.Guid == expectedConnectionGuid)
-                {
-                    hasConnection = true;
-                }
-            }
-
             //Assert
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
@@ -390,441 +380,189 @@ namespace Tests
             Assert.AreEqual(expectedType, actualController.NetworkType);
             Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
             Assert.IsTrue(hasIO);
-            Assert.IsTrue(hasConnection);
             testForTag(actualController);
             testForCosts(actualController);
         }
 
-        //----------------------------------Tests above have new values, below do not----------------------------------------------
+        [TestMethod]
+        public void Load_Templates_ConnectionType()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            string expectedName = "Test Connection Type";
+            double expectedCost = 12.48;
+            double expectedLabor = 84.21;
 
+            TECConnectionType actualConnectionType = null;
+            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            {
+                if (connectionType.Guid == expectedGuid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
 
-        //[TestMethod]
-        //public void Load_Templates_Controller()
-        //{
-        //    //Assert
-        //    Assert.AreEqual("Test Controller", actualController.Name);
-        //    Assert.AreEqual("test description", actualController.Description);
-        //    Assert.AreEqual(101, actualController.Cost);
-        //    Assert.AreEqual(2, actualController.IO.Count);
-        //    Assert.AreEqual(IOType.AI, actualController.IO[0].Type);
-        //    Assert.AreEqual("Test Manufacturer", actualController.Manufacturer.Name);
-        //}
+            //Assert
+            Assert.AreEqual(expectedName, actualConnectionType.Name);
+            Assert.AreEqual(expectedCost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedLabor, actualConnectionType.Labor);
 
-        //[TestMethod]
-        //public void Load_Templates_ConnectionType()
-        //{
-        //    bool found = false;
-        //    foreach (TECCost cost in actualConnectionType.AssociatedCosts)
-        //    {
-        //        if (cost.Name == "Test Cost")
-        //        {
-        //            found = true;
-        //            break;
-        //        }
-        //    }
+            testForCosts(actualConnectionType);
+            testForRatedCosts(actualConnectionType);
+        }
 
-        //    Assert.AreEqual("Test ConnectionType", actualConnectionType.Name);
-        //    Assert.AreEqual(10, actualConnectionType.Cost);
-        //    Assert.AreEqual(12, actualConnectionType.Labor);
-        //    Assert.IsTrue(found);
-        //    Assert.AreEqual(2, actualConnectionType.AssociatedCosts.Count);
-        //}
+        [TestMethod]
+        public void Load_Templates_ConduitType()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            string expectedName = "Test Conduit Type";
+            double expectedCost = 45.67;
+            double expectedLabor = 76.54;
 
-        //[TestMethod]
-        //public void Load_Templates_ConduitType()
-        //{
-        //    Assert.AreEqual("Test ConduitType", actualConduitType.Name);
-        //    Assert.AreEqual(12, actualConduitType.Cost);
-        //    Assert.AreEqual(13, actualConduitType.Labor);
-        //    Assert.AreEqual("Test Cost", actualConduitType.AssociatedCosts[0].Name);
+            TECConduitType actualConduitType = null;
+            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            {
+                if (conduitType.Guid == expectedGuid)
+                {
+                    actualConduitType = conduitType;
+                    break;
+                }
+            }
 
-        //}
+            //Assert
+            Assert.AreEqual(expectedName, actualConduitType.Name);
+            Assert.AreEqual(expectedCost, actualConduitType.Cost);
+            Assert.AreEqual(expectedLabor, actualConduitType.Labor);
 
-        //[TestMethod]
-        //public void Load_Templates_AssociatedCost()
-        //{
-        //    Assert.AreEqual("Test Cost", actualAssociatedCost.Name);
-        //    Assert.AreEqual(42, actualAssociatedCost.Cost);
-        //}
+            testForCosts(actualConduitType);
+            testForRatedCosts(actualConduitType);
+        }
 
-        //[TestMethod]
-        //public void Load_Templates_MiscCost()
-        //{
-        //    //Arrange
-        //    TECMisc actualCost = actualTemplates.MiscCostTemplates[0];
+        [TestMethod]
+        public void Load_Templates_AssociatedCosts()
+        {
+            Guid expectedTECGuid = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+            string expectedTECName = "Test TEC Associated Cost";
+            double expectedTECCost = 31;
+            double expectedTECLabor = 13;
+            CostType expectedTECType = CostType.TEC;
 
-        //    //Assert
-        //    Assert.AreEqual("Test Misc Cost", actualCost.Name);
-        //    Assert.AreEqual(654.9648, actualCost.Cost);
-        //    Assert.AreEqual(19, actualCost.Quantity);
-        //}
+            Guid expectedElectricalGuid = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+            string expectedElectricalName = "Test Electrical Associated Cost";
+            double expectedElectricalCost = 42;
+            double expectedElectricalLabor = 24;
+            CostType expectedElectricalType = CostType.Electrical;
 
+            TECCost actualTECCost = null;
+            TECCost actualElectricalCost = null;
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Guid == expectedTECGuid)
+                {
+                    actualTECCost = cost;
+                }
+                else if (cost.Guid == expectedElectricalGuid)
+                {
+                    actualElectricalCost = cost;
+                }
+                if (actualTECCost != null && actualElectricalCost != null)
+                {
+                    break;
+                }
+            }
 
-        //[TestMethod]
-        //public void Load_Templates_IOModules()
-        //{
-        //    //Arrange
-        //    //TECIOModule actualIOModule = actualTemplates.Catalogs.IOModules[0];
+            //Assert
+            Assert.AreEqual(expectedTECName, actualTECCost.Name, "TEC cost name didn't load properly.");
+            Assert.AreEqual(expectedTECCost, actualTECCost.Cost, "TEC cost cost didn't load properly.");
+            Assert.AreEqual(expectedTECLabor, actualTECCost.Labor, "TEC cost labor didn't load properly.");
+            Assert.AreEqual(expectedTECType, actualTECCost.Type, "TEC cost type didn't load properly.");
 
-        //    //Assert
-        //    Assert.AreEqual("Test IO Module", actualIOModule.Name);
-        //    Assert.AreEqual(42, actualIOModule.Cost);
-        //    Assert.AreEqual(2, actualIOModule.IOPerModule);
-        //}
+            Assert.AreEqual(expectedElectricalName, actualElectricalCost.Name, "Electrical cost name didn't load properly.");
+            Assert.AreEqual(expectedElectricalCost, actualElectricalCost.Cost, "Electrical cost cost didn't load properly.");
+            Assert.AreEqual(expectedElectricalLabor, actualElectricalCost.Labor, "Electrical cost labor didn't load properly.");
+            Assert.AreEqual(expectedElectricalType, actualElectricalCost.Type, "Electrical cost type didn't load properly.");
+        }
 
-        //[TestMethod]
-        //public void Load_Templates_PanelType()
-        //{
-        //    //Arrange
-        //    TECPanelType actualCost = actualTemplates.Catalogs.PanelTypes[0];
+        [TestMethod]
+        public void Load_Templates_IOModule()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
+            string expectedName = "Test IO Module";
+            string expectedDescription = "Test IO Module Description";
+            double expectedCost = 2233;
+            double expectedIOPerModule = 10;
 
-        //    //Assert
-        //    Assert.AreEqual("Test Panel Type", actualCost.Name);
-        //    Assert.AreEqual(654.9648, actualCost.Cost);
-        //}
+            TECIOModule actualModule = null;
+            foreach (TECIOModule module in actualTemplates.Catalogs.IOModules)
+            {
+                if (module.Guid == expectedGuid)
+                {
+                    actualModule = module;
+                }
+            }
 
-        //[TestMethod]
-        //public void Load_Templates_Panel()
-        //{
-        //    //Arrange
-        //    TECPanel actualPanel = actualTemplates.PanelTemplates[0];
-        //    TECPanelType actualPanelType = actualPanel.Type;
+            //Assert
+            Assert.AreEqual(expectedName, actualModule.Name);
+            Assert.AreEqual(expectedDescription, actualModule.Description);
+            Assert.AreEqual(expectedCost, actualModule.Cost);
+            Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
+        }
 
-        //    //Assert
-        //    foreach (TECPanel panel in actualTemplates.PanelTemplates)
-        //    {
-        //        if (panel.Name == "Controlled Panel")
-        //        {
-        //            Assert.Fail();
-        //        }
-        //    }
+        [TestMethod]
+        public void Load_Templates_PanelType()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+            string expectedName = "Test Panel Type";
+            double expectedCost = 1324;
+            double expectedLabor = 4231;
 
-        //    Assert.AreEqual("Test Panel", actualPanel.Name);
-        //    Assert.AreEqual("Test Panel Type", actualPanelType.Name);
-        //}
+            TECPanelType actualType = null;
+            foreach (TECPanelType type in actualTemplates.Catalogs.PanelTypes)
+            {
+                if (type.Guid == expectedGuid)
+                {
+                    actualType = type;
+                }
+            }
 
-        //[TestMethod]
-        //public void Load_Templates_ControlledScope_Linking()
-        //{
-        //    //Arrange
-        //    TECSystem actualConScope = actualTemplates.SystemTemplates[0];
-        //    var connectionsInSystemsLinked = true;
-        //    var connectionsInControllersLinked = true;
-        //    var controllersInPanelsLinked = true;
+            //Assert
+            Assert.AreEqual(expectedName, actualType.Name);
+            Assert.AreEqual(expectedCost, actualType.Cost);
+            Assert.AreEqual(expectedLabor, actualType.Labor);
+        }
 
-        //    foreach (TECEquipment equipment in actualConScope.Equipment)
-        //    {
-        //        foreach (TECSubScope subScope in equipment.SubScope)
-        //        {
-        //            if (!actualConScope.Controllers[0].ChildrenConnections.Contains(subScope.Connection))
-        //            {
-        //                connectionsInSystemsLinked = false;
-        //            }
-        //        }
-        //    }
-        //    foreach (TECPanel panel in actualConScope.Panels)
-        //    {
-        //        foreach (TECController controller in panel.Controllers)
-        //        {
-        //            if (!actualConScope.Controllers.Contains(controller))
-        //            {
-        //                controllersInPanelsLinked = false;
-        //            }
-        //        }
-        //    }
+        [TestMethod]
+        public void Load_Templates_Panel()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            string expectedName = "Bid Panel";
+            string expectedDescription = "Bid Panel Description";
+            int expectedQuantity = 1;
 
-        //    Assert.IsTrue(connectionsInSystemsLinked);
-        //    Assert.IsTrue(connectionsInControllersLinked);
-        //    Assert.IsTrue(controllersInPanelsLinked);
-        //}
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
 
-        //[TestMethod]
-        //public void Load_Templates_Linked_Devices()
-        //{
-        //    foreach (TECSystem system in actualTemplates.SystemTemplates)
-        //    {
-        //        foreach (TECEquipment equipment in system.Equipment)
-        //        {
-        //            foreach (TECSubScope subScope in equipment.SubScope)
-        //            {
-        //                foreach (TECDevice device in subScope.Devices)
-        //                {
-        //                    if (!actualTemplates.Catalogs.Devices.Contains(device))
-        //                    {
-        //                        Assert.Fail("Devices in system templates not linked");
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
-        //    {
-        //        foreach (TECSubScope subScope in equipment.SubScope)
-        //        {
-        //            foreach (TECDevice device in subScope.Devices)
-        //            {
-        //                if (!actualTemplates.Catalogs.Devices.Contains(device))
-        //                {
-        //                    Assert.Fail("Devices in equipment templates not linked");
-        //                }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
-        //    {
-        //        foreach (TECDevice device in subScope.Devices)
-        //        {
-        //            if (!actualTemplates.Catalogs.Devices.Contains(device))
-        //            {
-        //                Assert.Fail("Devices in subscope templates not linked");
-        //            }
-        //        }
-        //    }
-        //    Assert.IsTrue(true, "All Devices Linked");
-        //}
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            {
+                if (panel.Guid == expectedGuid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
 
-        //[TestMethod]
-        //public void Load_Templates_Linked_AssociatedCosts()
-        //{
-        //    foreach (TECSystem system in actualTemplates.SystemTemplates)
-        //    {
-        //        foreach (TECCost cost in system.AssociatedCosts)
-        //        {
-        //            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //            { Assert.Fail("Associated costs in system templates not linked"); }
-        //        }
-        //        foreach (TECEquipment equipment in system.Equipment)
-        //        {
-        //            foreach (TECCost cost in equipment.AssociatedCosts)
-        //            {
-        //                if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //                { Assert.Fail("Associated costs in system templates not linked"); }
-        //            }
-        //            foreach (TECSubScope subScope in equipment.SubScope)
-        //            {
-        //                foreach (TECCost cost in subScope.AssociatedCosts)
-        //                {
-        //                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //                    { Assert.Fail("Associated costs in system templates not linked"); }
-        //                }
-        //                foreach (TECDevice device in subScope.Devices)
-        //                {
-        //                    foreach (TECCost cost in device.AssociatedCosts)
-        //                    {
-        //                        if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //                        { Assert.Fail("Associated costs in system templates not linked"); }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
-        //    {
-        //        foreach (TECCost cost in equipment.AssociatedCosts)
-        //        {
-        //            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //            { Assert.Fail("Associated costs in equipment templates not linked"); }
-        //        }
-        //        foreach (TECSubScope subScope in equipment.SubScope)
-        //        {
-        //            foreach (TECCost cost in subScope.AssociatedCosts)
-        //            {
-        //                if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //                { Assert.Fail("Associated costs in equipment templates not linked"); }
-        //            }
-        //            foreach (TECDevice device in subScope.Devices)
-        //            {
-        //                foreach (TECCost cost in device.AssociatedCosts)
-        //                {
-        //                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //                    { Assert.Fail("Associated costs in equipment templates not linked"); }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
-        //    {
-        //        foreach (TECCost cost in subScope.AssociatedCosts)
-        //        {
-        //            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //            { Assert.Fail("Associated costs in subscope templates not linked"); }
-        //        }
-        //        foreach (TECDevice device in subScope.Devices)
-        //        {
-        //            foreach (TECCost cost in device.AssociatedCosts)
-        //            {
-        //                if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //                { Assert.Fail("Associated costs in subscope templates not linked"); }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECDevice device in actualTemplates.Catalogs.Devices)
-        //    {
-        //        foreach (TECCost cost in device.AssociatedCosts)
-        //        {
-        //            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //            { Assert.Fail("Associated costs in device catalog not linked"); }
-        //        }
-        //    }
-        //    foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
-        //    {
-        //        foreach (TECCost cost in conduitType.AssociatedCosts)
-        //        {
-        //            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //            { Assert.Fail("Associated costs in conduit type catalog not linked"); }
-        //        }
-        //    }
-        //    foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
-        //    {
-        //        foreach (TECCost cost in connectionType.AssociatedCosts)
-        //        {
-        //            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-        //            { Assert.Fail("Associated costs in connection type catalog not linked"); }
-        //        }
-        //    }
-
-        //    Assert.IsTrue(true, "All Associated costs Linked");
-        //}
-
-        //[TestMethod]
-        //public void Load_Templates_Linked_Manufacturers()
-        //{
-        //    foreach (TECDevice device in actualTemplates.Catalogs.Devices)
-        //    {
-        //        if (!actualTemplates.Catalogs.Manufacturers.Contains(device.Manufacturer))
-        //        {
-        //            Assert.Fail("Manufacturers not linked in device catalog");
-        //        }
-        //    }
-        //    foreach (TECController controller in actualTemplates.ControllerTemplates)
-        //    {
-        //        if (!actualTemplates.Catalogs.Manufacturers.Contains(controller.Manufacturer))
-        //        {
-        //            Assert.Fail("Manufacturers not linked in controller templates");
-        //        }
-        //    }
-        //    Assert.IsTrue(true, "All Manufacturers linked");
-        //}
-
-        //[TestMethod]
-        //public void Load_Templates_Linked_Tags()
-        //{
-        //    foreach (TECSystem system in actualTemplates.SystemTemplates)
-        //    {
-        //        foreach (TECTag tag in system.Tags)
-        //        {
-        //            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //            { Assert.Fail("Tags in system templates not linked"); }
-        //        }
-        //        foreach (TECEquipment equipment in system.Equipment)
-        //        {
-        //            foreach (TECTag tag in equipment.Tags)
-        //            {
-        //                if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //                { Assert.Fail("Tags in system templates not linked"); }
-        //            }
-        //            foreach (TECSubScope subScope in equipment.SubScope)
-        //            {
-        //                foreach (TECTag tag in subScope.Tags)
-        //                {
-        //                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //                    { Assert.Fail("Tags in system templates not linked"); }
-        //                }
-        //                foreach (TECDevice device in subScope.Devices)
-        //                {
-        //                    foreach (TECTag tag in device.Tags)
-        //                    {
-        //                        if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //                        { Assert.Fail("Tags in system templates not linked"); }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
-        //    {
-        //        foreach (TECTag tag in equipment.Tags)
-        //        {
-        //            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //            { Assert.Fail("Tags in equipment templates not linked"); }
-        //        }
-        //        foreach (TECSubScope subScope in equipment.SubScope)
-        //        {
-        //            foreach (TECTag tag in subScope.Tags)
-        //            {
-        //                if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //                { Assert.Fail("Tags in equipment templates not linked"); }
-        //            }
-        //            foreach (TECDevice device in subScope.Devices)
-        //            {
-        //                foreach (TECTag tag in device.Tags)
-        //                {
-        //                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //                    { Assert.Fail("Tags in equipment templates not linked"); }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
-        //    {
-        //        foreach (TECTag tag in subScope.Tags)
-        //        {
-        //            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //            { Assert.Fail("Tags in subscope templates not linked"); }
-        //        }
-        //        foreach (TECDevice device in subScope.Devices)
-        //        {
-        //            foreach (TECTag tag in device.Tags)
-        //            {
-        //                if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //                { Assert.Fail("Tags in subscope templates not linked"); }
-        //            }
-        //        }
-        //    }
-        //    foreach (TECDevice device in actualTemplates.Catalogs.Devices)
-        //    {
-        //        foreach (TECTag tag in device.Tags)
-        //        {
-        //            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //            { Assert.Fail("Tags in device catalog not linked"); }
-        //        }
-        //    }
-        //    foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
-        //    {
-        //        foreach (TECTag tag in conduitType.Tags)
-        //        {
-        //            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //            { Assert.Fail("Tags in conduit type catalog not linked"); }
-        //        }
-        //    }
-        //    foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
-        //    {
-        //        foreach (TECTag tag in connectionType.Tags)
-        //        {
-        //            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-        //            { Assert.Fail("Tags in connection type catalog not linked"); }
-        //        }
-        //    }
-
-        //    Assert.IsTrue(true, "All Tags Linked");
-        //}
-
-        //[TestMethod]
-        //public void Load_Templates_Linked_ConnectionTypes()
-        //{
-        //    foreach (TECDevice device in actualTemplates.Catalogs.Devices)
-        //    {
-        //        foreach (TECConnectionType type in device.ConnectionTypes)
-        //        {
-        //            if (!actualTemplates.Catalogs.ConnectionTypes.Contains(type))
-        //            {
-        //                Assert.Fail("ConnectionTypes not linked in device catalog");
-        //            }
-        //        }
-        //    }
-
-        //    Assert.IsTrue(true, "All Connection types linked");
-        //}
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
+        }
 
         private void testForScopeChildren(TECScope scope)
         {
