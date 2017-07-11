@@ -33,17 +33,17 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
-            bid.Systems.Add(new TECSystem());
+            bid.Systems.Add(system);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
-            system.AddInstance(bid);
-
+            TECSystem instance = system.AddInstance(bid);
+            StackItem expectedItem = new StackItem(Change.Add, system, instance);
             int expectedCount = 1;
 
             //Assert
-            Assert.AreEqual(expectedCount, actualCount);
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
         }
 
