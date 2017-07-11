@@ -355,6 +355,14 @@ namespace Tests
             values.Add("1");
             values.Add("AI");
             AddDataToTable(new PointTable(), values);
+
+            values = new List<string>();
+            values.Add("6776a30b-0325-42ad-8aa3-3c065b4bb908");
+            values.Add("Child Point");
+            values.Add("Child Point Description");
+            values.Add("1");
+            values.Add("BO");
+            AddDataToTable(new PointTable(), values);
         }
         private static void AddToTagTable()
         {
@@ -855,6 +863,13 @@ namespace Tests
             values.Add("2");
             values.Add("0");
             AddDataToTable(new SubScopeDeviceTable(), values);
+
+            values = new List<string>();
+            values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
+            values.Add("95135fdf-7565-4d22-b9e4-1f177febae15");
+            values.Add("3");
+            values.Add("0");
+            AddDataToTable(new SubScopeDeviceTable(), values);
         }
         private static void AddToSubScopePointTable()
         {
@@ -866,6 +881,11 @@ namespace Tests
             values = new List<string>();
             values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
             values.Add("e60437bc-09a1-47eb-9fd5-78711d942a12");
+            AddDataToTable(new SubScopePointTable(), values);
+
+            values = new List<string>();
+            values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
+            values.Add("6776a30b-0325-42ad-8aa3-3c065b4bb908");
             AddDataToTable(new SubScopePointTable(), values);
         }
         private static void AddToScopeTagTable()

@@ -210,6 +210,59 @@ namespace Tests
             testForCosts(actualEquipment);
         }
 
+        [TestMethod]
+        public void Load_Templates_SubScope()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
+            string expectedName = "Template SS";
+            string expectedDescription = "Template SS Description";
+            int expectedQuantity = 1;
+
+            Guid childPoint = new Guid("6776a30b-0325-42ad-8aa3-3c065b4bb908");
+            Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+
+            TECSubScope actualSubScope = null;
+            foreach(TECSubScope ss in actualTemplates.SubScopeTemplates)
+            {
+                if (ss.Guid == expectedGuid)
+                {
+                    actualSubScope = ss;
+                    break;
+                }
+            }
+
+            bool foundPoint = false;
+            foreach (TECPoint point in actualSubScope.Points)
+            {
+                if (point.Guid == childPoint)
+                {
+                    foundPoint = true;
+                    break;
+                }
+            }
+            bool foundDevice = false;
+            foreach (TECDevice device in actualSubScope.Devices)
+            {
+                if (device.Guid == childDevice)
+                {
+                    foundDevice = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
+            Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
+            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
+
+            Assert.IsTrue(foundPoint, "Point not loaded into subscope properly.");
+            Assert.IsTrue(foundDevice, "Device not loaded into subscope properly.");
+
+            testForTag(actualSubScope);
+            testForCosts(actualSubScope);
+        }
+
         //----------------------------------Tests above have new values, below do not----------------------------------------------
         
 
