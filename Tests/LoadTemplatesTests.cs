@@ -486,6 +486,53 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Load_Templates_Tag()
+        {
+            Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+            string expectedString = "Test Tag";
+
+            TECTag actualTag = null;
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
+            {
+                if (tag.Guid == expectedGuid)
+                {
+                    actualTag = tag;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedString, actualTag.Text, "Tag text didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Templates_MiscCost()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("5df99701-1d7b-4fbe-843d-40793f4145a8");
+            string expectedName = "Bid Misc";
+            double expectedCost = 1298;
+            double expectedLabor = 8921;
+            double expectedQuantity = 2;
+            CostType expectedType = CostType.Electrical;
+            TECMisc actualMisc = null;
+            foreach (TECMisc misc in actualTemplates.MiscCostTemplates)
+            {
+                if (misc.Guid == expectedGuid)
+                {
+                    actualMisc = misc;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualMisc.Name);
+            Assert.AreEqual(expectedQuantity, actualMisc.Quantity);
+            Assert.AreEqual(expectedCost, actualMisc.Cost);
+            Assert.AreEqual(expectedLabor, actualMisc.Labor);
+            Assert.AreEqual(expectedType, actualMisc.Type);
+        }
+
+        [TestMethod]
         public void Load_Templates_IOModule()
         {
             //Arrange
@@ -564,11 +611,81 @@ namespace Tests
             testForCosts(actualPanel);
         }
 
-        private void testForScopeChildren(TECScope scope)
+        [TestMethod]
+        public void Load_Templates_ScopeBranch()
         {
-            testForTag(scope);
-            testForCosts(scope);
-            testForLocation(scope);
+            Guid expectedGuid = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
+            string expectedName = "System Scope Branch";
+            string expectedDescription = "System Scope Branch Description";
+
+            Guid childGuid = new Guid("542802f6-a7b1-4020-9be4-e58225c433a8");
+
+            TECScopeBranch actualBranch = null;
+            foreach(TECSystem system in actualTemplates.SystemTemplates)
+            {
+                foreach(TECScopeBranch branch in system.ScopeBranches)
+                {
+                    if (branch.Guid == expectedGuid)
+                    {
+                        actualBranch = branch;
+                        break;
+                    }
+                }
+                if (actualBranch != null) break;
+            }
+
+            bool foundChildBranch = false;
+            foreach(TECScopeBranch branch in actualBranch.Branches)
+            {
+                if (branch.Guid == childGuid)
+                {
+                    foundChildBranch = true;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedName, actualBranch.Name, "Scope branch name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualBranch.Description, "Scope branch description didn't load properly.");
+
+            Assert.IsTrue(foundChildBranch, "Child branch didn't load properly into scope branch.");
+        }
+
+        [TestMethod]
+        public void Load_Templates_SubScopeConnection()
+        {
+            Guid expectedGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            double expectedWireLength = 40;
+            double expectedConduitLength = 20;
+
+            Guid expectedParentControllerGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+
+            TECSubScopeConnection actualSSConnect = null;
+            foreach (TECSystem typical in actualTemplates.SystemTemplates)
+            {
+                foreach (TECController controller in typical.Controllers)
+                {
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        if (connection.Guid == expectedGuid)
+                        {
+                            actualSSConnect = (connection as TECSubScopeConnection);
+                            break;
+                        }
+                    }
+                    if (actualSSConnect != null) break;
+                }
+                if (actualSSConnect != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedWireLength, actualSSConnect.Length, "Length didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitLength, actualSSConnect.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualSSConnect.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualSSConnect.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
         }
 
         private void testForTag(TECScope scope)
@@ -610,11 +727,6 @@ namespace Tests
 
             Assert.IsTrue(foundTECCost, "TEC Cost not loaded properly into scope.");
             Assert.IsTrue(foundElectricalCost, "Electrical Cost not loaded properly into scope.");
-        }
-        private void testForLocation(TECScope scope)
-        {
-            bool foundLocation = (scope.Location.Guid == TEST_LOCATION_GUID);
-            Assert.IsTrue(foundLocation, "Location not loaded properly into scope.");
         }
 
         private void testForRatedCosts(ElectricalMaterialComponent component)
