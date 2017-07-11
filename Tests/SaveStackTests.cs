@@ -47,7 +47,33 @@ namespace Tests
             checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
         }
 
-       
+
+
+
+        [TestMethod]
+        public void Bid_AddSubScope()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECSystem system = new TECSystem();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment();
+            system.Equipment.Add(equipment);
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            StackItem expectedItem = new StackItem(Change.Add, equipment, subScope);
+            int expectedCount = 1;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+        
+
         public void checkStackItem(StackItem expectedItem, StackItem actualItem)
         {
             Assert.AreEqual(expectedItem.Change, actualItem.Change);
