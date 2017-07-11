@@ -93,8 +93,21 @@ namespace DebugLibrary
             if (logPath == null)
             //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
             {
-                logPath = createLogPath();
-                File.Create(logPath).Close();
+                bool created = false;
+                while(!created)
+                {
+                    logPath = createLogPath();
+                    try
+                    {
+                        File.Create(logPath).Close();
+                        created = true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Path already taken. Waiting 0.5 seconds.");
+                        System.Threading.Thread.Sleep(500);
+                    }
+                }
             }
 
             bool logged = false;
