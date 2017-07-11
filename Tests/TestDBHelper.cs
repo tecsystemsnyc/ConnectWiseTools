@@ -48,6 +48,7 @@ namespace Tests
             AddToPanelTable();
             AddToIOModuleTable();
             AddToIOTable();
+
             AddToBidLaborTable();
             AddToBidBidParametersTable();
             AddToBidScopeBranchTable();
@@ -98,25 +99,52 @@ namespace Tests
             AddToTemplatesInfoTable();
             AddToLaborConstantsTable();
             AddToSubcontractorConstantsTable();
+            AddToUserAdjustmentsTable();
+            AddToScopeBranchTable();
             AddToSystemTable();
             AddToEquipmentTable();
             AddToSubScopeTable();
             AddToDeviceTable();
             AddToPointTable();
-            AddToControllerTable();
-            AddToPanelTable();
             AddToTagTable();
+            AddToManufacturerTable();
+            AddToConnectionTypeTable();
+            AddToConduitTypeTable();
             AddToAssociatedCostTable();
+            AddToSubScopeConnectionTable();
+            AddToNetworkConnectionTable();
+            AddToControllerTable();
+            AddToMiscTable();
+            AddToPanelTypeTable();
+            AddToPanelTable();
+            AddToIOModuleTable();
+            AddToIOTable();
 
+            AddToControllerIOTable();
+            AddToIOModuleManufacturerTable();
+            AddToIOIOModuleTable();
+            AddToControllerConnectionTable();
+            AddToScopeBranchHierarchyTable();
             AddToSystemEquipmentTable();
-            AddToSystemControllerTable();
-            AddToSystemPanelTable();
             AddToEquipmentSubScopeTable();
-            AddToScopeTagTable();
-            AddToScopeAssociatedCostTable();
             AddToSubScopeDeviceTable();
             AddToSubScopePointTable();
-
+            AddToScopeTagTable();
+            AddToDeviceManufacturerTable();
+            AddToDeviceConnectionTypeTable();
+            AddToScopeAssociatedCostTable();
+            AddElectricalComponentRatedCostTable();
+            AddToControllerManufacturerTable();
+            AddToConnectionConduitTypeTable();
+            AddToSubScopeConnectionChildrenTable();
+            AddToPanelPanelTypeTable();
+            AddToPanelControllerTable();
+            AddToSystemControllerTable();
+            AddToSystemPanelTable();
+            AddToSystemScopeBranchTable();
+            AddToSystemHierarchyTable();
+            AddToSystemMiscTable();
+            
             SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }
