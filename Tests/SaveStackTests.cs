@@ -78,15 +78,27 @@ namespace Tests
             TECBid bid = new TECBid();
             ChangeStack stack = new ChangeStack(bid);
             TECSystem system = new TECSystem();
-            bid.Systems.Add(new TECSystem());
-
+            bid.Systems.Add(system);
+            
             int initialCount = stack.SaveStack.Count;
             int expectedCount = 1;
 
-            system.AddInstance(bid);
+            TECSystem instance = system.AddInstance(bid);
+            StackItem expectedItem = new StackItem(Change.Add, system, instance);
             int actualCount = stack.SaveStack.Count - initialCount;
 
             Assert.AreEqual(expectedCount, actualCount);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+
+       
+        public void checkStackItem(StackItem expectedItem, StackItem actualItem)
+        {
+            Assert.AreEqual(expectedItem.Change, actualItem.Change);
+            Assert.AreEqual(expectedItem.ReferenceObject, actualItem.ReferenceObject);
+            Assert.AreEqual(expectedItem.TargetObject, actualItem.TargetObject);
+            Assert.AreEqual(expectedItem.ReferenceType, actualItem.ReferenceType);
+            Assert.AreEqual(expectedItem.TargetType, actualItem.TargetType);
         }
     }
 }
