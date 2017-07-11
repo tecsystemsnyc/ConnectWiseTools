@@ -114,6 +114,8 @@ namespace Tests
             AddToEquipmentSubScopeTable();
             AddToScopeTagTable();
             AddToScopeAssociatedCostTable();
+            AddToSubScopeDeviceTable();
+            AddToSubScopePointTable();
 
             SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
@@ -999,6 +1001,11 @@ namespace Tests
             values.Add("1645886c-fce7-4380-a5c3-295f91961d16");
             values.Add("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
             AddDataToTable(new ScopeTagTable(), values);
+
+            values = new List<string>();
+            values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
+            values.Add("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+            AddDataToTable(new ScopeTagTable(), values);
         }
         private static void AddToDeviceManufacturerTable()
         {
@@ -1297,6 +1304,21 @@ namespace Tests
             values.Add(electricalCostGuid);
             values.Add("1");
             AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            //Template SubScope
+            scopeGuid = "3ebdfd64-5249-4332-a832-ff3cc0cdb309";
+            values = new List<string>();
+            values.Add(scopeGuid);
+            values.Add(tecCostGuid);
+            values.Add("1");
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
+            values = new List<string>();
+            values.Add(scopeGuid);
+            values.Add(electricalCostGuid);
+            values.Add("1");
+            AddDataToTable(new ScopeAssociatedCostTable(), values);
+
         }
         private static void AddElectricalComponentRatedCostTable()
         {
