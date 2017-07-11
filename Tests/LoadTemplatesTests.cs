@@ -317,7 +317,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Load_Bid_Manufacturer()
+        public void Load_Templates_Manufacturer()
         {
             //Arrange
             Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
@@ -340,8 +340,63 @@ namespace Tests
             Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
         }
 
+        [TestMethod]
+        public void Load_Templates_Controller()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            string expectedName = "Bid Controller";
+            string expectedDescription = "Bid Controller Description";
+            double expectedCost = 1812;
+            NetworkType expectedType = NetworkType.Server;
+            bool expectedGlobalStatus = true;
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedGuid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            Guid expectedConnectionGuid = new Guid("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
+            Guid expectedIOGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+
+            bool hasIO = false;
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Guid == expectedIOGuid)
+                {
+                    hasIO = true;
+                    break;
+                }
+            }
+
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.ChildrenConnections)
+            {
+                if (conn.Guid == expectedConnectionGuid)
+                {
+                    hasConnection = true;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
+            Assert.IsTrue(hasIO);
+            Assert.IsTrue(hasConnection);
+            testForTag(actualController);
+            testForCosts(actualController);
+        }
+
         //----------------------------------Tests above have new values, below do not----------------------------------------------
-        
+
 
         //[TestMethod]
         //public void Load_Templates_Controller()
