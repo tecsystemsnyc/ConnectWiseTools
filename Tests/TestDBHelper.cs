@@ -100,7 +100,6 @@ namespace Tests
             AddToLaborConstantsTable();
             AddToSubcontractorConstantsTable();
             AddToUserAdjustmentsTable();
-            AddToScopeBranchTable();
             AddToSystemTable();
             AddToEquipmentTable();
             AddToSubScopeTable();
@@ -120,21 +119,14 @@ namespace Tests
             AddToIOModuleTable();
             AddToIOTable();
             AddToScopeBranchTable();
-            AddToManufacturerTable();
-            AddToConnectionTypeTable();
 
             AddToControllerIOTable();
             AddToIOModuleManufacturerTable();
             AddToIOIOModuleTable();
             AddToControllerConnectionTable();
-            AddToScopeBranchHierarchyTable();
             AddToSystemEquipmentTable();
             AddToEquipmentSubScopeTable();
-            AddToSubScopeDeviceTable();
-            AddToSubScopePointTable();
             AddToScopeTagTable();
-            AddToDeviceManufacturerTable();
-            AddToDeviceConnectionTypeTable();
             AddToScopeAssociatedCostTable();
             AddElectricalComponentRatedCostTable();
             AddToControllerManufacturerTable();
@@ -144,7 +136,6 @@ namespace Tests
             AddToPanelControllerTable();
             AddToSystemControllerTable();
             AddToSystemPanelTable();
-            AddToSystemScopeBranchTable();
             AddToSystemHierarchyTable();
             AddToSystemMiscTable();
             
