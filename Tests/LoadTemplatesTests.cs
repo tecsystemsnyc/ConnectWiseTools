@@ -106,6 +106,7 @@ namespace Tests
             Guid childEquipment = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
             Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
             Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
+            Guid childScopeBranch = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualTemplates.SystemTemplates)
@@ -144,6 +145,15 @@ namespace Tests
                     break;
                 }
             }
+            bool foundScopeBranch = false;
+            foreach(TECScopeBranch branch in actualSystem.ScopeBranches)
+            {
+                if (branch.Guid == childScopeBranch)
+                {
+                    foundScopeBranch = true;
+                    break;
+                }
+            }
 
             //Assert
             Assert.AreEqual(expectedName, actualSystem.Name);
@@ -162,6 +172,7 @@ namespace Tests
             Assert.IsTrue(foundEquip, "Equipment not loaded properly into system.");
             Assert.IsTrue(foundControl, "Controller not loaded properly into system.");
             Assert.IsTrue(foundPanel, "Panel not loaded properly into system.");
+            Assert.IsTrue(foundScopeBranch, "Scope branch not loaded properly into system.");
 
             testForTag(actualSystem);
             testForCosts(actualSystem);
@@ -263,70 +274,74 @@ namespace Tests
             testForCosts(actualSubScope);
         }
 
+        [TestMethod]
+        public void Load_Templates_Device()
+        {
+            Guid expectedGuid = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            string expectedName = "Test Device";
+            string expectedDescription = "Test Device Description";
+            double expectedCost = 123.45;
+
+            Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            Guid connectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+
+            TECDevice actualDevice = null;
+            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
+            {
+                if (dev.Guid == expectedGuid)
+                {
+                    actualDevice = dev;
+                    break;
+                }
+            }
+
+            bool foundConnectionType = false;
+            foreach (TECConnectionType connectType in actualDevice.ConnectionTypes)
+            {
+                if (connectType.Guid == connectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedName, actualDevice.Name, "Device name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualDevice.Description, "Device description didn't load properly.");
+            Assert.AreEqual(expectedCost, actualDevice.Cost, "Device cost didn't load properly.");
+            Assert.AreEqual(manufacturerGuid, actualDevice.Manufacturer.Guid, "Manufacturer didn't load properly into device.");
+
+            Assert.IsTrue(foundConnectionType, "Connection type didn't load properly into device.");
+
+            testForTag(actualDevice);
+            testForCosts(actualDevice);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Manufacturer()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            string expectedName = "Test Manufacturer";
+            double expectedMultiplier = 0.5;
+
+
+            TECManufacturer actualManufacturer = null;
+            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
+            {
+                if (man.Guid == expectedGuid)
+                {
+                    actualManufacturer = man;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualManufacturer.Name);
+            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
+        }
+
         //----------------------------------Tests above have new values, below do not----------------------------------------------
         
-
-        //[TestMethod]
-        //public void Load_Templates_SubScope()
-        //{
-        //    //Arrange
-        //    TECDevice childDevice = actualSubScope.Devices[0];
-        //    TECPoint ssPoint = actualSubScope.Points[0];
-        //    TECManufacturer childMan = childDevice.Manufacturer;
-
-        //    //Assert
-        //    Assert.AreEqual("Test SubScope", actualSubScope.Name);
-        //    Assert.AreEqual("SubScope Description", actualSubScope.Description);
-        //    Assert.AreEqual("SubScope Tag", actualSubScope.Tags[0].Text);
-        //    Assert.AreEqual("Test SubScope", actualSubScope.Name);
-        //    Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
-
-        //    Assert.AreEqual("Child Device", childDevice.Name);
-        //    Assert.AreEqual("Child Device", childDevice.Description);
-        //    Assert.AreEqual(89.3, childDevice.Cost);
-        //    Assert.AreEqual("TwoC18", childDevice.ConnectionTypes[0].Name);
-        //    Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
-
-        //    Assert.AreEqual("SubScope Point", ssPoint.Name);
-        //    Assert.AreEqual("Child Point", ssPoint.Description);
-        //    Assert.AreEqual(349, ssPoint.Quantity);
-        //    Assert.AreEqual(PointTypes.BO, ssPoint.Type);
-
-        //    Assert.AreEqual("Child Manufacturer (Child Device)", childMan.Name);
-        //    Assert.AreEqual(0.3, childMan.Multiplier);
-        //}
-
-        //[TestMethod]
-        //public void Load_Templates_Device()
-        //{
-        //    //Arrange
-        //    TECManufacturer childMan = actualDevice.Manufacturer;
-
-        //    //Assert
-        //    Assert.AreEqual("Test Device", actualDevice.Name);
-        //    Assert.AreEqual("Device Description", actualDevice.Description);
-        //    Assert.AreEqual(72.9, actualDevice.Cost);
-        //    Assert.AreEqual("Cat6", actualDevice.ConnectionTypes[0].Name);
-        //    Assert.AreEqual("Device Tag", actualDevice.Tags[0].Text);
-
-        //    Assert.AreEqual("Child Manufacturer (Test Device)", childMan.Name);
-        //    Assert.AreEqual(0.123, childMan.Multiplier);
-        //}
-
-        //[TestMethod]
-        //public void Load_Templates_Manufacturer()
-        //{
-        //    //Assert
-        //    Assert.AreEqual("Test Manufacturer", actualManufacturer.Name);
-        //    Assert.AreEqual(0.65, actualManufacturer.Multiplier);
-        //}
-
-        //[TestMethod]
-        //public void Load_Templates_Tag()
-        //{
-        //    //Assert
-        //    Assert.AreEqual("Test Tag", actualTag.Text);
-        //}
 
         //[TestMethod]
         //public void Load_Templates_Controller()

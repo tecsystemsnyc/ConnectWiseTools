@@ -107,6 +107,9 @@ namespace Tests
             AddToPanelTable();
             AddToTagTable();
             AddToAssociatedCostTable();
+            AddToScopeBranchTable();
+            AddToManufacturerTable();
+            AddToConnectionTypeTable();
 
             AddToSystemEquipmentTable();
             AddToSystemControllerTable();
@@ -116,6 +119,10 @@ namespace Tests
             AddToScopeAssociatedCostTable();
             AddToSubScopeDeviceTable();
             AddToSubScopePointTable();
+            AddToSystemScopeBranchTable();
+            AddToScopeBranchHierarchyTable();
+            AddToDeviceManufacturerTable();
+            AddToDeviceConnectionTypeTable();
 
             SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
