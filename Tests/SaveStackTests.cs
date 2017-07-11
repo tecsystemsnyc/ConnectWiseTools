@@ -71,5 +71,22 @@ namespace Tests
 
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
         }
+
+        [TestMethod]
+        public void Bid_AddSystemInstance()
+        {
+            TECBid bid = new TECBid();
+            ChangeStack stack = new ChangeStack(bid);
+            TECSystem system = new TECSystem();
+            bid.Systems.Add(new TECSystem());
+
+            int initialCount = stack.SaveStack.Count;
+            int expectedCount = 1;
+
+            system.AddInstance(bid);
+            int actualCount = stack.SaveStack.Count - initialCount;
+
+            Assert.AreEqual(expectedCount, actualCount);
+        }
     }
 }
