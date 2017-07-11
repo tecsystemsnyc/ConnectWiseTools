@@ -99,7 +99,6 @@ namespace Tests
             AddToTemplatesInfoTable();
             AddToLaborConstantsTable();
             AddToSubcontractorConstantsTable();
-            AddToUserAdjustmentsTable();
             AddToSystemTable();
             AddToEquipmentTable();
             AddToSubScopeTable();
@@ -111,7 +110,6 @@ namespace Tests
             AddToConduitTypeTable();
             AddToAssociatedCostTable();
             AddToSubScopeConnectionTable();
-            AddToNetworkConnectionTable();
             AddToControllerTable();
             AddToMiscTable();
             AddToPanelTypeTable();
