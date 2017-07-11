@@ -12,6 +12,7 @@ namespace Tests
     public class LinkingTests
     {
         static TECBid bid;
+        static TECTemplates templates;
         static string path;
 
         private TestContext testContextInstance;
@@ -33,6 +34,10 @@ namespace Tests
             path = Path.GetTempFileName();
             TestDBHelper.CreateTestBid(path);
             bid = TestHelper.LoadTestBid(path);
+
+            path = Path.GetTempFileName();
+            TestDBHelper.CreateTestTemplates(path);
+            templates = TestHelper.LoadTestTemplates(path);
         }
 
         [ClassCleanup]
@@ -109,7 +114,7 @@ namespace Tests
         #endregion
 
         [TestMethod]
-        public void ScopeChildrenLinking()
+        public void Bid_ScopeChildrenLinking()
         {
             foreach (TECSystem typical in bid.Systems)
             {
@@ -170,6 +175,63 @@ namespace Tests
             {
                 checkScopeChildrenCatalogLinks(panel, bid.Catalogs);
                 checkScopeLocationLinks(panel, bid);
+            }
+        }
+
+        [TestMethod]
+        public void Templates_ScopeChildrenLinking()
+        {
+            foreach (TECSystem typical in templates.SystemTemplates)
+            {
+                checkScopeChildrenCatalogLinks(typical, templates.Catalogs);
+                foreach (TECController control in typical.Controllers)
+                {
+                    checkScopeChildrenCatalogLinks(control, templates.Catalogs);
+                }
+                foreach (TECPanel panel in typical.Panels)
+                {
+                    checkScopeChildrenCatalogLinks(panel, templates.Catalogs);
+                }
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    checkScopeChildrenCatalogLinks(equip, templates.Catalogs);
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            checkScopeChildrenCatalogLinks(point, templates.Catalogs);
+                        }
+                    }
+                }
+            }
+            foreach (TECController control in templates.ControllerTemplates)
+            {
+                checkScopeChildrenCatalogLinks(control, templates.Catalogs);
+            }
+            foreach (TECPanel panel in templates.PanelTemplates)
+            {
+                checkScopeChildrenCatalogLinks(panel, templates.Catalogs);
+            }
+            foreach (TECEquipment equip in templates.EquipmentTemplates)
+            {
+                checkScopeChildrenCatalogLinks(equip, templates.Catalogs);
+                foreach (TECSubScope ss in equip.SubScope)
+                {
+                    checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
+                    foreach (TECPoint point in ss.Points)
+                    {
+                        checkScopeChildrenCatalogLinks(point, templates.Catalogs);
+                    }
+                }
+            }
+            foreach (TECSubScope ss in templates.SubScopeTemplates)
+            {
+                checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
+                foreach (TECPoint point in ss.Points)
+                {
+                    checkScopeChildrenCatalogLinks(point, templates.Catalogs);
+                }
             }
         }
 
@@ -282,7 +344,7 @@ namespace Tests
 
         [TestMethod]
         //Checks controller manufacturer is in catalogs.
-        public void ControllerLinking()
+        public void Bid_ControllerLinking()
         {
             foreach (TECSystem typical in bid.Systems)
             {
@@ -306,7 +368,7 @@ namespace Tests
 
         [TestMethod]
         //Checks panel connected to a controller in a bid and panel type in panel is in catalogs.
-        public void PanelLinking()
+        public void Bid_PanelLinking()
         {
             foreach(TECPanel panel in bid.Panels)
             {
@@ -342,7 +404,7 @@ namespace Tests
 
         [TestMethod]
         //Checks every device in subscope is in catalogs.
-        public void SubScopeLinking()
+        public void Bid_SubScopeLinking()
         {
             foreach (TECSystem typical in bid.Systems)
             {
@@ -372,10 +434,84 @@ namespace Tests
             }
         }
 
+        [TestMethod]
+        //Checks controller manufacturer is in catalogs.
+        public void Templates_ControllerLinking()
+        {
+            foreach (TECSystem typical in templates.SystemTemplates)
+            {
+                foreach (TECController controller in typical.Controllers)
+                {
+                    Assert.IsTrue(templates.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                }
+            }
+            foreach (TECController controller in templates.ControllerTemplates)
+            {
+                Assert.IsTrue(templates.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+            }
+        }
+
+        [TestMethod]
+        //Checks panel connected to a controller in a bid and panel type in panel is in catalogs.
+        public void Templates_PanelLinking()
+        {
+            foreach (TECSystem typical in templates.SystemTemplates)
+            {
+                foreach (TECPanel panel in typical.Panels)
+                {
+                    foreach (TECController panelControl in panel.Controllers)
+                    {
+                        Assert.IsTrue(typical.Controllers.Contains(panelControl), "Controller in panel not found in typical.");
+                    }
+                    Assert.IsTrue(templates.Catalogs.PanelTypes.Contains(panel.Type));
+                }
+            }
+            foreach(TECPanel panel in templates.PanelTemplates)
+            {
+                Assert.IsTrue(templates.Catalogs.PanelTypes.Contains(panel.Type));
+            }
+        }
+
+        [TestMethod]
+        //Checks every device in subscope is in catalogs.
+        public void Templates_SubScopeLinking()
+        {
+            foreach (TECSystem typical in templates.SystemTemplates)
+            {
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECDevice dev in ss.Devices)
+                        {
+                            Assert.IsTrue(templates.Catalogs.Devices.Contains(dev));
+                        }
+                    }
+                }
+            }
+            foreach (TECEquipment equip in templates.EquipmentTemplates)
+            {
+                foreach (TECSubScope ss in equip.SubScope)
+                {
+                    foreach (TECDevice dev in ss.Devices)
+                    {
+                        Assert.IsTrue(templates.Catalogs.Devices.Contains(dev));
+                    }
+                }
+            }
+            foreach (TECSubScope ss in templates.SubScopeTemplates)
+            {
+                foreach (TECDevice dev in ss.Devices)
+                {
+                    Assert.IsTrue(templates.Catalogs.Devices.Contains(dev));
+                }
+            }
+        }
+
         #region Connection Linking
         [TestMethod]
         //Checks every conduit type in connection is in catalogs.
-        public void ConnectionLinking()
+        public void Bid_ConnectionLinking()
         {
             foreach (TECSystem typical in bid.Systems)
             {
@@ -407,7 +543,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SubScopeConnectionLinking()
+        public void Bid_SubScopeConnectionLinking()
         {
             foreach(TECController controller in bid.Controllers)
             {
@@ -449,6 +585,48 @@ namespace Tests
                 }
             }
             
+        }
+
+        [TestMethod]
+        //Checks every conduit type in connection is in catalogs.
+        public void Templates_ConnectionLinking()
+        {
+            foreach (TECSystem typical in templates.SystemTemplates)
+            {
+                foreach (TECController controller in typical.Controllers)
+                {
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        Assert.IsTrue(templates.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
+                    }
+                }
+            }
+            foreach (TECController controller in templates.ControllerTemplates)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    Assert.IsTrue(templates.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Templates_SubScopeConnectionLinking()
+        {
+            foreach (TECSystem typical in templates.SystemTemplates)
+            {
+                foreach (TECController controller in typical.Controllers)
+                {
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        var subScopeConnection = connection as TECSubScopeConnection;
+                        if (subScopeConnection != null)
+                        {
+                            Assert.IsTrue(typical.SubScope.Contains(subScopeConnection.SubScope));
+                        }
+                    }
+                }
+            }
         }
 
         [TestMethod]
