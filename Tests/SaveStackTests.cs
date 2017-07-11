@@ -15,9 +15,10 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            ChangeStack stack = new ChangeStack(bid);
-            
+
             //Act
+            ChangeStack stack = new ChangeStack(bid);
+
             bid.Systems.Add(new TECSystem());
 
             int expectedCount = 1;
@@ -31,20 +32,18 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            ChangeStack stack = new ChangeStack(bid);
             TECSystem system = new TECSystem();
             bid.Systems.Add(new TECSystem());
 
-            int initialCount = stack.SaveStack.Count;
-
             //Act
+            ChangeStack stack = new ChangeStack(bid);
+
             system.AddInstance(bid);
 
             int expectedCount = 1;
-            int actualCount = stack.SaveStack.Count - initialCount;
 
             //Assert
-            Assert.AreEqual(expectedCount, actualCount);
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
         }
     }
 }
