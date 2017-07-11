@@ -680,13 +680,14 @@ namespace Tests
         {
             TECBid saveBid = TestHelper.CreateTestBid();
             var expectedTotalCost = saveBid.Estimate.TotalCost;
+            double delta = 0.0001;
             
             //Act
             path = Path.GetTempFileName();
             DatabaseHelper.SaveNew(path, saveBid);
             TECBid loadedBid = DatabaseHelper.Load(path) as TECBid;
 
-            Assert.AreEqual(expectedTotalCost, loadedBid.Estimate.TotalCost);
+            Assert.AreEqual(expectedTotalCost, loadedBid.Estimate.TotalCost, delta);
         }
     }
 }

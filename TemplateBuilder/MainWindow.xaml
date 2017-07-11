@@ -17,6 +17,7 @@
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         Height="720"
         Width="1200"
+        WindowStartupLocation="CenterScreen"
         MinHeight="300" MinWidth="535"
         x:Name="root">
 

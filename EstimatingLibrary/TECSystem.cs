@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -505,7 +506,6 @@ namespace EstimatingLibrary
         {
             if (SystemInstances.Count > 0)
             {
-
                 if (e is PropertyChangedExtendedEventArgs<Object>)
                 {
                     PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
@@ -523,12 +523,28 @@ namespace EstimatingLibrary
                     {
                         handleRemove(newValue, oldValue);
                     }
+                    else if(oldValue is TECPoint && oldValue is TECPoint)
+                    {
+                        handlePointChanged(newValue as TECPoint, e.PropertyName);
+                    }
                 } else if (e.PropertyName == "Connection" && sender is TECSubScope)
                 {
                     handleSubScopeConnectionChanged(sender as TECSubScope);
                 }
-
             }
+        }
+
+        private void handlePointChanged(TECPoint point, string propertyName)
+        {
+            PropertyInfo property = typeof(TECPoint).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+            if(property != null && property.CanWrite && CharactersticInstances.ContainsKey(point))
+            {
+                foreach (TECPoint instance in CharactersticInstances.GetInstances(point))
+                {
+                    property.SetValue(instance, property.GetValue(point), null);
+                }
+            }
+            
         }
 
         private void handleSubScopeConnectionChanged(TECSubScope subScope)

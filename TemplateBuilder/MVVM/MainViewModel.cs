@@ -381,7 +381,7 @@ namespace TemplateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    load(true);
+                    load(true, path);
                 }
                 else
                 {

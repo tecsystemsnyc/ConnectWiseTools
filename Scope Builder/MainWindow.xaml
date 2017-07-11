@@ -17,6 +17,7 @@
         Title="{Binding TitleString}"
         Height="720"
         Width="1200"
+        WindowStartupLocation="CenterScreen"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         xmlns:dd="urn:gong-wpf-dragdrop"
         MinHeight="300" MinWidth="535"

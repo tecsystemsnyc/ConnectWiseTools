@@ -266,7 +266,7 @@ namespace TECUserControlLibrary.ViewModels
         public void Drop(IDropInfo dropInfo)
         {
             var newMisc = (dropInfo.Data as TECMisc).DragDropCopy() as TECMisc;
-            handleAddMisc(newMisc);
+            sourceCollection.Add(newMisc);
         }
     }
 }

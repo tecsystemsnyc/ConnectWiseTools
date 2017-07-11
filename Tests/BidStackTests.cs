@@ -1006,7 +1006,7 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
             point.Name = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+
             testStack.Undo();
 
             //assert
@@ -1028,7 +1028,7 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
             point.Description = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+
             testStack.Undo();
 
             //assert
@@ -1050,7 +1050,7 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
             point.Quantity = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+
             testStack.Undo();
 
             //assert
@@ -1072,7 +1072,7 @@ namespace Tests
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
             point.Type = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+
             testStack.Undo();
 
             //assert
@@ -2142,7 +2142,7 @@ namespace Tests
             int beforeCount = testStack.UndoStack.Count;
             var point = Bid.RandomPoint();
             point.Quantity = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+
             testStack.Undo();
             testStack.Redo();
 
