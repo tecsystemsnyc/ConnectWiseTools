@@ -356,16 +356,27 @@ namespace EstimatingLibrary.Utilities
             {
                 if (change == Change.Add)
                 {
-                    instance.PropertyChanged += Instance_PropertyChanged;
-                    instance.PropertyChanged += Object_PropertyChanged;
+                    if (changeType == ChangeType.Instance)
+                    {
+                        instance.PropertyChanged += Instance_PropertyChanged;
+                    }
+                    else
+                    {
+                        instance.PropertyChanged += Object_PropertyChanged;
+                    }
                 }
                 else if (change == Change.Remove)
                 {
-                    instance.PropertyChanged -= Instance_PropertyChanged;
-                    instance.PropertyChanged -= Object_PropertyChanged;
+                    if (changeType == ChangeType.Instance)
+                    {
+                        instance.PropertyChanged -= Instance_PropertyChanged;
+                    }
+                    else
+                    {
+                        instance.PropertyChanged -= Object_PropertyChanged;
+                    }
                 }
-                handleSystemChildren(instance, change, ChangeType.Instance);
-                handleSystemChildren(instance, change, ChangeType.Object);
+                handleSystemChildren(instance, change, changeType);
             }
         }
         private void handleEquipmentChildren(TECEquipment equipment, Change change, ChangeType changeType)

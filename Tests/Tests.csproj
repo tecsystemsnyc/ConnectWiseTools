@@ -129,6 +129,7 @@
     <Compile Include="SaveAsBidTests.cs" />
     <Compile Include="SaveAsTemplatesTests.cs" />
     <Compile Include="SaveBidTests.cs" />
+    <Compile Include="SaveStackTests.cs" />
     <Compile Include="SaveTemplateTests.cs" />
     <Compile Include="BidStackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

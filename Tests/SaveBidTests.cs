@@ -524,6 +524,73 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Save_Bid_Add_System_Instance()
+        {
+            //Act
+            TECSystem typical = bid.Systems.RandomObject();
+
+            TECSystem expectedSystem = typical.AddInstance(bid);
+           
+            DatabaseHelper.Update(path, testStack, false);
+
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach(TECSystem instance in system.SystemInstances)
+                {
+                    if (expectedSystem.Guid == instance.Guid)
+                    {
+                        actualSystem = instance;
+                        break;
+                    }
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
+            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
+            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_System_Instance_Edit()
+        {
+            //Act
+            TECSystem typical = bid.Systems.RandomObject();
+
+            typical.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
+            TECSystem expectedSystem = typical.AddInstance(bid);
+
+            DatabaseHelper.Update(path, testStack, false);
+
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECSystem instance in system.SystemInstances)
+                {
+                    if (expectedSystem.Guid == instance.Guid)
+                    {
+                        actualSystem = instance;
+                        break;
+                    }
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
+            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
+            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
+        }
+
+        [TestMethod]
         public void Save_Bid_Remove_System()
         {
             //Act
