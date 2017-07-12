@@ -1165,7 +1165,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
             subScope.Devices.Remove(device);
 
-            StackItem expectedItem = new StackItem(Change.Remove, subScope, device);
+            StackItem expectedItem = new StackItem(Change.RemoveRelationship, subScope, device);
             int expectedCount = 1;
 
             //Assert
