@@ -292,8 +292,8 @@ namespace Tests
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
             int expectedCount = expectedItems.Count;
