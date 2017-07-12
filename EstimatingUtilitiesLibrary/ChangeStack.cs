@@ -18,6 +18,7 @@ namespace EstimatingUtilitiesLibrary
     public enum Change { Add, Remove, Edit, AddRelationship, RemoveRelationship };
     public class ChangeStack
     {
+        List<string> changeExceptions = new List<string> { "CostComponentChanged", "RemovedSubScope" };
         //List of change, target object, reference object
         //Example: Add, Bid, System
         //Example: Edit, New Object, Old Object
@@ -87,157 +88,159 @@ namespace EstimatingUtilitiesLibrary
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
-            string message = "Propertychanged: " + e.PropertyName;
-            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-            if (!isDoing) { RedoStack.Clear(); }
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (!changeExceptions.Contains(e.PropertyName))
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                StackItem item;
-                object oldValue = args.OldValue;
-                object newValue = args.NewValue;
-                if (e.PropertyName == "Add" || e.PropertyName == "Remove")
+                string message = "Propertychanged: " + e.PropertyName;
+                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+
+                if (!isDoing) { RedoStack.Clear(); }
+                if (e is PropertyChangedExtendedEventArgs<Object>)
                 {
-                    message = e.PropertyName + " change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    Change change = Change.Add;
-                    if(e.PropertyName == "Remove")
+
+                    PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                    StackItem item;
+                    object oldValue = args.OldValue;
+                    object newValue = args.NewValue;
+                    if (e.PropertyName == "Add" || e.PropertyName == "Remove")
                     {
-                        change = Change.Remove;
+                        message = e.PropertyName + " change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        Change change = Change.Add;
+                        if (e.PropertyName == "Remove")
+                        {
+                            change = Change.Remove;
+                        }
+
+                        item = new StackItem(change, args);
+                        handleChildren(item);
+                        UndoStack.Add(item);
+                        SaveStack.Add(item);
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                    }
+                    else if (e.PropertyName == "ObjectPropertyChanged" || e.PropertyName == "RelationshipPropertyChanged")
+                    {
+                        message = "Object changed: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        Change addChange = Change.Add;
+                        Change removeChange = Change.Remove;
+                        if (e.PropertyName == "RelationshipPropertyChanged")
+                        {
+                            addChange = Change.AddRelationship;
+                            removeChange = Change.RemoveRelationship;
+                        }
+
+                        var oldNew = newValue as Tuple<Object, Object>;
+                        var toSave = new List<StackItem>();
+                        if (oldNew.Item1 != null)
+                        {
+                            toSave.Add(new StackItem(removeChange, oldValue, oldNew.Item1, args.OldType, args.NewType));
+                        }
+                        if (oldNew.Item2 != null)
+                        {
+                            toSave.Add(new StackItem(addChange, oldValue, oldNew.Item2, args.OldType, args.NewType));
+                        }
+                        foreach (var save in toSave)
+                        {
+                            SaveStack.Add(save);
+                        }
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                    }
+                    else if (e.PropertyName == "MetaAdd" || e.PropertyName == "MetaRemove")
+                    {
+                        message = e.PropertyName + " change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        Change change = Change.Add;
+                        if (e.PropertyName == "MetaRemove")
+                        {
+                            change = Change.Remove;
+                        }
+
+                        item = new StackItem(change, args);
+                        SaveStack.Add(item);
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                    }
+                    else if (e.PropertyName == "AddRelationship" || e.PropertyName == "RemoveRelationship")
+                    {
+                        message = e.PropertyName + " change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        Change change = Change.AddRelationship;
+                        if (e.PropertyName == "RemoveRelationship")
+                        {
+                            change = Change.RemoveRelationship;
+                        }
+
+                        item = new StackItem(change, args);
+                        UndoStack.Add(item);
+                        SaveStack.Add(item);
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                    }
+                    else if (e.PropertyName == "AddCatalog" || e.PropertyName == "RemoveCatalog")
+                    {
+                        message = e.PropertyName + " change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        Change change = Change.Add;
+                        if (e.PropertyName == "RemoveCatalog")
+                        {
+                            change = Change.RemoveRelationship;
+                        }
+                        item = new StackItem(change, args);
+                        UndoStack.Add(item);
+                        SaveStack.Add(item);
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                    }
+                    else if (e.PropertyName == "Edit" || e.PropertyName == "ChildChanged")
+                    {
+                        message = e.PropertyName + " change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+
+                        item = new StackItem(Change.Edit, args);
+                        SaveStack.Add(item);
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                    }
+                    else if (e.PropertyName == "Catalogs")
+                    {
+                        message = "Catalog change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+
+                        item = new StackItem(Change.Add, args);
+                        handleChildren(item);
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                    }
+                    else
+                    {
+                        message = "Edit change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+
+                        item = new StackItem(Change.Edit, args);
+                        UndoStack.Add(item);
+                        SaveStack.Add(item);
+
+                        message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                     }
 
-                    item = new StackItem(change, args);
-                    handleChildren(item);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
-                }
-                else if (e.PropertyName == "ObjectPropertyChanged" || e.PropertyName == "RelationshipPropertyChanged")
-                {
-                    message = "Object changed: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    Change addChange = Change.Add;
-                    Change removeChange = Change.Remove;
-                    if (e.PropertyName == "RelationshipPropertyChanged")
-                    {
-                        addChange = Change.AddRelationship;
-                        removeChange = Change.RemoveRelationship;
-                    }
-
-                    var oldNew = newValue as Tuple<Object, Object>;
-                    var toSave = new List<StackItem>();
-                    if (oldNew.Item1 != null)
-                    {
-                        toSave.Add(new StackItem(removeChange, oldValue, oldNew.Item1, args.OldType, args.NewType));
-                    }
-                    if (oldNew.Item2 != null)
-                    {
-                        toSave.Add(new StackItem(addChange, oldValue, oldNew.Item2, args.OldType, args.NewType));
-                    }
-                    foreach (var save in toSave)
-                    {
-                        SaveStack.Add(save);
-                    }
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
-                }
-                else if (e.PropertyName == "MetaAdd" || e.PropertyName == "MetaRemove")
-                {
-                    message = e.PropertyName + " change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    Change change = Change.Add;
-                    if (e.PropertyName == "MetaRemove")
-                    {
-                        change = Change.Remove;
-                    }
-
-                    item = new StackItem(change, args);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
-                }
-                else if (e.PropertyName == "AddRelationship" || e.PropertyName == "RemoveRelationship")
-                {
-                    message = e.PropertyName + " change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    Change change = Change.AddRelationship;
-                    if (e.PropertyName == "RemoveRelationship")
-                    {
-                        change = Change.RemoveRelationship;
-                    }
-
-                    item = new StackItem(change, args);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
-                }
-                else if (e.PropertyName == "AddCatalog" || e.PropertyName == "RemoveCatalog")
-                {
-                    message = e.PropertyName + " change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    Change change = Change.Add;
-                    if (e.PropertyName == "RemoveCatalog")
-                    {
-                        change = Change.RemoveRelationship;
-                    }
-                    item = new StackItem(change, args);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
-                }
-                else if (e.PropertyName == "Edit" || e.PropertyName == "ChildChanged")
-                {
-                    message = e.PropertyName + " change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                    item = new StackItem(Change.Edit, args);
-                    SaveStack.Add(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
-                }
-                
-                else if (e.PropertyName == "RemovedSubScope") { }
-                else if (e.PropertyName == "Catalogs")
-                {
-                    message = "Catalog change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                    item = new StackItem(Change.Add, args);
-                    handleChildren(item);
-
-                    message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
                 else
                 {
-                    message = "Edit change: " + oldValue;
+                    message = "Property not compatible: " + e.PropertyName;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                    item = new StackItem(Change.Edit, args);
-                    UndoStack.Add(item);
-                    SaveStack.Add(item);
-
                     message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
                 }
-
-            }
-            else
-            {
-                message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                message = "Undo count: " + UndoStack.Count + " Save Count: " + SaveStack.Count;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
         #endregion //Event Handlers
