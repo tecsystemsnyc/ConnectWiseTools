@@ -42,7 +42,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 unregisterChanges();
                 _templates = value;
-                RaisePropertyChanged("Temnplates");
+                RaisePropertyChanged("Templates");
                 registerChanges();
             }
         }
