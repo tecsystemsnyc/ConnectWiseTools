@@ -692,11 +692,9 @@ namespace Tests
             typical.MiscCosts.Add(misc);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.MiscCosts[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, misc));
 
-            int expectedCount = 1;
+            int expectedCount = expectedItems.Count;
 
 
             //Assert
@@ -1192,6 +1190,7 @@ namespace Tests
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
             TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
             //Act
@@ -1199,8 +1198,8 @@ namespace Tests
             subScope.Devices.Remove(device);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
-            expectedItems.Add(new StackItem(Change.Remove, system.Equipment[0].SubScope[0], device));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, instance.Equipment[0].SubScope[0], device));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, system.Equipment[0].SubScope[0], device));
 
             int expectedCount = 2;
 
