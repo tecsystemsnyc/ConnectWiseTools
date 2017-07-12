@@ -24,11 +24,9 @@ namespace TECUserControlLibrary.ViewModels
                 if (_changeWatcher != null)
                 {
                     _changeWatcher.InstanceChanged -= instanceChanged;
-                    _changeWatcher.Changed -= bidChanged;
                 }
                 _changeWatcher = value;
                 _changeWatcher.InstanceChanged += instanceChanged;
-                _changeWatcher.Changed += bidChanged;
             }
         }
 
@@ -148,7 +146,18 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem)
                     {
-                        addInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        if (referenceObject is TECBid)
+                        {
+                            addTypicalSystem(targetObject as TECSystem);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            addInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
                     }
                     else if (targetObject is TECEquipment)
                     {
@@ -216,7 +225,18 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem)
                     {
-                        removeInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        if (referenceObject is TECBid)
+                        {
+                            removeTypicalSystem(targetObject as TECSystem);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            removeInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
                     }
                     else if (targetObject is TECEquipment)
                     {
@@ -278,30 +298,6 @@ namespace TECUserControlLibrary.ViewModels
                         {
                             removeAssCost(targetObject as TECCost);
                         }
-                    }
-                }
-            }
-        }
-        private void bidChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                var targetObject = args.NewValue;
-                var referenceObject = args.OldValue;
-
-                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
-                {
-                    if (targetObject is TECSystem && referenceObject is TECBid)
-                    {
-                        addTypicalSystem(targetObject as TECSystem);
-                    }
-                }
-                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
-                {
-                    if (targetObject is TECSystem && referenceObject is TECBid)
-                    {
-                        removeTypicalSystem(targetObject as TECSystem);
                     }
                 }
             }
