@@ -262,7 +262,7 @@ namespace Tests
             equipment.SubScope.Add(subScope);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, AddRelationship, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.Add, system.Equipment[0], subScope));
 
@@ -923,7 +923,7 @@ namespace Tests
             typical.Equipment.Remove(equip);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Remove, typical, equip));
 
