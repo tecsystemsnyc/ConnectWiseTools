@@ -21,11 +21,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (_changeWatcher != null)
                 {
-                    _changeWatcher.Changed -= bidChanged;
                     _changeWatcher.InstanceChanged -= instanceChanged;
                 }
                 _changeWatcher = value;
-                _changeWatcher.Changed += bidChanged;
                 _changeWatcher.InstanceChanged += instanceChanged;
             }
         }
@@ -116,30 +114,6 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Event Handlers
-        private void bidChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
-            {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                var targetObject = args.NewValue;
-                var referenceObject = args.OldValue;
-
-                if (args.PropertyName == "Add")
-                {
-                    if (targetObject is TECSystem && referenceObject is TECBid)
-                    {
-                        addTypicalSystem(targetObject as TECSystem);
-                    }
-                }
-                else if (args.PropertyName == "Remove")
-                {
-                    if (targetObject is TECSystem && referenceObject is TECBid)
-                    {
-                        removeTypicalSystem(targetObject as TECSystem);
-                    }
-                }
-            }
-        }
         private void instanceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e is PropertyChangedExtendedEventArgs<Object>)
@@ -152,7 +126,18 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem)
                     {
-                        addInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        if (referenceObject is TECBid)
+                        {
+                            addTypicalSystem(targetObject as TECSystem);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            addInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
                     }
                     else if (targetObject is TECController)
                     {
@@ -205,7 +190,18 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (targetObject is TECSystem)
                     {
-                        removeInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        if (referenceObject is TECBid)
+                        {
+                            removeTypicalSystem(targetObject as TECSystem);
+                        }
+                        else if (referenceObject is TECSystem)
+                        {
+                            removeInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
                     }
                     else if (targetObject is TECController)
                     {
