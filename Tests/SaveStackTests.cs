@@ -110,16 +110,20 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
+            TECSystem system = new TECSystem();
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
-            bid.Systems.Add(new TECSystem());
+            StackItem expectedItem = new StackItem(Change.Add, bid, system);
+
+            bid.Systems.Add(system);
 
             int expectedCount = 1;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
         }
 
         [TestMethod]
