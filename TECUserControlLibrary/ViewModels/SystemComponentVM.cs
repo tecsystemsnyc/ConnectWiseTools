@@ -127,6 +127,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             ScopeDataGrid.Refresh(scopeManager);
             ConnectionVM.Refresh(scopeManager);
+            ControllersPanelsVM.Refresh(new TECSystem(), scopeManager);
         }
         private void setupVMs(TECScopeManager scopeManager, bool isTypicalSystem = true)
         {
@@ -139,7 +140,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.ChildVM.DataGridVisibilty.SubScopeLocation = Visibility.Collapsed;
             ScopeDataGrid.ChildVM.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
-            ControllersPanelsVM = new ControllersPanelsVM(new TECSystem(), isTypicalSystem);
+            ControllersPanelsVM = new ControllersPanelsVM(new TECSystem(), scopeManager, isTypicalSystem);
             ConnectionVM = new ConnectionVM(scopeManager, isTypicalSystem);
             MiscCostsVM = new MiscCostsVM(new TECSystem());
         }

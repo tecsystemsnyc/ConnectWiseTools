@@ -126,6 +126,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RandomTests.cs" />
     <Compile Include="SaveAsBidTests.cs" />
     <Compile Include="SaveAsTemplatesTests.cs" />
     <Compile Include="SaveBidTests.cs" />

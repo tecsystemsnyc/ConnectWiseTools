@@ -195,8 +195,15 @@ namespace TECUserControlLibrary.ViewModels
             setup();
 
         }
-        public ControllersPanelsVM(TECSystem system, bool canSelectPanel = true)
+        public ControllersPanelsVM(TECSystem system, TECScopeManager manager, bool canSelectPanel = true)
         {
+            if(manager is TECBid)
+            {
+                _bid = manager as TECBid;
+            }else
+            {
+                _templates = manager as TECTemplates;
+            }
             isGlobal = false;
             PanelSelectionReadOnly = !canSelectPanel;
             PanelSelectionVisibility = Visibility.Visible;
@@ -222,8 +229,20 @@ namespace TECUserControlLibrary.ViewModels
             Templates = templates;
             setup();
         }
-        public void Refresh(TECSystem system)
+        public void Refresh(TECSystem system, TECScopeManager manager = null)
         {
+            if(manager != null)
+            {
+                if (manager is TECBid)
+                {
+                    _bid = manager as TECBid;
+                }
+                else
+                {
+                    _templates = manager as TECTemplates;
+                }
+            }
+            
             sourceControllers = system.Controllers;
             PanelsSource = system.Panels;
             SelectedSystem = system;
