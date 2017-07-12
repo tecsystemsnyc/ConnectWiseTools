@@ -488,19 +488,24 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
-            TECController controller = new TECController(new TECManufacturer());
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECController controller = new TECController(manufacturer);
             bid.Systems.Add(system);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, system, controller);
-            int expectedCount = 1;
+
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Add, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Add, system, controller));
+
+            int expectedCount = 2;
 
             system.Controllers.Add(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
-            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+            checkStackItems(expectedItems, stack);
         }
 
         [TestMethod]
