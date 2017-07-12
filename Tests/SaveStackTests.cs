@@ -1403,10 +1403,9 @@ namespace Tests
             typical.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Panels[0]));
-            expectedItems.Add(new StackItem(Change.Remove, panel, type));
+            expectedItems.Add(new StackItem(Change.Remove, instance.Panels[0], type));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
             int expectedCount = expectedItems.Count;
