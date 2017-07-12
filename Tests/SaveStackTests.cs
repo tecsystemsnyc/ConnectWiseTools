@@ -19,18 +19,23 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            TECController controller = new TECController(new TECManufacturer());
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECController controller = new TECController(manufacturer);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, bid, controller);
-            int expectedCount = 1;
+
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Add, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Add, bid, controller));
+
+            int expectedCount = 2;
 
             bid.Controllers.Add(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
-            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+            checkStackItems(expectedItems, stack);
         }
         #endregion
         #region Panel
