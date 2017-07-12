@@ -423,9 +423,11 @@ namespace EstimatingLibrary
             ModelLinkingHelper.LinkTypicalInstanceDictionary(CharactersticInstances, outSystem);
             return outSystem;
         }
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECSystem outSystem = new TECSystem(this);
+            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+            TECSystem outSystem = new TECSystem(this, guidDictionary);
+            ModelLinkingHelper.LinkSystem(outSystem, scopeManager, guidDictionary);
             return outSystem;
         }
         

@@ -129,7 +129,7 @@ namespace EstimatingLibrary
             AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
         }
 
-        abstract public Object DragDropCopy();
+        abstract public Object DragDropCopy(TECScopeManager scopeManager);
         #endregion //Constructors
 
         #region Methods
