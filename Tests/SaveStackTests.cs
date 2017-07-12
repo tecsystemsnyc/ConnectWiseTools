@@ -39,18 +39,22 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, bid, panel);
-            int expectedCount = 1;
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Add, panel, type));
+            expectedItems.Add(new StackItem(Change.Add, bid, panel));
 
+            int expectedCount = 2;
+            
             bid.Panels.Add(panel);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
-            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+            checkStackItems(expectedItems, stack);
         }
         #endregion
         #region Misc
@@ -175,9 +179,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, typical, equip));
             
             int expectedCount = 3;
-
             
-
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItems(expectedItems, stack);
@@ -555,19 +557,22 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, system, panel);
-            int expectedCount = 1;
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Add, panel, type));
+            expectedItems.Add(new StackItem(Change.Add, system, panel));
+            int expectedCount = 2;
 
             system.Panels.Add(panel);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
-            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+            checkStackItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -576,7 +581,8 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -587,7 +593,9 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.Add, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Panels[0]));
+            expectedItems.Add(new StackItem(Change.Add, panel, type));
             expectedItems.Add(new StackItem(Change.Add, typical, panel));
 
             int expectedCount = 3;
@@ -604,7 +612,8 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
 
@@ -615,7 +624,9 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.Add, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Panels[0]));
+            expectedItems.Add(new StackItem(Change.Add, panel, type));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
             int expectedCount = 3;
@@ -756,19 +767,22 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
             bid.Panels.Add(panel);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, bid, panel);
-            int expectedCount = 1;
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Remove, panel, type));
+            expectedItems.Add(new StackItem(Change.Remove, bid, panel));
+            int expectedCount = 2;
 
             bid.Panels.Remove(panel);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
-            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+            checkStackItems(expectedItems, stack);
         }
         #endregion
         #region Misc
@@ -1289,20 +1303,23 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
             system.Panels.Add(panel);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, system, panel);
-            int expectedCount = 1;
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Remove, panel, type));
+            expectedItems.Add(new StackItem(Change.Remove, system, panel));
+            int expectedCount = 2;
 
             system.Panels.Remove(panel);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
-            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+            checkStackItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1311,7 +1328,8 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Panels.Add(panel);
@@ -1323,7 +1341,9 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.Remove, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Remove, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Panels[0]));
+            expectedItems.Add(new StackItem(Change.Remove, panel, type));
             expectedItems.Add(new StackItem(Change.Remove, typical, panel));
 
             int expectedCount = 3;
@@ -1340,7 +1360,8 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanel panel = new TECPanel(new TECPanelType());
+            TECPanelType type = new TECPanelType();
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
             TECSystem instance = typical.AddInstance(bid);
@@ -1351,7 +1372,9 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.Remove, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Remove, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Panels[0]));
+            expectedItems.Add(new StackItem(Change.Remove, panel, type));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
             int expectedCount = 3;
