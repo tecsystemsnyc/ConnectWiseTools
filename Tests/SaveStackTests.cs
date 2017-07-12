@@ -926,12 +926,12 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-
+            var removed = instance.Equipment[0];
             typical.Equipment.Remove(equip);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Remove, instance, removed));
             expectedItems.Add(new StackItem(Change.Remove, typical, equip));
 
             int expectedCount = 3;
