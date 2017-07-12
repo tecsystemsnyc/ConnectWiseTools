@@ -1308,7 +1308,8 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECController controller = new TECController(new TECManufacturer());
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECController controller = new TECController(manufacturer);
             bid.Systems.Add(typical);
             typical.Controllers.Add(controller);
             TECSystem instance = typical.AddInstance(bid);
@@ -1319,8 +1320,9 @@ namespace Tests
             typical.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Controllers[0]));
+            expectedItems.Add(new StackItem(Change.Remove, instance.Controllers[0], instance.Controllers[0].Manufacturer));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
             int expectedCount = expectedItems.Count;
