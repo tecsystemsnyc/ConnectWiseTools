@@ -291,8 +291,8 @@ namespace Tests
             
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
@@ -379,10 +379,10 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.AddRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
             expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
+            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
@@ -514,7 +514,8 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECController controller = new TECController(new TECManufacturer());
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECController controller = new TECController(manufacturer);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -525,13 +526,14 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.AddRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance.Controllers[0], manufacturer));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Controllers[0]));
+            expectedItems.Add(new StackItem(Change.Add, controller, manufacturer));
             expectedItems.Add(new StackItem(Change.Add, typical, controller));
 
-            int expectedCount = 3;
+            int expectedCount = 5;
 
-
-
+            
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItems(expectedItems, stack);
@@ -1266,22 +1268,25 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECController controller = new TECController(new TECManufacturer());
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECController controller = new TECController(manufacturer);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Controllers.Add(controller);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-
+            var removed = instance.Controllers[0];
             typical.Controllers.Remove(controller);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Controllers[0]));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Remove, removed, manufacturer));
+            expectedItems.Add(new StackItem(Change.Remove, instance, removed));
+            expectedItems.Add(new StackItem(Change.Remove, controller, manufacturer));
             expectedItems.Add(new StackItem(Change.Remove, typical, controller));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
             
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);

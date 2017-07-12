@@ -779,6 +779,7 @@ namespace EstimatingLibrary
                         if (CharactersticInstances.GetInstances(characteristicController).Contains(controller))
                         {
                             controllersToRemove.Add(controller);
+                            CharactersticInstances.RemoveItem(characteristicController, controller);
                         }
                     }
                     foreach (TECController controller in controllersToRemove)
@@ -798,6 +799,7 @@ namespace EstimatingLibrary
                         if (CharactersticInstances.GetInstances(characteristicPanel).Contains(panel))
                         {
                             panelsToRemove.Add(panel);
+                            CharactersticInstances.RemoveItem(characteristicPanel, panel);
                         }
                     }
                     foreach (TECPanel panel in panelsToRemove)
@@ -817,6 +819,7 @@ namespace EstimatingLibrary
                         if (CharactersticInstances.GetInstances(characteristicEquipment).Contains(equipment))
                         {
                             equipmentToRemove.Add(equipment);
+                            CharactersticInstances.RemoveItem(characteristicEquipment, equipment);
                         }
                     }
                     foreach (TECEquipment equipment in equipmentToRemove)
@@ -839,6 +842,8 @@ namespace EstimatingLibrary
                             if (CharactersticInstances.GetInstances(characteristicSubScope).Contains(subScope))
                             {
                                 subScopeToRemove.Add(subScope);
+                                CharactersticInstances.RemoveItem(characteristicSubScope, subScope);
+
                             }
                         }
                         foreach (TECSubScope subScope in subScopeToRemove)
@@ -874,6 +879,7 @@ namespace EstimatingLibrary
                             if (CharactersticInstances.GetInstances(characteristicPoint).Contains(point))
                             {
                                 pointsToRemove.Add(point);
+                                CharactersticInstances.RemoveItem(characteristicPoint, point);
                             }
                         }
                         foreach (TECPoint point in pointsToRemove)

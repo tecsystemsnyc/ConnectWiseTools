@@ -415,6 +415,10 @@ namespace EstimatingUtilitiesLibrary
             if (newItem is TECSystem)
             {
                 handleSystemChildren(newItem as TECSystem, item.Change);
+                if(item.ReferenceObject is TECSystem)
+                {
+                    handleRemoveRelationships(item.ReferenceObject as TECSystem, item.TargetObject as TECSystem);
+                }
             }
             else if (newItem is TECEquipment)
             {
@@ -463,6 +467,46 @@ namespace EstimatingUtilitiesLibrary
                 handleCatalogsChildren(newItem as TECCatalogs, item.Change);
             }
         }
+
+        private void handleRemoveRelationships(TECSystem parent, TECSystem child)
+        {
+            foreach (TECEquipment equipment in parent.Equipment)
+            {
+                foreach (TECEquipment instanceEquipment in child.Equipment)
+                {
+                    parent.CharactersticInstances.RemoveItem(equipment, instanceEquipment);
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach (TECSubScope instanceSubScope in instanceEquipment.SubScope)
+                        {
+                            parent.CharactersticInstances.RemoveItem(subScope, instanceSubScope);
+                            foreach (TECPoint point in subScope.Points)
+                            {
+                                foreach (TECPoint instancePoint in instanceSubScope.Points)
+                                {
+                                    parent.CharactersticInstances.RemoveItem(point, instancePoint);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (TECController controller in parent.Controllers)
+            {
+                foreach (TECController instanceController in child.Controllers)
+                {
+                    parent.CharactersticInstances.RemoveItem(controller, instanceController);
+                }
+            }
+            foreach (TECPanel panel in parent.Panels)
+            {
+                foreach (TECPanel instancePanel in child.Panels)
+                {
+                    parent.CharactersticInstances.RemoveItem(panel, instancePanel);
+                }
+            }
+        }
+
         private void handleEquipmentChildren(TECEquipment equipment, Change change)
         {
             handleScopeChildren(equipment as TECScope, change);
