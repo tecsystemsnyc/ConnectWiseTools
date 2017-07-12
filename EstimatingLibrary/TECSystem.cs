@@ -330,7 +330,7 @@ namespace EstimatingLibrary
             _systemInstances = new ObservableCollection<TECSystem>();
             _scopeBranches = new ObservableCollection<TECScopeBranch>();
             _miscCosts = new ObservableCollection<TECMisc>();
-            CharactersticInstances = new ObservableItemToInstanceList<TECScope>();
+            _charactersticInstances = new ObservableItemToInstanceList<TECScope>();
             CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
             Equipment.CollectionChanged += CollectionChanged;
             Controllers.CollectionChanged += CollectionChanged;

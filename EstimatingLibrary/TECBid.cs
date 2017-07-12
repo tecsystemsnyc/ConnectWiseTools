@@ -177,9 +177,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Locations", temp, this);
             }
         }
-
         
-
         public ObservableCollection<TECController> Controllers
         {
             get { return _controllers; }
