@@ -359,8 +359,34 @@ namespace Tests
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItems(expectedItems, stack);
         }
-        #endregion
 
+        [TestMethod]
+        public void Bid_AddInstanceToTypicalWithEquipment()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECSystem typical = new TECSystem();
+            TECEquipment equip = new TECEquipment();
+            bid.Systems.Add(typical);
+            typical.Equipment.Add(equip);
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+
+            TECSystem instance = typical.AddInstance(bid);
+
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Add, equip, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.Add, typical, instance));
+
+            int expectedCount = 3;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItems(expectedItems, stack);
+        }
+       
         public void checkStackItem(StackItem expectedItem, StackItem actualItem)
         {
             Assert.AreEqual(expectedItem.Change, actualItem.Change);
