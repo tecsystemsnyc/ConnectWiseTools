@@ -959,8 +959,8 @@ namespace Tests
             typical.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
             int expectedCount = 3;
