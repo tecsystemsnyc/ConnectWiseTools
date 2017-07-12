@@ -1452,14 +1452,10 @@ namespace Tests
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
-            typical.MiscCosts.Remove(misc);
-
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.MiscCosts[0]));
             expectedItems.Add(new StackItem(Change.Remove, typical, misc));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
 
             //Assert
