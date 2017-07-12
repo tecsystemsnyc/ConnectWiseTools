@@ -460,6 +460,7 @@ namespace Tests
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
             //Act
@@ -474,8 +475,8 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
-            int expectedCount = 6;
-            
+            int expectedCount = expectedItems.Count;
+
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItems(expectedItems, stack);
