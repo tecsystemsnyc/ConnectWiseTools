@@ -683,11 +683,11 @@ namespace Tests
             typical.MiscCosts.Add(misc);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.MiscCosts[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, misc));
 
-            int expectedCount = 3;
+            int expectedCount = 1;
 
 
             //Assert
@@ -711,11 +711,9 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.MiscCosts[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = 1;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
