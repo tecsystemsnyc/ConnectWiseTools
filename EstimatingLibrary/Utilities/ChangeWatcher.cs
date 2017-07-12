@@ -674,7 +674,7 @@ namespace EstimatingLibrary.Utilities
             }
             else if (change == Change.Remove && oldValue is TECBid && newValue is TECSystem)
             {
-                InstanceChanged?.Invoke(sender, args);
+                 InstanceChanged?.Invoke(sender, args);
             }
         }
     }
