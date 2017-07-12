@@ -1135,12 +1135,12 @@ namespace Tests
             system.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, system, instance));
 
             int expectedCount = 7;
