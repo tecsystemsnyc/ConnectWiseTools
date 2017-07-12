@@ -1454,9 +1454,8 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.Remove, typical, misc));
-
             int expectedCount = expectedItems.Count;
-
+            typical.MiscCosts.Remove(misc);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
