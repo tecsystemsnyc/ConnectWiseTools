@@ -17,12 +17,15 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Label Content="Controllers"/>
+        <Label Content="Controllers" 
+                                FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center"/>
         <controls:ControllerInPanelGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}" Grid.Row="1"
-                                                 Margin="5"/>
-        <Label Content="Panels" Grid.Column="1"/>
+                                                 Margin="0,0,5,0"/>
+        <Label Content="Panels" Grid.Column="1" FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center"/>
         <controls:PanelsGridControl PanelsSource="{Binding ElementName=parent, Path=ViewModel.PanelsSource}"
                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}" Grid.Column="1" Grid.Row="1"
-                                      Margin="5"/>
+                                      Margin="0,0,5,0"/>
     </Grid>
 </UserControl>

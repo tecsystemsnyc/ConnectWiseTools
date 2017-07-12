@@ -50,11 +50,11 @@
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"/>
             </TabItem>
-            <TabItem Header="Sys"
+            <TabItem Header="Systems"
                 Visibility="{Binding Path=ViewModel.SystemsVisibility}">
                 <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SystemItemsCollection}"/>
             </TabItem>
-            <TabItem Header="Equip"
+            <TabItem Header="Equipment"
                  Visibility="{Binding Path=ViewModel.EquipmentVisibility}">
                 <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.EquipmentItemsCollection}"/>
             </TabItem>
