@@ -214,7 +214,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -296,7 +296,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
-            int expectedCount = 5;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -386,7 +386,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
-            int expectedCount = 7;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -460,6 +460,7 @@ namespace Tests
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
             //Act
@@ -467,15 +468,15 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
             expectedItems.Add(new StackItem(Change.Add, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.Add, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
+            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
-            int expectedCount = 6;
-            
+            int expectedCount = expectedItems.Count;
+
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItems(expectedItems, stack);
@@ -559,7 +560,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Controllers[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -614,8 +615,8 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, panel, type));
             expectedItems.Add(new StackItem(Change.Add, typical, panel));
 
-            int expectedCount = 3;
-            
+            int expectedCount = expectedItems.Count;
+
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -644,7 +645,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 4;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -925,12 +926,12 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-
+            var removed = instance.Equipment[0];
             typical.Equipment.Remove(equip);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Remove, instance, removed));
             expectedItems.Add(new StackItem(Change.Remove, typical, equip));
 
             int expectedCount = 3;
@@ -1318,7 +1319,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Controllers[0]));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -1406,7 +1407,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Remove, panel, type));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -1450,15 +1451,10 @@ namespace Tests
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
-            typical.MiscCosts.Remove(misc);
-
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.MiscCosts[0]));
             expectedItems.Add(new StackItem(Change.Remove, typical, misc));
-
-            int expectedCount = 3;
-
+            int expectedCount = expectedItems.Count;
+            typical.MiscCosts.Remove(misc);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
