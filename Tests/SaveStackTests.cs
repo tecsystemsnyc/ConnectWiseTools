@@ -751,19 +751,24 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            TECController controller = new TECController(new TECManufacturer());
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECController controller = new TECController(manufacturer);
             bid.Controllers.Add(controller);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, bid, controller);
-            int expectedCount = 1;
+
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Remove, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Remove, bid, controller));
+
+            int expectedCount = 2;
 
             bid.Controllers.Remove(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
-            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+            checkStackItems(expectedItems, stack);
         }
         #endregion
         #region Panel
