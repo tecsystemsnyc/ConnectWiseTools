@@ -640,12 +640,11 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.AddRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Panels[0]));
-            expectedItems.Add(new StackItem(Change.Add, panel, type));
+            expectedItems.Add(new StackItem(Change.Add, instance.Panels[0], type));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = 4;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
