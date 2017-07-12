@@ -213,6 +213,16 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
+            TECScopeManager scopeManager;
+            if (Templates != null)
+            {
+                scopeManager = Templates;
+            }
+            else
+            {
+                scopeManager = Bid;
+            }
+
             Type sourceType = dropInfo.Data.GetType();
             Object sourceItem;
             sourceItem = dropInfo.Data;
@@ -234,19 +244,11 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (dropInfo.Data is TECController)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, SelectedSystem.Controllers);
+                UIHelpers.ControllerInPanelDrop(dropInfo, SelectedSystem.Controllers, scopeManager);
             }
             else
             {
-                TECScopeManager scopeManager;
-                if (Templates != null)
-                {
-                    scopeManager = Templates;
-                }
-                else
-                {
-                    scopeManager = Bid;
-                }
+                
                 UIHelpers.StandardDrop(dropInfo, scopeManager);
             }
         }

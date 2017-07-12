@@ -45,7 +45,7 @@ namespace EstimatingLibrary
             return outMan;
         }
 
-        public override Object DragDropCopy()
+        public override Object DragDropCopy(TECScopeManager scopeManager)
         {
             throw new NotImplementedException();
         }

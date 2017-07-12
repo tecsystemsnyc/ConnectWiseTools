@@ -376,21 +376,21 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECController)
+            TECScopeManager scopeManager;
+            if (Templates != null)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers, isGlobal);
+                scopeManager = Templates;
             }
             else
             {
-                TECScopeManager scopeManager;
-                if(Templates != null)
-                {
-                    scopeManager = Templates;
-                }
-                else
-                {
-                    scopeManager = Bid;
-                }
+                scopeManager = Bid;
+            }
+            if (dropInfo.Data is TECController)
+            {
+                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers, scopeManager, isGlobal);
+            }
+            else
+            {
                 UIHelpers.StandardDrop(dropInfo, scopeManager);
             }
         }

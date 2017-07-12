@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -73,9 +74,10 @@ namespace EstimatingLibrary
             return outPoint;
         }
 
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             TECPoint outPoint = new TECPoint(this);
+            ModelLinkingHelper.LinkScopeItem(outPoint, scopeManager);
             return outPoint;
         }
 

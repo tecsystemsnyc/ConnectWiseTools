@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -459,9 +460,10 @@ namespace EstimatingLibrary
 
             return outController;
         }
-        public override Object DragDropCopy()
+        public override Object DragDropCopy(TECScopeManager scopeManager)
         {
             var outController = new TECController(this);
+            ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }
         private ObservableCollection<IOType> getAvailableIO()

@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -87,9 +88,10 @@ namespace EstimatingLibrary
             outPanel._guid = _guid;
             return outPanel;
         }
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             var outPanel = new TECPanel(this);
+            ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }
 

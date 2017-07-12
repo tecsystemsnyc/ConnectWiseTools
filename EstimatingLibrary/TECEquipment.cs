@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
@@ -166,9 +167,10 @@ namespace EstimatingLibrary
             return outEquip;
         }
 
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             TECEquipment outEquip = new TECEquipment(this);
+            ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
             return outEquip;
         }
 

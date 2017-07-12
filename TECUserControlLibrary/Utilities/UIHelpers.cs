@@ -50,8 +50,7 @@ namespace TECUserControlLibrary.Utilities
                     var outSource = new List<object>();
                     foreach (object item in ((IList)sourceItem))
                     {
-                        var toAdd = ((TECScope)item).DragDropCopy() as TECScope;
-                        ModelLinkingHelper.LinkScopeItem(toAdd, scopeManager);
+                        var toAdd = ((TECScope)item).DragDropCopy(scopeManager);
                         outSource.Add(toAdd);
                      }
                     sourceItem = outSource;
@@ -64,9 +63,7 @@ namespace TECUserControlLibrary.Utilities
                     }
                     else
                     {
-                        sourceItem = ((TECScope)dropInfo.Data).DragDropCopy();
-                        ModelLinkingHelper.LinkScopeItem(sourceItem as TECScope, scopeManager);
-
+                        sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(scopeManager);
                     }
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
@@ -124,9 +121,9 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers, bool isGlobal = true)
+        public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers, TECScopeManager scopeManager, bool isGlobal = true)
         {
-            var sourceItem = (dropInfo.Data as TECScope).DragDropCopy();
+            var sourceItem = (dropInfo.Data as TECScope).DragDropCopy(scopeManager);
             Type sourceType = dropInfo.Data.GetType();
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 
@@ -188,33 +185,7 @@ namespace TECUserControlLibrary.Utilities
             }
             
         }
-
-        public static void ControlledScopeDrop(IDropInfo dropInfo, TECScopeManager scopeManager)
-        {
-            var sourceItem = dropInfo.Data;
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                if (dropInfo.Data is TECSystem)
-                {
-                    Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-                    sourceItem = new TECSystem((dropInfo.Data as TECSystem), guidDictionary);
-                    var newControlledScope = sourceItem as TECSystem;
-                    ModelLinkingHelper.LinkSystem(newControlledScope, scopeManager, guidDictionary);
-                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
-                    {
-                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                    }
-                    else
-                    {
-                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                    }
-                }
-            }
-            else
-            {
-                handleReorderDrop(dropInfo);
-            }
-        }
+        
         private static void handleReorderDrop(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;

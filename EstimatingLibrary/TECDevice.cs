@@ -89,9 +89,16 @@ namespace EstimatingLibrary
             return outDevice;
         }
 
-        public override Object DragDropCopy()
+        public override Object DragDropCopy(TECScopeManager scopeManager)
         {
-            return this;
+            foreach(TECDevice device in scopeManager.Catalogs.Devices)
+            {
+                if(device.Guid == this.Guid)
+                {
+                    return device;
+                }
+            }
+            throw new Exception();
         }
 
         private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

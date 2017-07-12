@@ -42,7 +42,7 @@ namespace EstimatingLibrary
             return outCost;
         }
 
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECMisc(this);
         }

@@ -273,9 +273,10 @@ namespace EstimatingLibrary
             outScope.copyPropertiesFromScope(this);
             return outScope;
         }
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             TECSubScope outScope = new TECSubScope(this);
+            ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }
 
