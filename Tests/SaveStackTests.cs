@@ -826,17 +826,20 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            bid.Systems.Add(new TECSystem());
+            TECSystem system = new TECSystem();
+            bid.Systems.Add(system);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
+            StackItem expectedItem = new StackItem(Change.Remove, bid, system);
 
-            bid.Systems.Remove(new TECSystem());
+            bid.Systems.Remove(system);
 
             int expectedCount = 1;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
         }
 
         [TestMethod]
