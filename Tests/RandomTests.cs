@@ -2,6 +2,9 @@
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using EstimatingLibrary;
+using EstimatingUtilitiesLibrary;
+using System.IO;
 
 namespace Tests
 {
@@ -59,11 +62,35 @@ namespace Tests
         #endregion
 
         [TestMethod]
-        public void AddPointTo()
+        public void AddSubScopeToLoadedSystem()
         {
-            //
-            // TODO: Add test logic here
-            //
+            TECBid bid = new TECBid();
+            ChangeStack stack;
+
+            var path = Path.GetTempFileName();
+            DatabaseHelper.SaveNew(path, bid);
+
+            bid = DatabaseHelper.Load(path) as TECBid;
+            stack = new ChangeStack(bid);
+            bid.Systems.Add(new TECSystem());
+            DatabaseHelper.Update(path, stack, false);
+
+            bid = DatabaseHelper.Load(path) as TECBid;
+            stack = new ChangeStack(bid);
+            bid.Systems[0].AddInstance(bid);
+            DatabaseHelper.Update(path, stack, false);
+
+            bid = DatabaseHelper.Load(path) as TECBid;
+            stack = new ChangeStack(bid);
+            bid.Systems[0].Equipment.Add(new TECEquipment());
+            DatabaseHelper.Update(path, stack, false);
+
+            bid = DatabaseHelper.Load(path) as TECBid;
+            stack = new ChangeStack(bid);
+            bid.Systems[0].Equipment[0].SubScope.Add(new TECSubScope());
+            DatabaseHelper.Update(path, stack, false);
+
+            bid = DatabaseHelper.Load(path) as TECBid;
         }
     }
 }
