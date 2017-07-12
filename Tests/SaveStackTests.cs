@@ -11,6 +11,90 @@ namespace Tests
     [TestClass]
     public class SaveStackTests
     {
+        #region Bid
+        #region Controller
+        [TestMethod]
+        public void Bid_AddController()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECController controller = new TECController(new TECManufacturer());
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+            StackItem expectedItem = new StackItem(Change.Add, bid, controller);
+            int expectedCount = 1;
+
+            bid.Controllers.Add(controller);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+        #endregion
+        #region Panel
+        [TestMethod]
+        public void Bid_AddPanel()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECPanel panel = new TECPanel(new TECPanelType());
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+            StackItem expectedItem = new StackItem(Change.Add, bid, panel);
+            int expectedCount = 1;
+
+            bid.Panels.Add(panel);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+        #endregion
+        #region Misc
+        [TestMethod]
+        public void Bid_AddMisc()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECMisc misc = new TECMisc();
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+            StackItem expectedItem = new StackItem(Change.Add, bid, misc);
+            int expectedCount = 1;
+
+            bid.MiscCosts.Add(misc);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+        #endregion
+        #region Scope Branch
+        [TestMethod]
+        public void Bid_AddScopeBranch()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECScopeBranch scopeBranch = new TECScopeBranch();
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+            StackItem expectedItem = new StackItem(Change.Add, bid, scopeBranch);
+            int expectedCount = 1;
+
+            bid.ScopeTree.Add(scopeBranch);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+        #endregion
+        #endregion
+
+        #region System
         [TestMethod]
         public void Bid_AddSystem()
         {
@@ -47,7 +131,6 @@ namespace Tests
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
         }
-
         #region Equipment
         [TestMethod]
         public void Bid_AddEquipmentToTypicalWithout()
@@ -343,11 +426,10 @@ namespace Tests
             subScope.Devices.Add(device);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, device, instance.Equipment[0].SubScope[0].Devices[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
             expectedItems.Add(new StackItem(Change.Add, system.Equipment[0].SubScope[0], device));
 
-            int expectedCount = 3;
+            int expectedCount = 2;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -373,7 +455,6 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, device, instance.Equipment[0].SubScope[0].Devices[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
             expectedItems.Add(new StackItem(Change.Add, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
@@ -381,7 +462,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
-            int expectedCount = 7;
+            int expectedCount = 6;
             
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -542,6 +623,106 @@ namespace Tests
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
             checkStackItems(expectedItems, stack);
         }
+        #endregion
+        #region Misc
+        [TestMethod]
+        public void Bid_AddMiscToTypicalWithout()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECSystem system = new TECSystem();
+            TECMisc misc = new TECMisc();
+            bid.Systems.Add(system);
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+            StackItem expectedItem = new StackItem(Change.Add, system, misc);
+            int expectedCount = 1;
+
+            system.MiscCosts.Add(misc);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+
+        [TestMethod]
+        public void Bid_AddMiscToTypicalWith()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECSystem typical = new TECSystem();
+            TECMisc misc = new TECMisc();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+
+            typical.MiscCosts.Add(misc);
+
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Add, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance, instance.MiscCosts[0]));
+            expectedItems.Add(new StackItem(Change.Add, typical, misc));
+
+            int expectedCount = 3;
+
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddInstanceToTypicalWithMisc()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECSystem typical = new TECSystem();
+            TECMisc misc = new TECMisc();
+            bid.Systems.Add(typical);
+            typical.MiscCosts.Add(misc);
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+
+            TECSystem instance = typical.AddInstance(bid);
+
+            List<StackItem> expectedItems = new List<StackItem>();
+            expectedItems.Add(new StackItem(Change.Add, misc, instance.MiscCosts[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(Change.Add, instance, instance.MiscCosts[0]));
+            expectedItems.Add(new StackItem(Change.Add, typical, instance));
+
+            int expectedCount = 3;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItems(expectedItems, stack);
+        }
+        #endregion
+        #region Scope Branch
+        [TestMethod]
+        public void Bid_AddScopeBranchToTypical()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECSystem system = new TECSystem();
+            TECScopeBranch scopeBranch = new TECScopeBranch();
+            bid.Systems.Add(system);
+
+            //Act
+            ChangeStack stack = new ChangeStack(bid);
+            StackItem expectedItem = new StackItem(Change.Add, system, scopeBranch);
+            int expectedCount = 1;
+
+            system.ScopeBranches.Add(scopeBranch);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.SaveStack.Count);
+            checkStackItem(expectedItem, stack.SaveStack[stack.SaveStack.Count - 1]);
+        }
+        #endregion
         #endregion
 
         public void checkStackItem(StackItem expectedItem, StackItem actualItem)
