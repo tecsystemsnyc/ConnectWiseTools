@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using System.IO;
+using EstimatingLibrary.Utilities;
 
 namespace Tests
 {
@@ -61,32 +62,22 @@ namespace Tests
         //
         #endregion
 
+
         [TestMethod]
         public void AddSubScopeToLoadedSystem()
         {
-            TECBid bid = new TECBid();
-            ChangeStack stack;
+            TECBid bid = TestHelper.CreateTestBid();
 
             var path = Path.GetTempFileName();
-            DatabaseHelper.SaveNew(path, bid);
 
-            bid = DatabaseHelper.Load(path) as TECBid;
-            stack = new ChangeStack(bid);
             bid.Systems.Add(new TECSystem());
-            DatabaseHelper.Update(path, stack, false);
-
-            bid = DatabaseHelper.Load(path) as TECBid;
-            stack = new ChangeStack(bid);
             bid.Systems[0].AddInstance(bid);
-            DatabaseHelper.Update(path, stack, false);
-
-            bid = DatabaseHelper.Load(path) as TECBid;
-            stack = new ChangeStack(bid);
             bid.Systems[0].Equipment.Add(new TECEquipment());
-            DatabaseHelper.Update(path, stack, false);
-
+            DatabaseHelper.SaveNew(path, bid);
+            
             bid = DatabaseHelper.Load(path) as TECBid;
-            stack = new ChangeStack(bid);
+
+            ChangeStack stack = new ChangeStack(bid);
             bid.Systems[0].Equipment[0].SubScope.Add(new TECSubScope());
             DatabaseHelper.Update(path, stack, false);
 
