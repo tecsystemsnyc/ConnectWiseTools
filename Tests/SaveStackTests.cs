@@ -214,7 +214,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -296,7 +296,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
-            int expectedCount = 5;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -386,7 +386,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, system, instance));
 
-            int expectedCount = 7;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -559,7 +559,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Controllers[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -614,8 +614,8 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, panel, type));
             expectedItems.Add(new StackItem(Change.Add, typical, panel));
 
-            int expectedCount = 3;
-            
+            int expectedCount = expectedItems.Count;
+
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -645,7 +645,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Add, panel, type));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -1319,7 +1319,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Controllers[0]));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
@@ -1407,7 +1407,7 @@ namespace Tests
             expectedItems.Add(new StackItem(Change.Remove, panel, type));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.SaveStack.Count);
