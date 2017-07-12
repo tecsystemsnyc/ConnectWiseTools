@@ -210,7 +210,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, equip, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(Change.AddRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
