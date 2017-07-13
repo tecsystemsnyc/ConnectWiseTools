@@ -1,11 +1,9 @@
 ﻿using EstimatingLibrary;
-using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,10 +12,10 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class SaveBidTests
+    public class IntegratedSaveLoadTests
     {
         const bool DEBUG = true;
-        
+
         TECBid bid;
         ChangeStack testStack;
         string path;
@@ -27,8 +25,9 @@ namespace Tests
         {
             path = Path.GetTempFileName();
             bid = TestHelper.CreateTestBid();
-            testStack = new ChangeStack(bid);
             DatabaseHelper.SaveNew(path, bid);
+            bid = DatabaseHelper.Load(path) as TECBid;
+            testStack = new ChangeStack(bid);
         }
 
         [TestCleanup]
@@ -487,7 +486,7 @@ namespace Tests
             TECSystem typical = bid.Systems.RandomObject();
 
             TECSystem expectedSystem = typical.AddInstance(bid);
-           
+
             DatabaseHelper.Update(path, testStack, false);
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
@@ -495,7 +494,7 @@ namespace Tests
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
             {
-                foreach(TECSystem instance in system.SystemInstances)
+                foreach (TECSystem instance in system.SystemInstances)
                 {
                     if (expectedSystem.Guid == instance.Guid)
                     {
@@ -684,9 +683,9 @@ namespace Tests
                 if (system.Guid == expectedSystem.Guid)
                 {
                     actualSystem = system;
-                    foreach(TECMisc misc in actualSystem.MiscCosts)
+                    foreach (TECMisc misc in actualSystem.MiscCosts)
                     {
-                        if(misc.Guid == expectedMisc.Guid)
+                        if (misc.Guid == expectedMisc.Guid)
                         {
                             actualMisc = misc;
                             break;
@@ -740,10 +739,10 @@ namespace Tests
         public void Save_Bid_Remove_Equipment()
         {
             //Act
-            TECSystem systemToModify = null; 
-            foreach(TECSystem system in bid.Systems)
+            TECSystem systemToModify = null;
+            foreach (TECSystem system in bid.Systems)
             {
-                if(system.Equipment.Count > 0)
+                if (system.Equipment.Count > 0)
                 {
                     systemToModify = system;
                 }
@@ -905,7 +904,7 @@ namespace Tests
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
             expectedSubScope.Quantity = 235746543;
-            
+
 
             bid.RandomEquipment().SubScope.Add(expectedSubScope);
 
@@ -1261,7 +1260,7 @@ namespace Tests
         {
             //Act
             TECSubScope ssToModify = bid.RandomSubScope();
-            while(ssToModify.Devices.Count == 0)
+            while (ssToModify.Devices.Count == 0)
             {
                 ssToModify = bid.RandomSubScope();
             }
@@ -1570,7 +1569,7 @@ namespace Tests
         {
             TECSystem systemToEdit = bid.Systems.RandomObject();
             TECTag tagToAdd = null;
-            foreach(TECTag tag in bid.Catalogs.Tags)
+            foreach (TECTag tag in bid.Catalogs.Tags)
             {
                 if (!systemToEdit.Tags.Contains(tag))
                 {
@@ -2711,7 +2710,7 @@ namespace Tests
         #endregion Controller IO
 
         #endregion
-        
+
         #region Save Misc Cost
         [TestMethod]
         public void Save_Bid_Add_MiscCost()
@@ -2869,7 +2868,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
         }
-        
+
         #endregion
 
         #region Save Panel
@@ -2953,9 +2952,8 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_ControlledScope()
         {
-           
+
         }
         #endregion
-
     }
 }
