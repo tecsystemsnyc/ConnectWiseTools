@@ -418,7 +418,7 @@ namespace EstimatingUtilitiesLibrary
             if (newItem is TECSystem)
             {
                 handleSystemChildren(newItem as TECSystem, item.Change);
-                if(item.ReferenceObject is TECSystem && item.Change == Change.Remove)
+                if (item.ReferenceObject is TECSystem && item.Change == Change.Remove)
                 {
                     handleRemoveRelationships(item.ReferenceObject as TECSystem, item.TargetObject as TECSystem);
                 }
