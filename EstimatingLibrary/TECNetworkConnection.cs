@@ -77,6 +77,7 @@ namespace EstimatingLibrary
                 foreach (TECCost cost in ConnectionType.RatedCosts)
                 {
                     TECCost ratedCost = new TECCost();
+                    ratedCost.Type = cost.Type;
                     ratedCost.Cost = cost.Cost * Length;
                     ratedCost.Labor = cost.Labor * Length;
                     outCosts.Add(ratedCost);
