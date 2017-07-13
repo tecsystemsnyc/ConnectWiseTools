@@ -13362,6 +13362,13 @@ namespace EstimatingUtilitiesLibrary
             runProperties51.Append((FontSize)fontSize.CloneNode(true));
             Text text34 = new Text();
             text34.Text = scope.Name;
+            if(scope is TECSystem)
+            {
+                if((scope as TECSystem).SystemInstances.Count > 1)
+                {
+                    text34.Text += ": (Qty. " + (scope as TECSystem).SystemInstances.Count + ")";
+                }
+            }
 
             run51.Append(runProperties51);
             run51.Append(text34);
