@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,27 +39,22 @@ namespace EstimatingLibrary
             }
         }
 
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-        public double ElectricalCost
+        public List<TECCost> Costs
         {
             get
             {
-                return 0;
+                return getCosts();
             }
         }
-        public double ElectricalLabor
+        private List<TECCost> getCosts()
         {
-            get
+            var outCosts = new List<TECCost>();
+            outCosts.Add(Type);
+            foreach(TECCost cost in AssociatedCosts)
             {
-                return getElectricalLabor();
+                outCosts.Add(cost);
             }
+            return outCosts;
         }
         #endregion
 
@@ -92,10 +88,10 @@ namespace EstimatingLibrary
             outPanel._guid = _guid;
             return outPanel;
         }
-
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             var outPanel = new TECPanel(this);
+            ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }
 
@@ -116,42 +112,5 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-
-            if (Type != null)
-            {
-                matCost += Type.Cost;
-            }
-
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double lCost = 0;
-
-
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
-            {
-                lCost += cost.Labor;
-            }
-
-            return lCost;
-        }
-        private double getElectricalLabor()
-        {
-            double mountingLabor = 0;
-            mountingLabor += .5;
-
-            return mountingLabor;
-        }
-
     }
 }

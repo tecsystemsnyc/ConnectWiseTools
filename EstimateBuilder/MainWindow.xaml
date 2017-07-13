@@ -5,24 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:local="clr-namespace:EstimateBuilder"
-        xmlns:view="clr-namespace:EstimateBuilder.View"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
-        xmlns:cLibView ="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
-        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
-        xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
         xmlns:dd="urn:gong-wpf-dragdrop"
+        
+        xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
         Height="720"
         Width="1200"
+        WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         x:Name="parent">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Skins/MainSkin.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -50,7 +49,7 @@
     </Window.InputBindings>
 
     <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
-        <cLibControls:MenuControl ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+        <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
 
         <Grid x:Name="LayoutRoot">
@@ -73,39 +72,31 @@
 
             <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
                 <TabItem Header="Scope Editor">
-                    <view:ScopeEditorView
+                    <views:ScopeEditorView
                         ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
-                <TabItem Header="Electrical">
-                    <view:ElectricalView
-                        ViewModel="{Binding ElectricalVM}"/>
-                </TabItem>
                 <TabItem Header="Network">
-                    <cLibView:NetworkView
+                    <views:NetworkView
                         ViewModel="{Binding NetworkVM}"/>
                 </TabItem>
                 <TabItem Header="Drawing" Visibility="Collapsed">
-                    <view:DrawingView
+                    <views:DrawingView
                         ViewModel="{Binding DrawingVM}"/>
                 </TabItem>
-                <TabItem Header="Labor">
-                    <view:LaborView
-                        ViewModel="{Binding LaborVM}"/>
-                </TabItem>
-                <TabItem Header="Proposal">
-                    <view:ProposalView
-                        ViewModel="{Binding ProposalVM}"/>
-                </TabItem>
                 <TabItem Header="Review">
-                    <view:ReviewTabControl
+                    <controls:ReviewTabControl
                         ViewModel="{Binding}"/>
                 </TabItem>
+                <TabItem Header="Proposal">
+                    <views:ProposalView
+                        ViewModel="{Binding ProposalVM}"/>
+                </TabItem>
                 <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
-                    <cLibView:SettingsView
+                    <views:SettingsView
                         ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
             </TabControl>
-            <cLibControls:StatusBarControl ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+            <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
                                            Grid.Row="3" Grid.ColumnSpan="3"
                                            dd:DragDrop.IsDropTarget="True"
                                            dd:DragDrop.DropHandler="{Binding}"/>

@@ -35,18 +35,7 @@ namespace TECUserControlLibrary.Models
                 
             }
         }
-
-        private TECSystem _parentSystem;
-        public TECSystem ParentSystem
-        {
-            get { return _parentSystem; }
-            set
-            {
-                _parentSystem = value;
-                RaisePropertyChanged("ParentSystem");
-            }
-        }
-
+        
         private TECEquipment _parentEquipment;
         public TECEquipment ParentEquipment
         {

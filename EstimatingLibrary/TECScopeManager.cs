@@ -17,7 +17,7 @@ namespace EstimatingLibrary
         }
 
         protected TECLabor _labor;
-        public TECLabor Labor
+        virtual public TECLabor Labor
         {
             get { return _labor; }
             set
@@ -29,7 +29,7 @@ namespace EstimatingLibrary
         }
 
         protected TECCatalogs _catalogs;
-        public TECCatalogs Catalogs
+        virtual public TECCatalogs Catalogs
         {
             get { return _catalogs; }
             set

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using EstimatingLibrary.Interfaces;
+using System.Collections;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -190,9 +191,13 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion Cast Conversions
 
-        public static object GetChildCollection(Type childType, object parentObject)
+        public static object GetChildCollection(Type childType, object parentObject, Type parentType = null)
         {
-            foreach (PropertyInfo info in parentObject.GetType().GetProperties())
+            if(parentType == null)
+            {
+                parentType = parentObject.GetType();
+            }
+            foreach (PropertyInfo info in parentType.GetProperties())
             {
                 if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { childType }))
                     return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);
@@ -289,13 +294,4 @@ namespace EstimatingUtilitiesLibrary
         }
 
     }
-
-    public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };
-    public enum GridIndex { AddControlledScope = 1, Scope, DDC, Location, Proposal, Budget, Misc, Settings };
-    public enum TemplateGridIndex { None, ControlledScope, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
-    public enum ScopeCollectionIndex { None, ControlledScope, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
-    public enum LocationScopeType { System, Equipment, SubScope };
-    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscWiring, MiscCosts };
-    public enum ControlledScopeEditIndex { Edit, Qty };
-    public enum TECMaterialIndex{ Devices, Controllers, Panels, MiscCosts }
 }

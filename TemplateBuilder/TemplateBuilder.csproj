@@ -181,16 +181,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Design\DesignDataService.cs" />
-    <Compile Include="EnumBindingSourceExtension.cs" />
-    <Compile Include="MainViewModelData.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\ConstantsView.xaml.cs">
-      <DependentUpon>ConstantsView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="MVVM\MainViewModel.cs" />
+    <Compile Include="MVVM\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -203,11 +198,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Skins\MainSkin.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ConstantsView.xaml">
+    <Page Include="ResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,8 +1,7 @@
 ﻿<ResourceDictionary x:Class="TECUserControlLibrary.TECResourceDictionary" 
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:TECUserControlLibrary"
-                    xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters"
+                    xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:dd="urn:gong-wpf-dragdrop">
     
@@ -58,7 +57,7 @@
         <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
         <Setter Property="Template" Value="{DynamicResource TextBoxBaseControlTemplate}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="local:TextBoxEnterKeyUpdateBehavior.IsEnabledForStyle" Value="True"/>
+        <Setter Property="utilities:TextBoxEnterKeyUpdateBehavior.IsEnabledForStyle" Value="True"/>
         <EventSetter Event="PreviewMouseDown" Handler="TextBox_PreviewMouseDown"/>
     </Style>
     <Style TargetType="DataGrid">
@@ -148,14 +147,14 @@
         <ToggleButton Name="ShowDetails" 
                       IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DataContext, 
-                                        Converter={cnvt:DataContextToEnableConverter}}"
+                                        Converter={utilities:DataContextToEnableConverter}}"
                       IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DetailsVisibility, 
-                                        Converter={cnvt:VisbilityToBooleanConverter}, 
+                                        Converter={utilities:VisbilityToBooleanConverter}, 
                                         Mode=TwoWay}"
                       Content="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
                                         Path=DetailsVisibility, 
-                                        Converter={cnvt:VisbilityToContentConverter}}"
+                                        Converter={utilities:VisbilityToContentConverter}}"
                       PreviewMouseDown="ShowDetails_PreviewMouseDown"
                     Margin="0"/>
     </DataTemplate>

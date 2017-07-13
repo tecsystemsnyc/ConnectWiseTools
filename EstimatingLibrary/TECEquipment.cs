@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
@@ -89,36 +90,37 @@ namespace EstimatingLibrary
             }
         }
 
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-
-        public double ElectricalCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-        public double ElectricalLabor
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         public int PointNumber
         {
             get
             {
                 return getPointNumber();
             }
+        }
+
+        public List<TECCost> Costs
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
+
+        private List<TECCost> getCosts()
+        {
+            var outCosts = new List<TECCost>();
+            foreach(TECSubScope ss in SubScope)
+            {
+                foreach(TECCost cost in ss.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach(TECCost cost in AssociatedCosts)
+            {
+                outCosts.Add(cost);
+            }
+            return outCosts;
         }
 
         #endregion //Properties
@@ -138,22 +140,17 @@ namespace EstimatingLibrary
         public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
             ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
-            if (characteristicReference == null)
-            {
-                characteristicReference = new ObservableItemToInstanceList<TECScope>();
-            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
-
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
                 var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
-                characteristicReference.AddItem(subScope,toAdd);
+                characteristicReference?.AddItem(subScope,toAdd);
                 SubScope.Add(toAdd);
             }
             _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
-
             this.copyPropertiesFromScope(equipmentSource);
+            
         }
         #endregion //Constructors
 
@@ -170,37 +167,11 @@ namespace EstimatingLibrary
             return outEquip;
         }
 
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             TECEquipment outEquip = new TECEquipment(this);
+            ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
             return outEquip;
-        }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-            foreach (TECSubScope sub in this.SubScope)
-            {
-                matCost += sub.MaterialCost;
-            }
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double cost = 0;
-            foreach (TECSubScope sub in this.SubScope)
-            {
-                cost += sub.LaborCost;
-            }
-            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
-            {
-                cost += assCost.Labor;
-            }
-            return cost;
         }
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

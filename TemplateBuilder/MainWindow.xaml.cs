@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using TemplateBuilder.ViewModel;
+using TemplateBuilder.MVVM;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight;
 

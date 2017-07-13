@@ -8,63 +8,78 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConnectionType : TECScope, ElectricalMaterialComponent
+    public class TECConnectionType : TECCost, ElectricalMaterialComponent
     {
         #region Properties
-
-        protected double _cost;
-        public double Cost
+        private ObservableCollection<TECCost> _ratedCosts;
+        public ObservableCollection<TECCost> RatedCosts
         {
-            get { return _cost; }
+            get { return _ratedCosts; }
             set
             {
-                var temp = Copy();
-                _cost = value;
-                NotifyPropertyChanged("Cost", temp, this);
+                var temp = this.Copy();
+                RatedCosts.CollectionChanged -= RatedCosts_CollectionChanged;
+                _ratedCosts = value;
+                RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
+                NotifyPropertyChanged("RatedCosts", temp, this);
             }
         }
-
-        protected double _labor;
-        public double Labor
-        {
-            get { return _labor; }
-            set
-            {
-                var temp = Copy();
-                _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
-            }
-        }
-
         #endregion
 
         public TECConnectionType(Guid guid) : base(guid)
         {
             _cost = 0;
             _labor = 0;
+            _ratedCosts = new ObservableCollection<TECCost>();
+            _type = CostType.Electrical;
+            RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
         }
         public TECConnectionType() : this(Guid.NewGuid()) { }
         public TECConnectionType(TECConnectionType connectionTypeSource) : this()
         {
-            copyPropertiesFromScope(connectionTypeSource);
-            _cost = connectionTypeSource.Cost;
-            _labor = connectionTypeSource.Labor;
+            copyPropertiesFromCost(connectionTypeSource);
+            var ratedCosts = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in connectionTypeSource.RatedCosts)
+            { ratedCosts.Add(cost as TECCost); }
+            RatedCosts.CollectionChanged -= RatedCosts_CollectionChanged;
+            _ratedCosts = ratedCosts;
+            RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
         }
 
         public override object Copy()
         {
             var outType = new TECConnectionType();
             outType._guid = this._guid;
-            outType.copyPropertiesFromScope(this);
-            outType._cost = this._cost;
-            outType._labor = this._labor;
+            outType.copyPropertiesFromCost(this);
+            var ratedCosts = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in RatedCosts)
+            { ratedCosts.Add(cost as TECCost); }
+            outType._ratedCosts = ratedCosts;
+            outType.RatedCosts.CollectionChanged += outType.RatedCosts_CollectionChanged;
 
             return outType;
         }
-
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             throw new NotImplementedException();
+        }
+
+        private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (TECCost item in e.NewItems)
+                {
+                    NotifyPropertyChanged("AddCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECCost item in e.OldItems)
+                {
+                    NotifyPropertyChanged("RemoveCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                }
+            }
         }
     }
 }

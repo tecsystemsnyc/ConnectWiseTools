@@ -1,7 +1,9 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +14,12 @@ namespace Tests
     public class LoadTemplatesTests
     {
         static TECTemplates actualTemplates;
-        static TECSystem actualSystem;
-        static TECEquipment actualEquipment;
-        static TECSubScope actualSubScope;
-        static TECDevice actualDevice;
-        static TECManufacturer actualManufacturer;
-        static TECTag actualTag;
-        static TECConnectionType actualConnectionType;
-        static TECController actualController;
-        static TECConduitType actualConduitType;
-        static TECAssociatedCost actualAssociatedCost;
-        static TECIOModule actualIOModule;
+
+        static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+        static Guid TEST_TEC_COST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+        static Guid TEST_ELECTRICAL_COST_GUID = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+        static Guid TEST_LOCATION_GUID = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
+        static Guid TEST_RATED_COST_GUID = new Guid("b7c01526-c195-442f-a1f1-28d07db61144");
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -40,677 +37,712 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext TestContext)
         {
-            //Arrange
-            actualTemplates = TestHelper.LoadTestTemplates(TestHelper.StaticTestTemplatesPath);
-
-            actualSystem = actualTemplates.SystemTemplates[0];
-
-            actualEquipment = actualTemplates.EquipmentTemplates[0];
-
-            actualSubScope = actualTemplates.SubScopeTemplates[0];
-
-            actualController = actualTemplates.ControllerTemplates[0];
-
-            actualDevice = null;
-            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
-            {
-                if (dev.Name == "Test Device") actualDevice = dev;
-            }
-
-            actualManufacturer = null;
-            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
-            {
-                if (man.Name == "Test Manufacturer") actualManufacturer = man;
-            }
-
-            actualTag = null;
-            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
-            {
-                if (tag.Text == "Test Tag") actualTag = tag;
-            }
-
-            actualConnectionType = null;
-            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
-            {
-                if (connectionType.Name == "Test ConnectionType") actualConnectionType = connectionType;
-            }
-            actualConduitType = null;
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
-            {
-                if (conduitType.Name == "Test ConduitType") actualConduitType = conduitType;
-            }
-            actualAssociatedCost = null;
-            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
-            {
-                if (cost.Name == "Test Cost") actualAssociatedCost = cost;
-            }
-            actualIOModule = null;
-            foreach (TECIOModule ioModule in actualTemplates.Catalogs.IOModules)
-            {
-                if (ioModule.Name == "Test IO Module") actualIOModule = ioModule;
-            }
+            string path = Path.GetTempFileName();
+            TestDBHelper.CreateTestTemplates(path);
+            actualTemplates = TestHelper.LoadTestTemplates(path);
         }
 
         [TestMethod]
         public void Load_Templates_LaborConsts()
         {
-            //Arrange
-            TECLabor actualLabor = actualTemplates.Labor;
-
             //Assert
-            Assert.AreEqual(10.0, actualLabor.PMCoef);
-            Assert.AreEqual(10.1, actualLabor.PMRate);
-            Assert.AreEqual(11.0, actualLabor.ENGCoef);
-            Assert.AreEqual(11.2, actualLabor.ENGRate);
-            Assert.AreEqual(12.0, actualLabor.CommCoef);
-            Assert.AreEqual(12.3, actualLabor.CommRate);
-            Assert.AreEqual(13.0, actualLabor.SoftCoef);
-            Assert.AreEqual(13.4, actualLabor.SoftRate);
-            Assert.AreEqual(14.0, actualLabor.GraphCoef);
-            Assert.AreEqual(14.5, actualLabor.GraphRate);
+            double expectedPMCoef = 2;
+            double expectedPMRate = 30;
+            Assert.AreEqual(expectedPMCoef, actualTemplates.Labor.PMCoef, "PM Coefficient didn't load properly.");
+            Assert.AreEqual(expectedPMRate, actualTemplates.Labor.PMRate, "PM Rate didn't load properly.");
+
+            double expectedENGCoef = 2;
+            double expectedENGRate = 40;
+            Assert.AreEqual(expectedENGCoef, actualTemplates.Labor.ENGCoef, "ENG Coefficient didn't load properly.");
+            Assert.AreEqual(expectedENGRate, actualTemplates.Labor.ENGRate, "ENG Rate didn't load properly.");
+
+            double expectedCommCoef = 2;
+            double expectedCommRate = 50;
+            Assert.AreEqual(expectedCommCoef, actualTemplates.Labor.CommCoef, "Comm Coefficient didn't load properly.");
+            Assert.AreEqual(expectedCommRate, actualTemplates.Labor.CommRate, "Comm Rate didn't load properly.");
+
+            double expectedSoftCoef = 2;
+            double expectedSoftRate = 60;
+            Assert.AreEqual(expectedSoftCoef, actualTemplates.Labor.SoftCoef, "Software Coefficient didn't load properly.");
+            Assert.AreEqual(expectedSoftRate, actualTemplates.Labor.SoftRate, "Software Rate didn't load properly.");
+
+            double expectedGraphCoef = 2;
+            double expectedGraphRate = 70;
+            Assert.AreEqual(expectedGraphCoef, actualTemplates.Labor.GraphCoef, "Graphics Coefficient didn't load properly.");
+            Assert.AreEqual(expectedGraphRate, actualTemplates.Labor.GraphRate, "Graphics Rate didn't load properly.");
         }
 
         [TestMethod]
-        public void Load_Templates_SubconstractorConsts()
+        public void Load_Templates_SubcontractorConsts()
         {
-            //Arrange
-            TECLabor actualLabor = actualTemplates.Labor;
-
             //Assert
-            Assert.AreEqual(954.9, actualLabor.ElectricalRate);
-            Assert.AreEqual(614.15, actualLabor.ElectricalSuperRate);
-            Assert.AreEqual(6870.1, actualLabor.ElectricalNonUnionRate);
-            Assert.AreEqual(46.12, actualLabor.ElectricalSuperNonUnionRate);
+            double expectedElectricalRate = 50;
+            double expectedElectricalSuperRate = 60;
+            double expectedElectricalNonUnionRate = 30;
+            double expectedElectricalSuperNonUnionRate = 40;
+            double expectedElectricalSuperRatio = 0.25;
+            bool expectedOT = false;
+            bool expectedUnion = true;
+            Assert.AreEqual(expectedElectricalRate, actualTemplates.Labor.ElectricalRate, "Electrical rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRate, actualTemplates.Labor.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalNonUnionRate, actualTemplates.Labor.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualTemplates.Labor.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRatio, actualTemplates.Labor.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
+            Assert.AreEqual(expectedOT, actualTemplates.Labor.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
+            Assert.AreEqual(expectedUnion, actualTemplates.Labor.ElectricalIsUnion, "Electrical union bool didn't load properly.");
         }
 
         [TestMethod]
         public void Load_Templates_System()
         {
             //Arrange
-            TECEquipment sysEquipment = actualSystem.Equipment[0];
-            TECSubScope sysSubScope = sysEquipment.SubScope[0];
-            TECDevice childDevice = sysSubScope.Devices[0];
-            TECPoint sysPoint = sysSubScope.Points[0];
-            TECManufacturer childMan = childDevice.Manufacturer;
+            Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
+            string expectedName = "Typical System";
+            string expectedDescription = "Typical System Description";
+            int expectedQuantity = 1;
+            double expectedBP = 100;
+            bool expectedProposeEquipment = true;
+
+            Guid childEquipment = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
+            Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
+            Guid childScopeBranch = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            {
+                if (system.Guid == expectedGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+
+            bool foundEquip = false;
+            foreach (TECEquipment equip in actualSystem.Equipment)
+            {
+                if (equip.Guid == childEquipment)
+                {
+                    foundEquip = true;
+                    break;
+                }
+            }
+            bool foundControl = false;
+            foreach (TECController control in actualSystem.Controllers)
+            {
+                if (control.Guid == childController)
+                {
+                    foundControl = true;
+                    break;
+                }
+            }
+            bool foundPanel = false;
+            foreach (TECPanel panel in actualSystem.Panels)
+            {
+                if (panel.Guid == childPanel)
+                {
+                    foundPanel = true;
+                    break;
+                }
+            }
+            bool foundScopeBranch = false;
+            foreach(TECScopeBranch branch in actualSystem.ScopeBranches)
+            {
+                if (branch.Guid == childScopeBranch)
+                {
+                    foundScopeBranch = true;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test System", actualSystem.Name);
-            Assert.AreEqual("System Description", actualSystem.Description);
-            Assert.AreEqual(12.3, actualSystem.BudgetPriceModifier);
-            Assert.AreEqual("System Tag", actualSystem.Tags[0].Text);
+            Assert.AreEqual(expectedName, actualSystem.Name);
+            Assert.AreEqual(expectedDescription, actualSystem.Description);
+            Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+            Assert.AreEqual(expectedProposeEquipment, actualSystem.ProposeEquipment);
 
-            Assert.AreEqual("System Equipment", sysEquipment.Name);
-            Assert.AreEqual("Child Equipment", sysEquipment.Description);
-            Assert.AreEqual(654, sysEquipment.Quantity);
-            Assert.AreEqual(65.4, sysEquipment.BudgetUnitPrice);
-            Assert.AreEqual("Equipment Tag", sysEquipment.Tags[0].Text);
+            foreach (TECSystem instance in actualSystem.SystemInstances)
+            {
+                Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
+                Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
+            }
 
-            Assert.AreEqual("System SubScope", sysSubScope.Name);
-            Assert.AreEqual("Child SubScope", sysSubScope.Description);
-            Assert.AreEqual(486, sysSubScope.Quantity);
-            Assert.AreEqual("SubScope Tag", sysSubScope.Tags[0].Text);
+            Assert.IsTrue(foundEquip, "Equipment not loaded properly into system.");
+            Assert.IsTrue(foundControl, "Controller not loaded properly into system.");
+            Assert.IsTrue(foundPanel, "Panel not loaded properly into system.");
+            Assert.IsTrue(foundScopeBranch, "Scope branch not loaded properly into system.");
 
-            Assert.AreEqual("Child Device", childDevice.Name);
-            Assert.AreEqual("Child Device", childDevice.Description);
-            Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("TwoC18", childDevice.ConnectionTypes[0].Name);
-            Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
-
-            Assert.AreEqual("System Point", sysPoint.Name);
-            Assert.AreEqual("Child Point", sysPoint.Description);
-            Assert.AreEqual(34, sysPoint.Quantity);
-            Assert.AreEqual(PointTypes.Serial, sysPoint.Type);
-
-            Assert.AreEqual("Child Manufacturer (Child Device)", childMan.Name);
-            Assert.AreEqual(0.3, childMan.Multiplier);
+            testForTag(actualSystem);
+            testForCosts(actualSystem);
         }
 
         [TestMethod]
         public void Load_Templates_Equipment()
         {
-            //Arrange
-            TECSubScope equipSubScope = actualEquipment.SubScope[0];
-            TECDevice childDevice = equipSubScope.Devices[0];
-            TECPoint equipPoint = equipSubScope.Points[0];
-            TECManufacturer childMan = childDevice.Manufacturer;
+            Guid expectedGuid = new Guid("1645886c-fce7-4380-a5c3-295f91961d16");
+            string expectedName = "Template Equip";
+            string expectedDescription = "Template Equip Description";
+            int expectedQuantity = 1;
+            double expectedBP = 25;
+
+            Guid childSubScope = new Guid("214dc8d1-22be-4fbf-8b6b-d66c21105f61");
+
+            TECEquipment actualEquipment = null;
+            foreach(TECEquipment equip in actualTemplates.EquipmentTemplates)
+            {
+                if (equip.Guid == expectedGuid)
+                {
+                    actualEquipment = equip;
+                    break;
+                }
+            }
+
+            bool foundSubScope = false;
+            foreach (TECSubScope ss in actualEquipment.SubScope)
+            {
+                if (ss.Guid == childSubScope)
+                {
+                    foundSubScope = true;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Equipment", actualEquipment.Name);
-            Assert.AreEqual("Equipment Description", actualEquipment.Description);
-            Assert.AreEqual(64.1, actualEquipment.BudgetUnitPrice);
-            Assert.AreEqual("Equipment Tag", actualEquipment.Tags[0].Text);
+            Assert.AreEqual(expectedName, actualEquipment.Name);
+            Assert.AreEqual(expectedDescription, actualEquipment.Description);
+            Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
+            Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
 
-            Assert.AreEqual("Equipment SubScope", equipSubScope.Name);
-            Assert.AreEqual("Child SubScope", equipSubScope.Description);
-            Assert.AreEqual(346, equipSubScope.Quantity);
-            Assert.AreEqual("SubScope Tag", equipSubScope.Tags[0].Text);
+            Assert.IsTrue(foundSubScope, "Subscope not loaded properly into equipment.");
 
-            Assert.AreEqual("Child Device", childDevice.Name);
-            Assert.AreEqual("Child Device", childDevice.Description);
-            Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("TwoC18", childDevice.ConnectionTypes[0].Name);
-            Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
-
-            Assert.AreEqual("Equipment Point", equipPoint.Name);
-            Assert.AreEqual("Child Point", equipPoint.Description);
-            Assert.AreEqual(81, equipPoint.Quantity);
-            Assert.AreEqual(PointTypes.AI, equipPoint.Type);
-
-            Assert.AreEqual("Child Manufacturer (Child Device)", childMan.Name);
-            Assert.AreEqual(0.3, childMan.Multiplier);
+            testForTag(actualEquipment);
+            testForCosts(actualEquipment);
         }
 
         [TestMethod]
         public void Load_Templates_SubScope()
         {
             //Arrange
-            TECDevice childDevice = actualSubScope.Devices[0];
-            TECPoint ssPoint = actualSubScope.Points[0];
-            TECManufacturer childMan = childDevice.Manufacturer;
+            Guid expectedGuid = new Guid("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
+            string expectedName = "Template SS";
+            string expectedDescription = "Template SS Description";
+            int expectedQuantity = 1;
+
+            Guid childPoint = new Guid("6776a30b-0325-42ad-8aa3-3c065b4bb908");
+            Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+
+            TECSubScope actualSubScope = null;
+            foreach(TECSubScope ss in actualTemplates.SubScopeTemplates)
+            {
+                if (ss.Guid == expectedGuid)
+                {
+                    actualSubScope = ss;
+                    break;
+                }
+            }
+
+            bool foundPoint = false;
+            foreach (TECPoint point in actualSubScope.Points)
+            {
+                if (point.Guid == childPoint)
+                {
+                    foundPoint = true;
+                    break;
+                }
+            }
+            bool foundDevice = false;
+            foreach (TECDevice device in actualSubScope.Devices)
+            {
+                if (device.Guid == childDevice)
+                {
+                    foundDevice = true;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test SubScope", actualSubScope.Name);
-            Assert.AreEqual("SubScope Description", actualSubScope.Description);
-            Assert.AreEqual("SubScope Tag", actualSubScope.Tags[0].Text);
-            Assert.AreEqual("Test SubScope", actualSubScope.Name);
-            Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
+            Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
+            Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
+            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
 
-            Assert.AreEqual("Child Device", childDevice.Name);
-            Assert.AreEqual("Child Device", childDevice.Description);
-            Assert.AreEqual(89.3, childDevice.Cost);
-            Assert.AreEqual("TwoC18", childDevice.ConnectionTypes[0].Name);
-            Assert.AreEqual("Device Tag", childDevice.Tags[0].Text);
+            Assert.IsTrue(foundPoint, "Point not loaded into subscope properly.");
+            Assert.IsTrue(foundDevice, "Device not loaded into subscope properly.");
 
-            Assert.AreEqual("SubScope Point", ssPoint.Name);
-            Assert.AreEqual("Child Point", ssPoint.Description);
-            Assert.AreEqual(349, ssPoint.Quantity);
-            Assert.AreEqual(PointTypes.BO, ssPoint.Type);
-
-            Assert.AreEqual("Child Manufacturer (Child Device)", childMan.Name);
-            Assert.AreEqual(0.3, childMan.Multiplier);
+            testForTag(actualSubScope);
+            testForCosts(actualSubScope);
         }
 
         [TestMethod]
         public void Load_Templates_Device()
         {
-            //Arrange
-            TECManufacturer childMan = actualDevice.Manufacturer;
+            Guid expectedGuid = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            string expectedName = "Test Device";
+            string expectedDescription = "Test Device Description";
+            double expectedCost = 123.45;
 
-            //Assert
-            Assert.AreEqual("Test Device", actualDevice.Name);
-            Assert.AreEqual("Device Description", actualDevice.Description);
-            Assert.AreEqual(72.9, actualDevice.Cost);
-            Assert.AreEqual("Cat6", actualDevice.ConnectionTypes[0].Name);
-            Assert.AreEqual("Device Tag", actualDevice.Tags[0].Text);
+            Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            Guid connectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
 
-            Assert.AreEqual("Child Manufacturer (Test Device)", childMan.Name);
-            Assert.AreEqual(0.123, childMan.Multiplier);
+            TECDevice actualDevice = null;
+            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
+            {
+                if (dev.Guid == expectedGuid)
+                {
+                    actualDevice = dev;
+                    break;
+                }
+            }
+
+            bool foundConnectionType = false;
+            foreach (TECConnectionType connectType in actualDevice.ConnectionTypes)
+            {
+                if (connectType.Guid == connectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedName, actualDevice.Name, "Device name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualDevice.Description, "Device description didn't load properly.");
+            Assert.AreEqual(expectedCost, actualDevice.Cost, "Device cost didn't load properly.");
+            Assert.AreEqual(manufacturerGuid, actualDevice.Manufacturer.Guid, "Manufacturer didn't load properly into device.");
+
+            Assert.IsTrue(foundConnectionType, "Connection type didn't load properly into device.");
+
+            testForTag(actualDevice);
+            testForCosts(actualDevice);
         }
 
         [TestMethod]
         public void Load_Templates_Manufacturer()
         {
-            //Assert
-            Assert.AreEqual("Test Manufacturer", actualManufacturer.Name);
-            Assert.AreEqual(0.65, actualManufacturer.Multiplier);
-        }
+            //Arrange
+            Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            string expectedName = "Test Manufacturer";
+            double expectedMultiplier = 0.5;
 
-        [TestMethod]
-        public void Load_Templates_Tag()
-        {
+
+            TECManufacturer actualManufacturer = null;
+            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
+            {
+                if (man.Guid == expectedGuid)
+                {
+                    actualManufacturer = man;
+                    break;
+                }
+            }
+
             //Assert
-            Assert.AreEqual("Test Tag", actualTag.Text);
+            Assert.AreEqual(expectedName, actualManufacturer.Name);
+            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
         }
 
         [TestMethod]
         public void Load_Templates_Controller()
         {
+            //Arrange
+            Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            string expectedName = "Bid Controller";
+            string expectedDescription = "Bid Controller Description";
+            double expectedCost = 1812;
+            NetworkType expectedType = NetworkType.Server;
+            bool expectedGlobalStatus = true;
+
+            TECController actualController = null;
+            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            {
+                if (controller.Guid == expectedGuid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+            
+            Guid expectedIOGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+
+            bool hasIO = false;
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Guid == expectedIOGuid)
+                {
+                    hasIO = true;
+                    break;
+                }
+            }
+
             //Assert
-            Assert.AreEqual("Test Controller", actualController.Name);
-            Assert.AreEqual("test description", actualController.Description);
-            Assert.AreEqual(101, actualController.Cost);
-            Assert.AreEqual(2, actualController.IO.Count);
-            Assert.AreEqual(IOType.AI, actualController.IO[0].Type);
-            Assert.AreEqual("Test Manufacturer", actualController.Manufacturer.Name);
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
+            Assert.IsTrue(hasIO);
+            testForTag(actualController);
+            testForCosts(actualController);
         }
 
         [TestMethod]
         public void Load_Templates_ConnectionType()
         {
-            Assert.AreEqual("Test ConnectionType", actualConnectionType.Name);
-            Assert.AreEqual(10, actualConnectionType.Cost);
-            Assert.AreEqual(12, actualConnectionType.Labor);
-            Assert.AreEqual("Test Cost", actualConnectionType.AssociatedCosts[0].Name);
-            Assert.AreEqual(2, actualConnectionType.AssociatedCosts.Count);
+            //Arrange
+            Guid expectedGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            string expectedName = "Test Connection Type";
+            double expectedCost = 12.48;
+            double expectedLabor = 84.21;
+
+            TECConnectionType actualConnectionType = null;
+            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            {
+                if (connectionType.Guid == expectedGuid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualConnectionType.Name);
+            Assert.AreEqual(expectedCost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedLabor, actualConnectionType.Labor);
+
+            testForCosts(actualConnectionType);
+            testForRatedCosts(actualConnectionType);
         }
 
         [TestMethod]
         public void Load_Templates_ConduitType()
         {
-            Assert.AreEqual("Test ConduitType", actualConduitType.Name);
-            Assert.AreEqual(12, actualConduitType.Cost);
-            Assert.AreEqual(13, actualConduitType.Labor);
-            Assert.AreEqual("Test Cost", actualConduitType.AssociatedCosts[0].Name);
+            //Arrange
+            Guid expectedGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            string expectedName = "Test Conduit Type";
+            double expectedCost = 45.67;
+            double expectedLabor = 76.54;
 
+            TECConduitType actualConduitType = null;
+            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            {
+                if (conduitType.Guid == expectedGuid)
+                {
+                    actualConduitType = conduitType;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualConduitType.Name);
+            Assert.AreEqual(expectedCost, actualConduitType.Cost);
+            Assert.AreEqual(expectedLabor, actualConduitType.Labor);
+
+            testForCosts(actualConduitType);
+            testForRatedCosts(actualConduitType);
         }
 
         [TestMethod]
-        public void Load_Templates_AssociatedCost()
+        public void Load_Templates_AssociatedCosts()
         {
-            Assert.AreEqual("Test Cost", actualAssociatedCost.Name);
-            Assert.AreEqual(42, actualAssociatedCost.Cost);
+            Guid expectedTECGuid = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+            string expectedTECName = "Test TEC Associated Cost";
+            double expectedTECCost = 31;
+            double expectedTECLabor = 13;
+            CostType expectedTECType = CostType.TEC;
+
+            Guid expectedElectricalGuid = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+            string expectedElectricalName = "Test Electrical Associated Cost";
+            double expectedElectricalCost = 42;
+            double expectedElectricalLabor = 24;
+            CostType expectedElectricalType = CostType.Electrical;
+
+            TECCost actualTECCost = null;
+            TECCost actualElectricalCost = null;
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Guid == expectedTECGuid)
+                {
+                    actualTECCost = cost;
+                }
+                else if (cost.Guid == expectedElectricalGuid)
+                {
+                    actualElectricalCost = cost;
+                }
+                if (actualTECCost != null && actualElectricalCost != null)
+                {
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedTECName, actualTECCost.Name, "TEC cost name didn't load properly.");
+            Assert.AreEqual(expectedTECCost, actualTECCost.Cost, "TEC cost cost didn't load properly.");
+            Assert.AreEqual(expectedTECLabor, actualTECCost.Labor, "TEC cost labor didn't load properly.");
+            Assert.AreEqual(expectedTECType, actualTECCost.Type, "TEC cost type didn't load properly.");
+
+            Assert.AreEqual(expectedElectricalName, actualElectricalCost.Name, "Electrical cost name didn't load properly.");
+            Assert.AreEqual(expectedElectricalCost, actualElectricalCost.Cost, "Electrical cost cost didn't load properly.");
+            Assert.AreEqual(expectedElectricalLabor, actualElectricalCost.Labor, "Electrical cost labor didn't load properly.");
+            Assert.AreEqual(expectedElectricalType, actualElectricalCost.Type, "Electrical cost type didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Templates_Tag()
+        {
+            Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+            string expectedString = "Test Tag";
+
+            TECTag actualTag = null;
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
+            {
+                if (tag.Guid == expectedGuid)
+                {
+                    actualTag = tag;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedString, actualTag.Text, "Tag text didn't load properly.");
         }
 
         [TestMethod]
         public void Load_Templates_MiscCost()
         {
             //Arrange
-            TECMiscCost actualCost = actualTemplates.MiscCostTemplates[0];
+            Guid expectedGuid = new Guid("5df99701-1d7b-4fbe-843d-40793f4145a8");
+            string expectedName = "Bid Misc";
+            double expectedCost = 1298;
+            double expectedLabor = 8921;
+            double expectedQuantity = 2;
+            CostType expectedType = CostType.Electrical;
+            TECMisc actualMisc = null;
+            foreach (TECMisc misc in actualTemplates.MiscCostTemplates)
+            {
+                if (misc.Guid == expectedGuid)
+                {
+                    actualMisc = misc;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Misc Cost", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
-            Assert.AreEqual(19, actualCost.Quantity);
+            Assert.AreEqual(expectedName, actualMisc.Name);
+            Assert.AreEqual(expectedQuantity, actualMisc.Quantity);
+            Assert.AreEqual(expectedCost, actualMisc.Cost);
+            Assert.AreEqual(expectedLabor, actualMisc.Labor);
+            Assert.AreEqual(expectedType, actualMisc.Type);
         }
 
-
         [TestMethod]
-        public void Load_Templates_MiscWiring()
+        public void Load_Templates_IOModule()
         {
             //Arrange
-            TECMiscWiring actualCost = actualTemplates.MiscWiringTemplates[0];
+            Guid expectedGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
+            string expectedName = "Test IO Module";
+            string expectedDescription = "Test IO Module Description";
+            double expectedCost = 2233;
+            double expectedIOPerModule = 10;
+
+            TECIOModule actualModule = null;
+            foreach (TECIOModule module in actualTemplates.Catalogs.IOModules)
+            {
+                if (module.Guid == expectedGuid)
+                {
+                    actualModule = module;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Misc Wiring", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
-            Assert.AreEqual(19, actualCost.Quantity);
-        }
-
-
-        [TestMethod]
-        public void Load_Templates_IOModules()
-        {
-            //Arrange
-            TECIOModule actualIOModule = actualTemplates.Catalogs.IOModules[0];
-
-            //Assert
-            Assert.AreEqual("Test IO Module", actualIOModule.Name);
-            Assert.AreEqual(42, actualIOModule.Cost);
-            Assert.AreEqual(2, actualIOModule.IOPerModule);
+            Assert.AreEqual(expectedName, actualModule.Name);
+            Assert.AreEqual(expectedDescription, actualModule.Description);
+            Assert.AreEqual(expectedCost, actualModule.Cost);
+            Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
         }
 
         [TestMethod]
         public void Load_Templates_PanelType()
         {
             //Arrange
-            TECPanelType actualCost = actualTemplates.Catalogs.PanelTypes[0];
+            Guid expectedGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+            string expectedName = "Test Panel Type";
+            double expectedCost = 1324;
+            double expectedLabor = 4231;
+
+            TECPanelType actualType = null;
+            foreach (TECPanelType type in actualTemplates.Catalogs.PanelTypes)
+            {
+                if (type.Guid == expectedGuid)
+                {
+                    actualType = type;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Panel Type", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
+            Assert.AreEqual(expectedName, actualType.Name);
+            Assert.AreEqual(expectedCost, actualType.Cost);
+            Assert.AreEqual(expectedLabor, actualType.Labor);
         }
 
         [TestMethod]
         public void Load_Templates_Panel()
         {
             //Arrange
-            TECPanel actualPanel = actualTemplates.PanelTemplates[0];
-            TECPanelType actualPanelType = actualPanel.Type;
+            Guid expectedGuid = new Guid("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            string expectedName = "Bid Panel";
+            string expectedDescription = "Bid Panel Description";
+            int expectedQuantity = 1;
 
-            //Assert
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
             foreach (TECPanel panel in actualTemplates.PanelTemplates)
             {
-                if (panel.Name == "Controlled Panel")
+                if (panel.Guid == expectedGuid)
                 {
-                    Assert.Fail();
+                    actualPanel = panel;
+                    break;
                 }
             }
-
-            Assert.AreEqual("Test Panel", actualPanel.Name);
-            Assert.AreEqual("Test Panel Type", actualPanelType.Name);
-        }
-
-        [TestMethod]
-        public void Load_Templates_ControlledScope()
-        {
-            //Arrange
-            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
 
             //Assert
-            Assert.AreEqual("Test Controlled Scope", actualConScope.Name);
-            Assert.AreEqual("Test Controlled Description", actualConScope.Description);
-            Assert.AreEqual(420, actualConScope.Controllers[0].ChildrenConnections[0].Length);
-            Assert.AreEqual("Controlled System", actualConScope.Systems[0].Name);
-            Assert.AreEqual("Controlled Controller", actualConScope.Controllers[0].Name);
-            Assert.AreEqual("Controlled Panel", actualConScope.Panels[0].Name);
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
         }
 
         [TestMethod]
-        public void Load_Templates_ControlledScope_Linking()
+        public void Load_Templates_ScopeBranch()
         {
-            //Arrange
-            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
-            var connectionsInSystemsLinked = true;
-            var connectionsInControllersLinked = true;
-            var controllersInPanelsLinked = true;
+            Guid expectedGuid = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
+            string expectedName = "System Scope Branch";
+            string expectedDescription = "System Scope Branch Description";
 
-            foreach (TECSystem system in actualConScope.Systems)
+            Guid childGuid = new Guid("542802f6-a7b1-4020-9be4-e58225c433a8");
+
+            TECScopeBranch actualBranch = null;
+            foreach(TECSystem system in actualTemplates.SystemTemplates)
             {
-                foreach (TECEquipment equipment in system.Equipment)
+                foreach(TECScopeBranch branch in system.ScopeBranches)
                 {
-                    foreach (TECSubScope subScope in equipment.SubScope)
+                    if (branch.Guid == expectedGuid)
                     {
-                        if (!actualConScope.Controllers[0].ChildrenConnections.Contains(subScope.Connection))
-                        {
-                            connectionsInSystemsLinked = false;
-                        }
+                        actualBranch = branch;
+                        break;
                     }
                 }
+                if (actualBranch != null) break;
             }
-            foreach (TECPanel panel in actualConScope.Panels)
+
+            bool foundChildBranch = false;
+            foreach(TECScopeBranch branch in actualBranch.Branches)
             {
-                foreach (TECController controller in panel.Controllers)
+                if (branch.Guid == childGuid)
                 {
-                    if (!actualConScope.Controllers.Contains(controller))
-                    {
-                        controllersInPanelsLinked = false;
-                    }
+                    foundChildBranch = true;
+                    break;
                 }
             }
 
-            Assert.IsTrue(connectionsInSystemsLinked);
-            Assert.IsTrue(connectionsInControllersLinked);
-            Assert.IsTrue(controllersInPanelsLinked);
+            Assert.AreEqual(expectedName, actualBranch.Name, "Scope branch name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualBranch.Description, "Scope branch description didn't load properly.");
+
+            Assert.IsTrue(foundChildBranch, "Child branch didn't load properly into scope branch.");
         }
 
         [TestMethod]
-        public void Load_Templates_Linked_Devices()
+        public void Load_Templates_SubScopeConnection()
         {
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            Guid expectedGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            double expectedWireLength = 40;
+            double expectedConduitLength = 20;
+
+            Guid expectedParentControllerGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+
+            TECSubScopeConnection actualSSConnect = null;
+            foreach (TECSystem typical in actualTemplates.SystemTemplates)
             {
-                foreach (TECEquipment equipment in system.Equipment)
+                foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECSubScope subScope in equipment.SubScope)
+                    foreach (TECConnection connection in controller.ChildrenConnections)
                     {
-                        foreach (TECDevice device in subScope.Devices)
+                        if (connection.Guid == expectedGuid)
                         {
-                            if (!actualTemplates.Catalogs.Devices.Contains(device))
-                            {
-                                Assert.Fail("Devices in system templates not linked");
-                            }
+                            actualSSConnect = (connection as TECSubScopeConnection);
+                            break;
                         }
                     }
+                    if (actualSSConnect != null) break;
                 }
+                if (actualSSConnect != null) break;
             }
-            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
-            {
-                foreach (TECSubScope subScope in equipment.SubScope)
-                {
-                    foreach (TECDevice device in subScope.Devices)
-                    {
-                        if (!actualTemplates.Catalogs.Devices.Contains(device))
-                        {
-                            Assert.Fail("Devices in equipment templates not linked");
-                        }
-                    }
-                }
-            }
-            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
-            {
-                foreach (TECDevice device in subScope.Devices)
-                {
-                    if (!actualTemplates.Catalogs.Devices.Contains(device))
-                    {
-                        Assert.Fail("Devices in subscope templates not linked");
-                    }
-                }
-            }
-            Assert.IsTrue(true, "All Devices Linked");
+
+            //Assert
+            Assert.AreEqual(expectedWireLength, actualSSConnect.Length, "Length didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitLength, actualSSConnect.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualSSConnect.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualSSConnect.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
         }
 
-        [TestMethod]
-        public void Load_Templates_Linked_AssociatedCosts()
+        private void testForTag(TECScope scope)
         {
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            bool foundTag = false;
+
+            foreach (TECTag tag in scope.Tags)
             {
-                foreach (TECAssociatedCost cost in system.AssociatedCosts)
+                if (tag.Guid == TEST_TAG_GUID)
                 {
-                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in system templates not linked"); }
-                }
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
-                    {
-                        if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                        { Assert.Fail("Associated costs in system templates not linked"); }
-                    }
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
-                        {
-                            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                            { Assert.Fail("Associated costs in system templates not linked"); }
-                        }
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            foreach (TECAssociatedCost cost in device.AssociatedCosts)
-                            {
-                                if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                                { Assert.Fail("Associated costs in system templates not linked"); }
-                            }
-                        }
-                    }
-                }
-            }
-            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
-            {
-                foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
-                {
-                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in equipment templates not linked"); }
-                }
-                foreach (TECSubScope subScope in equipment.SubScope)
-                {
-                    foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
-                    {
-                        if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                        { Assert.Fail("Associated costs in equipment templates not linked"); }
-                    }
-                    foreach (TECDevice device in subScope.Devices)
-                    {
-                        foreach (TECAssociatedCost cost in device.AssociatedCosts)
-                        {
-                            if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                            { Assert.Fail("Associated costs in equipment templates not linked"); }
-                        }
-                    }
-                }
-            }
-            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
-            {
-                foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
-                {
-                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in subscope templates not linked"); }
-                }
-                foreach (TECDevice device in subScope.Devices)
-                {
-                    foreach (TECAssociatedCost cost in device.AssociatedCosts)
-                    {
-                        if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                        { Assert.Fail("Associated costs in subscope templates not linked"); }
-                    }
-                }
-            }
-            foreach (TECDevice device in actualTemplates.Catalogs.Devices)
-            {
-                foreach (TECAssociatedCost cost in device.AssociatedCosts)
-                {
-                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in device catalog not linked"); }
-                }
-            }
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
-            {
-                foreach (TECAssociatedCost cost in conduitType.AssociatedCosts)
-                {
-                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in conduit type catalog not linked"); }
-                }
-            }
-            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
-            {
-                foreach (TECAssociatedCost cost in connectionType.AssociatedCosts)
-                {
-                    if (!actualTemplates.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in connection type catalog not linked"); }
+                    foundTag = true;
+                    break;
                 }
             }
 
-            Assert.IsTrue(true, "All Associated costs Linked");
+            Assert.IsTrue(foundTag, "Tag not loaded properly into scope.");
+        }
+        private void testForCosts(TECScope scope)
+        {
+            bool foundTECCost = false;
+            bool foundElectricalCost = false;
+
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_TEC_COST_GUID)
+                {
+                    foundTECCost = true;
+                    break;
+                }
+            }
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_ELECTRICAL_COST_GUID)
+                {
+                    foundElectricalCost = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundTECCost, "TEC Cost not loaded properly into scope.");
+            Assert.IsTrue(foundElectricalCost, "Electrical Cost not loaded properly into scope.");
         }
 
-        [TestMethod]
-        public void Load_Templates_Linked_Manufacturers()
+        private void testForRatedCosts(ElectricalMaterialComponent component)
         {
-            foreach (TECDevice device in actualTemplates.Catalogs.Devices)
+            bool foundCost = false;
+
+            foreach (TECCost cost in component.RatedCosts)
             {
-                if (!actualTemplates.Catalogs.Manufacturers.Contains(device.Manufacturer))
+                if (cost.Guid == TEST_RATED_COST_GUID)
                 {
-                    Assert.Fail("Manufacturers not linked in device catalog");
+                    foundCost = true;
+                    break;
                 }
             }
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
-            {
-                if (!actualTemplates.Catalogs.Manufacturers.Contains(controller.Manufacturer))
-                {
-                    Assert.Fail("Manufacturers not linked in controller templates");
-                }
-            }
-            Assert.IsTrue(true, "All Manufacturers linked");
+
+            Assert.IsTrue(foundCost, "Rated Cost not loaded properly into scope.");
         }
-
-        [TestMethod]
-        public void Load_Templates_Linked_Tags()
-        {
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
-            {
-                foreach (TECTag tag in system.Tags)
-                {
-                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in system templates not linked"); }
-                }
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECTag tag in equipment.Tags)
-                    {
-                        if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                        { Assert.Fail("Tags in system templates not linked"); }
-                    }
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        foreach (TECTag tag in subScope.Tags)
-                        {
-                            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                            { Assert.Fail("Tags in system templates not linked"); }
-                        }
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            foreach (TECTag tag in device.Tags)
-                            {
-                                if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                                { Assert.Fail("Tags in system templates not linked"); }
-                            }
-                        }
-                    }
-                }
-            }
-            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
-            {
-                foreach (TECTag tag in equipment.Tags)
-                {
-                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in equipment templates not linked"); }
-                }
-                foreach (TECSubScope subScope in equipment.SubScope)
-                {
-                    foreach (TECTag tag in subScope.Tags)
-                    {
-                        if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                        { Assert.Fail("Tags in equipment templates not linked"); }
-                    }
-                    foreach (TECDevice device in subScope.Devices)
-                    {
-                        foreach (TECTag tag in device.Tags)
-                        {
-                            if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                            { Assert.Fail("Tags in equipment templates not linked"); }
-                        }
-                    }
-                }
-            }
-            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
-            {
-                foreach (TECTag tag in subScope.Tags)
-                {
-                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in subscope templates not linked"); }
-                }
-                foreach (TECDevice device in subScope.Devices)
-                {
-                    foreach (TECTag tag in device.Tags)
-                    {
-                        if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                        { Assert.Fail("Tags in subscope templates not linked"); }
-                    }
-                }
-            }
-            foreach (TECDevice device in actualTemplates.Catalogs.Devices)
-            {
-                foreach (TECTag tag in device.Tags)
-                {
-                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in device catalog not linked"); }
-                }
-            }
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
-            {
-                foreach (TECTag tag in conduitType.Tags)
-                {
-                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in conduit type catalog not linked"); }
-                }
-            }
-            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
-            {
-                foreach (TECTag tag in connectionType.Tags)
-                {
-                    if (!actualTemplates.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in connection type catalog not linked"); }
-                }
-            }
-
-            Assert.IsTrue(true, "All Tags Linked");
-        }
-
-        [TestMethod]
-        public void Load_Templates_Linked_ConnectionTypes()
-        {
-            foreach (TECDevice device in actualTemplates.Catalogs.Devices)
-            {
-                foreach (TECConnectionType type in device.ConnectionTypes)
-                {
-                    if (!actualTemplates.Catalogs.ConnectionTypes.Contains(type))
-                    {
-                        Assert.Fail("ConnectionTypes not linked in device catalog");
-                    }
-                }
-            }
-
-            Assert.IsTrue(true, "All Connection types linked");
-        }
-
-
     }
 }

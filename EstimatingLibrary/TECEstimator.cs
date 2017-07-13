@@ -19,172 +19,184 @@ namespace EstimatingLibrary
 
         const double ZERO = 0;
 
+        List<string> omitStrings = new List<string>(new string[]{"AddRelationship", "RemoveRelationship", "AddCatalog", "RemoveCatalog"});
+
         #region Cost Base
-        private double tecLaborHours;
-        private double tecMaterialCost;
-        private double electricalLaborHours;
-        private double electricalMaterialCost;
+        private TECCost tecCost;
+        private TECCost electricalCost;
         private int pointNumber;
         #endregion
 
         #region Cost and Labor
 
+        public double TECFieldHours
+        {
+            get { return tecCost.Labor; }
+        }
+        public double TECFieldLaborCost
+        {
+            get
+            {
+                { return TECFieldHours * bid.Labor.CommRate; }
+            }
+        }
+        
         public double PMPointLaborHours
         {
-            get { return GetPMPointHours(bid); }
+            get { return getPMPointHours(bid); }
         }
         public double PMLaborHours
         {
-            get { return GetPMTotalHours(bid); }
+            get { return getPMTotalHours(bid); }
         }
         public double PMLaborCost
         {
-            get { return GetPMLaborCost(bid); }
+            get { return getPMLaborCost(bid); }
         }
 
         public double ENGPointLaborHours
         {
-            get { return GetENGPointHours(bid); }
+            get { return getENGPointHours(bid); }
         }
         public double ENGLaborHours
         {
-            get { return GetENGTotalHours(bid); }
+            get { return getENGTotalHours(bid); }
         }
         public double ENGLaborCost
         {
-            get { return GetENGLaborCost(bid); }
+            get { return getENGLaborCost(bid); }
         }
 
         public double SoftPointLaborHours
         {
-            get { return GetSoftPointHours(bid); }
+            get { return getSoftPointHours(bid); }
         }
         public double SoftLaborHours
         {
-            get { return GetSoftTotalHours(bid); }
+            get { return getSoftTotalHours(bid); }
         }
         public double SoftLaborCost
         {
-            get { return GetSoftLaborCost(bid); }
+            get { return getSoftLaborCost(bid); }
         }
 
         public double CommPointLaborHours
         {
-            get { return GetCommPointHours(bid); }
+            get { return getCommPointHours(bid); }
         }
         public double CommLaborHours
         {
-            get { return GetCommTotalHours(bid); }
+            get { return getCommTotalHours(bid); }
         }
         public double CommLaborCost
         {
-            get { return GetCommLaborCost(bid); }
+            get { return getCommLaborCost(bid); }
         }
 
         public double GraphPointLaborHours
         {
-            get { return GetGraphPointHours(bid); }
+            get { return getGraphPointHours(bid); }
         }
         public double GraphLaborHours
         {
-            get { return GetGraphTotalHours(bid); }
+            get { return getGraphTotalHours(bid); }
         }
         public double GraphLaborCost
         {
-            get { return GetGraphLaborCost(bid); }
+            get { return getGraphLaborCost(bid); }
         }
 
         public double TECLaborHours
         {
-            get { return GetTECLaborHours(bid); }
+            get { return getTECLaborHours(bid); }
         }
         public double TECLaborCost
         {
-            get { return GetTECLaborCost(bid); }
+            get { return getTECLaborCost(bid); }
         }
 
         public double TotalLaborCost
         {
-            get { return GetTotalLaborCost(bid); }
+            get { return getTotalLaborCost(bid); }
         }
 
         public double TECCost
         {
-            get { return GetTECCost(bid); }
+            get { return getTECCost(bid); }
         }
 
         public double TECMaterialCost
         {
             get
             {
-                return tecMaterialCost;
+                return tecCost.Cost;
             }
         }
         public double TECShipping
         {
-            get { return GetTECShipping(); }
+            get { return getTECShipping(); }
         }
         public double TECWarranty
         {
-            get { return GetTECWarranty(); }
+            get { return getTECWarranty(); }
         }
         public double Tax
         {
             get
-            { return GetTax(bid); }
+            { return getTax(bid); }
         }
         public double TECSubtotal
         {
             get
             {
-                return GetTECSubtotal(bid);
+                return getTECSubtotal(bid);
             }
         }
 
         public double ElectricalLaborHours
         {
-            get { return electricalLaborHours; }
+            get { return electricalCost.Labor; }
         }
         public double ElectricalLaborCost
         {
-            get { return GetElectricalLaborCost(bid); }
+            get { return getElectricalLaborCost(bid); }
         }
         public double ElectricalSuperLaborHours
         {
-            get { return GetElectricalSuperLaborHours(); }
+            get { return getElectricalSuperLaborHours(); }
         }
         public double ElectricalSuperLaborCost
         {
-            get { return GetElectricalSuperLaborCost(bid); }
+            get { return getElectricalSuperLaborCost(bid); }
         }
 
         public double SubcontractorLaborHours
         {
-            get { return GetSubcontractorLaborHours(bid); }
+            get { return getSubcontractorLaborHours(bid); }
         }
         public double SubcontractorLaborCost
         {
-            get { return GetSubcontractorLaborCost(bid); }
+            get { return getSubcontractorLaborCost(bid); }
         }
 
         public double ElectricalMaterialCost
         {
             get
-            { return electricalMaterialCost; }
+            { return electricalCost.Cost; }
         }
         public double ElectricalShipping
         {
-            get { return GetElectricalShipping(); }
+            get { return getElectricalShipping(); }
         }
         public double ElectricalWarranty
         {
-            get { return GetElectricalWarranty(); }
+            get { return getElectricalWarranty(); }
         }
         public double SubcontractorSubtotal
         {
             get
             {
-                return GetSubcontractorSubtotal(bid);
+                return getSubcontractorSubtotal(bid);
             }
         }
 
@@ -192,13 +204,13 @@ namespace EstimatingLibrary
         {
             get
             {
-                return GetTotalPrice(bid);
+                return getTotalPrice(bid);
             }
         }
 
         public double BudgetPrice
         {
-            get { return GetBudgetPrice(bid); }
+            get { return getBudgetPrice(bid); }
         }
         public int TotalPointNumber
         {
@@ -209,16 +221,16 @@ namespace EstimatingLibrary
         }
         public double PricePerPoint
         {
-            get { return GetPricePerPoint(bid); }
+            get { return getPricePerPoint(bid); }
         }
         public double Margin
         {
-            get { return GetMargin(bid); }
+            get { return getMargin(bid); }
         }
 
         public double TotalCost
         {
-            get { return GetTotalCost(bid); }
+            get { return getTotalCost(bid); }
         }
         #endregion
 
@@ -227,7 +239,14 @@ namespace EstimatingLibrary
             bid = Bid;
             getInitialValues();
             watcher = new ChangeWatcher(bid);
-            watcher.Changed += Object_PropertyChanged;
+            watcher.InstanceChanged += Object_PropertyChanged;
+        }
+        public void Refresh()
+        {
+            getInitialValues();
+            watcher.InstanceChanged -= Object_PropertyChanged;
+            watcher = new ChangeWatcher(bid);
+            watcher.InstanceChanged += Object_PropertyChanged;
         }
 
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
@@ -236,83 +255,189 @@ namespace EstimatingLibrary
             string message = "Propertychanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (!omitStrings.Contains(e.PropertyName))
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                object oldValue = args.OldValue;
-                object newValue = args.NewValue;
-                if (e.PropertyName == "Add")
+                if (e is PropertyChangedExtendedEventArgs<Object>)
                 {
-                    message = "Add change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    if(!(oldValue is TECCatalogs))
+                    PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                    object oldValue = args.OldValue;
+                    object newValue = args.NewValue;
+                    if (e.PropertyName == "Add")
                     {
-                        addCost(newValue);
-                        addPoints(newValue);
+                        message = "Add change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        if (!(oldValue is TECCatalogs))
+                        {
+                            if (newValue is TECSystem && oldValue is TECSystem)
+                            {
+                                handleInstanceAdded(newValue as TECSystem, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECMisc && oldValue is TECSystem)
+                            {
+                                handleAddMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECSubScopeConnection && oldValue is TECController)
+                            {
+                                if (!isTypical(newValue as TECSubScopeConnection))
+                                {
+                                    addCost(newValue);
+                                    addPoints(newValue);
+                                }
+                            }
+                            else
+                            {
+                                addCost(newValue);
+                                addPoints(newValue);
+                            }
+                        }
                     }
-                }
-                else if (e.PropertyName == "Remove")
-                {
-                    message = "Remove change: " + oldValue;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    if (!(oldValue is TECCatalogs))
+                    else if (e.PropertyName == "Remove")
                     {
-                        removeCost(newValue);
-                        removePoints(newValue);
+                        message = "Remove change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        if (!(oldValue is TECCatalogs))
+                        {
+                            if (newValue is TECSystem && oldValue is TECSystem)
+                            {
+                                handleInstanceRemoved(newValue as TECSystem, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECMisc && oldValue is TECSystem)
+                            {
+                                handleRemoveMiscInSystem(newValue as TECMisc, oldValue as TECSystem);
+                            }
+                            else if (newValue is TECSystem && oldValue is TECBid)
+                            {
+                                handleTypicalRemoved(newValue as TECSystem);
+                            }
+                            else if (newValue is TECSubScopeConnection && oldValue is TECController)
+                            {
+                                if (!isTypical(newValue as TECSubScopeConnection))
+                                {
+                                    removeCost(newValue);
+                                    removePoints(newValue);
+                                }
+                            }
+                            else
+                            {
+                                removeCost(newValue);
+                                removePoints(newValue);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message = "Edit change: " + oldValue;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+
+                        if (oldValue is TECSubScopeConnection && newValue is TECSubScopeConnection)
+                        {
+                            if (!isTypical(newValue as TECSubScopeConnection))
+                            {
+                                editCost(newValue, oldValue);
+                                editPoints(newValue, oldValue);
+                            }
+                        }
+                        else
+                        {
+                            editCost(newValue, oldValue);
+                            editPoints(newValue, oldValue);
+
+                            if (bid.GetType().GetProperty(e.PropertyName) != null)
+                            {
+                                var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
+                                if (list != null)
+                                {
+                                    foreach (object item in list)
+                                    {
+                                        addCost(item);
+                                        addPoints(item);
+                                    }
+                                }
+                            }
+                            if (newValue is TECBidParameters)
+                            {
+                                raiseMaterial();
+                                raiseTECTotals();
+                                raiseSubcontractorTotals();
+                            }
+                            else if (newValue is TECLabor)
+                            {
+                                raiseTECLabor();
+                                raiseElectricalLabor();
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    message = "Edit change: " + oldValue;
+                    message = "Property not compatible: " + e.PropertyName;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    editCost(newValue, oldValue);
-                    editPoints(newValue, oldValue);
 
-                    if(bid.GetType().GetProperty(e.PropertyName) != null)
-                    {
-                        var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
-                        if (list != null)
-                        {
-                            foreach (object item in list)
-                            {
-                                addCost(item);
-                                addPoints(item);
-                            }
-                        }
-                    }
-                    if(newValue is TECBidParameters)
-                    {
-                        raiseMaterial();
-                        raiseTECTotals();
-                        raiseSubcontractorTotals();
-                    }
-                    else if (newValue is TECLabor)
-                    {
-                        raiseTECLabor();
-                        raiseElectricalLabor();
-                    }
                 }
             }
-            else
-            {
-                message = "Property not compatible: " + e.PropertyName;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+        }
 
+        private void handleRemoveMiscInSystem(TECMisc misc, TECSystem system)
+        {
+            foreach(TECSystem instance in system.SystemInstances)
+            {
+                removeCost(misc);
+            }
+        }
+
+        private void handleAddMiscInSystem(TECMisc misc, TECSystem system)
+        {
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                addCost(misc);
+            }
+        }
+
+        private void handleInstanceRemoved(TECSystem instance, TECSystem parent)
+        {
+            removeCost(instance);
+            removePoints(instance);
+            foreach (TECMisc misc in parent.MiscCosts)
+            {
+                removeCost(misc);
+            }
+        }
+
+        private void handleTypicalRemoved(TECSystem typical)
+        {
+            foreach(TECSystem instance in typical.SystemInstances)
+            {
+                handleInstanceRemoved(instance, typical);
+            }
+        }
+
+        private void handleInstanceAdded(TECSystem instance, TECSystem parent)
+        {
+            addCost(instance);
+            addPoints(instance);
+            foreach (TECMisc misc in parent.MiscCosts)
+            {
+                addCost(misc);
             }
         }
 
         private void getInitialValues()
         {
             pointNumber = 0;
-            tecLaborHours = 0;
-            tecMaterialCost = 0;
-            electricalLaborHours = 0;
-            electricalMaterialCost = 0;
+            tecCost = new TECCost();
+            electricalCost = new TECCost();
 
-            foreach (TECSystem system in bid.Systems)
+            foreach (TECSystem typical in bid.Systems)
             {
-                addCost(system);
-                addPoints(system);
+                foreach(TECSystem system in typical.SystemInstances)
+                {
+                    addCost(system);
+                    addPoints(system);
+                    foreach (TECMisc misc in typical.MiscCosts)
+                    {
+                        addCost(misc);
+                    }
+                }
             }
             foreach (TECPanel panel in bid.Panels)
             {
@@ -321,70 +446,100 @@ namespace EstimatingLibrary
             foreach (TECController controller in bid.Controllers)
             {
                 addCost(controller);
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    if(connection is TECSubScopeConnection)
+                    {
+                        if (isTypical(connection as TECSubScopeConnection))
+                        {
+                            removeCost(connection);
+                        }
+                    }
+                }
             }
-            foreach (TECMiscCost miscCost in bid.MiscCosts)
+            foreach (TECMisc miscCost in bid.MiscCosts)
             {
                 addCost(miscCost);
             }
-            foreach (TECMiscWiring miscWiring in bid.MiscWiring)
-            {
-                addCost(miscWiring);
-            }
-
         }
-
+        
         #region Update From Changes
         private void addCost(object item)
         {
             if (item is CostComponent)
             {
-                var cost = item as CostComponent;
-                tecMaterialCost += cost.MaterialCost;
-                tecLaborHours += cost.LaborCost;
-                electricalMaterialCost += cost.ElectricalCost;
-                electricalLaborHours += cost.ElectricalLabor;
-
-                if (Math.Abs(cost.MaterialCost) > ZERO)
-                { raiseMaterial(); }
-                if (Math.Abs(cost.LaborCost) > ZERO)
-                { raiseTECLabor(); }
-                if (Math.Abs(cost.ElectricalCost) > ZERO)
-                { raiseElectricalMaterial(); }
-                if (Math.Abs(cost.ElectricalLabor) > ZERO)
-                { raiseElectricalLabor(); }
-
+                bool tecChanged = false;
+                bool electricalChanged = false;
+                var costComponent = item as CostComponent;
+                foreach(TECCost cost in costComponent.Costs)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        tecCost.Cost += cost.ExtendedCost;
+                        tecCost.Labor += cost.Labor;
+                        tecChanged = true;
+                    }
+                    else if (cost.Type == CostType.Electrical) 
+                    {
+                        electricalCost.Cost += cost.Cost;
+                        electricalCost.Labor += cost.Labor;
+                        electricalChanged = true;
+                    }
+                }
+                if (tecChanged)
+                {
+                    raiseMaterial();
+                    raiseTECLabor();
+                }
+                if (electricalChanged)
+                {
+                    raiseElectricalMaterial();
+                    raiseElectricalLabor();
+                }
             }
-
         }
         private void removeCost(object item)
         {
             if (item is CostComponent)
             {
-                var cost = item as CostComponent;
-                tecMaterialCost -= cost.MaterialCost;
-                tecLaborHours -= cost.LaborCost;
-                electricalMaterialCost -= cost.ElectricalCost;
-                electricalLaborHours -= cost.ElectricalLabor;
-                if (Math.Abs(cost.MaterialCost) > ZERO)
-                { raiseMaterial(); }
-                if (Math.Abs(cost.LaborCost) > ZERO)
-                { raiseTECLabor(); }
-                if (Math.Abs(cost.ElectricalCost) > ZERO)
-                { raiseElectricalMaterial(); }
-                if (Math.Abs(cost.ElectricalLabor) > ZERO)
-                { raiseElectricalLabor(); }
+                bool tecChanged = false;
+                bool electricalChanged = false;
+                var costComponent = item as CostComponent;
+                foreach (TECCost cost in costComponent.Costs)
+                {
+                    if (cost.Type == CostType.TEC)
+                    {
+                        tecCost.Cost -= cost.ExtendedCost;
+                        tecCost.Labor -= cost.Labor;
+                        tecChanged = true;
+                    }
+                    else if (cost.Type == CostType.Electrical)
+                    {
+                        electricalCost.Cost -= cost.Cost;
+                        electricalCost.Labor -= cost.Labor;
+                        electricalChanged = true;
+                    }
+                }
+                if (tecChanged)
+                {
+                    raiseMaterial();
+                    raiseLabor();
+                }
+                if (electricalChanged)
+                {
+                    raiseElectricalMaterial();
+                    raiseElectricalLabor();
+                }
             }
         }
         private void editCost(object newValue, object oldValue)
         {
-            if (newValue is TECConnection || newValue is TECMiscCost
-                || newValue is TECMiscWiring || newValue is TECSubScope)
+            Type newType = newValue.GetType();
+            Type oldType = oldValue.GetType();
+            if (newType == oldType && newValue is CostComponent)
             {
-                if (newValue.GetType() == oldValue.GetType())
-                {
-                    addCost(newValue);
-                    removeCost(oldValue);
-                }
+                addCost(newValue);
+                removeCost(oldValue);
             }
         }
 
@@ -420,12 +575,12 @@ namespace EstimatingLibrary
         #endregion
 
         #region Calculate Derivatives
-        public double GetTECShipping()
+        public double getTECShipping()
         {
             return (TECMaterialCost * 0.03);
         }
 
-        public double GetTECWarranty()
+        public double getTECWarranty()
         {
             return (TECMaterialCost * 0.05);
         }
@@ -433,29 +588,29 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns TEC material costs of devices and their associated costs
         /// </summary>
-        public double GetExtendedMaterialCost()
+        public double getExtendedMaterialCost()
         {
-            return (TECMaterialCost + TECShipping + TECWarranty);
+            return (TECMaterialCost + TECShipping + TECWarranty + Tax);
         }
         /// <summary>
         /// Returns TEC labor costs of associated costs
         /// </summary>
-        public double GetMaterialLabor(TECBid bid)
+        public double getMaterialLabor(TECBid bid)
         {
-            double laborHours = tecLaborHours;
-            double cost = tecLaborHours * bid.Labor.CommRate;
+            double laborHours = tecCost.Labor;
+            double cost = tecCost.Labor * bid.Labor.CommRate;
             return cost;
         }
         /// <summary>
         /// Returns tax from the TEC materials cost at 8.75% if tax is not exempt
         /// </summary>
-        public double GetTax(TECBid bid)
+        public double getTax(TECBid bid)
         {
             double outTax = 0;
 
             if (!bid.Parameters.IsTaxExempt)
             {
-                outTax += .0875 * GetExtendedMaterialCost();
+                outTax += .0875 * TECMaterialCost;
             }
 
             return outTax;
@@ -464,41 +619,40 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns cost of all TEC material and labor with escalation and tax
         /// </summary>
-        public double GetTECCost(TECBid bid)
+        public double getTECCost(TECBid bid)
         {
             double outCost = 0;
-            outCost += GetTECLaborCost(bid);
-            outCost += GetMaterialLabor(bid);
-            outCost += GetExtendedMaterialCost();
+            outCost += getTECLaborCost(bid);
+            outCost += getExtendedMaterialCost();
             outCost += outCost * bid.Parameters.Escalation / 100;
-            outCost += GetTax(bid);
+            outCost += getTax(bid);
 
             return outCost;
         }
         /// <summary>
         /// Returns TEC Cost plus profit
         /// </summary>
-        public double GetTECSubtotal(TECBid bid)
+        public double getTECSubtotal(TECBid bid)
         {
             double outCost = 0;
-            outCost += GetTECCost(bid);
+            outCost += getTECCost(bid);
             outCost += outCost * bid.Parameters.Overhead / 100;
             outCost += outCost * bid.Parameters.Profit / 100;
 
             return outCost;
         }
         
-        public double GetElectricalShipping()
+        public double getElectricalShipping()
         {
             return (ElectricalMaterialCost * 0.03);
         }
 
-        public double GetElectricalWarranty()
+        public double getElectricalWarranty()
         {
             return (ElectricalMaterialCost * 0.05);
         }
 
-        public double GetExtendedElectricalMaterialCost()
+        public double getExtendedElectricalMaterialCost()
         {
             return (ElectricalMaterialCost + ElectricalShipping + ElectricalWarranty);
         }
@@ -507,7 +661,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns PM labor hours based on points
         /// </summary>
-        public double GetPMPointHours(TECBid bid)
+        public double getPMPointHours(TECBid bid)
         {
             double hours = pointNumber * bid.Labor.PMCoef;
 
@@ -516,9 +670,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns total PM labor hours
         /// </summary>
-        public double GetPMTotalHours(TECBid bid)
+        public double getPMTotalHours(TECBid bid)
         {
-            double hours = GetPMPointHours(bid);
+            double hours = getPMPointHours(bid);
             hours += bid.Labor.PMExtraHours;
 
             return hours;
@@ -526,9 +680,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns PM labor cost
         /// </summary>
-        public double GetPMLaborCost(TECBid bid)
+        public double getPMLaborCost(TECBid bid)
         {
-            double cost = GetPMTotalHours(bid) * bid.Labor.PMRate;
+            double cost = getPMTotalHours(bid) * bid.Labor.PMRate;
 
             return cost;
         }
@@ -536,7 +690,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns ENG labor hours based on points
         /// </summary>
-        public double GetENGPointHours(TECBid bid)
+        public double getENGPointHours(TECBid bid)
         {
             double hours = pointNumber * bid.Labor.ENGCoef;
 
@@ -545,9 +699,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns total ENG labor hours
         /// </summary>
-        public double GetENGTotalHours(TECBid bid)
+        public double getENGTotalHours(TECBid bid)
         {
-            double hours = GetENGPointHours(bid);
+            double hours = getENGPointHours(bid);
             hours += bid.Labor.ENGExtraHours;
 
             return hours;
@@ -555,9 +709,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns ENG labor cost
         /// </summary>
-        public double GetENGLaborCost(TECBid bid)
+        public double getENGLaborCost(TECBid bid)
         {
-            double cost = GetENGTotalHours(bid) * bid.Labor.ENGRate;
+            double cost = getENGTotalHours(bid) * bid.Labor.ENGRate;
 
             return cost;
         }
@@ -565,7 +719,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns PM labor hours based on points
         /// </summary>
-        public double GetCommPointHours(TECBid bid)
+        public double getCommPointHours(TECBid bid)
         {
             double hours = pointNumber * bid.Labor.CommCoef;
 
@@ -574,9 +728,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns total PM labor hours
         /// </summary>
-        public double GetCommTotalHours(TECBid bid)
+        public double getCommTotalHours(TECBid bid)
         {
-            double hours = GetCommPointHours(bid);
+            double hours = getCommPointHours(bid);
             hours += bid.Labor.CommExtraHours;
 
             return hours;
@@ -584,9 +738,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns PM labor cost
         /// </summary>
-        public double GetCommLaborCost(TECBid bid)
+        public double getCommLaborCost(TECBid bid)
         {
-            double cost = GetCommTotalHours(bid) * bid.Labor.CommRate;
+            double cost = getCommTotalHours(bid) * bid.Labor.CommRate;
 
             return cost;
         }
@@ -594,7 +748,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns Soft labor hours based on points
         /// </summary>
-        public double GetSoftPointHours(TECBid bid)
+        public double getSoftPointHours(TECBid bid)
         {
             double hours = pointNumber * bid.Labor.SoftCoef;
 
@@ -603,9 +757,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns total Soft labor hours
         /// </summary>
-        public double GetSoftTotalHours(TECBid bid)
+        public double getSoftTotalHours(TECBid bid)
         {
-            double hours = GetSoftPointHours(bid);
+            double hours = getSoftPointHours(bid);
             hours += bid.Labor.SoftExtraHours;
 
             return hours;
@@ -613,9 +767,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns Soft labor cost
         /// </summary>
-        public double GetSoftLaborCost(TECBid bid)
+        public double getSoftLaborCost(TECBid bid)
         {
-            double cost = GetSoftTotalHours(bid) * bid.Labor.SoftRate;
+            double cost = getSoftTotalHours(bid) * bid.Labor.SoftRate;
 
             return cost;
         }
@@ -623,7 +777,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns Graph labor hours based on points
         /// </summary>
-        public double GetGraphPointHours(TECBid bid)
+        public double getGraphPointHours(TECBid bid)
         {
             double hours = pointNumber * bid.Labor.GraphCoef;
 
@@ -632,9 +786,9 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns total Graph labor hours
         /// </summary>
-        public double GetGraphTotalHours(TECBid bid)
+        public double getGraphTotalHours(TECBid bid)
         {
-            double hours = GetGraphPointHours(bid);
+            double hours = getGraphPointHours(bid);
             hours += bid.Labor.GraphExtraHours;
 
             return hours;
@@ -642,108 +796,112 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns Graph labor cost
         /// </summary>
-        public double GetGraphLaborCost(TECBid bid)
+        public double getGraphLaborCost(TECBid bid)
         {
-            double cost = GetGraphTotalHours(bid) * bid.Labor.GraphRate;
+            double cost = getGraphTotalHours(bid) * bid.Labor.GraphRate;
 
             return cost;
         }
+        
 
         /// <summary>
         /// Returns all TEC labor hours
         /// </summary>
-        public double GetTECLaborHours(TECBid bid)
+        public double getTECLaborHours(TECBid bid)
         {
             double outLabor = 0;
-            outLabor += GetPMTotalHours(bid);
-            outLabor += GetENGTotalHours(bid);
-            outLabor += GetCommTotalHours(bid);
-            outLabor += GetSoftTotalHours(bid);
-            outLabor += GetGraphTotalHours(bid);
+            outLabor += getPMTotalHours(bid);
+            outLabor += getENGTotalHours(bid);
+            outLabor += getCommTotalHours(bid);
+            outLabor += getSoftTotalHours(bid);
+            outLabor += getGraphTotalHours(bid);
+            outLabor += tecCost.Labor;
             return outLabor;
         }
         /// <summary>
         /// Returns all TEC labor cost
         /// </summary>
-        public double GetTECLaborCost(TECBid bid)
+        public double getTECLaborCost(TECBid bid)
         {
             double outCost = 0;
-            outCost += GetPMLaborCost(bid);
-            outCost += GetENGLaborCost(bid);
-            outCost += GetCommLaborCost(bid);
-            outCost += GetSoftLaborCost(bid);
-            outCost += GetGraphLaborCost(bid);
-            outCost += GetMaterialLabor(bid);
+            outCost += getPMLaborCost(bid);
+            outCost += getENGLaborCost(bid);
+            outCost += getCommLaborCost(bid);
+            outCost += getSoftLaborCost(bid);
+            outCost += getGraphLaborCost(bid);
+            outCost += getMaterialLabor(bid);
             return outCost;
         }
 
         /// <summary>
         /// Returns the Journeyman electrical labor cost
         /// </summary>
-        public double GetElectricalLaborCost(TECBid bid)
+        public double getElectricalLaborCost(TECBid bid)
         {
-            double cost = electricalLaborHours * bid.Labor.ElectricalEffectiveRate;
+            double electricalHours = electricalCost.Labor;
+            double electricalRate = bid.Labor.ElectricalEffectiveRate;
+            double cost = electricalHours * electricalRate;
 
             return cost;
         }
         /// <summary>
         /// Returns the electrical super labor hours
         /// </summary>
-        public double GetElectricalSuperLaborHours()
+        public double getElectricalSuperLaborHours()
         {
-            double laborHours = electricalLaborHours;
-
-            return laborHours / 7;
+            return electricalCost.Labor * bid.Labor.ElectricalSuperRatio;
         }
         /// <summary>
         /// Returns the electrical super labor cost
         /// </summary>
-        public double GetElectricalSuperLaborCost(TECBid bid)
+        public double getElectricalSuperLaborCost(TECBid bid)
         {
-            double cost = GetElectricalSuperLaborHours() * bid.Labor.ElectricalSuperEffectiveRate;
+            double cost = getElectricalSuperLaborHours() * bid.Labor.ElectricalSuperEffectiveRate;
 
             return cost;
         }
         /// <summary>
         /// Returns the electrical labor hours of all wire, conduit, and their associated costs 
         /// </summary>
-        public double GetTotalElectricalLaborHours()
+        public double getTotalElectricalLaborHours()
         {
-            double laborCost = electricalLaborHours + GetElectricalSuperLaborHours();
+            double laborCost = electricalCost.Labor + getElectricalSuperLaborHours();
             return laborCost;
         }
         /// <summary>
         /// Returns the electrical labor cost of all wire, conduit, and their associated costs 
         /// </summary>
-        public double GetTotalElectricalLaborCost(TECBid bid)
+        public double getTotalElectricalLaborCost(TECBid bid)
         {
-            double laborCost = GetElectricalLaborCost(bid) + GetElectricalSuperLaborCost(bid);
+            double electricalLaborCost = getElectricalLaborCost(bid);
+            double electricalSuperLaborCost = getElectricalSuperLaborCost(bid);
+            double laborCost = electricalLaborCost + electricalSuperLaborCost;
             return laborCost;
         }
 
         /// <summary>
         /// Returns the subcontractor labor hours
         /// </summary>
-        public double GetSubcontractorLaborHours(TECBid bid)
+        public double getSubcontractorLaborHours(TECBid bid)
         {
-            double laborHours = GetTotalElectricalLaborHours();
+            double laborHours = getTotalElectricalLaborHours();
             return laborHours;
         }
         /// <summary>
         /// Returns the subcontractor labor cost
         /// </summary>
-        public double GetSubcontractorLaborCost(TECBid bid)
+        public double getSubcontractorLaborCost(TECBid bid)
         {
-            double laborHours = GetTotalElectricalLaborCost(bid);
+            double laborHours = getTotalElectricalLaborCost(bid);
             return laborHours;
         }
 
         /// <summary>
         /// Returns the total labor cost
         /// </summary>
-        public double GetTotalLaborCost(TECBid bid)
+        public double getTotalLaborCost(TECBid bid)
         {
-            double cost = GetSubcontractorLaborCost(bid) + GetTECLaborCost(bid);
+            double cost = getSubcontractorLaborCost(bid) + getTECLaborCost(bid);
             return cost;
         }
         #endregion
@@ -751,41 +909,42 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical material and labor costs with escalation 
         /// </summary>
-        public double GetSubcontractorCost(TECBid bid)
+        public double getSubcontractorCost(TECBid bid)
         {
-            double outCost = 0;
-            outCost += GetSubcontractorLaborCost(bid);
-            outCost += GetExtendedElectricalMaterialCost();
-            outCost += outCost * bid.Parameters.SubcontractorEscalation / 100;
+            double subcontractorLaborCost = getSubcontractorLaborCost(bid);
+            double extendedElectricalMaterialCost = getExtendedElectricalMaterialCost();
+            double subcontractorEscalation = bid.Parameters.SubcontractorEscalation;
+
+            double outCost = (subcontractorLaborCost + extendedElectricalMaterialCost) * (1 + (subcontractorEscalation) / 100);
 
             return outCost;
         }
         /// <summary>
         /// Returns the electrical total with markup 
         /// </summary>
-        public double GetSubcontractorSubtotal(TECBid bid)
+        public double getSubcontractorSubtotal(TECBid bid)
         {
-            double outCost = 0;
-            outCost += GetSubcontractorCost(bid);
-            outCost += outCost * bid.Parameters.SubcontractorMarkup / 100;
+            double subContractorCost = getSubcontractorCost(bid);
+            double subContractorMarkup = bid.Parameters.SubcontractorMarkup;
+            double outCost = subContractorCost * (1 + (subContractorMarkup / 100));
             return outCost;
         }
         /// <summary>
         /// Returns the total cost
         /// </summary>
-        public double GetTotalCost(TECBid bid)
+        public double getTotalCost(TECBid bid)
         {
-            return GetSubcontractorCost(bid) + GetTECCost(bid);
+            return getSubcontractorCost(bid) + getTECCost(bid);
         }
         /// <summary>
         /// Returns the final sell price 
         /// </summary>
-        public double GetTotalPrice(TECBid bid)
+        public double getTotalPrice(TECBid bid)
         {
-            double outPrice = 0;
+            double tecSubtotal = getTECSubtotal(bid);
+            double subcontractSubtotal = getSubcontractorSubtotal(bid);
 
-            outPrice += GetTECSubtotal(bid);
-            outPrice += GetSubcontractorSubtotal(bid);
+            double outPrice = tecSubtotal + subcontractSubtotal;
             if (bid.Parameters.RequiresBond)
             {
                 outPrice *= 1.013;
@@ -797,7 +956,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the budget price based on the user-assigned values in systems
         /// </summary>
-        public double GetBudgetPrice(TECBid bid)
+        public double getBudgetPrice(TECBid bid)
         {
             double price = 0;
             foreach (TECSystem system in bid.Systems)
@@ -814,19 +973,19 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the final price per point 
         /// </summary>
-        public double GetPricePerPoint(TECBid bid)
+        public double getPricePerPoint(TECBid bid)
         {
-            return (GetTotalPrice(bid) / pointNumber);
+            return (getTotalPrice(bid) / pointNumber);
         }
         /// <summary>
         /// Returns the Margin based on sell price and cost 
         /// </summary>
-        public double GetMargin(TECBid bid)
+        public double getMargin(TECBid bid)
         {
             double margin;
-            double totalPrice = GetTotalPrice(bid);
-            double tecCost = GetTECCost(bid);
-            double subCost = GetSubcontractorCost(bid);
+            double totalPrice = getTotalPrice(bid);
+            double tecCost = getTECCost(bid);
+            double subCost = getSubcontractorCost(bid);
             margin = (totalPrice - tecCost - subCost) / totalPrice;
             return margin * 100;
         }
@@ -857,6 +1016,9 @@ namespace EstimatingLibrary
         }
         private void raiseTECLabor()
         {
+            RaisePropertyChanged("TECFieldHours");
+            RaisePropertyChanged("TECFieldLaborCost");
+
             RaisePropertyChanged("PMPointLaborHours");
             RaisePropertyChanged("PMLaborHours");
             RaisePropertyChanged("PMLaborCost");
@@ -963,6 +1125,19 @@ namespace EstimatingLibrary
             RaisePropertyChanged("Margin");
         }
         #endregion
+
+        private bool isTypical(TECSubScopeConnection ssConnect)
+        {
+            TECSubScope ss = ssConnect.SubScope;
+            foreach (TECSystem typical in bid.Systems)
+            {
+                if (typical.SubScope.Contains(ss))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public override object Copy()
         {

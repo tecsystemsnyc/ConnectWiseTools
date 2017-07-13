@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
+    public enum CostType { None, TEC, Electrical }
+
     public class TECCost : TECScope
-    {
+    { 
         #region Properties
 
         protected double _cost;
@@ -23,6 +25,11 @@ namespace EstimatingLibrary
             }
         }
 
+        virtual public double ExtendedCost
+        {
+            get { return Cost; }
+        }
+
         protected double _labor;
         public double Labor
         {
@@ -33,6 +40,18 @@ namespace EstimatingLibrary
                 _labor = value;
                 NotifyPropertyChanged("Labor", temp, this);
                 RaisePropertyChanged("TotalLabor");
+            }
+        }
+
+        protected CostType _type;
+        public CostType Type
+        {
+            get { return _type; }
+            set
+            {
+                var temp = this.Copy();
+                _type = value;
+                NotifyPropertyChanged("Type", temp, this);
             }
         }
 
@@ -53,6 +72,7 @@ namespace EstimatingLibrary
         {
             _cost = 0;
             _labor = 0;
+            _type = 0;
             base.PropertyChanged += TECCost_PropertyChanged;
         }
 
@@ -64,6 +84,7 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(cost);
             _cost = cost.Cost;
             _labor = cost.Labor;
+            _type = cost.Type;
         }
 
         public override object Copy()
@@ -74,9 +95,9 @@ namespace EstimatingLibrary
             return outCost;
         }
 
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
-            throw new NotImplementedException();
+            return this.Copy();
         }
 
         private void TECCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

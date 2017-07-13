@@ -19,6 +19,8 @@ namespace TemplateBuilder
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+
             // Check if this was launched by double-clicking a doc. If so, use that as the
             // startup file name.
 
@@ -46,5 +48,15 @@ namespace TemplateBuilder
             base.OnStartup(e);
         }
 
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (DebugHandler.isReleased)
+            {
+                DebugHandler.LogError("Exception: " + e.Exception);
+                DebugHandler.LogError("Inner Exception: " + e.Exception.InnerException);
+                DebugHandler.LogError("Stack Trace: " + e.Exception.StackTrace);
+                e.Handled = true;
+            }
+        }
     }
 }

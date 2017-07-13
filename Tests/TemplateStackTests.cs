@@ -192,12 +192,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECAssociatedCost> expected = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost item in Template.Catalogs.AssociatedCosts)
+            ObservableCollection<TECCost> expected = new ObservableCollection<TECCost>();
+            foreach (TECCost item in Template.Catalogs.AssociatedCosts)
             {
                 expected.Add(item);
             }
-            TECAssociatedCost edit = new TECAssociatedCost();
+            TECCost edit = new TECCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -206,7 +206,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECAssociatedCost> actual = Template.Catalogs.AssociatedCosts;
+            ObservableCollection<TECCost> actual = Template.Catalogs.AssociatedCosts;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -288,12 +288,13 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Name;
+            var system = Template.SystemTemplates.RandomObject();
+            string expected = system.Name;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Name = edit;
+            system.Name = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
@@ -308,17 +309,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Description;
+            var system = Template.SystemTemplates.RandomObject();
+            string expected = system.Description;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Description = edit;
+            system.Description = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Description;
+            string actual = system.Description;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -328,17 +330,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            int expected = Template.SystemTemplates[0].Quantity;
+            var system = Template.SystemTemplates.RandomObject();
+            int expected = system.Quantity;
             int edit = 3;
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Quantity = edit;
+            system.Quantity = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Quantity;
+            int actual = system.Quantity;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -348,8 +351,9 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
+            var system = Template.SystemTemplates.RandomObject();
             ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
-            foreach (TECEquipment item in Template.SystemTemplates[0].Equipment)
+            foreach (TECEquipment item in system.Equipment)
             {
                 expected.Add(item);
             }
@@ -357,12 +361,12 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment.Add(edit);
+            system.Equipment.Add(edit);
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = Template.SystemTemplates[0].Equipment;
+            ObservableCollection<TECEquipment> actual = system.Equipment;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -372,17 +376,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].Name;
+            var equipment = Template.EquipmentTemplates.RandomObject();
+            string expected = equipment.Name;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].Name = edit;
+            equipment.Name = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].Name;
+            string actual = equipment.Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -392,17 +397,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].Description;
+            var equipment = Template.EquipmentTemplates.RandomObject();
+            string expected = equipment.Description;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].Description = edit;
+            equipment.Description = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].Description;
+            string actual = equipment.Description;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -412,17 +418,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            int expected = Template.SystemTemplates[0].Equipment[0].Quantity;
+            var equipment = Template.EquipmentTemplates.RandomObject();
+            int expected = equipment.Quantity;
             int edit = 3;
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].Quantity = edit;
+            equipment.Quantity = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].Quantity;
+            int actual = equipment.Quantity;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -432,8 +439,9 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
+            var equipment = Template.EquipmentTemplates.RandomObject();
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
-            foreach (TECSubScope item in Template.SystemTemplates[0].Equipment[0].SubScope)
+            foreach (TECSubScope item in equipment.SubScope)
             {
                 expected.Add(item);
             }
@@ -441,12 +449,12 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope.Add(edit);
+            equipment.SubScope.Add(edit);
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Template.SystemTemplates[0].Equipment[0].SubScope;
+            ObservableCollection<TECSubScope> actual = equipment.SubScope;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -456,17 +464,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Name;
+            var subScope = Template.SubScopeTemplates.RandomObject();
+            string expected = subScope.Name;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Name = edit;
+            subScope.Name = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Name;
+            string actual = subScope.Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -476,17 +485,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Description;
+            var subScope = Template.SubScopeTemplates.RandomObject();
+            string expected = subScope.Description;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Description = edit;
+            subScope.Description = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Description;
+            string actual = subScope.Description;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -496,17 +506,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            int expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Quantity;
+            var subScope = Template.SubScopeTemplates.RandomObject();
+            int expected = subScope.Quantity;
             int edit = 3;
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Quantity = edit;
+            subScope.Quantity = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Quantity;
+            int actual = subScope.Quantity;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -516,8 +527,9 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
+            var subScope = Template.SubScopeTemplates.RandomObject();
             ObservableCollection<TECPoint> expected = new ObservableCollection<TECPoint>();
-            foreach (TECPoint item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Points)
+            foreach (TECPoint item in subScope.Points)
             {
                 expected.Add(item);
             }
@@ -526,12 +538,12 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points.Add(edit);
+            subScope.Points.Add(edit);
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECPoint> actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points;
+            ObservableCollection<TECPoint> actual = subScope.Points;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -541,21 +553,21 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
+            var subScope = Template.SubScopeTemplates.RandomObject();
             ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
+            foreach (TECDevice item in subScope.Devices)
             {
                 expected.Add(item);
             }
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(Template.Catalogs.Devices[0]);
-            Assert.AreEqual((beforeCount + 2), testStack.UndoStack.Count, "Not added to undo stack");
+            subScope.Devices.Add(Template.Catalogs.Devices.RandomObject());
+            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECDevice> actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices;
+            ObservableCollection<TECDevice> actual = subScope.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -565,16 +577,17 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            int expectedCount = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
-            TECAssociatedCost edit = new TECAssociatedCost();
+            var subScope = Template.SubScopeTemplates.RandomObject();
+            int expectedCount = subScope.AssociatedCosts.Count;
+            TECCost edit = new TECCost();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts.Add(edit);
+            subScope.AssociatedCosts.Add(edit);
             testStack.Undo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].AssociatedCosts.Count;
+            int actual = subScope.AssociatedCosts.Count;
             Assert.AreEqual(expectedCount, actual, "Not Undone");
 
         }
@@ -584,17 +597,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Name;
+            var device = Template.Catalogs.Devices.RandomObject();
+            string expected = device.Name;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Name = edit;
+            device.Name = edit;
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Name;
+            string actual = device.Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -604,17 +618,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Description;
+            var device = Template.Catalogs.Devices.RandomObject();
+            string expected = device.Description;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Description = edit;
+            device.Description = edit;
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Description;
+            string actual = device.Description;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -624,17 +639,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            double expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            var device = Template.Catalogs.Devices.RandomObject();
+            double expected = device.Cost;
             double edit = 123;
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
+            device.Cost = edit;
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            double actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            double actual = device.Cost;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -644,17 +660,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            Guid expected = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Guid.ToString());
+            var device = Template.Catalogs.Devices.RandomObject();
+            Guid expected = new Guid(device.Manufacturer.Guid.ToString());
             TECManufacturer edit = new TECManufacturer();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Manufacturer = edit;
+            device.Manufacturer = edit;
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            Guid actual = new Guid(Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Manufacturer.Guid.ToString());
+            Guid actual = new Guid(device.Manufacturer.Guid.ToString());
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -664,17 +681,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            int expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes.Count;
-            TECConnectionType edit = Template.Catalogs.ConnectionTypes[1];
+            var device = Template.Catalogs.Devices.RandomObject();
+            int expected = device.ConnectionTypes.Count;
+            TECConnectionType edit = Template.Catalogs.ConnectionTypes.RandomObject();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes.Add(edit);
+            device.ConnectionTypes.Add(edit);
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].ConnectionTypes.Count;
+            int actual = device.ConnectionTypes.Count;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -684,17 +702,18 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            int expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Quantity;
+            var device = Template.Catalogs.Devices.RandomObject();
+            int expected = device.Quantity;
             int edit = 123;
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Quantity = edit;
+            device.Quantity = edit;
             //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Quantity;
+            int actual = device.Quantity;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -832,12 +851,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECMiscCost> expected = new ObservableCollection<TECMiscCost>();
-            foreach (TECMiscCost item in Template.MiscCostTemplates)
+            ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Template.MiscCostTemplates)
             {
                 expected.Add(item);
             }
-            TECMiscCost edit = new TECMiscCost();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -847,32 +866,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECMiscCost> actual = Template.MiscCostTemplates;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
-
-        [TestMethod]
-        public void Undo_Template_MiscWiring()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECMiscWiring> expected = new ObservableCollection<TECMiscWiring>();
-            foreach (TECMiscWiring item in Template.MiscWiringTemplates)
-            {
-                expected.Add(item);
-            }
-            TECMiscWiring edit = new TECMiscWiring();
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
-            Template.MiscWiringTemplates.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECMiscWiring> actual = Template.MiscWiringTemplates;
+            ObservableCollection<TECMisc> actual = Template.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1574,13 +1568,13 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECMiscCost edit = new TECMiscCost();
+            TECMisc edit = new TECMisc();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
             Template.MiscCostTemplates.Add(edit);
-            var expected = new ObservableCollection<TECMiscCost>();
-            foreach (TECMiscCost item in Template.MiscCostTemplates)
+            var expected = new ObservableCollection<TECMisc>();
+            foreach (TECMisc item in Template.MiscCostTemplates)
             {
                 expected.Add(item);
             }
@@ -1588,31 +1582,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECMiscCost> actual = Template.MiscCostTemplates;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Template_MiscWiring()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECMiscWiring edit = new TECMiscWiring();
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.MiscWiringTemplates.Add(edit);
-            var expected = new ObservableCollection<TECMiscWiring>();
-            foreach (TECMiscWiring item in Template.MiscWiringTemplates)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECMiscWiring> actual = Template.MiscWiringTemplates;
+            ObservableCollection<TECMisc> actual = Template.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

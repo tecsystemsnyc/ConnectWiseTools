@@ -23,6 +23,7 @@ namespace EstimatingLibrary
                 charactersticInstances[key] = new List<T>();
             }
             charactersticInstances[key].Add(value);
+            
             NotifyPropertyChanged("AddRelationship", key as object, value as object, typeof(T), typeof(T));
         }
 
@@ -53,6 +54,23 @@ namespace EstimatingLibrary
         public Dictionary<T, List<T>> GetFullDictionary()
         {
             return charactersticInstances;
+        }
+
+        public int Count
+        {
+            get { return charactersticInstances.Count; }
+        }
+
+        public bool ContainsValue(T value)
+        {
+            foreach(KeyValuePair<T, List<T>> item in charactersticInstances)
+            {
+                if (value.GetType() == item.Key.GetType())
+                {
+                    if (item.Value.Contains(value)) return true;
+                }
+            }
+            return false;
         }
 
         public override object Copy()

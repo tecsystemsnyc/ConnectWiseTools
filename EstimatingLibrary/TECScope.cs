@@ -21,7 +21,7 @@ namespace EstimatingLibrary
         protected TECLocation _location;
 
         protected ObservableCollection<TECTag> _tags;
-        protected ObservableCollection<TECAssociatedCost> _associatedCosts;
+        protected ObservableCollection<TECCost> _associatedCosts;
 
         public string Name
         {
@@ -74,7 +74,7 @@ namespace EstimatingLibrary
                 Tags.CollectionChanged += collectionChanged;
             }
         }
-        public ObservableCollection<TECAssociatedCost> AssociatedCosts
+        public ObservableCollection<TECCost> AssociatedCosts
         {
             get { return _associatedCosts; }
             set
@@ -124,12 +124,12 @@ namespace EstimatingLibrary
 
             _quantity = 1;
             _tags = new ObservableCollection<TECTag>();
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            _associatedCosts = new ObservableCollection<TECCost>();
             Tags.CollectionChanged += collectionChanged;
-            AssociatedCosts.CollectionChanged += collectionChanged;
+            AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
         }
 
-        abstract public Object DragDropCopy();
+        abstract public Object DragDropCopy(TECScopeManager scopeManager);
         #endregion //Constructors
 
         #region Methods
@@ -144,9 +144,9 @@ namespace EstimatingLibrary
             foreach (TECTag tag in scope.Tags)
             { tags.Add(tag as TECTag); }
             _tags = tags;
-            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
-            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
-            { associatedCosts.Add(cost as TECAssociatedCost); }
+            var associatedCosts = new ObservableCollection<TECCost>();
+            foreach (TECCost cost in scope.AssociatedCosts)
+            { associatedCosts.Add(cost as TECCost); }
             _associatedCosts = associatedCosts;
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -174,22 +174,22 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    var assCost = item as TECAssociatedCost;
+                    var assCost = item as TECCost;
                     assCost.PropertyChanged += AssCost_PropertyChanged;
                     var old = this.Copy() as TECScope;
-                    old.AssociatedCosts.Remove(item as TECAssociatedCost);
-                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                    old.AssociatedCosts.Remove(item as TECCost);
+                    NotifyPropertyChanged("CostComponentChanged", old as object, this as object);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    var assCost = item as TECAssociatedCost;
+                    var assCost = item as TECCost;
                     assCost.PropertyChanged -= AssCost_PropertyChanged;
                     var old = this.Copy() as TECScope;
-                    old.AssociatedCosts.Add(item as TECAssociatedCost);
-                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                    old.AssociatedCosts.Add(item as TECCost);
+                    NotifyPropertyChanged("CostComponentChanged", old as object, this as object);
                 }
             }
         }
@@ -202,8 +202,8 @@ namespace EstimatingLibrary
                 if ((args.PropertyName == "Cost") || (args.PropertyName == "Labor"))
                 {
                     var old = this.Copy() as TECScope;
-                    old.AssociatedCosts.Remove(args.NewValue as TECAssociatedCost);
-                    old.AssociatedCosts.Add(args.OldValue as TECAssociatedCost);
+                    old.AssociatedCosts.Remove(args.NewValue as TECCost);
+                    old.AssociatedCosts.Add(args.OldValue as TECCost);
                     NotifyPropertyChanged("CostComponentChanged", old, this);
                 }
             }

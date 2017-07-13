@@ -23,7 +23,7 @@ namespace Tests
         static TECManufacturer expectedManufacturer;
         static TECTag expectedTag;
         static TECController expectedController;
-        static TECAssociatedCost expectedAssociatedCost;
+        static TECCost expectedAssociatedCost;
         static TECConnectionType expectedConnectionType;
         static TECConduitType expectedConduitType;
 
@@ -37,7 +37,7 @@ namespace Tests
         static TECManufacturer actualManufacturer;
         static TECTag actualTag;
         static TECController actualController;
-        static TECAssociatedCost actualAssociatedCost;
+        static TECCost actualAssociatedCost;
         static TECConnectionType actualConnectionType;
         static TECConduitType actualConduitType;
 
@@ -73,9 +73,9 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            EstimatingLibraryDatabase.SaveNew(path, expectedTemplates);
+            DatabaseHelper.SaveNew(path, expectedTemplates);
 
-            actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {
@@ -140,7 +140,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedAssociatedCost.Guid)
                 {
@@ -268,6 +268,16 @@ namespace Tests
 
             Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
+
+            ////Controlled scope tests]
+            //TECSystem expectedConScope = expectedSystem;
+            //TECSystem actualConScope = actualSystem;
+            //Assert.AreEqual(expectedConScope.Name, actualConScope.Name);
+            //Assert.AreEqual(expectedConScope.Description, actualConScope.Description);
+            //Assert.AreEqual(expectedConScope.Equipment[0].Name, actualConScope.Equipment[0].Name);
+            //Assert.AreEqual(expectedConScope.Panels[0].Name, actualConScope.Panels[0].Name);
+            //Assert.AreEqual(expectedConScope.Controllers[0].Name, actualConScope.Controllers[0].Name);
+            //Assert.AreEqual(42, actualConScope.Controllers[0].ChildrenConnections[0].Length);
         }
 
         [TestMethod]
@@ -416,6 +426,7 @@ namespace Tests
             Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
             Assert.AreEqual(expectedConnectionType.Labor, actualConnectionType.Labor);
+            Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
 
         [TestMethod]
@@ -425,6 +436,7 @@ namespace Tests
             Assert.AreEqual(expectedConduitType.Name, actualConduitType.Name);
             Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost);
             Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
+            Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
 
         [TestMethod]
@@ -443,20 +455,8 @@ namespace Tests
         public void SaveAs_Templates_MiscCost()
         {
             //Arrange
-            TECMiscCost expectedCost = expectedTemplates.MiscCostTemplates[0];
-            TECMiscCost actualCost = actualTemplates.MiscCostTemplates[0];
-
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
-
-        [TestMethod]
-        public void SaveAs_Templates_MiscWiring()
-        {
-            //Arrange
-            TECMiscWiring expectedCost = expectedTemplates.MiscWiringTemplates[0];
-            TECMiscWiring actualCost = actualTemplates.MiscWiringTemplates[0];
+            TECMisc expectedCost = expectedTemplates.MiscCostTemplates[0];
+            TECMisc actualCost = actualTemplates.MiscCostTemplates[0];
 
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
@@ -483,22 +483,6 @@ namespace Tests
 
             Assert.AreEqual(expectedIOModule.Name, actualIOModule.Name);
             Assert.AreEqual(expectedIOModule.Cost, actualIOModule.Cost);
-        }
-
-        [TestMethod]
-        public void SaveAs_Templates_ControlledScope()
-        {
-            //Arrange
-            TECControlledScope expectedConScope = expectedTemplates.ControlledScopeTemplates[0];
-            TECControlledScope actualConScope = actualTemplates.ControlledScopeTemplates[0];
-
-            //Assert
-            Assert.AreEqual(expectedConScope.Name, actualConScope.Name);
-            Assert.AreEqual(expectedConScope.Description, actualConScope.Description);
-            Assert.AreEqual(expectedConScope.Systems[0].Name, actualConScope.Systems[0].Name);
-            Assert.AreEqual(expectedConScope.Panels[0].Name, actualConScope.Panels[0].Name);
-            Assert.AreEqual(expectedConScope.Controllers[0].Name, actualConScope.Controllers[0].Name);
-            Assert.AreEqual(42, actualConScope.Controllers[0].ChildrenConnections[0].Length);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -40,7 +41,7 @@ namespace Tests
         {
             OGPath = Path.GetTempFileName();
             OGTemplates = TestHelper.CreateTestTemplates();
-            EstimatingLibraryDatabase.SaveNew(OGPath, OGTemplates);
+            DatabaseHelper.SaveNew(OGPath, OGTemplates);
         }
 
         [TestInitialize]
@@ -94,9 +95,9 @@ namespace Tests
             //Act
             double expectedPM = 0.123;
             templates.Labor.PMCoef = expectedPM;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualPM = actualTemplates.Labor.PMCoef;
 
             //Assert
@@ -109,9 +110,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.PMRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.PMRate;
 
             //Assert
@@ -124,9 +125,9 @@ namespace Tests
             //Act
             double expectedENG = 0.123;
             templates.Labor.ENGCoef = expectedENG;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualENG = actualTemplates.Labor.ENGCoef;
 
             //Assert
@@ -139,9 +140,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.ENGRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ENGRate;
 
             //Assert
@@ -154,9 +155,9 @@ namespace Tests
             //Act
             double expectedComm = 0.123;
             templates.Labor.CommCoef = expectedComm;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualComm = actualTemplates.Labor.CommCoef;
 
             //Assert
@@ -169,9 +170,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.CommRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.CommRate;
 
             //Assert
@@ -184,9 +185,9 @@ namespace Tests
             //Act
             double expectedSoft = 0.123;
             templates.Labor.SoftCoef = expectedSoft;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualSoft = actualTemplates.Labor.SoftCoef;
 
             //Assert
@@ -199,9 +200,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.SoftRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.SoftRate;
 
             //Assert
@@ -214,9 +215,9 @@ namespace Tests
             //Act
             double expectedGraph = 0.123;
             templates.Labor.GraphCoef = expectedGraph;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualGraph = actualTemplates.Labor.GraphCoef;
 
             //Assert
@@ -229,9 +230,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.GraphRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.GraphRate;
 
             //Assert
@@ -244,9 +245,9 @@ namespace Tests
             //Act
             double expectedRate = 0.123;
             templates.Labor.ElectricalRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalRate;
 
             //Assert
@@ -259,9 +260,9 @@ namespace Tests
             //Act
             double expectedRate = 0.456;
             templates.Labor.ElectricalNonUnionRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalNonUnionRate;
 
             //Assert
@@ -274,9 +275,9 @@ namespace Tests
             //Act
             double expectedRate = 0.123;
             templates.Labor.ElectricalSuperRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalSuperRate;
 
             //Assert
@@ -289,9 +290,9 @@ namespace Tests
             //Act
             double expectedRate = 23.94;
             templates.Labor.ElectricalSuperNonUnionRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalSuperNonUnionRate;
 
             //Assert
@@ -315,9 +316,9 @@ namespace Tests
 
             templates.SystemTemplates.Add(expectedSystem);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualTemplates.SystemTemplates)
@@ -345,9 +346,9 @@ namespace Tests
 
             templates.SystemTemplates.Remove(systemToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates expectedTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates expectedTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECSystem system in templates.SystemTemplates)
@@ -368,9 +369,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Name = "Save System Name";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualTemplates.SystemTemplates)
@@ -392,9 +393,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Description = "Save System Description";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualTemplates.SystemTemplates)
@@ -415,9 +416,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Quantity = 987654321;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualTemplates.SystemTemplates)
@@ -438,9 +439,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.BudgetPriceModifier = 9876543.21;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualTemplates.SystemTemplates)
@@ -470,9 +471,9 @@ namespace Tests
 
             templates.EquipmentTemplates.Add(expectedEquipment);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECEquipment actualEquipment = null;
             foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
@@ -500,9 +501,9 @@ namespace Tests
 
             templates.EquipmentTemplates.Remove(EquipmentToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
@@ -530,9 +531,9 @@ namespace Tests
 
             sysToModify.Equipment.Add(expectedEquipment);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSystem actualSystem = null;
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
@@ -586,9 +587,9 @@ namespace Tests
 
             sysToModify.Equipment.Remove(equipToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             TECSystem actualSystem = null;
@@ -617,9 +618,9 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Name = "Save Equipment Name";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECEquipment actualEquipment = null;
             foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
@@ -641,9 +642,9 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Description = "Save Equipment Description";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECEquipment actualEquipment = null;
             foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
@@ -664,9 +665,9 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Quantity = 987654321;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECEquipment actualEquipment = null;
             foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
@@ -687,9 +688,9 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.BudgetUnitPrice = 9876543.21;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECEquipment actualEquipment = null;
             foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
@@ -717,9 +718,9 @@ namespace Tests
 
             templates.SubScopeTemplates.Add(expectedSubScope);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSubScope actualSubScope = null;
             foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
@@ -746,9 +747,9 @@ namespace Tests
 
             templates.SubScopeTemplates.Remove(SubScopeToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
@@ -768,9 +769,9 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Name = "Save SubScope Name";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSubScope actualSubScope = null;
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
@@ -792,9 +793,9 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Description = "Save SubScope Description";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSubScope actualSubScope = null;
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
@@ -815,9 +816,9 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Quantity = 987654321;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSubScope actualSubScope = null;
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
@@ -838,21 +839,21 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
 
-            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[1];
+            TECCost expectedCost = templates.Catalogs.AssociatedCosts[1];
             expectedSubScope.AssociatedCosts.Add(templates.Catalogs.AssociatedCosts[1]);
             int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECSubScope actualSubScope = null;
-            TECAssociatedCost actualCost = null;
+            TECCost actualCost = null;
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
             {
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
                     actualSubScope = SubScope;
-                    foreach (TECAssociatedCost cost in actualSubScope.AssociatedCosts)
+                    foreach (TECCost cost in actualSubScope.AssociatedCosts)
                     {
                         if (cost.Guid == expectedCost.Guid)
                         {
@@ -888,9 +889,9 @@ namespace Tests
 
             templates.Catalogs.Devices.Add(expectedDevice);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECDevice actualDevice = null;
             foreach (TECDevice device in actualTemplates.Catalogs.Devices)
@@ -919,9 +920,9 @@ namespace Tests
 
             templates.Catalogs.Devices.Remove(deviceToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
@@ -938,9 +939,9 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             expectedDevice.Name = "Save Device Name";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECDevice actualDevice = null;
             foreach (TECDevice Device in actualTemplates.Catalogs.Devices)
@@ -962,9 +963,9 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             expectedDevice.Description = "Save Device Description";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECDevice actualDevice = null;
             foreach (TECDevice Device in actualTemplates.Catalogs.Devices)
@@ -985,9 +986,9 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             expectedDevice.Cost = 46.89;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECDevice actualDevice = null;
             foreach (TECDevice Device in actualTemplates.Catalogs.Devices)
@@ -1011,9 +1012,9 @@ namespace Tests
             testConnectionType.Name = "Test Add Connection Type Device";
             templates.Catalogs.ConnectionTypes.Add(testConnectionType);
             expectedDevice.ConnectionTypes.Add(testConnectionType);
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECDevice actualDevice = null;
             foreach (TECDevice Device in actualTemplates.Catalogs.Devices)
@@ -1053,9 +1054,9 @@ namespace Tests
             manToAdd.Multiplier = 1;
             templates.Catalogs.Manufacturers.Add(manToAdd);
             expectedDevice.Manufacturer = manToAdd;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECDevice actualDevice = null;
             foreach (TECDevice Device in actualTemplates.Catalogs.Devices)
@@ -1084,9 +1085,9 @@ namespace Tests
 
             templates.ControllerTemplates.Add(expectedController);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECController actualController = null;
             foreach (TECController controller in actualTemplates.ControllerTemplates)
@@ -1109,13 +1110,13 @@ namespace Tests
         {
             //Act
             int oldNumControllers = templates.ControllerTemplates.Count;
-            TECController controllerToRemove = templates.ControllerTemplates[0];
+            TECController controllerToRemove = templates.ControllerTemplates.RandomObject();
 
             templates.ControllerTemplates.Remove(controllerToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECController controller in actualTemplates.ControllerTemplates)
@@ -1124,7 +1125,6 @@ namespace Tests
             }
 
             Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
-
         }
 
         [TestMethod]
@@ -1133,9 +1133,9 @@ namespace Tests
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
             expectedController.Name = "Test save controller name";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECController actualController = null;
             foreach (TECController controller in actualTemplates.ControllerTemplates)
@@ -1157,9 +1157,9 @@ namespace Tests
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
             expectedController.Description = "Save Device Description";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECController actualController = null;
             foreach (TECController controller in actualTemplates.ControllerTemplates)
@@ -1181,9 +1181,9 @@ namespace Tests
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
             expectedController.Cost = 46.89;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECController actualController = null;
             foreach (TECController controller in actualTemplates.ControllerTemplates)
@@ -1207,9 +1207,9 @@ namespace Tests
             var testManufacturer = new TECManufacturer();
             templates.Catalogs.Manufacturers.Add(testManufacturer);
             expectedController.Manufacturer = testManufacturer;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECController actualController = null;
             foreach (TECController controller in actualTemplates.ControllerTemplates)
@@ -1235,9 +1235,9 @@ namespace Tests
             testio.Type = IOType.BACnetIP;
             expectedController.IO.Add(testio);
             bool hasBACnetIP = false;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             TECController actualController = null;
             foreach (TECController controller in actualTemplates.ControllerTemplates)
             {
@@ -1271,9 +1271,9 @@ namespace Tests
 
             expectedController.IO.Remove(ioToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECController actualController = null;
             foreach (TECController con in actualTemplates.ControllerTemplates)
@@ -1302,9 +1302,9 @@ namespace Tests
             TECIO ioToChange = expectedController.IO[0];
             ioToChange.Quantity = 69;
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECController actualController = null;
             foreach (TECController con in actualTemplates.ControllerTemplates)
@@ -1342,9 +1342,9 @@ namespace Tests
 
             templates.Catalogs.Manufacturers.Add(expectedManufacturer);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECManufacturer actualManufacturer = null;
             foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
@@ -1369,9 +1369,9 @@ namespace Tests
             //Act
             TECManufacturer expectedManufacturer = templates.Catalogs.Manufacturers[0];
             expectedManufacturer.Name = "Test save manufacturer name";
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECManufacturer actualMan = null;
             foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
@@ -1393,9 +1393,9 @@ namespace Tests
             //Act
             TECManufacturer expectedManufacturer = templates.Catalogs.Manufacturers[0];
             expectedManufacturer.Multiplier = 987.41;
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECManufacturer actualMan = null;
             foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
@@ -1425,9 +1425,9 @@ namespace Tests
 
             templates.Catalogs.Tags.Add(expectedTag);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECTag actualTag = null;
             foreach (TECTag tag in actualTemplates.Catalogs.Tags)
@@ -1453,9 +1453,9 @@ namespace Tests
 
             templates.Catalogs.Tags.Remove(tagToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECTag tag in actualTemplates.Catalogs.Tags)
@@ -1479,16 +1479,28 @@ namespace Tests
 
             templates.Catalogs.ConnectionTypes.Add(expectedConnectionType);
 
-            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[0];
+            TECCost expectedCost = templates.Catalogs.AssociatedCosts.RandomObject();
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
             int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            TECCost expectedRated = null;
+            foreach(TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if(cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConnectionType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConnectionType.RatedCosts.Count;
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECConnectionType actualConnectionType = null;
-            TECAssociatedCost actualCost = null;
+            TECCost actualCost = null;
             foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
@@ -1504,11 +1516,58 @@ namespace Tests
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
             Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.Catalogs.ConnectionTypes.Count);
             Assert.AreEqual(expectedCostCount, actualConnectionType.AssociatedCosts.Count);
+            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
 
         }
+        [TestMethod]
+        public void Save_Templates_Add_ConnectionTypeRatedCost()
+        {
+            //Act
+            int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
+            TECConnectionType expectedConnectionType = templates.Catalogs.ConnectionTypes.RandomObject();
 
+            TECCost expectedRated = null;
+            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConnectionType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConnectionType.RatedCosts.Count;
+
+            DatabaseHelper.Update(path, testStack);
+
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+
+            TECConnectionType actualConnectionType = null;
+            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            {
+                if (connectionType.Guid == expectedConnectionType.Guid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
+
+            bool hasRated = false;
+            foreach (TECCost cost in actualConnectionType.RatedCosts)
+            {
+                if (cost.Guid == expectedRated.Guid)
+                {
+                    hasRated = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.IsTrue(hasRated);
+
+        }
         #endregion
 
         #region Save Conduit Type
@@ -1523,9 +1582,21 @@ namespace Tests
 
             templates.Catalogs.ConduitTypes.Add(expectedConduitType);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            TECCost expectedRated = null;
+            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConduitType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConduitType.RatedCosts.Count;
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECConduitType actualConnectionType = null;
             foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
@@ -1540,6 +1611,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedConduitType.Name, actualConnectionType.Name);
             Assert.AreEqual(expectedConduitType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
             Assert.AreEqual((oldNumConduitTypes + 1), actualTemplates.Catalogs.ConduitTypes.Count);
 
         }
@@ -1553,9 +1625,9 @@ namespace Tests
 
             templates.Catalogs.ConduitTypes.Remove(conduitTypeToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
@@ -1565,6 +1637,54 @@ namespace Tests
 
             Assert.AreEqual((oldNumConduitTypes - 1), actualTemplates.Catalogs.ConduitTypes.Count);
         }
+
+        [TestMethod]
+        public void Save_Templates_Add_ConduitTypeRatedCost()
+        {
+            //Act
+            int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
+            TECConduitType expectedConduitType = templates.Catalogs.ConduitTypes.RandomObject();
+            
+            TECCost expectedRated = null;
+            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            {
+                if (cost.Type == CostType.Electrical)
+                {
+                    expectedRated = cost;
+                    break;
+                }
+            }
+            expectedConduitType.RatedCosts.Add(expectedRated);
+            int expectedRatedCount = expectedConduitType.RatedCosts.Count;
+
+            DatabaseHelper.Update(path, testStack);
+
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+
+            TECConduitType actualConduitType = null;
+            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            {
+                if (conduitType.Guid == expectedConduitType.Guid)
+                {
+                    actualConduitType = conduitType;
+                    break;
+                }
+            }
+
+            bool hasRated = false;
+            foreach(TECCost cost in actualConduitType.RatedCosts)
+            {
+                if(cost.Guid == expectedRated.Guid)
+                {
+                    hasRated = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.IsTrue(hasRated);
+
+        }
         #endregion
 
         #region Save Associated Costs
@@ -1573,18 +1693,18 @@ namespace Tests
         {
             //Act
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
-            TECAssociatedCost expectedAssociatedCost = new TECAssociatedCost();
+            TECCost expectedAssociatedCost = new TECCost();
             expectedAssociatedCost.Name = "Test Associated Cost";
             expectedAssociatedCost.Cost = 21.34;
 
             templates.Catalogs.AssociatedCosts.Add(expectedAssociatedCost);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECAssociatedCost actualCost = null;
-            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            TECCost actualCost = null;
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedAssociatedCost.Guid)
                 {
@@ -1605,16 +1725,16 @@ namespace Tests
         {
             //Act
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
-            TECAssociatedCost costToRemove = templates.Catalogs.AssociatedCosts[0];
+            TECCost costToRemove = templates.Catalogs.AssociatedCosts[0];
 
             templates.Catalogs.AssociatedCosts.Remove(costToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -1628,19 +1748,19 @@ namespace Tests
         public void Save_Templates_Add_MiscCost()
         {
             //Act
-            TECMiscCost expectedCost = new TECMiscCost();
+            TECMisc expectedCost = new TECMisc();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
 
             templates.MiscCostTemplates.Add(expectedCost);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1659,14 +1779,14 @@ namespace Tests
         public void Save_Templates_Remove_MiscCost()
         {
             //Act
-            TECMiscCost costToRemove = templates.MiscCostTemplates[0];
+            TECMisc costToRemove = templates.MiscCostTemplates[0];
             templates.MiscCostTemplates.Remove(costToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -1678,14 +1798,14 @@ namespace Tests
         public void Save_Templates_MiscCost_Name()
         {
             //Act
-            TECMiscCost expectedCost = templates.MiscCostTemplates[0];
+            TECMisc expectedCost = templates.MiscCostTemplates[0];
             expectedCost.Name = "Test Save Cost Name";
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1702,14 +1822,14 @@ namespace Tests
         public void Save_Templates_MiscCost_Cost()
         {
             //Act
-            TECMiscCost expectedCost = templates.MiscCostTemplates[0];
+            TECMisc expectedCost = templates.MiscCostTemplates[0];
             expectedCost.Cost = 489.1238;
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualTemplates.MiscCostTemplates)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1722,129 +1842,6 @@ namespace Tests
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
         }
 
-        #endregion
-
-        #region Save Misc Wiring
-        [TestMethod]
-        public void Save_Templates_Add_MiscWiring()
-        {
-            //Act
-            TECMiscWiring expectedCost = new TECMiscWiring();
-            expectedCost.Name = "Add cost addition";
-            expectedCost.Cost = 978.3;
-            expectedCost.Quantity = 21;
-
-            templates.MiscWiringTemplates.Add(expectedCost);
-
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
-
-        [TestMethod]
-        public void Save_Templates_Remove_MiscWiring()
-        {
-            //Act
-            TECMiscWiring costToRemove = templates.MiscWiringTemplates[0];
-            templates.MiscWiringTemplates.Remove(costToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
-
-            //Assert
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
-            {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual(templates.MiscWiringTemplates.Count, templates.MiscWiringTemplates.Count);
-        }
-
-        [TestMethod]
-        public void Save_Templates_MiscWiring_Name()
-        {
-            //Act
-            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
-            expectedCost.Name = "Test Save Cost Name";
-
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-        }
-
-        [TestMethod]
-        public void Save_Templates_MiscWiring_Cost()
-        {
-            //Act
-            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
-            expectedCost.Cost = 489.1238;
-
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-        }
-
-        [TestMethod]
-        public void Save_Templates_MiscWiring_Quantity()
-        {
-            //Act
-            TECMiscWiring expectedCost = templates.MiscWiringTemplates[0];
-            expectedCost.Quantity = 492;
-
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualTemplates.MiscWiringTemplates)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
         #endregion
 
         #region Save Panel Type
@@ -1858,9 +1855,9 @@ namespace Tests
 
             templates.Catalogs.PanelTypes.Add(expectedCost);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanelType actualCost = null;
             foreach (TECPanelType cost in actualTemplates.Catalogs.PanelTypes)
@@ -1884,8 +1881,8 @@ namespace Tests
             TECPanelType costToRemove = templates.Catalogs.PanelTypes[0];
             templates.Catalogs.PanelTypes.Remove(costToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECPanelType cost in actualTemplates.Catalogs.PanelTypes)
@@ -1903,8 +1900,8 @@ namespace Tests
             TECPanelType expectedCost = templates.Catalogs.PanelTypes[0];
             expectedCost.Name = "Test Save Cost Name";
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanelType actualCost = null;
             foreach (TECPanelType cost in actualTemplates.Catalogs.PanelTypes)
@@ -1927,8 +1924,8 @@ namespace Tests
             TECPanelType expectedCost = templates.Catalogs.PanelTypes[0];
             expectedCost.Cost = 489.1238;
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanelType actualCost = null;
             foreach (TECPanelType cost in actualTemplates.Catalogs.PanelTypes)
@@ -1958,9 +1955,9 @@ namespace Tests
 
             templates.Catalogs.IOModules.Add(expectedModule);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECIOModule actualCost = null;
             foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
@@ -1984,8 +1981,8 @@ namespace Tests
             TECIOModule costToRemove = templates.Catalogs.IOModules[0];
             templates.Catalogs.IOModules.Remove(costToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
@@ -2003,8 +2000,8 @@ namespace Tests
             TECIOModule expectedCost = templates.Catalogs.IOModules[0];
             expectedCost.Name = "Test Save IOModule Name";
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECIOModule actualCost = null;
             foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
@@ -2027,8 +2024,8 @@ namespace Tests
             TECIOModule expectedCost = templates.Catalogs.IOModules[0];
             expectedCost.Cost = 489.1238;
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECIOModule actualCost = null;
             foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
@@ -2056,8 +2053,8 @@ namespace Tests
             expectedPanel.Description = "Test description";
             templates.PanelTemplates.Add(expectedPanel);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanel actualpanel = null;
             foreach (TECPanel panel in actualTemplates.PanelTemplates)
@@ -2083,8 +2080,8 @@ namespace Tests
 
             templates.PanelTemplates.Remove(panelToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
             foreach (TECPanel panel in actualTemplates.PanelTemplates)
@@ -2102,8 +2099,8 @@ namespace Tests
             //Act
             TECPanel expectedPanel = templates.PanelTemplates[0];
             expectedPanel.Name = "Test save panel name";
-            EstimatingLibraryDatabase.Update(path, testStack);
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            DatabaseHelper.Update(path, testStack);
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanel actualPanel = null;
             foreach (TECPanel panel in actualTemplates.PanelTemplates)
@@ -2125,34 +2122,33 @@ namespace Tests
         public void Save_Templates_Add_ControlledScope()
         {
             //Act
-            TECControlledScope expectedScope = new TECControlledScope();
+            TECSystem expectedScope = new TECSystem();
             expectedScope.Name = "New controlled scope";
             expectedScope.Description = "New controlled scope desc";
-            templates.ControlledScopeTemplates.Add(expectedScope);
+            templates.SystemTemplates.Add(expectedScope);
 
-            var scopeSystem = new TECSystem();
-            scopeSystem.Name = "Test Scope System";
-            scopeSystem.Description = "Test scope system description";
-            scopeSystem.Equipment.Add(new TECEquipment());
-            scopeSystem.Equipment[0].SubScope.Add(new TECSubScope());
+            var scopeEquipment = new TECEquipment();
+            scopeEquipment.Name = "Test Scope System";
+            scopeEquipment.Description = "Test scope system description";
+            scopeEquipment.SubScope.Add(new TECSubScope());
 
-            expectedScope.Systems.Add(scopeSystem);
+            expectedScope.Equipment.Add(scopeEquipment);
 
             var scopeController = new TECController(templates.Catalogs.Manufacturers[0]);
             scopeController.Name = "Test Scope Controller";
             expectedScope.Controllers.Add(scopeController);
-            scopeController.AddSubScope(scopeSystem.Equipment[0].SubScope[0]);
+            scopeController.AddSubScope(scopeEquipment.SubScope[0]);
 
             var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
             scopePanel.Name = "Test Scope Name";
             expectedScope.Panels.Add(scopePanel);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECControlledScope actualScope = null;
-            foreach (TECControlledScope scope in actualTemplates.ControlledScopeTemplates)
+            TECSystem actualScope = null;
+            foreach (TECSystem scope in actualTemplates.SystemTemplates)
             {
                 if (expectedScope.Guid == scope.Guid)
                 {
@@ -2174,28 +2170,28 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedScope.Name, actualScope.Name);
             Assert.AreEqual(expectedScope.Description, actualScope.Description);
-            Assert.AreEqual(expectedScope.Systems.Count, actualScope.Systems.Count);
+            Assert.AreEqual(expectedScope.Equipment.Count, actualScope.Equipment.Count);
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
             Assert.AreEqual(expectedScope.Controllers[0].ChildrenConnections.Count, actualScope.Controllers[0].ChildrenConnections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
-            Assert.IsTrue(actualSSConnection.SubScope == actualScope.Systems[0].Equipment[0].SubScope[0]);
+            Assert.IsTrue(actualSSConnection.SubScope == actualScope.Equipment[0].SubScope[0]);
         }
 
         [TestMethod]
         public void Save_Templates_Remove_ControlledScope()
         {
             //Act
-            int oldNumScope = templates.ControlledScopeTemplates.Count;
-            TECControlledScope scopeToRemove = templates.ControlledScopeTemplates[0];
+            int oldNumScope = templates.SystemTemplates.Count;
+            TECSystem scopeToRemove = templates.SystemTemplates[0];
 
-            templates.ControlledScopeTemplates.Remove(scopeToRemove);
+            templates.SystemTemplates.Remove(scopeToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack);
+            DatabaseHelper.Update(path, testStack);
 
-            TECTemplates expectedTemplates = EstimatingLibraryDatabase.Load(path) as TECTemplates;
+            TECTemplates expectedTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECControlledScope scope in templates.ControlledScopeTemplates)
+            foreach (TECSystem scope in templates.SystemTemplates)
             {
                 if (scope.Guid == scopeToRemove.Guid)
                 {
@@ -2203,7 +2199,7 @@ namespace Tests
                 }
             }
 
-            Assert.AreEqual((oldNumScope - 1), templates.ControlledScopeTemplates.Count);
+            Assert.AreEqual((oldNumScope - 1), templates.SystemTemplates.Count);
         }
 
         #endregion

@@ -66,37 +66,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public double MaterialCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
-        public double LaborCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
-        public double ElectricalCost
-        {
-            get
-            {
-                return getElectricalCost();
-            }
-        }
-
-        public double ElectricalLabor
-        {
-            get
-            {
-                return getElectricalLabor();
-            }
-        }
+        public abstract List<TECCost> Costs { get; }
         #endregion //Properties
 
         #region Constructors 
@@ -118,8 +88,5 @@ namespace EstimatingLibrary
             { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
         }
         #endregion //Constructors
-
-        abstract protected double getElectricalCost();
-        abstract protected double getElectricalLabor();
     }
 }

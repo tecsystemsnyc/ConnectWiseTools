@@ -55,29 +55,7 @@ namespace EstimatingLibrary
             {
                 _connection = value;
                 RaisePropertyChanged("Connection");
-            }
-        }
-
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-        public double ElectricalCost
-        {
-            get
-            {
-                return 0;
-            }
-        }
-        public double ElectricalLabor
-        {
-            get
-            {
-                return getElectricalLabor();
+                
             }
         }
 
@@ -105,6 +83,38 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
+
+        public List<TECCost> Costs
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
+        private List<TECCost> getCosts()
+        {
+            var outCosts = new List<TECCost>();
+            foreach(TECDevice dev in Devices)
+            {
+                outCosts.Add(dev);
+                foreach(TECCost cost in dev.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach(TECPoint point in Points)
+            {
+                foreach(TECCost cost in point.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            foreach(TECCost cost in AssociatedCosts)
+            {
+                outCosts.Add(cost);
+            }
+            return outCosts;
+        }
         #endregion //Properties
 
         #region Constructors
@@ -122,62 +132,57 @@ namespace EstimatingLibrary
         public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
             ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
         {
-            if (characteristicReference == null)
-            {
-                characteristicReference = new ObservableItemToInstanceList<TECScope>();
-            }
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
-
             foreach (TECDevice device in sourceSubScope.Devices)
-            { Devices.Add(new TECDevice(device)); }
+            { _devices.Add(new TECDevice(device)); }
+            var subWatch = System.Diagnostics.Stopwatch.StartNew();
             foreach (TECPoint point in sourceSubScope.Points)
             {
                 var toAdd = new TECPoint(point);
-                characteristicReference.AddItem(point,toAdd);
+                characteristicReference?.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
-
             this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors
 
         #region Num Point Types
-        private int _ai;
-        private int _ao;
-        private int _bi;
-        private int _bo;
-        private int _serial;
+        //private int _ai;
+        //private int _ao;
+        //private int _bi;
+        //private int _bo;
+        //private int _serial;
 
-        public int AI { get { return _ai; } }
-        public int AO { get { return _ao; } }
-        public int BI { get { return _bi; } }
-        public int BO { get { return _bo; } }
-        public int Serial { get { return _serial; } }
+        //public int AI { get { return _ai; } }
+        //public int AO { get { return _ao; } }
+        //public int BI { get { return _bi; } }
+        //public int BO { get { return _bo; } }
+        //public int Serial { get { return _serial; } }
 
         #endregion //Num Point Types
 
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            _ai = 0;
-            _ao = 0;
-            _bi = 0;
-            _bo = 0;
-            _serial = 0;
-            foreach (TECPoint point in Points)
-            {
-                if (point.Type == PointTypes.AI) { _ai++; }
-                else if (point.Type == PointTypes.AO) { _ao++; }
-                else if (point.Type == PointTypes.BI) { _bi++; }
-                else if (point.Type == PointTypes.BO) { _bo++; }
-                else if (point.Type == PointTypes.Serial) { _serial++; }
-                else
-                {
-                    string message = "Invalid Point Type in PointsColllectionChanged in TECSubScope";
-                    throw new InvalidCastException(message);
-                }
-            }
+            //_ai = 0;
+            //_ao = 0;
+            //_bi = 0;
+            //_bo = 0;
+            //_serial = 0;
+            //foreach (TECPoint point in Points)
+            //{
+            //    if (point.Type == PointTypes.AI) { _ai++; }
+            //    else if (point.Type == PointTypes.AO) { _ao++; }
+            //    else if (point.Type == PointTypes.BI) { _bi++; }
+            //    else if (point.Type == PointTypes.BO) { _bo++; }
+            //    else if (point.Type == PointTypes.Serial) { _serial++; }
+            //    else
+            //    {
+            //        string message = "Invalid Point Type in PointsColllectionChanged in TECSubScope";
+            //        throw new InvalidCastException(message);
+            //    }
+            //}
 
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -268,9 +273,10 @@ namespace EstimatingLibrary
             outScope.copyPropertiesFromScope(this);
             return outScope;
         }
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             TECSubScope outScope = new TECSubScope(this);
+            ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }
 
@@ -285,50 +291,6 @@ namespace EstimatingLibrary
                 }
             }
             return outTypes;
-        }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-
-            foreach (TECDevice device in this.Devices)
-            {
-                matCost += device.Cost * device.Manufacturer.Multiplier;
-                foreach (TECAssociatedCost cost in device.AssociatedCosts)
-                {
-                    matCost += cost.Cost;
-                }
-            }
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
-            {
-                matCost += cost.Cost;
-            }
-
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double labCost = 0;
-
-            foreach (TECDevice device in this.Devices)
-            {
-                labCost += device.LaborCost;
-            }
-            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
-            {
-                labCost += assCost.Labor;
-            }
-
-            return labCost;
-        }
-        private double getElectricalLabor()
-        {
-            double mountingLabor = 0;
-            foreach(TECDevice device in Devices)
-            {
-                mountingLabor += .5;
-            }
-            return mountingLabor;
         }
 
         private void subscribeToDevices()
@@ -412,6 +374,11 @@ namespace EstimatingLibrary
             }
             old._devices = oldDevices;
             return old;
+        }
+
+        public void LinkConnection(TECSubScopeConnection connection)
+        {
+            _connection = connection;
         }
         #endregion
     }

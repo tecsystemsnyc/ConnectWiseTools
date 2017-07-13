@@ -223,91 +223,67 @@ namespace EstimatingUtilitiesLibrary
         {
             Paragraph paragraph = new Paragraph();
             int sysNum = 1;
-            foreach (TECProposalScope systemProp in bid.ProposalScope)
+            foreach (TECSystem system in bid.Systems)
             {
-                if (systemProp.IsProposed)
+                 paragraph = document.LastSection.AddParagraph();
+                paragraph.AddTab();
+                string systemString = system.Name;
+                if (system.Quantity > 1)
                 {
-                    paragraph = document.LastSection.AddParagraph();
-                    TECScope system = systemProp.Scope;
-                    paragraph.AddTab();
-                    string systemString = system.Name;
-                    if (system.Quantity > 1)
-                    {
-                        systemString += " (" + system.Quantity.ToString() + ")";
-                    }
-                    if (system.Description != "")
-                    {
-                        systemString += ": " + system.Description;
-                    }
-
-                    paragraph.AddFormattedText(sysNum.ToString() + ". ");
-                    paragraph.AddFormattedText(systemString);
-
-                    foreach (TECScopeBranch branch in systemProp.Notes)
-                    {
-                        paragraph = document.LastSection.AddParagraph();
-                        addScopeBranch(branch, document, paragraph, 2);
-                    }
-
-                    int equipIndex = 0;
-                    foreach (TECProposalScope equipProp in systemProp.Children)
-                    {
-                        if (equipProp.IsProposed)
-                        {
-                            paragraph = document.LastSection.AddParagraph();
-                            TECScope equipment = equipProp.Scope;
-                            paragraph.AddTab();
-                            string equipmentString = equipment.Name;
-                            if (equipment.Quantity > 1)
-                            {
-                                equipmentString += " (" + equipment.Quantity.ToString() + ")";
-                            }
-                            if (equipment.Description != "")
-                            {
-                                equipmentString += ": " + equipment.Description;
-                            }
-
-                            paragraph.AddTab();
-                            paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ". ");
-                            paragraph.AddFormattedText(equipmentString);
-
-                            foreach (TECScopeBranch branch in equipProp.Notes)
-                            {
-                                paragraph = document.LastSection.AddParagraph();
-                                addScopeBranch(branch, document, paragraph, 3);
-                            }
-
-                            int ssIndex = 0;
-                            foreach (TECProposalScope ssProp in equipProp.Children)
-                            {
-                                if (ssProp.IsProposed)
-                                {
-                                    paragraph = document.LastSection.AddParagraph();
-                                    TECScope subScope = ssProp.Scope;
-                                    paragraph.AddTab();
-                                    string subScopeString = subScope.Name;
-
-                                    paragraph.AddTab();
-                                    paragraph.AddTab();
-                                    paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ". ");
-                                    paragraph.AddFormattedText(subScopeString);
-
-                                    foreach (TECScopeBranch branch in ssProp.Notes)
-                                    {
-                                        paragraph = document.LastSection.AddParagraph();
-                                        addScopeBranch(branch, document, paragraph, 4);
-                                    }
-                                    ssIndex++;
-                                }
-                            }
-                            equipIndex++;
-                        }
-
-                    }
-                    paragraph.AddLineBreak();
-                    sysNum++;
+                    systemString += " (" + system.Quantity.ToString() + ")";
+                }
+                if (system.Description != "")
+                {
+                    systemString += ": " + system.Description;
                 }
 
+                paragraph.AddFormattedText(sysNum.ToString() + ". ");
+                paragraph.AddFormattedText(systemString);
+
+                foreach (TECScopeBranch branch in system.ScopeBranches)
+                {
+                    paragraph = document.LastSection.AddParagraph();
+                    addScopeBranch(branch, document, paragraph, 2);
+                }
+
+                int equipIndex = 0;
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    paragraph = document.LastSection.AddParagraph();
+                    paragraph.AddTab();
+                    string equipmentString = equipment.Name;
+                    if (equipment.Quantity > 1)
+                    {
+                        equipmentString += " (" + equipment.Quantity.ToString() + ")";
+                    }
+                    if (equipment.Description != "")
+                    {
+                        equipmentString += ": " + equipment.Description;
+                    }
+
+                    paragraph.AddTab();
+                    paragraph.AddFormattedText(itemLetters[equipIndex].ToLower() + ". ");
+                    paragraph.AddFormattedText(equipmentString);
+                    
+                    int ssIndex = 0;
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                                
+                        paragraph = document.LastSection.AddParagraph();
+                        paragraph.AddTab();
+                        string subScopeString = subScope.Name;
+
+                        paragraph.AddTab();
+                        paragraph.AddTab();
+                        paragraph.AddFormattedText(itemNumerals[ssIndex].ToLower() + ". ");
+                        paragraph.AddFormattedText(subScopeString);
+                            
+                        ssIndex++;
+                    }
+                    equipIndex++;
+                }
+                paragraph.AddLineBreak();
+                sysNum++;
             }
         }
         private static void createPricing(Document document, double price)

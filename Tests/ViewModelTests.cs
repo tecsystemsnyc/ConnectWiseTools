@@ -86,8 +86,8 @@ namespace Tests
 
             Assert.AreEqual(panel.Controllers.Count, 0, "Controller not removed to panel");
         }
-
         #endregion
+
         #region SubScopeConnection
         [TestMethod]
         public void SubScopeConnection_AddConnection()

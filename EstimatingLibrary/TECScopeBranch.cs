@@ -59,7 +59,7 @@ namespace EstimatingLibrary
             return outScope;
         }
 
-        public override object DragDropCopy()
+        public override object DragDropCopy(TECScopeManager scopeManager)
         {
             TECScopeBranch outScope = new TECScopeBranch(this);
             return outScope;

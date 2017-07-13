@@ -28,8 +28,8 @@ namespace DebugLibrary
             }
         }
 
-        private const bool RELEASE_CREATES_LOG = false;
-        private const bool DEBUG_CREATES_LOG = false;
+        private const bool RELEASE_CREATES_LOG = true;
+        private const bool DEBUG_CREATES_LOG = true;
 
         //The folder inside of AppData where the log folder hierarchy will be stored.
         private const string APPDATA_FOLDER = @"TECSystems\Logs\";
@@ -93,19 +93,46 @@ namespace DebugLibrary
             if (logPath == null)
             //If the logFile doesn't exist yet, create a new one in the proper date hierarchy folder and the current time as the file name.
             {
-                logPath = createLogPath();
-                File.Create(logPath).Close();
+                bool created = false;
+                while(!created)
+                {
+                    logPath = createLogPath();
+                    try
+                    {
+                        File.Create(logPath).Close();
+                        created = true;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Path already taken. Waiting 0.5 seconds.");
+                        System.Threading.Thread.Sleep(500);
+                    }
+                }
             }
 
-            using (StreamWriter writer = new StreamWriter(logPath, true))
+            bool logged = false;
+            while(!logged)
             {
-                DateTime date = DateTime.Now;
-                CultureInfo culture = CultureInfo.CreateSpecificCulture("hr-HR");
-                DateTimeFormatInfo dtfi = culture.DateTimeFormat;
-                dtfi = culture.DateTimeFormat;
-                dtfi.TimeSeparator = "-";
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(logPath, true))
+                    {
+                        DateTime date = DateTime.Now;
+                        CultureInfo culture = CultureInfo.CreateSpecificCulture("hr-HR");
+                        DateTimeFormatInfo dtfi = culture.DateTimeFormat;
+                        dtfi = culture.DateTimeFormat;
+                        dtfi.TimeSeparator = "-";
 
-                writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
+                        writer.WriteLine(date.ToString("T", dtfi) + ": " + message);
+                        writer.Close();
+                        logged = true;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Log file: " + logPath + " is locked. Waiting 0.5 seconds.");
+                    System.Threading.Thread.Sleep(500);
+                }
             }
         }
 

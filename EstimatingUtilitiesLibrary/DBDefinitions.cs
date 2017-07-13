@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace EstimatingUtilitiesLibrary
 {
     #region Table Definitions
+    #region Object Tables
     public class BidInfoTable : TableBase
     {
         public static new string TableName = "TECBidInfo";
@@ -58,7 +60,7 @@ namespace EstimatingUtilitiesLibrary
         public static new string TableName = "TECBidParameters";
         public static Type ParameterType = typeof(TECBidParameters);
 
-        public static TableField ParamtersID = new TableField("ParametersID", "TEXT", ParameterType.GetProperty("Guid"));
+        public static TableField ParametersID = new TableField("ParametersID", "TEXT", ParameterType.GetProperty("Guid"));
 
         public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"));
         public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"));
@@ -72,7 +74,7 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            ParamtersID
+            ParametersID
         };
 
         public static new List<Type> Types = new List<Type>()
@@ -200,27 +202,6 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class BidScopeBranchTable : TableBase
-    {
-        public static new string TableName = "TECBidTECScopeBranch";
-        public static Type ObjectType = typeof(TECScopeBranch);
-        public static Type ReferenceType = typeof(TECBid);
-
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ObjectType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            BidID,
-            ScopeBranchID
-        };
-
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-    }
     public class ScopeBranchTable : TableBase
     {
         public static new string TableName = "TECScopeBranch";
@@ -249,6 +230,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
         public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.GetProperty("BudgetPriceModifier"));
+        public static TableField ProposeEquipment = new TableField("ProposeEquipment", "INTEGER", ObjectType.GetProperty("ProposeEquipment"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SystemID
@@ -442,23 +424,6 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ProposalScopeTable : TableBase
-    {
-        public static new string TableName = "TECProposalScope";
-        public static Type ObjectType = typeof(TECProposalScope);
-
-        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IsProposed = new TableField("IsProposed", "INTEGER", ObjectType.GetProperty("IsProposed"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            ProposalScopeID
-        };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType
-        };
-    }
     public class ConnectionTypeTable : CatalogTableBase
     {
         public static new string TableName = "TECConnectionType";
@@ -500,12 +465,13 @@ namespace EstimatingUtilitiesLibrary
     public class AssociatedCostTable : CatalogTableBase
     {
         public static new string TableName = "TECAssociatedCost";
-        public static Type ObjectType = typeof(TECAssociatedCost);
+        public static Type ObjectType = typeof(TECCost);
 
         public static TableField AssociatedCostID = new TableField("AssociatedCostID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -514,25 +480,6 @@ namespace EstimatingUtilitiesLibrary
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType
-        };
-    }
-    public class ProposalScopeScopeBranchTable : TableBase
-    {
-        public static new string TableName = "TECProposalScopeTECScopeBranch";
-        public static Type ObjectType = typeof(TECProposalScope);
-        public static Type ReferenceType = typeof(TECScopeBranch);
-
-        public static TableField ProposalScopeID = new TableField("ProposalScopeID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ReferenceType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            ScopeBranchID
-        };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
         };
     }
     public class SubScopeConnectionTable : TableBase
@@ -579,7 +526,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
-        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("NetworkType"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID
@@ -589,41 +536,21 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class MiscCostTable : TableBase
+    public class MiscTable : TableBase
     {
-        public static new string TableName = "TECMiscCost";
-        public static Type ObjectType = typeof(TECMiscCost);
+        public static new string TableName = "TECMisc";
+        public static Type ObjectType = typeof(TECMisc);
 
-        public static TableField MiscCostID = new TableField("MiscCostID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField MiscID = new TableField("MiscID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            MiscCostID
-        };
-
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType
-        };
-    }
-    public class MiscWiringTable : TableBase
-    {
-        public static new string TableName = "TECMiscWiring";
-        public static Type ObjectType = typeof(TECMiscWiring);
-
-        public static TableField MiscWiringID = new TableField("MiscWiringID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            MiscWiringID
+            MiscID
         };
 
         public static new List<Type> Types = new List<Type>()
@@ -639,6 +566,7 @@ namespace EstimatingUtilitiesLibrary
         public static TableField PanelTypeID = new TableField("PanelTypeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -663,25 +591,6 @@ namespace EstimatingUtilitiesLibrary
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             PanelID
-        };
-
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType
-        };
-    }
-    public class ControlledScopeTable : TableBase
-    {
-        public static new string TableName = "TECControlledScope";
-        public static Type ObjectType = typeof(TECControlledScope);
-
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            ControlledScopeID
         };
 
         public static new List<Type> Types = new List<Type>()
@@ -728,7 +637,9 @@ namespace EstimatingUtilitiesLibrary
             IOObjectType
         };
     }
+    #endregion
 
+    #region Relationship Tables
     public class BidLaborTable : TableBase
     {
         public static new string TableName = "TECBidTECLabor";
@@ -771,40 +682,40 @@ namespace EstimatingUtilitiesLibrary
             ParameterType
         };
     }
-    public class BidMiscWiringTable : TableBase
+    public class BidScopeBranchTable : TableBase
     {
-        public static new string TableName = "TECBidTECMiscWiring";
-        public static Type BidType = typeof(TECBid);
-        public static Type CostType = typeof(TECMiscWiring);
+        public static new string TableName = "TECBidTECScopeBranch";
+        public static Type ObjectType = typeof(TECScopeBranch);
+        public static Type ReferenceType = typeof(TECBid);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
-        public static TableField MiscWiringID = new TableField("MiscWiringID", "TEXT", CostType.GetProperty("Guid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ObjectType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             BidID,
-            MiscWiringID
+            ScopeBranchID
         };
 
         public static new List<Type> Types = new List<Type>()
         {
-            BidType,
-            CostType
+            ObjectType,
+            ReferenceType
         };
     }
-    public class BidMiscCostTable : TableBase
+    public class BidMiscTable : TableBase
     {
-        public static new string TableName = "TECBidTECMiscCost";
+        public static new string TableName = "TECBidTECMisc";
         public static Type BidType = typeof(TECBid);
-        public static Type CostType = typeof(TECMiscCost);
+        public static Type CostType = typeof(TECMisc);
 
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
-        public static TableField MiscCostID = new TableField("MiscCostID", "TEXT", CostType.GetProperty("Guid"));
+        public static TableField MiscID = new TableField("MiscID", "TEXT", CostType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             BidID,
-            MiscCostID
+            MiscID
         };
 
         public static new List<Type> Types = new List<Type>()
@@ -825,6 +736,24 @@ namespace EstimatingUtilitiesLibrary
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ControllerID,
             IOID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
+    public class IOModuleManufacturerTable : TableBase
+    {
+        public static new string TableName = "TECIOModuleTECManufacturer";
+        public static Type ObjectType = typeof(TECIOModule);
+        public static Type ReferenceType = typeof(TECManufacturer);
+
+        public static TableField IOModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            IOModuleID
             };
         public static new List<Type> Types = new List<Type>()
         {
@@ -993,7 +922,6 @@ namespace EstimatingUtilitiesLibrary
 
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PointID = new TableField("PointID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID,
@@ -1151,7 +1079,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static new string TableName = "TECScopeTECAssociatedCost";
         public static Type ObjectType = typeof(TECScope);
-        public static Type ReferenceType = typeof(TECAssociatedCost);
+        public static Type ReferenceType = typeof(TECCost);
 
         public static Type HelperType = typeof(HelperProperties);
 
@@ -1163,6 +1091,29 @@ namespace EstimatingUtilitiesLibrary
         {
             ScopeID,
             AssociatedCostID
+        };
+        public static new List<Type> Types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+    }
+    public class ElectricalMaterialRatedCostTable : IndexedRelationTableBase
+    {
+        public static new string TableName = "ElectricalMaterialRatedCost";
+        public static Type ObjectType = typeof(ElectricalMaterialComponent);
+        public static Type ReferenceType = typeof(TECCost);
+
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField ComponentID = new TableField("ComponentID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField CostID = new TableField("CostID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
+            ComponentID,
+            CostID
         };
         public static new List<Type> Types = new List<Type>()
         {
@@ -1275,10 +1226,11 @@ namespace EstimatingUtilitiesLibrary
         public static TableField PanelID = new TableField("PanelID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PanelTypeID = new TableField("PaneltypeID", "TEXT", ReferenceType.GetProperty("Guid"));
 
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
+        public static new List<TableField> PrimaryKey = new List<TableField>()
+        {
             PanelID,
             PanelTypeID
-            };
+        };
         public static new List<Type> Types = new List<Type>()
         {
             ObjectType,
@@ -1304,71 +1256,70 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ControlledScopeSystemTable : TableBase
+    public class SystemControllerTable : TableBase
     {
-        public static new string TableName = "TECControlledScopeTECSystem";
-        public static Type ControlledScopeType = typeof(TECControlledScope);
+        public static new string TableName = "TECSystemTECController";
         public static Type SystemType = typeof(TECSystem);
-
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
-        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ControlledScopeID,
-            SystemID
-            };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ControlledScopeType,
-            SystemType
-        };
-    }
-    public class ControlledScopeControllerTable : TableBase
-    {
-        public static new string TableName = "TECControlledScopeTECController";
-        public static Type ScopeType = typeof(TECControlledScope);
         public static Type ControllerType = typeof(TECController);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ScopeType.GetProperty("Guid"));
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ControlledScopeID,
+            SystemID,
             ControllerID
             };
         public static new List<Type> Types = new List<Type>()
         {
-            ScopeType,
+            SystemType,
             ControllerType
         };
     }
-    public class ControlledScopePanelTable : TableBase
+    public class SystemPanelTable : TableBase
     {
-        public static new string TableName = "TECControlledScopeTECPanel";
-        public static Type ControlledScopeType = typeof(TECControlledScope);
+        public static new string TableName = "TECSystemTECPanel";
+        public static Type SystemType = typeof(TECSystem);
         public static Type PanelType = typeof(TECPanel);
 
-        public static TableField ControlledScopeID = new TableField("ControlledScopeID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField PanelID = new TableField("PanelID", "TEXT", PanelType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ControlledScopeID,
+            SystemID,
             PanelID
             };
         public static new List<Type> Types = new List<Type>()
         {
-            ControlledScopeType,
+            SystemType,
             PanelType
         };
     }
-    
-    public class ControlledScopeHierarchyTable : TableBase
+    public class SystemScopeBranchTable : TableBase
     {
-        public static new string TableName = "TECControlledScopeHierarchy";
-        public static Type ControlledScopeType = typeof(TECControlledScope);
+        public static new string TableName = "TECSystemTECScopeBranch";
+        public static Type SystemType = typeof(TECSystem);
+        public static Type ScopeBranchType = typeof(TECScopeBranch);
 
-        public static TableField ParentID = new TableField("ControlledScopeParentID", "TEXT", ControlledScopeType.GetProperty("Guid"));
-        public static TableField ChildID = new TableField("ControlledScopeChildID", "TEXT", ControlledScopeType.GetProperty("Guid"));
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
+        public static TableField BranchID = new TableField("BranchID", "TEXT", ScopeBranchType.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SystemID,
+            BranchID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            SystemType,
+            ScopeBranchType
+        };
+    }
+    public class SystemHierarchyTable : TableBase
+    {
+        public static new string TableName = "TECSystemHierarchy";
+        public static Type SystemType = typeof(TECSystem);
+
+        public static TableField ParentID = new TableField("SystemParentID", "TEXT", SystemType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("SystemChildID", "TEXT", SystemType.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ParentID,
@@ -1376,10 +1327,30 @@ namespace EstimatingUtilitiesLibrary
             };
         public static new List<Type> Types = new List<Type>()
         {
-            ControlledScopeType,
-            ControlledScopeType
+            SystemType,
+            SystemType
         };
     }
+    public class SystemMiscTable : TableBase
+    {
+        public static new string TableName = "TECSystemTECMisc";
+        public static Type SystemType = typeof(TECSystem);
+        public static Type MiscType = typeof(TECMisc);
+
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
+        public static TableField MiscID = new TableField("MIscID", "TEXT", MiscType.GetProperty("Guid"));
+        
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            SystemID,
+            MiscID
+            };
+        public static new List<Type> Types = new List<Type>()
+        {
+            SystemType,
+            MiscType
+        };
+    }
+
     public class CharacteristicScopeInstanceScopeTable : TableBase
     {
         public static new string TableName = "CharacteristicScopeInstanceScope";
@@ -1398,25 +1369,7 @@ namespace EstimatingUtilitiesLibrary
             ScopeType
         };
     }
-
-    public class IOModuleManufacturerTable : TableBase
-    {
-        public static new string TableName = "TECIOModuleTECManufacturer";
-        public static Type ObjectType = typeof(TECIOModule);
-        public static Type ReferenceType = typeof(TECManufacturer);
-
-        public static TableField IOModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField ManufacturerID = new TableField("ManufacturerID", "TEXT", ReferenceType.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            IOModuleID
-            };
-        public static new List<Type> Types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-    }
+    #endregion
 
     public static class AllBidTables
     {
@@ -1440,15 +1393,13 @@ namespace EstimatingUtilitiesLibrary
             new LocationTable(),
             new VisualScopeTable(),
             new BidParametersTable(),
-            new MiscCostTable(),
-            new MiscWiringTable(),
+            new MiscTable(),
             new PanelTable(),
             new PanelTypeTable(),
             new SubScopeConnectionTable(),
             new NetworkConnectionTable(),
             new IOTable(),
             new IOModuleTable(),
-            new ControlledScopeTable(),
 
             new BidLaborTable(),
             new ConnectionTypeTable(),
@@ -1467,24 +1418,23 @@ namespace EstimatingUtilitiesLibrary
             new LocationScopeTable(),
             new ControllerTable(),
             new AssociatedCostTable(),
+            new ElectricalMaterialRatedCostTable(),
             new ControllerConnectionTable(),
             new ControllerIOTable(),
             new IOIOModuleTable(),
-            new ProposalScopeTable(),
-            new ProposalScopeScopeBranchTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
-            new ControlledScopeControllerTable(),
-            new ControlledScopePanelTable(),
-            new ControlledScopeSystemTable(),
-            new ControlledScopeHierarchyTable(),
+            new SystemControllerTable(),
+            new SystemPanelTable(),
+            new SystemScopeBranchTable(),
+            new SystemHierarchyTable(),
+            new SystemMiscTable(),
             new CharacteristicScopeInstanceScopeTable(),
             new BidBidParametersTable(),
-            new BidMiscCostTable(),
-            new BidMiscWiringTable(),
+            new BidMiscTable(),
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
@@ -1510,12 +1460,11 @@ namespace EstimatingUtilitiesLibrary
             new ManufacturerTable(),
             new PanelTypeTable(),
             new PanelTable(),
-            new MiscCostTable(),
-            new MiscWiringTable(),
-            new ControlledScopeTable(),
+            new MiscTable(),
             new SubScopeConnectionTable(),
             new IOModuleTable(),
             new IOTable(),
+            new ScopeBranchTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -1532,16 +1481,19 @@ namespace EstimatingUtilitiesLibrary
             new DeviceManufacturerTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
+            new ElectricalMaterialRatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
             new PanelPanelTypeTable(),
-            new ControlledScopeControllerTable(),
-            new ControlledScopePanelTable(),
-            new ControlledScopeSystemTable(),
-            new ControlledScopeHierarchyTable(),
+            new SystemControllerTable(),
+            new SystemPanelTable(),
+            new SystemHierarchyTable(),
+            new SystemScopeBranchTable(),
+            new SystemMiscTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
-            new IOModuleManufacturerTable()
+            new IOModuleManufacturerTable(),
+            new ScopeBranchHierarchyTable()
         };
     }
 
@@ -1570,23 +1522,18 @@ namespace EstimatingUtilitiesLibrary
             new LocationTable(),
             new VisualScopeTable(),
             new BidParametersTable(),
-            new MiscCostTable(),
-            new MiscWiringTable(),
+            new MiscTable(),
             new PanelTypeTable(),
             new PanelTable(),
-            new ControlledScopeTable(),
             new SubScopeConnectionTable(),
             new NetworkConnectionTable(),
             new IOModuleTable(),
             new IOTable(),
-
-
+            
             new BidLaborTable(),
-            new ProposalScopeTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new AssociatedCostTable(),
-            new ProposalScopeScopeBranchTable(),
             new ControllerTable(),
             new ControllerIOTable(),
             new IOIOModuleTable(),
@@ -1605,20 +1552,23 @@ namespace EstimatingUtilitiesLibrary
             new VisualScopeScopeTable(),
             new LocationScopeTable(),
             new ScopeAssociatedCostTable(),
+            new ElectricalMaterialRatedCostTable(),
             new ControllerManufacturerTable(),
             new ConnectionConduitTypeTable(),
             new BidBidParametersTable(),
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
-            new ControlledScopeControllerTable(),
-            new ControlledScopePanelTable(),
-            new ControlledScopeSystemTable(),
-            new ControlledScopeHierarchyTable(),
+            new SystemControllerTable(),
+            new SystemPanelTable(),
+            new SystemHierarchyTable(),
+            new SystemScopeBranchTable(),
+            new SystemMiscTable(),
             new CharacteristicScopeInstanceScopeTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionControllerTable(),
             new NetworkConnectionConnectionTypeTable(),
-            new IOModuleManufacturerTable()
+            new IOModuleManufacturerTable(),
+            new BidMiscTable()
         };
     }
 

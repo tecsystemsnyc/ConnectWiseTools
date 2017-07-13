@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.MiscCostsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             x:Name="parent"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Misc. Costs" Grid.Row="0"
+                                FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center"/>
+            <controls:MiscCostGridControl CostSource="{Binding TECCostCollection}"
+                                  Grid.Row="1" Grid.Column="1"
+                                  Margin="0,0,5,0"
+                                  ViewModel="{Binding}"
+                                          UserCanAddRows="False"/>
+
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Misc. Wiring" Grid.Row="0"
+                                FontWeight="Bold" Foreground="Black"
+                                VerticalAlignment="Center"/>
+            <controls:MiscCostGridControl CostSource="{Binding ElectricalCostCollection}"
+                                  Grid.Row="1" Grid.Column="1"
+                                  Margin="5,0,0,0"
+                                          UserCanAddRows="False"
+                                  ViewModel="{Binding}"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Name:" Grid.Column="0"/>
+            <TextBox Text="{Binding MiscName}" Grid.Column="1"/>
+            <Label Content="Type:" Grid.Column="2"/>
+            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:CostType}}}"
+                      SelectedItem="{Binding MiscType}"
+                      Grid.Column="3"
+                  VerticalContentAlignment="Center"/>
+            <Button Content="Add" Command="{Binding AddNewCommand}" Grid.Column="4" Grid.RowSpan="2" Margin="4"/>
+            <Label Content="Cost:" Grid.Column="0" Grid.Row="1"/>
+            <TextBox Text="{Binding Cost}" Grid.Column="1" Grid.Row="1"/>
+            <Label Content="Labor:" Grid.Column="2" Grid.Row="1"/>
+            <TextBox Text="{Binding Labor}" Grid.Column="3" Grid.Row="1"/>
+        </Grid>
+    </Grid>
+</UserControl>

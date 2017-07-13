@@ -15,9 +15,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
         private ObservableCollection<TECController> _controllerTemplates;
-        private ObservableCollection<TECControlledScope> _controlledScopeTemplates;
-        private ObservableCollection<TECMiscCost> _miscCostTemplates;
-        private ObservableCollection<TECMiscWiring> _miscWiringTemplates;
+        private ObservableCollection<TECMisc> _miscCostTemplates;
         private ObservableCollection<TECPanel> _panelTemplates;
 
         public ObservableCollection<TECSystem> SystemTemplates
@@ -68,19 +66,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ControllerTemplates", temp, this);
             }
         }
-        public ObservableCollection<TECControlledScope> ControlledScopeTemplates
-        {
-            get { return _controlledScopeTemplates; }
-            set
-            {
-                var temp = this.Copy();
-                ControlledScopeTemplates.CollectionChanged -= CollectionChanged;
-                _controlledScopeTemplates = value;
-                ControlledScopeTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ControlledScopeTemplates", temp, this);
-            }
-        }
-        public ObservableCollection<TECMiscCost> MiscCostTemplates
+        public ObservableCollection<TECMisc> MiscCostTemplates
         {
             get { return _miscCostTemplates; }
             set
@@ -90,18 +76,6 @@ namespace EstimatingLibrary
                 _miscCostTemplates = value;
                 MiscCostTemplates.CollectionChanged += CollectionChanged;
                 NotifyPropertyChanged("MiscCostTemplates", temp, this);
-            }
-        }
-        public ObservableCollection<TECMiscWiring> MiscWiringTemplates
-        {
-            get { return _miscWiringTemplates; }
-            set
-            {
-                var temp = this.Copy();
-                MiscWiringTemplates.CollectionChanged -= CollectionChanged;
-                _miscWiringTemplates = value;
-                MiscWiringTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscWiringTemplates", temp, this);
             }
         }
         public ObservableCollection<TECPanel> PanelTemplates
@@ -118,6 +92,22 @@ namespace EstimatingLibrary
         }
         #endregion //Properties
 
+        //For listening to a catalog changing
+        public override TECCatalogs Catalogs
+        {
+            get
+            {
+                return base.Catalogs;
+            }
+
+            set
+            {
+                base.Catalogs.ScopeChildRemoved -= scopeChildRemoved;
+                base.Catalogs = value;
+                base.Catalogs.ScopeChildRemoved += scopeChildRemoved;
+            }
+        }
+
         #region Constructors
         public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
@@ -128,19 +118,17 @@ namespace EstimatingLibrary
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
             _controllerTemplates = new ObservableCollection<TECController>();
-            _miscWiringTemplates = new ObservableCollection<TECMiscWiring>();
-            _miscCostTemplates = new ObservableCollection<TECMiscCost>();
-            _controlledScopeTemplates = new ObservableCollection<TECControlledScope>();
+            _miscCostTemplates = new ObservableCollection<TECMisc>();
             _panelTemplates = new ObservableCollection<TECPanel>();
 
             SystemTemplates.CollectionChanged += CollectionChanged;
             EquipmentTemplates.CollectionChanged += CollectionChanged;
             SubScopeTemplates.CollectionChanged += CollectionChanged;
             ControllerTemplates.CollectionChanged += CollectionChanged;
-            MiscWiringTemplates.CollectionChanged += CollectionChanged;
             MiscCostTemplates.CollectionChanged += CollectionChanged;
             PanelTemplates.CollectionChanged += CollectionChanged;
-            ControlledScopeTemplates.CollectionChanged += CollectionChanged;
+
+            Catalogs.ScopeChildRemoved += scopeChildRemoved;
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
@@ -156,24 +144,132 @@ namespace EstimatingLibrary
             { SubScopeTemplates.Add(new TECSubScope(subScope)); }
             foreach (TECController controller in templatesSource.ControllerTemplates)
             { ControllerTemplates.Add(new TECController(controller)); }
-            foreach (TECMiscCost cost in templatesSource.MiscCostTemplates)
+            foreach (TECMisc cost in templatesSource.MiscCostTemplates)
             {
-                MiscCostTemplates.Add(new TECMiscCost(cost));
-            }
-            foreach (TECMiscWiring wiring in templatesSource.MiscWiringTemplates)
-            {
-                MiscWiringTemplates.Add(new TECMiscWiring(wiring));
+                MiscCostTemplates.Add(new TECMisc(cost));
             }
             foreach (TECPanel panel in templatesSource.PanelTemplates)
             {
                 PanelTemplates.Add(new TECPanel(panel));
             }
-            foreach (TECControlledScope scope in templatesSource.ControlledScopeTemplates)
-            {
-                ControlledScopeTemplates.Add(new TECControlledScope(scope));
-            }
         }
         #endregion //Constructors
+
+        private void scopeChildRemoved(TECObject child)
+        {
+            foreach (TECConnectionType type in Catalogs.ConnectionTypes)
+            {
+                removeChildFromScope(type, child);
+                TECCost cost = child as TECCost;
+                if (cost != null)
+                {
+                    type.RatedCosts.Remove(cost);
+                }
+            }
+            foreach (TECConduitType type in Catalogs.ConduitTypes)
+            {
+                removeChildFromScope(type, child);
+                TECCost cost = child as TECCost;
+                if (cost != null)
+                {
+                    type.RatedCosts.Remove(cost);
+                }
+            }
+            foreach (TECPanelType type in Catalogs.PanelTypes)
+            {
+                removeChildFromScope(type, child);
+            }
+            foreach (TECIOModule module in Catalogs.IOModules)
+            {
+                removeChildFromScope(module, child);
+            }
+            foreach (TECDevice dev in Catalogs.Devices)
+            {
+                removeChildFromScope(dev, child);
+            }
+            foreach (TECManufacturer man in Catalogs.Manufacturers)
+            {
+                removeChildFromScope(man, child);
+            }
+            foreach (TECSystem sys in SystemTemplates)
+            {
+                removeChildFromScope(sys, child);
+                foreach(TECEquipment equip in sys.Equipment)
+                {
+                    removeChildFromScope(equip, child);
+                    foreach(TECSubScope ss in equip.SubScope)
+                    {
+                        removeChildFromScope(ss, child);
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            removeChildFromScope(point, child);
+                        }
+                    }
+                }
+                foreach(TECSystem instance in sys.SystemInstances)
+                {
+                    removeChildFromScope(sys, child);
+                    foreach (TECEquipment equip in sys.Equipment)
+                    {
+                        removeChildFromScope(equip, child);
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            removeChildFromScope(ss, child);
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                removeChildFromScope(point, child);
+                            }
+                        }
+                    }
+                }
+            }
+            foreach(TECEquipment equip in EquipmentTemplates)
+            {
+                removeChildFromScope(equip, child);
+                foreach (TECSubScope ss in equip.SubScope)
+                {
+                    removeChildFromScope(ss, child);
+                    foreach (TECPoint point in ss.Points)
+                    {
+                        removeChildFromScope(point, child);
+                    }
+                }
+            }
+            foreach(TECSubScope ss in SubScopeTemplates)
+            {
+                removeChildFromScope(ss, child);
+                foreach (TECPoint point in ss.Points)
+                {
+                    removeChildFromScope(point, child);
+                }
+            }
+            foreach(TECController controller in ControllerTemplates)
+            {
+                removeChildFromScope(controller, child);
+            }
+            foreach(TECPanel panel in PanelTemplates)
+            {
+                removeChildFromScope(panel, child);
+            }
+        }
+
+        private void removeChildFromScope(TECScope scope, TECObject child)
+        {
+            TECCost cost = child as TECCost;
+            TECTag tag = child as TECTag;
+            if (cost != null)
+            {
+                scope.AssociatedCosts.Remove(cost);
+            }
+            else if (tag != null)
+            {
+                scope.Tags.Remove(tag);
+            }
+            else
+            {
+                throw new NotImplementedException("Scope child isn't cost or tag.");
+            }
+        }
 
         #region Collection Changed
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -215,18 +311,12 @@ namespace EstimatingLibrary
             { outTemplate.SubScopeTemplates.Add(subScope.Copy() as TECSubScope); }
             foreach (TECController controller in this.ControllerTemplates)
             { outTemplate.ControllerTemplates.Add(controller.Copy() as TECController); }
-            foreach (TECMiscCost cost in this.MiscCostTemplates)
-            { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMiscCost); }
-            foreach (TECMiscWiring wiring in this.MiscWiringTemplates)
-            { outTemplate.MiscWiringTemplates.Add(wiring.Copy() as TECMiscWiring); }
+            foreach (TECMisc cost in this.MiscCostTemplates)
+            { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMisc); }
             foreach (TECPanel panel in this.PanelTemplates)
             { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
-            foreach (TECControlledScope scope in this.ControlledScopeTemplates)
-            {
-                outTemplate.ControlledScopeTemplates.Add(scope.Copy() as TECControlledScope);
-            }
+            outTemplate.Catalogs.ScopeChildRemoved += outTemplate.scopeChildRemoved;
             return outTemplate;
         }
-
     }
 }

@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.ScopeEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ignore="http://www.galasoft.ch/ignore"
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"     
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             mc:Ignorable="d ignore"
+             x:Name="parent"
+             d:DesignWidth="960" d:DesignHeight="640">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background="{DynamicResource WindowBackgroundBrush}"
+           DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" MaxWidth="{Binding TemplatesVisibility, Converter={utilities:TemplatesVisibilityConverter}}"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*" MinHeight="40"/>
+        </Grid.RowDefinitions>
+
+        <views:ScopeCollectionsTabView Grid.Column="0" Grid.Row="0"
+                                         Grid.RowSpan="2"
+                                         ViewModel="{Binding ScopeCollection}"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
+        <TabControl Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="3"
+                    SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
+            <TabItem Header="NoneTab" Visibility="Collapsed"/>
+            <TabItem Header="Systems">
+                <TabControl SelectedIndex="{Binding SystemsSubIndex, Converter={utilities:SystemsSubIndexIntegerConverter}, Mode=OneWayToSource}">
+                    <TabItem Header="Typical">
+                        <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
+                    </TabItem>
+                    <TabItem Header="Instances">
+                        <views:InstanceSystemView ViewModel="{Binding InstanceSystemVM}"/>
+                    </TabItem>
+                    <TabItem Header="By Location">
+                        <views:LocationView LocationSource="{Binding Bid.Locations}"
+                                            ViewModel="{Binding LocationDataGrid}"/>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem Header="Controllers and Panels">
+                <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
+            </TabItem>
+            <!--Old Location-->
+            <TabItem Visibility="Collapsed"/>
+            <!--Proposal And Budget-->
+            <TabItem Visibility="Collapsed"/>
+            <TabItem Visibility="Collapsed"/>
+            <TabItem Header="Misc.">
+                <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
+            </TabItem>
+            
+        </TabControl>
+        <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
+
+        <!--Right Tab Control-->
+        <views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
+                             Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>
+    </Grid>
+</UserControl>

@@ -84,6 +84,113 @@ namespace Tests
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
             Assert.AreEqual(null, subScope.Connection, "Connection not removed from subscope");
         }
+
+        [TestMethod]
+        public void Bid_AddControlledScope()
+        {
+            TECBid bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+
+            TECSystem controlledScope = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(controlledScope);
+            
+            //Assert.AreEqual(quantity, bid.Systems.Count);
+            //Assert.AreEqual(quantity, bid.Controllers.Count);
+            //Assert.AreEqual(quantity, bid.Panels.Count);
+
+            foreach(TECPanel scopePanel in controlledScope.Panels)
+            {
+                foreach(TECPanel bidPanel in bid.Panels)
+                {
+                    Assert.AreEqual(scopePanel.Controllers.Count, bidPanel.Controllers.Count);
+                }
+            }
+            foreach (TECController scopeController in controlledScope.Controllers)
+            {
+                foreach (TECController bidController in bid.Controllers)
+                {
+                    Assert.AreEqual(scopeController.ChildrenConnections.Count, bidController.ChildrenConnections.Count);
+                }
+            }
+        }
+
+        #endregion
+
+        #region System
+        
+        [TestMethod]
+        public void System_AddInstances()
+        {
+            TECBid bid = new TECBid();
+            int qty = 3;
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+
+            for (int x = 0; x < qty; x++)
+            {
+                system.AddInstance(bid);
+            }
+
+            Assert.AreEqual(system.SystemInstances.Count, qty);
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
+            }
+
+        }
+
+        [TestMethod]
+        public void System_EditInstances()
+        {
+            TECBid bid = new TECBid();
+            int qty = 3;
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            bid.Systems.Add(system);
+            for (int x = 0; x < qty; x++)
+            {
+                system.AddInstance(bid);
+            }
+
+            system.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
+            system.Controllers.Add(TestHelper.CreateTestController(bid.Catalogs));
+            system.Panels.Add(TestHelper.CreateTestPanel(bid.Catalogs));
+
+            foreach (TECSystem instance in system.SystemInstances)
+            {
+                Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
+                Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
+            }
+
+        }
+
+        [TestMethod]
+        public void System_RemoveSystemInstanceWithBidConnection()
+        {
+            var bid = new TECBid();
+            var bidController = new TECController(new TECManufacturer());
+            bid.Controllers.Add(bidController);
+
+            var system = new TECSystem();
+            var equipment = new TECEquipment();
+            var subScope = new TECSubScope();
+            system.Equipment.Add(equipment);
+            equipment.SubScope.Add(subScope);
+            bidController.AddSubScope(subScope);
+            var instance = system.AddInstance(bid);
+            
+            Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
+
+            system.SystemInstances.Remove(instance);
+
+            Assert.AreEqual(1, bidController.ChildrenConnections.Count, "Connection not removed");
+            
+        }
+
         #endregion
     }
 }

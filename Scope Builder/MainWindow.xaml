@@ -1,0 +1,172 @@
+﻿<Window x:Class="Scope_Builder.MainWindow"
+        xmlns="http://schemas.microsoft.com/netfx/2007/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:local="clr-namespace:Scope_Builder"
+        xmlns:ELib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+        xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
+        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
+        xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:cLibUtilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
+        
+        mc:Ignorable="d ignore"
+        Title="{Binding TitleString}"
+        Height="720"
+        Width="1200"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
+        xmlns:dd="urn:gong-wpf-dragdrop"
+        MinHeight="300" MinWidth="535"
+        x:Name="Window">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SaveCommand}"
+                    Gesture="CTRL+S" />
+        <KeyBinding Command="{Binding NewCommand}"
+                    Gesture="CTRL+N" />
+        <KeyBinding Command="{Binding SaveAsCommand}"
+                    Gesture="SHIFT+CTRL+S" />
+        <KeyBinding Command="{Binding UndoCommand}"
+                    Gesture="CTRL+Z" />
+        <KeyBinding Command="{Binding RedoCommand}"
+                    Gesture="CTRL+SHIFT+Z" />
+        <KeyBinding Command="{Binding LoadCommand}"
+                    Gesture="CTRL+O" />
+    </Window.InputBindings>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel Background="{DynamicResource SBWindowBackgroundBrush}" IsEnabled="{Binding IsReady}">
+        <cLibViews:MenuView ViewModel="{Binding ElementName=Window, Path=DataContext.MenuVM}"
+                                  DockPanel.Dock="Top"/>
+        <Grid>
+        <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250" MaxWidth="{Binding TemplatesVisibility, Converter={cLibUtilities:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*" MinHeight="40"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+            <Grid Grid.ColumnSpan="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Name:" Grid.Column="0" 
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Bid.Name}"
+                         VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
+                         Grid.Column="1"
+                         VerticalAlignment="Center">
+                </TextBox>
+                <Label Content="Bid Number:" Grid.Column="2"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Bid.BidNumber}"
+                 Grid.Column="3"
+                 VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
+                         VerticalAlignment="Center">
+                </TextBox>
+                <Label Content="Estimator:" Grid.Column="4"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Bid.Estimator}"
+                Grid.Column="5"
+                VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
+                         VerticalAlignment="Center">
+                </TextBox>
+                <Label Content="Salesperson:" Grid.Column="6"
+                       Background="{DynamicResource SBWindowBackgroundBrush}"
+                       Foreground="{DynamicResource LightTextBrush}"
+                       VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Bid.Salesperson}"
+                Grid.Column="7"
+                VerticalContentAlignment="Center"
+                         Height="24"
+                         Margin="0"
+                         VerticalAlignment="Center">
+                </TextBox>
+                <Image Source="{Binding TECLogo}"
+                   Grid.Column="8"/>
+            </Grid>
+        
+            <cLibViews:ScopeCollectionsTabView ViewModel ="{Binding ScopeCollection}"
+                                             Grid.Column="0"
+                                             Grid.Row="1" Grid.RowSpan="2"/>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2"/>
+            <TabControl Grid.Row="1"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="5"
+                    Grid.RowSpan="2"
+                        Margin="0,2,0,0"
+                    SelectedIndex="{Binding DGTabIndex, Converter={cLibUtilities:GridIndexToIntegerConverter}}">
+                <TabItem Header="None"
+                         Visibility="Collapsed"/>
+                <TabItem Header="Systems">
+                    <cLibViews:SystemsGridView SystemsSource="{Binding Bid.Systems}"
+                                             ViewModel="{Binding ScopeDataGrid}"/>
+                </TabItem>
+                <TabItem Header="DDC"
+                         Visibility="Collapsed"/>
+                <TabItem Header="By Location">
+                    <cLibViews:LocationView LocationSource="{Binding Bid.Locations}"
+                                            ViewModel="{Binding LocationDataGrid}"/>
+                </TabItem>
+                
+                <TabItem Header="Proposal">
+                    <cLibViews:ProposalView ViewModel="{Binding DocumentBuilderVM}"/>
+                </TabItem>
+                <TabItem Header="Budget">
+                    <cLibViews:BudgetView ViewModel="{Binding BudgetVM}"/>
+                </TabItem>
+                <!--Misc Tab-->
+                <TabItem Visibility="Collapsed"/>
+                <TabItem Header="Settings">
+                    <cLibViews:SettingsView ViewModel="{Binding SettingsVM}"/>
+                </TabItem>
+            </TabControl>
+
+            <cLibViews:StatusBarView ViewModel="{Binding ElementName=Window, Path=DataContext.StatusBarVM}"
+                Grid.Row="3"
+                       Grid.ColumnSpan="7"/>
+        </Grid>
+   </DockPanel>
+</Window>

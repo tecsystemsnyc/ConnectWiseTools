@@ -8,24 +8,15 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECScope
+    public class TECDevice : TECCost
     {
         #region Properties
-        private double _cost;
         private ObservableCollection<TECConnectionType> _connectionTypes;
         private IOType _ioType;
         private TECManufacturer _manufacturer;
-
-        public double Cost
+        public override double ExtendedCost
         {
-            get { return _cost; }
-            set
-            {
-                var temp = this.Copy();
-                _cost = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Cost", temp, this);
-            }
+            get { return Cost * Manufacturer.Multiplier; }
         }
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
@@ -68,23 +59,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        public double MaterialCost
-        {
-            get { return getMaterialCost(); }
-        }
-        public double LaborCost
-        {
-            get { return getLaborCost(); }
-        }
-
-        public double ElectricalCost
-        {
-            get { return 0; }
-        }
-        public double ElectricalLabor
-        {
-            get { return 0; }
-        }
         #endregion//Properties
 
         #region Constructors
@@ -93,6 +67,7 @@ namespace EstimatingLibrary
             _cost = 0;
             _connectionTypes = connectionTypes;
             _manufacturer = manufacturer;
+            _type = CostType.TEC;
             ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
         }
         public TECDevice(ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
@@ -114,28 +89,16 @@ namespace EstimatingLibrary
             return outDevice;
         }
 
-        public override Object DragDropCopy()
+        public override Object DragDropCopy(TECScopeManager scopeManager)
         {
-            return this;
-        }
-
-        private double getMaterialCost()
-        {
-            double matCost = 0;
-            foreach (TECAssociatedCost cost in this.AssociatedCosts)
+            foreach(TECDevice device in scopeManager.Catalogs.Devices)
             {
-                matCost += cost.Cost;
+                if(device.Guid == this.Guid)
+                {
+                    return device;
+                }
             }
-            return matCost;
-        }
-        private double getLaborCost()
-        {
-            double cost = 0;
-            foreach (TECAssociatedCost assCost in this.AssociatedCosts)
-            {
-                cost += assCost.Labor;
-            }
-            return cost;
+            throw new Exception();
         }
 
         private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

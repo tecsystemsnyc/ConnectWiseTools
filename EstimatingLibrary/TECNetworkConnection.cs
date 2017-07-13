@@ -51,6 +51,60 @@ namespace EstimatingLibrary
             }
         }
 
+        override public List<TECCost> Costs
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
+        private List<TECCost> getCosts()
+        {
+            var outCosts = new List<TECCost>();
+            TECCost thisCost = new TECCost();
+
+            if (ConnectionType != null)
+            {
+                thisCost = new TECCost();
+                thisCost.Type = ConnectionType.Type;
+                thisCost.Cost = ConnectionType.Cost * Length;
+                thisCost.Labor = ConnectionType.Labor * Length;
+                outCosts.Add(thisCost);
+                foreach (TECCost cost in ConnectionType.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+                foreach (TECCost cost in ConnectionType.RatedCosts)
+                {
+                    TECCost ratedCost = new TECCost();
+                    ratedCost.Type = cost.Type;
+                    ratedCost.Cost = cost.Cost * Length;
+                    ratedCost.Labor = cost.Labor * Length;
+                    outCosts.Add(ratedCost);
+                }
+            }
+            if (ConduitType != null)
+            {
+                thisCost = new TECCost();
+                thisCost.Type = ConduitType.Type;
+                thisCost.Cost = ConduitType.Cost * ConduitLength;
+                thisCost.Labor = ConduitType.Labor * ConduitLength;
+                outCosts.Add(thisCost);
+                foreach (TECCost cost in ConduitType.AssociatedCosts)
+                {
+                    outCosts.Add(cost);
+                }
+                foreach (TECCost cost in ConduitType.RatedCosts)
+                {
+                    TECCost ratedCost = new TECCost();
+                    ratedCost.Cost = cost.Cost * Length;
+                    ratedCost.Labor = cost.Labor * Length;
+                    outCosts.Add(ratedCost);
+                }
+            }
+            return outCosts;
+        }
+
         //---Derived---
         public ObservableCollection<IOType> PossibleIO
         {
@@ -118,46 +172,6 @@ namespace EstimatingLibrary
             connection._guid = this._guid;
 
             return connection;
-        }
-        protected override double getElectricalCost()
-        {
-            double cost = 0;
-            if (ConnectionType != null)
-            {
-                TECConnectionType type = ConnectionType;
-                cost += Length * type.Cost;
-                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                { cost += associatedCost.Cost * ChildrenControllers.Count; }
-            }
-            if (ConduitType != null)
-            {
-                cost += ConduitLength * ConduitType.Cost;
-                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
-                {
-                    cost += associatedCost.Cost * ChildrenControllers.Count;
-                }
-            }
-            return cost;
-        }
-        protected override double getElectricalLabor()
-        {
-            double laborHours = 0;
-            if (ConnectionType != null)
-            {
-                TECConnectionType type = ConnectionType;
-                laborHours += Length * type.Labor;
-                foreach (TECAssociatedCost associatedCost in type.AssociatedCosts)
-                { laborHours += associatedCost.Labor * ChildrenControllers.Count; }
-            }
-            if (ConduitType != null)
-            {
-                laborHours += Length * ConduitType.Labor;
-                foreach (TECAssociatedCost associatedCost in ConduitType.AssociatedCosts)
-                {
-                    laborHours += associatedCost.Labor * ChildrenControllers.Count;
-                }
-            }
-            return laborHours;
         }
         #endregion Methods
 

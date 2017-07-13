@@ -1,15 +1,14 @@
 ﻿<Application x:Class="EstimateBuilder.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:EstimateBuilder.ViewModel"
-             xmlns:views="clr-namespace:EstimateBuilder.View"
-             xmlns:review="clr-namespace:EstimateBuilder.View.Review"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:ignore="http://www.galasoft.ch/ignore"
-             xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
-             xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
-             xmlns:cLibViewModels="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
+             
+             xmlns:localMVVM="clr-namespace:EstimateBuilder.MVVM"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+             xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
              
              StartupUri="MainWindow.xaml"
              mc:Ignorable="d ignore">
@@ -22,23 +21,23 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!--Global View Model Locator-->
-            <vm:ViewModelLocator x:Key="Locator"
+            <localMVVM:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
 
-            <DataTemplate DataType="{x:Type vm:ScopeEditorViewModel}">
+            <DataTemplate DataType="{x:Type vm:ScopeEditorVM}">
                 <views:ScopeEditorView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:DrawingViewModel}">
+            <DataTemplate DataType="{x:Type vm:DrawingVM}">
                 <views:DrawingView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:LaborViewModel}">
+            <DataTemplate DataType="{x:Type vm:LaborVM}">
                 <views:LaborView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:ReviewViewModel}">
-                <review:ReviewView />
+            <DataTemplate DataType="{x:Type vm:ReviewVM}">
+                <views:ReviewView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type cLibViewModels:SettingsViewModel}">
-                <cLibViews:SettingsView/>
+            <DataTemplate DataType="{x:Type vm:SettingsVM}">
+                <views:SettingsView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

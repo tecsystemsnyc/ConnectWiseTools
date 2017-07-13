@@ -1,9 +1,11 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,12 @@ namespace Tests
     public class LoadBidTests
     {
         static TECBid actualBid;
+
+        static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+        static Guid TEST_TEC_COST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+        static Guid TEST_ELECTRICAL_COST_GUID = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+        static Guid TEST_LOCATION_GUID = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
+        static Guid TEST_RATED_COST_GUID = new Guid("b7c01526-c195-442f-a1f1-28d07db61144");
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -31,28 +39,51 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext TestContext)
         {
-            //Arrange
-            actualBid = TestHelper.LoadTestBid(TestHelper.StaticTestBidPath);
+            var path = Path.GetTempFileName();
+            TestDBHelper.CreateTestBid(path);
+            actualBid = TestHelper.LoadTestBid(path);
         }
 
         [TestMethod]
         public void Load_Bid_Info()
         {
             //Assert
-            string expectedName = "Unit Testimate";
-            Assert.AreEqual(expectedName, actualBid.Name);
+            string expectedName = "Testimate";
+            Assert.AreEqual(expectedName, actualBid.Name, "Bid name didn't load properly.");
 
-            string expectedNumber = "1701-117";
-            Assert.AreEqual(expectedNumber, actualBid.BidNumber);
+            string expectedNumber = "7357";
+            Assert.AreEqual(expectedNumber, actualBid.BidNumber, "Bid number didn't load properly.");
 
             DateTime expectedDueDate = new DateTime(1969, 7, 20);
-            Assert.AreEqual(expectedDueDate, actualBid.DueDate);
+            Assert.AreEqual(expectedDueDate, actualBid.DueDate, "Bid due date didn't load properly.");
 
-            string expectedSales = "Mrs. Test";
-            Assert.AreEqual(expectedSales, actualBid.Salesperson);
+            string expectedSales = "Mrs. Salesperson";
+            Assert.AreEqual(expectedSales, actualBid.Salesperson, "Salesperson didn't load properly.");
 
-            string expectedEstimator = "Mr. Test";
-            Assert.AreEqual(expectedEstimator, actualBid.Estimator);
+            string expectedEstimator = "Mr. Estimator";
+            Assert.AreEqual(expectedEstimator, actualBid.Estimator, "Estimator didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_Parameters()
+        {
+            double expectedEscalation = 10;
+            double expectedOverhead = 20;
+            double expectedProfit = 20;
+            double expectedSubcontractorMarkup = 20;
+            double expectedSubcontractorEscalation = 10;
+            bool expectedIsTaxExempt = false;
+            bool expectedRequiresBond = false;
+            bool expectedRequiresWrapUp = false;
+
+            Assert.AreEqual(expectedEscalation, actualBid.Parameters.Escalation, "Escalation didn't load properly.");
+            Assert.AreEqual(expectedOverhead, actualBid.Parameters.Overhead, "Overhead didn't load properly.");
+            Assert.AreEqual(expectedProfit, actualBid.Parameters.Profit, "Profit didn't load properly.");
+            Assert.AreEqual(expectedSubcontractorMarkup, actualBid.Parameters.SubcontractorMarkup, "Subcontractor markup didn't load properly.");
+            Assert.AreEqual(expectedSubcontractorEscalation, actualBid.Parameters.SubcontractorEscalation, "Subcontractor escalation didn't load properly.");
+            Assert.AreEqual(expectedIsTaxExempt, actualBid.Parameters.IsTaxExempt, "Is tax exempt didn't load properly.");
+            Assert.AreEqual(expectedRequiresBond, actualBid.Parameters.RequiresBond, "Requires bond didn't load properly.");
+            Assert.AreEqual(expectedRequiresWrapUp, actualBid.Parameters.RequiresWrapUp, "Requires wrap up didn't load properly.");
         }
 
         [TestMethod]
@@ -60,364 +91,1141 @@ namespace Tests
         {
             //Assert
             double expectedPMCoef = 2;
-            double expectedPMRate = 2.1;
-            Assert.AreEqual(expectedPMCoef, actualBid.Labor.PMCoef);
-            Assert.AreEqual(expectedPMRate, actualBid.Labor.PMRate);
+            double expectedPMRate = 30;
+            Assert.AreEqual(expectedPMCoef, actualBid.Labor.PMCoef, "PM Coefficient didn't load properly.");
+            Assert.AreEqual(expectedPMRate, actualBid.Labor.PMRate, "PM Rate didn't load properly.");
 
-            double expectedENGCoef = 3;
-            double expectedENGRate = 3.1;
-            Assert.AreEqual(expectedENGCoef, actualBid.Labor.ENGCoef);
-            Assert.AreEqual(expectedENGRate, actualBid.Labor.ENGRate);
+            double expectedENGCoef = 2;
+            double expectedENGRate = 40;
+            Assert.AreEqual(expectedENGCoef, actualBid.Labor.ENGCoef, "ENG Coefficient didn't load properly.");
+            Assert.AreEqual(expectedENGRate, actualBid.Labor.ENGRate, "ENG Rate didn't load properly.");
 
-            double expectedCommCoef = 4;
-            double expectedCommRate = 4.1;
-            Assert.AreEqual(expectedCommCoef, actualBid.Labor.CommCoef);
-            Assert.AreEqual(expectedCommRate, actualBid.Labor.CommRate);
+            double expectedCommCoef = 2;
+            double expectedCommRate = 50;
+            Assert.AreEqual(expectedCommCoef, actualBid.Labor.CommCoef, "Comm Coefficient didn't load properly.");
+            Assert.AreEqual(expectedCommRate, actualBid.Labor.CommRate, "Comm Rate didn't load properly.");
 
-            double expectedSoftCoef = 5;
-            double expectedSoftRate = 5.1;
-            Assert.AreEqual(expectedSoftCoef, actualBid.Labor.SoftCoef);
-            Assert.AreEqual(expectedSoftRate, actualBid.Labor.SoftRate);
+            double expectedSoftCoef = 2;
+            double expectedSoftRate = 60;
+            Assert.AreEqual(expectedSoftCoef, actualBid.Labor.SoftCoef, "Software Coefficient didn't load properly.");
+            Assert.AreEqual(expectedSoftRate, actualBid.Labor.SoftRate, "Software Rate didn't load properly.");
 
-            double expectedGraphCoef = 6;
-            double expectedGraphRate = 6.1;
-            Assert.AreEqual(expectedGraphCoef, actualBid.Labor.GraphCoef);
-            Assert.AreEqual(expectedGraphRate, actualBid.Labor.GraphRate);
+            double expectedGraphCoef = 2;
+            double expectedGraphRate = 70;
+            Assert.AreEqual(expectedGraphCoef, actualBid.Labor.GraphCoef, "Graphics Coefficient didn't load properly.");
+            Assert.AreEqual(expectedGraphRate, actualBid.Labor.GraphRate, "Graphics Rate didn't load properly.");
         }
 
         [TestMethod]
         public void Load_Bid_SubcontractorConsts()
         {
             //Assert
-            double expectedElectricalRate = 7;
-            double expectedElectricalSuperRate = 7.1;
-            double expectedElectricalNonUnionRate = 8;
-            double expectedElectricalSuperNonUnionRate = 8.1;
-            bool expectedOT = true;
+            double expectedElectricalRate = 50;
+            double expectedElectricalSuperRate = 60;
+            double expectedElectricalNonUnionRate = 30;
+            double expectedElectricalSuperNonUnionRate = 40;
+            double expectedElectricalSuperRatio = 0.25;
+            bool expectedOT = false;
             bool expectedUnion = true;
-            Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate);
-            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate);
-            Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Labor.ElectricalNonUnionRate);
-            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Labor.ElectricalSuperNonUnionRate);
-            Assert.AreEqual(expectedOT, actualBid.Labor.ElectricalIsOnOvertime);
-            Assert.AreEqual(expectedUnion, actualBid.Labor.ElectricalIsUnion);
+            Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate, "Electrical rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Labor.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Labor.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRatio, actualBid.Labor.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
+            Assert.AreEqual(expectedOT, actualBid.Labor.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
+            Assert.AreEqual(expectedUnion, actualBid.Labor.ElectricalIsUnion, "Electrical union bool didn't load properly.");
         }
 
         [TestMethod]
         public void Load_Bid_UserAdjustments()
         {
             //Assert
-            double expectedPMExtra = 10;
-            double expectedENGExtra = 10.1;
-            double expectedCommExtra = 10.2;
-            double expectedSoftExtra = 10.3;
-            double expectedGraphExtra = 10.4;
+            double expectedPMExtra = 120;
+            double expectedENGExtra = 110;
+            double expectedCommExtra = 100;
+            double expectedSoftExtra = 90;
+            double expectedGraphExtra = 80;
 
-            Assert.AreEqual(expectedPMExtra, actualBid.Labor.PMExtraHours);
-            Assert.AreEqual(expectedENGExtra, actualBid.Labor.ENGExtraHours);
-            Assert.AreEqual(expectedCommExtra, actualBid.Labor.CommExtraHours);
-            Assert.AreEqual(expectedSoftExtra, actualBid.Labor.SoftExtraHours);
-            Assert.AreEqual(expectedGraphExtra, actualBid.Labor.GraphExtraHours);
-        }
-
-        [TestMethod]
-        public void Load_Bid_System()
-        {
-            //Arrange
-            TECSystem actualSystem = actualBid.Systems[0];
-
-            //Assert
-            string expectedName = "Test System";
-            Assert.AreEqual(expectedName, actualSystem.Name);
-
-            string expectedDescription = "Test System Description";
-            Assert.AreEqual(expectedDescription, actualSystem.Description);
-
-            int expectedQuantity = 123;
-            Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
-
-            double expectedBP = 123;
-            Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Equipment()
-        {
-            //Arrange
-            TECEquipment actualEquipment = actualBid.Systems[0].Equipment[0];
-
-            //Assert
-            string expectedName = "Test Equipment";
-            Assert.AreEqual(expectedName, actualEquipment.Name);
-
-            string expectedDescription = "Test Equipment Description";
-            Assert.AreEqual(expectedDescription, actualEquipment.Description);
-
-            int expectedQuantity = 456;
-            Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
-
-            double expectedBP = 456;
-            Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
-        }
-
-        [TestMethod]
-        public void Load_Bid_SubScope()
-        {
-            //Arrange
-            TECSubScope actualSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
-            TECConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0];
-
-            //Assert
-            string expectedName = "Test SubScope";
-            Assert.AreEqual(expectedName, actualSubScope.Name);
-
-            string expectedDescription = "Test SubScope Description";
-            Assert.AreEqual(expectedDescription, actualSubScope.Description);
-
-            int expectedQuantity = 789;
-            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity);
-            Assert.AreEqual(actualConnection, actualSubScope.Connection);
-            Assert.AreEqual("Test Cost", actualSubScope.AssociatedCosts[0].Name);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Device()
-        {
-            //Arrange
-            ObservableCollection<TECDevice> actualDevices = actualBid.Systems[0].Equipment[0].SubScope[0].Devices;
-            TECDevice actualDevice = actualDevices[0];
-            TECManufacturer actualManufacturer = actualBid.Catalogs.Manufacturers[0];
-
-            //Assert
-            string expectedName = "Test Device";
-            Assert.AreEqual(expectedName, actualDevice.Name);
-
-            string expectedDescription = "Test Device Description";
-            Assert.AreEqual(expectedDescription, actualDevice.Description);
-
-            int expectedQuantity = 3;
-            int actualQuantity = 0;
-            foreach (TECDevice device in actualDevices)
-            {
-                if (device.Guid == actualDevice.Guid)
-                {
-                    actualQuantity++;
-                }
-            }
-            Assert.AreEqual(expectedQuantity, actualQuantity);
-
-            double expectedCost = 654;
-            Assert.AreEqual(expectedCost, actualDevice.Cost);
-
-            Assert.AreEqual("ThreeC18", actualDevice.ConnectionTypes[0].Name);
-
-            Assert.AreEqual(actualManufacturer.Guid, actualDevice.Manufacturer.Guid);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Manufacturer()
-        {
-            //Arrange
-            TECManufacturer actualManufacturer = actualBid.Catalogs.Manufacturers[0];
-            TECDevice actualDevice = actualBid.Systems[0].Equipment[0].SubScope[0].Devices[0];
-
-            //Assert
-            string expectedName = "Test Manufacturer";
-            double expectedMultiplier = 0.17;
-
-            Assert.AreEqual(expectedName, actualManufacturer.Name);
-            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
-
-            Assert.AreEqual(expectedName, actualDevice.Manufacturer.Name);
-            Assert.AreEqual(expectedMultiplier, actualDevice.Manufacturer.Multiplier);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Point()
-        {
-            //Arrange
-            TECPoint actualPoint = actualBid.Systems[0].Equipment[0].SubScope[0].Points[0];
-
-            //Assert
-            string expectedName = "Test Point";
-            Assert.AreEqual(expectedName, actualPoint.Name);
-
-            string expectedDescription = "Test Point Description";
-            Assert.AreEqual(expectedDescription, actualPoint.Description);
-
-            int expectedQuantity = 321;
-            Assert.AreEqual(expectedQuantity, actualPoint.Quantity);
-
-            PointTypes expectedType = PointTypes.Serial;
-            Assert.AreEqual(expectedType, actualPoint.Type);
-        }
-
-        [TestMethod]
-        public void Load_Bid_Location()
-        {
-            //Arrange
-            TECSystem actualSystem = actualBid.Systems[0];
-            TECEquipment actualEquipment = actualSystem.Equipment[0];
-            TECSubScope actualSubScope = actualEquipment.SubScope[0];
-
-            //Assert
-            string expectedLocationName = "Test Location";
-            Assert.AreEqual(expectedLocationName, actualBid.Locations[0].Name);
-
-            string expectedLocation2Name = "Test Location 2";
-            Assert.AreEqual(expectedLocation2Name, actualBid.Locations[1].Name);
-
-            //System and Equipment have the same location, but subscope does not
-            Assert.AreEqual(actualBid.Locations[0], actualSystem.Location);
-            Assert.AreEqual(actualBid.Locations[0], actualEquipment.Location);
-            Assert.AreEqual(actualBid.Locations[1], actualSubScope.Location);
-        }
-
-        [TestMethod]
-        public void Load_Bid_ScopeTree()
-        {
-            TECScopeBranch actualScopeParent = actualBid.ScopeTree[0];
-            TECScopeBranch actualScopeChild = actualScopeParent.Branches[0];
-            TECScopeBranch actualScopeGrandChild = actualScopeChild.Branches[0];
-
-            //Assert
-            Assert.AreEqual("Scope 1", actualScopeParent.Name);
-            Assert.AreEqual("1st Description", actualScopeParent.Description);
-
-            Assert.AreEqual("Scope 2", actualScopeChild.Name);
-            Assert.AreEqual("2nd Description", actualScopeChild.Description);
-
-            Assert.AreEqual("Scope 3", actualScopeGrandChild.Name);
-            Assert.AreEqual("3rd Description", actualScopeGrandChild.Description);
-
-            Assert.AreEqual(1, actualBid.ScopeTree.Count);
+            Assert.AreEqual(expectedPMExtra, actualBid.Labor.PMExtraHours, "PM Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedENGExtra, actualBid.Labor.ENGExtraHours, "ENG Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedCommExtra, actualBid.Labor.CommExtraHours, "Comm Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedSoftExtra, actualBid.Labor.SoftExtraHours, "Soft Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedGraphExtra, actualBid.Labor.GraphExtraHours, "Graph Extra Hours didn't load properly.");
         }
 
         [TestMethod]
         public void Load_Bid_Note()
         {
             //Assert
+            Guid expectedGuid = new Guid("50f3a707-fc1b-4eb3-9413-1dbde57b1d90");
             string expectedText = "Test Note";
-            Assert.AreEqual(expectedText, actualBid.Notes[0].Text);
+
+            TECNote actualNote = null;
+            foreach(TECNote note in actualBid.Notes)
+            {
+                if (note.Guid == expectedGuid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedText, actualNote.Text, "Note text didn't load properly.");
         }
 
         [TestMethod]
         public void Load_Bid_Exclusion()
         {
             //Assert
+            Guid expectedGuid = new Guid("15692e12-e728-4f1b-b65c-de365e016e7a");
             string expectedText = "Test Exclusion";
-            Assert.AreEqual(expectedText, actualBid.Exclusions[0].Text);
+
+            TECExclusion actualExclusion = null;
+            foreach (TECExclusion note in actualBid.Exclusions)
+            {
+                if (note.Guid == expectedGuid)
+                {
+                    actualExclusion = note;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedText, actualExclusion.Text, "Exclusion text didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_BidScopeTree()
+        {
+            Guid expectedParentGuid = new Guid("25e815fa-4ac7-4b69-9640-5ae220f0cd40");
+            string expectedParentName = "Bid Scope Branch";
+            string expectedParentDescription = "Bid Scope Branch Description";
+            Guid expectedChildGuid = new Guid("81adfc62-20ec-466f-a2a0-430e1223f64f");
+            string expectedChildName = "Bid Child Branch";
+            string expectedChildDescription = "Bid Child Branch Description";
+
+            TECScopeBranch actualParent = null;
+            TECScopeBranch actualChild = null;
+            foreach(TECScopeBranch branch in actualBid.ScopeTree)
+            {
+                if (branch.Guid == expectedParentGuid)
+                {
+                    actualParent = branch;
+                    foreach(TECScopeBranch child in branch.Branches)
+                    {
+                        if (child.Guid == expectedChildGuid)
+                        {
+                            actualChild = child;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedParentName, actualParent.Name, "Parent scope branch name didn't load properly.");
+            Assert.AreEqual(expectedParentDescription, actualParent.Description, "Parent scope branch description didn't load properly.");
+            Assert.AreEqual(expectedChildName, actualChild.Name, "Child scope branch name didn't load properly.");
+            Assert.AreEqual(expectedChildDescription, actualChild.Description, "Child scope branch description didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_SystemScopeTree()
+        {
+            Guid expectedParentGuid = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
+            string expectedParentName = "System Scope Branch";
+            string expectedParentDescription = "System Scope Branch Description";
+            Guid expectedChildGuid = new Guid("542802f6-a7b1-4020-9be4-e58225c433a8");
+            string expectedChildName = "System Child Branch";
+            string expectedChildDescription = "System Child Branch Description";
+
+            TECScopeBranch actualParent = null;
+            TECScopeBranch actualChild = null;
+            foreach(TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECScopeBranch branch in typical.ScopeBranches)
+                {
+                    if (branch.Guid == expectedParentGuid)
+                    {
+                        actualParent = branch;
+                        foreach(TECScopeBranch child in branch.Branches)
+                        {
+                            if (child.Guid == expectedChildGuid)
+                            {
+                                actualChild = child;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                if (actualParent != null) break;
+            }
+
+            Assert.AreEqual(expectedParentName, actualParent.Name, "Parent scope branch name didn't load properly.");
+            Assert.AreEqual(expectedParentDescription, actualParent.Description, "Parent scope branch description didn't load properly.");
+            Assert.AreEqual(expectedChildName, actualChild.Name, "Child scope branch name didn't load properly.");
+            Assert.AreEqual(expectedChildDescription, actualChild.Description, "Child scope branch description didn't load properly.");
+        }
+        
+        [TestMethod]
+        public void Load_Bid_TypicalSystem()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
+            string expectedName = "Typical System";
+            string expectedDescription = "Typical System Description";
+            int expectedQuantity = 1;
+            double expectedBP = 100;
+            bool expectedProposeEquipment = true;
+            int expectedChildren = 1;
+
+            Guid childEquipment = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
+            Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
+
+            TECSystem actualSystem = null;
+            foreach(TECSystem system in actualBid.Systems)
+            {
+                if(system.Guid == expectedGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+
+            bool foundEquip = false;
+            foreach (TECEquipment equip in actualSystem.Equipment)
+            {
+                if (equip.Guid == childEquipment)
+                {
+                    foundEquip = true;
+                    break;
+                }
+            }
+            bool foundControl = false;
+            foreach (TECController control in actualSystem.Controllers)
+            {
+                if (control.Guid == childController)
+                {
+                    foundControl = true;
+                    break;
+                }
+            }
+            bool foundPanel = false;
+            foreach(TECPanel panel in actualSystem.Panels)
+            {
+                if (panel.Guid == childPanel)
+                {
+                    foundPanel = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSystem.Name);
+            Assert.AreEqual(expectedDescription, actualSystem.Description);
+            Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+            Assert.AreEqual(expectedChildren, actualSystem.SystemInstances.Count);
+            Assert.AreEqual(expectedProposeEquipment, actualSystem.ProposeEquipment);
+
+            foreach(TECSystem instance in actualSystem.SystemInstances)
+            {
+                Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
+                Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
+                Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
+            }
+
+            Assert.IsTrue(foundEquip, "Typical equipment not loaded properly into typical system.");
+            Assert.IsTrue(foundControl, "Typical controller not loaded properly into typical system.");
+            Assert.IsTrue(foundPanel, "Typical panel not loaded properly into typical system.");
+
+            testForTag(actualSystem);
+            testForCosts(actualSystem);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstanceSystem()
+        {
+            Guid expectedGuid = new Guid("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
+            string expectedName = "Instance System";
+            string expectedDescription = "Instance System Description";
+            int expectedQuantity = 1;
+            double expectedBP = 100;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    if (instance.Guid == expectedGuid)
+                    {
+                        actualSystem = instance;
+                        break;
+                    }
+                }
+                if (actualSystem != null) { break; }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSystem.Name);
+            Assert.AreEqual(expectedDescription, actualSystem.Description);
+            Assert.AreEqual(expectedQuantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedBP, actualSystem.BudgetPriceModifier);
+
+            testForScopeChildren(actualSystem);
+        }
+
+        [TestMethod]
+        public void Load_Bid_TypicalEquipment()
+        {
+            Guid expectedGuid = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
+            string expectedName = "Typical Equip";
+            string expectedDescription = "Typical Equip Description";
+            int expectedQuantity = 1;
+            double expectedBP = 50;
+
+            Guid childSubScope = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+
+            TECEquipment actualEquipment = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECEquipment equip in typical.Equipment)
+                {
+                    if (equip.Guid == expectedGuid)
+                    {
+                        actualEquipment = equip;
+                        break;
+                    }
+                }
+                if (actualEquipment != null) break;
+            }
+
+            bool foundSubScope = false;
+            foreach(TECSubScope ss in actualEquipment.SubScope)
+            {
+                if (ss.Guid == childSubScope)
+                {
+                    foundSubScope = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualEquipment.Name);
+            Assert.AreEqual(expectedDescription, actualEquipment.Description);
+            Assert.AreEqual(expectedQuantity, actualEquipment.Quantity);
+            Assert.AreEqual(expectedBP, actualEquipment.BudgetUnitPrice);
+
+            Assert.IsTrue(foundSubScope, "Typical subscope not loaded properly into typical equipment.");
+
+            testForTag(actualEquipment);
+            testForCosts(actualEquipment);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstanceEquipment()
+        {
+            Guid expectedInstanceGuid = new Guid("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
+            string expectedInstanceName = "Instance Equip";
+            string expectedInstanceDescription = "Instance Equip Description";
+            int expectedInstanceQuantity = 1;
+            double expectedInstanceBP = 50;
+
+            Guid childSubScope = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
+
+            TECEquipment actualEquipment = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach(TECEquipment equip in instance.Equipment)
+                    {
+                        if (equip.Guid == expectedInstanceGuid)
+                        {
+                            actualEquipment = equip;
+                            break;
+                        }
+                    }
+                    if (actualEquipment != null) break;
+                }
+                if (actualEquipment != null) break;
+            }
+
+            bool foundSubScope = false;
+            foreach(TECSubScope ss in actualEquipment.SubScope)
+            {
+                if (ss.Guid == childSubScope)
+                {
+                    foundSubScope = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedInstanceName, actualEquipment.Name);
+            Assert.AreEqual(expectedInstanceDescription, actualEquipment.Description);
+            Assert.AreEqual(expectedInstanceQuantity, actualEquipment.Quantity);
+            Assert.AreEqual(expectedInstanceBP, actualEquipment.BudgetUnitPrice);
+
+            Assert.IsTrue(foundSubScope, "Instance subscope not loaded properly into instance equipment.");
+
+            testForScopeChildren(actualEquipment);
+        }
+
+        [TestMethod]
+        public void Load_Bid_TypicalSubScope()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+            string expectedName = "Typical SS";
+            string expectedDescription = "Typical SS Description";
+            int expectedQuantity = 1;
+
+            Guid childPoint = new Guid("03a16819-9205-4e65-a16b-96616309f171");
+            Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECEquipment equipment in system.Equipment)
+                {
+                    foreach (TECSubScope subScope in equipment.SubScope)
+                    {
+                        if (subScope.Guid == expectedGuid)
+                        {
+                            actualSubScope = subScope;
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null)
+                    {
+                        break;
+                    }
+                }
+                if (actualSubScope != null)
+                {
+                    break;
+                }
+            }
+
+            bool foundPoint = false;
+            foreach(TECPoint point in actualSubScope.Points)
+            {
+                if (point.Guid == childPoint)
+                {
+                    foundPoint = true;
+                    break;
+                }
+            }
+            bool foundDevice = false;
+            foreach(TECDevice device in actualSubScope.Devices)
+            {
+                if (device.Guid == childDevice)
+                {
+                    foundDevice = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
+            Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
+            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
+            Assert.AreEqual(expectedConnectionGuid, actualSubScope.Connection.Guid, "Connection not loaded");
+
+            Assert.IsTrue(foundPoint, "Typical point not loaded into typical subscope properly.");
+            Assert.IsTrue(foundDevice, "Typical device not loaded into typical subscope properly.");
+
+            testForTag(actualSubScope);
+            testForCosts(actualSubScope);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstanceSubScope()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
+            string expectedName = "Instance SS";
+            string expectedDescription = "Instance SS Description";
+            int expectedQuantity = 1;
+
+            Guid childPoint = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
+            Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+
+            TECSubScope actualSubScope = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECEquipment equipment in system.Equipment)
+                    {
+                        foreach (TECSubScope subScope in equipment.SubScope)
+                        {
+                            if (subScope.Guid == expectedGuid)
+                            {
+                                actualSubScope = subScope;
+                                break;
+                            }
+                        }
+                        if (actualSubScope != null)
+                        {
+                            break;
+                        }
+                    }
+                    if (actualSubScope != null)
+                    {
+                        break;
+                    }
+                }
+                if (actualSubScope != null)
+                {
+                    break;
+                }
+            }
+
+            bool foundPoint = false;
+            foreach (TECPoint point in actualSubScope.Points)
+            {
+                if (point.Guid == childPoint)
+                {
+                    foundPoint = true;
+                    break;
+                }
+            }
+            bool foundDevice = false;
+            foreach (TECDevice device in actualSubScope.Devices)
+            {
+                if (device.Guid == childDevice)
+                {
+                    foundDevice = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
+            Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
+            Assert.AreEqual(expectedQuantity, actualSubScope.Quantity, "Quantity not loaded");
+            Assert.AreEqual(expectedConnectionGuid, actualSubScope.Connection.Guid, "Connection not loaded");
+
+            Assert.IsTrue(foundPoint, "Instance point not loaded into typical subscope properly.");
+            Assert.IsTrue(foundDevice, "Instance device not loaded into typical subscope properly.");
+
+            testForScopeChildren(actualSubScope);
+        }
+
+        [TestMethod]
+        public void Load_Bid_Device()
+        {
+            Guid expectedGuid = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
+            string expectedName = "Test Device";
+            string expectedDescription = "Test Device Description";
+            double expectedCost = 123.45;
+
+            Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            Guid connectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+
+            TECDevice actualDevice = null;
+            foreach(TECDevice dev in actualBid.Catalogs.Devices)
+            {
+                if (dev.Guid == expectedGuid)
+                {
+                    actualDevice = dev;
+                    break;
+                }
+            }
+
+            bool foundConnectionType = false;
+            foreach(TECConnectionType connectType in actualDevice.ConnectionTypes)
+            {
+                if (connectType.Guid == connectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedName, actualDevice.Name, "Device name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualDevice.Description, "Device description didn't load properly.");
+            Assert.AreEqual(expectedCost, actualDevice.Cost, "Device cost didn't load properly.");
+            Assert.AreEqual(manufacturerGuid, actualDevice.Manufacturer.Guid, "Manufacturer didn't load properly into device.");
+
+            Assert.IsTrue(foundConnectionType, "Connection type didn't load properly into device.");
+
+            testForTag(actualDevice);
+            testForCosts(actualDevice);
+        }
+
+        [TestMethod]
+        public void Load_Bid_TypicalPoint()
+        {
+            Guid expectedGuid = new Guid("03a16819-9205-4e65-a16b-96616309f171");
+            string expectedName = "Typical Point";
+            string expectedDescription = "Typical Point Description";
+            int expectedQuantity = 1;
+            PointTypes expectedType = PointTypes.AI;
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECEquipment equip in typical.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        foreach (TECPoint point in ss.Points)
+                        {
+                            if (point.Guid == expectedGuid)
+                            {
+                                actualPoint = point;
+                                break;
+                            }
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            Assert.AreEqual(expectedName, actualPoint.Name, "Typical point name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualPoint.Description, "Typical point description didn't load properly.");
+            Assert.AreEqual(expectedQuantity, actualPoint.Quantity, "Typical point quantity didn't load properly.");
+            Assert.AreEqual(expectedType, actualPoint.Type, "Typical point type didn't load properly.");
+
+            testForTag(actualPoint);
+            testForCosts(actualPoint);
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstancePoint()
+        {
+            Guid expectedGuid = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
+            string expectedName = "Instance Point";
+            string expectedDescription = "Instance Point Description";
+            int expectedQuantity = 1;
+            PointTypes expectedType = PointTypes.AI;
+
+            TECPoint actualPoint = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            foreach (TECPoint point in ss.Points)
+                            {
+                                if (point.Guid == expectedGuid)
+                                {
+                                    actualPoint = point;
+                                    break;
+                                }
+                            }
+                            if (actualPoint != null) break;
+                        }
+                        if (actualPoint != null) break;
+                    }
+                    if (actualPoint != null) break;
+                }
+                if (actualPoint != null) break;
+            }
+
+            Assert.AreEqual(expectedName, actualPoint.Name, "Instance point name didn't load properly.");
+            Assert.AreEqual(expectedDescription, actualPoint.Description, "Instance point description didn't load properly.");
+            Assert.AreEqual(expectedQuantity, actualPoint.Quantity, "Instance point quantity didn't load properly.");
+            Assert.AreEqual(expectedType, actualPoint.Type, "Instance point type didn't load properly.");
+
+            testForTag(actualPoint);
+            testForCosts(actualPoint);
         }
 
         [TestMethod]
         public void Load_Bid_Tag()
         {
-            //Arrange
-            TECTag actualTag = actualBid.Catalogs.Tags[0];
-            TECSystem actualSystem = actualBid.Systems[0];
-            TECEquipment actualEquipment = actualSystem.Equipment[0];
-            TECSubScope actualSubScope = actualEquipment.SubScope[0];
-            TECDevice actualDevice = actualSubScope.Devices[0];
-            TECPoint actualPoint = actualSubScope.Points[0];
-            TECController actualController = actualBid.Controllers[0];
+            Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
+            string expectedString = "Test Tag";
 
-            //Assert
-            string expectedText = "Test Tag";
-            Assert.AreEqual(expectedText, actualTag.Text);
+            TECTag actualTag = null;
+            foreach (TECTag tag in actualBid.Catalogs.Tags)
+            {
+                if (tag.Guid == expectedGuid)
+                {
+                    actualTag = tag;
+                    break;
+                }
+            }
 
-            Guid expectedGuid = actualTag.Guid;
-
-            Assert.AreEqual(expectedGuid, actualSystem.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualSystem.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualEquipment.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualEquipment.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualSubScope.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualSubScope.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualDevice.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualDevice.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualPoint.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualPoint.Tags[0].Text);
-
-            Assert.AreEqual(expectedGuid, actualController.Tags[0].Guid);
-            Assert.AreEqual(expectedText, actualController.Tags[0].Text);
+            Assert.AreEqual(expectedString, actualTag.Text, "Tag text didn't load properly.");
         }
 
         [TestMethod]
-        public void Load_Bid_Drawing()
+        public void Load_Bid_Manufacturer()
         {
             //Arrange
-            TECDrawing actualDrawing = actualBid.Drawings[0];
+            Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            string expectedName = "Test Manufacturer";
+            double expectedMultiplier = 0.5;
+
+
+            TECManufacturer actualManufacturer = null;
+            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
+            {
+                if (man.Guid == expectedGuid)
+                {
+                    actualManufacturer = man;
+                    break;
+                }
+            }
 
             //Assert
-            string expectedName = "Test Drawing";
-            string expectedDescription = "Test Drawing Description";
-
-            Assert.AreEqual(expectedName, actualDrawing.Name);
-            Assert.AreEqual(expectedDescription, actualDrawing.Description);
+            Assert.AreEqual(expectedName, actualManufacturer.Name);
+            Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
         }
 
         [TestMethod]
-        public void Load_Bid_Page()
+        public void Load_Bid_Location()
         {
             //Arrange
-            TECPage actualPage = actualBid.Drawings[0].Pages[0];
+            Guid expectedGuid = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
+            string expectedLocationName = "Test Location";
+
+            TECLocation actualLocation = null;
+            foreach (TECLocation location in actualBid.Locations)
+            {
+                if (location.Guid == expectedGuid)
+                {
+                    actualLocation = location;
+                    break;
+                }
+            }
 
             //Assert
-            int expectedPageNum = 1;
-
-            Assert.AreEqual(expectedPageNum, actualPage.PageNum);
+            Assert.AreEqual(expectedLocationName, actualLocation.Name);
         }
 
         [TestMethod]
-        public void Load_Bid_VisualScope()
+        public void Load_Bid_ConnectionType()
         {
             //Arrange
-            TECVisualScope actualVisScope = actualBid.Drawings[0].Pages[0].PageScope[0];
-            TECSystem actualSystem = actualBid.Systems[0];
+            Guid expectedGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            string expectedName = "Test Connection Type";
+            double expectedCost = 12.48;
+            double expectedLabor = 84.21;
+
+            TECConnectionType actualConnectionType = null;
+            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
+            {
+                if (connectionType.Guid == expectedGuid)
+                {
+                    actualConnectionType = connectionType;
+                    break;
+                }
+            }
 
             //Assert
-            double expectedXPos = 119;
-            double expectedYPos = 69.08;
+            Assert.AreEqual(expectedName, actualConnectionType.Name);
+            Assert.AreEqual(expectedCost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedLabor, actualConnectionType.Labor);
 
-            Assert.AreEqual(expectedXPos, actualVisScope.X);
-            Assert.AreEqual(expectedYPos, actualVisScope.Y);
-            Assert.AreEqual(actualSystem, actualVisScope.Scope);
+            testForCosts(actualConnectionType);
+            testForRatedCosts(actualConnectionType);
         }
 
         [TestMethod]
-        public void Load_Bid_Controller()
+        public void Load_Bid_ConduitType()
         {
             //Arrange
-            TECController actualController = actualBid.Controllers[0];
-            TECConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0];
+            Guid expectedGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            string expectedName = "Test Conduit Type";
+            double expectedCost = 45.67;
+            double expectedLabor = 76.54;
 
-            string expectedName = "Test Controller";
-            string expectedDescription = "Test Controller Description";
-            double expectedCost = 64.94;
+            TECConduitType actualConduitType = null;
+            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
+            {
+                if (conduitType.Guid == expectedGuid)
+                {
+                    actualConduitType = conduitType;
+                    break;
+                }
+            }
 
-            bool hasAI = false;
-            bool hasAO = false;
+            //Assert
+            Assert.AreEqual(expectedName, actualConduitType.Name);
+            Assert.AreEqual(expectedCost, actualConduitType.Cost);
+            Assert.AreEqual(expectedLabor, actualConduitType.Labor);
 
+            testForCosts(actualConduitType);
+            testForRatedCosts(actualConduitType);
+        }
+
+        [TestMethod]
+        public void Load_Bid_AssociatedCosts()
+        {
+            Guid expectedTECGuid = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
+            string expectedTECName = "Test TEC Associated Cost";
+            double expectedTECCost = 31;
+            double expectedTECLabor = 13;
+            CostType expectedTECType = CostType.TEC;
+
+            Guid expectedElectricalGuid = new Guid("63ed1eb7-c05b-440b-9e15-397f64ff05c7");
+            string expectedElectricalName = "Test Electrical Associated Cost";
+            double expectedElectricalCost = 42;
+            double expectedElectricalLabor = 24;
+            CostType expectedElectricalType = CostType.Electrical;
+
+            TECCost actualTECCost = null;
+            TECCost actualElectricalCost = null;
+            foreach(TECCost cost in actualBid.Catalogs.AssociatedCosts)
+            {
+                if (cost.Guid == expectedTECGuid)
+                {
+                    actualTECCost = cost;
+                }
+                else if (cost.Guid == expectedElectricalGuid)
+                {
+                    actualElectricalCost = cost;
+                }
+                if (actualTECCost != null && actualElectricalCost != null)
+                {
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedTECName, actualTECCost.Name, "TEC cost name didn't load properly.");
+            Assert.AreEqual(expectedTECCost, actualTECCost.Cost, "TEC cost cost didn't load properly.");
+            Assert.AreEqual(expectedTECLabor, actualTECCost.Labor, "TEC cost labor didn't load properly.");
+            Assert.AreEqual(expectedTECType, actualTECCost.Type, "TEC cost type didn't load properly.");
+
+            Assert.AreEqual(expectedElectricalName, actualElectricalCost.Name, "Electrical cost name didn't load properly.");
+            Assert.AreEqual(expectedElectricalCost, actualElectricalCost.Cost, "Electrical cost cost didn't load properly.");
+            Assert.AreEqual(expectedElectricalLabor, actualElectricalCost.Labor, "Electrical cost labor didn't load properly.");
+            Assert.AreEqual(expectedElectricalType, actualElectricalCost.Type, "Electrical cost type didn't load properly.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_TypicalSubScopeConnection()
+        {
+            Guid expectedGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            double expectedWireLength = 40;
+            double expectedConduitLength = 20;
+
+            Guid expectedParentControllerGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+
+            TECSubScopeConnection actualSSConnect = null;
+            foreach(TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECController controller in typical.Controllers)
+                {
+                    foreach(TECConnection connection in controller.ChildrenConnections)
+                    {
+                        if (connection.Guid == expectedGuid)
+                        {
+                            actualSSConnect = (connection as TECSubScopeConnection);
+                            break;
+                        }
+                    }
+                    if (actualSSConnect != null) break;
+                }
+                if (actualSSConnect != null) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedWireLength, actualSSConnect.Length, "Length didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitLength, actualSSConnect.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualSSConnect.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualSSConnect.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstanceSubScopeConnection()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+            double expectedLength = 50;
+            double expectedConduitLength = 30;
+            Guid expectedSubScopeGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
+            Guid expectedControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+
+            TECSubScopeConnection actualConnection = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECController controller in system.Controllers)
+                    {
+                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        {
+                            if (connection.Guid == expectedGuid)
+                            {
+                                actualConnection = connection as TECSubScopeConnection;
+                                break;
+                            }
+                        }
+                        if (actualConnection != null)
+                        {
+                            break;
+                        }
+                    }
+                    if (actualConnection != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualConnection.Length, "Length didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_BidInstance_NetworkConnection()
+        {
+            Guid expectedGuid = new Guid("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
+            double expectedLength = 100;
+            double expectedConduitLength = 80;
+
+            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
+            Guid expectedChildControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+
+            TECNetworkConnection actualNetConnect = null;
+            foreach(TECController controller in actualBid.Controllers)
+            {
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection.Guid == expectedGuid)
+                    {
+                        actualNetConnect = (connection as TECNetworkConnection);
+                        break;
+                    }
+                }
+                if (actualNetConnect != null) break;
+            }
+
+            bool childControllerFound = false;
+            foreach(TECController controller in actualNetConnect.ChildrenControllers)
+            {
+                if (controller.Guid == expectedChildControllerGuid)
+                {
+                    childControllerFound = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
+            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitTypeGuid, actualNetConnect.ConduitType.Guid, "ConduitType didn't load properly in network connection.");
+            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_BidBidChild_NetworkConnection()
+        {
+            Guid expectedGuid = new Guid("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
+            double expectedLength = 80;
+            double expectedConduitLength = 60;
+
+            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            Guid expectedChildControllerGuid = new Guid("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+
+            TECNetworkConnection actualNetConnect = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection.Guid == expectedGuid)
+                    {
+                        actualNetConnect = (connection as TECNetworkConnection);
+                        break;
+                    }
+                }
+                if (actualNetConnect != null) break;
+            }
+
+            bool childControllerFound = false;
+            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            {
+                if (controller.Guid == expectedChildControllerGuid)
+                {
+                    childControllerFound = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
+            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_InstanceInstanceChild_NetworkConnection()
+        {
+            Guid expectedGuid = new Guid("e503fdd4-f299-4618-8d54-6751c3b2bc25");
+            double expectedLength = 70;
+            double expectedConduitLength = 50;
+
+            Guid expectedParentControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            Guid expectedChildControllerGuid = new Guid("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+
+            TECNetworkConnection actualNetConnect = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach(TECSystem instance in typical.SystemInstances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        {
+                            if (connection.Guid == expectedGuid)
+                            {
+                                actualNetConnect = (connection as TECNetworkConnection);
+                                break;
+                            }
+                        }
+                        if (actualNetConnect != null) break;
+                    }
+                    if (actualNetConnect != null) break;
+                }
+                if (actualNetConnect != null) break;
+            }
+
+            bool childControllerFound = false;
+            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            {
+                if (controller.Guid == expectedChildControllerGuid)
+                {
+                    childControllerFound = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
+            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_DaisyChain_NetworkConnection()
+        {
+            Guid expectedGuid = new Guid("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
+            double expectedLength = 90;
+            double expectedConduitLength = 70;
+
+            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
+
+            Guid expectedDaisy1Guid = new Guid("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+            Guid expectedDaisy2Guid = new Guid("7b6825df-57da-458a-a859-a9459c15907b");
+
+            TECNetworkConnection actualNetConnect = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                foreach (TECConnection connection in controller.ChildrenConnections)
+                {
+                    if (connection.Guid == expectedGuid)
+                    {
+                        actualNetConnect = (connection as TECNetworkConnection);
+                        break;
+                    }
+                }
+                if (actualNetConnect != null) break;
+            }
+
+            bool daisy1Found = false;
+            bool daisy2Found = false;
+            foreach(TECController controller in actualNetConnect.ChildrenControllers)
+            {
+                if(controller.Guid == expectedDaisy1Guid)
+                {
+                    daisy1Found = true;
+                }
+                else if (controller.Guid == expectedDaisy2Guid)
+                {
+                    daisy2Found = true;
+                }
+                if (daisy1Found && daisy2Found) break;
+            }
+
+            //Assert
+            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
+            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
+
+            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
+            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+
+            Assert.IsTrue(daisy1Found, "First daisy chain controller didn't load properly in network connection.");
+            Assert.IsTrue(daisy2Found, "Second daisy chain controller didn't load properly in network connection.");
+        }
+
+        [TestMethod]
+        public void Load_Bid_BidController()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            string expectedName = "Bid Controller";
+            string expectedDescription = "Bid Controller Description";
+            double expectedCost = 1812;
+            NetworkType expectedType = NetworkType.Server;
+            bool expectedGlobalStatus = true;
+
+            TECController actualController = null;
+            foreach (TECController controller in actualBid.Controllers)
+            {
+                if (controller.Guid == expectedGuid)
+                {
+                    actualController = controller;
+                    break;
+                }
+            }
+
+            Guid expectedConnectionGuid = new Guid("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
+            Guid expectedIOGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+
+            bool hasIO = false;
             foreach (TECIO io in actualController.IO)
             {
-                if (io.Type == IOType.AI)
+                if (io.Guid == expectedIOGuid)
                 {
-                    hasAI = true;
-                }
-                else if (io.Type == IOType.AO)
-                {
-                    hasAO = true;
+                    hasIO = true;
+                    break;
                 }
             }
 
             bool hasConnection = false;
             foreach (TECConnection conn in actualController.ChildrenConnections)
             {
-                if (conn == actualConnection)
+                if (conn.Guid == expectedConnectionGuid)
                 {
                     hasConnection = true;
                 }
@@ -427,359 +1235,543 @@ namespace Tests
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
             Assert.AreEqual(expectedCost, actualController.Cost);
-            Assert.IsTrue(hasAI);
-            Assert.IsTrue(hasAO);
-
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
+            Assert.IsTrue(hasIO);
             Assert.IsTrue(hasConnection);
+            testForTag(actualController);
+            testForCosts(actualController);
         }
 
         [TestMethod]
-        public void Load_Bid_SubScopeConnection()
+        public void Load_Bid_SystemTypicalController()
         {
             //Arrange
-            TECSubScopeConnection actualConnection = actualBid.Controllers[0].ChildrenConnections[0] as TECSubScopeConnection;
+            Guid expectedGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            string expectedName = "Typical Controller";
+            string expectedDescription = "Typical Controller Description";
+            double expectedCost = 1776;
+            NetworkType expectedType = 0;
+            bool expectedGlobalStatus = false;
 
-            TECSubScope expectedSubScope = actualBid.Systems[0].Equipment[0].SubScope[0];
-            TECController expectedController = null;
-            foreach (TECController controller in actualBid.Controllers)
+            TECController actualController = null;
+            foreach (TECSystem system in actualBid.Systems)
             {
-                if (controller.Name == "Test Controller")
+                foreach (TECController controller in system.Controllers)
                 {
-                    expectedController = controller;
+                    if (controller.Guid == expectedGuid)
+                    {
+                        actualController = controller;
+                        break;
+                    }
+                }
+            }
+
+            Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            Guid expectedIOGuid = new Guid("fbae3851-3320-4e94-a674-ddec86bc4964");
+
+            bool hasIO = false;
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Guid == expectedIOGuid)
+                {
+                    hasIO = true;
                     break;
                 }
             }
 
-
-            double expectedLength = 493.45;
-
-            bool hasSubScope = false;
-            if (actualConnection.SubScope == expectedSubScope)
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.ChildrenConnections)
             {
-                hasSubScope = true;
+                if (conn.Guid == expectedConnectionGuid)
+                {
+                    hasConnection = true;
+                }
             }
 
-
             //Assert
-            Assert.AreEqual(expectedLength, actualConnection.Length);
-            Assert.AreEqual(expectedController, actualConnection.ParentController);
-            Assert.IsTrue(hasSubScope, "Connection scope failed to load.");
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
+            Assert.IsTrue(hasIO, "IO not loaded");
+            Assert.IsTrue(hasConnection, "Connection not loaded");
+            testForTag(actualController);
+            testForCosts(actualController);
         }
 
         [TestMethod]
-        public void Load_Bid_ProposalScope()
-        {
-            TECSystem actualSystem = actualBid.Systems[0];
-
-            //Arrange
-            TECProposalScope actualPropScope = actualBid.ProposalScope[0];
-
-            TECScope expectedScope = actualSystem;
-
-            bool expectedIsProposed = true;
-
-            string expectedPropScopeBranchName = "Proposal Scope";
-
-            //Assert
-            Assert.AreEqual(expectedScope, actualPropScope.Scope);
-            Assert.AreEqual(expectedIsProposed, actualPropScope.IsProposed);
-            Assert.AreEqual(expectedPropScopeBranchName, actualPropScope.Notes[0].Name);
-        }
-
-        [TestMethod]
-        public void Load_Bid_AssociatedCosts()
+        public void Load_Bid_SystemInstanceController()
         {
             //Arrange
-            TECAssociatedCost actualAssociatedCost = actualBid.Catalogs.AssociatedCosts[0];
+            Guid expectedGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
+            string expectedName = "Instance Controller";
+            string expectedDescription = "Instance Controller Description";
+            double expectedCost = 1776;
+            NetworkType expectedType = NetworkType.DDC;
+            bool expectedGlobalStatus = false;
+
+            TECController actualController = null;
+            foreach (TECSystem typical in actualBid.Systems)
+            {
+                foreach (TECSystem system in typical.SystemInstances)
+                {
+                    foreach (TECController controller in system.Controllers)
+                    {
+                        if (controller.Guid == expectedGuid)
+                        {
+                            actualController = controller;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+            Guid expectedIOGuid = new Guid("434bc312-f933-40c8-b8bd-f4e22f19f606");
+
+            bool hasIO = false;
+            foreach (TECIO io in actualController.IO)
+            {
+                if (io.Guid == expectedIOGuid)
+                {
+                    hasIO = true;
+                    break;
+                }
+            }
+
+            bool hasConnection = false;
+            foreach (TECConnection conn in actualController.ChildrenConnections)
+            {
+                if (conn.Guid == expectedConnectionGuid)
+                {
+                    hasConnection = true;
+                }
+            }
 
             //Assert
-            string expectedName = "Test Cost";
-            Assert.AreEqual(expectedName, actualAssociatedCost.Name);
-        }
-
-        [TestMethod]
-        public void Load_Bid_ConnectionType()
-        {
-            //Arrange
-            TECConnectionType actualConnectionType = actualBid.Catalogs.ConnectionTypes[0];
-
-            //Assert
-            string expectedName = "ThreeC18";
-            Assert.AreEqual(expectedName, actualConnectionType.Name);
-        }
-
-        [TestMethod]
-        public void Load_Bid_ConduitType()
-        {
-            //Arrange
-            TECConduitType actualConduitType = actualBid.Catalogs.ConduitTypes[0];
-
-            //Assert
-            string expectedName = "Test ConduitType";
-            Assert.AreEqual(expectedName, actualConduitType.Name);
+            Assert.AreEqual(expectedName, actualController.Name);
+            Assert.AreEqual(expectedDescription, actualController.Description);
+            Assert.AreEqual(expectedCost, actualController.Cost);
+            Assert.AreEqual(expectedType, actualController.NetworkType);
+            Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
+            Assert.IsTrue(hasIO, "IO not loaded");
+            Assert.IsTrue(hasConnection, "Connection not loaded");
+            testForTag(actualController);
+            testForCosts(actualController);
         }
 
         [TestMethod]
         public void Load_Bid_MiscCost()
         {
             //Arrange
-            TECMiscCost actualCost = actualBid.MiscCosts[0];
+            Guid expectedGuid = new Guid("5df99701-1d7b-4fbe-843d-40793f4145a8");
+            string expectedName = "Bid Misc";
+            double expectedCost = 1298;
+            double expectedLabor = 8921;
+            double expectedQuantity = 2;
+            CostType expectedType = CostType.Electrical;
+            TECMisc actualMisc = null;
+            foreach (TECMisc misc in actualBid.MiscCosts)
+            {
+                if (misc.Guid == expectedGuid)
+                {
+                    actualMisc = misc;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Misc Cost", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
-            Assert.AreEqual(19, actualCost.Quantity);
+            Assert.AreEqual(expectedName, actualMisc.Name);
+            Assert.AreEqual(expectedQuantity, actualMisc.Quantity);
+            Assert.AreEqual(expectedCost, actualMisc.Cost);
+            Assert.AreEqual(expectedLabor, actualMisc.Labor);
+            Assert.AreEqual(expectedType, actualMisc.Type);
         }
-
 
         [TestMethod]
-        public void Load_Bid_MiscWiring()
+        public void Load_Bid_SystemMiscCost()
         {
             //Arrange
-            TECMiscWiring actualCost = actualBid.MiscWiring[0];
-
+            Guid expectedGuid = new Guid("e3ecee54-1f90-415a-b493-90a78f618476");
+            string expectedName = "System Misc";
+            double expectedCost = 1492;
+            double expectedLabor = 2941;
+            double expectedQuantity = 3;
+            CostType expectedType = CostType.TEC;
+            TECMisc actualMisc = null;
+            foreach(TECSystem system in actualBid.Systems)
+            {
+                foreach (TECMisc misc in system.MiscCosts)
+                {
+                    if (misc.Guid == expectedGuid)
+                    {
+                        actualMisc = misc;
+                        break;
+                    }
+                }
+            }
+            
             //Assert
-            Assert.AreEqual("Test Misc Wiring", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
-            Assert.AreEqual(19, actualCost.Quantity);
+            Assert.AreEqual(expectedName, actualMisc.Name);
+            Assert.AreEqual(expectedQuantity, actualMisc.Quantity);
+            Assert.AreEqual(expectedCost, actualMisc.Cost);
+            Assert.AreEqual(expectedLabor, actualMisc.Labor);
+            Assert.AreEqual(expectedType, actualMisc.Type);
         }
-
-
+        
         [TestMethod]
         public void Load_Bid_PanelType()
         {
             //Arrange
-            TECPanelType actualCost = actualBid.Catalogs.PanelTypes[0];
+            Guid expectedGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+            string expectedName = "Test Panel Type";
+            double expectedCost = 1324;
+            double expectedLabor = 4231;
+
+            TECPanelType actualType = null;
+            foreach (TECPanelType type in actualBid.Catalogs.PanelTypes)
+            {
+                if (type.Guid == expectedGuid)
+                {
+                    actualType = type;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Panel Type", actualCost.Name);
-            Assert.AreEqual(654.9648, actualCost.Cost);
+            Assert.AreEqual(expectedName, actualType.Name);
+            Assert.AreEqual(expectedCost, actualType.Cost);
+            Assert.AreEqual(expectedLabor, actualType.Labor);
         }
 
         [TestMethod]
-        public void Load_Bid_Panel()
+        public void Load_Bid_BidPanel()
         {
             //Arrange
-            TECPanel actualPanel = actualBid.Panels[0];
-            TECPanelType actualPanelType = actualBid.Panels[0].Type;
+            Guid expectedGuid = new Guid("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            string expectedName = "Bid Panel";
+            string expectedDescription = "Bid Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Guid == expectedGuid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
 
             //Assert
-            Assert.AreEqual("Test Panel", actualPanel.Name);
-            Assert.AreEqual("Test Panel Type", actualPanelType.Name);
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
         }
 
         [TestMethod]
-        public void Load_Bid_Linked_Devices()
+        public void Load_Bid_TypicalPanel()
         {
+            //Arrange
+            Guid expectedGuid = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
+            string expectedName = "Typical Panel";
+            string expectedDescription = "Typical Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
             foreach (TECSystem system in actualBid.Systems)
             {
-                foreach (TECEquipment equipment in system.Equipment)
+                foreach (TECPanel panel in system.Panels)
                 {
-                    foreach (TECSubScope subScope in equipment.SubScope)
+                    if (panel.Guid == expectedGuid)
                     {
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            if (!actualBid.Catalogs.Devices.Contains(device))
-                            {
-                                Assert.Fail("Devices in systems not linked");
-                            }
-                        }
+                        actualPanel = panel;
+                        break;
                     }
                 }
+                if (actualPanel != null) break;
             }
 
-            Assert.IsTrue(true, "All Devices Linked");
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
         }
 
         [TestMethod]
-        public void Load_Bid_Linked_AssociatedCosts()
+        public void Load_Bid_InstancePanel()
         {
-            foreach (TECSystem system in actualBid.Systems)
+            //Arrange
+            Guid expectedGuid = new Guid("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
+            string expectedName = "Instance Panel";
+            string expectedDescription = "Instance Panel Description";
+            int expectedQuantity = 1;
+
+            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+
+            TECPanel actualPanel = null;
+            foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach (TECAssociatedCost cost in system.AssociatedCosts)
+                foreach (TECSystem system in typical.SystemInstances)
                 {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in system not linked"); }
-                }
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECAssociatedCost cost in equipment.AssociatedCosts)
+                    foreach (TECPanel panel in system.Panels)
                     {
-                        if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                        { Assert.Fail("Associated costs in equipment not linked"); }
-                    }
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        foreach (TECAssociatedCost cost in subScope.AssociatedCosts)
+                        if (panel.Guid == expectedGuid)
                         {
-                            if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                            { Assert.Fail("Associated costs in subscope not linked"); }
-                        }
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            foreach (TECAssociatedCost cost in device.AssociatedCosts)
-                            {
-                                if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                                { Assert.Fail("Associated costs in subscope not linked"); }
-                            }
+                            actualPanel = panel;
+                            break;
                         }
                     }
+                    if (actualPanel != null) break;
                 }
+                if (actualPanel != null) break;
             }
 
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
-            {
-                foreach (TECAssociatedCost cost in device.AssociatedCosts)
-                {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in device catalog not linked"); }
-                }
-            }
-            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
-            {
-                foreach (TECAssociatedCost cost in conduitType.AssociatedCosts)
-                {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in conduit type catalog not linked"); }
-                }
-            }
-            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
-            {
-                foreach (TECAssociatedCost cost in connectionType.AssociatedCosts)
-                {
-                    if (!actualBid.Catalogs.AssociatedCosts.Contains(cost))
-                    { Assert.Fail("Associated costs in connection type catalog not linked"); }
-                }
-            }
-
-            Assert.IsTrue(true, "All Associated costs Linked");
+            //Assert
+            Assert.AreEqual(expectedName, actualPanel.Name);
+            Assert.AreEqual(expectedDescription, actualPanel.Description);
+            Assert.AreEqual(expectedQuantity, actualPanel.Quantity);
+            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
+            testForCosts(actualPanel);
         }
 
         [TestMethod]
-        public void Load_Bid_Linked_Manufacturers()
+        public void Load_Bid_IOModule()
         {
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
+            //Arrange
+            Guid expectedGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
+            string expectedName = "Test IO Module";
+            string expectedDescription = "Test IO Module Description";
+            double expectedCost = 2233;
+            double expectedIOPerModule = 10;
+
+            TECIOModule actualModule = null;
+            foreach (TECIOModule module in actualBid.Catalogs.IOModules)
             {
-                if (device.Manufacturer == null)
+                if (module.Guid == expectedGuid)
                 {
-                    Assert.Fail("Device doesn't have manufacturer.");
-                }
-                if (!actualBid.Catalogs.Manufacturers.Contains(device.Manufacturer))
-                {
-                    Assert.Fail("Manufacturers not linked in device catalog");
+                    actualModule = module;
                 }
             }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualModule.Name);
+            Assert.AreEqual(expectedDescription, actualModule.Description);
+            Assert.AreEqual(expectedCost, actualModule.Cost);
+            Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
+        }
+
+        [TestMethod]
+        public void Load_Bid_IO()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+            IOType expectedType = IOType.BACnetIP;
+            int expectedLabor = 2;
+
+            Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
+
+            TECIO actualIO = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                if (controller.Manufacturer == null)
+                foreach (TECIO io in controller.IO)
                 {
-                    Assert.Fail("Controller doesn't have manufacturer.");
-                }
-                if (!actualBid.Catalogs.Manufacturers.Contains(controller.Manufacturer))
-                {
-                    Assert.Fail("Manufacturers not linked in controllers");
-                }
-            }
-            Assert.IsTrue(true, "All Manufacturers linked");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Linked_ConduitTypes()
-        {
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                foreach (TECConnection connection in controller.ChildrenConnections)
-                {
-                    if (!actualBid.Catalogs.ConduitTypes.Contains(connection.ConduitType))
-                    { Assert.Fail("Conduit types in connection not linked"); }
+                    if (io.Guid == expectedGuid)
+                    {
+                        actualIO = io;
+                    }
                 }
             }
 
-            Assert.IsTrue(true, "All conduit types Linked");
+            //Assert
+            Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
+            Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
+            Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
         }
 
         [TestMethod]
-        public void Load_Bid_Linked_Tags()
+        public void Load_Bid_TypicalIO()
         {
+            //Arrange
+            Guid expectedGuid = new Guid("fbae3851-3320-4e94-a674-ddec86bc4964");
+            IOType expectedType = IOType.BACnetIP;
+            int expectedLabor = 2;
+
+            Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
+
+            TECIO actualIO = null;
             foreach (TECSystem system in actualBid.Systems)
             {
-                foreach (TECTag tag in system.Tags)
+                foreach (TECController controller in system.Controllers)
                 {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in system templates not linked"); }
-                }
-                foreach (TECEquipment equipment in system.Equipment)
-                {
-                    foreach (TECTag tag in equipment.Tags)
-                    {
-                        if (!actualBid.Catalogs.Tags.Contains(tag))
-                        { Assert.Fail("Tags in system templates not linked"); }
-                    }
-                    foreach (TECSubScope subScope in equipment.SubScope)
-                    {
-                        foreach (TECTag tag in subScope.Tags)
+                    foreach (TECIO io in controller.IO) { 
+                        if (io.Guid == expectedGuid)
                         {
-                            if (!actualBid.Catalogs.Tags.Contains(tag))
-                            { Assert.Fail("Tags in system templates not linked"); }
-                        }
-                        foreach (TECDevice device in subScope.Devices)
-                        {
-                            foreach (TECTag tag in device.Tags)
-                            {
-                                if (!actualBid.Catalogs.Tags.Contains(tag))
-                                { Assert.Fail("Tags in system templates not linked"); }
-                            }
+                            actualIO = io;
                         }
                     }
                 }
             }
 
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
-            {
-                foreach (TECTag tag in device.Tags)
-                {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in device catalog not linked"); }
-                }
-            }
-            foreach (TECConduitType conduitType in actualBid.Catalogs.ConduitTypes)
-            {
-                foreach (TECTag tag in conduitType.Tags)
-                {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in conduit type catalog not linked"); }
-                }
-            }
-            foreach (TECConnectionType connectionType in actualBid.Catalogs.ConnectionTypes)
-            {
-                foreach (TECTag tag in connectionType.Tags)
-                {
-                    if (!actualBid.Catalogs.Tags.Contains(tag))
-                    { Assert.Fail("Tags in connection type catalog not linked"); }
-                }
-            }
-
-            Assert.IsTrue(true, "All Tags Linked");
+            //Assert
+            Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
+            Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
+            Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
         }
 
         [TestMethod]
-        public void Load_Bid_Linked_ConnectionTypes()
+        public void Load_Bid_InstanceIO()
         {
-            foreach (TECDevice device in actualBid.Catalogs.Devices)
+            //Arrange
+            Guid expectedGuid = new Guid("434bc312-f933-40c8-b8bd-f4e22f19f606");
+            IOType expectedType = IOType.BACnetIP;
+            int expectedLabor = 2;
+
+            Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
+
+            TECIO actualIO = null;
+            foreach (TECSystem typical in actualBid.Systems)
             {
-                if (device.ConnectionTypes.Count == 0)
+                foreach(TECSystem system in typical.SystemInstances)
+                foreach (TECController controller in system.Controllers)
                 {
-                    Assert.Fail("Device doesn't have connectionType");
-                }
-                foreach (TECConnectionType type in device.ConnectionTypes)
-                {
-                    if (!actualBid.Catalogs.ConnectionTypes.Contains(type))
+                    foreach (TECIO io in controller.IO)
                     {
-                        Assert.Fail("ConnectionTypes not linked in device catalog");
+                        if (io.Guid == expectedGuid)
+                        {
+                            actualIO = io;
+                        }
                     }
                 }
             }
+
+            //Assert
+            Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
+            Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
+            Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
         }
 
+        //----------------------------------------Tests above have new values, below do not-------------------------------------------
+
+
+        //[TestMethod]
+        //public void Load_Bid_Drawing()
+        //{
+        //    //Arrange
+        //    TECDrawing actualDrawing = actualBid.Drawings[0];
+
+        //    //Assert
+        //    string expectedName = "Test Drawing";
+        //    string expectedDescription = "Test Drawing Description";
+
+        //    Assert.AreEqual(expectedName, actualDrawing.Name);
+        //    Assert.AreEqual(expectedDescription, actualDrawing.Description);
+        //}
+
+        //[TestMethod]
+        //public void Load_Bid_Page()
+        //{
+        //    //Arrange
+        //    TECPage actualPage = actualBid.Drawings[0].Pages[0];
+
+        //    //Assert
+        //    int expectedPageNum = 1;
+
+        //    Assert.AreEqual(expectedPageNum, actualPage.PageNum);
+        //}
+
+        //[TestMethod]
+        //public void Load_Bid_VisualScope()
+        //{
+        //    //Arrange
+        //    TECVisualScope actualVisScope = actualBid.Drawings[0].Pages[0].PageScope[0];
+        //    TECSystem actualSystem = actualBid.Systems[0];
+
+        //    //Assert
+        //    double expectedXPos = 119;
+        //    double expectedYPos = 69.08;
+
+        //    Assert.AreEqual(expectedXPos, actualVisScope.X);
+        //    Assert.AreEqual(expectedYPos, actualVisScope.Y);
+        //    Assert.AreEqual(actualSystem, actualVisScope.Scope);
+        //}
+
+        private void testForScopeChildren(TECScope scope)
+        {
+            testForTag(scope);
+            testForCosts(scope);
+            testForLocation(scope);
+        }
+
+        private void testForTag(TECScope scope)
+        {
+            bool foundTag = false;
+
+            foreach (TECTag tag in scope.Tags)
+            {
+                if (tag.Guid == TEST_TAG_GUID)
+                {
+                    foundTag = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundTag, "Tag not loaded properly into scope.");
+        }
+        private void testForCosts(TECScope scope)
+        {
+            bool foundTECCost = false;
+            bool foundElectricalCost = false;
+
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_TEC_COST_GUID)
+                {
+                    foundTECCost = true;
+                    break;
+                }
+            }
+            foreach (TECCost cost in scope.AssociatedCosts)
+            {
+                if (cost.Guid == TEST_ELECTRICAL_COST_GUID)
+                {
+                    foundElectricalCost = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundTECCost, "TEC Cost not loaded properly into scope.");
+            Assert.IsTrue(foundElectricalCost, "Electrical Cost not loaded properly into scope.");
+        }
+        private void testForLocation(TECScope scope)
+        {
+            bool foundLocation = (scope.Location.Guid == TEST_LOCATION_GUID);
+            Assert.IsTrue(foundLocation, "Location not loaded properly into scope.");
+        }
+
+        private void testForRatedCosts(ElectricalMaterialComponent component)
+        {
+            bool foundCost = false;
+            
+            foreach (TECCost cost in component.RatedCosts)
+            {
+                if (cost.Guid == TEST_RATED_COST_GUID)
+                {
+                    foundCost = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(foundCost, "Rated Cost not loaded properly into scope.");
+        }
     }
 }

@@ -12,19 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
     public partial class SettingsView : UserControl
     {
-        public Object ViewModel
+        public SettingsVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (SettingsVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+            DependencyProperty.Register("ViewModel", typeof(SettingsVM),
               typeof(SettingsView));
 
         public SettingsView()

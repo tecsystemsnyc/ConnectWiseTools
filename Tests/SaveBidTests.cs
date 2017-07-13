@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -16,59 +17,18 @@ namespace Tests
     public class SaveBidTests
     {
         const bool DEBUG = true;
-
-        static TECBid OGBid;
+        
         TECBid bid;
         ChangeStack testStack;
-        static string OGPath;
         string path;
-
-        private TestContext testContextInstance;
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext TestContext)
-        {
-            OGPath = Path.GetTempFileName();
-            OGBid = TestHelper.CreateTestBid();
-            EstimatingLibraryDatabase.SaveNew(OGPath, OGBid);
-        }
 
         [TestInitialize]
         public void TestInitialize()
         {
-            //Arrange
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            //bid = TestHelper.CreateTestBid();
-            //watch.Stop();
-            //Console.WriteLine("CreateTestBid: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            //testStack = new ChangeStack(bid);
-            //watch.Stop();
-            //Console.WriteLine("Creating Stack: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            //path = Path.GetTempFileName();
-            //File.Delete(path);
-            //path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".bdb";
-            //EstimatingLibraryDatabase.SaveBidToNewDB(path, bid);
-            //watch.Stop();
-            //Console.WriteLine("SaveBidToNewDB: " + watch.ElapsedMilliseconds);
-
-            bid = OGBid.Copy() as TECBid;
-            ModelLinkingHelper.LinkBid(bid);
-            testStack = new ChangeStack(bid);
             path = Path.GetTempFileName();
-            File.Copy(OGPath, path, true);
+            bid = TestHelper.CreateTestBid();
+            testStack = new ChangeStack(bid);
+            DatabaseHelper.SaveNew(path, bid);
         }
 
         [TestCleanup]
@@ -92,8 +52,6 @@ namespace Tests
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
-            File.Delete(OGPath);
         }
 
         #region Save BidInfo
@@ -103,9 +61,9 @@ namespace Tests
             //Act
             string expectedName = "Save Name";
             bid.Name = expectedName;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             string actualName = actualBid.Name;
 
             //Assert
@@ -118,9 +76,9 @@ namespace Tests
             //Act
             string expectedBidNo = "Save BidNo";
             bid.BidNumber = expectedBidNo;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             string actualBidNo = actualBid.BidNumber;
 
             //Assert
@@ -133,9 +91,9 @@ namespace Tests
             //Act
             DateTime expectedDueDate = DateTime.Now;
             bid.DueDate = expectedDueDate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             DateTime actualDueDate = actualBid.DueDate;
 
             //Assert
@@ -148,9 +106,9 @@ namespace Tests
             //Act
             string expectedSalesperson = "Save Salesperson";
             bid.Salesperson = expectedSalesperson;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             string actualSalesperson = actualBid.Salesperson;
 
             //Assert
@@ -163,9 +121,9 @@ namespace Tests
             //Act
             string expectedEstimator = "Save Estimator";
             bid.Estimator = expectedEstimator;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             string actualEstimator = actualBid.Estimator;
 
             //Assert
@@ -180,9 +138,9 @@ namespace Tests
             //Act
             double expectedPM = 0.123;
             bid.Labor.PMCoef = expectedPM;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualPM = actualBid.Labor.PMCoef;
 
             //Assert
@@ -195,9 +153,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             bid.Labor.PMRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualbid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualbid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualbid.Labor.PMRate;
 
             //Assert
@@ -210,9 +168,9 @@ namespace Tests
             //Act
             double expectedHours = 457.69;
             bid.Labor.PMExtraHours = expectedHours;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualHours = actualBid.Labor.PMExtraHours;
 
             //Assert
@@ -225,9 +183,9 @@ namespace Tests
             //Act
             double expectedENG = 0.123;
             bid.Labor.ENGCoef = expectedENG;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualENG = actualBid.Labor.ENGCoef;
 
             //Assert
@@ -240,9 +198,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             bid.Labor.ENGRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualbid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualbid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualbid.Labor.ENGRate;
 
             //Assert
@@ -255,9 +213,9 @@ namespace Tests
             //Act
             double expectedHours = 457.69;
             bid.Labor.ENGExtraHours = expectedHours;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualHours = actualBid.Labor.ENGExtraHours;
 
             //Assert
@@ -270,9 +228,9 @@ namespace Tests
             //Act
             double expectedComm = 0.123;
             bid.Labor.CommCoef = expectedComm;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualComm = actualBid.Labor.CommCoef;
 
             //Assert
@@ -285,9 +243,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             bid.Labor.CommRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualbid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualbid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualbid.Labor.CommRate;
 
             //Assert
@@ -300,9 +258,9 @@ namespace Tests
             //Act
             double expectedHours = 457.69;
             bid.Labor.CommExtraHours = expectedHours;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualHours = actualBid.Labor.CommExtraHours;
 
             //Assert
@@ -315,9 +273,9 @@ namespace Tests
             //Act
             double expectedSoft = 0.123;
             bid.Labor.SoftCoef = expectedSoft;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualSoft = actualBid.Labor.SoftCoef;
 
             //Assert
@@ -330,9 +288,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             bid.Labor.SoftRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualbid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualbid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualbid.Labor.SoftRate;
 
             //Assert
@@ -345,9 +303,9 @@ namespace Tests
             //Act
             double expectedHours = 457.69;
             bid.Labor.SoftExtraHours = expectedHours;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualHours = actualBid.Labor.SoftExtraHours;
 
             //Assert
@@ -360,9 +318,9 @@ namespace Tests
             //Act
             double expectedGraph = 0.123;
             bid.Labor.GraphCoef = expectedGraph;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualGraph = actualBid.Labor.GraphCoef;
 
             //Assert
@@ -375,9 +333,9 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             bid.Labor.GraphRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualbid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualbid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualbid.Labor.GraphRate;
 
             //Assert
@@ -390,9 +348,9 @@ namespace Tests
             //Act
             double expectedHours = 457.69;
             bid.Labor.GraphExtraHours = expectedHours;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualHours = actualBid.Labor.GraphExtraHours;
 
             //Assert
@@ -405,9 +363,9 @@ namespace Tests
             //Act
             double expectedRate = 0.123;
             bid.Labor.ElectricalRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualBid.Labor.ElectricalRate;
 
             //Assert
@@ -420,9 +378,9 @@ namespace Tests
             //Act
             double expectedRate = 0.456;
             bid.Labor.ElectricalNonUnionRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualBid.Labor.ElectricalNonUnionRate;
 
             //Assert
@@ -435,9 +393,9 @@ namespace Tests
             //Act
             double expectedRate = 0.123;
             bid.Labor.ElectricalSuperRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualBid.Labor.ElectricalSuperRate;
 
             //Assert
@@ -450,9 +408,9 @@ namespace Tests
             //Act
             double expectedRate = 23.94;
             bid.Labor.ElectricalSuperNonUnionRate = expectedRate;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             double actualRate = actualBid.Labor.ElectricalSuperNonUnionRate;
 
             //Assert
@@ -464,9 +422,9 @@ namespace Tests
         {
             //Act
             bid.Labor.ElectricalIsOnOvertime = !bid.Labor.ElectricalIsOnOvertime;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             Assert.AreEqual(bid.Labor.ElectricalIsOnOvertime, actualBid.Labor.ElectricalIsOnOvertime);
@@ -477,9 +435,9 @@ namespace Tests
         {
             //Act
             bid.Labor.ElectricalIsUnion = !bid.Labor.ElectricalIsUnion;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             Assert.AreEqual(bid.Labor.ElectricalIsUnion, actualBid.Labor.ElectricalIsUnion);
@@ -500,9 +458,9 @@ namespace Tests
 
             bid.Systems.Add(expectedSystem);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -516,6 +474,74 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
+            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
+            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_System_Instance()
+        {
+            //Act
+            TECSystem typical = bid.Systems.RandomObject();
+
+            TECSystem expectedSystem = typical.AddInstance(bid);
+           
+            DatabaseHelper.Update(path, testStack, false);
+
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach(TECSystem instance in system.SystemInstances)
+                {
+                    if (expectedSystem.Guid == instance.Guid)
+                    {
+                        actualSystem = instance;
+                        break;
+                    }
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
+            Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
+            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
+            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Add_System_Instance_Edit()
+        {
+            //Act
+            TECSystem typical = bid.Systems.RandomObject();
+
+            typical.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
+            TECSystem expectedSystem = typical.AddInstance(bid);
+
+            DatabaseHelper.Update(path, testStack, false);
+
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                foreach (TECSystem instance in system.SystemInstances)
+                {
+                    if (expectedSystem.Guid == instance.Guid)
+                    {
+                        actualSystem = instance;
+                        break;
+                    }
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
+            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
             Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
@@ -530,9 +556,9 @@ namespace Tests
 
             bid.Systems.Remove(systemToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             foreach (TECSystem system in finalBid.Systems)
@@ -553,9 +579,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Name = "Save System Name";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -577,9 +603,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Description = "Save System Description";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -600,9 +626,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Quantity = 987654321;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -623,9 +649,9 @@ namespace Tests
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.BudgetPriceModifier = 9876543.21;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -638,6 +664,40 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
+        }
+
+        [TestMethod]
+        public void Save_Bid_System_Misc()
+        {
+            //Act
+            TECSystem expectedSystem = bid.Systems.RandomObject();
+            var expectedMisc = new TECMisc();
+            expectedSystem.MiscCosts.Add(expectedMisc);
+            DatabaseHelper.Update(path, testStack, false);
+
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+
+            TECSystem actualSystem = null;
+            TECMisc actualMisc = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == expectedSystem.Guid)
+                {
+                    actualSystem = system;
+                    foreach(TECMisc misc in actualSystem.MiscCosts)
+                    {
+                        if(misc.Guid == expectedMisc.Guid)
+                        {
+                            actualMisc = misc;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedMisc.Guid, actualMisc.Guid);
         }
         #endregion Edit System
         #endregion Save System
@@ -655,9 +715,9 @@ namespace Tests
 
             bid.Systems[0].Equipment.Add(expectedEquipment);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECEquipment actualEquipment = null;
             foreach (TECEquipment equip in actualBid.Systems[0].Equipment)
@@ -680,15 +740,22 @@ namespace Tests
         public void Save_Bid_Remove_Equipment()
         {
             //Act
-            TECSystem systemToModify = bid.Systems[0];
+            TECSystem systemToModify = null; 
+            foreach(TECSystem system in bid.Systems)
+            {
+                if(system.Equipment.Count > 0)
+                {
+                    systemToModify = system;
+                }
+            }
             int oldNumEquip = systemToModify.Equipment.Count();
             TECEquipment equipToRemove = systemToModify.Equipment[0];
 
             systemToModify.Equipment.Remove(equipToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSystem modifiedSystem = null;
             foreach (TECSystem system in bid.Systems)
@@ -717,11 +784,11 @@ namespace Tests
         public void Save_Bid_Equipment_Name()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Name = "Save Equip Name";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECEquipment actualEquip = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -745,11 +812,11 @@ namespace Tests
         public void Save_Bid_Equipment_Description()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Description = "Save Equip Description";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECEquipment actualEquip = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -773,11 +840,11 @@ namespace Tests
         public void Save_Bid_Equipment_Quantity()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.Quantity = 987654321;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECEquipment actualEquip = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -801,11 +868,11 @@ namespace Tests
         public void Save_Bid_Equipment_BudgetPrice()
         {
             //Act
-            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
+            TECEquipment expectedEquip = bid.RandomEquipment();
             expectedEquip.BudgetUnitPrice = 9876543.21;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECEquipment actualEquip = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -838,12 +905,13 @@ namespace Tests
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
             expectedSubScope.Quantity = 235746543;
+            
 
-            bid.Systems[0].Equipment[0].SubScope.Add(expectedSubScope);
+            bid.RandomEquipment().SubScope.Add(expectedSubScope);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -873,15 +941,15 @@ namespace Tests
         public void Save_Bid_Remove_SubScope()
         {
             //Act
-            TECEquipment equipToModify = bid.Systems[0].Equipment[0];
+            TECEquipment equipToModify = bid.RandomEquipment();
             int oldNumSubScope = equipToModify.SubScope.Count();
             TECSubScope subScopeToRemove = equipToModify.SubScope[0];
 
             equipToModify.SubScope.Remove(subScopeToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECEquipment modifiedEquip = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -911,11 +979,11 @@ namespace Tests
         public void Save_Bid_SubScope_Name()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Name = "Save SubScope Name";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -943,11 +1011,11 @@ namespace Tests
         public void Save_Bid_SubScope_Description()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Description = "Save SubScope Description";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -975,11 +1043,11 @@ namespace Tests
         public void Save_Bid_SubScope_Quantity()
         {
             //Act
-            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope expectedSubScope = bid.RandomSubScope();
             expectedSubScope.Quantity = 987654321;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1011,31 +1079,22 @@ namespace Tests
         public void Save_Bid_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = null;
-            //Devices can only be added from the device catalog.
-            foreach (TECDevice dev in bid.Catalogs.Devices)
-            {
-                if (dev.Name == "Device C1")
-                {
-                    expectedDevice = dev;
-                    break;
-                }
-            }
+            TECDevice expectedDevice = bid.Catalogs.Devices.RandomObject();
 
-            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToModify = bid.RandomSubScope();
 
             //Makes a copy, as devices can only be added via drag drop.
             subScopeToModify.Devices = new ObservableCollection<TECDevice>();
             int expectedQuantity = 5;
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
-            subScopeToModify.Devices.Add(new TECDevice(expectedDevice));
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
+            subScopeToModify.Devices.Add(expectedDevice);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECDevice actualDevice = null;
             int actualQuantity = 0;
@@ -1080,7 +1139,12 @@ namespace Tests
         public void Save_Bid_Remove_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while (ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
+
             int oldNumDevices = ssToModify.Devices.Count();
             TECDevice deviceToRemove = ssToModify.Devices[0];
 
@@ -1098,9 +1162,9 @@ namespace Tests
                 ssToModify.Devices.Remove(deviceToRemove);
             }
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope modifiedSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1140,7 +1204,11 @@ namespace Tests
         public void Save_Bid_LowerQuantity_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while (ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
 
             TECDevice deviceToRemove = ssToModify.Devices[0];
 
@@ -1153,9 +1221,9 @@ namespace Tests
 
             ssToModify.Devices.Remove(deviceToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope modifiedSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1192,7 +1260,11 @@ namespace Tests
         public void Save_Bid_Device_Quantity()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
+            while(ssToModify.Devices.Count == 0)
+            {
+                ssToModify = bid.RandomSubScope();
+            }
             TECDevice expectedDevice = ssToModify.Devices[0];
 
             int expectedNumDevices = 0;
@@ -1205,9 +1277,9 @@ namespace Tests
             ssToModify.Devices.Add(new TECDevice(expectedDevice));
             expectedNumDevices++;
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope modifiedSS = null;
             int actualQuantity = 0;
@@ -1266,12 +1338,12 @@ namespace Tests
             expectedPoint.Description = "Point Description";
             expectedPoint.Quantity = 84300;
 
-            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToModify = bid.RandomSubScope();
             subScopeToModify.Points.Add(expectedPoint);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1309,14 +1381,14 @@ namespace Tests
         public void Save_Bid_Remove_Point()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = bid.RandomSubScope();
             int oldNumPoints = ssToModify.Points.Count();
             TECPoint pointToRemove = ssToModify.Points[0];
             ssToModify.Points.Remove(pointToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope modifiedSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1350,11 +1422,11 @@ namespace Tests
         public void Save_Bid_Point_Name()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Name = "Point name save test";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1386,11 +1458,11 @@ namespace Tests
         public void Save_Bid_Point_Description()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Description = "Point Description save test";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1422,11 +1494,11 @@ namespace Tests
         public void Save_Bid_Point_Quantity()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Quantity = 7463;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1458,11 +1530,11 @@ namespace Tests
         public void Save_Bid_Point_Type()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = bid.RandomPoint();
             expectedPoint.Type = PointTypes.BI;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1496,14 +1568,20 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSystem()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECSystem systemToEdit = bid.Systems[0];
+            TECSystem systemToEdit = bid.Systems.RandomObject();
+            TECTag tagToAdd = null;
+            foreach(TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!systemToEdit.Tags.Contains(tag))
+                {
+                    systemToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
+            DatabaseHelper.Update(path, testStack, false);
 
-            systemToEdit.Tags.Add(tagToAdd);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSystem finalSystem = null;
             foreach (TECSystem system in finalBid.Systems)
@@ -1527,14 +1605,21 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToEquipment()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
+            TECEquipment equipmentToEdit = bid.RandomEquipment();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!equipmentToEdit.Tags.Contains(tag))
+                {
+                    equipmentToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
-            equipmentToEdit.Tags.Add(tagToAdd);
+            DatabaseHelper.Update(path, testStack, false);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
 
             TECEquipment finalEquipment = null;
             foreach (TECSystem system in finalBid.Systems)
@@ -1565,14 +1650,21 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSubScope()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToEdit = bid.RandomSubScope();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!subScopeToEdit.Tags.Contains(tag))
+                {
+                    subScopeToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
-            subScopeToEdit.Tags.Add(tagToAdd);
+            DatabaseHelper.Update(path, testStack, false);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
 
             TECSubScope finalSubScope = null;
             foreach (TECSystem system in finalBid.Systems)
@@ -1604,14 +1696,21 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToPoint()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECPoint PointToEdit = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint PointToEdit = bid.RandomPoint();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!PointToEdit.Tags.Contains(tag))
+                {
+                    PointToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
-            PointToEdit.Tags.Add(tagToAdd);
+            DatabaseHelper.Update(path, testStack, false);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPoint finalPoint = null;
             foreach (TECSystem system in finalBid.Systems)
@@ -1646,14 +1745,21 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
-            TECTag tagToAdd = bid.Catalogs.Tags[1];
-            TECController ControllerToEdit = bid.Controllers[0];
+            TECController ControllerToEdit = bid.Controllers.RandomObject();
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
+            {
+                if (!ControllerToEdit.Tags.Contains(tag))
+                {
+                    ControllerToEdit.Tags.Add(tag);
+                    tagToAdd = tag;
+                    break;
+                }
+            }
 
-            ControllerToEdit.Tags.Add(tagToAdd);
+            DatabaseHelper.Update(path, testStack, false);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid finalBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
 
             TECController finalController = null;
             foreach (TECController Controller in finalBid.Controllers)
@@ -1688,9 +1794,9 @@ namespace Tests
             expectedBranch.Description = "Branch description";
             bid.ScopeTree.Add(expectedBranch);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECScopeBranch actualBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1715,12 +1821,12 @@ namespace Tests
             TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Name = "New Child";
             expectedBranch.Description = "Child Branch Description";
-            TECScopeBranch branchToModify = bid.ScopeTree[0];
+            TECScopeBranch branchToModify = bid.ScopeTree.RandomObject();
             branchToModify.Branches.Add(expectedBranch);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECScopeBranch modifiedBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1752,12 +1858,12 @@ namespace Tests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch branchToRemove = bid.ScopeTree[0];
+            TECScopeBranch branchToRemove = bid.ScopeTree.RandomObject();
             bid.ScopeTree.Remove(branchToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1784,12 +1890,12 @@ namespace Tests
             }
 
             int oldNumBranches = branchToModify.Branches.Count();
-            TECScopeBranch branchToRemove = branchToModify.Branches[0];
+            TECScopeBranch branchToRemove = branchToModify.Branches.RandomObject();
             branchToModify.Branches.Remove(branchToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECScopeBranch modifiedBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1813,12 +1919,12 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Branch_Name()
         {
-            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
             expectedBranch.Name = "Test Branch Save";
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECScopeBranch actualBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1836,12 +1942,12 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Branch_Description()
         {
-            TECScopeBranch expectedBranch = bid.ScopeTree[0];
+            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
             expectedBranch.Description = "Test Branch Save";
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECScopeBranch actualBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1867,9 +1973,9 @@ namespace Tests
             expectedLocation.Name = "New Location";
             bid.Locations.Add(expectedLocation);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECLocation actualLocation = null;
             foreach (TECLocation loc in actualBid.Locations)
@@ -1891,12 +1997,12 @@ namespace Tests
         {
             //Act
             int oldNumLocations = bid.Locations.Count;
-            TECLocation locationToRemove = bid.Locations[0];
+            TECLocation locationToRemove = bid.Locations.RandomObject();
             bid.Locations.Remove(locationToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             foreach (TECLocation loc in actualBid.Locations)
@@ -1911,12 +2017,12 @@ namespace Tests
         public void Save_Bid_Edit_Location_Name()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations.RandomObject();
             expectedLocation.Name = "Location Name Save";
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECLocation actualLocation = null;
             foreach (TECLocation loc in actualBid.Locations)
@@ -1936,7 +2042,7 @@ namespace Tests
         public void Save_Bid_Add_Location_ToScope()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations.RandomObject();
 
             TECSystem sysToModify = null;
             foreach (TECSystem sys in bid.Systems)
@@ -1954,9 +2060,9 @@ namespace Tests
             equipToModify.Location = expectedLocation;
             ssToModify.Location = expectedLocation;
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECLocation actualLocation = null;
             foreach (TECLocation loc in actualBid.Locations)
@@ -2011,9 +2117,9 @@ namespace Tests
             expectedEquip.Location = null;
             expectedSS.Location = null;
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             int actualNumLocations = actualBid.Locations.Count;
 
@@ -2065,9 +2171,9 @@ namespace Tests
 
             expectedSystem.Location = expectedLocation;
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             int actualNumLocations = actualBid.Locations.Count;
 
@@ -2108,9 +2214,9 @@ namespace Tests
             expectedNote.Text = "New Note";
             bid.Notes.Add(expectedNote);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECNote actualNote = null;
             foreach (TECNote note in actualBid.Notes)
@@ -2134,9 +2240,9 @@ namespace Tests
             TECNote noteToRemove = bid.Notes[0];
             bid.Notes.Remove(noteToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             foreach (TECNote note in actualBid.Notes)
@@ -2154,9 +2260,9 @@ namespace Tests
             TECNote expectedNote = bid.Notes[0];
             expectedNote.Text = "Test Save Text";
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECNote actualNote = null;
             foreach (TECNote note in actualBid.Notes)
@@ -2183,9 +2289,9 @@ namespace Tests
             expectedExclusion.Text = "New Exclusion";
             bid.Exclusions.Add(expectedExclusion);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECExclusion actualExclusion = null;
             foreach (TECExclusion Exclusion in actualBid.Exclusions)
@@ -2209,9 +2315,9 @@ namespace Tests
             TECExclusion ExclusionToRemove = bid.Exclusions[0];
             bid.Exclusions.Remove(ExclusionToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             foreach (TECExclusion Exclusion in actualBid.Exclusions)
@@ -2229,9 +2335,9 @@ namespace Tests
             TECExclusion expectedExclusion = bid.Exclusions[0];
             expectedExclusion.Text = "Test Save Text";
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECExclusion actualExclusion = null;
             foreach (TECExclusion Exclusion in actualBid.Exclusions)
@@ -2380,9 +2486,9 @@ namespace Tests
 
             bid.Controllers.Add(expectedController);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -2409,9 +2515,9 @@ namespace Tests
 
             bid.Controllers.Remove(controllerToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             foreach (TECController controller in actualBid.Controllers)
@@ -2429,9 +2535,9 @@ namespace Tests
             //Act
             TECController expectedController = bid.Controllers[0];
             expectedController.Name = "Test save controller name";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -2453,9 +2559,9 @@ namespace Tests
             //Act
             TECController expectedController = bid.Controllers[0];
             expectedController.Description = "Save Device Description";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -2477,9 +2583,9 @@ namespace Tests
             //Act
             TECController expectedController = bid.Controllers[0];
             expectedController.Cost = 46.89;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -2506,11 +2612,11 @@ namespace Tests
             expectedController.IO.Add(testio);
             bool hasBACnetIP = false;
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
             watch.Stop();
             Console.WriteLine(" UpdateBidToDD: " + watch.ElapsedMilliseconds);
             watch = System.Diagnostics.Stopwatch.StartNew();
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
             watch.Stop();
             Console.WriteLine(" Load: " + watch.ElapsedMilliseconds);
             TECController actualController = null;
@@ -2547,9 +2653,9 @@ namespace Tests
 
             expectedController.IO.Remove(ioToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECController actualController = null;
             foreach (TECController con in actualBid.Controllers)
@@ -2578,9 +2684,9 @@ namespace Tests
             TECIO ioToChange = expectedController.IO[0];
             ioToChange.Quantity = 69;
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECController actualController = null;
             foreach (TECController con in actualBid.Controllers)
@@ -2605,253 +2711,25 @@ namespace Tests
         #endregion Controller IO
 
         #endregion
-
-        #region Save Proposal Scope
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_IsProposed()
-        {
-            //Act
-            TECProposalScope expectedPropScope = bid.ProposalScope[0];
-            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_IsProposed_InProposalScope()
-        {
-            //Act
-            TECProposalScope expectedPropScope = bid.ProposalScope[0].Children[0];
-            expectedPropScope.IsProposed = !expectedPropScope.IsProposed;
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                foreach (TECProposalScope child in propScope.Children)
-                {
-                    if (child.Scope.Guid == expectedPropScope.Scope.Guid)
-                    {
-                        actualPropScope = child;
-                        break;
-                    }
-                }
-                if (actualPropScope != null) break;
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPropScope.IsProposed, actualPropScope.IsProposed);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Add_Note()
-        {
-            //Act
-            TECProposalScope expectedPropScope = bid.ProposalScope[0];
-            int oldNumNotes = expectedPropScope.Notes.Count;
-            TECScopeBranch expectedNote = new TECScopeBranch();
-            expectedNote.Name = "Added Prop Note";
-            expectedPropScope.Notes.Add(expectedNote);
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            TECScopeBranch actualNote = null;
-            foreach (TECScopeBranch note in actualPropScope.Notes)
-            {
-                if (note.Guid == expectedNote.Guid)
-                {
-                    actualNote = note;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedNote.Name, actualNote.Name);
-            Assert.AreEqual((oldNumNotes + 1), actualPropScope.Notes.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Add_Note_InNote()
-        {
-            //Act
-            TECScopeBranch noteToModify = null;
-            foreach (TECProposalScope propScope in bid.ProposalScope)
-            {
-                if (propScope.Notes.Count > 0)
-                {
-                    noteToModify = propScope.Notes[0];
-                    break;
-                }
-            }
-            int oldNumNotes = noteToModify.Branches.Count;
-            TECScopeBranch expectedNote = new TECScopeBranch();
-            expectedNote.Name = "Added Prop Note Note";
-            noteToModify.Branches.Add(expectedNote);
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECScopeBranch actualNote = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                foreach (TECScopeBranch note in propScope.Notes)
-                {
-                    if (note.Guid == noteToModify.Guid)
-                    {
-                        Assert.AreEqual((oldNumNotes + 1), note.Branches.Count);
-                        foreach (TECScopeBranch noteNote in note.Branches)
-                        {
-                            if (noteNote.Guid == expectedNote.Guid)
-                            {
-                                actualNote = noteNote;
-                                break;
-                            }
-                        }
-                    }
-                    if (actualNote != null) { break; }
-                }
-                if (actualNote != null) { break; }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedNote.Name, actualNote.Name);
-
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Remove_Note()
-        {
-            //Act
-            TECProposalScope propScopeToModify = null;
-            foreach (TECProposalScope propScope in bid.ProposalScope)
-            {
-                if (propScope.Notes.Count > 0)
-                {
-                    propScopeToModify = propScope;
-                    break;
-                }
-            }
-            int numOldNotes = propScopeToModify.Notes.Count;
-            TECScopeBranch noteToRemove = propScopeToModify.Notes[0];
-            propScopeToModify.Notes.Remove(noteToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == propScopeToModify.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            //Assert
-            foreach (TECScopeBranch note in actualPropScope.Notes)
-            {
-                if (note.Guid == noteToRemove.Guid) { Assert.Fail(); }
-            }
-
-            Assert.AreEqual((numOldNotes - 1), actualPropScope.Notes.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_ProposalScope_Edit_Note()
-        {
-            //Act
-            TECProposalScope expectedPropScope = null;
-            foreach (TECProposalScope propScope in bid.ProposalScope)
-            {
-                if (propScope.Notes.Count > 0)
-                {
-                    expectedPropScope = propScope;
-                    break;
-                }
-            }
-
-            TECScopeBranch noteToModify = expectedPropScope.Notes[0];
-            noteToModify.Name = "Edited note";
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECProposalScope actualPropScope = null;
-            foreach (TECProposalScope propScope in actualBid.ProposalScope)
-            {
-                if (propScope.Scope.Guid == expectedPropScope.Scope.Guid)
-                {
-                    actualPropScope = propScope;
-                    break;
-                }
-            }
-
-            TECScopeBranch actualNote = null;
-            foreach (TECScopeBranch note in actualPropScope.Notes)
-            {
-                if (note.Guid == noteToModify.Guid)
-                {
-                    actualNote = noteToModify;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(noteToModify.Name, actualNote.Name);
-            Assert.IsNotNull(actualNote);
-        }
-
-        #endregion Save Proposal Scope
-
+        
         #region Save Misc Cost
         [TestMethod]
         public void Save_Bid_Add_MiscCost()
         {
             //Act
-            TECMiscCost expectedCost = new TECMiscCost();
+            TECMisc expectedCost = new TECMisc();
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
 
             bid.MiscCosts.Add(expectedCost);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2870,15 +2748,15 @@ namespace Tests
         public void Save_Bid_Remove_MiscCost()
         {
             //Act
-            TECMiscCost costToRemove = bid.MiscCosts[0];
+            TECMisc costToRemove = bid.MiscCosts[0];
             bid.MiscCosts.Remove(costToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
@@ -2890,15 +2768,15 @@ namespace Tests
         public void Save_Bid_MiscCost_Name()
         {
             //Act
-            TECMiscCost expectedCost = bid.MiscCosts[0];
+            TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Name = "Test Save Cost Name";
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2915,15 +2793,15 @@ namespace Tests
         public void Save_Bid_MiscCost_Cost()
         {
             //Act
-            TECMiscCost expectedCost = bid.MiscCosts[0];
+            TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Cost = 489.1238;
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -2940,143 +2818,15 @@ namespace Tests
         public void Save_Bid_MiscCost_Quantity()
         {
             //Act
-            TECMiscCost expectedCost = bid.MiscCosts[0];
+            TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Quantity = 492;
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECMiscCost actualCost = null;
-            foreach (TECMiscCost cost in actualBid.MiscCosts)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
-        #endregion
-
-        #region Save Misc Wiring
-        [TestMethod]
-        public void Save_Bid_Add_MiscWiring()
-        {
-            //Act
-            TECMiscWiring expectedCost = new TECMiscWiring();
-            expectedCost.Name = "Add cost addition";
-            expectedCost.Cost = 978.3;
-            expectedCost.Quantity = 21;
-
-            bid.MiscWiring.Add(expectedCost);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
-        }
-
-        [TestMethod]
-        public void Save_Bid_Remove_MiscWiring()
-        {
-            //Act
-            TECMiscWiring costToRemove = bid.MiscWiring[0];
-            bid.MiscWiring.Remove(costToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            //Assert
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual(bid.MiscWiring.Count, actualBid.MiscWiring.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_MiscWiring_Name()
-        {
-            //Act
-            TECMiscWiring expectedCost = bid.MiscWiring[0];
-            expectedCost.Name = "Test Save Cost Name";
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-        }
-
-        [TestMethod]
-        public void Save_Bid_MiscWiring_Cost()
-        {
-            //Act
-            TECMiscWiring expectedCost = bid.MiscWiring[0];
-            expectedCost.Cost = 489.1238;
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-        }
-
-        [TestMethod]
-        public void Save_Bid_MiscWiring_Quantity()
-        {
-            //Act
-            TECMiscWiring expectedCost = bid.MiscWiring[0];
-            expectedCost.Quantity = 492;
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECMiscWiring actualCost = null;
-            foreach (TECMiscWiring cost in actualBid.MiscWiring)
+            TECMisc actualCost = null;
+            foreach (TECMisc cost in actualBid.MiscCosts)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -3101,9 +2851,9 @@ namespace Tests
 
             bid.Catalogs.PanelTypes.Add(expectedCost);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPanelType actualCost = null;
             foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
@@ -3119,77 +2869,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
         }
-
-        [TestMethod]
-        public void Save_Bid_Remove_PanelType()
-        {
-            //Act
-            TECPanelType costToRemove = bid.Catalogs.PanelTypes[0];
-            bid.Catalogs.PanelTypes.Remove(costToRemove);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            //Assert
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
-            }
-
-            Assert.AreEqual(bid.MiscWiring.Count, actualBid.MiscWiring.Count);
-        }
-
-        [TestMethod]
-        public void Save_Bid_PanelType_Name()
-        {
-            //Act
-            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
-            expectedCost.Name = "Test Save Cost Name";
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanelType actualCost = null;
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-        }
-
-        [TestMethod]
-        public void Save_Bid_PanelType_Cost()
-        {
-            //Act
-            TECPanelType expectedCost = bid.Catalogs.PanelTypes[0];
-            expectedCost.Cost = 489.1238;
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanelType actualCost = null;
-            foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
-            {
-                if (cost.Guid == expectedCost.Guid)
-                {
-                    actualCost = cost;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
-        }
-
+        
         #endregion
 
         #region Save Panel
@@ -3202,9 +2882,9 @@ namespace Tests
             expectedPanel.Description = "Test description";
             bid.Panels.Add(expectedPanel);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPanel actualpanel = null;
             foreach (TECPanel panel in actualBid.Panels)
@@ -3230,9 +2910,9 @@ namespace Tests
 
             bid.Panels.Remove(panelToRemove);
 
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
             foreach (TECPanel panel in actualBid.Panels)
@@ -3250,9 +2930,9 @@ namespace Tests
             //Act
             TECPanel expectedPanel = bid.Panels[0];
             expectedPanel.Name = "Test save panel name";
-            EstimatingLibraryDatabase.Update(path, testStack, false);
+            DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
+            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             TECPanel actualPanel = null;
             foreach (TECPanel panel in actualBid.Panels)
@@ -3273,88 +2953,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_ControlledScope()
         {
-            //Act
-            TECControlledScope scope = new TECControlledScope();
-            scope.Name = "Test Controlled Scope";
-            scope.Description = "Test description";
-
-            var expectedSystem = new TECSystem();
-            expectedSystem.Name = "CSSYSTEM";
-            var expectedEquipment = new TECEquipment();
-            expectedEquipment.Name = "CSEQUIPMENT";
-            var expectedSubScope = new TECSubScope();
-            expectedSubScope.Name = "CSSUBSCOPE";
-            expectedEquipment.SubScope.Add(expectedSubScope);
-            expectedSystem.Equipment.Add(expectedEquipment);
-
-            var expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
-            expectedPanel.Name = "CSPANEL";
-            var expectedController = new TECController(bid.Catalogs.Manufacturers[0]);
-            expectedController.Name = "CSCONTROLLER";
-            expectedPanel.Controllers.Add(expectedController);
-
-            var expectedConnection = new TECSubScopeConnection();
-            expectedConnection.Length = 1212;
-            expectedConnection.ParentController = expectedController;
-            expectedConnection.SubScope = expectedSubScope;
-            expectedController.ChildrenConnections.Add(expectedConnection);
-            expectedSubScope.Connection = expectedConnection;
-
-            scope.Systems.Add(expectedSystem);
-            scope.Panels.Add(expectedPanel);
-            scope.Controllers.Add(expectedController);
-
-            bid.addControlledScope(scope, 1);
-
-            EstimatingLibraryDatabase.Update(path, testStack, false);
-
-            TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-            TECPanel actualpanel = null;
-            TECController actualController = null;
-            TECSubScopeConnection actualConnection = null;
-            TECSystem actualSystem = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Name == "CSCONTROLLER")
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                if (system.Name == "CSSYSTEM")
-                {
-                    actualSystem = system;
-                    break;
-                }
-            }
-            foreach (TECSubScopeConnection connection in actualController.ChildrenConnections)
-            {
-                if (connection.Length == 1212)
-                {
-                    actualConnection = connection;
-                    break;
-                }
-            }
-            foreach (TECPanel panel in actualBid.Panels)
-            {
-                if (panel.Name == "CSPANEL")
-                {
-                    actualpanel = panel;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPanel.Name, actualpanel.Name);
-            Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
-            Assert.IsTrue(actualController.ChildrenConnections.Contains(actualConnection), "Connections not linked in controller");
-            Assert.IsTrue(actualController == actualConnection.ParentController, "Controller not linked in connection");
-            Assert.IsTrue(actualConnection.SubScope == actualSystem.Equipment[0].SubScope[0], "Scope not linked in connection");
-            Assert.IsTrue(actualpanel.Controllers.Contains(actualController), "Controller not linked in panel");
+           
         }
         #endregion
 

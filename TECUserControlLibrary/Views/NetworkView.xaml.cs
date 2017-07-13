@@ -12,33 +12,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TECUserControlLibrary.DataGrids;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
     /// <summary>
     /// Interaction logic for NetworkView.xaml
     /// </summary>
-    /// 
-
-
     public partial class NetworkView : UserControl
     {
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
+        public NetworkVM ViewModel
         {
-            get { return (Object)GetValue(ViewModelProperty); }
+            get { return (NetworkVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
-
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(NetworkView));
+            DependencyProperty.Register("ViewModel", typeof(NetworkVM),
+                typeof(NetworkView));
 
         public NetworkView()
         {

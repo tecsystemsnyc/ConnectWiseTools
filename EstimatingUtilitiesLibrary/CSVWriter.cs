@@ -97,7 +97,7 @@ namespace EstimatingUtilitiesLibrary
                                 {
                                     row.Add("");
                                 }
-                                row.Add((subScope.Quantity * equipment.Quantity * system.Quantity).ToString());
+                                row.Add((subScope.Quantity * equipment.Quantity * system.SystemInstances.Count).ToString());
                                 WriteRow(writer, row);
                             }
                         }

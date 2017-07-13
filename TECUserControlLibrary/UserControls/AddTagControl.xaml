@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.AddTagControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox Grid.Row="0" Margin="5" ItemsSource="{Binding ElementName=parent, Path=TagList}"
+                              SelectedItem="{Binding SelectedTag}"
+                  DisplayMemberPath="Text"/>
+        <Button Grid.Row="0" Grid.Column="1" Content="Add Tag"
+                            Command="{Binding ElementName=parent, Path=AddTagCommand}"
+                            Margin="5"/>
+        <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="2"
+                               TagsSource="{Binding ElementName=parent, Path=TagList}"/>
+    </Grid>
+</UserControl>

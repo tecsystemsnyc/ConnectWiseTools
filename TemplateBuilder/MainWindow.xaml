@@ -5,24 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        
-        xmlns:local="clr-namespace:TemplateBuilder"
-        xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
-        xmlns:dd="urn:gong-wpf-dragdrop"
-        xmlns:cLib="clr-namespace:TECUserControlLibrary;assembly=TECUserControlLibrary"
-        xmlns:grids="clr-namespace:TECUserControlLibrary.DataGrids;assembly=TECUserControlLibrary"
-        xmlns:cLibControls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
-        xmlns:cLibViews="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
-        xmlns:cnvt="clr-namespace:TECUserControlLibrary.HelperConverters;assembly=TECUserControlLibrary"
-        xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:dd="urn:gong-wpf-dragdrop" 
         xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
-        xmlns:view="clr-namespace:TemplateBuilder.View"
+        
+        xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
+        xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
+        xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
         
         Title="{Binding TitleString}"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         Height="720"
         Width="1200"
+        WindowStartupLocation="CenterScreen"
         MinHeight="300" MinWidth="535"
         x:Name="root">
 
@@ -30,7 +25,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
-                <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -51,11 +45,11 @@
                     Gesture="CTRL+SHIFT+Z" />
     </Window.InputBindings>
     <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
-        <cLibControls:MenuControl ViewModel="{Binding ElementName=root, Path=DataContext.MenuVM}"
+        <views:MenuView ViewModel="{Binding ElementName=root, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding TemplatesVisibility, Converter={cnvt:TemplatesVisibilityConverter}}"/>
+                <ColumnDefinition Width="250" MaxWidth="{Binding TemplatesVisibility, Converter={utilities:TemplatesVisibilityConverter}}"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
@@ -70,75 +64,54 @@
             <Image Source="{Binding TECLogo}"
                    Grid.Column="4"/>
 
-            <cLib:ScopeCollectionsTabControl Grid.RowSpan="2"
+            <views:ScopeCollectionsTabView Grid.RowSpan="2"
                                              ViewModel="{Binding ScopeCollection}"/>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1"/>
             <TabControl Grid.Row="0"
                         Grid.Column="2"
                         Grid.RowSpan="2"
-                        SelectedIndex="{Binding DGTabIndex, Converter={cnvt:TemplateGridIndexToIntegerConverter}}"
-                        Background="{DynamicResource SectionBackgroundBrush}">
+                        SelectedIndex="{Binding DGTabIndex, Converter={utilities:TemplateGridIndexToIntegerConverter}}"
+                        Background="{DynamicResource SectionBackgroundBrush}"
+                        Margin="0,6,0,0">
                 <TabItem Header="None" Visibility="Collapsed">
                 </TabItem>
-                <TabItem Header="Controlled Scope">
-                    <views:ControlledScopeView ViewModel="{Binding ElementName=root, Path=DataContext.ControlledScopeVM}"/>
-                </TabItem>
                 <TabItem Header="Systems">
-                    <grids:SystemsGridControl SystemsSource="{Binding Templates.SystemTemplates}"
-                                             ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                    <views:TypicalSystemsView ViewModel="{Binding ElementName=root, Path=DataContext.TypicalSystemsTab}"/>
                 </TabItem>
                 <TabItem Header="Equipment">
-                    <grids:EquipmentGridControl EquipmentSource="{Binding Templates.EquipmentTemplates}"
+                    <views:EquipmentGridView EquipmentSource="{Binding Templates.EquipmentTemplates}"
                                                ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
                 </TabItem>
                 <TabItem Header="Points">
-                    <grids:SubScopeGridControl SubScopeSource="{Binding Templates.SubScopeTemplates}"
-                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                    <views:SubScopeGridView SubScopeSource="{Binding Templates.SubScopeTemplates}"
+                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid.ChildVM}"/>
                 </TabItem>
                 <TabItem Header="Devices">
-                    <grids:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
-                                             ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
+                    <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
+                                             ViewModel="{Binding ScopeDataGrid.ChildVM.ChildVM}"
+                                                 SelectedDevice="{Binding ScopeDataGrid.ChildVM.ChildVM.SelectedDevice}"/>
                 </TabItem>
                 <TabItem Header="Controllers and Panels">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" Content="Controllers"/>
-                        <grids:ControllerGridControl ControllersSource="{Binding Templates.ControllerTemplates}"
-                                                     ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
-                                                     Grid.Row="1"
-                                                     Margin="5"/>
-                        <Label Grid.Row="0" Grid.Column="1" Content="Panels"/>
-                        <grids:PanelsGrid PanelsSource="{Binding Templates.PanelTemplates}"
-                                          ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"
-                                          Grid.Row="1" Grid.Column="1"
-                                          Margin="5"/>
-                    </Grid>
+                    <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsVM}"/>
                 </TabItem>
                 <TabItem Header="Materials">
-                    <cLib:MaterialView ViewModel="{Binding ElementName=root, Path=DataContext.MaterialsTab}"/>
+                    <views:MaterialView ViewModel="{Binding MaterialsTab}"/>
                 </TabItem>
                 <TabItem Header="Constants">
-                    <view:ConstantsView ViewModel="{Binding ElementName=root, Path=DataContext}"/>
+                    <views:ConstantsView ViewModel="{Binding ConstantsVM}"/>
                 </TabItem>
                 <TabItem Header="Settings">
-                    <cLibViews:SettingsView ViewModel="{Binding SettingsVM}"/>
+                    <views:SettingsView ViewModel="{Binding SettingsVM}"/>
                 </TabItem>
                 
             </TabControl>
             <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="1"/>
             <!--Right Tab Control-->
-            <cLib:EditTabControl Index="{Binding EditTab.TabIndex}"
+            <views:EditTabView Index="{Binding EditTab.TabIndex}"
                              ViewModel="{Binding ElementName=root, Path=DataContext.EditTab}"
-                             Grid.Column="4" Grid.Row="1" Grid.RowSpan="1"/>
+                             Grid.Column="4" Grid.Row="1" Grid.RowSpan="1" Margin="0,-2,0,0"/>
 
-            <cLibControls:StatusBarControl ViewModel="{Binding ElementName=root, Path=DataContext.StatusBarVM}"
+            <views:StatusBarView ViewModel="{Binding ElementName=root, Path=DataContext.StatusBarVM}"
                 Grid.Row="3"
                        Grid.ColumnSpan="6"/>
         </Grid>
