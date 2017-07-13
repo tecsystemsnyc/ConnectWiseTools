@@ -427,8 +427,8 @@ namespace TECUserControlLibrary.ViewModels
                 bool containsCost = ratedCostDictionary.ContainsKey(cost.Guid);
                 if (containsCost)
                 {
-                    RatedCostSubTotalCost -= lengthDictionary[cost.Guid].TotalCost;
-                    RatedCostSubTotalLabor -= lengthDictionary[cost.Guid].TotalLabor;
+                    RatedCostSubTotalCost -= ratedCostDictionary[cost.Guid].TotalCost;
+                    RatedCostSubTotalLabor -= ratedCostDictionary[cost.Guid].TotalLabor;
                     ratedCostDictionary[cost.Guid].Length -= length;
                     RatedCostSubTotalCost += ratedCostDictionary[cost.Guid].TotalCost;
                     RatedCostSubTotalLabor += ratedCostDictionary[cost.Guid].TotalLabor;
