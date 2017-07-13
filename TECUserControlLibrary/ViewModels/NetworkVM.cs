@@ -285,40 +285,26 @@ namespace TECUserControlLibrary.ViewModels
 
                     if (!daisyChain.Contains(netController.Controller))
                     {
+                        //Find the parent controller and connection
+                        TECController parentController = null;
+                        TECNetworkConnection parentConnection = null;
                         foreach (NetworkController controller in NetworkControllersVM.NetworkControllers)
                         {
-                            //Check for compatibility
-                            bool compatible = false;
-                            foreach(IOType thisType in netController.Controller.NetworkIO)
+                            foreach (TECConnection connection in controller.Controller.ChildrenConnections)
                             {
-                                foreach(IOType parentType in controller.Controller.NetworkIO)
+                                if (connection is TECNetworkConnection && (connection as TECNetworkConnection).ChildrenControllers == daisyChain)
                                 {
-                                    if (thisType == parentType)
-                                    {
-                                        compatible = true;
-                                        break;
-                                    }
+                                    parentConnection = (connection as TECNetworkConnection);
+                                    parentController = controller.Controller;
+                                    break;
                                 }
-                                if (compatible) break;
                             }
-
-                            if (compatible)
-                            {
-                                //Find the parent controller and connection and add the controller.
-                                bool connectionFound = false;
-                                foreach (TECConnection connection in controller.Controller.ChildrenConnections)
-                                {
-                                    if (connection is TECNetworkConnection && (connection as TECNetworkConnection).ChildrenControllers == daisyChain)
-                                    {
-                                        TECNetworkConnection parentConnection = (connection as TECNetworkConnection);
-                                        TECController parentController = controller.Controller;
-                                        parentController.AddController(netController.Controller, parentConnection);
-                                        connectionFound = true;
-                                        break;
-                                    }
-                                }
-                                if (connectionFound) break;
-                            }
+                            if (parentController != null) break;
+                        }
+                        //Check for compatibility and add
+                        if (netController.Controller.NetworkIO.Contains(parentConnection.IOType))
+                        {
+                            parentController.AddController(netController.Controller, parentConnection);
                         }
                     }
                 }
