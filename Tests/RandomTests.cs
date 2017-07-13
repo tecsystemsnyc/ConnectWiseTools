@@ -69,16 +69,13 @@ namespace Tests
             TECBid bid = TestHelper.CreateTestBid();
 
             var path = Path.GetTempFileName();
-
-            bid.Systems.Add(new TECSystem());
-            bid.Systems[0].AddInstance(bid);
-            bid.Systems[0].Equipment.Add(new TECEquipment());
+            
             DatabaseHelper.SaveNew(path, bid);
             
             bid = DatabaseHelper.Load(path) as TECBid;
 
             ChangeStack stack = new ChangeStack(bid);
-            bid.Systems[0].Equipment[0].SubScope.Add(new TECSubScope());
+            bid.RandomEquipment().SubScope.Add(new TECSubScope());
             DatabaseHelper.Update(path, stack, false);
 
             bid = DatabaseHelper.Load(path) as TECBid;
