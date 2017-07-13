@@ -148,6 +148,10 @@
                                                     Binding="{Binding ChildrenControllers.Count}"
                                                     IsReadOnly="True"
                                                     Width="Auto" MinWidth="100"/>
+                                <DataGridTextColumn Header="IO Type"
+                                                    Binding="{Binding IOType}"
+                                                    Width="Auto" MinWidth="100"
+                                                    IsReadOnly="True"/>
                                 <DataGridComboBoxColumn Header="Wire Type"
                                                         ItemsSource="{Binding Data.WireTypes, Source={StaticResource proxy}}"
                                                         DisplayMemberPath="Name"
