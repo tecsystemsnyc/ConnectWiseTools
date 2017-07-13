@@ -101,6 +101,24 @@ namespace EstimatingLibrary
                 Parameters.PropertyChanged += objectPropertyChanged;
             }
         }
+        public override TECLabor Labor
+        {
+            get
+            {
+                return base.Labor;
+            }
+
+            set
+            {
+                if(Labor != null)
+                {
+                    Labor.PropertyChanged -= objectPropertyChanged;
+                }
+                base.Labor = value;
+                Labor.PropertyChanged += objectPropertyChanged;
+                
+            }
+        }
 
         public ObservableCollection<TECScopeBranch> ScopeTree
         {

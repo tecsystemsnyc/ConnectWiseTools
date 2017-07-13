@@ -17,7 +17,7 @@ namespace EstimatingLibrary
         }
 
         protected TECLabor _labor;
-        public TECLabor Labor
+        virtual public TECLabor Labor
         {
             get { return _labor; }
             set
