@@ -1027,6 +1027,7 @@ namespace EstimatingLibrary
 
         public void RefreshReferences()
         {
+            watcher.Changed -= Object_PropertyChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += Object_PropertyChanged;
         }

@@ -1565,43 +1565,44 @@ namespace EstimatingUtilitiesLibrary
         private static TECSystem getSystemFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SystemTable.SystemID.Name].ToString());
-            TECSystem controlledScope = new TECSystem(guid);
+            TECSystem system = new TECSystem(guid);
 
-            controlledScope.Name = row[SystemTable.Name.Name].ToString();
-            controlledScope.Description = row[SystemTable.Description.Name].ToString();
-            controlledScope.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
-            controlledScope.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
-            controlledScope.ProposeEquipment = row[SystemTable.ProposeEquipment.Name].ToString().ToInt(0).ToBool();
+            system.Name = row[SystemTable.Name.Name].ToString();
+            system.Description = row[SystemTable.Description.Name].ToString();
+            system.Quantity = row[SystemTable.Quantity.Name].ToString().ToInt();
+            system.BudgetPriceModifier = row[SystemTable.BudgetPrice.Name].ToString().ToDouble();
+            system.ProposeEquipment = row[SystemTable.ProposeEquipment.Name].ToString().ToInt(0).ToBool();
             //var watch = System.Diagnostics.Stopwatch.StartNew();
-            controlledScope.Controllers = getControllersInSystem(guid);
+            system.Controllers = getControllersInSystem(guid);
             //watch.Stop();
             //Console.WriteLine("getControllersInSystem: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            controlledScope.Equipment = getEquipmentInSystem(guid);
+            system.Equipment = getEquipmentInSystem(guid);
             //watch.Stop();
             //Console.WriteLine("getEquipmentInSystem: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            controlledScope.Panels = getPanelsInSystem(guid);
+            system.Panels = getPanelsInSystem(guid);
             //watch.Stop();
             //Console.WriteLine("getPanelsInSystem: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            controlledScope.SystemInstances = getChildrenSystems(guid);
+            system.SystemInstances = getChildrenSystems(guid);
             //watch.Stop();
             //Console.WriteLine("getChildrenSystems: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            controlledScope.MiscCosts = getMiscInSystem(guid);
+            system.MiscCosts = getMiscInSystem(guid);
             //watch.Stop();
             //Console.WriteLine("getMiscInSystem: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            controlledScope.ScopeBranches = getScopeBranchesInSystem(guid);
+            system.ScopeBranches = getScopeBranchesInSystem(guid);
             // watch.Stop();
             // Console.WriteLine("getScopeBranchesInSystem: " + watch.ElapsedMilliseconds);
             // watch = System.Diagnostics.Stopwatch.StartNew();
-            getScopeChildren(controlledScope);
+            getScopeChildren(system);
             // watch.Stop();
             // Console.WriteLine("getScopeChildren: " + watch.ElapsedMilliseconds);
-
-            return controlledScope;
+            system.RefreshReferences();
+            
+            return system;
         }
 
         private static TECEquipment getEquipmentFromRow(DataRow row)
