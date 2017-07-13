@@ -44,7 +44,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock Text="Panel Associated Costs" Grid.Column="2" Foreground="Black" FontSize="20"/>
+        <TextBlock Text="Associated Costs" Grid.Column="2" Foreground="Black" FontSize="20"/>
 
         <!--Panel Associated Costs Summary-->
         <controls:CostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"

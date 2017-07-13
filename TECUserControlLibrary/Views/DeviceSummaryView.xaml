@@ -94,7 +94,7 @@
             <Border Margin="5" Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1"/>
         </Grid>
 
-        <TextBlock Text="Associated Costs (Not including subcontractor)" Grid.Column="2" Foreground="Black" FontSize="20"/>
+        <TextBlock Text="Associated Costs (Not including subcontractor)" Grid.Column="2" Grid.ColumnSpan="2" Foreground="Black" FontSize="20"/>
 
         <!--Device Associated Costs Summary-->
         <controls:CostsSummaryGridControl Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
