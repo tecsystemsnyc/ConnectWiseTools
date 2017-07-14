@@ -28,8 +28,8 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (!File.Exists(DBPath))
                 {
-                    DebugHandler.LogDebugMessage("Database File Created");
                     SQLiteConnection.CreateFile(DBPath);
+                    DebugHandler.LogDebugMessage("Database File Created");
                 }
 
                 Connection = buildConnection(DBPath);
