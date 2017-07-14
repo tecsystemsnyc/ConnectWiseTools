@@ -212,7 +212,6 @@ namespace EstimatingUtilitiesLibrary
             checkAndUpdateDB(typeof(TECTemplates));
             if (isCompatbile)
             {
-                createTemplateIndexes();
                 TECTemplates templates = new TECTemplates();
                 //var watch = System.Diagnostics.Stopwatch.StartNew();
                 templates = getTemplatesInfo();
@@ -3084,29 +3083,6 @@ namespace EstimatingUtilitiesLibrary
             }
         }
         #endregion
-
-        #region Indexes
-        static private string systemEquipmentIndex = "systemEquipmentIndex";
-        static private string systemEquipmentOrder = "systemEquipmentOrder";
-        static private string equipmentSubScopeOrder = "equipmentSubScopeOrder";
-
-        static private void createTemplateIndexes()
-        {
-            //SQLiteDB.nonQueryCommand(createIndex(systemEquipmentIndex,
-            //    SystemEquipmentTable.TableName, SystemEquipmentTable.SystemID.Name));
-            //SQLiteDB.nonQueryCommand(createIndex(systemEquipmentOrder,
-            //    SystemEquipmentTable.TableName, SystemEquipmentTable.ScopeIndex.Name));
-            //SQLiteDB.nonQueryCommand(createIndex(equipmentSubScopeOrder,
-            //    EquipmentSubScopeTable.TableName, EquipmentSubScopeTable.ScopeIndex.Name));
-        }
-
-        static private string createIndex(string index, string table, string field)
-        {
-            string command = string.Format("create index {0} on {1}({2})",
-                index, table, field);
-
-            return command;
-        }
-        #endregion
+        
     }
 }
