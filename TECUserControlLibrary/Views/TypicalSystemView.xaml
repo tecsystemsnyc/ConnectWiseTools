@@ -13,6 +13,13 @@
              x:Name="parent"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
@@ -39,6 +46,7 @@
             <controls:ControlledScopeGridControl SystemSource="{Binding ScopeSource}"
                                            SelectedItem="{Binding SelectedSystem}"
                                            ViewModel="{Binding}"
+                                                 UserCanAddRows="True"
                                            Grid.Row="1"/>
 
         </Grid>

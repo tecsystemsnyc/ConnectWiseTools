@@ -237,7 +237,7 @@ namespace TECUserControlLibrary
         private void TabControl_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (IsUnderTabHeader(e.OriginalSource as DependencyObject))
-                CommitTables(yourTabControl);
+                CommitTables(sender as TabControl);
         }
 
         private bool IsUnderTabHeader(DependencyObject control)
