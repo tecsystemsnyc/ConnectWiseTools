@@ -10,12 +10,6 @@ namespace EstimatingLibrary
     public abstract class TECScopeManager : TECObject
     {
         #region Properties
-        private Guid _guid;
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
-
         protected TECLabor _labor;
         virtual public TECLabor Labor
         {
@@ -42,9 +36,8 @@ namespace EstimatingLibrary
 
         #endregion
 
-        protected TECScopeManager(Guid guid)
+        protected TECScopeManager(Guid guid): base(guid)
         {
-            _guid = guid;
             _labor = new TECLabor();
             _catalogs = new TECCatalogs();
         }

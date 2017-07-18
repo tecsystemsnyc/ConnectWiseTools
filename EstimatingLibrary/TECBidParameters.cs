@@ -19,14 +19,7 @@ namespace EstimatingLibrary
         private bool _requiresBond;
         private bool _requiresWrapUp;
         private bool _hasBMS;
-
-        private Guid _guid;
-
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
-
+       
         public double Escalation
         {
             get { return _escalation; }
@@ -120,9 +113,8 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECBidParameters(Guid guid)
+        public TECBidParameters(Guid guid) : base(guid)
         {
-            _guid = guid;
             _isTaxExempt = false;
             _requiresBond = false;
             _requiresWrapUp = false;

@@ -10,9 +10,7 @@ namespace EstimatingLibrary
     public class TECLabor : TECObject
     {
         #region Properties
-
-        private Guid _guid;
-        public Guid Guid { get { return _guid; } }
+        
 
         #region PM
         private double _pmCoef;
@@ -380,7 +378,7 @@ namespace EstimatingLibrary
         #region Initializers
         public TECLabor() : this(Guid.NewGuid()) { }
 
-        public TECLabor(Guid guid)
+        public TECLabor(Guid guid) : base(guid)
         {
             _guid = guid;
 

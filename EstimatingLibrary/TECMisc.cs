@@ -7,8 +7,22 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, CostComponent
+    public class TECMisc : TECCost, CostComponent, DragDropComponent
     {
+        private int _quantity;
+
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                var temp = this.Copy();
+                _quantity = value;
+                NotifyPropertyChanged("Quantity", temp, this);
+
+            }
+        }
+
         public List<TECCost> Costs
         {
             get
@@ -42,7 +56,7 @@ namespace EstimatingLibrary
             return outCost;
         }
 
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public new object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECMisc(this);
         }

@@ -46,8 +46,6 @@ namespace EstimatingLibrary
         }
         private double _feetPerPoint;
 
-        public Guid Guid;
-
         public ObservableCollection<TECPage> Pages
         {
             get { return _pages; }
@@ -59,11 +57,10 @@ namespace EstimatingLibrary
         }
         private ObservableCollection<TECPage> _pages;
 
-        public TECDrawing(string name)
+        public TECDrawing(string name) : base(Guid.NewGuid())
         {
             _name = name;
             _description = "No description";
-            Guid = Guid.NewGuid();
             _pages = new ObservableCollection<TECPage>();
 
             Pages.CollectionChanged += Pages_CollectionChanged;
@@ -90,13 +87,13 @@ namespace EstimatingLibrary
         public TECDrawing(string name, string description, Guid guid, ObservableCollection<TECPage> pages) : this(name)
         {
             _description = description;
-            Guid = guid;
+            _guid = guid;
             _pages = pages;
         }
         public TECDrawing(TECDrawing drawingSource) : this(drawingSource.Name)
         {
             _description = drawingSource.Description;
-            Guid = drawingSource.Guid;
+            _guid = drawingSource.Guid;
             foreach (TECPage page in drawingSource.Pages)
             {
                 _pages.Add(new TECPage(page));

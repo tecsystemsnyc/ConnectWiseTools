@@ -52,23 +52,20 @@ namespace EstimatingLibrary
                 return getConnectableScope();
             }
         }
-        public Guid Guid;
         #endregion
 
         #region COnstructors
         public TECVisualScope() : this(Guid.NewGuid()) { }
-        public TECVisualScope(Guid guid)
+        public TECVisualScope(Guid guid) : base(guid)
         {
-            Guid = guid;
             _x = 0;
             _y = 0;
         }
-        public TECVisualScope(TECVisualScope vScope)
+        public TECVisualScope(TECVisualScope vScope) : base(vScope.Scope.Guid)
         {
             _scope = vScope.Scope;
             _x = vScope.X;
             _y = vScope.Y;
-            Guid = vScope.Guid;
         }
         #endregion
 
@@ -84,7 +81,7 @@ namespace EstimatingLibrary
             if (this.Scope is TECController)
             {
                 var controller = this.Scope as TECController;
-                foreach (IOType type in controller.getUniqueIO())
+                foreach (IOType type in controller.Type.getUniqueIO())
                 {
                     outScope.Add(Tuple.Create<TECObject, TECVisualScope, string>(controller, this, TECIO.convertTypeToString(type)));
                 }

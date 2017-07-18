@@ -12,7 +12,7 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private ObservableCollection<TECController> _childrenControllers;
-        private TECConnectionType _connectionType;
+        private TECElectricalMaterial _connectionType;
         private IOType _ioType;
 
         public ObservableCollection<TECController> ChildrenControllers
@@ -28,7 +28,7 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("PossibleIO");
             }
         }
-        public TECConnectionType ConnectionType
+        public TECElectricalMaterial ConnectionType
         {
             get { return _connectionType; }
             set

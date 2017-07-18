@@ -11,7 +11,6 @@ namespace EstimatingLibrary
     public class TECPage : TECObject
     {
         #region Poperties
-        public Guid Guid { get; set; }
         private string _path;
         public string Path
         {
@@ -51,9 +50,9 @@ namespace EstimatingLibrary
         private ObservableCollection<TECVisualConnection> _connections;
         #endregion
 
-        public TECPage(Guid guid)
+        public TECPage(Guid guid) : base(guid)
         {
-            Guid = guid;
+            _guid = guid;
             PageNum = 0;
             _path = "";
             _pageScope = new ObservableCollection<TECVisualScope>();
@@ -64,9 +63,8 @@ namespace EstimatingLibrary
 
         public TECPage() : this(Guid.NewGuid()) { }
 
-        public TECPage(TECPage page)
+        public TECPage(TECPage page) : base(page.Guid)
         {
-            Guid = page.Guid;
             _path = page.Path;
             _pageScope = new ObservableCollection<TECVisualScope>();
             _connections = new ObservableCollection<TECVisualConnection>();
