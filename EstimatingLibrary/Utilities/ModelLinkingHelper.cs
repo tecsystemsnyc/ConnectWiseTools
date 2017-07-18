@@ -407,7 +407,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECConnectionType> connectionTypes)
+        private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECElectricalMaterial> connectionTypes)
         {
             ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
             foreach (TECConnectionType deviceType in device.ConnectionTypes)
@@ -484,7 +484,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkConnectionToConduitType(TECConnection connection, ObservableCollection<TECConduitType> conduitTypes)
+        private static void linkConnectionToConduitType(TECConnection connection, ObservableCollection<TECElectricalMaterial> conduitTypes)
         {
             if (connection.ConduitType != null)
             {
@@ -499,7 +499,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECConnectionType> connectionTypes)
+        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECElectricalMaterial> connectionTypes)
         {
             foreach (TECConnectionType type in connectionTypes)
             {
@@ -601,8 +601,8 @@ namespace EstimatingLibrary.Utilities
         /// <param name="oldCharacteristicInstances">A previosuly linked scope dictionary, from the original system before copying</param>
         /// <param name="newCharacteristicInstances">The scope dictionary that must be linked</param>
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
-            ObservableItemToInstanceList<TECScope> oldCharacteristicInstances,
-            ObservableItemToInstanceList<TECScope> newCharacteristicInstances)
+            ObservableItemToInstanceList<TECObject> oldCharacteristicInstances,
+            ObservableItemToInstanceList<TECObject> newCharacteristicInstances)
         {
             foreach (var item in oldCharacteristicInstances.GetFullDictionary())
             {
@@ -674,9 +674,9 @@ namespace EstimatingLibrary.Utilities
         /// <param name="instances"></param>
         /// <param name="referenceDict"></param>
         /// <param name="characteristicList"></param>
-        private static void linkCharacteristicWithInstances(TECScope characteristic, IList instances,
+        private static void linkCharacteristicWithInstances(TECObject characteristic, IList instances,
             Dictionary<Guid, List<Guid>> referenceDict,
-            ObservableItemToInstanceList<TECScope> characteristicList)
+            ObservableItemToInstanceList<TECObject> characteristicList)
         {
             foreach (TECScope item in instances)
             {

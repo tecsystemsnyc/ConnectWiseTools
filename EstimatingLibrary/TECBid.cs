@@ -21,7 +21,7 @@ namespace EstimatingLibrary
 
         private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
         private ObservableCollection<TECSystem> _systems { get; set; }
-        private ObservableCollection<TECNote> _notes { get; set; }
+        private ObservableCollection<TECLabeled> _notes { get; set; }
         private ObservableCollection<TECExclusion> _exclusions { get; set; }
         private ObservableCollection<TECDrawing> _drawings { get; set; }
         private ObservableCollection<TECLocation> _locations { get; set; }
@@ -145,7 +145,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Systems", temp, this);
             }
         }
-        public ObservableCollection<TECNote> Notes
+        public ObservableCollection<TECLabeled> Notes
         {
             get { return _notes; }
             set
@@ -262,7 +262,7 @@ namespace EstimatingLibrary
             _estimator = "";
             _scopeTree = new ObservableCollection<TECScopeBranch>();
             _systems = new ObservableCollection<TECSystem>();
-            _notes = new ObservableCollection<TECNote>();
+            _notes = new ObservableCollection<TECLabeled>();
             _exclusions = new ObservableCollection<TECExclusion>();
             _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLocation>();
@@ -305,9 +305,9 @@ namespace EstimatingLibrary
             }
             foreach (string item in Defaults.Notes)
             {
-                var noteToAdd = new TECNote();
+                var noteToAdd = new TECLabeled();
                 noteToAdd.Text = item;
-                Notes.Add(new TECNote(noteToAdd));
+                Notes.Add(new TECLabeled(noteToAdd));
             }
             _parameters.Overhead = 20;
             _parameters.Profit = 20;
@@ -333,8 +333,8 @@ namespace EstimatingLibrary
             { ScopeTree.Add(new TECScopeBranch(branch)); }
             foreach (TECSystem system in bidSource.Systems)
             { Systems.Add(new TECSystem(system)); }
-            foreach (TECNote note in bidSource.Notes)
-            { Notes.Add(new TECNote(note)); }
+            foreach (TECLabeled note in bidSource.Notes)
+            { Notes.Add(new TECLabeled(note)); }
             foreach (TECExclusion exclusion in bidSource.Exclusions)
             { Exclusions.Add(new TECExclusion(exclusion)); }
             foreach (TECLocation location in bidSource.Locations)
@@ -485,8 +485,8 @@ namespace EstimatingLibrary
             { bid.ScopeTree.Add(branch.Copy() as TECScopeBranch); }
             foreach (TECSystem system in this.Systems)
             { bid.Systems.Add(system.Copy() as TECSystem); }
-            foreach (TECNote note in this.Notes)
-            { bid.Notes.Add(note.Copy() as TECNote); }
+            foreach (TECLabeled note in this.Notes)
+            { bid.Notes.Add(note.Copy() as TECLabeled); }
             foreach (TECExclusion exclusion in this.Exclusions)
             { bid.Exclusions.Add(exclusion.Copy() as TECExclusion); }
             foreach (TECLocation location in this.Locations)

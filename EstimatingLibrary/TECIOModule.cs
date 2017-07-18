@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECIOModule : TECCost
+    public class TECIOModule : TECHardware
     {
         private int _ioPerModule;
         public int IOPerModule
@@ -19,34 +19,18 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("IOPerModule", temp, this);
             }
         }
-
-        private TECManufacturer _manufacturer;
-        public TECManufacturer Manufacturer
-        {
-            get { return _manufacturer; }
-            set
-            {
-                var temp = this.Copy();
-                _manufacturer = value;
-                NotifyPropertyChanged("Manufacturer", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
-            }
-        }
-
-
-        public TECIOModule(Guid guid) : base(guid)
+        
+        public TECIOModule(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer)
         {
             _ioPerModule = 0;
         }
-        public TECIOModule() : this(Guid.NewGuid()) { }
-        public TECIOModule(TECIOModule ioModuleSource) : this()
+        public TECIOModule(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
+        public TECIOModule(TECIOModule ioModuleSource) : this(ioModuleSource.Manufacturer)
         {
-            copyPropertiesFromCost(this);
+            copyPropertiesFromHardware(this);
             _ioPerModule = ioModuleSource.IOPerModule;
-            _manufacturer = ioModuleSource.Manufacturer;
         }
-
-
+        
         public override object Copy()
         {
             var outObject = new TECIOModule(this.Guid);

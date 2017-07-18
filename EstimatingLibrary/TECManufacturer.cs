@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECManufacturer : TECScope
+    public class TECManufacturer : TECLabeled
     {
         #region Properties
         public double Multiplier
@@ -32,7 +32,7 @@ namespace EstimatingLibrary
 
         public TECManufacturer(TECManufacturer manSource) : this(manSource.Guid)
         {
-            _name = manSource.Name;
+            _label = manSource.Label;
             _multiplier = manSource.Multiplier;
         }
         #endregion //Constructors
@@ -43,11 +43,6 @@ namespace EstimatingLibrary
             TECManufacturer outMan = new TECManufacturer(this);
             outMan._guid = this.Guid;
             return outMan;
-        }
-
-        public override Object DragDropCopy(TECScopeManager scopeManager)
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

@@ -2126,7 +2126,7 @@ namespace EstimatingUtilitiesLibrary
 
             paragraph89.Append(paragraphProperties89);
             var notesParagraphs = new List<Paragraph>();
-            foreach (TECNote note in _bid.Notes)
+            foreach (TECLabeled note in _bid.Notes)
             {
                 Paragraph paragraph90 = new Paragraph() { RsidParagraphMarkRevision = "001B6681", RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
                 notesParagraphs.Add(paragraph90);

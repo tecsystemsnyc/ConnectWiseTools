@@ -885,9 +885,9 @@ namespace EstimatingUtilitiesLibrary
                 return null;
             }
         }
-        static private ObservableCollection<TECNote> getNotes()
+        static private ObservableCollection<TECLabeled> getNotes()
         {
-            ObservableCollection<TECNote> notes = new ObservableCollection<TECNote>();
+            ObservableCollection<TECLabeled> notes = new ObservableCollection<TECLabeled>();
             DataTable notesDT = SQLiteDB.getDataFromTable(NoteTable.TableName);
             foreach (DataRow row in notesDT.Rows)
             { notes.Add(getNoteFromRow(row)); }
@@ -1760,10 +1760,10 @@ namespace EstimatingUtilitiesLibrary
             branch.Tags = getTagsInScope(scopeBranchID);
             return branch;
         }
-        private static TECNote getNoteFromRow(DataRow row)
+        private static TECLabeled getNoteFromRow(DataRow row)
         {
             Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
-            var note = new TECNote(noteID);
+            var note = new TECLabeled(noteID);
             note.Text = row["NoteText"].ToString();
             return note;
         }
@@ -2093,7 +2093,7 @@ namespace EstimatingUtilitiesLibrary
                 saveScopeChildProperties(controller);
                 saveControllerChildProperties(controller);
             }
-            foreach (TECNote note in bid.Notes)
+            foreach (TECLabeled note in bid.Notes)
             { addObject(new StackItem(Change.Add, bid, note)); }
             foreach (TECExclusion exclusion in bid.Exclusions)
             { addObject(new StackItem(Change.Add, bid, exclusion)); }

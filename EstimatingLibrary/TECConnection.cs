@@ -13,16 +13,11 @@ namespace EstimatingLibrary
     public abstract class TECConnection : TECObject, CostComponent
     {
         #region Properties
-        protected Guid _guid;
         protected double _length;
         protected double _conduitLength;
         protected TECController _parentController;
-        protected TECConduitType _conduitType;
+        protected TECElectricalMaterial _conduitType;
 
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
         public double Length
         {
             get { return _length; }
@@ -52,7 +47,7 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("ParentController");
             }
         }
-        public TECConduitType ConduitType
+        public TECElectricalMaterial ConduitType
         {
             get { return _conduitType; }
             set
@@ -62,7 +57,7 @@ namespace EstimatingLibrary
                 _conduitType = value;
                 NotifyPropertyChanged("ConduitType", temp, this);
                 temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECConnection), typeof(TECConduitType));
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECConnection), typeof(TECElectricalMaterial));
             }
         }
 
@@ -70,9 +65,8 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors 
-        public TECConnection(Guid guid)
+        public TECConnection(Guid guid) : base(guid)
         {
-            _guid = guid;
             _length = 0;
             _conduitLength = 0;
         }
@@ -85,7 +79,7 @@ namespace EstimatingLibrary
             _length = connectionSource.Length;
             _conduitLength = connectionSource.ConduitLength;
             if (connectionSource.ConduitType != null)
-            { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
+            { _conduitType = connectionSource.ConduitType.Copy() as TECElectricalMaterial; }
         }
         #endregion //Constructors
     }

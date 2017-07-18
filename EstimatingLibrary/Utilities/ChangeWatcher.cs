@@ -38,7 +38,7 @@ namespace EstimatingLibrary.Utilities
             Bid.Parameters.PropertyChanged += Object_PropertyChanged;
             foreach (TECScopeBranch branch in Bid.ScopeTree)
             { registerScope(branch); }
-            foreach (TECNote note in Bid.Notes)
+            foreach (TECLabeled note in Bid.Notes)
             { note.PropertyChanged += Object_PropertyChanged; }
             foreach (TECExclusion exclusion in Bid.Exclusions)
             { exclusion.PropertyChanged += Object_PropertyChanged; }

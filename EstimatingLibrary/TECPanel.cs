@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECScope, CostComponent
+    public class TECPanel : TECLocated, CostComponent, DragDropComponent
     {
         #region Properties
         private TECPanelType _type;
@@ -88,7 +88,7 @@ namespace EstimatingLibrary
             outPanel._guid = _guid;
             return outPanel;
         }
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
             var outPanel = new TECPanel(this);
             ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);

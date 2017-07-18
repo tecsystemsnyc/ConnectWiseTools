@@ -311,13 +311,13 @@ namespace EstimatingUtilitiesLibrary
             cell.Add(paragraph);
             document.LastSection.Add(table);
         }
-        private static void createNotesAndExclusions(Document document, List<TECNote> notes, List<TECExclusion> exclusions)
+        private static void createNotesAndExclusions(Document document, List<TECLabeled> notes, List<TECExclusion> exclusions)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Notes:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
 
-            foreach (TECNote note in notes)
+            foreach (TECLabeled note in notes)
             {
                 paragraph = document.LastSection.AddParagraph();
                 paragraph.AddFormattedText("•   " + note.Text);

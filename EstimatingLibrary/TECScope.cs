@@ -10,17 +10,14 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECScope : TECObject, GuidObject
+    public abstract class TECScope : TECObject
     {
         #region Properties
 
         protected string _name;
         protected string _description;
-        protected Guid _guid;
-        protected int _quantity;
-        protected TECLocation _location;
 
-        protected ObservableCollection<TECTag> _tags;
+        protected ObservableCollection<TECLabeled> _tags;
         protected ObservableCollection<TECCost> _associatedCosts;
 
         public string Name
@@ -46,23 +43,8 @@ namespace EstimatingLibrary
 
             }
         }
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
 
-        public int Quantity
-        {
-            get { return _quantity; }
-            set
-            {
-                var temp = this.Copy();
-                _quantity = value;
-                NotifyPropertyChanged("Quantity", temp, this);
-
-            }
-        }
-        public ObservableCollection<TECTag> Tags
+        public ObservableCollection<TECLabeled> Tags
         {
             get { return _tags; }
             set
@@ -86,63 +68,32 @@ namespace EstimatingLibrary
                 AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
             }
         }
-
-        public TECLocation Location
-        {
-            get { return _location; }
-            set
-            {
-                var oldNew = Tuple.Create<Object, Object>(_location, value);
-                var temp = Copy();
-                _location = value;
-                NotifyPropertyChanged("Location", temp, this);
-                temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
-            }
-        }
-
-        //public abstract double MaterialCost { get; }
-        //public abstract double LaborCost { get; }
-
-        public void SetLocationFromParent(TECLocation location)
-        {
-            var oldNew = Tuple.Create<Object, Object>(_location, location);
-            _location = location;
-            RaisePropertyChanged("Location");
-            var temp = Copy();
-            NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
-        }
-
-        #endregion //Properties
+        
+        #endregion
 
         #region Constructors
-        public TECScope(Guid guid)
+        public TECScope(Guid guid) : base(guid)
         {
             _name = "";
             _description = "";
             _guid = guid;
 
-            _quantity = 1;
-            _tags = new ObservableCollection<TECTag>();
+            _tags = new ObservableCollection<TECLabeled>();
             _associatedCosts = new ObservableCollection<TECCost>();
             Tags.CollectionChanged += collectionChanged;
             AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
         }
 
-        abstract public Object DragDropCopy(TECScopeManager scopeManager);
-        #endregion //Constructors
+        #endregion 
 
         #region Methods
         protected void copyPropertiesFromScope(TECScope scope)
         {
             _name = scope.Name;
             _description = scope.Description;
-            _quantity = scope.Quantity;
-            if (scope.Location != null)
-            { _location = scope.Location as TECLocation; }
-            var tags = new ObservableCollection<TECTag>();
-            foreach (TECTag tag in scope.Tags)
-            { tags.Add(tag as TECTag); }
+            var tags = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled tag in scope.Tags)
+            { tags.Add(tag as TECLabeled); }
             _tags = tags;
             var associatedCosts = new ObservableCollection<TECCost>();
             foreach (TECCost cost in scope.AssociatedCosts)

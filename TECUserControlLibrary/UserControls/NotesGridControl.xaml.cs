@@ -23,9 +23,9 @@ namespace TECUserControlLibrary.UserControls
     public partial class NotesGridControl : UserControl
     {
 
-        public ObservableCollection<TECNote> NotesSource
+        public ObservableCollection<TECLabeled> NotesSource
         {
-            get { return (ObservableCollection<TECNote>)GetValue(NotesSourceProperty); }
+            get { return (ObservableCollection<TECLabeled>)GetValue(NotesSourceProperty); }
             set { SetValue(NotesSourceProperty, value); }
         }
 
@@ -33,8 +33,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the SystemSource dependency property
         /// </summary>
         public static readonly DependencyProperty NotesSourceProperty =
-            DependencyProperty.Register("NotesSource", typeof(ObservableCollection<TECNote>),
-              typeof(NotesGridControl), new PropertyMetadata(default(ObservableCollection<TECNote>)));
+            DependencyProperty.Register("NotesSource", typeof(ObservableCollection<TECLabeled>),
+              typeof(NotesGridControl), new PropertyMetadata(default(ObservableCollection<TECLabeled>)));
 
         public NotesGridControl()
         {

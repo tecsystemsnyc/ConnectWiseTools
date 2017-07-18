@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstimateBuilder", "EstimateBuilder\EstimateBuilder.csproj", "{600B62B8-38CD-47CD-885E-FC4D58052359}"
 EndProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstimatingLibrary", "Estima
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstimatingUtilitiesLibrary", "EstimatingUtilitiesLibrary\EstimatingUtilitiesLibrary.csproj", "{51A81226-21BE-421F-846E-84BFF88B0F0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scope Builder", "Scope Builder\Scope Builder.csproj", "{0F5E9CB0-DA6D-4E9E-BCD7-5B6A3F81B2BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScopeBuilder", "Scope Builder\ScopeBuilder.csproj", "{0F5E9CB0-DA6D-4E9E-BCD7-5B6A3F81B2BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TECUserControlLibrary", "TECUserControlLibrary\TECUserControlLibrary.csproj", "{22639A06-A7BA-483D-80DC-C9BD7157F0BA}"
 EndProject

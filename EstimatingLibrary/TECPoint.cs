@@ -12,10 +12,11 @@ namespace EstimatingLibrary
 
     public enum PointTypes { AI = 1, AO, BI, BO, Serial };
 
-    public class TECPoint : TECScope, PointComponent
+    public class TECPoint : TECLabeled, PointComponent
     {
         #region Properties
         private PointTypes _type;
+        private int _quantity;
 
         public PointTypes Type
         {
@@ -28,7 +29,17 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Type", temp, this);
             }
         }
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                var temp = this.Copy();
+                _quantity = value;
+                NotifyPropertyChanged("Quantity", temp, this);
 
+            }
+        }
         public string TypeString
         {
             get { return convertTypeToString(Type); }
@@ -50,7 +61,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getPointNumber();
+                return Quantity;
             }
         }
         #endregion //Properties
@@ -62,7 +73,8 @@ namespace EstimatingLibrary
         public TECPoint(TECPoint pointSource) : this()
         {
             _type = pointSource.Type;
-            this.copyPropertiesFromScope(pointSource);
+            _label = pointSource.Label;
+            _quantity = pointSource.Quantity;
         }
         #endregion //Constructors
 
@@ -73,18 +85,7 @@ namespace EstimatingLibrary
             outPoint._guid = Guid;
             return outPoint;
         }
-
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            TECPoint outPoint = new TECPoint(this);
-            ModelLinkingHelper.LinkScopeItem(outPoint, scopeManager);
-            return outPoint;
-        }
-
-        private int getPointNumber()
-        {
-            return Quantity;
-        }
+        
         #region Conversion Methods
         public static PointTypes convertStringToType(string type)
         {

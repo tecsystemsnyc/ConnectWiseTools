@@ -14,14 +14,13 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECCost, CostComponent
+    public class TECController : TECScope, CostComponent, DragDropComponent
     {
         #region Properties
         //---Stored---
         private TECNetworkConnection _parentConnection;
         private ObservableCollection<TECConnection> _childrenConnections;
-        private ObservableCollection<TECIO> _io;
-        private TECManufacturer _manufacturer;
+        private TECControllerType _type;
         private NetworkType _networkType;
         
         public TECNetworkConnection ParentConnection
@@ -48,26 +47,14 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("ChildNetworkConnections");
             }
         }
-        public ObservableCollection<TECIO> IO
+        public TECControllerType Type
         {
-            get { return _io; }
+            get { return _type; }
             set
             {
                 var temp = this.Copy();
-                IO.CollectionChanged -= IO_CollectionChanged;
-                _io = value;
-                NotifyPropertyChanged("IO", temp, this);
-                IO.CollectionChanged += IO_CollectionChanged;
-            }
-        }
-        public TECManufacturer Manufacturer
-        {
-            get { return _manufacturer; }
-            set
-            {
-                var temp = this.Copy();
-                _manufacturer = value;
-                NotifyPropertyChanged("Manufacturer", temp, this);
+                _type = value;
+                NotifyPropertyChanged("Type", temp, this);
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
@@ -89,69 +76,36 @@ namespace EstimatingLibrary
                 return getCosts();
             }
         }
-
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            outCosts.Add(this);
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            foreach(TECConnection connection in ChildrenConnections)
-            {
-                foreach(TECCost cost in connection.Costs)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            return outCosts;
-        }
-
-        public override double ExtendedCost
-        {
-            get { return Cost * Manufacturer.Multiplier; }
-        }
+        
         //---Derived---
         public ObservableCollection<IOType> AvailableIO
         {
             get { return getAvailableIO(); }
         }
-
         public ObservableCollection<IOType> NetworkIO
         {
             get
             { return getNetworkIO(); }
         }
-
         public bool IsGlobal;
 
         #endregion
 
         #region Constructors
-        public TECController(Guid guid, TECManufacturer manufacturer, bool isGlobal = true) : base(guid)
+        public TECController(Guid guid, TECControllerType type, bool isGlobal = true) : base(guid)
         {
             IsGlobal = isGlobal;
-            _cost = 0;
-            _io = new ObservableCollection<TECIO>();
+            _type = type;
             _childrenConnections = new ObservableCollection<TECConnection>();
-            _manufacturer = manufacturer;
             ChildrenConnections.CollectionChanged += collectionChanged;
-            IO.CollectionChanged += IO_CollectionChanged;
-            _type = CostType.TEC;
         }
 
-        public TECController(TECManufacturer manufacturer, bool isGlobal = true) : this(Guid.NewGuid(), manufacturer, isGlobal) { }
-        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Manufacturer)
+        public TECController(TECControllerType type, bool isGlobal = true) : this(Guid.NewGuid(), type, isGlobal) { }
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Type)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
             copyPropertiesFromScope(controllerSource);
-            foreach (TECIO io in controllerSource.IO)
-            {
-                TECIO ioToAdd = new TECIO(io);
-                _io.Add(new TECIO(io));
-            }
             foreach (TECConnection connection in controllerSource.ChildrenConnections)
             {
                 if (connection is TECSubScopeConnection)
@@ -168,36 +122,11 @@ namespace EstimatingLibrary
                     _childrenConnections.Add(connectionToAdd);
                 }
             }
-            _cost = controllerSource.Cost;
         }
 
         #endregion
 
         #region Event Handlers
-        private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (Object item in e.NewItems)
-                {
-                    if (item is TECIO)
-                    {
-                        NotifyPropertyChanged("Add", this, (item as TECObject).Copy());
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (Object item in e.OldItems)
-                {
-                    if (item is TECIO)
-                    {
-                        NotifyPropertyChanged("Remove", this, (item as TECObject).Copy());
-                    }
-                }
-            }
-        }
-
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -262,7 +191,7 @@ namespace EstimatingLibrary
                 return null;
             }
         }
-        public TECNetworkConnection AddController(TECController controller, TECConnectionType connectionType)
+        public TECNetworkConnection AddController(TECController controller, TECElectricalMaterial connectionType)
         {
             if (controller != this)
             {
@@ -413,7 +342,7 @@ namespace EstimatingLibrary
                 return ParentConnection.ParentController;
             }
         }
-        public void SetParentController(TECController controller, TECConnectionType connectionType)
+        public void SetParentController(TECController controller, TECElectricalMaterial connectionType)
         {
             if (ParentConnection != null)
             {
@@ -443,14 +372,8 @@ namespace EstimatingLibrary
         #region Methods
         public override Object Copy()
         {
-            TECController outController = new TECController(this.Guid, Manufacturer);
+            TECController outController = new TECController(this.Guid, this.Type);
             outController.copyPropertiesFromScope(this);
-            outController._cost = Cost;
-            outController._type = Type;
-            foreach (TECIO io in this.IO)
-            {
-                outController.IO.Add(io.Copy() as TECIO);
-            }
             foreach (TECConnection connection in ChildrenConnections)
             {
                 var outConnection = connection.Copy() as TECConnection;
@@ -460,7 +383,7 @@ namespace EstimatingLibrary
 
             return outController;
         }
-        public override Object DragDropCopy(TECScopeManager scopeManager)
+        public Object DragDropCopy(TECScopeManager scopeManager)
         {
             var outController = new TECController(this);
             ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
@@ -469,7 +392,7 @@ namespace EstimatingLibrary
         private ObservableCollection<IOType> getAvailableIO()
         {
             var availableIO = new ObservableCollection<IOType>();
-            foreach (TECIO type in this.IO)
+            foreach (TECIO type in this.Type.IO)
             {
                 for (var x = 0; x < type.Quantity; x++)
                 {
@@ -489,7 +412,7 @@ namespace EstimatingLibrary
         private ObservableCollection<IOType> getNetworkIO()
         {
             var outIO = new ObservableCollection<IOType>();
-            foreach (TECIO io in this.IO)
+            foreach (TECIO io in this.Type.IO)
             {
                 var type = io.Type;
                 if (type != IOType.AI && type != IOType.AO && type != IOType.DI && type != IOType.DO)
@@ -503,33 +426,24 @@ namespace EstimatingLibrary
 
             return outIO;
         }
-        public int NumberOfIOType(IOType ioType)
+        private List<TECCost> getCosts()
         {
-            int outNum = 0;
-
-            foreach (TECIO type in IO)
+            var outCosts = new List<TECCost>();
+            outCosts.Add(this.Type);
+            foreach (TECCost cost in AssociatedCosts)
             {
-                if (type.Type == ioType)
+                outCosts.Add(cost);
+            }
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                foreach (TECCost cost in connection.Costs)
                 {
-                    outNum = type.Quantity;
+                    outCosts.Add(cost);
                 }
             }
-
-            return outNum;
+            return outCosts;
         }
-        public List<IOType> getUniqueIO()
-        {
-            var outList = new List<IOType>();
 
-            foreach (TECIO io in this.IO)
-            {
-                if (!outList.Contains(io.Type))
-                {
-                    outList.Add(io.Type);
-                }
-            }
-            return outList;
-        }
         #endregion
     }
 }

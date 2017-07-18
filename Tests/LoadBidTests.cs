@@ -160,8 +160,8 @@ namespace Tests
             Guid expectedGuid = new Guid("50f3a707-fc1b-4eb3-9413-1dbde57b1d90");
             string expectedText = "Test Note";
 
-            TECNote actualNote = null;
-            foreach(TECNote note in actualBid.Notes)
+            TECLabeled actualNote = null;
+            foreach(TECLabeled note in actualBid.Notes)
             {
                 if (note.Guid == expectedGuid)
                 {

@@ -251,12 +251,12 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECNote> expected = new ObservableCollection<TECNote>();
-            foreach (TECNote item in Bid.Notes)
+            ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Notes)
             {
                 expected.Add(item);
             }
-            TECNote edit = new TECNote();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -266,7 +266,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECNote> actual = Bid.Notes;
+            ObservableCollection<TECLabeled> actual = Bid.Notes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1357,13 +1357,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECNote edit = new TECNote();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Notes.Add(edit);
-            var expected = new ObservableCollection<TECNote>();
-            foreach (TECNote item in Bid.Notes)
+            var expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Notes)
             {
                 expected.Add(item);
             }
@@ -1371,7 +1371,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECNote> actual = Bid.Notes;
+            ObservableCollection<TECLabeled> actual = Bid.Notes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

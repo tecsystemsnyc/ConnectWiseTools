@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface GuidObject
+    interface DragDropComponent
     {
-        Guid Guid { get; }
+        Object DragDropCopy(TECScopeManager scopeManager);
     }
 }

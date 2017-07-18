@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECScope, CostComponent, PointComponent
+    public class TECSubScope : TECLocated, CostComponent, PointComponent, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECDevice> _devices;
@@ -59,11 +59,11 @@ namespace EstimatingLibrary
             }
         }
 
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return getConnectionTypes(); }
         }
-        public List<TECConnectionType> AvailableConnections
+        public List<TECElectricalMaterial> AvailableConnections
         {
             get { return getAvailableConnectionTypes(); }
         }
@@ -98,13 +98,6 @@ namespace EstimatingLibrary
             {
                 outCosts.Add(dev);
                 foreach(TECCost cost in dev.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach(TECPoint point in Points)
-            {
-                foreach(TECCost cost in point.AssociatedCosts)
                 {
                     outCosts.Add(cost);
                 }
@@ -270,22 +263,22 @@ namespace EstimatingLibrary
             outScope._points = points;
             outScope.reSubscribeToCollections();
 
-            outScope.copyPropertiesFromScope(this);
+            outScope.copyPropertiesFromLocated(this);
             return outScope;
         }
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
             TECSubScope outScope = new TECSubScope(this);
             ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }
 
-        private ObservableCollection<TECConnectionType> getConnectionTypes()
+        private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
         {
-            var outTypes = new ObservableCollection<TECConnectionType>();
+            var outTypes = new ObservableCollection<TECElectricalMaterial>();
             foreach (TECDevice device in Devices)
             {
-                foreach(TECConnectionType type in device.ConnectionTypes)
+                foreach(TECElectricalMaterial type in device.ConnectionTypes)
                 {
                     outTypes.Add(type);
                 }
@@ -308,10 +301,10 @@ namespace EstimatingLibrary
             }
         }
 
-        private List<TECConnectionType> getAvailableConnectionTypes()
+        private List<TECElectricalMaterial> getAvailableConnectionTypes()
         {
-            var availableConnections = new List<TECConnectionType>();
-            foreach (TECConnectionType conType in this.ConnectionTypes)
+            var availableConnections = new List<TECElectricalMaterial>();
+            foreach (TECElectricalMaterial conType in this.ConnectionTypes)
             {
                 availableConnections.Add(conType);
             }

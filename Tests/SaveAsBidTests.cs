@@ -26,7 +26,7 @@ namespace Tests
         static TECManufacturer expectedManufacturer;
         static TECPoint expectedPoint;
         static TECScopeBranch expectedBranch;
-        static TECNote expectedNote;
+        static TECLabeled expectedNote;
         static TECExclusion expectedExclusion;
         static TECTag expectedTag;
         //static TECDrawing expectedDrawing;
@@ -47,7 +47,7 @@ namespace Tests
         static TECManufacturer actualManufacturer;
         static TECPoint actualPoint;
         static TECScopeBranch actualBranch;
-        static TECNote actualNote;
+        static TECLabeled actualNote;
         static TECExclusion actualExclusion;
         static TECTag actualTag;
         //static TECDrawing actualDrawing;
@@ -164,7 +164,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECNote note in actualBid.Notes)
+            foreach (TECLabeled note in actualBid.Notes)
             {
                 if (note.Guid == expectedNote.Guid)
                 {

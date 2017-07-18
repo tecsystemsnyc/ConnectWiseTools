@@ -69,7 +69,7 @@ namespace Tests
             branch2.Branches.Add(branch3);
 
             //Notes
-            var note1 = new TECNote();
+            var note1 = new TECLabeled();
             note1.Text = "Note 1";
 
             bid.Notes.Add(note1);
