@@ -138,6 +138,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (TemplatesFilePath == "" || !File.Exists(TemplatesFilePath))
             {
+                TemplatesFilePath = null;
                 string message = "No templates file loaded. Would you like to load templates?";
                 MessageBoxResult result = MessageBox.Show(message, "Load Templates?", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
@@ -152,7 +153,9 @@ namespace TECUserControlLibrary.ViewModels
                 else
                 {
                     templatesLoaded = false;
-                    TemplatesFilePath = "";
+                    TemplatesFilePath = null;
+                    ResetStatus();
+                    return;
                 }
             }
 
@@ -161,6 +164,7 @@ namespace TECUserControlLibrary.ViewModels
                 loadTemplates(TemplatesFilePath);
                 DebugHandler.LogDebugMessage("Finished loading templates.");
                 templatesLoaded = true;
+                ResetStatus();
             }
             else
             {
