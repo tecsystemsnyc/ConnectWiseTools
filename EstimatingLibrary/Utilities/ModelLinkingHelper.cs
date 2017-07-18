@@ -118,9 +118,9 @@ namespace EstimatingLibrary.Utilities
         }
 
         //Was LinkCharacteristicInstances()
-        public static void LinkTypicalInstanceDictionary(ObservableItemToInstanceList<TECScope> oldDictionary, TECSystem newTypical)
+        public static void LinkTypicalInstanceDictionary(ObservableItemToInstanceList<TECObject> oldDictionary, TECSystem newTypical)
         {
-            ObservableItemToInstanceList<TECScope> newCharacteristicInstances = new ObservableItemToInstanceList<TECScope>();
+            ObservableItemToInstanceList<TECObject> newCharacteristicInstances = new ObservableItemToInstanceList<TECObject>();
             foreach (TECSystem instance in newTypical.SystemInstances)
             {
                 linkCharacteristicCollections(newTypical.Equipment, instance.Equipment, oldDictionary, newCharacteristicInstances);
@@ -173,10 +173,6 @@ namespace EstimatingLibrary.Utilities
         {
             linkScopeChildrenToCatalogs(scope, bid.Catalogs);
             linkLocation(scope, bid.Locations);
-            foreach (TECPoint point in scope.Points)
-            {
-                LinkScopeItem(point, bid);
-            }
             foreach (TECDevice dev in scope.Devices)
             {
                 LinkScopeItem(dev, bid);
@@ -217,16 +213,37 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECIOModule module in catalogs.IOModules)
             {
-                linkModuleToManufacturer(module, catalogs.Manufacturers);
+                linkHardwareToManufacturers(module, catalogs.Manufacturers);
             }
-            foreach (TECConnectionType connectionType in catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial connectionType in catalogs.ConnectionTypes)
             {
                 linkElectricalMaterialComponentToCatalogs(connectionType, catalogs);
             }
-            foreach (TECConduitType conduitType in catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial conduitType in catalogs.ConduitTypes)
             {
                 linkElectricalMaterialComponentToCatalogs(conduitType, catalogs);
             }
+            foreach(TECPanelType panelType in catalogs.PanelTypes)
+            {
+                linkPanelTypesToManufacturer(panelType, catalogs);
+            }
+            foreach(TECControllerType controllerType in catalogs.ControllerTypes)
+            {
+                linkControllerTypeToCatalogs(controllerType, catalogs);
+            }
+        }
+
+        private static void linkControllerTypeToCatalogs(TECControllerType controllerType, TECCatalogs catalogs)
+        {
+            foreach (TECIO io in controllerType.IO)
+            {
+                linkIOToModule(io, catalogs.IOModules);
+            }
+        }
+
+        private static void linkPanelTypesToManufacturer(TECPanelType panelType, TECCatalogs catalogs)
+        {
+            throw new NotImplementedException();
         }
 
         private static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
@@ -265,26 +282,18 @@ namespace EstimatingLibrary.Utilities
         {
             linkScopeChildrenToCatalogs(ss, catalogs);
             linkSubScopeToDevices(ss, catalogs.Devices);
-            foreach(TECPoint point in ss.Points)
-            {
-                linkScopeChildrenToCatalogs(point, catalogs);
-            }
         }
 
         private static void linkDeviceToCatalogs(TECDevice dev, TECCatalogs catalogs)
         {
             linkDeviceToConnectionTypes(dev, catalogs.ConnectionTypes);
-            linkDeviceToManufacturer(dev, catalogs.Manufacturers);
+            linkHardwareToManufacturers(dev, catalogs.Manufacturers);
             linkScopeChildrenToCatalogs(dev, catalogs);
         }
 
         private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
         {
-            linkControllerToManufacturer(controller, catalogs.Manufacturers);
-            foreach(TECIO io in controller.IO)
-            {
-                linkIOToModule(io, catalogs.IOModules);
-            }
+            linkHardwareToManufacturers(controller.Type, catalogs.Manufacturers);
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 linkConnectionToCatalogs(connection, catalogs);
@@ -298,10 +307,10 @@ namespace EstimatingLibrary.Utilities
             linkScopeChildrenToCatalogs(panel, catalogs);
         }
 
-        private static void linkElectricalMaterialComponentToCatalogs(ElectricalMaterialComponent component, TECCatalogs catalogs)
+        private static void linkElectricalMaterialComponentToCatalogs(TECElectricalMaterial component, TECCatalogs catalogs)
         {
             linkScopeChildrenToCatalogs((component as TECScope), catalogs);
-            linkElectricalMaterialComponentToRatedCosts(component, catalogs.AssociatedCosts);
+            linkElectricalMaterialToRatedCosts(component, catalogs.AssociatedCosts);
         }
 
         private static void linkConnectionToCatalogs(TECConnection connection, TECCatalogs catalogs)
@@ -396,24 +405,13 @@ namespace EstimatingLibrary.Utilities
             linkTagsInScope(catalogs.Tags, scope);
         }
 
-        private static void linkModuleToManufacturer(TECIOModule module, ObservableCollection<TECManufacturer> manufacturers)
-        {
-            foreach (TECManufacturer manufacturer in manufacturers)
-            {
-                if (module.Manufacturer.Guid == manufacturer.Guid)
-                {
-                    module.Manufacturer = manufacturer;
-                }
-            }
-        }
-
         private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECElectricalMaterial> connectionTypes)
         {
-            ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
-            foreach (TECConnectionType deviceType in device.ConnectionTypes)
+            ObservableCollection<TECElectricalMaterial> linkedTypes = new ObservableCollection<TECElectricalMaterial>();
+            foreach (TECElectricalMaterial deviceType in device.ConnectionTypes)
             {
                 bool found = false;
-                foreach (TECConnectionType connectionType in connectionTypes)
+                foreach (TECElectricalMaterial connectionType in connectionTypes)
                 {
                     if (deviceType.Guid == connectionType.Guid)
                     {
@@ -430,18 +428,18 @@ namespace EstimatingLibrary.Utilities
             device.ConnectionTypes = linkedTypes;
         }
 
-        private static void linkDeviceToManufacturer(TECDevice device, ObservableCollection<TECManufacturer> manufacturers)
+        private static void linkHardwareToManufacturers(TECHardware hardware, ObservableCollection<TECManufacturer> manufacturers)
         {
             foreach (TECManufacturer man in manufacturers)
             {
-                if (device.Manufacturer.Guid == man.Guid)
+                if (hardware.Manufacturer.Guid == man.Guid)
                 {
-                    device.Manufacturer = man;
+                    hardware.Manufacturer = man;
                 }
             }
         }
 
-        private static void linkElectricalMaterialComponentToRatedCosts(ElectricalMaterialComponent component, ObservableCollection<TECCost> costs)
+        private static void linkElectricalMaterialToRatedCosts(TECElectricalMaterial component, ObservableCollection<TECCost> costs)
         {
             ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
             foreach (TECCost cost in costs)
@@ -454,21 +452,7 @@ namespace EstimatingLibrary.Utilities
             }
             component.RatedCosts = costsToAssign;
         }
-
-        private static void linkControllerToManufacturer(TECController controller, ObservableCollection<TECManufacturer> manufacturers)
-        {
-            foreach (TECManufacturer manufacturer in manufacturers)
-            {
-                if (controller.Manufacturer != null)
-                {
-                    if (controller.Manufacturer.Guid == manufacturer.Guid)
-                    {
-                        controller.Manufacturer = manufacturer;
-                    }
-                }
-            }
-        }
-
+        
         private static void linkIOToModule(TECIO io, ObservableCollection<TECIOModule> modules)
         {
             if (io.IOModule != null)
@@ -488,7 +472,7 @@ namespace EstimatingLibrary.Utilities
         {
             if (connection.ConduitType != null)
             {
-                foreach (TECConduitType type in conduitTypes)
+                foreach (TECElectricalMaterial type in conduitTypes)
                 {
                     if (connection.ConduitType.Guid == type.Guid)
                     {
@@ -501,7 +485,7 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECElectricalMaterial> connectionTypes)
         {
-            foreach (TECConnectionType type in connectionTypes)
+            foreach (TECElectricalMaterial type in connectionTypes)
             {
                 if (netConnect.ConnectionType.Guid == type.Guid)
                 {
@@ -547,9 +531,9 @@ namespace EstimatingLibrary.Utilities
         }
 
         #region Location Linking
-        private static void linkLocation(TECSystem system, ObservableCollection<TECLocation> locations)
+        private static void linkLocation(TECSystem system, ObservableCollection<TECLabeled> locations)
         {
-            linkLocation(system as TECScope, locations);
+            linkLocation(system as TECLocated, locations);
             foreach (TECSystem instance in system.SystemInstances)
             {
                 linkLocation(instance, locations);
@@ -560,21 +544,21 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkLocation(TECEquipment equipment, ObservableCollection<TECLocation> locations)
+        private static void linkLocation(TECEquipment equipment, ObservableCollection<TECLabeled> locations)
         {
-            linkLocation(equipment as TECScope, locations);
+            linkLocation(equipment as TECLocated, locations);
             foreach (TECSubScope ss in equipment.SubScope)
             {
                 linkLocation(ss, locations);
             }
         }
 
-        static private void linkLocation(TECScope scope, ObservableCollection<TECLocation> locations)
+        static private void linkLocation(TECLocated scope, ObservableCollection<TECLabeled> locations)
         {
             if (scope.Location != null)
             {
                 bool found = false;
-                foreach (TECLocation location in locations)
+                foreach (TECLabeled location in locations)
                 {
                     if (scope.Location.Guid == location.Guid)
                     {
@@ -711,13 +695,13 @@ namespace EstimatingLibrary.Utilities
             }
             scope.AssociatedCosts = costsToAssign;
         }
-        static private void linkTagsInScope(ObservableCollection<TECTag> tags, TECScope scope)
+        static private void linkTagsInScope(ObservableCollection<TECLabeled> tags, TECScope scope)
         {
-            ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
-            foreach (TECTag tag in scope.Tags)
+            ObservableCollection<TECLabeled> linkedTags = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled tag in scope.Tags)
             {
                 bool found = false;
-                foreach (TECTag referenceTag in tags)
+                foreach (TECLabeled referenceTag in tags)
                 {
                     if (tag.Guid == referenceTag.Guid)
                     {

@@ -202,7 +202,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECSystem(TECSystem source, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
+            ObservableItemToInstanceList<TECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = source.Guid; }

@@ -77,7 +77,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
+            ObservableItemToInstanceList<TECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
@@ -141,7 +141,7 @@ namespace EstimatingLibrary
         }
         private void SubScopeChanged(string name)
         {
-            else if (name == "PointNumber")
+            if (name == "PointNumber")
             {
                 RaisePropertyChanged("PointNumber");
             }
