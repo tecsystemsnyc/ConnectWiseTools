@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECScopeBranch : TECScope
+    public class TECScopeBranch : TECLabeled
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
         private ObservableCollection<TECScopeBranch> _branches;
@@ -41,7 +41,7 @@ namespace EstimatingLibrary
             {
                 Branches.Add(new TECScopeBranch(branch));
             }
-            this.copyPropertiesFromScope(scopeBranchSource);
+            _label = scopeBranchSource.Label;
         }
         #endregion //Constructors
 
@@ -49,22 +49,16 @@ namespace EstimatingLibrary
         {
             TECScopeBranch outScope = new TECScopeBranch();
             outScope._guid = Guid;
+            outScope._label = Label;
 
             foreach (TECScopeBranch branch in this.Branches)
             {
                 outScope.Branches.Add(branch.Copy() as TECScopeBranch);
             }
-            this.copyPropertiesFromScope(this);
 
             return outScope;
         }
-
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            TECScopeBranch outScope = new TECScopeBranch(this);
-            return outScope;
-        }
-
+        
         private void Branches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

@@ -8,17 +8,13 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECCost
+    public class TECDevice : TECHardware, DragDropComponent
     {
         #region Properties
-        private ObservableCollection<TECConnectionType> _connectionTypes;
+        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
         private IOType _ioType;
-        private TECManufacturer _manufacturer;
-        public override double ExtendedCost
-        {
-            get { return Cost * Manufacturer.Multiplier; }
-        }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
@@ -36,7 +32,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        
         public IOType IOType
         {
             get { return _ioType; }
@@ -48,36 +43,23 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        public TECManufacturer Manufacturer
-        {
-            get { return _manufacturer; }
-            set
-            {
-                var temp = this.Copy();
-                _manufacturer = value;
-                NotifyPropertyChanged("Manufacturer", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
-            }
-        }
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(Guid guid, ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : base(guid)
+        public TECDevice(Guid guid, ObservableCollection<TECElectricalMaterial> connectionTypes, TECManufacturer manufacturer) : base(guid, manufacturer)
         {
             _cost = 0;
             _connectionTypes = connectionTypes;
-            _manufacturer = manufacturer;
             _type = CostType.TEC;
             ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
         }
-        public TECDevice(ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
+        public TECDevice(ObservableCollection<TECElectricalMaterial> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
 
         //Copy Constructor
         public TECDevice(TECDevice deviceSource)
             : this(deviceSource.Guid, deviceSource.ConnectionTypes, deviceSource.Manufacturer)
         {
-            this.copyPropertiesFromScope(deviceSource);
-            _cost = deviceSource.Cost;
+            this.copyPropertiesFromHardware(deviceSource);
             _ioType = deviceSource.IOType;
         }
         #endregion //Constructors
@@ -89,7 +71,7 @@ namespace EstimatingLibrary
             return outDevice;
         }
 
-        public override Object DragDropCopy(TECScopeManager scopeManager)
+        public new Object DragDropCopy(TECScopeManager scopeManager)
         {
             foreach(TECDevice device in scopeManager.Catalogs.Devices)
             {

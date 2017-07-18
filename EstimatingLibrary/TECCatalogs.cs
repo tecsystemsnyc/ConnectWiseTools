@@ -9,14 +9,15 @@ namespace EstimatingLibrary
 {
     public class TECCatalogs : TECObject
     {
-        private ObservableCollection<TECConnectionType> _connectionTypes;
-        private ObservableCollection<TECConduitType> _conduitTypes;
+        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
+        private ObservableCollection<TECElectricalMaterial> _conduitTypes;
         private ObservableCollection<TECCost> _associatedCosts;
         private ObservableCollection<TECPanelType> _panelTypes;
+        private ObservableCollection<TECControllerType> _controllerTypes;
         private ObservableCollection<TECIOModule> _ioModules;
         private ObservableCollection<TECDevice> _devices;
         private ObservableCollection<TECManufacturer> _manufacturers;
-        private ObservableCollection<TECTag> _tags;
+        private ObservableCollection<TECLabeled> _tags;
 
         public ObservableCollection<TECIOModule> IOModules
         {
@@ -66,7 +67,20 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("PanelTypes", temp, this);
             }
         }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        public ObservableCollection<TECControllerType> ControllerTypes
+        {
+            
+            get { return _controllerTypes; }
+            set
+            {
+                var temp = this.Copy();
+                PanelTypes.CollectionChanged -= CollectionChanged;
+                _controllerTypes = value;
+                ControllerTypes.CollectionChanged += CollectionChanged;
+                NotifyPropertyChanged("ControllerTypes", temp, this);
+            }
+        }
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
@@ -78,7 +92,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("ConnectionTypes", temp, this);
             }
         }
-        public ObservableCollection<TECConduitType> ConduitTypes
+        public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {
             get { return _conduitTypes; }
             set
@@ -104,7 +118,7 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("AssociatedCosts", temp, this);
             }
         }
-        public ObservableCollection<TECTag> Tags
+        public ObservableCollection<TECLabeled> Tags
         {
             get { return _tags; }
             set
@@ -121,21 +135,22 @@ namespace EstimatingLibrary
 
         public Action<TECObject> ScopeChildRemoved;
 
-        public TECCatalogs()
+        public TECCatalogs() : base(Guid.NewGuid())
         {
             instantiateCOllections();
         }
 
         private void instantiateCOllections()
         {
-            _conduitTypes = new ObservableCollection<TECConduitType>();
-            _connectionTypes = new ObservableCollection<TECConnectionType>();
+            _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
+            _connectionTypes = new ObservableCollection<TECElectricalMaterial>();
             _associatedCosts = new ObservableCollection<TECCost>();
             _panelTypes = new ObservableCollection<TECPanelType>();
+            _controllerTypes = new ObservableCollection<TECControllerType>();
             _ioModules = new ObservableCollection<TECIOModule>();
             _devices = new ObservableCollection<TECDevice>();
             _manufacturers = new ObservableCollection<TECManufacturer>();
-            _tags = new ObservableCollection<TECTag>();
+            _tags = new ObservableCollection<TECLabeled>();
 
             registerInitialCollectionChanges();
         }
@@ -145,6 +160,7 @@ namespace EstimatingLibrary
             ConnectionTypes.CollectionChanged += CollectionChanged;
             AssociatedCosts.CollectionChanged += CollectionChanged;
             PanelTypes.CollectionChanged += CollectionChanged;
+            ControllerTypes.CollectionChanged += CollectionChanged;
             IOModules.CollectionChanged += CollectionChanged;
             Devices.CollectionChanged += CollectionChanged;
             Manufacturers.CollectionChanged += CollectionChanged;
@@ -159,12 +175,12 @@ namespace EstimatingLibrary
             TECCatalogs catalogs = new TECCatalogs();
             foreach (TECCost cost in this.AssociatedCosts)
             { catalogs.AssociatedCosts.Add(cost.Copy() as TECCost); }
-            foreach (TECConduitType conduitType in this.ConduitTypes)
-            { catalogs.ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
-            foreach (TECConnectionType connectionType in this.ConnectionTypes)
-            { catalogs.ConnectionTypes.Add(connectionType.Copy() as TECConnectionType); }
-            foreach (TECTag tag in this.Tags)
-            { catalogs.Tags.Add(tag.Copy() as TECTag); }
+            foreach (TECElectricalMaterial conduitType in this.ConduitTypes)
+            { catalogs.ConduitTypes.Add(conduitType.Copy() as TECElectricalMaterial); }
+            foreach (TECElectricalMaterial connectionType in this.ConnectionTypes)
+            { catalogs.ConnectionTypes.Add(connectionType.Copy() as TECElectricalMaterial); }
+            foreach (TECLabeled tag in this.Tags)
+            { catalogs.Tags.Add(tag.Copy() as TECLabeled); }
             foreach (TECManufacturer manufacturer in this.Manufacturers)
             { catalogs.Manufacturers.Add(manufacturer.Copy() as TECManufacturer); }
             foreach (TECDevice device in this.Devices)

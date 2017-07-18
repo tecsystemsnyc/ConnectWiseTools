@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,14 @@ namespace EstimatingLibrary
 {
     public enum CostType { None, TEC, Electrical }
 
-    public class TECCost : TECScope
+    public class TECCost : TECScope, DragDropComponent
     { 
         #region Properties
 
         protected double _cost;
+        protected double _labor;
+        protected CostType _type;
+        
         public double Cost
         {
             get { return _cost; }
@@ -24,13 +28,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalCost");
             }
         }
-
-        virtual public double ExtendedCost
-        {
-            get { return Cost; }
-        }
-
-        protected double _labor;
         public double Labor
         {
             get { return _labor; }
@@ -42,8 +39,6 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("TotalLabor");
             }
         }
-
-        protected CostType _type;
         public CostType Type
         {
             get { return _type; }
@@ -54,17 +49,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged("Type", temp, this);
             }
         }
-
-        public double TotalCost
-        {
-            get { return Cost * Quantity; }
-        }
-
-        public double TotalLabor
-        {
-            get { return Labor * Quantity; }
-        }
-
         #endregion
 
         #region Constructors
@@ -73,7 +57,6 @@ namespace EstimatingLibrary
             _cost = 0;
             _labor = 0;
             _type = 0;
-            base.PropertyChanged += TECCost_PropertyChanged;
         }
 
         public TECCost() : this(Guid.NewGuid()) { }
@@ -95,18 +78,10 @@ namespace EstimatingLibrary
             return outCost;
         }
 
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
             return this.Copy();
         }
-
-        private void TECCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Quantity")
-            {
-                RaisePropertyChanged("TotalCost");
-                RaisePropertyChanged("TotalLabor");
-            }
-        }
+        
     }
 }

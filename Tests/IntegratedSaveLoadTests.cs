@@ -2209,7 +2209,7 @@ namespace Tests
         public void Save_Bid_Add_Note()
         {
             //Act
-            TECNote expectedNote = new TECNote();
+            TECLabeled expectedNote = new TECLabeled();
             expectedNote.Text = "New Note";
             bid.Notes.Add(expectedNote);
 
@@ -2217,8 +2217,8 @@ namespace Tests
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECNote actualNote = null;
-            foreach (TECNote note in actualBid.Notes)
+            TECLabeled actualNote = null;
+            foreach (TECLabeled note in actualBid.Notes)
             {
                 if (note.Guid == expectedNote.Guid)
                 {
@@ -2236,7 +2236,7 @@ namespace Tests
         {
             //Act
             int oldNumNotes = bid.Notes.Count;
-            TECNote noteToRemove = bid.Notes[0];
+            TECLabeled noteToRemove = bid.Notes[0];
             bid.Notes.Remove(noteToRemove);
 
             DatabaseHelper.Update(path, testStack, false);
@@ -2244,7 +2244,7 @@ namespace Tests
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
-            foreach (TECNote note in actualBid.Notes)
+            foreach (TECLabeled note in actualBid.Notes)
             {
                 if (note.Guid == noteToRemove.Guid) Assert.Fail();
             }
@@ -2256,15 +2256,15 @@ namespace Tests
         public void Save_Bid_Note_Text()
         {
             //Act
-            TECNote expectedNote = bid.Notes[0];
+            TECLabeled expectedNote = bid.Notes[0];
             expectedNote.Text = "Test Save Text";
 
             DatabaseHelper.Update(path, testStack, false);
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECNote actualNote = null;
-            foreach (TECNote note in actualBid.Notes)
+            TECLabeled actualNote = null;
+            foreach (TECLabeled note in actualBid.Notes)
             {
                 if (note.Guid == expectedNote.Guid)
                 {

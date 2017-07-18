@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     {
         private Dictionary<T, List<T>> charactersticInstances;
 
-        public ObservableItemToInstanceList()
+        public ObservableItemToInstanceList() : base(Guid.NewGuid())
         {
             charactersticInstances = new Dictionary<T, List<T>>();
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConnectionType : TECCost, ElectricalMaterialComponent
+    public class TECElectricalMaterial : TECCost
     {
         #region Properties
         private ObservableCollection<TECCost> _ratedCosts;
@@ -26,20 +26,18 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECConnectionType(Guid guid) : base(guid)
+        public TECElectricalMaterial(Guid guid) : base(guid)
         {
-            _cost = 0;
-            _labor = 0;
             _ratedCosts = new ObservableCollection<TECCost>();
             _type = CostType.Electrical;
             RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
         }
-        public TECConnectionType() : this(Guid.NewGuid()) { }
-        public TECConnectionType(TECConnectionType connectionTypeSource) : this()
+        public TECElectricalMaterial() : this(Guid.NewGuid()) { }
+        public TECElectricalMaterial(TECElectricalMaterial materialSource) : this()
         {
-            copyPropertiesFromCost(connectionTypeSource);
+            copyPropertiesFromCost(materialSource);
             var ratedCosts = new ObservableCollection<TECCost>();
-            foreach (TECCost cost in connectionTypeSource.RatedCosts)
+            foreach (TECCost cost in materialSource.RatedCosts)
             { ratedCosts.Add(cost as TECCost); }
             RatedCosts.CollectionChanged -= RatedCosts_CollectionChanged;
             _ratedCosts = ratedCosts;
@@ -48,7 +46,7 @@ namespace EstimatingLibrary
 
         public override object Copy()
         {
-            var outType = new TECConnectionType();
+            var outType = new TECElectricalMaterial();
             outType._guid = this._guid;
             outType.copyPropertiesFromCost(this);
             var ratedCosts = new ObservableCollection<TECCost>();
@@ -58,10 +56,6 @@ namespace EstimatingLibrary
             outType.RatedCosts.CollectionChanged += outType.RatedCosts_CollectionChanged;
 
             return outType;
-        }
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            throw new NotImplementedException();
         }
 
         private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

@@ -169,7 +169,7 @@ namespace EstimatingUtilitiesLibrary
     public class NoteTable : TableBase
     {
         public static new string TableName = "TECNote";
-        public static Type ObjectType = typeof(TECNote);
+        public static Type ObjectType = typeof(TECLabeled);
 
 
         public static TableField NoteID = new TableField("NoteID", "TEXT", ObjectType.GetProperty("Guid"));

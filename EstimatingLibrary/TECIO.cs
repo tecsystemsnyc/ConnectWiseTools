@@ -23,11 +23,6 @@ namespace EstimatingLibrary
     public class TECIO : TECObject
     {
         #region Properties
-        private Guid _guid;
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
 
         private IOType _type;
         public IOType Type
@@ -70,9 +65,8 @@ namespace EstimatingLibrary
 
         #endregion
 
-        public TECIO(Guid guid)
+        public TECIO(Guid guid) : base(guid)
         {
-            _guid = guid;
             _quantity = 1;
         }
 

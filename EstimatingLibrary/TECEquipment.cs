@@ -9,7 +9,7 @@ using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECScope, CostComponent, PointComponent
+    public class TECEquipment : TECLocated, CostComponent, PointComponent, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
@@ -30,66 +30,7 @@ namespace EstimatingLibrary
                 subscribeToSubScope();
             }
         }
-
-        public double BudgetUnitPrice
-        {
-            get { return _budgetUnitPrice; }
-            set
-            {
-                var temp = this.Copy();
-                if (value < 0)
-                {
-                    _budgetUnitPrice = -1;
-                }
-                else
-                {
-                    _budgetUnitPrice = value;
-                }
-                NotifyPropertyChanged("BudgetUnitPrice", temp, this);
-                RaisePropertyChanged("TotalBudgetPrice");
-            }
-        }
-        private double _budgetUnitPrice;
-
-        new public int Quantity
-        {
-            get { return _quantity; }
-            set
-            {
-                var temp = this.Copy();
-                _quantity = value;
-                RaisePropertyChanged("TotalBudgetPrice");
-                NotifyPropertyChanged("Quantity", temp, this);
-            }
-        }
-        public int SubScopeQuantity
-        {
-            get
-            {
-                int quantitySS = 0;
-                foreach (TECSubScope ss in SubScope)
-                {
-                    quantitySS += ss.Quantity;
-                }
-                return quantitySS;
-            }
-        }
-
-        public double TotalBudgetPrice
-        {
-            get
-            {
-                if (Quantity > 0)
-                {
-                    return (Quantity * BudgetUnitPrice);
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-        }
-
+        
         public int PointNumber
         {
             get
@@ -105,7 +46,6 @@ namespace EstimatingLibrary
                 return getCosts();
             }
         }
-
         private List<TECCost> getCosts()
         {
             var outCosts = new List<TECCost>();
@@ -128,7 +68,6 @@ namespace EstimatingLibrary
         #region Constructors
         public TECEquipment(Guid guid) : base(guid)
         {
-            _budgetUnitPrice = -1;
             _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
             base.PropertyChanged += TECEquipment_PropertyChanged;
@@ -138,7 +77,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
+            ObservableItemToInstanceList<TECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
@@ -148,8 +87,7 @@ namespace EstimatingLibrary
                 characteristicReference?.AddItem(subScope,toAdd);
                 SubScope.Add(toAdd);
             }
-            _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
-            this.copyPropertiesFromScope(equipmentSource);
+            copyPropertiesFromScope(equipmentSource);
             
         }
         #endregion //Constructors
@@ -161,13 +99,11 @@ namespace EstimatingLibrary
             outEquip._guid = this.Guid;
             foreach (TECSubScope subScope in this.SubScope)
             { outEquip.SubScope.Add(subScope.Copy() as TECSubScope); }
-            outEquip._budgetUnitPrice = this.BudgetUnitPrice;
-
             outEquip.copyPropertiesFromScope(this);
             return outEquip;
         }
 
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
             TECEquipment outEquip = new TECEquipment(this);
             ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
@@ -205,11 +141,7 @@ namespace EstimatingLibrary
         }
         private void SubScopeChanged(string name)
         {
-            if (name == "Quantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-            }
-            else if (name == "PointNumber")
+            if (name == "PointNumber")
             {
                 RaisePropertyChanged("PointNumber");
             }

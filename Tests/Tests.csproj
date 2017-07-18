@@ -151,9 +151,9 @@
       <Project>{51a81226-21be-421f-846e-84bff88b0f0f}</Project>
       <Name>EstimatingUtilitiesLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scope Builder\Scope Builder.csproj">
+    <ProjectReference Include="..\Scope Builder\ScopeBuilder.csproj">
       <Project>{0f5e9cb0-da6d-4e9e-bcd7-5b6a3f81b2bf}</Project>
-      <Name>Scope Builder</Name>
+      <Name>ScopeBuilder</Name>
     </ProjectReference>
     <ProjectReference Include="..\TECUserControlLibrary\TECUserControlLibrary.csproj">
       <Project>{22639a06-a7ba-483d-80dc-c9bd7157f0ba}</Project>

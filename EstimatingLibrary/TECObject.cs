@@ -9,6 +9,15 @@ namespace EstimatingLibrary
 {
     public abstract class TECObject : INotifyPropertyChanged
     {
+        #region Properties
+        protected Guid _guid;
+        
+        public Guid Guid
+        {
+            get { return _guid; }
+        }
+        #endregion
+
         #region Property Changed
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -29,8 +38,15 @@ namespace EstimatingLibrary
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        abstract public Object Copy();
         #endregion //Property Changed
+
+        public TECObject(Guid guid)
+        {
+            _guid = guid;
+        }
+
+        #region Methods
+        abstract public Object Copy();
+        #endregion
     }
 }
