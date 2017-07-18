@@ -207,11 +207,7 @@ namespace EstimatingLibrary
                 return getTotalPrice(bid);
             }
         }
-
-        public double BudgetPrice
-        {
-            get { return getBudgetPrice(bid); }
-        }
+        
         public int TotalPointNumber
         {
             get
@@ -234,7 +230,7 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECEstimator(TECBid Bid)
+        public TECEstimator(TECBid Bid) : base(Guid.NewGuid())
         {
             bid = Bid;
             getInitialValues();
@@ -475,7 +471,7 @@ namespace EstimatingLibrary
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        tecCost.Cost += cost.ExtendedCost;
+                        tecCost.Cost += cost.Cost;
                         tecCost.Labor += cost.Labor;
                         tecChanged = true;
                     }
@@ -509,7 +505,7 @@ namespace EstimatingLibrary
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        tecCost.Cost -= cost.ExtendedCost;
+                        tecCost.Cost -= cost.Cost;
                         tecCost.Labor -= cost.Labor;
                         tecChanged = true;
                     }
@@ -951,24 +947,7 @@ namespace EstimatingLibrary
             }
             return outPrice;
         }
-
-        #region Budgeting
-        /// <summary>
-        /// Returns the budget price based on the user-assigned values in systems
-        /// </summary>
-        public double getBudgetPrice(TECBid bid)
-        {
-            double price = 0;
-            foreach (TECSystem system in bid.Systems)
-            {
-                if (system.TotalBudgetPrice >= 0)
-                {
-                    price += system.TotalBudgetPrice;
-                }
-            }
-            return price;
-        }
-        #endregion
+        
         #region Metrics
         /// <summary>
         /// Returns the final price per point 

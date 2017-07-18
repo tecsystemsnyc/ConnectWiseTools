@@ -157,7 +157,7 @@ namespace EstimatingLibrary
 
         private void scopeChildRemoved(TECObject child)
         {
-            foreach (TECConnectionType type in Catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial type in Catalogs.ConnectionTypes)
             {
                 removeChildFromScope(type, child);
                 TECCost cost = child as TECCost;
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
                     type.RatedCosts.Remove(cost);
                 }
             }
-            foreach (TECConduitType type in Catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial type in Catalogs.ConduitTypes)
             {
                 removeChildFromScope(type, child);
                 TECCost cost = child as TECCost;
@@ -187,10 +187,6 @@ namespace EstimatingLibrary
             {
                 removeChildFromScope(dev, child);
             }
-            foreach (TECManufacturer man in Catalogs.Manufacturers)
-            {
-                removeChildFromScope(man, child);
-            }
             foreach (TECSystem sys in SystemTemplates)
             {
                 removeChildFromScope(sys, child);
@@ -200,10 +196,6 @@ namespace EstimatingLibrary
                     foreach(TECSubScope ss in equip.SubScope)
                     {
                         removeChildFromScope(ss, child);
-                        foreach (TECPoint point in ss.Points)
-                        {
-                            removeChildFromScope(point, child);
-                        }
                     }
                 }
                 foreach(TECSystem instance in sys.SystemInstances)
@@ -215,10 +207,6 @@ namespace EstimatingLibrary
                         foreach (TECSubScope ss in equip.SubScope)
                         {
                             removeChildFromScope(ss, child);
-                            foreach (TECPoint point in ss.Points)
-                            {
-                                removeChildFromScope(point, child);
-                            }
                         }
                     }
                 }
@@ -229,19 +217,11 @@ namespace EstimatingLibrary
                 foreach (TECSubScope ss in equip.SubScope)
                 {
                     removeChildFromScope(ss, child);
-                    foreach (TECPoint point in ss.Points)
-                    {
-                        removeChildFromScope(point, child);
-                    }
                 }
             }
             foreach(TECSubScope ss in SubScopeTemplates)
             {
                 removeChildFromScope(ss, child);
-                foreach (TECPoint point in ss.Points)
-                {
-                    removeChildFromScope(point, child);
-                }
             }
             foreach(TECController controller in ControllerTemplates)
             {
@@ -256,7 +236,7 @@ namespace EstimatingLibrary
         private void removeChildFromScope(TECScope scope, TECObject child)
         {
             TECCost cost = child as TECCost;
-            TECTag tag = child as TECTag;
+            TECLabeled tag = child as TECLabeled;
             if (cost != null)
             {
                 scope.AssociatedCosts.Remove(cost);

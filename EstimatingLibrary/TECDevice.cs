@@ -87,14 +87,14 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (TECConnectionType type in e.NewItems)
+                foreach (TECElectricalMaterial type in e.NewItems)
                 {
                     NotifyPropertyChanged<object>("AddCatalog", this, type);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (TECConnectionType type in e.OldItems)
+                foreach (TECElectricalMaterial type in e.OldItems)
                 {
                     NotifyPropertyChanged<object>("RemoveCatalog", this, type);
                 }

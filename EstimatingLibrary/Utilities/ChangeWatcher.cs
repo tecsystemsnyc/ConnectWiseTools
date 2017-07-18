@@ -40,9 +40,9 @@ namespace EstimatingLibrary.Utilities
             { registerScope(branch); }
             foreach (TECLabeled note in Bid.Notes)
             { note.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECExclusion exclusion in Bid.Exclusions)
+            foreach (TECLabeled exclusion in Bid.Exclusions)
             { exclusion.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECLocation location in Bid.Locations)
+            foreach (TECLabeled location in Bid.Locations)
             { location.PropertyChanged += Object_PropertyChanged; }
             foreach (TECSystem system in Bid.Systems)
             { registerSystem(system); }
@@ -102,13 +102,13 @@ namespace EstimatingLibrary.Utilities
             { ioModule.PropertyChanged += Object_PropertyChanged; }
             foreach (TECPanelType panelType in catalogs.PanelTypes)
             { panelType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECConnectionType connectionType in catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial connectionType in catalogs.ConnectionTypes)
             { connectionType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECConduitType conduitType in catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial conduitType in catalogs.ConduitTypes)
             { conduitType.PropertyChanged += Object_PropertyChanged; }
             foreach (TECCost cost in catalogs.AssociatedCosts)
             { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECTag tag in catalogs.Tags)
+            foreach (TECLabeled tag in catalogs.Tags)
             { tag.PropertyChanged += Object_PropertyChanged; }
         }
         private void registerSubScope(TECSubScope subScope, ChangeType changeType = ChangeType.Object)
@@ -205,14 +205,6 @@ namespace EstimatingLibrary.Utilities
                 if(changeType == ChangeType.Instance)
                 {
                     connection.PropertyChanged += Instance_PropertyChanged;
-                }
-            }
-            foreach (TECIO io in controller.IO)
-            {
-                io.PropertyChanged += Object_PropertyChanged;
-                if (changeType == ChangeType.Instance)
-                {
-                    io.PropertyChanged += Instance_PropertyChanged;
                 }
             }
         }
@@ -453,17 +445,6 @@ namespace EstimatingLibrary.Utilities
                     }
 
                 }
-                foreach (TECIO io in controller.IO)
-                {
-                    
-                    if (changeType == ChangeType.Instance)
-                    {
-                        io.PropertyChanged += Instance_PropertyChanged;
-                    } else
-                    {
-                        io.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
             }
             else if(change == Change.Remove)
             {
@@ -475,16 +456,6 @@ namespace EstimatingLibrary.Utilities
                         connection.PropertyChanged += Instance_PropertyChanged;
                     } else {
                         connection.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-                foreach (TECIO io in controller.IO)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        io.PropertyChanged += Instance_PropertyChanged;
-                    } else{
-                        io.PropertyChanged -= Object_PropertyChanged;
-
                     }
                 }
             }

@@ -21,7 +21,7 @@ namespace EstimatingLibrary
                 _location = value;
                 NotifyPropertyChanged("Location", temp, this);
                 temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
+                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
             }
         }
         #endregion
@@ -35,7 +35,7 @@ namespace EstimatingLibrary
             _location = location;
             RaisePropertyChanged("Location");
             var temp = Copy();
-            NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLocation));
+            NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
         }
 
         protected void copyPropertiesFromLocated(TECLocated scope)

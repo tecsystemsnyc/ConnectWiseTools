@@ -886,29 +886,13 @@ namespace EstimatingUtilitiesLibrary
                 return null;
             }
         }
-        static private ObservableCollection<TECLabeled> getNotes()
+        static private ObservableCollection<TECLabeled> getLabeled(string tableName)
         {
-            ObservableCollection<TECLabeled> notes = new ObservableCollection<TECLabeled>();
-            DataTable notesDT = SQLiteDB.getDataFromTable(NoteTable.TableName);
+            ObservableCollection<TECLabeled> labeled = new ObservableCollection<TECLabeled>();
+            DataTable notesDT = SQLiteDB.getDataFromTable(tableName);
             foreach (DataRow row in notesDT.Rows)
-            { notes.Add(getNoteFromRow(row)); }
-            return notes;
-        }
-        static private ObservableCollection<TECExclusion> getExclusions()
-        {
-            ObservableCollection<TECExclusion> exclusions = new ObservableCollection<TECExclusion>();
-            DataTable exclusionsDT = SQLiteDB.getDataFromTable(ExclusionTable.TableName);
-            foreach (DataRow row in exclusionsDT.Rows)
-            { exclusions.Add(getExclusionFromRow(row)); }
-            return exclusions;
-        }
-        static private ObservableCollection<TECTag> getAllTags()
-        {
-            ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
-            DataTable tagsDT = SQLiteDB.getDataFromTable(TagTable.TableName);
-            foreach (DataRow row in tagsDT.Rows)
-            { tags.Add(getTagFromRow(row)); }
-            return tags;
+            { labeled.Add(getLabeledFromRow(row)); }
+            return labeled;
         }
         static private ObservableCollection<TECDrawing> getDrawings()
         {
@@ -1755,25 +1739,16 @@ namespace EstimatingUtilitiesLibrary
         {
             Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
             TECScopeBranch branch = new TECScopeBranch(scopeBranchID);
-            branch.Name = row[ScopeBranchTable.Name.Name].ToString();
-            branch.Description = row[ScopeBranchTable.Description.Name].ToString();
+            branch.Label = row[ScopeBranchTable.Name.Name].ToString();
             branch.Branches = getChildBranchesInBranch(scopeBranchID);
-            branch.Tags = getTagsInScope(scopeBranchID);
             return branch;
         }
-        private static TECLabeled getNoteFromRow(DataRow row)
+        private static TECLabeled getLabeledFromRow(DataRow row)
         {
-            Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
-            var note = new TECLabeled(noteID);
-            note.Text = row["NoteText"].ToString();
+            Guid labeledID = new Guid(row[LabeledTable.ID.Name].ToString());
+            var note = new TECLabeled(labeledID);
+            note.Label = row[LabeledTable.Label.Name].ToString();
             return note;
-        }
-        private static TECExclusion getExclusionFromRow(DataRow row)
-        {
-            Guid exclusionId = new Guid(row["ExclusionID"].ToString());
-            TECExclusion exclusion = new TECExclusion(exclusionId);
-            exclusion.Text = row["ExclusionText"].ToString();
-            return exclusion;
         }
         #endregion
         #region Drawing Objects

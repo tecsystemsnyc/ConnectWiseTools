@@ -45,11 +45,11 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECVisualConnection()
+        public TECVisualConnection() : base(Guid.NewGuid())
         {
 
         }
-        public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2)
+        public TECVisualConnection(TECVisualScope vs1, TECVisualScope vs2) : this()
         {
             Scope1 = vs1;
             Scope2 = vs2;

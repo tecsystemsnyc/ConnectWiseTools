@@ -33,10 +33,9 @@ namespace EstimatingLibrary
         
         public override object Copy()
         {
-            var outObject = new TECIOModule(this.Guid);
+            var outObject = new TECIOModule(this.Guid, this.Manufacturer);
             outObject.copyPropertiesFromCost(this);
             outObject._ioPerModule = this.IOPerModule;
-            outObject._manufacturer = this.Manufacturer;
             return outObject;
         }
     }
