@@ -149,6 +149,10 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         TemplatesFilePath = path;
                     }
+                    else
+                    {
+                        ResetStatus();
+                    }
                 }
                 else
                 {
@@ -164,7 +168,6 @@ namespace TECUserControlLibrary.ViewModels
                 loadTemplates(TemplatesFilePath);
                 DebugHandler.LogDebugMessage("Finished loading templates.");
                 templatesLoaded = true;
-                ResetStatus();
             }
             else
             {
