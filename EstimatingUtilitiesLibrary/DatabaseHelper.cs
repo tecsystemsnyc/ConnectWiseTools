@@ -50,7 +50,8 @@ namespace EstimatingUtilitiesLibrary
             }
             else
             {
-                throw new NotImplementedException();
+                MessageBox.Show("File is not a compatible database.");
+                return null;
             }
 
             SQLiteDB.nonQueryCommand("END TRANSACTION");
