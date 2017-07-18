@@ -63,6 +63,7 @@
     <Style TargetType="DataGrid">
         <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="RowHeaderWidth" Value="15"/>
+        <Setter Property="Margin" Value="0"/>
         <Setter Property="dd:DragDrop.IsDropTarget" Value="True"/>
         <Setter Property="dd:DragDrop.IsDragSource" Value="True"/>
         <Setter Property="RowDetailsVisibilityMode" Value="Collapsed"/>
@@ -128,6 +129,9 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    <Style TargetType="TabControl">
+        <EventSetter Event="PreviewMouseDown" Handler="TabControl_PreviewMouseDown"/>
     </Style>
     <Style TargetType="ComboBox">
         <Setter Property="Background" Value="{StaticResource TextInputBrush}"/>
