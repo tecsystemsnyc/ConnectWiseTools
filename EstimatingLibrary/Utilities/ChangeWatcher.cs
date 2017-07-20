@@ -500,8 +500,17 @@ namespace EstimatingLibrary.Utilities
         }
         private void Instance_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            handleInstanceChanged(sender, e);
-            InstanceChanged?.Invoke(sender, e);
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                object oldValue = args.OldValue;
+                object newValue = args.NewValue;
+                if (!isTypicalConnection(oldValue, newValue))
+                {
+                    handleInstanceChanged(sender, e);
+                    InstanceChanged?.Invoke(sender, e);
+                }
+            }
         }
         private void handlePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -583,12 +592,10 @@ namespace EstimatingLibrary.Utilities
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
-                    if (!isTypicalConnection(oldValue, newValue))
-                    {
-                        ((TECObject)newValue).PropertyChanged += Instance_PropertyChanged;
-                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                        handleChildren(newValue, Change.Add, ChangeType.Instance);
-                    }
+                    ((TECObject)newValue).PropertyChanged += Instance_PropertyChanged;
+                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                    handleChildren(newValue, Change.Add, ChangeType.Instance);
+                    
                 }
                 else if (e.PropertyName == "Remove")
                 {
