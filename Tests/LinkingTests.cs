@@ -52,7 +52,7 @@ namespace Tests
         {
             foreach(TECDevice device in bid.Catalogs.Devices)
             {
-                foreach(TECConnectionType connectionType in device.ConnectionTypes)
+                foreach(TECElectricalMaterial connectionType in device.ConnectionTypes)
                 {
                     if (!bid.Catalogs.ConnectionTypes.Contains(connectionType))
                     {
@@ -83,7 +83,7 @@ namespace Tests
         [TestMethod]
         public void ConnectionTypeLinking()
         {
-            foreach(TECConnectionType connectionType in bid.Catalogs.ConnectionTypes)
+            foreach(TECElectricalMaterial connectionType in bid.Catalogs.ConnectionTypes)
             {
                 foreach(TECCost cost in connectionType.RatedCosts)
                 {
@@ -99,7 +99,7 @@ namespace Tests
         [TestMethod]
         public void ConduitTypeLinking()
         {
-            foreach(TECConduitType conduitType in bid.Catalogs.ConduitTypes)
+            foreach(TECElectricalMaterial conduitType in bid.Catalogs.ConduitTypes)
             {
                 foreach (TECCost cost in conduitType.RatedCosts)
                 {
@@ -677,7 +677,7 @@ namespace Tests
                     Assert.Fail("Associated cost in scope not linked.");
                 }
             }
-            foreach(TECTag tag in scope.Tags)
+            foreach(TECLabeled tag in scope.Tags)
             {
                 if (!catalogs.Tags.Contains(tag))
                 {

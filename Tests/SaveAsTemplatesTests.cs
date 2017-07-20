@@ -21,11 +21,11 @@ namespace Tests
         static TECSubScope expectedSubScope;
         static TECDevice expectedDevice;
         static TECManufacturer expectedManufacturer;
-        static TECTag expectedTag;
+        static TECLabeled expectedTag;
         static TECController expectedController;
         static TECCost expectedAssociatedCost;
-        static TECConnectionType expectedConnectionType;
-        static TECConduitType expectedConduitType;
+        static TECElectricalMaterial expectedConnectionType;
+        static TECElectricalMaterial expectedConduitType;
 
         static string path;
 
@@ -35,11 +35,11 @@ namespace Tests
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
-        static TECTag actualTag;
+        static TECLabeled actualTag;
         static TECController actualController;
         static TECCost actualAssociatedCost;
-        static TECConnectionType actualConnectionType;
-        static TECConduitType actualConduitType;
+        static TECElectricalMaterial actualConnectionType;
+        static TECElectricalMaterial actualConduitType;
 
         private TestContext testContextInstance;
         public TestContext TestContext
@@ -122,7 +122,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
+            foreach (TECLabeled tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {
@@ -149,7 +149,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
                 {
@@ -158,7 +158,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedConduitType.Guid)
                 {
@@ -242,24 +242,24 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
             Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
-            Assert.AreEqual(expectedSystem.Tags[0].Text, actualSystem.Tags[0].Text);
+            Assert.AreEqual(expectedSystem.Tags[0].Label, actualSystem.Tags[0].Label);
 
             Assert.AreEqual(expectedSysEquipment.Name, actualSysEquipment.Name);
             Assert.AreEqual(expectedSysEquipment.Description, actualSysEquipment.Description);
             Assert.AreEqual(expectedSysEquipment.Quantity, actualSysEquipment.Quantity);
             Assert.AreEqual(expectedSysEquipment.BudgetUnitPrice, actualSysEquipment.BudgetUnitPrice);
-            Assert.AreEqual(expectedSysEquipment.Tags[0].Text, actualSysEquipment.Tags[0].Text);
+            Assert.AreEqual(expectedSysEquipment.Tags[0].Label, actualSysEquipment.Tags[0].Label);
 
             Assert.AreEqual(expectedSysSubScope.Name, actualSysSubScope.Name);
             Assert.AreEqual(expectedSysSubScope.Description, actualSysSubScope.Description);
             Assert.AreEqual(expectedSysSubScope.Quantity, actualSysSubScope.Quantity);
-            Assert.AreEqual(expectedSysSubScope.Tags[0].Text, actualSysSubScope.Tags[0].Text);
+            Assert.AreEqual(expectedSysSubScope.Tags[0].Label, actualSysSubScope.Tags[0].Label);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
-            Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
+            Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
             Assert.AreEqual(expectedSysPoint.Name, actualSysPoint.Name);
             Assert.AreEqual(expectedSysPoint.Description, actualSysPoint.Description);
@@ -298,18 +298,18 @@ namespace Tests
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
             Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
-            Assert.AreEqual(expectedEquipment.Tags[0].Text, actualEquipment.Tags[0].Text);
+            Assert.AreEqual(expectedEquipment.Tags[0].Label, actualEquipment.Tags[0].Label);
 
             Assert.AreEqual(expectedEquipSubScope.Name, actualEquipSubScope.Name);
             Assert.AreEqual(expectedEquipSubScope.Description, actualEquipSubScope.Description);
             Assert.AreEqual(expectedEquipSubScope.Quantity, actualEquipSubScope.Quantity);
-            Assert.AreEqual(expectedEquipSubScope.Tags[0].Text, actualEquipSubScope.Tags[0].Text);
+            Assert.AreEqual(expectedEquipSubScope.Tags[0].Label, actualEquipSubScope.Tags[0].Label);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
-            Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
+            Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
             Assert.AreEqual(expectedEquipPoint.Name, actualEquipPoint.Name);
             Assert.AreEqual(expectedEquipPoint.Description, actualEquipPoint.Description);
@@ -335,14 +335,14 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
-            Assert.AreEqual(expectedSubScope.Tags[0].Text, actualSubScope.Tags[0].Text);
+            Assert.AreEqual(expectedSubScope.Tags[0].Label, actualSubScope.Tags[0].Label);
             Assert.AreEqual(expectedSubScope.AssociatedCosts[0].Name, actualSubScope.AssociatedCosts[0].Name);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
-            Assert.AreEqual(expectedChildDevice.Tags[0].Text, actualChildDevice.Tags[0].Text);
+            Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
             Assert.AreEqual(expectedSSPoint.Name, actualSSPoint.Name);
             Assert.AreEqual(expectedSSPoint.Description, actualSSPoint.Description);
@@ -365,7 +365,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.ConnectionTypes[0].Guid, actualDevice.ConnectionTypes[0].Guid);
-            Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
+            Assert.AreEqual(expectedDevice.Tags[0].Label, actualDevice.Tags[0].Label);
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
 
             Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
@@ -384,7 +384,7 @@ namespace Tests
         public void SaveAs_Templates_Tag()
         {
             //Assert
-            Assert.AreEqual(expectedTag.Text, actualTag.Text);
+            Assert.AreEqual(expectedTag.Label, actualTag.Label);
         }
 
         [TestMethod]

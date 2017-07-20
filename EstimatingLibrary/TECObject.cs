@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
+    public enum Flavor { Tag=1, Location, Note, Exclusion, Wire, Conduit }
+
     public abstract class TECObject : INotifyPropertyChanged
     {
         #region Properties
@@ -16,6 +18,8 @@ namespace EstimatingLibrary
         {
             get { return _guid; }
         }
+
+        public Flavor Flavor;
         #endregion
 
         #region Property Changed

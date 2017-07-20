@@ -27,9 +27,9 @@ namespace TECUserControlLibrary.UserControls
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECTag> TagsSource
+        public ObservableCollection<TECLabeled> TagsSource
         {
-            get { return (ObservableCollection<TECTag>)GetValue(TagsSourceProperty); }
+            get { return (ObservableCollection<TECLabeled>)GetValue(TagsSourceProperty); }
             set { SetValue(TagsSourceProperty, value); }
         }
 
@@ -37,8 +37,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the DevicesSource dependency property
         /// </summary>
         public static readonly DependencyProperty TagsSourceProperty =
-            DependencyProperty.Register("TagsSource", typeof(ObservableCollection<TECTag>),
-              typeof(TagsGridControl), new PropertyMetadata(default(ObservableCollection<TECTag>)));
+            DependencyProperty.Register("TagsSource", typeof(ObservableCollection<TECLabeled>),
+              typeof(TagsGridControl), new PropertyMetadata(default(ObservableCollection<TECLabeled>)));
 
         #endregion
 

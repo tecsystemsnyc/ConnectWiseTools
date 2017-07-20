@@ -30,9 +30,9 @@ namespace TECUserControlLibrary.Views
         /// <summary>
         /// Gets or sets the LocationSource which is displayed
         /// </summary>
-        public ObservableCollection<TECLocation> LocationSource
+        public ObservableCollection<TECLabeled> LocationSource
         {
-            get { return (ObservableCollection<TECLocation>)GetValue(LocationSourceProperty); }
+            get { return (ObservableCollection<TECLabeled>)GetValue(LocationSourceProperty); }
             set { SetValue(LocationSourceProperty, value); }
         }
 
@@ -40,8 +40,8 @@ namespace TECUserControlLibrary.Views
         /// Identified the LocationSource dependency property
         /// </summary>
         public static readonly DependencyProperty LocationSourceProperty =
-            DependencyProperty.Register("LocationSource", typeof(ObservableCollection<TECLocation>),
-              typeof(LocationView), new PropertyMetadata(default(ObservableCollection<TECLocation>)));
+            DependencyProperty.Register("LocationSource", typeof(ObservableCollection<TECLabeled>),
+              typeof(LocationView), new PropertyMetadata(default(ObservableCollection<TECLabeled>)));
 
         /// <summary>
         /// Gets or sets the SystemSource which is displayed

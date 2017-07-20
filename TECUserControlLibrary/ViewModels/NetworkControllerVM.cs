@@ -30,8 +30,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public Visibility DetailsVisibility { get; private set; }
 
-        private ObservableCollection<TECConnectionType> _wireTypes;
-        public ObservableCollection<TECConnectionType> WireTypes
+        private ObservableCollection<TECElectricalMaterial> _wireTypes;
+        public ObservableCollection<TECElectricalMaterial> WireTypes
         {
             get { return _wireTypes; }
             private set
@@ -40,8 +40,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("WireTypes");
             }
         }
-        private ObservableCollection<TECConduitType> _conduitTypes;
-        public ObservableCollection<TECConduitType> ConduitTypes
+        private ObservableCollection<TECElectricalMaterial> _conduitTypes;
+        public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {
             get { return _conduitTypes; }
             set
@@ -52,7 +52,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public IOType SelectedIO { get; set; }
-        public TECConnectionType SelectedWire { get; set; }
+        public TECElectricalMaterial SelectedWire { get; set; }
 
         private TECController _selectedChild;
         public TECController SelectedChild
@@ -74,10 +74,10 @@ namespace TECUserControlLibrary.ViewModels
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
         
-        public TECConduitType NoneConduitType { get; set; }
+        public TECElectricalMaterial NoneConduitType { get; set; }
         public TECController NoneController { get; set; }
 
-        private TECConnectionType defaultWireType;
+        private TECElectricalMaterial defaultWireType;
         #endregion
 
         public NetworkControllerVM(Visibility detailsVisibility, TECBid bid)
@@ -183,20 +183,20 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupNoneTypes()
         {
-            NoneConduitType = new TECConduitType();
+            NoneConduitType = new TECElectricalMaterial();
             NoneConduitType.Name = "None";
         }
         private void populateWireAndConduitTypes(TECBid bid)
         {
-            WireTypes = new ObservableCollection<TECConnectionType>();
-            foreach(TECConnectionType type in bid.Catalogs.ConnectionTypes)
+            WireTypes = new ObservableCollection<TECElectricalMaterial>();
+            foreach(TECElectricalMaterial type in bid.Catalogs.ConnectionTypes)
             {
                 WireTypes.Add(type);
             }
 
-            ConduitTypes = new ObservableCollection<TECConduitType>();
+            ConduitTypes = new ObservableCollection<TECElectricalMaterial>();
             ConduitTypes.Add(NoneConduitType);
-            foreach(TECConduitType type in bid.Catalogs.ConduitTypes)
+            foreach(TECElectricalMaterial type in bid.Catalogs.ConduitTypes)
             {
                 ConduitTypes.Add(type);
             }

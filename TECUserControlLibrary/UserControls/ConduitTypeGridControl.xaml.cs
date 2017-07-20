@@ -24,15 +24,15 @@ namespace TECUserControlLibrary.UserControls
     {
         #region DPs
 
-        public ObservableCollection<TECConduitType> ConduitTypesSource
+        public ObservableCollection<TECElectricalMaterial> ConduitTypesSource
         {
-            get { return (ObservableCollection<TECConduitType>)GetValue(ConduitTypesSourceProperty); }
+            get { return (ObservableCollection<TECElectricalMaterial>)GetValue(ConduitTypesSourceProperty); }
             set { SetValue(ConduitTypesSourceProperty, value); }
         }
 
         public static readonly DependencyProperty ConduitTypesSourceProperty =
-            DependencyProperty.Register("ConduitTypesSource", typeof(ObservableCollection<TECConduitType>),
-              typeof(ConduitTypeGridControl), new PropertyMetadata(default(ObservableCollection<TECConduitType>)));
+            DependencyProperty.Register("ConduitTypesSource", typeof(ObservableCollection<TECElectricalMaterial>),
+              typeof(ConduitTypeGridControl), new PropertyMetadata(default(ObservableCollection<TECElectricalMaterial>)));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used

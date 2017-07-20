@@ -1987,7 +1987,7 @@ namespace EstimatingUtilitiesLibrary
             paragraph75.Append(paragraphProperties75);
 
             var exclusionParagraphs = new List<Paragraph>();
-            foreach (TECExclusion exclusion in _bid.Exclusions)
+            foreach (TECLabeled exclusion in _bid.Exclusions)
             {
                 Paragraph paragraph76 = new Paragraph() { RsidParagraphMarkRevision = "001B6681", RsidParagraphAddition = "00A61B35", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
                 exclusionParagraphs.Add(paragraph76);
@@ -2021,7 +2021,7 @@ namespace EstimatingUtilitiesLibrary
                 runProperties77.Append(italicComplexScript3);
                 runProperties77.Append((FontSize)fontSize1.CloneNode(true));
                 Text text60 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-                text60.Text = exclusion.Text;
+                text60.Text = exclusion.Label;
 
                 run77.Append(runProperties77);
                 run77.Append(text60);
@@ -2156,7 +2156,7 @@ namespace EstimatingUtilitiesLibrary
 
                 runProperties89.Append((FontSize)fontSize1.CloneNode(true));
                 Text text72 = new Text();
-                text72.Text = note.Text;
+                text72.Text = note.Label;
 
                 run89.Append(runProperties89);
                 run89.Append(text72);
@@ -13306,7 +13306,7 @@ namespace EstimatingUtilitiesLibrary
 
                 runProperties46.Append((FontSize)fontSize.CloneNode(true));
                 Text text29 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-                text29.Text = branch.Name;
+                text29.Text = branch.Label;
 
                 run46.Append(runProperties46);
                 run46.Append(text29);

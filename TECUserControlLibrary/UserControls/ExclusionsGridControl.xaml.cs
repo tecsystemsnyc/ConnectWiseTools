@@ -23,9 +23,9 @@ namespace TECUserControlLibrary.UserControls
     public partial class ExclusionsGridControl : UserControl
     {
 
-        public ObservableCollection<TECExclusion> ExclusionsSource
+        public ObservableCollection<TECLabeled> ExclusionsSource
         {
-            get { return (ObservableCollection<TECExclusion>)GetValue(ExclusionsSourceProperty); }
+            get { return (ObservableCollection<TECLabeled>)GetValue(ExclusionsSourceProperty); }
             set { SetValue(ExclusionsSourceProperty, value); }
         }
 
@@ -33,8 +33,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the SystemSource dependency property
         /// </summary>
         public static readonly DependencyProperty ExclusionsSourceProperty =
-            DependencyProperty.Register("ExclusionsSource", typeof(ObservableCollection<TECExclusion>),
-              typeof(ExclusionsGridControl), new PropertyMetadata(default(ObservableCollection<TECExclusion>)));
+            DependencyProperty.Register("ExclusionsSource", typeof(ObservableCollection<TECLabeled>),
+              typeof(ExclusionsGridControl), new PropertyMetadata(default(ObservableCollection<TECLabeled>)));
 
         public ExclusionsGridControl()
         {

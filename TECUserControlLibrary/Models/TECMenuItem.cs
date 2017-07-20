@@ -28,7 +28,7 @@ namespace TECUserControlLibrary.Models
         public ICommand Command { get; set; }
         public ObservableCollection<TECMenuItem> Items { get; set; }
 
-        public TECMenuItem(string name, SolidColorBrush textBrush)
+        public TECMenuItem(string name, SolidColorBrush textBrush) : base(Guid.NewGuid())
         {
             Name = name;
             TextBrush = textBrush;

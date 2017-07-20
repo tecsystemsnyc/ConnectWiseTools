@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GongSolutions.Wpf.DragDrop;
 using System;
@@ -31,7 +32,7 @@ namespace TECUserControlLibrary.Utilities
             if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-                if (sourceItem != null && sourceType == targetType)
+                if (sourceItem != null && sourceType == targetType && sourceType is DragDropComponent)
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;
@@ -50,7 +51,7 @@ namespace TECUserControlLibrary.Utilities
                     var outSource = new List<object>();
                     foreach (object item in ((IList)sourceItem))
                     {
-                        var toAdd = ((TECScope)item).DragDropCopy(scopeManager);
+                        var toAdd = ((DragDropComponent)item).DragDropCopy(scopeManager);
                         outSource.Add(toAdd);
                      }
                     sourceItem = outSource;
@@ -63,7 +64,7 @@ namespace TECUserControlLibrary.Utilities
                     }
                     else
                     {
-                        sourceItem = ((TECScope)dropInfo.Data).DragDropCopy(scopeManager);
+                        sourceItem = ((DragDropComponent)dropInfo.Data).DragDropCopy(scopeManager);
                     }
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
@@ -123,7 +124,7 @@ namespace TECUserControlLibrary.Utilities
         }
         public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers, TECScopeManager scopeManager, bool isGlobal = true)
         {
-            var sourceItem = (dropInfo.Data as TECScope).DragDropCopy(scopeManager);
+            var sourceItem = (dropInfo.Data as DragDropComponent).DragDropCopy(scopeManager);
             Type sourceType = dropInfo.Data.GetType();
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
 

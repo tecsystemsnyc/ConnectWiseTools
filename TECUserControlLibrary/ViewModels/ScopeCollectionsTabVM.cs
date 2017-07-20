@@ -76,8 +76,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private TECTag _selectedTag;
-        public TECTag SelectedTag
+        private TECLabeled _selectedTag;
+        public TECLabeled SelectedTag
         {
             get { return _selectedTag; }
             set
@@ -109,8 +109,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECTag> _tagSelections;
-        public ObservableCollection<TECTag> TagSelections
+        private ObservableCollection<TECLabeled> _tagSelections;
+        public ObservableCollection<TECLabeled> TagSelections
         {
             get { return _tagSelections; }
             set
@@ -341,7 +341,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private double _deviceCost;
 
-        public TECConnectionType DeviceConnectionType
+        public TECElectricalMaterial DeviceConnectionType
         {
             get { return _deviceConnectionType; }
             set
@@ -350,10 +350,10 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DeviceConnectionType");
             }
         }
-        private TECConnectionType _deviceConnectionType;
+        private TECElectricalMaterial _deviceConnectionType;
 
-        private ObservableCollection<TECConnectionType> _deviceConnectionTypes;
-        public ObservableCollection<TECConnectionType> DeviceConnectionTypes
+        private ObservableCollection<TECElectricalMaterial> _deviceConnectionTypes;
+        public ObservableCollection<TECElectricalMaterial> DeviceConnectionTypes
         {
             get { return _deviceConnectionTypes; }
             set
@@ -386,7 +386,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private TECManufacturer _deviceManufacturer;
 
-        public ObservableCollection<TECTag> DeviceTags
+        public ObservableCollection<TECLabeled> DeviceTags
         {
             get { return _deviceTags; }
             set
@@ -395,7 +395,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DeviceTags");
             }
         }
-        private ObservableCollection<TECTag> _deviceTags;
+        private ObservableCollection<TECLabeled> _deviceTags;
         #endregion //Device Interface Properties
 
         #region Controller Interface Properties
@@ -420,18 +420,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         private string _controllerDescription;
-
-        public double ControllerCost
-        {
-            get { return _controllerCost; }
-            set
-            {
-                _controllerCost = value;
-                RaisePropertyChanged("ControllerCost");
-            }
-        }
-        private double _controllerCost;
-
+        
         public IOType ControllerIOType
         {
             get { return _controllerIOType; }
@@ -465,7 +454,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private ObservableCollection<TECIO> _controllerIO;
 
-        public ObservableCollection<TECTag> ControllerTags
+        public ObservableCollection<TECLabeled> ControllerTags
         {
             get { return _controllerTags; }
             set
@@ -474,18 +463,18 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ControllerTags");
             }
         }
-        private ObservableCollection<TECTag> _controllerTags;
+        private ObservableCollection<TECLabeled> _controllerTags;
 
-        public TECManufacturer ControllerManufacturer
+        public TECControllerType ControllerType
         {
-            get { return _controllerManufacturer; }
+            get { return _controllerType; }
             set
             {
-                _controllerManufacturer = value;
-                RaisePropertyChanged("ControllerManufacturer");
+                _controllerType = value;
+                RaisePropertyChanged("ControllerType");
             }
         }
-        private TECManufacturer _controllerManufacturer;
+        private TECControllerType _controllerType;
 
         #endregion //Device Interface Properties
 
@@ -531,8 +520,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PanelAssociatedCosts");
             }
         }
-        private ObservableCollection<TECTag> _panelTags;
-        public ObservableCollection<TECTag> PanelTags
+        private ObservableCollection<TECLabeled> _panelTags;
+        public ObservableCollection<TECLabeled> PanelTags
         {
             get { return _panelTags; }
             set
@@ -692,12 +681,12 @@ namespace TECUserControlLibrary.ViewModels
 
             PanelTypeSelections = templates.Catalogs.PanelTypes;
 
-            DeviceTags = new ObservableCollection<TECTag>();
-            ControllerTags = new ObservableCollection<TECTag>();
-            PanelTags = new ObservableCollection<TECTag>();
+            DeviceTags = new ObservableCollection<TECLabeled>();
+            ControllerTags = new ObservableCollection<TECLabeled>();
+            PanelTags = new ObservableCollection<TECLabeled>();
             PanelAssociatedCosts = new ObservableCollection<TECCost>();
             ControllerIO = new ObservableCollection<TECIO>();
-            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
+            DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
 
             setupInterfaceDefaults();
         }
@@ -712,9 +701,9 @@ namespace TECUserControlLibrary.ViewModels
             Templates = templates;
             PanelTypeSelections = templates.Catalogs.PanelTypes;
             populateItemsCollections();
-            DeviceTags = new ObservableCollection<TECTag>();
-            ControllerTags = new ObservableCollection<TECTag>();
-            PanelTags = new ObservableCollection<TECTag>();
+            DeviceTags = new ObservableCollection<TECLabeled>();
+            ControllerTags = new ObservableCollection<TECLabeled>();
+            PanelTags = new ObservableCollection<TECLabeled>();
             PanelAssociatedCosts = new ObservableCollection<TECCost>();
             ControllerIO = new ObservableCollection<TECIO>();
         }
@@ -740,9 +729,9 @@ namespace TECUserControlLibrary.ViewModels
                             }
                             else
                             {
-                                foreach (TECTag tag in item.Tags)
+                                foreach (TECLabeled tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                     {
                                         SystemItemsCollection.Add(item);
                                     }
@@ -761,9 +750,9 @@ namespace TECUserControlLibrary.ViewModels
                             }
                             else
                             {
-                                foreach (TECTag tag in item.Tags)
+                                foreach (TECLabeled tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                     {
                                         EquipmentItemsCollection.Add(item);
                                     }
@@ -782,9 +771,9 @@ namespace TECUserControlLibrary.ViewModels
                             }
                             else
                             {
-                                foreach (TECTag tag in item.Tags)
+                                foreach (TECLabeled tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                     {
                                         SubScopeItemsCollection.Add(item);
                                     }
@@ -803,9 +792,9 @@ namespace TECUserControlLibrary.ViewModels
                             }
                             else
                             {
-                                foreach (TECTag tag in item.Tags)
+                                foreach (TECLabeled tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                     {
                                         DevicesItemsCollection.Add(item);
                                     }
@@ -824,9 +813,9 @@ namespace TECUserControlLibrary.ViewModels
                             }
                             else
                             {
-                                foreach (TECTag tag in item.Tags)
+                                foreach (TECLabeled tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                     {
                                         ControllersItemsCollection.Add(item);
                                     }
@@ -845,9 +834,9 @@ namespace TECUserControlLibrary.ViewModels
                             }
                             else
                             {
-                                foreach (TECTag tag in item.Tags)
+                                foreach (TECLabeled tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                     {
                                         AssociatedCostsItemsCollection.Add(item);
                                     }
@@ -866,9 +855,9 @@ namespace TECUserControlLibrary.ViewModels
                             }
                             else
                             {
-                                foreach (TECTag tag in item.Tags)
+                                foreach (TECLabeled tag in item.Tags)
                                 {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                     {
                                         PanelsItemsCollection.Add(item);
                                     }
@@ -889,9 +878,9 @@ namespace TECUserControlLibrary.ViewModels
                                 }
                                 else
                                 {
-                                    foreach (TECTag tag in item.Tags)
+                                    foreach (TECLabeled tag in item.Tags)
                                     {
-                                        if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                        if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                         {
                                             MiscCostsCollection.Add(item);
                                         }
@@ -913,9 +902,9 @@ namespace TECUserControlLibrary.ViewModels
                                 }
                                 else
                                 {
-                                    foreach (TECTag tag in item.Tags)
+                                    foreach (TECLabeled tag in item.Tags)
                                     {
-                                        if (UtilitiesMethods.StringContainsStrings(tag.Text.ToUpper(), searchCriteria))
+                                        if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
                                         {
                                             MiscWiringCollection.Add(item);
                                         }
@@ -975,8 +964,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddTagExecute()
         {
-            TECTag newTag = new TECTag();
-            newTag.Text = TagName;
+            TECLabeled newTag = new TECLabeled();
+            newTag.Label = TagName;
             Templates.Catalogs.Tags.Add(newTag);
         }
         private bool canAddTag()
@@ -988,7 +977,7 @@ namespace TECUserControlLibrary.ViewModels
         private void AddManufacturerExecute()
         {
             TECManufacturer newMan = new TECManufacturer();
-            newMan.Name = ManufacturerName;
+            newMan.Label = ManufacturerName;
             newMan.Multiplier = ManufacturerMultiplier;
             Templates.Catalogs.Manufacturers.Add(newMan);
         }
@@ -1011,9 +1000,9 @@ namespace TECUserControlLibrary.ViewModels
             DeviceDescription = "";
             DeviceCost = 0;
             DeviceConnectionType = null;
-            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
+            DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
             DeviceManufacturer = null;
-            DeviceTags = new ObservableCollection<TECTag>();
+            DeviceTags = new ObservableCollection<TECLabeled>();
         }
         private bool CanAddDevice()
         {
@@ -1030,23 +1019,20 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddControllerExecute()
         {
-            var newController = new TECController(ControllerManufacturer);
+            var newController = new TECController(ControllerType);
             newController.Name = ControllerName;
             newController.Description = ControllerDescription;
-            newController.Cost = ControllerCost;
-            newController.IO = ControllerIO;
             newController.Tags = ControllerTags;
             Templates.ControllerTemplates.Add(newController);
             ControllerName = "";
             ControllerDescription = "";
-            ControllerCost = 0;
+            ControllerType = null;
             ControllerIO = new ObservableCollection<TECIO>();
-            ControllerTags = new ObservableCollection<TECTag>();
-            ControllerManufacturer = null;
+            ControllerTags = new ObservableCollection<TECLabeled>();
         }
         private bool CanAddController()
         {
-            if (ControllerManufacturer != null)
+            if (ControllerType != null)
             {
                 return true;
             }
@@ -1151,7 +1137,7 @@ namespace TECUserControlLibrary.ViewModels
             SelectedPanelType = null;
             PanelName = "";
             PanelDescription = "";
-            PanelTags = new ObservableCollection<TECTag>();
+            PanelTags = new ObservableCollection<TECLabeled>();
             PanelAssociatedCosts = new ObservableCollection<TECCost>();
         }
         private bool AddPanelCanExecute()
@@ -1191,7 +1177,6 @@ namespace TECUserControlLibrary.ViewModels
 
             _controllerName = "";
             _controllerDescription = "";
-            _controllerCost = 0;
             _controllerIOQTY = 0;
 
             _panelName = "";

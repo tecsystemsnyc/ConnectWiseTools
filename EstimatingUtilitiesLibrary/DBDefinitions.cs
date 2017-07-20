@@ -186,8 +186,9 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ExclusionTable : TableBase
     {
-        public static new string TableName = "TECExclusion";
-        public static Type ObjectType = typeof(TECExclusion);
+        public static new string TableName = "TECLabeled";
+        public static Type ObjectType = typeof(TECLabeled);
+        public static Flavor ObjectFlavor = Flavor.Exclusion;
 
         public static TableField ExclusionID = new TableField("ExclusionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ExclusionText = new TableField("ExclusionText", "TEXT", ObjectType.GetProperty("Text"));
@@ -321,8 +322,9 @@ namespace EstimatingUtilitiesLibrary
     }
     public class TagTable : CatalogTableBase
     {
-        public static new string TableName = "TECTag";
-        public static Type ObjectType = typeof(TECTag);
+        public static new string TableName = "TECLabeled";
+        public static Type ObjectType = typeof(TECLabeled);
+        public static Flavor ObjectFlavor = Flavor.Tag;
 
         public static TableField TagID = new TableField("TagID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TagString = new TableField("TagString", "TEXT", ObjectType.GetProperty("Text"));
@@ -391,8 +393,9 @@ namespace EstimatingUtilitiesLibrary
     }
     public class LocationTable : CatalogTableBase
     {
-        public static new string TableName = "TECLocation";
-        public static Type ObjectType = typeof(TECLocation);
+        public static new string TableName = "TECLabeled";
+        public static Type ObjectType = typeof(TECLabeled);
+        public static Flavor ObjectFlavor = Flavor.Location;
 
         public static TableField LocationID = new TableField("LocationID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
@@ -426,8 +429,9 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ConnectionTypeTable : CatalogTableBase
     {
-        public static new string TableName = "TECConnectionType";
-        public static Type ObjectType = typeof(TECConnectionType);
+        public static new string TableName = "TECElectricalMaterial";
+        public static Type ObjectType = typeof(TECElectricalMaterial);
+        public static Flavor ObjectFlavor = Flavor.Wire;
 
         public static TableField ConnectionTypeID = new TableField("ConnectionTypeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
@@ -445,8 +449,9 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ConduitTypeTable : CatalogTableBase
     {
-        public static new string TableName = "TECConduitType";
-        public static Type ObjectType = typeof(TECConduitType);
+        public static new string TableName = "TECElectricalMaterial";
+        public static Type ObjectType = typeof(TECElectricalMaterial);
+        public static Flavor ObejctFlavor = Flavor.Conduit;
 
         public static TableField ConduitTypeID = new TableField("ConduitTypeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
@@ -936,9 +941,10 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ScopeTagTable : TableBase
     {
-        public static new string TableName = "TECScopeTECTag";
+        public static new string TableName = "TECScopeTECLabeled";
         public static Type ObjectType = typeof(TECScope);
-        public static Type ReferenceType = typeof(TECTag);
+        public static Type ReferenceType = typeof(TECLabeled);
+        public static Flavor ReferenceFlavor = Flavor.Tag;
 
         public static TableField ScopeID = new TableField("ScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TagID = new TableField("TagID", "TEXT", ReferenceType.GetProperty("Guid"));
@@ -974,9 +980,10 @@ namespace EstimatingUtilitiesLibrary
     }
     public class DeviceConnectionTypeTable : IndexedRelationTableBase
     {
-        public static new string TableName = "TECDeviceTECConnectionType";
+        public static new string TableName = "TECDeviceTECElectricalMaterial";
         public static Type ObjectType = typeof(TECDevice);
-        public static Type ReferenceType = typeof(TECConnectionType);
+        public static Type ReferenceType = typeof(TECElectricalMaterial);
+        public static Flavor ReferenceFlavor = Flavor.Wire;
 
         public static Type HelperType = typeof(HelperProperties);
 
@@ -1058,9 +1065,10 @@ namespace EstimatingUtilitiesLibrary
     }
     public class LocationScopeTable : TableBase
     {
-        public static new string TableName = "TECLocationTECScope";
+        public static new string TableName = "TECLabeledTECScope";
         public static Type ObjectType = typeof(TECScope);
-        public static Type ReferenceType = typeof(TECLocation);
+        public static Type ReferenceType = typeof(TECLabeled);
+        public static Flavor ReferenceFlavor = Flavor.Location;
 
         public static TableField LocationID = new TableField("LocationID", "TEXT", ReferenceType.GetProperty("Guid"));
         public static TableField ScopeID = new TableField("ScopeID", "TEXT", ObjectType.GetProperty("Guid"));
@@ -1141,9 +1149,10 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ConnectionConduitTypeTable : TableBase
     {
-        public static new string TableName = "TECConnectionTECConduitType";
+        public static new string TableName = "TECConnectionTECElectricalMaterial";
         public static Type ObjectType = typeof(TECConnection);
-        public static Type ReferenceType = typeof(TECConduitType);
+        public static Type ReferenceType = typeof(TECElectricalMaterial);
+        public static Flavor ReferenceFlavor = Flavor.Conduit;
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConduitTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
@@ -1160,9 +1169,10 @@ namespace EstimatingUtilitiesLibrary
     }
     public class NetworkConnectionConnectionTypeTable : TableBase
     {
-        public static new string TableName = "TECNetworkConnectionTECConnectionType";
+        public static new string TableName = "TECNetworkConnectionTECElectricalMaterial";
         public static Type ObjectType = typeof(TECNetworkConnection);
-        public static Type ReferenceType = typeof(TECConnectionType);
+        public static Type ReferenceType = typeof(TECElectricalMaterial);
+        public static Flavor ReferenceFlavor = Flavor.Wire;
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));

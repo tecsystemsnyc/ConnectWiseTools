@@ -204,7 +204,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
@@ -276,12 +276,12 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECExclusion> expected = new ObservableCollection<TECExclusion>();
-            foreach (TECExclusion item in Bid.Exclusions)
+            ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Exclusions)
             {
                 expected.Add(item);
             }
-            TECExclusion edit = new TECExclusion();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -291,7 +291,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECExclusion> actual = Bid.Exclusions;
+            ObservableCollection<TECLabeled> actual = Bid.Exclusions;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -301,12 +301,12 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECTag> expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Bid.Catalogs.Tags)
+            ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Catalogs.Tags)
             {
                 expected.Add(item);
             }
-            TECTag edit = new TECTag();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -316,7 +316,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECTag> actual = Bid.Catalogs.Tags;
+            ObservableCollection<TECLabeled> actual = Bid.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -353,12 +353,12 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECLocation> expected = new ObservableCollection<TECLocation>();
-            foreach (TECLocation item in Bid.Locations)
+            ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Locations)
             {
                 expected.Add(item);
             }
-            TECLocation edit = new TECLocation();
+            TECLabeled edit = new TECLabeled();
             edit.Name = "Edit";
 
             //Act
@@ -369,7 +369,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECLocation> actual = Bid.Locations;
+            ObservableCollection<TECLabeled> actual = Bid.Locations;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -714,7 +714,7 @@ namespace Tests
             var Bid = TestHelper.CreateTestBid();
             var system = Bid.Systems.RandomObject();
             Guid expected = new Guid(system.Location.Guid.ToString());
-            TECLocation edit = new TECLocation();
+            TECLabeled edit = new TECLabeled();
             edit.Name = "Floor 42";
 
             //Act
@@ -934,7 +934,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(Bid.Catalogs.ConnectionTypes.RandomObject());
             TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers.RandomObject());
 
@@ -955,8 +955,8 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECConduitType expected = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
-            TECConduitType edit = Bid.Catalogs.ConduitTypes[1];
+            TECElectricalMaterial expected = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
+            TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes[1];
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -964,7 +964,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            TECConduitType actual = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
+            TECElectricalMaterial actual = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
             Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
 
         }
@@ -1307,7 +1307,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
@@ -1381,13 +1381,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECExclusion edit = new TECExclusion();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Exclusions.Add(edit);
-            var expected = new ObservableCollection<TECExclusion>();
-            foreach (TECExclusion item in Bid.Exclusions)
+            var expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Exclusions)
             {
                 expected.Add(item);
             }
@@ -1395,7 +1395,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECExclusion> actual = Bid.Exclusions;
+            ObservableCollection<TECLabeled> actual = Bid.Exclusions;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1453,13 +1453,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECTag edit = new TECTag();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Catalogs.Tags.Add(edit);
-            var expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Bid.Catalogs.Tags)
+            var expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Catalogs.Tags)
             {
                 expected.Add(item);
             }
@@ -1467,7 +1467,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECTag> actual = Bid.Catalogs.Tags;
+            ObservableCollection<TECLabeled> actual = Bid.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1501,14 +1501,14 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLocation edit = new TECLocation();
+            TECLabeled edit = new TECLabeled();
             edit.Name = "This";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             Bid.Locations.Add(edit);
-            var expected = new ObservableCollection<TECLocation>();
-            foreach (TECLocation item in Bid.Locations)
+            var expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Bid.Locations)
             {
                 expected.Add(item);
             }
@@ -1516,7 +1516,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECLocation> actual = Bid.Locations;
+            ObservableCollection<TECLabeled> actual = Bid.Locations;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1763,7 +1763,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLocation edit = new TECLocation();
+            TECLabeled edit = new TECLabeled();
             edit.Name = "Floor 42";
 
             var system = new TECSystem();
@@ -1776,7 +1776,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            TECLocation actual = system.Location;
+            TECLabeled actual = system.Location;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1962,7 +1962,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 

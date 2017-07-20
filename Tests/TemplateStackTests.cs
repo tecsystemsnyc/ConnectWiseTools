@@ -146,7 +146,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);
@@ -216,12 +216,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECConnectionType> expected = new ObservableCollection<TECConnectionType>();
-            foreach (TECConnectionType item in Template.Catalogs.ConnectionTypes)
+            ObservableCollection<TECElectricalMaterial> expected = new ObservableCollection<TECElectricalMaterial>();
+            foreach (TECElectricalMaterial item in Template.Catalogs.ConnectionTypes)
             {
                 expected.Add(item);
             }
-            TECConnectionType edit = new TECConnectionType();
+            TECElectricalMaterial edit = new TECElectricalMaterial();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -230,7 +230,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECConnectionType> actual = Template.Catalogs.ConnectionTypes;
+            ObservableCollection<TECElectricalMaterial> actual = Template.Catalogs.ConnectionTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -240,12 +240,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECConduitType> expected = new ObservableCollection<TECConduitType>();
-            foreach (TECConduitType item in Template.Catalogs.ConduitTypes)
+            ObservableCollection<TECElectricalMaterial> expected = new ObservableCollection<TECElectricalMaterial>();
+            foreach (TECElectricalMaterial item in Template.Catalogs.ConduitTypes)
             {
                 expected.Add(item);
             }
-            TECConduitType edit = new TECConduitType();
+            TECElectricalMaterial edit = new TECElectricalMaterial();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -254,7 +254,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECConduitType> actual = Template.Catalogs.ConduitTypes;
+            ObservableCollection<TECElectricalMaterial> actual = Template.Catalogs.ConduitTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -264,12 +264,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECTag> expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Template.Catalogs.Tags)
+            ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Template.Catalogs.Tags)
             {
                 expected.Add(item);
             }
-            TECTag edit = new TECTag();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -278,7 +278,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
+            ObservableCollection<TECLabeled> actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -683,7 +683,7 @@ namespace Tests
             var Template = TestHelper.CreateTestTemplates();
             var device = Template.Catalogs.Devices.RandomObject();
             int expected = device.ConnectionTypes.Count;
-            TECConnectionType edit = Template.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial edit = Template.Catalogs.ConnectionTypes.RandomObject();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -1002,7 +1002,7 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);
@@ -1053,13 +1053,13 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECTag edit = new TECTag();
+            TECLabeled edit = new TECLabeled();
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
             Template.Catalogs.Tags.Add(edit);
-            var expected = new ObservableCollection<TECTag>();
-            foreach (TECTag item in Template.Catalogs.Tags)
+            var expected = new ObservableCollection<TECLabeled>();
+            foreach (TECLabeled item in Template.Catalogs.Tags)
             {
                 expected.Add(item);
             }
@@ -1067,7 +1067,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
+            ObservableCollection<TECLabeled> actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1321,7 +1321,7 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);

@@ -7,8 +7,8 @@ namespace TECUserControlLibrary.ViewModels
     public class LocationVM : SystemsVM
     {
         #region Properties
-        private TECLocation _selectedLocation;
-        public TECLocation SelectedLocation
+        private TECLabeled _selectedLocation;
+        public TECLabeled SelectedLocation
         {
             get { return _selectedLocation; }
             set

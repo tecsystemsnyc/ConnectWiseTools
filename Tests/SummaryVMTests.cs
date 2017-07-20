@@ -1054,7 +1054,7 @@ namespace Tests
             Total total = new Total();
             if(connection is TECSubScopeConnection)
             {
-                foreach(TECConnectionType conType in (connection as TECSubScopeConnection).ConnectionTypes)
+                foreach(TECElectricalMaterial conType in (connection as TECSubScopeConnection).ConnectionTypes)
                 {
                     total += calculateTotal(conType, type) * connection.Length;
                     total += calculateTotal(conType as TECScope, type);

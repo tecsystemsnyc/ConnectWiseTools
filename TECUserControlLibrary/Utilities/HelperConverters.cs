@@ -186,8 +186,8 @@ namespace TECUserControlLibrary.Utilities
         {
             if (value == null)
             {
-                var location = new TECLocation();
-                location.Name = "None";
+                var location = new TECLabeled();
+                location.Label = "None";
                 return location;
             }
             else
@@ -204,7 +204,7 @@ namespace TECUserControlLibrary.Utilities
             }
             else
             {
-                if (((TECLocation)value).Name == "None")
+                if (((TECLabeled)value).Label == "None")
                 {
                     return null;
                 }
@@ -353,7 +353,7 @@ namespace TECUserControlLibrary.Utilities
         {
             if (value == null)
             {
-                var conduitType = new TECConduitType();
+                var conduitType = new TECElectricalMaterial();
                 conduitType.Name = "None";
                 return conduitType;
             }
@@ -371,7 +371,7 @@ namespace TECUserControlLibrary.Utilities
             }
             else
             {
-                if (((TECConduitType)value).Name == "None")
+                if (((TECElectricalMaterial)value).Name == "None")
                 {
                     return null;
                 }
@@ -460,7 +460,7 @@ namespace TECUserControlLibrary.Utilities
         {
             if (value == null)
             {
-                var module = new TECIOModule();
+                var module = new TECIOModule(new TECManufacturer());
                 module.Name = "None";
                 return module;
             }

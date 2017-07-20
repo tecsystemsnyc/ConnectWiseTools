@@ -408,7 +408,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             StackItem expectedItem = new StackItem(Change.Add, subScope, device);
@@ -434,7 +434,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             List<StackItem> expectedItems = new List<StackItem>();
@@ -459,7 +459,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
@@ -1162,7 +1162,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             //Act
@@ -1189,7 +1189,7 @@ namespace Tests
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
@@ -1219,7 +1219,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
             TECSystem instance = system.AddInstance(bid);

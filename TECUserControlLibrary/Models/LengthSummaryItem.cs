@@ -52,7 +52,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public LengthSummaryItem(ElectricalMaterialComponent material)
+        public LengthSummaryItem(ElectricalMaterialComponent material) : base(Guid.NewGuid())
         {
             _material = material;
             _length = 0;

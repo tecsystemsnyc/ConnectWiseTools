@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.ViewModels
         private ObservableCollection<TECVisualConnection> _displayConnections;
         private string _controllerName;
         private TECController _selectedControllerTemplate;
-        private TECManufacturer _controllerManufacturer;
+        private TECControllerType _controllerType;
 
         private Tuple<TECObject, TECVisualScope, string> connectionStart;
 
@@ -196,13 +196,13 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedControllerTemplate");
             }
         }
-        public TECManufacturer ControllerManufacturer
+        public TECControllerType ControllerType
         {
-            get { return _controllerManufacturer; }
+            get { return _controllerType; }
             set
             {
-                _controllerManufacturer = value;
-                RaisePropertyChanged("ControllerManufacturer");
+                _controllerType = value;
+                RaisePropertyChanged("ControllerType");
             }
         }
 
@@ -347,12 +347,10 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddControllerExecute()
         {
-            var newController = new TECController(ControllerManufacturer);
+            var newController = new TECController(ControllerType);
             newController.Name = ControllerName;
-            newController.IO = SelectedControllerTemplate.IO;
             newController.Tags = SelectedControllerTemplate.Tags;
             newController.Description = SelectedControllerTemplate.Description;
-            newController.Cost = SelectedControllerTemplate.Cost;
             Bid.Controllers.Add(newController);
         }
         #endregion
@@ -551,7 +549,7 @@ namespace TECUserControlLibrary.ViewModels
         //        {
         //            var availableConnections = subScope.AvailableConnections;
 
-        //            //foreach (TECConnectionType conType in connection.ConnectionTypes)
+        //            //foreach (TECElectricalMaterial conType in connection.ConnectionTypes)
         //            //{
         //            //    if (availableConnections.Contains(conType))
         //            //    {
@@ -609,7 +607,7 @@ namespace TECUserControlLibrary.ViewModels
         //        if(item2.Item1 is TECSubScope)
         //        {
         //            var sub = item2.Item1 as TECSubScope;
-        //            foreach (TECConnectionType type in sub.ConnectionTypes)
+        //            foreach (TECElectricalMaterial type in sub.ConnectionTypes)
         //            {
         //                newConnection.ConnectionTypes.Add(type);
         //            }
@@ -633,7 +631,7 @@ namespace TECUserControlLibrary.ViewModels
         //    {
         //        newConnection.Controller = item2.Item1 as TECController;
         //        var sub = item1.Item1 as TECSubScope;
-        //        foreach (TECConnectionType type in sub.ConnectionTypes)
+        //        foreach (TECElectricalMaterial type in sub.ConnectionTypes)
         //        {
         //            newConnection.ConnectionTypes.Add(type);
         //        }

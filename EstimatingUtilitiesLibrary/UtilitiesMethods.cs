@@ -225,7 +225,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 foreach (T item in bidItems)
                 {
-                    if ((item as GuidObject).Guid == (templateItem as GuidObject).Guid)
+                    if ((item as TECObject).Guid == (templateItem as TECObject).Guid)
                     {
                         itemsToRemove.Add(item);
                     }

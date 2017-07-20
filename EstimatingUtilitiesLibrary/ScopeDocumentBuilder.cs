@@ -197,11 +197,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void addScopeBranch(TECScopeBranch branch, Document document, Paragraph paragraph, int tabs, string tabChar = "• ")
         {
-            string scopeString = branch.Name;
-            if (branch.Description != "")
-            {
-                scopeString += ": " + branch.Description;
-            }
+            string scopeString = branch.Label;
             for (int i = 0; i < tabs; i++)
             {
                 paragraph.AddTab();
@@ -228,9 +224,9 @@ namespace EstimatingUtilitiesLibrary
                  paragraph = document.LastSection.AddParagraph();
                 paragraph.AddTab();
                 string systemString = system.Name;
-                if (system.Quantity > 1)
+                if (system.SystemInstances.Count > 1)
                 {
-                    systemString += " (" + system.Quantity.ToString() + ")";
+                    systemString += " (" + system.SystemInstances.Count.ToString() + ")";
                 }
                 if (system.Description != "")
                 {
@@ -252,10 +248,6 @@ namespace EstimatingUtilitiesLibrary
                     paragraph = document.LastSection.AddParagraph();
                     paragraph.AddTab();
                     string equipmentString = equipment.Name;
-                    if (equipment.Quantity > 1)
-                    {
-                        equipmentString += " (" + equipment.Quantity.ToString() + ")";
-                    }
                     if (equipment.Description != "")
                     {
                         equipmentString += ": " + equipment.Description;
@@ -311,7 +303,7 @@ namespace EstimatingUtilitiesLibrary
             cell.Add(paragraph);
             document.LastSection.Add(table);
         }
-        private static void createNotesAndExclusions(Document document, List<TECLabeled> notes, List<TECExclusion> exclusions)
+        private static void createNotesAndExclusions(Document document, List<TECLabeled> notes, List<TECLabeled> exclusions)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Notes:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
@@ -320,16 +312,16 @@ namespace EstimatingUtilitiesLibrary
             foreach (TECLabeled note in notes)
             {
                 paragraph = document.LastSection.AddParagraph();
-                paragraph.AddFormattedText("•   " + note.Text);
+                paragraph.AddFormattedText("•   " + note.Label);
             }
             paragraph = document.LastSection.AddParagraph("Exclusions:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
 
-            foreach (TECExclusion exclusion in exclusions)
+            foreach (TECLabeled exclusion in exclusions)
             {
                 paragraph = document.LastSection.AddParagraph();
-                paragraph.AddFormattedText("•   " + exclusion.Text);
+                paragraph.AddFormattedText("•   " + exclusion.Label);
                 paragraph.AddLineBreak();
             }
         }

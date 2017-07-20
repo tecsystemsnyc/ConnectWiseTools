@@ -32,14 +32,14 @@ namespace TECUserControlLibrary.UserControls
             DependencyProperty.Register("AddTagCommand", typeof(ICommand),
               typeof(AddTagControl));
 
-        public ObservableCollection<TECTag> TagList
+        public ObservableCollection<TECLabeled> TagList
         {
-            get { return (ObservableCollection<TECTag>)GetValue(TagListProperty); }
+            get { return (ObservableCollection<TECLabeled>)GetValue(TagListProperty); }
             set { SetValue(TagListProperty, value); }
         }
 
         public static readonly DependencyProperty TagListProperty =
-            DependencyProperty.Register("TagList", typeof(ObservableCollection<TECTag>),
+            DependencyProperty.Register("TagList", typeof(ObservableCollection<TECLabeled>),
               typeof(AddTagControl));
 
         /// <summary>

@@ -878,7 +878,7 @@ namespace Tests
         public void Save_Templates_Add_Device()
         {
             //Act
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
             types.Add(templates.Catalogs.ConnectionTypes[0]);
             TECDevice expectedDevice = new TECDevice(Guid.NewGuid(), 
                 types,
@@ -1008,7 +1008,7 @@ namespace Tests
         {
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
-            var testConnectionType = new TECConnectionType();
+            var testConnectionType = new TECElectricalMaterial();
             testConnectionType.Name = "Test Add Connection Type Device";
             templates.Catalogs.ConnectionTypes.Add(testConnectionType);
             expectedDevice.ConnectionTypes.Add(testConnectionType);
@@ -1026,10 +1026,10 @@ namespace Tests
             }
 
             //Assert
-            foreach(TECConnectionType expectedConnectionType in expectedDevice.ConnectionTypes)
+            foreach(TECElectricalMaterial expectedConnectionType in expectedDevice.ConnectionTypes)
             {
                 bool found = false;
-                foreach(TECConnectionType actualConnectionType in actualDevice.ConnectionTypes)
+                foreach(TECElectricalMaterial actualConnectionType in actualDevice.ConnectionTypes)
                 {
                     if (expectedConnectionType.Guid == actualConnectionType.Guid)
                     {
@@ -1420,8 +1420,8 @@ namespace Tests
         {
             //Act
             int oldNumTags = templates.Catalogs.Tags.Count;
-            TECTag expectedTag = new TECTag();
-            expectedTag.Text = "Test add tag";
+            TECLabeled expectedTag = new TECLabeled();
+            expectedTag.Label = "Test add tag";
 
             templates.Catalogs.Tags.Add(expectedTag);
 
@@ -1429,8 +1429,8 @@ namespace Tests
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECTag actualTag = null;
-            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
+            TECLabeled actualTag = null;
+            foreach (TECLabeled tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {
@@ -1440,7 +1440,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedTag.Text, actualTag.Text);
+            Assert.AreEqual(expectedTag.Label, actualTag.Label);
             Assert.AreEqual((oldNumTags + 1), actualTemplates.Catalogs.Tags.Count);
         }
 
@@ -1449,7 +1449,7 @@ namespace Tests
         {
             //Act
             int oldNumTags = templates.Catalogs.Tags.Count;
-            TECTag tagToRemove = templates.Catalogs.Tags[0];
+            TECLabeled tagToRemove = templates.Catalogs.Tags[0];
 
             templates.Catalogs.Tags.Remove(tagToRemove);
 
@@ -1458,7 +1458,7 @@ namespace Tests
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
+            foreach (TECLabeled tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == tagToRemove.Guid) { Assert.Fail(); }
             }
@@ -1473,7 +1473,7 @@ namespace Tests
         {
             //Act
             int oldNumConnectionTypes = templates.Catalogs.ConnectionTypes.Count;
-            TECConnectionType expectedConnectionType = new TECConnectionType();
+            TECElectricalMaterial expectedConnectionType = new TECElectricalMaterial();
             expectedConnectionType.Name = "Test Add Connection Type";
             expectedConnectionType.Cost = 21.34;
 
@@ -1499,9 +1499,9 @@ namespace Tests
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECConnectionType actualConnectionType = null;
+            TECElectricalMaterial actualConnectionType = null;
             TECCost actualCost = null;
-            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
                 {
@@ -1526,7 +1526,7 @@ namespace Tests
         {
             //Act
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
-            TECConnectionType expectedConnectionType = templates.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial expectedConnectionType = templates.Catalogs.ConnectionTypes.RandomObject();
 
             TECCost expectedRated = null;
             foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
@@ -1544,8 +1544,8 @@ namespace Tests
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECConnectionType actualConnectionType = null;
-            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            TECElectricalMaterial actualConnectionType = null;
+            foreach (TECElectricalMaterial connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
                 {
@@ -1576,7 +1576,7 @@ namespace Tests
         {
             //Act
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
-            TECConduitType expectedConduitType = new TECConduitType();
+            TECElectricalMaterial expectedConduitType = new TECElectricalMaterial();
             expectedConduitType.Name = "Test Add Conduit Type";
             expectedConduitType.Cost = 21.34;
 
@@ -1598,8 +1598,8 @@ namespace Tests
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECConduitType actualConnectionType = null;
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            TECElectricalMaterial actualConnectionType = null;
+            foreach (TECElectricalMaterial conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedConduitType.Guid)
                 {
@@ -1621,7 +1621,7 @@ namespace Tests
         {
             //Act
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
-            TECConduitType conduitTypeToRemove = templates.Catalogs.ConduitTypes[0];
+            TECElectricalMaterial conduitTypeToRemove = templates.Catalogs.ConduitTypes[0];
 
             templates.Catalogs.ConduitTypes.Remove(conduitTypeToRemove);
 
@@ -1630,7 +1630,7 @@ namespace Tests
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == conduitTypeToRemove.Guid) Assert.Fail();
             }
@@ -1643,7 +1643,7 @@ namespace Tests
         {
             //Act
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
-            TECConduitType expectedConduitType = templates.Catalogs.ConduitTypes.RandomObject();
+            TECElectricalMaterial expectedConduitType = templates.Catalogs.ConduitTypes.RandomObject();
             
             TECCost expectedRated = null;
             foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
@@ -1661,8 +1661,8 @@ namespace Tests
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECConduitType actualConduitType = null;
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            TECElectricalMaterial actualConduitType = null;
+            foreach (TECElectricalMaterial conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedConduitType.Guid)
                 {

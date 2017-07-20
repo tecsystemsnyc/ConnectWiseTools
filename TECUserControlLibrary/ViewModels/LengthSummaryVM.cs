@@ -254,7 +254,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (connection is TECSubScopeConnection)
                 {
-                    foreach (TECConnectionType connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
+                    foreach (TECElectricalMaterial connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
                     {
                         AddLength(connectionType, connection.Length);
                         foreach(TECCost cost in connectionType.AssociatedCosts)
@@ -308,7 +308,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (connection is TECSubScopeConnection)
                 {
-                    foreach (TECConnectionType connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
+                    foreach (TECElectricalMaterial connectionType in (connection as TECSubScopeConnection).ConnectionTypes)
                     {
                         RemoveLength(connectionType, connection.Length);
                         foreach(TECCost cost in connectionType.AssociatedCosts)
@@ -328,9 +328,9 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void AddLength(ElectricalMaterialComponent component, double length)
+        public void AddLength(TECElectricalMaterial component, double length)
         {
-            if ((component is TECConnectionType && Type == LengthType.Wire) || (component is TECConduitType && Type == LengthType.Conduit))
+            if ((component is TECElectricalMaterial && Type == LengthType.Wire) || (component is TECElectricalMaterial && Type == LengthType.Conduit))
             {
                 bool containsLength = lengthDictionary.ContainsKey(component.Guid);
                 if (containsLength)
@@ -352,9 +352,9 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        public void RemoveLength(ElectricalMaterialComponent component, double length)
+        public void RemoveLength(TECElectricalMaterial component, double length)
         {
-            if ((component is TECConnectionType && Type == LengthType.Wire) || (component is TECConduitType && Type == LengthType.Conduit))
+            if ((component is TECElectricalMaterial && Type == LengthType.Wire) || (component is TECElectricalMaterial && Type == LengthType.Conduit))
             {
                 bool containsLength = lengthDictionary.ContainsKey(component.Guid);
                 if (containsLength)

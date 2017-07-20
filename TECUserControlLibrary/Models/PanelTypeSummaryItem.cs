@@ -57,7 +57,7 @@ namespace EstimateBuilder.Model
             }
         }
 
-        public PanelTypeSummaryItem(TECPanelType panelType)
+        public PanelTypeSummaryItem(TECPanelType panelType) : base(Guid.NewGuid())
         {
             _panelType = panelType;
             _quantity = 1;

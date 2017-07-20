@@ -60,7 +60,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public TECConnectionType WireType
+        public TECElectricalMaterial WireType
         {
             get
             {
@@ -83,7 +83,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public TECConduitType ConduitType
+        public TECElectricalMaterial ConduitType
         {
             get
             {
@@ -163,10 +163,10 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        private TECConnectionType defaultWireType;
+        private TECElectricalMaterial defaultWireType;
         #endregion
 
-        public NetworkController(TECController controller, TECConnectionType defaultWireType)
+        public NetworkController(TECController controller, TECElectricalMaterial defaultWireType) : base(Guid.NewGuid())
         {
             Controller = controller;
             _possibleParents = new ObservableCollection<TECController>();

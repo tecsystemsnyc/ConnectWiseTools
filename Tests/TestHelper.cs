@@ -38,13 +38,13 @@ namespace Tests
             bid.Catalogs = CreateTestCatalogs();
             
             //Locations
-            var cellar = new TECLocation();
+            var cellar = new TECLabeled();
             cellar.Name = "Cellar";
-            var location1 = new TECLocation();
+            var location1 = new TECLabeled();
             location1.Name = "1st Floor";
-            var location2 = new TECLocation();
+            var location2 = new TECLabeled();
             location2.Name = "2nd Floor";
-            var location3 = new TECLocation();
+            var location3 = new TECLabeled();
             location3.Name = "3rd Floor";
 
             bid.Locations.Add(cellar);
@@ -70,13 +70,13 @@ namespace Tests
 
             //Notes
             var note1 = new TECLabeled();
-            note1.Text = "Note 1";
+            note1.Label = "Note 1";
 
             bid.Notes.Add(note1);
 
             //Exclusions
-            var exclusion1 = new TECExclusion();
-            exclusion1.Text = "Exclusion 1";
+            var exclusion1 = new TECLabeled();
+            exclusion1.Label = "Exclusion 1";
 
             bid.Exclusions.Add(exclusion1);
 
@@ -221,16 +221,16 @@ namespace Tests
             templates.Labor = CreateTestLabor();
 
             //Tags
-            TECTag testTag = new TECTag();
-            testTag.Text = "Test Tag";
-            TECTag sysTag = new TECTag();
-            sysTag.Text = "System Tag";
-            TECTag equipTag = new TECTag();
-            equipTag.Text = "Equipment Tag";
-            TECTag ssTag = new TECTag();
-            ssTag.Text = "SubScope Tag";
-            TECTag devTag = new TECTag();
-            devTag.Text = "Device Tag";
+            TECLabeled testTag = new TECLabeled();
+            testTag.Label = "Test Tag";
+            TECLabeled sysTag = new TECLabeled();
+            sysTag.Label = "System Tag";
+            TECLabeled equipTag = new TECLabeled();
+            equipTag.Label = "Equipment Tag";
+            TECLabeled ssTag = new TECLabeled();
+            ssTag.Label = "SubScope Tag";
+            TECLabeled devTag = new TECLabeled();
+            devTag.Label = "Device Tag";
 
             templates.Catalogs.Tags.Add(testTag);
             templates.Catalogs.Tags.Add(sysTag);
@@ -254,24 +254,24 @@ namespace Tests
             templates.Catalogs.Manufacturers.Add(childDevMan);
 
             //Connection Types
-            TECConnectionType testDevConnType = new TECConnectionType();
+            TECElectricalMaterial testDevConnType = new TECElectricalMaterial();
             testDevConnType.Name = "FourC18";
 
-            TECConnectionType childDevConnType = new TECConnectionType();
+            TECElectricalMaterial childDevConnType = new TECElectricalMaterial();
             childDevConnType.Name = "ThreeC18";
 
             templates.Catalogs.ConnectionTypes.Add(testDevConnType);
             templates.Catalogs.ConnectionTypes.Add(childDevConnType);
 
             //Conduit Types
-            TECConduitType testConduitType = new TECConduitType();
+            TECElectricalMaterial testConduitType = new TECElectricalMaterial();
             testConduitType.Name = "EMT";
             testConduitType.Cost = 12;
             testConduitType.Labor = 2;
 
             templates.Catalogs.ConduitTypes.Add(testConduitType);
 
-            TECConduitType otherConduitType = new TECConduitType();
+            TECElectricalMaterial otherConduitType = new TECElectricalMaterial();
             otherConduitType.Name = "RGS";
             otherConduitType.Cost = 18;
             otherConduitType.Labor = 4;
@@ -299,14 +299,14 @@ namespace Tests
             templates.Catalogs.IOModules.Add(testIOModule);
 
             //Devices
-            ObservableCollection<TECConnectionType> contypes2 = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> contypes2 = new ObservableCollection<TECElectricalMaterial>();
             contypes2.Add(testDevConnType);
             TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
             testDev.Cost = 20.3;
 
-            ObservableCollection<TECConnectionType> contypes3 = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> contypes3 = new ObservableCollection<TECElectricalMaterial>();
             contypes3.Add(childDevConnType);
             TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, childDevMan);
             childDev.Name = "Child Device";
@@ -510,23 +510,23 @@ namespace Tests
         {
             TECCatalogs outCatalogs = new TECCatalogs();
             //Tags
-            var tag1 = new TECTag();
-            tag1.Text = "Tag 1";
-            var tag2 = new TECTag();
-            tag2.Text = "Test Tag";
+            var tag1 = new TECLabeled();
+            tag1.Label = "Tag 1";
+            var tag2 = new TECLabeled();
+            tag2.Label = "Test Tag";
 
             outCatalogs.Tags.Add(tag1);
             outCatalogs.Tags.Add(tag2);
 
             //Conduit Types
-            var conduitType1 = new TECConduitType();
+            var conduitType1 = new TECElectricalMaterial();
             conduitType1.Name = "Test Conduit 1";
             conduitType1.Cost = RandomInt(10, 100);
             conduitType1.Labor = RandomInt(10, 100);
 
             outCatalogs.ConduitTypes.Add(conduitType1);
 
-            var conduitType2 = new TECConduitType();
+            var conduitType2 = new TECElectricalMaterial();
             conduitType2.Name = "Test Conduit 2";
             conduitType2.Cost = RandomInt(10, 100);
             conduitType2.Labor = RandomInt(10, 100);
@@ -534,12 +534,12 @@ namespace Tests
             outCatalogs.ConduitTypes.Add(conduitType2);
 
             //ConnectionTypes
-            var connectionType1 = new TECConnectionType();
+            var connectionType1 = new TECElectricalMaterial();
             connectionType1.Name = "FourC18";
             connectionType1.Cost = RandomInt(10, 100);
             connectionType1.Labor = RandomInt(10, 100);
 
-            var connectionType2 = new TECConnectionType();
+            var connectionType2 = new TECElectricalMaterial();
             connectionType2.Name = "FourC18";
 
             outCatalogs.ConnectionTypes.Add(connectionType1);
@@ -553,7 +553,7 @@ namespace Tests
             outCatalogs.Manufacturers.Add(manufacturer1);
 
             //Devices
-            ObservableCollection<TECConnectionType> contypes4 = new ObservableCollection<TECConnectionType>();
+            ObservableCollection<TECElectricalMaterial> contypes4 = new ObservableCollection<TECElectricalMaterial>();
             contypes4.Add(connectionType1);
             TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
             device1.Name = "Device 1";
@@ -631,7 +631,7 @@ namespace Tests
         public static TECDevice CreateTestDevice(TECCatalogs catalogs)
         {
 
-            var connectionTypes = new ObservableCollection<TECConnectionType>();
+            var connectionTypes = new ObservableCollection<TECElectricalMaterial>();
             connectionTypes.Add(catalogs.ConnectionTypes.RandomObject());
             var manufacturer = catalogs.Manufacturers.RandomObject();
 

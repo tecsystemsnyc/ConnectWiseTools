@@ -27,8 +27,8 @@ namespace Tests
         static TECPoint expectedPoint;
         static TECScopeBranch expectedBranch;
         static TECLabeled expectedNote;
-        static TECExclusion expectedExclusion;
-        static TECTag expectedTag;
+        static TECLabeled expectedExclusion;
+        static TECLabeled expectedTag;
         //static TECDrawing expectedDrawing;
         //static TECPage expectedPage;
         //static TECVisualScope expectedVisualScope;
@@ -48,8 +48,8 @@ namespace Tests
         static TECPoint actualPoint;
         static TECScopeBranch actualBranch;
         static TECLabeled actualNote;
-        static TECExclusion actualExclusion;
-        static TECTag actualTag;
+        static TECLabeled actualExclusion;
+        static TECLabeled actualTag;
         //static TECDrawing actualDrawing;
         //static TECPage actualPage;
         //static TECVisualScope actualVisualScope;
@@ -173,7 +173,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECExclusion exclusion in actualBid.Exclusions)
+            foreach (TECLabeled exclusion in actualBid.Exclusions)
             {
                 if (exclusion.Guid == expectedExclusion.Guid)
                 {
@@ -182,7 +182,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECTag tag in actualBid.Catalogs.Tags)
+            foreach (TECLabeled tag in actualBid.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {
@@ -370,10 +370,10 @@ namespace Tests
             Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
 
-            foreach(TECConnectionType expectedConnectionType in expectedDevice.ConnectionTypes)
+            foreach(TECElectricalMaterial expectedConnectionType in expectedDevice.ConnectionTypes)
             {
                 bool found = false;
-                foreach (TECConnectionType actualConnectionType in actualDevice.ConnectionTypes)
+                foreach (TECElectricalMaterial actualConnectionType in actualDevice.ConnectionTypes)
                 {
                     if (actualConnectionType.Guid == expectedConnectionType.Guid)
                     {
@@ -445,39 +445,39 @@ namespace Tests
         public void SaveAs_Bid_Note()
         {
             //Assert
-            Assert.AreEqual(expectedNote.Text, actualNote.Text);
+            Assert.AreEqual(expectedNote.Label, actualNote.Label);
         }
 
         [TestMethod]
         public void SaveAs_Bid_Exclusion()
         {
             //Assert
-            Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
+            Assert.AreEqual(expectedExclusion.Label, actualExclusion.Label);
         }
 
         [TestMethod]
         public void SaveAs_Bid_Tag()
         {
             //Assert
-            Assert.AreEqual(expectedTag.Text, actualTag.Text);
+            Assert.AreEqual(expectedTag.Label, actualTag.Label);
 
-            string expectedText = actualTag.Text;
+            string expectedText = actualTag.Label;
             Guid expectedGuid = actualTag.Guid;
 
             Assert.AreEqual(expectedSystem.Tags[0].Guid, actualSystem.Tags[0].Guid);
-            Assert.AreEqual(expectedSystem.Tags[0].Text, actualSystem.Tags[0].Text);
+            Assert.AreEqual(expectedSystem.Tags[0].Label, actualSystem.Tags[0].Label);
 
             Assert.AreEqual(expectedEquipment.Tags[0].Guid, actualEquipment.Tags[0].Guid);
-            Assert.AreEqual(expectedEquipment.Tags[0].Text, actualEquipment.Tags[0].Text);
+            Assert.AreEqual(expectedEquipment.Tags[0].Label, actualEquipment.Tags[0].Label);
 
             Assert.AreEqual(expectedSubScope.Tags[0].Guid, actualSubScope.Tags[0].Guid);
-            Assert.AreEqual(expectedSubScope.Tags[0].Text, actualSubScope.Tags[0].Text);
+            Assert.AreEqual(expectedSubScope.Tags[0].Label, actualSubScope.Tags[0].Label);
 
             Assert.AreEqual(expectedDevice.Tags[0].Guid, actualDevice.Tags[0].Guid);
-            Assert.AreEqual(expectedDevice.Tags[0].Text, actualDevice.Tags[0].Text);
+            Assert.AreEqual(expectedDevice.Tags[0].Label, actualDevice.Tags[0].Label);
 
             Assert.AreEqual(expectedPoint.Tags[0].Guid, actualPoint.Tags[0].Guid);
-            Assert.AreEqual(expectedPoint.Tags[0].Text, actualPoint.Tags[0].Text);
+            Assert.AreEqual(expectedPoint.Tags[0].Label, actualPoint.Tags[0].Label);
         }
 
         //[TestMethod]

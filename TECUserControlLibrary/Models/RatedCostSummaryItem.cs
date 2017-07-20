@@ -54,7 +54,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public RatedCostSummaryItem(TECCost ratedCost, double length)
+        public RatedCostSummaryItem(TECCost ratedCost, double length) : base(Guid.NewGuid())
         {
             _ratedCost = ratedCost;
             _length = length;

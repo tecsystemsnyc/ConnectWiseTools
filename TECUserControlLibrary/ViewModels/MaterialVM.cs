@@ -273,7 +273,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectionTypeExecute()
         {
-            var connectionType = new TECConnectionType();
+            var connectionType = new TECElectricalMaterial();
             connectionType.Name = ConnectionTypeName;
             connectionType.Cost = ConnectionTypeCost;
             connectionType.Labor = ConnectionTypeLabor;
@@ -284,7 +284,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addConduitTypeExecute()
         {
-            var conduitType = new TECConduitType();
+            var conduitType = new TECElectricalMaterial();
             conduitType.Name = ConduitTypeName;
             conduitType.Cost = ConduitTypeCost;
             conduitType.Labor = ConduitTypeLabor;
@@ -341,12 +341,11 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addIOModuleExecute()
         {
-            var ioModule = new TECIOModule();
+            var ioModule = new TECIOModule(IOModuleManufacturer);
             ioModule.Name = IOModuleName;
             ioModule.Cost = IOModuleCost;
             ioModule.IOPerModule = IOModuleIOPerModule;
             ioModule.Description = IOModuleDescription;
-            ioModule.Manufacturer = IOModuleManufacturer;
 
             Templates.Catalogs.IOModules.Add(ioModule);
             IOModuleName = "";

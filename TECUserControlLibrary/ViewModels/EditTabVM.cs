@@ -127,7 +127,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private TECPoint _selectedPoint;
 
-        public TECTag SelectedTag
+        public TECLabeled SelectedTag
         {
             get { return _selectedTag; }
             set
@@ -136,7 +136,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedTag");
             }
         }
-        private TECTag _selectedTag;
+        private TECLabeled _selectedTag;
 
         private TECController _selectedController;
         public TECController SelectedController
@@ -207,8 +207,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECTag> _tagSelections;
-        public ObservableCollection<TECTag> TagSelections
+        private ObservableCollection<TECLabeled> _tagSelections;
+        public ObservableCollection<TECLabeled> TagSelections
         {
             get { return _tagSelections; }
             set
@@ -229,8 +229,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECConduitType> _conduitTypeSelections;
-        public ObservableCollection<TECConduitType> ConduitTypeSelections
+        private ObservableCollection<TECElectricalMaterial> _conduitTypeSelections;
+        public ObservableCollection<TECElectricalMaterial> ConduitTypeSelections
         {
             get { return _conduitTypeSelections; }
             set
@@ -251,8 +251,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECConnectionType> _connectionTypeSelections;
-        public ObservableCollection<TECConnectionType> ConnectionTypeSelections
+        private ObservableCollection<TECElectricalMaterial> _connectionTypeSelections;
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypeSelections
         {
             get { return _connectionTypeSelections; }
             set
@@ -262,8 +262,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private TECConnectionType _selectedConnectionType;
-        public TECConnectionType SelectedConnectionType
+        private TECElectricalMaterial _selectedConnectionType;
+        public TECElectricalMaterial SelectedConnectionType
         {
             get { return _selectedConnectionType; }
             set
@@ -300,11 +300,10 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand AddTagToEquipmentCommand { get; private set; }
         public ICommand AddTagToSubScopeCommand { get; private set; }
         public ICommand AddTagToDeviceCommand { get; private set; }
-        public ICommand AddTagToPointCommand { get; private set; }
         public ICommand AddTagToControllerCommand { get; private set; }
         public ICommand AddTagToPanelCommand { get; private set; }
         public ICommand AddTagToPanelTypeCommand { get; private set; }
-        public ICommand AddIOToControllerCommand { get; private set; }
+        //public ICommand AddIOToControllerCommand { get; private set; }
         public ICommand DeleteSelectedSystemCommand { get; private set; }
         public ICommand DeleteSelectedEquipmentCommand { get; private set; }
         public ICommand DeleteSelectedSubScopeCommand { get; private set; }
@@ -379,7 +378,7 @@ namespace TECUserControlLibrary.ViewModels
             bool hasIO = false;
             if (SelectedController != null && ControllerIO != 0)
             {
-                foreach (TECIO io in SelectedController.IO)
+                foreach (TECIO io in SelectedController.Type.IO)
                 {
                     if (io.Type == ControllerIO)
                     {
@@ -401,12 +400,11 @@ namespace TECUserControlLibrary.ViewModels
             AddTagToEquipmentCommand = new RelayCommand(AddTagToEquipmentExecute, CanAddTagToEquipment);
             AddTagToSubScopeCommand = new RelayCommand(AddTagToSubScopeExecute, CanAddTagToSubScope);
             AddTagToDeviceCommand = new RelayCommand(AddTagToDeviceExecute, CanAddTagToDevice);
-            AddTagToPointCommand = new RelayCommand(AddTagToPointExecute, CanAddTagToPoint);
             AddTagToControllerCommand = new RelayCommand(AddTagToControllerExecute, CanAddTagToController);
             AddTagToPanelCommand = new RelayCommand(AddTagToPanelExecute, CanAddTagToPanel);
             AddTagToPanelTypeCommand = new RelayCommand(AddTagToPanelTypeExecute, CanAddTagToPanelType);
 
-            AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, addIOCanExecute);
+            //AddIOToControllerCommand = new RelayCommand(AddIOToControllerExecute, addIOCanExecute);
 
             DeleteSelectedSystemCommand = new RelayCommand(DeleteSelectedSystemExecute);
             DeleteSelectedEquipmentCommand = new RelayCommand(DeleteSelectedEquipmentExecute);
@@ -538,25 +536,8 @@ namespace TECUserControlLibrary.ViewModels
             {
                 return false;
             }
-        }
-        private void AddTagToPointExecute()
-        {
-            SelectedPoint.Tags.Add(SelectedTag);
+        } 
 
-        }
-        private bool CanAddTagToPoint()
-        {
-            if (SelectedTag != null
-                && SelectedPoint != null
-                && !SelectedPoint.Tags.Contains(SelectedTag))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         private void AddTagToControllerExecute()
         {
             SelectedController.Tags.Add(SelectedTag);
@@ -609,16 +590,16 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void AddIOToControllerExecute()
-        {
-            var newIO = new TECIO();
-            newIO.Type = ControllerIO;
-            newIO.Quantity = ControllerIOQTY;
-            SelectedController.IO.Add(newIO);
+        //private void AddIOToControllerExecute()
+        //{
+        //    var newIO = new TECIO();
+        //    newIO.Type = ControllerIO;
+        //    newIO.Quantity = ControllerIOQTY;
+        //    SelectedController.IO.Add(newIO);
 
-            ControllerIOQTY = 1;
-            ControllerIO = 0;
-        }
+        //    ControllerIOQTY = 1;
+        //    ControllerIO = 0;
+        //}
         private void DeleteSelectedSystemExecute()
         {
             if (Templates != null)

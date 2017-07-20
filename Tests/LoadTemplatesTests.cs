@@ -296,7 +296,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECConnectionType connectType in actualDevice.ConnectionTypes)
+            foreach (TECElectricalMaterial connectType in actualDevice.ConnectionTypes)
             {
                 if (connectType.Guid == connectionTypeGuid)
                 {
@@ -393,8 +393,8 @@ namespace Tests
             double expectedCost = 12.48;
             double expectedLabor = 84.21;
 
-            TECConnectionType actualConnectionType = null;
-            foreach (TECConnectionType connectionType in actualTemplates.Catalogs.ConnectionTypes)
+            TECElectricalMaterial actualConnectionType = null;
+            foreach (TECElectricalMaterial connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedGuid)
                 {
@@ -421,8 +421,8 @@ namespace Tests
             double expectedCost = 45.67;
             double expectedLabor = 76.54;
 
-            TECConduitType actualConduitType = null;
-            foreach (TECConduitType conduitType in actualTemplates.Catalogs.ConduitTypes)
+            TECElectricalMaterial actualConduitType = null;
+            foreach (TECElectricalMaterial conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedGuid)
                 {
@@ -491,8 +491,8 @@ namespace Tests
             Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
             string expectedString = "Test Tag";
 
-            TECTag actualTag = null;
-            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
+            TECLabeled actualTag = null;
+            foreach (TECLabeled tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == expectedGuid)
                 {
@@ -501,7 +501,7 @@ namespace Tests
                 }
             }
 
-            Assert.AreEqual(expectedString, actualTag.Text, "Tag text didn't load properly.");
+            Assert.AreEqual(expectedString, actualTag.Label, "Tag text didn't load properly.");
         }
 
         [TestMethod]
@@ -692,7 +692,7 @@ namespace Tests
         {
             bool foundTag = false;
 
-            foreach (TECTag tag in scope.Tags)
+            foreach (TECLabeled tag in scope.Tags)
             {
                 if (tag.Guid == TEST_TAG_GUID)
                 {

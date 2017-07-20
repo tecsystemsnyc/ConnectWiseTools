@@ -55,8 +55,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SubScopeConnectionCollection");
             }
         }
-        private ObservableCollection<TECConduitType> _conduitTypeSelections;
-        public ObservableCollection<TECConduitType> ConduitTypeSelections
+        private ObservableCollection<TECElectricalMaterial> _conduitTypeSelections;
+        public ObservableCollection<TECElectricalMaterial> ConduitTypeSelections
         {
             get { return _conduitTypeSelections; }
             set
@@ -85,8 +85,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("NoneController");
             }
         }
-        private TECConduitType _noneConduitType;
-        public TECConduitType NoneConduitType
+        private TECElectricalMaterial _noneConduitType;
+        public TECElectricalMaterial NoneConduitType
         {
             get { return _noneConduitType; }
             set
@@ -147,12 +147,12 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupCatalogCollections()
         {
-            ConduitTypeSelections = new ObservableCollection<TECConduitType>();
-            var noneConduit = new TECConduitType();
+            ConduitTypeSelections = new ObservableCollection<TECElectricalMaterial>();
+            var noneConduit = new TECElectricalMaterial();
             noneConduit.Name = "None";
             NoneConduitType = noneConduit;
             ConduitTypeSelections.Add(NoneConduitType);
-            foreach (TECConduitType type in ScopeManager.Catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial type in ScopeManager.Catalogs.ConduitTypes)
             {
                 ConduitTypeSelections.Add(type);
             }
@@ -162,7 +162,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllerSelections = new ObservableCollection<TECController>();
             if (SelectedSystem != null )
             {
-                var noneController = new TECController(new TECManufacturer());
+                var noneController = new TECController(new TECControllerType(new TECManufacturer()));
                 noneController.Name = "None";
                 NoneController = noneController;
                 ControllerSelections.Add(NoneController);

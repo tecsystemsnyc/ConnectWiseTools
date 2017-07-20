@@ -230,7 +230,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (connection is TECSubScopeConnection)
             {
-                foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
+                foreach (TECElectricalMaterial type in (connection as TECSubScopeConnection).ConnectionTypes)
                 {
                     foreach (TECCost cost in type.AssociatedCosts)
                     {
@@ -267,7 +267,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (connection is TECSubScopeConnection)
             {
-                foreach (TECConnectionType type in (connection as TECSubScopeConnection).ConnectionTypes)
+                foreach (TECElectricalMaterial type in (connection as TECSubScopeConnection).ConnectionTypes)
                 {
                     foreach (TECCost cost in type.AssociatedCosts)
                     {
@@ -320,10 +320,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 AddAssCost(cost);
             }
-            foreach (TECPoint point in subScope.Points)
-            {
-                AddPoint(point);
-            }
             foreach (TECDevice dev in subScope.Devices)
             {
                 AddDevice(dev);
@@ -334,10 +330,6 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECCost cost in subScope.AssociatedCosts)
             {
                 RemoveAssCost(cost);
-            }
-            foreach (TECPoint point in subScope.Points)
-            {
-                RemovePoint(point);
             }
             foreach (TECDevice dev in subScope.Devices)
             {
@@ -357,21 +349,6 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECCost cost in dev.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical) RemoveAssCost(cost);
-            }
-        }
-
-        public void AddPoint(TECPoint point)
-        {
-            foreach (TECCost cost in point.AssociatedCosts)
-            {
-                AddAssCost(cost);
-            }
-        }
-        public void RemovePoint(TECPoint point)
-        {
-            foreach (TECCost cost in point.AssociatedCosts)
-            {
-                RemoveAssCost(cost);
             }
         }
 

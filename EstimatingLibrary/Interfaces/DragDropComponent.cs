@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface DragDropComponent
+    public interface DragDropComponent
     {
         Object DragDropCopy(TECScopeManager scopeManager);
     }

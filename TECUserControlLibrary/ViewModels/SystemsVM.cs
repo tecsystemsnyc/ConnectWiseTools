@@ -98,8 +98,8 @@ namespace TECUserControlLibrary.ViewModels
                 SelectionChanged?.Invoke(value);
             }
         }
-        private ObservableCollection<TECLocation> _locationSelections;
-        public ObservableCollection<TECLocation> LocationSelections
+        private ObservableCollection<TECLabeled> _locationSelections;
+        public ObservableCollection<TECLabeled> LocationSelections
         {
             get { return _locationSelections; }
             set
@@ -209,11 +209,11 @@ namespace TECUserControlLibrary.ViewModels
 
         private void populateLocationSelections()
         {
-            LocationSelections = new ObservableCollection<TECLocation>();
-            var noneLocation = new TECLocation();
-            noneLocation.Name = "None";
+            LocationSelections = new ObservableCollection<TECLabeled>();
+            var noneLocation = new TECLabeled();
+            noneLocation.Label = "None";
             LocationSelections.Add(noneLocation);
-            foreach (TECLocation location in Bid.Locations)
+            foreach (TECLabeled location in Bid.Locations)
             {
                 LocationSelections.Add(location);
             }
@@ -223,12 +223,12 @@ namespace TECUserControlLibrary.ViewModels
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object location in e.NewItems)
-                { LocationSelections.Add(location as TECLocation); }
+                { LocationSelections.Add(location as TECLabeled); }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object location in e.OldItems)
-                { LocationSelections.Remove(location as TECLocation); }
+                { LocationSelections.Remove(location as TECLabeled); }
             }
         }
 

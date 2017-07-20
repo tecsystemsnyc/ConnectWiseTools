@@ -1568,8 +1568,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToSystem()
         {
             TECSystem systemToEdit = bid.Systems.RandomObject();
-            TECTag tagToAdd = null;
-            foreach (TECTag tag in bid.Catalogs.Tags)
+            TECLabeled tagToAdd = null;
+            foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
                 if (!systemToEdit.Tags.Contains(tag))
                 {
@@ -1593,7 +1593,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECTag tag in finalSystem.Tags)
+            foreach (TECLabeled tag in finalSystem.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1605,8 +1605,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToEquipment()
         {
             TECEquipment equipmentToEdit = bid.RandomEquipment();
-            TECTag tagToAdd = null;
-            foreach (TECTag tag in bid.Catalogs.Tags)
+            TECLabeled tagToAdd = null;
+            foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
                 if (!equipmentToEdit.Tags.Contains(tag))
                 {
@@ -1638,7 +1638,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECTag tag in finalEquipment.Tags)
+            foreach (TECLabeled tag in finalEquipment.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1650,8 +1650,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToSubScope()
         {
             TECSubScope subScopeToEdit = bid.RandomSubScope();
-            TECTag tagToAdd = null;
-            foreach (TECTag tag in bid.Catalogs.Tags)
+            TECLabeled tagToAdd = null;
+            foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
                 if (!subScopeToEdit.Tags.Contains(tag))
                 {
@@ -1684,7 +1684,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECTag tag in finalSubScope.Tags)
+            foreach (TECLabeled tag in finalSubScope.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1696,8 +1696,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToPoint()
         {
             TECPoint PointToEdit = bid.RandomPoint();
-            TECTag tagToAdd = null;
-            foreach (TECTag tag in bid.Catalogs.Tags)
+            TECLabeled tagToAdd = null;
+            foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
                 if (!PointToEdit.Tags.Contains(tag))
                 {
@@ -1733,7 +1733,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECTag tag in finalPoint.Tags)
+            foreach (TECLabeled tag in finalPoint.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1745,8 +1745,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToController()
         {
             TECController ControllerToEdit = bid.Controllers.RandomObject();
-            TECTag tagToAdd = null;
-            foreach (TECTag tag in bid.Catalogs.Tags)
+            TECLabeled tagToAdd = null;
+            foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
                 if (!ControllerToEdit.Tags.Contains(tag))
                 {
@@ -1771,7 +1771,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECTag tag in finalController.Tags)
+            foreach (TECLabeled tag in finalController.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1968,7 +1968,7 @@ namespace Tests
         public void Save_Bid_Add_Location()
         {
             //Act
-            TECLocation expectedLocation = new TECLocation();
+            TECLabeled expectedLocation = new TECLabeled();
             expectedLocation.Name = "New Location";
             bid.Locations.Add(expectedLocation);
 
@@ -1976,8 +1976,8 @@ namespace Tests
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECLocation actualLocation = null;
-            foreach (TECLocation loc in actualBid.Locations)
+            TECLabeled actualLocation = null;
+            foreach (TECLabeled loc in actualBid.Locations)
             {
                 if (loc.Guid == expectedLocation.Guid)
                 {
@@ -1996,7 +1996,7 @@ namespace Tests
         {
             //Act
             int oldNumLocations = bid.Locations.Count;
-            TECLocation locationToRemove = bid.Locations.RandomObject();
+            TECLabeled locationToRemove = bid.Locations.RandomObject();
             bid.Locations.Remove(locationToRemove);
 
             DatabaseHelper.Update(path, testStack, false);
@@ -2004,7 +2004,7 @@ namespace Tests
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
-            foreach (TECLocation loc in actualBid.Locations)
+            foreach (TECLabeled loc in actualBid.Locations)
             {
                 if (loc.Guid == locationToRemove.Guid) Assert.Fail();
             }
@@ -2016,15 +2016,15 @@ namespace Tests
         public void Save_Bid_Edit_Location_Name()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations.RandomObject();
+            TECLabeled expectedLocation = bid.Locations.RandomObject();
             expectedLocation.Name = "Location Name Save";
 
             DatabaseHelper.Update(path, testStack, false);
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECLocation actualLocation = null;
-            foreach (TECLocation loc in actualBid.Locations)
+            TECLabeled actualLocation = null;
+            foreach (TECLabeled loc in actualBid.Locations)
             {
                 if (loc.Guid == expectedLocation.Guid)
                 {
@@ -2041,7 +2041,7 @@ namespace Tests
         public void Save_Bid_Add_Location_ToScope()
         {
             //Act
-            TECLocation expectedLocation = bid.Locations.RandomObject();
+            TECLabeled expectedLocation = bid.Locations.RandomObject();
 
             TECSystem sysToModify = null;
             foreach (TECSystem sys in bid.Systems)
@@ -2063,8 +2063,8 @@ namespace Tests
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECLocation actualLocation = null;
-            foreach (TECLocation loc in actualBid.Locations)
+            TECLabeled actualLocation = null;
+            foreach (TECLabeled loc in actualBid.Locations)
             {
                 if (loc.Guid == expectedLocation.Guid)
                 {
@@ -2148,8 +2148,8 @@ namespace Tests
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECLocation expectedLocation = null;
-            foreach (TECLocation loc in bid.Locations)
+            TECLabeled expectedLocation = null;
+            foreach (TECLabeled loc in bid.Locations)
             {
                 if (loc.Name == "Cellar")
                 {
@@ -2176,8 +2176,8 @@ namespace Tests
 
             int actualNumLocations = actualBid.Locations.Count;
 
-            TECLocation actualLocation = null;
-            foreach (TECLocation loc in actualBid.Locations)
+            TECLabeled actualLocation = null;
+            foreach (TECLabeled loc in actualBid.Locations)
             {
                 if (loc.Guid == expectedLocation.Guid)
                 {
@@ -2210,7 +2210,7 @@ namespace Tests
         {
             //Act
             TECLabeled expectedNote = new TECLabeled();
-            expectedNote.Text = "New Note";
+            expectedNote.Label = "New Note";
             bid.Notes.Add(expectedNote);
 
             DatabaseHelper.Update(path, testStack, false);
@@ -2228,7 +2228,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedNote.Text, actualNote.Text);
+            Assert.AreEqual(expectedNote.Label, actualNote.Label);
         }
 
         [TestMethod]
@@ -2257,7 +2257,7 @@ namespace Tests
         {
             //Act
             TECLabeled expectedNote = bid.Notes[0];
-            expectedNote.Text = "Test Save Text";
+            expectedNote.Label = "Test Save Text";
 
             DatabaseHelper.Update(path, testStack, false);
 
@@ -2274,7 +2274,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedNote.Text, actualNote.Text);
+            Assert.AreEqual(expectedNote.Label, actualNote.Label);
         }
         #endregion Save Note
 
@@ -2284,16 +2284,16 @@ namespace Tests
         public void Save_Bid_Add_Exclusion()
         {
             //Act
-            TECExclusion expectedExclusion = new TECExclusion();
-            expectedExclusion.Text = "New Exclusion";
+            TECLabeled expectedExclusion = new TECLabeled();
+            expectedExclusion.Label = "New Exclusion";
             bid.Exclusions.Add(expectedExclusion);
 
             DatabaseHelper.Update(path, testStack, false);
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECExclusion actualExclusion = null;
-            foreach (TECExclusion Exclusion in actualBid.Exclusions)
+            TECLabeled actualExclusion = null;
+            foreach (TECLabeled Exclusion in actualBid.Exclusions)
             {
                 if (Exclusion.Guid == expectedExclusion.Guid)
                 {
@@ -2303,7 +2303,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
+            Assert.AreEqual(expectedExclusion.Label, actualExclusion.Label);
         }
 
         [TestMethod]
@@ -2311,7 +2311,7 @@ namespace Tests
         {
             //Act
             int oldNumExclusions = bid.Exclusions.Count;
-            TECExclusion ExclusionToRemove = bid.Exclusions[0];
+            TECLabeled ExclusionToRemove = bid.Exclusions[0];
             bid.Exclusions.Remove(ExclusionToRemove);
 
             DatabaseHelper.Update(path, testStack, false);
@@ -2319,7 +2319,7 @@ namespace Tests
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
             //Assert
-            foreach (TECExclusion Exclusion in actualBid.Exclusions)
+            foreach (TECLabeled Exclusion in actualBid.Exclusions)
             {
                 if (Exclusion.Guid == ExclusionToRemove.Guid) Assert.Fail();
             }
@@ -2331,15 +2331,15 @@ namespace Tests
         public void Save_Bid_Exclusion_Text()
         {
             //Act
-            TECExclusion expectedExclusion = bid.Exclusions[0];
-            expectedExclusion.Text = "Test Save Text";
+            TECLabeled expectedExclusion = bid.Exclusions[0];
+            expectedExclusion.Label = "Test Save Text";
 
             DatabaseHelper.Update(path, testStack, false);
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECExclusion actualExclusion = null;
-            foreach (TECExclusion Exclusion in actualBid.Exclusions)
+            TECLabeled actualExclusion = null;
+            foreach (TECLabeled Exclusion in actualBid.Exclusions)
             {
                 if (Exclusion.Guid == expectedExclusion.Guid)
                 {
@@ -2349,7 +2349,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedExclusion.Text, actualExclusion.Text);
+            Assert.AreEqual(expectedExclusion.Label, actualExclusion.Label);
         }
         #endregion Save Exclusion
 

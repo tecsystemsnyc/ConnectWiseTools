@@ -441,7 +441,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 handleDeviceChildren(newItem as TECDevice, item.Change);
             }
-            else if (newItem is TECConduitType || newItem is TECConnectionType)
+            else if (newItem is TECElectricalMaterial || newItem is TECElectricalMaterial)
             {
                 handleScopeChildren(newItem as TECScope, item.Change);
                 handleElectricalMaterialChildren(newItem as ElectricalMaterialComponent, item.Change);
@@ -525,12 +525,6 @@ namespace EstimatingUtilitiesLibrary
         {
             handleScopeChildren(subScope as TECScope, change);
             StackItem item;
-            foreach (TECPoint newPoint in subScope.Points)
-            {
-                handleScopeChildren(newPoint as TECScope, change);
-                item = new StackItem(change, (object)subScope, (object)newPoint);
-                SaveStack.Add(item);
-            }
             foreach (TECDevice newDevice in subScope.Devices)
             {
                 item = new StackItem(change, (object)subScope, (object)newDevice);
@@ -544,12 +538,12 @@ namespace EstimatingUtilitiesLibrary
             {
                 if (change == Change.Add)
                 {
-                    SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+                    SaveStack.Add(new StackItem(Change.AddRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECElectricalMaterial)));
 
                 }
                 else if (change == Change.Remove)
                 {
-                    SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECConduitType)));
+                    SaveStack.Add(new StackItem(Change.RemoveRelationship, connection, connection.ConduitType, typeof(TECConnection), typeof(TECElectricalMaterial)));
 
                 }
             }
@@ -611,7 +605,7 @@ namespace EstimatingUtilitiesLibrary
             StackItem item;
             item = new StackItem(change, (object)device, (object)device.Manufacturer);
             SaveStack.Add(item);
-            foreach(TECConnectionType type in device.ConnectionTypes)
+            foreach(TECElectricalMaterial type in device.ConnectionTypes)
             {
                 item = new StackItem(change, (object)device, (object)type);
                 SaveStack.Add(item);
@@ -622,9 +616,9 @@ namespace EstimatingUtilitiesLibrary
         {
             handleScopeChildren(controller as TECScope, change);
             StackItem item;
-            if (controller.Manufacturer != null)
+            if (controller.Type != null)
             {
-                item = new StackItem(change, controller, controller.Manufacturer);
+                item = new StackItem(change, controller, controller.Type);
                 SaveStack.Add(item);
             }
             foreach (TECConnection connection in controller.ChildrenConnections)
@@ -632,17 +626,6 @@ namespace EstimatingUtilitiesLibrary
                 item = new StackItem(change, controller, connection, typeof(TECController), typeof(TECConnection));
                 SaveStack.Add(item);
                 handleConnectionChildren(connection, change);
-            }
-            foreach (TECIO io in controller.IO)
-            {
-                item = new StackItem(change, controller, io, typeof(TECController), typeof(TECIO));
-                SaveStack.Add(item);
-                if (io.IOModule != null)
-                {
-                    item = new StackItem(change, io, io.IOModule);
-                    SaveStack.Add(item);
-                }
-
             }
         }
         private void handleScopeChildren(TECScope scope, Change change)
@@ -653,9 +636,9 @@ namespace EstimatingUtilitiesLibrary
                 item = new StackItem(change, (object)scope, (object)cost, typeof(TECScope), typeof(TECCost));
                 SaveStack.Add(item);
             }
-            foreach (TECTag tag in scope.Tags)
+            foreach (TECLabeled tag in scope.Tags)
             {
-                item = new StackItem(change, (object)scope, (object)tag, typeof(TECScope), typeof(TECTag));
+                item = new StackItem(change, (object)scope, (object)tag, typeof(TECScope), typeof(TECLabeled));
                 SaveStack.Add(item);
             }
         }
@@ -744,12 +727,12 @@ namespace EstimatingUtilitiesLibrary
                 SaveStack.Add(new StackItem(Change.Add, device, catalogs));
                 handleDeviceChildren(device, change);
             }
-            foreach (TECConnectionType type in catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial type in catalogs.ConnectionTypes)
             {
                 SaveStack.Add(new StackItem(Change.Add, type, catalogs));
                 handleScopeChildren(type, change);
             }
-            foreach (TECConduitType type in catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial type in catalogs.ConduitTypes)
             {
                 SaveStack.Add(new StackItem(Change.Add, type, catalogs));
                 handleScopeChildren(type, change);
@@ -773,7 +756,7 @@ namespace EstimatingUtilitiesLibrary
             {
                 SaveStack.Add(new StackItem(Change.Add, manufacturer, catalogs));
             }
-            foreach (TECTag tag in catalogs.Tags)
+            foreach (TECLabeled tag in catalogs.Tags)
             {
                 SaveStack.Add(new StackItem(Change.Add, tag, catalogs));
             }

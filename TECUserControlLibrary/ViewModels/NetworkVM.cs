@@ -46,7 +46,7 @@ namespace TECUserControlLibrary.ViewModels
             NetworkControllersVM = new NetworkControllerVM(System.Windows.Visibility.Visible, bid);
             UnitaryControllersVM = new NetworkControllerVM(System.Windows.Visibility.Collapsed, bid);
 
-            noneController = new TECController(new TECManufacturer());
+            noneController = new TECController(new TECControllerType(new TECManufacturer()));
             noneController.Name = "None";
             NetworkControllersVM.NoneController = noneController;
             UnitaryControllersVM.NoneController = noneController;

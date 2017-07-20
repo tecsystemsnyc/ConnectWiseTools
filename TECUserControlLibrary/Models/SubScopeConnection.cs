@@ -47,7 +47,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public TECConduitType ConduitType
+        public TECElectricalMaterial ConduitType
         {
             get
             {
@@ -68,7 +68,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public SubScopeConnection(TECSubScope subscope)
+        public SubScopeConnection(TECSubScope subscope) : base(Guid.NewGuid())
         {
             _subScope = subscope;
             SubScope.PropertyChanged += SubScope_PropertyChanged;
@@ -117,7 +117,7 @@ namespace TECUserControlLibrary.Models
             
         }
 
-        private void handleConduitSelection(TECConduitType conduitType)
+        private void handleConduitSelection(TECElectricalMaterial conduitType)
         {
             if (SubScope.Connection != null)
             {
