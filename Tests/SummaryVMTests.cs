@@ -435,16 +435,17 @@ namespace Tests
             TECSubScope ss = new TECSubScope();
             typEquip.SubScope.Add(ss);
 
-            typical.AddInstance(bid);
-
             TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
             ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
-
+            
             //Act
             TECConnection connection = controller.AddSubScope(ss);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
+
+            typical.AddInstance(bid);
+
 
             Total totalTEC = calculateTotal(connection, CostType.TEC);
             Total totalElec = calculateTotal(connection, CostType.Electrical);

@@ -818,6 +818,7 @@ namespace Tests
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
             assertNoCostOrLabor(bid);
+
             checkRefresh(bid);
         }
 
