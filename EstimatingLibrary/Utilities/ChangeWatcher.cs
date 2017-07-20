@@ -16,8 +16,11 @@ namespace EstimatingLibrary.Utilities
         public Action<object, PropertyChangedEventArgs> Changed;
         public Action<object, PropertyChangedEventArgs> InstanceChanged;
 
+        private TECScopeManager scopeManager;
+
         public ChangeWatcher(TECScopeManager scopeManager)
         {
+            this.scopeManager = scopeManager;
             if (scopeManager is TECBid)
             {
                 registerBidChanges(scopeManager as TECBid);
@@ -580,9 +583,12 @@ namespace EstimatingLibrary.Utilities
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
-                    ((TECObject)newValue).PropertyChanged += Instance_PropertyChanged;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                    handleChildren(newValue, Change.Add, ChangeType.Instance);
+                    if (!isTypicalConnection(oldValue, newValue))
+                    {
+                        ((TECObject)newValue).PropertyChanged += Instance_PropertyChanged;
+                        DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                        handleChildren(newValue, Change.Add, ChangeType.Instance);
+                    }
                 }
                 else if (e.PropertyName == "Remove")
                 {
@@ -630,6 +636,24 @@ namespace EstimatingLibrary.Utilities
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
             }
+        }
+
+        private bool isTypicalConnection(object oldValue, object newValue)
+        {
+            var controller = oldValue as TECController;
+            var connection = newValue as TECSubScopeConnection;
+            var bid = scopeManager as TECBid;
+            if(controller != null && connection != null && bid != null)
+            {
+                foreach(TECSystem system in bid.Systems)
+                {
+                    if (system.SubScope.Contains(connection.SubScope))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs<object> args, Change change)
