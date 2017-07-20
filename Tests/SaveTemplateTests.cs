@@ -311,8 +311,6 @@ namespace Tests
             TECSystem expectedSystem = new TECSystem();
             expectedSystem.Name = "New system";
             expectedSystem.Description = "New system desc";
-            expectedSystem.BudgetPriceModifier = 123.5;
-            expectedSystem.Quantity = 1235;
 
             templates.SystemTemplates.Add(expectedSystem);
 
@@ -333,8 +331,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -409,52 +405,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
-
-        [TestMethod]
-        public void Save_Templates_System_Quantity()
-        {
-            //Act
-            TECSystem expectedSystem = templates.SystemTemplates[0];
-            expectedSystem.Quantity = 987654321;
-            DatabaseHelper.Update(path, testStack);
-
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
-
-            TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
-            {
-                if (system.Guid == expectedSystem.Guid)
-                {
-                    actualSystem = system;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-        }
-
-        [TestMethod]
-        public void Save_Templates_System_BudgetPrice()
-        {
-            //Act
-            TECSystem expectedSystem = templates.SystemTemplates[0];
-            expectedSystem.BudgetPriceModifier = 9876543.21;
-            DatabaseHelper.Update(path, testStack);
-
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
-
-            TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
-            {
-                if (system.Guid == expectedSystem.Guid)
-                {
-                    actualSystem = system;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
-        }
+        
         #endregion Edit System
         #endregion Save System
 
@@ -466,8 +417,6 @@ namespace Tests
             TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Equipment desc";
-            expectedEquipment.BudgetUnitPrice = 123.5;
-            expectedEquipment.Quantity = 1235;
 
             templates.EquipmentTemplates.Add(expectedEquipment);
 
@@ -488,8 +437,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
         }
 
         [TestMethod]
@@ -524,8 +471,6 @@ namespace Tests
             TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New System Equipment";
             expectedEquipment.Description = "System equipment description";
-            expectedEquipment.BudgetUnitPrice = 468.3;
-            expectedEquipment.Quantity = 5;
 
             TECSystem sysToModify = templates.SystemTemplates[0];
 
@@ -559,8 +504,6 @@ namespace Tests
             Assert.IsNotNull(actualEquipment);
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
             foreach (TECEquipment equip in actualTemplates.EquipmentTemplates)
             {
                 if (equip.Guid == actualEquipment.Guid) Assert.Fail();
@@ -658,52 +601,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
         }
-
-        [TestMethod]
-        public void Save_Templates_Equipment_Quantity()
-        {
-            //Act
-            TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
-            expectedEquipment.Quantity = 987654321;
-            DatabaseHelper.Update(path, testStack);
-
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
-
-            TECEquipment actualEquipment = null;
-            foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
-            {
-                if (Equipment.Guid == expectedEquipment.Guid)
-                {
-                    actualEquipment = Equipment;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-        }
-
-        [TestMethod]
-        public void Save_Templates_Equipment_BudgetPrice()
-        {
-            //Act
-            TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
-            expectedEquipment.BudgetUnitPrice = 9876543.21;
-            DatabaseHelper.Update(path, testStack);
-
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
-
-            TECEquipment actualEquipment = null;
-            foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
-            {
-                if (Equipment.Guid == expectedEquipment.Guid)
-                {
-                    actualEquipment = Equipment;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
-        }
+        
         #endregion Save Equipment
 
         #region Save SubScope
@@ -714,7 +612,6 @@ namespace Tests
             TECSubScope expectedSubScope = new TECSubScope();
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New SubScope desc";
-            expectedSubScope.Quantity = 1235;
 
             templates.SubScopeTemplates.Add(expectedSubScope);
 
@@ -735,7 +632,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
-            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
         }
 
         [TestMethod]
@@ -809,30 +705,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
         }
-
-        [TestMethod]
-        public void Save_Templates_SubScope_Quantity()
-        {
-            //Act
-            TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
-            expectedSubScope.Quantity = 987654321;
-            DatabaseHelper.Update(path, testStack);
-
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
-
-            TECSubScope actualSubScope = null;
-            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
-            {
-                if (SubScope.Guid == expectedSubScope.Guid)
-                {
-                    actualSubScope = SubScope;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
-        }
-
+        
         [TestMethod]
         public void Save_Templates_SubScope_AssociatedCosts()
         {
@@ -908,7 +781,6 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
             Assert.AreEqual(expectedDevice.ConnectionTypes[0].Name, actualDevice.ConnectionTypes[0].Name);
-            Assert.AreEqual(expectedDevice.Quantity, actualDevice.Quantity);
         }
 
         [TestMethod]
@@ -1050,7 +922,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             TECManufacturer manToAdd = new TECManufacturer();
-            manToAdd.Name = "Test";
+            manToAdd.Label = "Test";
             manToAdd.Multiplier = 1;
             templates.Catalogs.Manufacturers.Add(manToAdd);
             expectedDevice.Manufacturer = manToAdd;
@@ -1077,11 +949,9 @@ namespace Tests
         public void Save_Templates_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid(), templates.Catalogs.Manufacturers[0]);
+            TECController expectedController = new TECController(Guid.NewGuid(), templates.Catalogs.ControllerTypes[0]);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
-            expectedController.Cost = 100;
-            expectedController.Manufacturer = templates.Catalogs.Manufacturers[0];
 
             templates.ControllerTemplates.Add(expectedController);
 
@@ -1102,7 +972,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedController.Name, actualController.Name);
             Assert.AreEqual(expectedController.Description, actualController.Description);
-            Assert.AreEqual(expectedController.Cost, actualController.Cost);
         }
 
         [TestMethod]
@@ -1175,157 +1044,157 @@ namespace Tests
             Assert.AreEqual(expectedController.Description, actualController.Description);
         }
 
-        [TestMethod]
-        public void Save_Templates_Controller_Cost()
-        {
-            //Act
-            TECController expectedController = templates.ControllerTemplates[0];
-            expectedController.Cost = 46.89;
-            DatabaseHelper.Update(path, testStack);
+        //[TestMethod]
+        //public void Save_Templates_Controller_Cost()
+        //{
+        //    //Act
+        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    expectedController.Cost = 46.89;
+        //    DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+        //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECController actualController = null;
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
-            {
-                if (controller.Guid == expectedController.Guid)
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
+        //    TECController actualController = null;
+        //    foreach (TECController controller in actualTemplates.ControllerTemplates)
+        //    {
+        //        if (controller.Guid == expectedController.Guid)
+        //        {
+        //            actualController = controller;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            Assert.AreEqual(expectedController.Cost, actualController.Cost);
-        }
+        //    //Assert
+        //    Assert.AreEqual(expectedController.Cost, actualController.Cost);
+        //}
 
-        [TestMethod]
-        public void Save_Templates_Controller_Manufacturer()
-        {
-            //Act
-            TECController expectedController = templates.ControllerTemplates[0];
-            var testManufacturer = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(testManufacturer);
-            expectedController.Manufacturer = testManufacturer;
-            DatabaseHelper.Update(path, testStack);
+        //[TestMethod]
+        //public void Save_Templates_Controller_Manufacturer()
+        //{
+        //    //Act
+        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    var testManufacturer = new TECManufacturer();
+        //    templates.Catalogs.Manufacturers.Add(testManufacturer);
+        //    expectedController.Manufacturer = testManufacturer;
+        //    DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+        //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECController actualController = null;
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
-            {
-                if (controller.Guid == expectedController.Guid)
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
+        //    TECController actualController = null;
+        //    foreach (TECController controller in actualTemplates.ControllerTemplates)
+        //    {
+        //        if (controller.Guid == expectedController.Guid)
+        //        {
+        //            actualController = controller;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
-        }
+        //    //Assert
+        //    Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
+        //}
 
         #region Controller IO
-        [TestMethod]
-        public void Save_Templates_Controller_Add_IO()
-        {
-            //Act
-            TECController expectedController = templates.ControllerTemplates[0];
-            var testio = new TECIO();
-            testio.Type = IOType.BACnetIP;
-            expectedController.IO.Add(testio);
-            bool hasBACnetIP = false;
-            DatabaseHelper.Update(path, testStack);
+        //[TestMethod]
+        //public void Save_Templates_Controller_Add_IO()
+        //{
+        //    //Act
+        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    var testio = new TECIO();
+        //    testio.Type = IOType.BACnetIP;
+        //    expectedController.IO.Add(testio);
+        //    bool hasBACnetIP = false;
+        //    DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
-            TECController actualController = null;
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
-            {
-                if (controller.Guid == expectedController.Guid)
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
+        //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+        //    TECController actualController = null;
+        //    foreach (TECController controller in actualTemplates.ControllerTemplates)
+        //    {
+        //        if (controller.Guid == expectedController.Guid)
+        //        {
+        //            actualController = controller;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            foreach (TECIO io in actualController.IO)
-            {
-                if (io.Type == IOType.BACnetIP)
-                {
-                    hasBACnetIP = true;
-                }
-            }
+        //    //Assert
+        //    foreach (TECIO io in actualController.IO)
+        //    {
+        //        if (io.Type == IOType.BACnetIP)
+        //        {
+        //            hasBACnetIP = true;
+        //        }
+        //    }
 
-            Assert.IsTrue(hasBACnetIP);
+        //    Assert.IsTrue(hasBACnetIP);
 
-        }
+        //}
 
-        [TestMethod]
-        public void Save_Templates_Controller_Remove_IO()
-        {
-            //Act
-            TECController expectedController = templates.ControllerTemplates[0];
-            int oldNumIO = expectedController.IO.Count;
-            TECIO ioToRemove = expectedController.IO[0];
+        //[TestMethod]
+        //public void Save_Templates_Controller_Remove_IO()
+        //{
+        //    //Act
+        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    int oldNumIO = expectedController.IO.Count;
+        //    TECIO ioToRemove = expectedController.IO[0];
 
-            expectedController.IO.Remove(ioToRemove);
+        //    expectedController.IO.Remove(ioToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+        //    DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+        //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECController actualController = null;
-            foreach (TECController con in actualTemplates.ControllerTemplates)
-            {
-                if (con.Guid == expectedController.Guid)
-                {
-                    actualController = con;
-                    break;
-                }
-            }
+        //    TECController actualController = null;
+        //    foreach (TECController con in actualTemplates.ControllerTemplates)
+        //    {
+        //        if (con.Guid == expectedController.Guid)
+        //        {
+        //            actualController = con;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            foreach (TECIO io in actualController.IO)
-            {
-                if (io.Type == ioToRemove.Type) { Assert.Fail(); }
-            }
+        //    //Assert
+        //    foreach (TECIO io in actualController.IO)
+        //    {
+        //        if (io.Type == ioToRemove.Type) { Assert.Fail(); }
+        //    }
 
-            Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
-        }
+        //    Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
+        //}
 
-        [TestMethod]
-        public void Save_Templates_Controller_IO_Quantity()
-        {
-            //Act
-            TECController expectedController = templates.ControllerTemplates[0];
-            TECIO ioToChange = expectedController.IO[0];
-            ioToChange.Quantity = 69;
+        //[TestMethod]
+        //public void Save_Templates_Controller_IO_Quantity()
+        //{
+        //    //Act
+        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    TECIO ioToChange = expectedController.IO[0];
+        //    ioToChange.Quantity = 69;
 
-            DatabaseHelper.Update(path, testStack);
+        //    DatabaseHelper.Update(path, testStack);
 
-            TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+        //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
-            TECController actualController = null;
-            foreach (TECController con in actualTemplates.ControllerTemplates)
-            {
-                if (con.Guid == expectedController.Guid)
-                {
-                    actualController = con;
-                    break;
-                }
-            }
+        //    TECController actualController = null;
+        //    foreach (TECController con in actualTemplates.ControllerTemplates)
+        //    {
+        //        if (con.Guid == expectedController.Guid)
+        //        {
+        //            actualController = con;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            foreach (TECIO io in actualController.IO)
-            {
-                if (io.Type == ioToChange.Type)
-                {
-                    Assert.AreEqual(ioToChange.Quantity, io.Quantity);
-                    break;
-                }
-            }
-        }
+        //    //Assert
+        //    foreach (TECIO io in actualController.IO)
+        //    {
+        //        if (io.Type == ioToChange.Type)
+        //        {
+        //            Assert.AreEqual(ioToChange.Quantity, io.Quantity);
+        //            break;
+        //        }
+        //    }
+        //}
         #endregion Controller IO
 
         #endregion
@@ -1337,7 +1206,7 @@ namespace Tests
             //Act
             int oldNumManufacturers = templates.Catalogs.Manufacturers.Count;
             TECManufacturer expectedManufacturer = new TECManufacturer();
-            expectedManufacturer.Name = "Test Add Manufacturer";
+            expectedManufacturer.Label = "Test Add Manufacturer";
             expectedManufacturer.Multiplier = 21.34;
 
             templates.Catalogs.Manufacturers.Add(expectedManufacturer);
@@ -1357,7 +1226,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
+            Assert.AreEqual(expectedManufacturer.Label, actualManufacturer.Label);
             Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier);
             Assert.AreEqual((oldNumManufacturers + 1), actualTemplates.Catalogs.Manufacturers.Count);
 
@@ -1368,7 +1237,7 @@ namespace Tests
         {
             //Act
             TECManufacturer expectedManufacturer = templates.Catalogs.Manufacturers[0];
-            expectedManufacturer.Name = "Test save manufacturer name";
+            expectedManufacturer.Label = "Test save manufacturer name";
             DatabaseHelper.Update(path, testStack);
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
@@ -1384,7 +1253,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedManufacturer.Name, actualMan.Name);
+            Assert.AreEqual(expectedManufacturer.Label, actualMan.Label);
         }
 
         [TestMethod]
@@ -1849,7 +1718,7 @@ namespace Tests
         public void Save_Templates_Add_PanelType()
         {
             //Act
-            TECPanelType expectedCost = new TECPanelType();
+            TECPanelType expectedCost = new TECPanelType(templates.Catalogs.Manufacturers.RandomObject());
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
 
@@ -1948,7 +1817,7 @@ namespace Tests
         public void Save_Templates_Add_IOModule()
         {
             //Act
-            TECIOModule expectedModule = new TECIOModule();
+            TECIOModule expectedModule = new TECIOModule(templates.Catalogs.Manufacturers.RandomObject());
             expectedModule.Name = "Add IO Module";
             expectedModule.Cost = 978.3;
             expectedModule.Manufacturer = templates.Catalogs.Manufacturers[0];
@@ -2134,7 +2003,7 @@ namespace Tests
 
             expectedScope.Equipment.Add(scopeEquipment);
 
-            var scopeController = new TECController(templates.Catalogs.Manufacturers[0]);
+            var scopeController = new TECController(templates.Catalogs.ControllerTypes[0]);
             scopeController.Name = "Test Scope Controller";
             expectedScope.Controllers.Add(scopeController);
             scopeController.AddSubScope(scopeEquipment.SubScope[0]);

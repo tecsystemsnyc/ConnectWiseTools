@@ -111,6 +111,7 @@
   <ItemGroup>
     <Compile Include="ChangeStack.cs" />
     <Compile Include="CSVWriter.cs" />
+    <Compile Include="DatabaseUpdater.cs" />
     <Compile Include="DBDefinitions.cs" />
     <Compile Include="EstimateSpreadsheetExporter.cs" />
     <Compile Include="DatabaseHelper.cs" />

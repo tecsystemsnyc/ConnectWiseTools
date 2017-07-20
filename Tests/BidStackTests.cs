@@ -359,7 +359,7 @@ namespace Tests
                 expected.Add(item);
             }
             TECLabeled edit = new TECLabeled();
-            edit.Name = "Edit";
+            edit.Label = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -409,7 +409,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECPanelType edit = new TECPanelType();
+            TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers.RandomObject());
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -594,18 +594,18 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            string expected = Bid.Locations[0].Name;
+            string expected = Bid.Locations[0].Label;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            Bid.Locations[0].Name = edit;
+            Bid.Locations[0].Label = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Bid.Locations[0].Name;
+            string actual = Bid.Locations[0].Label;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -658,29 +658,7 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_System_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            var system = Bid.Systems.RandomObject();
-            int expected = system.Quantity;
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            system.Quantity = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = system.Quantity;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_System_Equipment()
         {
@@ -715,7 +693,7 @@ namespace Tests
             var system = Bid.Systems.RandomObject();
             Guid expected = new Guid(system.Location.Guid.ToString());
             TECLabeled edit = new TECLabeled();
-            edit.Name = "Floor 42";
+            edit.Label = "Floor 42";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -777,29 +755,7 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Equipment_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            var equipment = Bid.RandomEquipment();
-            int expected = equipment.Quantity;
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            equipment.Quantity = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = equipment.Quantity;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Equipment_SubScope()
         {
@@ -873,28 +829,7 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_SubScope_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            var subScope = Bid.RandomSubScope();
-            int expected = subScope.Quantity;
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            subScope.Quantity = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = subScope.Quantity;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
+        
 
         [TestMethod]
         public void Undo_SubScope_Points()
@@ -999,44 +934,22 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             var point = Bid.RandomPoint();
-            string expected = point.Name;
+            string expected = point.Label;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            point.Name = edit;
+            point.Label = edit;
 
             testStack.Undo();
 
             //assert
-            string actual = point.Name;
+            string actual = point.Label;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Point_Description()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            var point = Bid.RandomPoint();
-            string expected = point.Description;
-            string edit = "Edit";
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            point.Description = edit;
-
-            testStack.Undo();
-
-            //assert
-            string actual = point.Description;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Point_Quantity()
         {
@@ -1091,18 +1004,18 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             var manufacturer = Bid.Catalogs.Manufacturers.RandomObject();
-            string expected = manufacturer.Name;
+            string expected = manufacturer.Label;
             string edit = "changedName";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             int beforeCount = testStack.UndoStack.Count;
-            manufacturer.Name = edit;
+            manufacturer.Label = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = manufacturer.Name;
+            string actual = manufacturer.Label;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -1136,21 +1049,22 @@ namespace Tests
         [TestMethod]
         public void Undo_Controller_IOModule()
         {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECIOModule expected = Bid.Controllers[0].IO[0].IOModule;
-            TECIOModule edit = new TECIOModule();
+            Assert.Fail();
+            ////Arrange
+            //var Bid = TestHelper.CreateTestBid();
+            //TECIOModule expected = Bid.Controllers[0].IO[0].IOModule;
+            //TECIOModule edit = new TECIOModule();
 
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            int beforeCount = testStack.UndoStack.Count;
-            Bid.Controllers[0].IO[0].IOModule = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
+            ////Act
+            //ChangeStack testStack = new ChangeStack(Bid);
+            //int beforeCount = testStack.UndoStack.Count;
+            //Bid.Controllers[0].IO[0].IOModule = edit;
+            //Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            //testStack.Undo();
 
-            //assert
-            TECIOModule actual = Bid.Controllers[0].IO[0].IOModule;
-            Assert.AreEqual(expected, actual, "Not Undone");
+            ////assert
+            //TECIOModule actual = Bid.Controllers[0].IO[0].IOModule;
+            //Assert.AreEqual(expected, actual, "Not Undone");
         }
 
         #endregion
@@ -1429,7 +1343,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECPanelType edit = new TECPanelType();
+            TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers.RandomObject());
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1502,7 +1416,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECLabeled edit = new TECLabeled();
-            edit.Name = "This";
+            edit.Label = "This";
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
@@ -1530,12 +1444,12 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
-            Bid.Locations[0].Name = edit;
+            Bid.Locations[0].Label = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Bid.Locations[0].Name;
+            string actual = Bid.Locations[0].Label ;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1712,27 +1626,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_System_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            var system = Bid.Systems.RandomObject();
-            system.Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = system.Quantity;
-            Assert.AreEqual(edit, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_System_Equipment()
         {
@@ -1764,7 +1658,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECLabeled edit = new TECLabeled();
-            edit.Name = "Floor 42";
+            edit.Label = "Floor 42";
 
             var system = new TECSystem();
             Bid.Systems.Add(system);
@@ -1823,27 +1717,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Equipment_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            var equipment = Bid.RandomEquipment();
-            equipment.Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = equipment.Quantity;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Equipment_SubScope()
         {
@@ -1910,27 +1784,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_SubScope_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            var subscope = Bid.RandomSubScope();
-            subscope.Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = subscope.Quantity;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_SubScope_Points()
         {
@@ -2066,26 +1920,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Device_Quantity()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            int edit = 123;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            var device = Bid.RandomDevice();
-            device.Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = device.Quantity;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
+        
 
         #endregion
 
@@ -2100,36 +1935,16 @@ namespace Tests
             //Act
             ChangeStack testStack = new ChangeStack(Bid);
             var point = Bid.RandomPoint();
-            point.Name = edit;
+            point.Label = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = point.Name;
+            string actual = point.Label;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Point_Description()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            string edit = "Edit";
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Bid);
-            var point = Bid.RandomPoint();
-            point.Description = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            string actual = point.Description;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Point_Quantity()
         {
@@ -2200,7 +2015,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECPanelType edit = new TECPanelType();
+            TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers.RandomObject());
 
             //Act
             ChangeStack testStack = new ChangeStack(Bid);

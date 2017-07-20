@@ -19,14 +19,14 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECController controller = new TECController(type);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Add, controller, type));
             expectedItems.Add(new StackItem(Change.Add, bid, controller));
 
             int expectedCount = 2;
@@ -44,7 +44,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
 
             //Act
@@ -490,14 +490,15 @@ namespace Tests
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(manufacturer);
+            TECController controller = new TECController(type);
             bid.Systems.Add(system);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Add, controller, type));
             expectedItems.Add(new StackItem(Change.Add, system, controller));
 
             int expectedCount = 2;
@@ -516,7 +517,8 @@ namespace Tests
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(manufacturer);
+            TECController controller = new TECController(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -527,9 +529,9 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.AddRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Controllers[0], manufacturer));
+            expectedItems.Add(new StackItem(Change.Add, instance.Controllers[0], type));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Controllers[0]));
-            expectedItems.Add(new StackItem(Change.Add, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Add, controller, type));
             expectedItems.Add(new StackItem(Change.Add, typical, controller));
 
             int expectedCount = 5;
@@ -547,7 +549,9 @@ namespace Tests
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(manufacturer);
+
+            TECController controller = new TECController(type);
             bid.Systems.Add(typical);
             typical.Controllers.Add(controller);
 
@@ -559,7 +563,7 @@ namespace Tests
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.AddRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Add, instance, instance.Controllers[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Controllers[0], manufacturer));
+            expectedItems.Add(new StackItem(Change.Add, instance.Controllers[0], type));
             expectedItems.Add(new StackItem(Change.Add, typical, instance));
 
             int expectedCount = expectedItems.Count;
@@ -576,7 +580,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
 
@@ -600,7 +604,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
@@ -631,7 +635,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
@@ -761,14 +765,15 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(manufacturer);
+            TECController controller = new TECController(type);
             bid.Controllers.Add(controller);
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Remove, controller, type));
             expectedItems.Add(new StackItem(Change.Remove, bid, controller));
 
             int expectedCount = 2;
@@ -786,7 +791,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Panels.Add(panel);
 
@@ -1251,7 +1256,8 @@ namespace Tests
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(manufacturer);
+            TECController controller = new TECController(type);
             bid.Systems.Add(system);
             system.Controllers.Add(controller);
 
@@ -1259,7 +1265,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Remove, controller, type));
             expectedItems.Add(new StackItem(Change.Remove, system, controller));
 
             int expectedCount = 2;
@@ -1278,7 +1284,8 @@ namespace Tests
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(manufacturer);
+            TECController controller = new TECController(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Controllers.Add(controller);
@@ -1290,9 +1297,9 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, removed, typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, removed, manufacturer));
+            expectedItems.Add(new StackItem(Change.Remove, removed, type));
             expectedItems.Add(new StackItem(Change.Remove, instance, removed));
-            expectedItems.Add(new StackItem(Change.Remove, controller, manufacturer));
+            expectedItems.Add(new StackItem(Change.Remove, controller, type));
             expectedItems.Add(new StackItem(Change.Remove, typical, controller));
 
             int expectedCount = expectedItems.Count;
@@ -1309,7 +1316,8 @@ namespace Tests
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
             TECManufacturer manufacturer = new TECManufacturer();
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type = new TECControllerType(manufacturer);
+            TECController controller = new TECController(type);
             bid.Systems.Add(typical);
             typical.Controllers.Add(controller);
             TECSystem instance = typical.AddInstance(bid);
@@ -1321,7 +1329,7 @@ namespace Tests
 
             List<StackItem> expectedItems = new List<StackItem>();
             expectedItems.Add(new StackItem(Change.Remove, instance, instance.Controllers[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Controllers[0], instance.Controllers[0].Manufacturer));
+            expectedItems.Add(new StackItem(Change.Remove, instance.Controllers[0], instance.Controllers[0].Type));
             expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
             expectedItems.Add(new StackItem(Change.Remove, typical, instance));
 
@@ -1339,7 +1347,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
             system.Panels.Add(panel);
@@ -1364,7 +1372,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
@@ -1396,7 +1404,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECSystem typical = new TECSystem();
-            TECPanelType type = new TECPanelType();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);

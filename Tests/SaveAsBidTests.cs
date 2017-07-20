@@ -101,7 +101,7 @@ namespace Tests
             expectedBranch = null;
             foreach (TECScopeBranch branch in expectedBid.ScopeTree)
             {
-                if (branch.Name == "Branch 1")
+                if (branch.Label == "Branch 1")
                 {
                     expectedBranch = branch;
                     break;
@@ -141,11 +141,11 @@ namespace Tests
                 }
             }
 
-            actualEquipment = TestHelper.FindScopeInSystems(actualBid.Systems, expectedEquipment) as TECEquipment;
-            actualSubScope = TestHelper.FindScopeInSystems(actualBid.Systems, expectedSubScope) as TECSubScope;
+            actualEquipment = TestHelper.FindObjectInSystems(actualBid.Systems, expectedEquipment) as TECEquipment;
+            actualSubScope = TestHelper.FindObjectInSystems(actualBid.Systems, expectedSubScope) as TECSubScope;
             actualDevices = actualSubScope.Devices;
-            actualDevice = TestHelper.FindScopeInSystems(actualBid.Systems, expectedDevice) as TECDevice;
-            actualPoint = TestHelper.FindScopeInSystems(actualBid.Systems, expectedPoint) as TECPoint;
+            actualDevice = TestHelper.FindObjectInSystems(actualBid.Systems, expectedDevice) as TECDevice;
+            actualPoint = TestHelper.FindObjectInSystems(actualBid.Systems, expectedPoint) as TECPoint;
             foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
@@ -314,8 +314,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
             Assert.AreEqual(expectedSystem.SystemInstances.Count, actualSystem.SystemInstances.Count);
             Assert.AreEqual(expectedSystem.Equipment.Count, actualSystem.Equipment.Count);
             Assert.AreEqual(expectedSystem.Controllers.Count, actualSystem.Controllers.Count);
@@ -332,8 +330,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
         }
 
         [TestMethod]
@@ -342,7 +338,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
-            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
         }
 
         [TestMethod]
@@ -394,11 +389,11 @@ namespace Tests
         public void SaveAs_Bid_Manufacturer()
         {
             //Assert
-            Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
+            Assert.AreEqual(expectedManufacturer.Label, actualManufacturer.Label);
             Assert.IsTrue(TestHelper.areDoublesEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier),
                 "Expected: " + expectedManufacturer.Multiplier + " Actual: " + actualManufacturer.Multiplier);
 
-            Assert.AreEqual(expectedDevice.Manufacturer.Name, expectedDevice.Manufacturer.Name);
+            Assert.AreEqual(expectedDevice.Manufacturer.Label, expectedDevice.Manufacturer.Label);
             Assert.IsTrue(TestHelper.areDoublesEqual(expectedDevice.Manufacturer.Multiplier, expectedDevice.Manufacturer.Multiplier));
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, expectedDevice.Manufacturer.Guid);
         }
@@ -407,8 +402,7 @@ namespace Tests
         public void SaveAs_Bid_Point()
         {
             //Assert
-            Assert.AreEqual(expectedPoint.Name, actualPoint.Name);
-            Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
+            Assert.AreEqual(expectedPoint.Label, actualPoint.Label);
             Assert.AreEqual(expectedPoint.Quantity, actualPoint.Quantity);
             Assert.AreEqual(expectedPoint.Type, actualPoint.Type);
         }
@@ -428,16 +422,13 @@ namespace Tests
         public void SaveAs_Bid_ScopeBranch()
         {
             //Assert
-            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
-            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+            Assert.AreEqual(expectedBranch.Label, actualBranch.Label);
             Assert.AreEqual(expectedBranch.Guid, actualBranch.Guid);
 
-            Assert.AreEqual(expectedBranch.Branches[0].Name, actualBranch.Branches[0].Name);
-            Assert.AreEqual(expectedBranch.Branches[0].Description, actualBranch.Branches[0].Description);
+            Assert.AreEqual(expectedBranch.Branches[0].Label, actualBranch.Branches[0].Label);
             Assert.AreEqual(expectedBranch.Branches[0].Guid, actualBranch.Branches[0].Guid);
 
-            Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Name, actualBranch.Branches[0].Branches[0].Name);
-            Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Description, actualBranch.Branches[0].Branches[0].Description);
+            Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Label, actualBranch.Branches[0].Branches[0].Label);
             Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Guid, actualBranch.Branches[0].Branches[0].Guid);
         }
 
@@ -475,16 +466,13 @@ namespace Tests
 
             Assert.AreEqual(expectedDevice.Tags[0].Guid, actualDevice.Tags[0].Guid);
             Assert.AreEqual(expectedDevice.Tags[0].Label, actualDevice.Tags[0].Label);
-
-            Assert.AreEqual(expectedPoint.Tags[0].Guid, actualPoint.Tags[0].Guid);
-            Assert.AreEqual(expectedPoint.Tags[0].Label, actualPoint.Tags[0].Label);
         }
 
         //[TestMethod]
         //public void SaveAs_Bid_Drawing()
         //{
         //    //Assert
-        //    Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
+        //    Assert.AreEqual(expectedDrawing.Label, actualDrawing.Label);
         //    Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
         //}
 
@@ -512,12 +500,12 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedController.Name, actualController.Name);
             Assert.AreEqual(expectedController.Description, actualController.Description);
-            Assert.AreEqual(expectedController.Cost, actualController.Cost);
+            Assert.AreEqual(expectedController.Type.Guid, actualController.Type.Guid);
 
-            foreach (TECIO expectedIO in expectedController.IO)
+            foreach (TECIO expectedIO in expectedController.Type.IO)
             {
                 bool ioExists = false;
-                foreach (TECIO actualIO in actualController.IO)
+                foreach (TECIO actualIO in actualController.Type.IO)
                 {
                     if ((expectedIO.Type == actualIO.Type) && (expectedIO.Quantity == actualIO.Quantity))
                     {
@@ -598,7 +586,6 @@ namespace Tests
             
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
-            Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
         }
 
         [TestMethod]

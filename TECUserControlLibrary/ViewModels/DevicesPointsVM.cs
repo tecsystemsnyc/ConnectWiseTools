@@ -64,18 +64,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         private string _pointName;
-
-        public string PointDescription
-        {
-            get { return _pointDescription; }
-            set
-            {
-                _pointDescription = value;
-                RaisePropertyChanged("PointDescription");
-            }
-        }
-        private string _pointDescription;
-
+        
         public PointTypes PointType
         {
             get { return _pointType; }
@@ -129,7 +118,6 @@ namespace TECUserControlLibrary.ViewModels
             DataGridVisibilty = new VisibilityModel();
             setupCommands();
             PointName = "";
-            PointDescription = "";
         }
         #endregion
 
@@ -142,8 +130,7 @@ namespace TECUserControlLibrary.ViewModels
         private void AddPointExecute()
         {
             TECPoint newPoint = new TECPoint();
-            newPoint.Name = PointName;
-            newPoint.Description = PointDescription;
+            newPoint.Label = PointName;
             newPoint.Type = PointType;
             newPoint.Quantity = PointQuantity;
             if (PointType != 0)

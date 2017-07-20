@@ -42,7 +42,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public DeviceSummaryItem(TECDevice device)
+        public DeviceSummaryItem(TECDevice device) : base (Guid.NewGuid())
         {
             _device = device;
             _quantity = 1;

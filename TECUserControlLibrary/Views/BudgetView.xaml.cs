@@ -23,21 +23,21 @@ namespace TECUserControlLibrary.Views
     public partial class BudgetView : UserControl
     {
 
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public BudgetVM ViewModel
-        {
-            get { return (BudgetVM)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
+        ///// <summary>
+        ///// Gets or sets the ViewModel which is used
+        ///// </summary>
+        //public BudgetVM ViewModel
+        //{
+        //    get { return (BudgetVM)GetValue(ViewModelProperty); }
+        //    set { SetValue(ViewModelProperty, value); }
+        //}
 
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(BudgetVM),
-              typeof(BudgetView));
+        ///// <summary>
+        ///// Identified the ViewModel dependency property
+        ///// </summary>
+        //public static readonly DependencyProperty ViewModelProperty =
+        //    DependencyProperty.Register("ViewModel", typeof(BudgetVM),
+        //      typeof(BudgetView));
 
         public BudgetView()
         {

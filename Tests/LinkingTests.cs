@@ -132,11 +132,6 @@ namespace Tests
                         {
                             checkScopeChildrenCatalogLinks(ss, bid.Catalogs);
                             checkScopeLocationLinks(ss, bid);
-                            foreach (TECPoint point in ss.Points)
-                            {
-                                checkScopeChildrenCatalogLinks(point, bid.Catalogs);
-                                checkScopeLocationLinks(point, bid);
-                            }
                         }
                     }
                 }
@@ -158,11 +153,6 @@ namespace Tests
                     {
                         checkScopeChildrenCatalogLinks(ss, bid.Catalogs);
                         checkScopeLocationLinks(ss, bid);
-                        foreach (TECPoint point in ss.Points)
-                        {
-                            checkScopeChildrenCatalogLinks(point, bid.Catalogs);
-                            checkScopeLocationLinks(point, bid);
-                        }
                     }
                 }
             }
@@ -198,10 +188,6 @@ namespace Tests
                     foreach (TECSubScope ss in equip.SubScope)
                     {
                         checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
-                        foreach (TECPoint point in ss.Points)
-                        {
-                            checkScopeChildrenCatalogLinks(point, templates.Catalogs);
-                        }
                     }
                 }
             }
@@ -219,19 +205,11 @@ namespace Tests
                 foreach (TECSubScope ss in equip.SubScope)
                 {
                     checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
-                    foreach (TECPoint point in ss.Points)
-                    {
-                        checkScopeChildrenCatalogLinks(point, templates.Catalogs);
-                    }
                 }
             }
             foreach (TECSubScope ss in templates.SubScopeTemplates)
             {
                 checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
-                foreach (TECPoint point in ss.Points)
-                {
-                    checkScopeChildrenCatalogLinks(point, templates.Catalogs);
-                }
             }
         }
 
@@ -241,7 +219,7 @@ namespace Tests
         {
             foreach(TECSystem typical in bid.Systems)
             {
-                ObservableItemToInstanceList<TECScope> list = typical.CharactersticInstances;
+                ObservableItemToInstanceList<TECObject> list = typical.CharactersticInstances;
                 int scopeFound = 0;
                 foreach(TECEquipment equip in typical.Equipment)
                 {
@@ -292,7 +270,7 @@ namespace Tests
         {
             foreach(TECSystem typical in bid.Systems)
             {
-                ObservableItemToInstanceList<TECScope> list = typical.CharactersticInstances;
+                ObservableItemToInstanceList<TECObject> list = typical.CharactersticInstances;
                 foreach (TECSystem instance in typical.SystemInstances)
                 {
                     int scopeFound = 0;
@@ -352,17 +330,17 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
                     }
                 }
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
                 }
             }
             foreach (TECController controller in bid.Controllers)
             {
-                Assert.IsTrue(bid.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
             }
         }
 
@@ -442,12 +420,12 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(templates.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                    Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(controller.Type));
                 }
             }
             foreach (TECController controller in templates.ControllerTemplates)
             {
-                Assert.IsTrue(templates.Catalogs.Manufacturers.Contains(controller.Manufacturer));
+                Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(controller.Type));
             }
         }
 
@@ -685,7 +663,7 @@ namespace Tests
                 }
             }
         }
-        private void checkScopeLocationLinks(TECScope scope, TECBid bid)
+        private void checkScopeLocationLinks(TECLocated scope, TECBid bid)
         {
             if (scope.Location != null && !bid.Locations.Contains(scope.Location))
             {

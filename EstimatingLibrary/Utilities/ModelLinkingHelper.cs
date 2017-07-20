@@ -225,7 +225,8 @@ namespace EstimatingLibrary.Utilities
             }
             foreach(TECPanelType panelType in catalogs.PanelTypes)
             {
-                linkPanelTypesToManufacturer(panelType, catalogs);
+                linkHardwareToManufacturers(panelType, catalogs.Manufacturers);
+                linkScopeChildrenToCatalogs(panelType, catalogs);
             }
             foreach(TECControllerType controllerType in catalogs.ControllerTypes)
             {
@@ -235,17 +236,15 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkControllerTypeToCatalogs(TECControllerType controllerType, TECCatalogs catalogs)
         {
+            linkHardwareToManufacturers(controllerType, catalogs.Manufacturers);
+            linkScopeChildrenToCatalogs(controllerType, catalogs);
+
             foreach (TECIO io in controllerType.IO)
             {
                 linkIOToModule(io, catalogs.IOModules);
             }
         }
-
-        private static void linkPanelTypesToManufacturer(TECPanelType panelType, TECCatalogs catalogs)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         private static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
         {
             //Should assume linking a typical system with potential instances, controllers and panels.

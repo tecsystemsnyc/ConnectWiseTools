@@ -35,7 +35,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public ControllerInPanel(TECController controller, TECPanel panel)
+        public ControllerInPanel(TECController controller, TECPanel panel) : base(Guid.NewGuid())
         {
             _controller = controller;
             _panel = panel;

@@ -453,8 +453,6 @@ namespace Tests
             TECSystem expectedSystem = new TECSystem();
             expectedSystem.Name = "New system";
             expectedSystem.Description = "New system desc";
-            expectedSystem.BudgetPriceModifier = 123.5;
-            expectedSystem.Quantity = 1235;
 
             bid.Systems.Add(expectedSystem);
 
@@ -476,8 +474,6 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -509,8 +505,6 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -543,8 +537,6 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
         }
 
         [TestMethod]
@@ -619,53 +611,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
-
-        [TestMethod]
-        public void Save_Bid_System_Quantity()
-        {
-            //Act
-            TECSystem expectedSystem = bid.Systems[0];
-            expectedSystem.Quantity = 987654321;
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECSystem actualSystem = null;
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                if (system.Guid == expectedSystem.Guid)
-                {
-                    actualSystem = system;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedSystem.Quantity, actualSystem.Quantity);
-        }
-
-        [TestMethod]
-        public void Save_Bid_System_BudgetPrice()
-        {
-            //Act
-            TECSystem expectedSystem = bid.Systems[0];
-            expectedSystem.BudgetPriceModifier = 9876543.21;
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECSystem actualSystem = null;
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                if (system.Guid == expectedSystem.Guid)
-                {
-                    actualSystem = system;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
-        }
-
+        
         [TestMethod]
         public void Save_Bid_System_Misc()
         {
@@ -710,8 +656,6 @@ namespace Tests
             TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Description";
-            expectedEquipment.BudgetUnitPrice = 465543.54;
-            expectedEquipment.Quantity = 46554354;
 
             bid.Systems[0].Equipment.Add(expectedEquipment);
 
@@ -732,8 +676,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.Quantity, actualEquipment.Quantity);
-            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
         }
 
         [TestMethod]
@@ -835,63 +777,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquip.Description, actualEquip.Description);
         }
-
-        [TestMethod]
-        public void Save_Bid_Equipment_Quantity()
-        {
-            //Act
-            TECEquipment expectedEquip = bid.RandomEquipment();
-            expectedEquip.Quantity = 987654321;
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECEquipment actualEquip = null;
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    if (equip.Guid == expectedEquip.Guid)
-                    {
-                        actualEquip = equip;
-                        break;
-                    }
-                }
-
-            }
-
-            //Assert
-            Assert.AreEqual(expectedEquip.Quantity, actualEquip.Quantity);
-        }
-
-        [TestMethod]
-        public void Save_Bid_Equipment_BudgetPrice()
-        {
-            //Act
-            TECEquipment expectedEquip = bid.RandomEquipment();
-            expectedEquip.BudgetUnitPrice = 9876543.21;
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECEquipment actualEquip = null;
-            foreach (TECSystem system in actualBid.Systems)
-            {
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    if (equip.Guid == expectedEquip.Guid)
-                    {
-                        actualEquip = equip;
-                        break;
-                    }
-                }
-                if (actualEquip != null) break;
-            }
-
-            //Assert
-            Assert.AreEqual(expectedEquip.BudgetUnitPrice, actualEquip.BudgetUnitPrice);
-        }
-
+        
         #endregion Edit Equipment
 
         #endregion Save Equipment
@@ -904,8 +790,6 @@ namespace Tests
             TECSubScope expectedSubScope = new TECSubScope();
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
-            expectedSubScope.Quantity = 235746543;
-            
 
             bid.RandomEquipment().SubScope.Add(expectedSubScope);
 
@@ -934,7 +818,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
-            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
         }
 
         [TestMethod]
@@ -1038,38 +921,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
         }
-
-        [TestMethod]
-        public void Save_Bid_SubScope_Quantity()
-        {
-            //Act
-            TECSubScope expectedSubScope = bid.RandomSubScope();
-            expectedSubScope.Quantity = 987654321;
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECSubScope actualSubScope = null;
-            foreach (TECSystem sys in actualBid.Systems)
-            {
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        if (ss.Guid == expectedSubScope.Guid)
-                        {
-                            actualSubScope = ss;
-                            break;
-                        }
-                    }
-                    if (actualSubScope != null) break;
-                }
-                if (actualSubScope != null) break;
-            }
-
-            //Assert
-            Assert.AreEqual(expectedSubScope.Quantity, actualSubScope.Quantity);
-        }
+        
         #endregion Edit SubScope
         #endregion Save SubScope
 
@@ -1334,8 +1186,7 @@ namespace Tests
             //Act
             TECPoint expectedPoint = new TECPoint();
             expectedPoint.Type = PointTypes.Serial;
-            expectedPoint.Name = "New Point";
-            expectedPoint.Description = "Point Description";
+            expectedPoint.Label = "New Point";
             expectedPoint.Quantity = 84300;
 
             TECSubScope subScopeToModify = bid.RandomSubScope();
@@ -1371,8 +1222,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedPoint.Name, actualPoint.Name);
-            Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
+            Assert.AreEqual(expectedPoint.Label, actualPoint.Label);
             Assert.AreEqual(expectedPoint.Quantity, actualPoint.Quantity);
             Assert.AreEqual(expectedPoint.Type, actualPoint.Type);
         }
@@ -1423,7 +1273,7 @@ namespace Tests
         {
             //Act
             TECPoint expectedPoint = bid.RandomPoint();
-            expectedPoint.Name = "Point name save test";
+            expectedPoint.Label = "Point name save test";
             DatabaseHelper.Update(path, testStack, false);
 
             TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
@@ -1451,45 +1301,9 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedPoint.Name, actualPoint.Name);
+            Assert.AreEqual(expectedPoint.Label, actualPoint.Label);
         }
-
-        [TestMethod]
-        public void Save_Bid_Point_Description()
-        {
-            //Act
-            TECPoint expectedPoint = bid.RandomPoint();
-            expectedPoint.Description = "Point Description save test";
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECPoint actualPoint = null;
-            foreach (TECSystem sys in actualBid.Systems)
-            {
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        foreach (TECPoint point in ss.Points)
-                        {
-                            if (point.Guid == expectedPoint.Guid)
-                            {
-                                actualPoint = point;
-                                break;
-                            }
-                        }
-                        if (actualPoint != null) break;
-                    }
-                    if (actualPoint != null) break;
-                }
-                if (actualPoint != null) break;
-            }
-
-            //Assert
-            Assert.AreEqual(expectedPoint.Description, actualPoint.Description);
-        }
-
+        
         [TestMethod]
         public void Save_Bid_Point_Quantity()
         {
@@ -1692,56 +1506,7 @@ namespace Tests
 
             Assert.IsTrue(tagExists);
         }
-
-        [TestMethod]
-        public void Save_Bid_Add_Tag_ToPoint()
-        {
-            TECPoint PointToEdit = bid.RandomPoint();
-            TECLabeled tagToAdd = null;
-            foreach (TECLabeled tag in bid.Catalogs.Tags)
-            {
-                if (!PointToEdit.Tags.Contains(tag))
-                {
-                    PointToEdit.Tags.Add(tag);
-                    tagToAdd = tag;
-                    break;
-                }
-            }
-
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid finalBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECPoint finalPoint = null;
-            foreach (TECSystem system in finalBid.Systems)
-            {
-                foreach (TECEquipment equip in system.Equipment)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        foreach (TECPoint point in ss.Points)
-                        {
-                            if (point.Guid == PointToEdit.Guid)
-                            {
-                                finalPoint = point;
-                                break;
-                            }
-                        }
-                    }
-                    if (finalPoint != null) { break; }
-                }
-                if (finalPoint != null) { break; }
-            }
-
-            bool tagExists = false;
-            foreach (TECLabeled tag in finalPoint.Tags)
-            {
-                if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
-            }
-
-            Assert.IsTrue(tagExists);
-        }
-
+        
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
@@ -1790,8 +1555,7 @@ namespace Tests
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
             TECScopeBranch expectedBranch = new TECScopeBranch();
-            expectedBranch.Name = "New Branch";
-            expectedBranch.Description = "Branch description";
+            expectedBranch.Label = "New Branch";
             bid.ScopeTree.Add(expectedBranch);
 
             DatabaseHelper.Update(path, testStack, false);
@@ -1809,8 +1573,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
-            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+            Assert.AreEqual(expectedBranch.Label, actualBranch.Label);
             Assert.AreEqual((oldNumBranches + 1), actualBid.ScopeTree.Count);
         }
 
@@ -1819,8 +1582,7 @@ namespace Tests
         {
             //Act
             TECScopeBranch expectedBranch = new TECScopeBranch();
-            expectedBranch.Name = "New Child";
-            expectedBranch.Description = "Child Branch Description";
+            expectedBranch.Label = "New Child";
             TECScopeBranch branchToModify = bid.ScopeTree.RandomObject();
             branchToModify.Branches.Add(expectedBranch);
 
@@ -1849,8 +1611,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
-            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
+            Assert.AreEqual(expectedBranch.Label, actualBranch.Label);
         }
 
         [TestMethod]
@@ -1920,7 +1681,7 @@ namespace Tests
         public void Save_Bid_Branch_Name()
         {
             TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
-            expectedBranch.Name = "Test Branch Save";
+            expectedBranch.Label = "Test Branch Save";
 
             DatabaseHelper.Update(path, testStack, false);
 
@@ -1936,32 +1697,9 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedBranch.Name, actualBranch.Name);
+            Assert.AreEqual(expectedBranch.Label, actualBranch.Label);
         }
-
-        [TestMethod]
-        public void Save_Bid_Branch_Description()
-        {
-            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
-            expectedBranch.Description = "Test Branch Save";
-
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECScopeBranch actualBranch = null;
-            foreach (TECScopeBranch branch in actualBid.ScopeTree)
-            {
-                if (branch.Guid == expectedBranch.Guid)
-                {
-                    actualBranch = branch;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedBranch.Description, actualBranch.Description);
-        }
-
+        
         #endregion Save Scope Branch
 
         #region Save Location
@@ -1970,7 +1708,7 @@ namespace Tests
         {
             //Act
             TECLabeled expectedLocation = new TECLabeled();
-            expectedLocation.Name = "New Location";
+            expectedLocation.Label = "New Location";
             bid.Locations.Add(expectedLocation);
 
             DatabaseHelper.Update(path, testStack, false);
@@ -1988,7 +1726,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+            Assert.AreEqual(expectedLocation.Label, actualLocation.Label);
             Assert.AreEqual(expectedLocation.Guid, actualLocation.Guid);
         }
 
@@ -2018,7 +1756,7 @@ namespace Tests
         {
             //Act
             TECLabeled expectedLocation = bid.Locations.RandomObject();
-            expectedLocation.Name = "Location Name Save";
+            expectedLocation.Label = "Location Name Save";
 
             DatabaseHelper.Update(path, testStack, false);
 
@@ -2035,7 +1773,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+            Assert.AreEqual(expectedLocation.Label, actualLocation.Label);
         }
 
         [TestMethod]
@@ -2087,7 +1825,7 @@ namespace Tests
             TECSubScope actualSS = actualEquip.SubScope[0];
 
             //Assert
-            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+            Assert.AreEqual(expectedLocation.Label, actualLocation.Label);
             Assert.AreEqual(expectedLocation.Guid, actualLocation.Guid);
 
             Assert.AreEqual(actualLocation, actualSystem.Location);
@@ -2152,7 +1890,7 @@ namespace Tests
             TECLabeled expectedLocation = null;
             foreach (TECLabeled loc in bid.Locations)
             {
-                if (loc.Name == "Cellar")
+                if (loc.Label == "Cellar")
                 {
                     expectedLocation = loc;
                     break;
@@ -2200,7 +1938,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedNumLocations, actualNumLocations);
 
-            Assert.AreEqual(expectedLocation.Name, actualLocation.Name);
+            Assert.AreEqual(expectedLocation.Label, actualLocation.Label);
             Assert.AreEqual(actualLocation, actualSystem.Location);
         }
         #endregion Save Location
@@ -2479,10 +2217,9 @@ namespace Tests
         public void Save_Bid_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.Manufacturers[0]);
+            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0]);
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
-            expectedController.Cost = 100;
 
             bid.Controllers.Add(expectedController);
 
@@ -2503,7 +2240,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedController.Name, actualController.Name);
             Assert.AreEqual(expectedController.Description, actualController.Description);
-            Assert.AreEqual(expectedController.Cost, actualController.Cost);
         }
 
         [TestMethod]
@@ -2576,138 +2312,115 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedController.Description, actualController.Description);
         }
-
-        [TestMethod]
-        public void Save_Bid_Controller_Cost()
-        {
-            //Act
-            TECController expectedController = bid.Controllers[0];
-            expectedController.Cost = 46.89;
-            DatabaseHelper.Update(path, testStack, false);
-
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-
-            TECController actualController = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Guid == expectedController.Guid)
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedController.Cost, actualController.Cost);
-        }
+        
         #region Controller IO
-        [TestMethod]
-        public void Save_Bid_Controller_Add_IO()
-        {
-            var watchTotal = System.Diagnostics.Stopwatch.StartNew();
-            //Act
-            TECController expectedController = bid.Controllers[0];
-            var testio = new TECIO();
-            testio.Type = IOType.BACnetIP;
-            expectedController.IO.Add(testio);
-            bool hasBACnetIP = false;
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            DatabaseHelper.Update(path, testStack, false);
-            watch.Stop();
-            Console.WriteLine(" UpdateBidToDD: " + watch.ElapsedMilliseconds);
-            watch = System.Diagnostics.Stopwatch.StartNew();
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
-            watch.Stop();
-            Console.WriteLine(" Load: " + watch.ElapsedMilliseconds);
-            TECController actualController = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Guid == expectedController.Guid)
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
+        //[TestMethod]
+        //public void Save_Bid_Controller_Add_IO()
+        //{
+        //    var watchTotal = System.Diagnostics.Stopwatch.StartNew();
+        //    //Act
+        //    TECController expectedController = bid.Controllers[0];
+        //    var testio = new TECIO();
+        //    testio.Type = IOType.BACnetIP;
+        //    expectedController.IO.Add(testio);
+        //    bool hasBACnetIP = false;
+        //    var watch = System.Diagnostics.Stopwatch.StartNew();
+        //    DatabaseHelper.Update(path, testStack, false);
+        //    watch.Stop();
+        //    Console.WriteLine(" UpdateBidToDD: " + watch.ElapsedMilliseconds);
+        //    watch = System.Diagnostics.Stopwatch.StartNew();
+        //    TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+        //    watch.Stop();
+        //    Console.WriteLine(" Load: " + watch.ElapsedMilliseconds);
+        //    TECController actualController = null;
+        //    foreach (TECController controller in actualBid.Controllers)
+        //    {
+        //        if (controller.Guid == expectedController.Guid)
+        //        {
+        //            actualController = controller;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            foreach (TECIO io in actualController.IO)
-            {
-                if (io.Type == IOType.BACnetIP)
-                {
-                    hasBACnetIP = true;
-                }
-            }
-            watchTotal.Stop();
-            Console.WriteLine(" Test Total: " + watchTotal.ElapsedMilliseconds);
+        //    //Assert
+        //    foreach (TECIO io in actualController.IO)
+        //    {
+        //        if (io.Type == IOType.BACnetIP)
+        //        {
+        //            hasBACnetIP = true;
+        //        }
+        //    }
+        //    watchTotal.Stop();
+        //    Console.WriteLine(" Test Total: " + watchTotal.ElapsedMilliseconds);
 
-            Assert.IsTrue(hasBACnetIP);
-        }
+        //    Assert.IsTrue(hasBACnetIP);
+        //}
 
-        [TestMethod]
-        public void Save_Bid_Controller_Remove_IO()
-        {
-            //Act
-            TECController expectedController = bid.Controllers[0];
-            int oldNumIO = expectedController.IO.Count;
-            TECIO ioToRemove = expectedController.IO[0];
+        //[TestMethod]
+        //public void Save_Bid_Controller_Remove_IO()
+        //{
+        //    //Act
+        //    TECController expectedController = bid.Controllers[0];
+        //    int oldNumIO = expectedController.IO.Count;
+        //    TECIO ioToRemove = expectedController.IO[0];
 
-            expectedController.IO.Remove(ioToRemove);
+        //    expectedController.IO.Remove(ioToRemove);
 
-            DatabaseHelper.Update(path, testStack, false);
+        //    DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+        //    TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECController actualController = null;
-            foreach (TECController con in actualBid.Controllers)
-            {
-                if (con.Guid == expectedController.Guid)
-                {
-                    actualController = con;
-                    break;
-                }
-            }
+        //    TECController actualController = null;
+        //    foreach (TECController con in actualBid.Controllers)
+        //    {
+        //        if (con.Guid == expectedController.Guid)
+        //        {
+        //            actualController = con;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            foreach (TECIO io in actualController.IO)
-            {
-                if (io.Type == ioToRemove.Type) { Assert.Fail(); }
-            }
+        //    //Assert
+        //    foreach (TECIO io in actualController.IO)
+        //    {
+        //        if (io.Type == ioToRemove.Type) { Assert.Fail(); }
+        //    }
 
-            Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
-        }
+        //    Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
+        //}
 
-        [TestMethod]
-        public void Save_Bid_Controller_IO_Quantity()
-        {
-            //Act
-            TECController expectedController = bid.Controllers[0];
-            TECIO ioToChange = expectedController.IO[0];
-            ioToChange.Quantity = 69;
+        //[TestMethod]
+        //public void Save_Bid_Controller_IO_Quantity()
+        //{
+        //    //Act
+        //    TECController expectedController = bid.Controllers[0];
+        //    TECIO ioToChange = expectedController.IO[0];
+        //    ioToChange.Quantity = 69;
 
-            DatabaseHelper.Update(path, testStack, false);
+        //    DatabaseHelper.Update(path, testStack, false);
 
-            TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
+        //    TECBid actualBid = DatabaseHelper.Load(path) as TECBid;
 
-            TECController actualController = null;
-            foreach (TECController con in actualBid.Controllers)
-            {
-                if (con.Guid == expectedController.Guid)
-                {
-                    actualController = con;
-                    break;
-                }
-            }
+        //    TECController actualController = null;
+        //    foreach (TECController con in actualBid.Controllers)
+        //    {
+        //        if (con.Guid == expectedController.Guid)
+        //        {
+        //            actualController = con;
+        //            break;
+        //        }
+        //    }
 
-            //Assert
-            foreach (TECIO io in actualController.IO)
-            {
-                if (io.Type == ioToChange.Type)
-                {
-                    Assert.AreEqual(ioToChange.Quantity, io.Quantity);
-                    break;
-                }
-            }
-        }
+        //    //Assert
+        //    foreach (TECIO io in actualController.IO)
+        //    {
+        //        if (io.Type == ioToChange.Type)
+        //        {
+        //            Assert.AreEqual(ioToChange.Quantity, io.Quantity);
+        //            break;
+        //        }
+        //    }
+        //}
         #endregion Controller IO
 
         #endregion
@@ -2845,7 +2558,7 @@ namespace Tests
         public void Save_Bid_Add_PanelType()
         {
             //Act
-            TECPanelType expectedCost = new TECPanelType();
+            TECPanelType expectedCost = new TECPanelType(bid.Catalogs.Manufacturers.RandomObject());
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
 

@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECScope, CostComponent, DragDropComponent
+    public class TECController : TECLocated, CostComponent, DragDropComponent
     {
         #region Properties
         //---Stored---
@@ -105,7 +105,7 @@ namespace EstimatingLibrary
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
-            copyPropertiesFromScope(controllerSource);
+            copyPropertiesFromLocated(controllerSource);
             foreach (TECConnection connection in controllerSource.ChildrenConnections)
             {
                 if (connection is TECSubScopeConnection)
@@ -373,7 +373,7 @@ namespace EstimatingLibrary
         public override Object Copy()
         {
             TECController outController = new TECController(this.Guid, this.Type);
-            outController.copyPropertiesFromScope(this);
+            outController.copyPropertiesFromLocated(this);
             foreach (TECConnection connection in ChildrenConnections)
             {
                 var outConnection = connection.Copy() as TECConnection;

@@ -167,10 +167,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         addSubScope(targetObject as TECSubScope);
                     }
-                    else if (targetObject is TECPoint)
-                    {
-                        addPoint(targetObject as TECPoint);
-                    }
                     else if (targetObject is TECDevice)
                     {
                         addDevice(targetObject as TECDevice);
@@ -245,10 +241,6 @@ namespace TECUserControlLibrary.ViewModels
                     else if (targetObject is TECSubScope)
                     {
                         removeSubScope(targetObject as TECSubScope);
-                    }
-                    else if (targetObject is TECPoint)
-                    {
-                        removePoint(targetObject as TECPoint);
                     }
                     else if (targetObject is TECDevice)
                     {
@@ -465,16 +457,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             DeviceSummaryVM.RemoveDevice(device);
         }
-
-        private void addPoint(TECPoint point)
-        {
-            MiscCostsSummaryVM.AddPoint(point);
-        }
-        private void removePoint(TECPoint point)
-        {
-            MiscCostsSummaryVM.RemovePoint(point);
-        }
-
+        
         private void addController(TECController controller)
         {
             ControllerSummaryVM.AddController(controller);

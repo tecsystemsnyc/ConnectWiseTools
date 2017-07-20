@@ -241,18 +241,14 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.BudgetPriceModifier, actualSystem.BudgetPriceModifier);
             Assert.AreEqual(expectedSystem.Tags[0].Label, actualSystem.Tags[0].Label);
 
             Assert.AreEqual(expectedSysEquipment.Name, actualSysEquipment.Name);
             Assert.AreEqual(expectedSysEquipment.Description, actualSysEquipment.Description);
-            Assert.AreEqual(expectedSysEquipment.Quantity, actualSysEquipment.Quantity);
-            Assert.AreEqual(expectedSysEquipment.BudgetUnitPrice, actualSysEquipment.BudgetUnitPrice);
             Assert.AreEqual(expectedSysEquipment.Tags[0].Label, actualSysEquipment.Tags[0].Label);
 
             Assert.AreEqual(expectedSysSubScope.Name, actualSysSubScope.Name);
             Assert.AreEqual(expectedSysSubScope.Description, actualSysSubScope.Description);
-            Assert.AreEqual(expectedSysSubScope.Quantity, actualSysSubScope.Quantity);
             Assert.AreEqual(expectedSysSubScope.Tags[0].Label, actualSysSubScope.Tags[0].Label);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
@@ -261,12 +257,11 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
-            Assert.AreEqual(expectedSysPoint.Name, actualSysPoint.Name);
-            Assert.AreEqual(expectedSysPoint.Description, actualSysPoint.Description);
+            Assert.AreEqual(expectedSysPoint.Label, actualSysPoint.Label);
             Assert.AreEqual(expectedSysPoint.Quantity, actualSysPoint.Quantity);
             Assert.AreEqual(expectedSysPoint.Type, actualSysPoint.Type);
 
-            Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
+            Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
 
             ////Controlled scope tests]
@@ -297,12 +292,10 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            Assert.AreEqual(expectedEquipment.BudgetUnitPrice, actualEquipment.BudgetUnitPrice);
             Assert.AreEqual(expectedEquipment.Tags[0].Label, actualEquipment.Tags[0].Label);
 
             Assert.AreEqual(expectedEquipSubScope.Name, actualEquipSubScope.Name);
             Assert.AreEqual(expectedEquipSubScope.Description, actualEquipSubScope.Description);
-            Assert.AreEqual(expectedEquipSubScope.Quantity, actualEquipSubScope.Quantity);
             Assert.AreEqual(expectedEquipSubScope.Tags[0].Label, actualEquipSubScope.Tags[0].Label);
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
@@ -311,12 +304,11 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
-            Assert.AreEqual(expectedEquipPoint.Name, actualEquipPoint.Name);
-            Assert.AreEqual(expectedEquipPoint.Description, actualEquipPoint.Description);
+            Assert.AreEqual(expectedEquipPoint.Label, actualEquipPoint.Label);
             Assert.AreEqual(expectedEquipPoint.Quantity, actualEquipPoint.Quantity);
             Assert.AreEqual(expectedEquipPoint.Type, actualEquipPoint.Type);
 
-            Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
+            Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
         }
 
@@ -344,12 +336,11 @@ namespace Tests
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
-            Assert.AreEqual(expectedSSPoint.Name, actualSSPoint.Name);
-            Assert.AreEqual(expectedSSPoint.Description, actualSSPoint.Description);
+            Assert.AreEqual(expectedSSPoint.Label, actualSSPoint.Label);
             Assert.AreEqual(expectedSSPoint.Quantity, actualSSPoint.Quantity);
             Assert.AreEqual(expectedSSPoint.Type, actualSSPoint.Type);
 
-            Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
+            Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
         }
 
@@ -368,7 +359,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Tags[0].Label, actualDevice.Tags[0].Label);
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
 
-            Assert.AreEqual(expectedChildMan.Name, actualChildMan.Name);
+            Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
             Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
         }
 
@@ -376,7 +367,7 @@ namespace Tests
         public void SaveAs_Templates_Manufacturer()
         {
             //Assert
-            Assert.AreEqual(expectedManufacturer.Name, actualManufacturer.Name);
+            Assert.AreEqual(expectedManufacturer.Label, actualManufacturer.Label);
             Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier);
         }
 
@@ -393,13 +384,12 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedController.Name, actualController.Name);
             Assert.AreEqual(expectedController.Description, actualController.Description);
-            Assert.AreEqual(expectedController.Cost, actualController.Cost);
-            Assert.AreEqual(expectedController.Manufacturer.Guid, actualController.Manufacturer.Guid);
+            Assert.AreEqual(expectedController.Type.Guid, actualController.Type.Guid);
 
-            foreach (TECIO expectedIO in expectedController.IO)
+            foreach (TECIO expectedIO in expectedController.Type.IO)
             {
                 bool ioExists = false;
-                foreach (TECIO actualIO in actualController.IO)
+                foreach (TECIO actualIO in actualController.Type.IO)
                 {
                     if ((expectedIO.Type == actualIO.Type) && (expectedIO.Quantity == actualIO.Quantity))
                     {
@@ -448,7 +438,6 @@ namespace Tests
 
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
-            Assert.AreEqual(expectedPanel.Quantity, actualPanel.Quantity);
         }
 
         [TestMethod]

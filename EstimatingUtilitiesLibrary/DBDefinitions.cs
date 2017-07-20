@@ -186,7 +186,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ExclusionTable : TableBase
     {
-        public static new string TableName = "TECLabeled";
+        public static new string TableName = "TECExclusion";
         public static Type ObjectType = typeof(TECLabeled);
         public static Flavor ObjectFlavor = Flavor.Exclusion;
 
@@ -322,7 +322,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class TagTable : CatalogTableBase
     {
-        public static new string TableName = "TECLabeled";
+        public static new string TableName = "TECTag";
         public static Type ObjectType = typeof(TECLabeled);
         public static Flavor ObjectFlavor = Flavor.Tag;
 
@@ -393,7 +393,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class LocationTable : CatalogTableBase
     {
-        public static new string TableName = "TECLabeled";
+        public static new string TableName = "TECLocation";
         public static Type ObjectType = typeof(TECLabeled);
         public static Flavor ObjectFlavor = Flavor.Location;
 
@@ -429,7 +429,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ConnectionTypeTable : CatalogTableBase
     {
-        public static new string TableName = "TECElectricalMaterial";
+        public static new string TableName = "TECConnectiontype";
         public static Type ObjectType = typeof(TECElectricalMaterial);
         public static Flavor ObjectFlavor = Flavor.Wire;
 
@@ -449,7 +449,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ConduitTypeTable : CatalogTableBase
     {
-        public static new string TableName = "TECElectricalMaterial";
+        public static new string TableName = "TECConduitType";
         public static Type ObjectType = typeof(TECElectricalMaterial);
         public static Flavor ObejctFlavor = Flavor.Conduit;
 
@@ -941,7 +941,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ScopeTagTable : TableBase
     {
-        public static new string TableName = "TECScopeTECLabeled";
+        public static new string TableName = "TECScopeTECTag";
         public static Type ObjectType = typeof(TECScope);
         public static Type ReferenceType = typeof(TECLabeled);
         public static Flavor ReferenceFlavor = Flavor.Tag;
@@ -980,7 +980,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class DeviceConnectionTypeTable : IndexedRelationTableBase
     {
-        public static new string TableName = "TECDeviceTECElectricalMaterial";
+        public static new string TableName = "TECDeviceTECConnectionType";
         public static Type ObjectType = typeof(TECDevice);
         public static Type ReferenceType = typeof(TECElectricalMaterial);
         public static Flavor ReferenceFlavor = Flavor.Wire;
@@ -1065,7 +1065,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class LocationScopeTable : TableBase
     {
-        public static new string TableName = "TECLabeledTECScope";
+        public static new string TableName = "TECLocationTECScope";
         public static Type ObjectType = typeof(TECScope);
         public static Type ReferenceType = typeof(TECLabeled);
         public static Flavor ReferenceFlavor = Flavor.Location;
@@ -1149,7 +1149,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class ConnectionConduitTypeTable : TableBase
     {
-        public static new string TableName = "TECConnectionTECElectricalMaterial";
+        public static new string TableName = "TECConnectionTECConduitType";
         public static Type ObjectType = typeof(TECConnection);
         public static Type ReferenceType = typeof(TECElectricalMaterial);
         public static Flavor ReferenceFlavor = Flavor.Conduit;
@@ -1169,7 +1169,7 @@ namespace EstimatingUtilitiesLibrary
     }
     public class NetworkConnectionConnectionTypeTable : TableBase
     {
-        public static new string TableName = "TECNetworkConnectionTECElectricalMaterial";
+        public static new string TableName = "TECNetworkConnectionTECConnectionType";
         public static Type ObjectType = typeof(TECNetworkConnection);
         public static Type ReferenceType = typeof(TECElectricalMaterial);
         public static Flavor ReferenceFlavor = Flavor.Wire;

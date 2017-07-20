@@ -39,13 +39,13 @@ namespace Tests
             
             //Locations
             var cellar = new TECLabeled();
-            cellar.Name = "Cellar";
+            cellar.Label = "Cellar";
             var location1 = new TECLabeled();
-            location1.Name = "1st Floor";
+            location1.Label = "1st Floor";
             var location2 = new TECLabeled();
-            location2.Name = "2nd Floor";
+            location2.Label = "2nd Floor";
             var location3 = new TECLabeled();
-            location3.Name = "3rd Floor";
+            location3.Label = "3rd Floor";
 
             bid.Locations.Add(cellar);
             bid.Locations.Add(location1);
@@ -55,14 +55,11 @@ namespace Tests
             
             //Scope Branches
             var branch1 = new TECScopeBranch();
-            branch1.Name = "Branch 1";
-            branch1.Description = "1st Description";
+            branch1.Label = "Branch 1";
             var branch2 = new TECScopeBranch();
-            branch2.Name = "Branch 2";
-            branch2.Description = "2nd Description";
+            branch2.Label = "Branch 2";
             var branch3 = new TECScopeBranch();
-            branch3.Name = "Branch 3";
-            branch3.Description = "3rd Description";
+            branch3.Label = "Branch 3";
 
             bid.ScopeTree.Add(branch1);
             branch1.Branches.Add(branch2);
@@ -81,15 +78,14 @@ namespace Tests
             bid.Exclusions.Add(exclusion1);
 
             //Controller
-            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.Manufacturers.RandomObject());
+            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes.RandomObject());
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
-            expectedController.Cost = 42.6;
 
             TECIO ioToAdd = new TECIO();
             ioToAdd.Type = IOType.AI;
             ioToAdd.Quantity = 5;
-            expectedController.IO.Add(ioToAdd);
+            expectedController.Type.IO.Add(ioToAdd);
             bid.Controllers.Add(expectedController);
             
             //Misc Cost
@@ -125,21 +121,16 @@ namespace Tests
             AssignSecondaryProperties(system1, bid);
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
-            system1.BudgetPriceModifier = 234.5;
-            system1.Quantity = 2345;
             
             var system2 = CreateTestSystem(bid.Catalogs);
             AssignSecondaryProperties(system2, bid);
             system2.Name = "System 2";
             system2.Description = "Description 2";
-            system2.BudgetPriceModifier = 234.52;
-            system2.Quantity = 23452;
 
             var system3 = CreateTestSystem(bid.Catalogs);
             AssignSecondaryProperties(system3, bid);
             system3.Name = "System 3";
             system3.Description = "No Location";
-            system3.BudgetPriceModifier = 349;
 
             bid.Systems.Add(system1);
             bid.Systems.Add(system2);
@@ -158,14 +149,11 @@ namespace Tests
             AssignSecondaryProperties(equipment1, bid);
             equipment1.Name = "Equipment 1";
             equipment1.Description = "Description 1";
-            equipment1.BudgetUnitPrice = 123.4;
-            equipment1.Quantity = 1234;
 
             var equipment2 = new TECEquipment();
             AssignSecondaryProperties(equipment2, bid);
             equipment2.Name = "Equipment 2";
             equipment2.Description = "Description 2";
-            equipment2.BudgetUnitPrice = 0;
 
             system1.Equipment.Add(equipment1);
             system3.Equipment.Add(equipment2);
@@ -175,7 +163,6 @@ namespace Tests
             AssignSecondaryProperties(subScope1, bid);
             subScope1.Name = "SubScope 1";
             subScope1.Description = "Description 1";
-            subScope1.Quantity = 654;
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
@@ -191,8 +178,7 @@ namespace Tests
 
             //Points
             var point1 = new TECPoint();
-            point1.Name = "Point 1";
-            point1.Description = "Description 1";
+            point1.Label = "Point 1";
             point1.Type = PointTypes.Serial;
             point1.Quantity = 321;
 
@@ -240,13 +226,13 @@ namespace Tests
 
             //Manufacturers
             TECManufacturer testMan = new TECManufacturer();
-            testMan.Name = "Test Manufacturer";
+            testMan.Label = "Test Manufacturer";
             testMan.Multiplier = 0.654;
             TECManufacturer testDevMan = new TECManufacturer();
-            testDevMan.Name = "Child Manufacturer (Test Device)";
+            testDevMan.Label = "Child Manufacturer (Test Device)";
             testDevMan.Multiplier = 0.446;
             TECManufacturer childDevMan = new TECManufacturer();
-            childDevMan.Name = "Child Manufacturer (Child Device)";
+            childDevMan.Label = "Child Manufacturer (Child Device)";
             childDevMan.Multiplier = 0.916;
             
             templates.Catalogs.Manufacturers.Add(testMan);
@@ -292,7 +278,7 @@ namespace Tests
             templates.Catalogs.AssociatedCosts.Add(testCost2);
 
             //IO Modules
-            TECIOModule testIOModule = new TECIOModule();
+            TECIOModule testIOModule = new TECIOModule(testMan);
             testIOModule.Name = "Test IO Module";
             testIOModule.Cost = 42;
             testIOModule.Manufacturer = testMan;
@@ -323,20 +309,17 @@ namespace Tests
             TECSystem system = new TECSystem();
             system.Name = "Test System";
             system.Description = "System Description";
-            system.BudgetPriceModifier = 587.3;
             
             TECEquipment sysEquip = new TECEquipment();
             sysEquip.Name = "System Equipment";
             sysEquip.Description = "Child Equipment";
-            sysEquip.BudgetUnitPrice = 489.5;
             TECSubScope sysSS = new TECSubScope();
             sysSS.Name = "System SubScope";
             sysSS.Description = "Child SubScope";
             sysSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint sysPoint = new TECPoint();
             sysPoint.Type = PointTypes.Serial;
-            sysPoint.Name = "System Point";
-            sysPoint.Description = "Child Point";
+            sysPoint.Label = "System Point";
 
             sysSS.Points.Add(sysPoint);
             sysSS.Devices.Add(childDev);
@@ -354,15 +337,12 @@ namespace Tests
             TECEquipment equipment = new TECEquipment();
             equipment.Name = "Test Equipment";
             equipment.Description = "Equipment Description";
-            equipment.BudgetUnitPrice = 193.2;
             TECSubScope equipSS = new TECSubScope();
             equipSS.Name = "Equipment SubScope";
             equipSS.Description = "Child SubScope";
-            equipSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint equipPoint = new TECPoint();
             equipPoint.Type = PointTypes.AI;
-            equipPoint.Name = "Equipment Point";
-            equipPoint.Description = "Child Point";
+            equipPoint.Label = "Equipment Point";
 
             equipSS.Points.Add(equipPoint);
             equipSS.Devices.Add(childDev);
@@ -379,8 +359,7 @@ namespace Tests
             subScope.Description = "SubScope Description";
             TECPoint ssPoint = new TECPoint();
             ssPoint.Type = PointTypes.BO;
-            ssPoint.Name = "SubScope Point";
-            ssPoint.Description = "Child Point";
+            ssPoint.Label = "SubScope Point";
 
             subScope.Points.Add(ssPoint);
             subScope.Devices.Add(childDev);
@@ -390,21 +369,20 @@ namespace Tests
             templates.SubScopeTemplates.Add(subScope);
 
             //Controller
-            TECController expectedController = new TECController(testMan);
-            expectedController.Name = "Test Controller";
-            expectedController.Description = "Test description";
-            expectedController.Cost = 42.6;
-
-            TECController controlledController = new TECController(testMan);
-            controlledController.Name = "Controlled Controller";
-
+            var expectedControllerType = new TECControllerType(testMan);
+            expectedControllerType.Cost = 42.6;
             TECIO ioToAdd = new TECIO();
             ioToAdd.Type = IOType.AI;
             ioToAdd.Quantity = 5;
+            expectedControllerType.IO.Add(ioToAdd);
 
-            expectedController.IO.Add(ioToAdd);
-            controlledController.IO.Add(ioToAdd);
+            TECController expectedController = new TECController(expectedControllerType);
+            expectedController.Name = "Test Controller";
+            expectedController.Description = "Test description";
 
+            TECController controlledController = new TECController(expectedControllerType);
+            controlledController.Name = "Controlled Controller";
+            
             templates.ControllerTemplates.Add(expectedController);
 
             //Misc Cost
@@ -426,7 +404,7 @@ namespace Tests
             templates.MiscCostTemplates.Add(wiring);
 
             //Panel Types
-            TECPanelType panelType = new TECPanelType();
+            TECPanelType panelType = new TECPanelType(testMan);
             panelType.Cost = 123.4;
             panelType.Name = "Test Panel Type";
 
@@ -454,7 +432,7 @@ namespace Tests
 
             //Controlled Scope
             //TECSystem testConScope = CreateTestSystem(templates.Catalogs);
-            //testConScope.Name = "Test Controlled Scope";
+            //testConScope.Label = "Test Controlled Scope";
             //testConScope.Description = "Test Description";
             //var controlledScopeEquipment = equipment.DragDropCopy() as TECEquipment;
             //testConScope.Equipment.Add(controlledScopeEquipment);
@@ -497,7 +475,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController(bid.Catalogs.Manufacturers[0]);
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0]);
             bid.Controllers.Add(controller);
             controller.AddSubScope(subScope);
             subScope.Connection.Length = 10;
@@ -547,7 +525,7 @@ namespace Tests
 
             //Manufacturers
             var manufacturer1 = new TECManufacturer();
-            manufacturer1.Name = "Test";
+            manufacturer1.Label = "Test";
             manufacturer1.Multiplier = RandomDouble(0, 1);
             
             outCatalogs.Manufacturers.Add(manufacturer1);
@@ -564,14 +542,14 @@ namespace Tests
             outCatalogs.Devices.Add(device1);
 
             //IO Modules
-            TECIOModule testIOModule = new TECIOModule();
+            TECIOModule testIOModule = new TECIOModule(manufacturer1);
             testIOModule.Name = "Test IO Module";
             testIOModule.Cost = RandomInt(10, 100);
             testIOModule.Manufacturer = manufacturer1;
             outCatalogs.IOModules.Add(testIOModule);
 
             //Panel Types
-            TECPanelType panelType = new TECPanelType();
+            TECPanelType panelType = new TECPanelType(manufacturer1);
             panelType.Cost = RandomDouble(0, 1000);
             panelType.Labor = RandomDouble(0, 1000);
             panelType.Name = "Test Panel Type";
@@ -655,7 +633,6 @@ namespace Tests
             var device = catalogs.Devices.RandomObject();
             var point = new TECPoint();
             point.Type = PointTypes.AI;
-            point.Tags.Add(catalogs.Tags.RandomObject());
 
             var subScope = new TECSubScope();
             subScope.Tags.Add(catalogs.Tags.RandomObject());
@@ -666,7 +643,6 @@ namespace Tests
         public static TECPoint CreateTestPoint(TECCatalogs catalogs)
         {
             TECPoint point = new TECPoint();
-            AssignSecondaryProperties(point, catalogs);
             point.Type = (PointTypes)Enum.GetNames(typeof(PointTypes)).Length;
             return point;
         }
@@ -685,9 +661,9 @@ namespace Tests
         }
         public static TECController CreateTestController(TECCatalogs catalogs)
         {
-            var manufacturer = catalogs.Manufacturers.RandomObject();
+            var type = catalogs.ControllerTypes.RandomObject();
 
-            var controlller = new TECController(manufacturer);
+            var controlller = new TECController(type);
             controlller.Tags.Add(catalogs.Tags.RandomObject());
             return controlller;
         }
@@ -855,7 +831,7 @@ namespace Tests
             return equipment;
         }
 
-        public static TECScope FindScopeInSystems(ObservableCollection<TECSystem> systems, TECScope reference)
+        public static TECObject FindObjectInSystems(ObservableCollection<TECSystem> systems, TECObject reference)
         {
             foreach(TECSystem system in systems)
             {
@@ -931,10 +907,10 @@ namespace Tests
             return null;
         }
 
-        public static void AssignSecondaryProperties(TECScope scope, TECBid bid)
+        public static void AssignSecondaryProperties(TECLocated located, TECBid bid)
         {
-            scope.Location = bid.Locations.RandomObject();
-            AssignSecondaryProperties(scope, bid.Catalogs);
+            located.Location = bid.Locations.RandomObject();
+            AssignSecondaryProperties(located, bid.Catalogs);
         }
         public static void AssignSecondaryProperties(TECScope scope, TECCatalogs catalogs)
         {

@@ -324,28 +324,7 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Template_System_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            var system = Template.SystemTemplates.RandomObject();
-            int expected = system.Quantity;
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            system.Quantity = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = system.Quantity;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Template_System_Equipment()
         {
@@ -412,27 +391,7 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Template_Equipment_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            var equipment = Template.EquipmentTemplates.RandomObject();
-            int expected = equipment.Quantity;
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            equipment.Quantity = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = equipment.Quantity;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
+        
 
         [TestMethod]
         public void Undo_Template_Equipment_SubScope()
@@ -500,28 +459,7 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Template_SubScope_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            var subScope = Template.SubScopeTemplates.RandomObject();
-            int expected = subScope.Quantity;
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            subScope.Quantity = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = subScope.Quantity;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Template_SubScope_Points()
         {
@@ -696,68 +634,27 @@ namespace Tests
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Template_Device_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            var device = Template.Catalogs.Devices.RandomObject();
-            int expected = device.Quantity;
-            int edit = 123;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            device.Quantity = edit;
-            //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            int actual = device.Quantity;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Template_Point_Name()
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Name;
+            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
             string edit = "Edit";
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Name = edit;
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
             Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Name;
+            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Template_Point_Description()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Description;
-            string edit = "Edit";
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Description = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Description;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Template_Point_Quantity()
         {
@@ -881,7 +778,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECPanelType edit = new TECPanelType();
+            TECPanelType edit = new TECPanelType(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -906,7 +803,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECIOModule edit = new TECIOModule();
+            TECIOModule edit = new TECIOModule(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -1109,26 +1006,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Template_System_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = Template.SystemTemplates[0].Quantity;
-            Assert.AreEqual(edit, actual, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Template_System_Equipment()
         {
@@ -1190,26 +1068,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Template_Equipment_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].Quantity;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Template_Equipment_SubScope()
         {
@@ -1271,26 +1130,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Template_SubScope_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            int edit = 3;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Quantity;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Template_SubScope_Points()
         {
@@ -1418,26 +1258,7 @@ namespace Tests
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Template_Device_Quantity()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            int edit = 123;
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Quantity = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Quantity;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Template_Point_Name()
         {
@@ -1447,35 +1268,16 @@ namespace Tests
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Name = edit;
+            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Name;
+            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Template_Point_Description()
-        {
-            //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            string edit = "Edit";
-
-            //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Description = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Description;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Template_Point_Quantity()
         {
@@ -1592,7 +1394,7 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECPanelType edit = new TECPanelType();
+            TECPanelType edit = new TECPanelType(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);
@@ -1616,7 +1418,7 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECIOModule edit = new TECIOModule();
+            TECIOModule edit = new TECIOModule(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
             ChangeStack testStack = new ChangeStack(Template);

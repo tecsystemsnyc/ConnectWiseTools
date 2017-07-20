@@ -160,6 +160,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PanelTypeLabor");
             }
         }
+        private TECManufacturer _panelTypeManufacturer;
+        public TECManufacturer PanelTypeManufacturer
+        {
+            get { return _panelTypeManufacturer; }
+            set
+            {
+                _panelTypeManufacturer = value;
+                RaisePropertyChanged("PanelTypeManufacturer");
+            }
+        }
 
         private string _ioModuleName;
         public string IOModuleName
@@ -318,7 +328,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addPanelTypeExecute()
         {
-            var panelType = new TECPanelType();
+            var panelType = new TECPanelType(PanelTypeManufacturer);
             panelType.Name = PanelTypeName;
             panelType.Cost = PanelTypeCost;
             panelType.Labor = PanelTypeLabor;
@@ -327,10 +337,11 @@ namespace TECUserControlLibrary.ViewModels
             PanelTypeName = "";
             PanelTypeCost = 0;
             PanelTypeLabor = 0;
+            PanelTypeManufacturer = null;
         }
         private bool canAddPanelTypeExecute()
         {
-            if (PanelTypeName != "")
+            if (PanelTypeName != "" && PanelTypeManufacturer != null)
             {
                 return true;
             }

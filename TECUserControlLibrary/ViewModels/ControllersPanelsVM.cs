@@ -279,7 +279,7 @@ namespace TECUserControlLibrary.ViewModels
         private void populatePanelSelections()
         {
             PanelSelections = new ObservableCollection<TECPanel>();
-            var nonePanel = new TECPanel(new TECPanelType());
+            var nonePanel = new TECPanel(new TECPanelType(new TECManufacturer()));
             nonePanel.Name = "None";
             NonePanel = nonePanel;
             PanelSelections.Add(NonePanel);

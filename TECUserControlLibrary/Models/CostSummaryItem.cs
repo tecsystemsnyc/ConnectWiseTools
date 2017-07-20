@@ -57,10 +57,14 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public CostSummaryItem(TECCost cost)
+        public CostSummaryItem(TECCost cost) : base(Guid.NewGuid())
         {
             _cost = cost;
-            _quantity = cost.Quantity;
+            _quantity = 1;
+            if(cost is TECMisc)
+            {
+                _quantity = (cost as TECMisc).Quantity;
+            }
             Cost.PropertyChanged += Cost_PropertyChanged;
             updateTotals();
         }

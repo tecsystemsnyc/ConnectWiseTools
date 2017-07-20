@@ -63,7 +63,7 @@ namespace Tests
         [TestMethod]
         public void Controller_AddSubScope()
         {
-            TECController controller = new TECController(new TECManufacturer());
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()));
             TECSubScope subScope = new TECSubScope();
 
             controller.AddSubScope(subScope);
@@ -75,7 +75,7 @@ namespace Tests
         [TestMethod]
         public void Controller_RemoveSubScope()
         {
-            TECController controller = new TECController(new TECManufacturer());
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()));
             TECSubScope subScope = new TECSubScope();
 
             controller.AddSubScope(subScope);
@@ -172,7 +172,7 @@ namespace Tests
         public void System_RemoveSystemInstanceWithBidConnection()
         {
             var bid = new TECBid();
-            var bidController = new TECController(new TECManufacturer());
+            var bidController = new TECController(new TECControllerType(new TECManufacturer()));
             bid.Controllers.Add(bidController);
 
             var system = new TECSystem();

@@ -149,7 +149,7 @@ namespace TECUserControlLibrary.ViewModels
         public void AddController(TECController controller)
         {
             Controllers.Add(controller);
-            ControllerSubTotal += controller.Cost * controller.Manufacturer.Multiplier;
+            ControllerSubTotal += controller.Type.ExtendedCost;
             foreach (TECCost cost in controller.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)
@@ -161,7 +161,7 @@ namespace TECUserControlLibrary.ViewModels
         public void RemoveController(TECController controller)
         {
             Controllers.Remove(controller);
-            ControllerSubTotal -= controller.Cost * controller.Manufacturer.Multiplier;
+            ControllerSubTotal -= controller.Type.ExtendedCost;
             foreach (TECCost cost in controller.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)

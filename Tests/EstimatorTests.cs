@@ -87,9 +87,10 @@ namespace Tests
             var bid = new TECBid();
 
             var manufacturer = new TECManufacturer();
+            var type = new TECControllerType(manufacturer);
+            type.Cost = 100;
 
-            var controller = new TECController(manufacturer);
-            controller.Cost = 100;
+            var controller = new TECController(type);
 
             bid.Controllers.Add(controller);
 
@@ -106,9 +107,10 @@ namespace Tests
             var bid = new TECBid();
 
             var manufacturer = new TECManufacturer();
+            var type = new TECControllerType(manufacturer);
+            type.Cost = 100;
 
-            var controller = new TECController(manufacturer);
-            controller.Cost = 100;
+            var controller = new TECController(type);
 
             bid.Controllers.Add(controller);
             bid.Controllers.Remove(controller);
@@ -124,9 +126,10 @@ namespace Tests
             var bid = new TECBid();
 
             var manufacturer = new TECManufacturer();
+            var type = new TECControllerType(manufacturer);
+            type.Cost = 100;
 
-            var controller = new TECController(manufacturer);
-            controller.Cost = 100;
+            var controller = new TECController(type);
 
             var typical = new TECSystem();
             bid.Systems.Add(typical);
@@ -147,9 +150,10 @@ namespace Tests
             var bid = new TECBid();
 
             var manufacturer = new TECManufacturer();
+            var type = new TECControllerType(manufacturer);
+            type.Cost = 100;
 
-            var controller = new TECController(manufacturer);
-            controller.Cost = 100;
+            var controller = new TECController(type);
 
             var typical = new TECSystem();
             bid.Systems.Add(typical);
@@ -170,9 +174,10 @@ namespace Tests
             var bid = new TECBid();
 
             var manufacturer = new TECManufacturer();
+            var type = new TECControllerType(manufacturer);
+            type.Cost = 100;
 
-            var controller = new TECController(manufacturer);
-            controller.Cost = 100;
+            var controller = new TECController(type);
 
             var typical = new TECSystem();
             bid.Systems.Add(typical);
@@ -193,9 +198,10 @@ namespace Tests
             var bid = new TECBid();
 
             var manufacturer = new TECManufacturer();
+            var type = new TECControllerType(manufacturer);
+            type.Cost = 100;
 
-            var controller = new TECController(manufacturer);
-            controller.Cost = 100;
+            var controller = new TECController(type);
 
             var typical = new TECSystem();
             bid.Systems.Add(typical);
@@ -216,7 +222,8 @@ namespace Tests
         {
             var bid = new TECBid();
 
-            var panelType = new TECPanelType();
+            var manufacturer = new TECManufacturer();
+            var panelType = new TECPanelType(manufacturer);
             panelType.Cost = 50;
             panelType.Labor = 7;
 
@@ -237,7 +244,8 @@ namespace Tests
         {
             var bid = new TECBid();
 
-            var panelType = new TECPanelType();
+            var manufacturer = new TECManufacturer();
+            var panelType = new TECPanelType(manufacturer);
             panelType.Cost = 50;
             panelType.Labor = 7;
 
@@ -256,7 +264,8 @@ namespace Tests
         {
             var bid = new TECBid();
 
-            var panelType = new TECPanelType();
+            var manufacturer = new TECManufacturer();
+            var panelType = new TECPanelType(manufacturer);
             panelType.Cost = 50;
             panelType.Labor = 7;
 
@@ -282,7 +291,8 @@ namespace Tests
         {
             var bid = new TECBid();
 
-            var panelType = new TECPanelType();
+            var manufacturer = new TECManufacturer();
+            var panelType = new TECPanelType(manufacturer);
             panelType.Cost = 50;
             panelType.Labor = 7;
 
@@ -307,7 +317,8 @@ namespace Tests
         {
             var bid = new TECBid();
 
-            var panelType = new TECPanelType();
+            var manufacturer = new TECManufacturer();
+            var panelType = new TECPanelType(manufacturer);
             panelType.Cost = 50;
             panelType.Labor = 7;
 
@@ -333,7 +344,8 @@ namespace Tests
         {
             var bid = new TECBid();
 
-            var panelType = new TECPanelType();
+            var manufacturer = new TECManufacturer();
+            var panelType = new TECPanelType(manufacturer);
             panelType.Cost = 50;
             panelType.Labor = 7;
 
@@ -509,6 +521,7 @@ namespace Tests
             var bid = new TECBid();
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -529,13 +542,13 @@ namespace Tests
             bid.Catalogs.ConduitTypes.Add(conduitType);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
-
+            bid.Catalogs.ControllerTypes.Add(controllerType);
 
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -566,6 +579,7 @@ namespace Tests
             var bid = new TECBid();
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -586,13 +600,13 @@ namespace Tests
             bid.Catalogs.ConduitTypes.Add(conduitType);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
-
+            bid.Catalogs.ControllerTypes.Add(controllerType);
 
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -624,6 +638,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -651,12 +666,13 @@ namespace Tests
             bid.Catalogs.ConduitTypes.Add(conduitType);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
+            bid.Catalogs.ControllerTypes.Add(controllerType);
 
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
 
             system.Controllers.Add(controller);
             system.Equipment.Add(equipment);
@@ -700,6 +716,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -727,12 +744,13 @@ namespace Tests
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
             conduitType.AssociatedCosts.Add(assCost);
+            bid.Catalogs.ControllerTypes.Add(controllerType);
 
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
 
             system.Controllers.Add(controller);
             system.Equipment.Add(equipment);
@@ -776,6 +794,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -796,12 +815,13 @@ namespace Tests
             bid.Catalogs.ConduitTypes.Add(conduitType);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
+            bid.Catalogs.ControllerTypes.Add(controllerType);
 
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
             bid.Controllers.Add(controller);
 
             system.Equipment.Add(equipment);
@@ -828,6 +848,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
             var ratedCost = new TECCost();
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
@@ -848,12 +869,13 @@ namespace Tests
             bid.Catalogs.ConduitTypes.Add(conduitType);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
+            bid.Catalogs.ControllerTypes.Add(controllerType);
 
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
             bid.Controllers.Add(controller);
 
             system.Equipment.Add(equipment);
@@ -1242,9 +1264,11 @@ namespace Tests
         {
             var bid = new TECBid();
             var manufacturer = new TECManufacturer();
-            
+
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
+            var controllerType = new TECControllerType(manufacturer);
+            controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
@@ -1254,10 +1278,8 @@ namespace Tests
             conduitType.Cost = 1;
             conduitType.Labor = 1;
 
-            var controller1 = new TECController(manufacturer);
-            controller1.IO.Add(io);
-            var controller2 = new TECController(manufacturer);
-            controller2.IO.Add(io);
+            var controller1 = new TECController(controllerType);
+            var controller2 = new TECController(controllerType);
 
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
@@ -1278,18 +1300,18 @@ namespace Tests
         {
             var bid = new TECBid();
             var manufacturer = new TECManufacturer();
+            var controllerType = new TECControllerType(manufacturer);
 
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
+            controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
-            var controller1 = new TECController(manufacturer);
-            controller1.IO.Add(io);
-            var controller2 = new TECController(manufacturer);
-            controller2.IO.Add(io);
+            var controller1 = new TECController(controllerType);
+            var controller2 = new TECController(controllerType);
 
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
@@ -1312,18 +1334,18 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             var system = new TECSystem();
             bid.Systems.Add(system);
+            var controllerType = new TECControllerType(manufacturer);
 
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
+            controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
-            var controller1 = new TECController(manufacturer);
-            controller1.IO.Add(io);
-            var controller2 = new TECController(manufacturer);
-            controller2.IO.Add(io);
+            var controller1 = new TECController(controllerType);
+            var controller2 = new TECController(controllerType);
 
             bid.Controllers.Add(controller1);
             system.Controllers.Add(controller2);
@@ -1346,18 +1368,18 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             var system = new TECSystem();
             bid.Systems.Add(system);
+            var controllerType = new TECControllerType(manufacturer);
 
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
+            controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
-            var controller1 = new TECController(manufacturer);
-            controller1.IO.Add(io);
-            var controller2 = new TECController(manufacturer);
-            controller2.IO.Add(io);
+            var controller1 = new TECController(controllerType);
+            var controller2 = new TECController(controllerType);
 
             bid.Controllers.Add(controller1);
             system.Controllers.Add(controller2);
@@ -1602,8 +1624,9 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
 
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -1654,8 +1677,9 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
 
-            var controller = new TECController(manufacturer);
+            var controller = new TECController(controllerType);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -1700,8 +1724,9 @@ namespace Tests
         {
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECManufacturer manufacturer = bid.Catalogs.Manufacturers[0];
-            TECController controller = new TECController(manufacturer);
+            TECControllerType type= bid.Catalogs.ControllerTypes[0];
+
+            TECController controller = new TECController(type);
             bid.Controllers.Add(controller);
 
             TECSystem typical = TestHelper.CreateTestSystem(bid.Catalogs);

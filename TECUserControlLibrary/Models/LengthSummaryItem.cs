@@ -10,8 +10,8 @@ namespace TECUserControlLibrary.Models
 {
     public class LengthSummaryItem : TECObject
     {
-        private ElectricalMaterialComponent _material;
-        public ElectricalMaterialComponent Material
+        private TECElectricalMaterial _material;
+        public TECElectricalMaterial Material
         {
             get { return _material; }
         }
@@ -52,7 +52,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public LengthSummaryItem(ElectricalMaterialComponent material) : base(Guid.NewGuid())
+        public LengthSummaryItem(TECElectricalMaterial material) : base(Guid.NewGuid())
         {
             _material = material;
             _length = 0;
