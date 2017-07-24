@@ -837,6 +837,7 @@ namespace Tests
             //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(0, bid.Estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, bid.Estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+            assertNoCostOrLabor(bid);
 
             checkRefresh(bid);
         }
@@ -1744,7 +1745,7 @@ namespace Tests
 
             checkRefresh(bid);
         }
-
+        
         #region Derived Labor
         [TestMethod]
         public void Estimate_TECLaborHoursFromPoints()
