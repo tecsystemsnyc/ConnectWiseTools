@@ -209,7 +209,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             foreach (TECConnection connection in controller.ChildrenConnections)
             {
-                if (!(connection is TECSubScopeConnection) || (isTypicalConnection(connection as TECSubScopeConnection)))
+                if (!(connection is TECSubScopeConnection) || (!isTypicalConnection(connection as TECSubScopeConnection)))
                 {
                     AddConnection(connection);
                 }
