@@ -962,7 +962,10 @@ namespace EstimatingLibrary
                     {
                         if(subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
                         {
-                            subScope.Connection.ParentController.AddSubScope(subInstance);
+                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance);
+                            instanceSSConnect.Length = subScope.Connection.Length;
+                            instanceSSConnect.ConduitLength = subScope.Connection.ConduitLength;
+                            instanceSSConnect.ConduitType = subScope.Connection.ConduitType;
                         }
                     }
                 }

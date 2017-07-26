@@ -435,16 +435,17 @@ namespace Tests
             TECSubScope ss = new TECSubScope();
             typEquip.SubScope.Add(ss);
 
-            typical.AddInstance(bid);
-
             TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
             ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
-
+            
             //Act
             TECConnection connection = controller.AddSubScope(ss);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
+
+            typical.AddInstance(bid);
+
 
             Total totalTEC = calculateTotal(connection, CostType.TEC);
             Total totalElec = calculateTotal(connection, CostType.Electrical);
@@ -926,6 +927,47 @@ namespace Tests
             Assert.AreEqual(tecVM.TotalLabor, initialTecLabor - totalTEC.labor, delta, "Total tec labor didn't update properly.");
             Assert.AreEqual(elecVM.TotalCost, initialElecCost - totalElec.cost, delta, "Total elec cost didn't update properly.");
             Assert.AreEqual(elecVM.TotalLabor, initialElecLabor - totalElec.labor, delta, "Total elec labor didn't update properly.");
+
+            checkRefresh(tecVM, elecVM, bid);
+        }
+        #endregion
+
+        #region Special Tests
+        [TestMethod]
+        public void AddTypicalSubScopeConnectionToController()
+        {
+            //Arrange
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+
+            TECController controller = new TECController(bid.Catalogs.Manufacturers.RandomObject());
+            bid.Controllers.Add(controller);
+
+            TECSystem typical = new TECSystem();
+
+            TECEquipment equip = new TECEquipment();
+            typical.Equipment.Add(equip);
+
+            TECSubScope ss = new TECSubScope();
+            equip.SubScope.Add(ss);
+
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+
+            bid.Systems.Add(typical);
+
+            TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
+            ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
+
+            //Act
+            TECConnection connection = controller.AddSubScope(ss);
+            connection.Length = 100;
+            connection.ConduitLength = 100;
+            connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
+
+            Assert.AreEqual(0, tecVM.TotalCost, "Typical connection added to tec cost.");
+            Assert.AreEqual(0, tecVM.TotalLabor, "Typical connection added to tec labor.");
+            Assert.AreEqual(0, elecVM.TotalCost, "Typical connection added to elec cost.");
+            Assert.AreEqual(0, elecVM.TotalLabor, "Typical connection added to elec labor.");
 
             checkRefresh(tecVM, elecVM, bid);
         }

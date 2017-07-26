@@ -209,7 +209,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             foreach (TECConnection connection in controller.ChildrenConnections)
             {
-                AddConnection(connection);
+                if (!(connection is TECSubScopeConnection) || (!isTypicalConnection(connection as TECSubScopeConnection)))
+                {
+                    AddConnection(connection);
+                }
             }
         }
         public void RemoveController(TECController controller)
@@ -446,5 +449,17 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
+
+        private bool isTypicalConnection(TECSubScopeConnection ssConnect)
+        {
+            foreach(TECSystem system in Bid.Systems)
+            {
+                if (system.SubScope.Contains(ssConnect.SubScope))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

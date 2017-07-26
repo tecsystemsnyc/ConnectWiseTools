@@ -16,8 +16,11 @@ namespace EstimatingLibrary.Utilities
         public Action<object, PropertyChangedEventArgs> Changed;
         public Action<object, PropertyChangedEventArgs> InstanceChanged;
 
+        private TECScopeManager scopeManager;
+
         public ChangeWatcher(TECScopeManager scopeManager)
         {
+            this.scopeManager = scopeManager;
             if (scopeManager is TECBid)
             {
                 registerBidChanges(scopeManager as TECBid);
@@ -468,8 +471,17 @@ namespace EstimatingLibrary.Utilities
         }
         private void Instance_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            handleInstanceChanged(sender, e);
-            InstanceChanged?.Invoke(sender, e);
+            if (e is PropertyChangedExtendedEventArgs<Object>)
+            {
+                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                object oldValue = args.OldValue;
+                object newValue = args.NewValue;
+                if (!isTypicalConnection(oldValue, newValue))
+                {
+                    handleInstanceChanged(sender, e);
+                    InstanceChanged?.Invoke(sender, e);
+                }
+            }
         }
         private void handlePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -554,6 +566,7 @@ namespace EstimatingLibrary.Utilities
                     ((TECObject)newValue).PropertyChanged += Instance_PropertyChanged;
                     DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
                     handleChildren(newValue, Change.Add, ChangeType.Instance);
+                    
                 }
                 else if (e.PropertyName == "Remove")
                 {
@@ -601,6 +614,24 @@ namespace EstimatingLibrary.Utilities
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
             }
+        }
+
+        private bool isTypicalConnection(object oldValue, object newValue)
+        {
+            var controller = oldValue as TECController;
+            var connection = newValue as TECSubScopeConnection;
+            var bid = scopeManager as TECBid;
+            if(controller != null && connection != null && bid != null)
+            {
+                foreach(TECSystem system in bid.Systems)
+                {
+                    if (system.SubScope.Contains(connection.SubScope))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs args, Change change)
