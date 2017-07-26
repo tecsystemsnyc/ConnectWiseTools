@@ -177,7 +177,7 @@ namespace EstimatingLibrary
         {
             if (e.PropertyName == "ObjectPropertyChanged")
             {
-                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var args = e as PropertyChangedExtendedEventArgs;
                 var oldNew = args.NewValue as Tuple<object, object>;
                 foreach (TECSubScope subScope in this.SubScope)
                 {

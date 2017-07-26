@@ -463,9 +463,9 @@ namespace TECUserControlLibrary.ViewModels
         #region Event Handlers
         private void DeviceItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
 
                 if (args.PropertyName == "Total")
                 {

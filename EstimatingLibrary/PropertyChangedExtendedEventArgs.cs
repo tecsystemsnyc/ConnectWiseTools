@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,30 +8,22 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class PropertyChangedExtendedEventArgs<T> : PropertyChangedEventArgs
+    public class PropertyChangedExtendedEventArgs : PropertyChangedEventArgs
     {
-        public virtual T OldValue { get; private set; }
-        public virtual T NewValue { get; private set; }
-        public virtual Type OldType { get; private set; }
-        public virtual Type NewType { get; private set; }
+        public virtual TECObject Sender { get; private set; }
+        public virtual Object Value { get; private set; }
+        public virtual Object OldValue { get; private set; }
+        public virtual Change Change { get; private set; }
 
-        public PropertyChangedExtendedEventArgs(string propertyName, T oldValue, T newValue)
+        public PropertyChangedExtendedEventArgs(Change change, string propertyName, TECObject sender,
+            object newValue, object oldValue)
             : base(propertyName)
         {
+            Change = change;
+            Sender = sender;
+            Value = newValue;
             OldValue = oldValue;
-            NewValue = newValue;
-            if (OldValue != null) { OldType = OldValue.GetType(); }
-            if (NewValue != null) { NewType = NewValue.GetType(); }
-
         }
-
-        public PropertyChangedExtendedEventArgs(string propertyName, T oldValue, T newValue, Type oldType, Type newType)
-            : base(propertyName)
-        {
-            OldValue = oldValue;
-            NewValue = newValue;
-            OldType = oldType;
-            NewType = newType;
-        }
+        
     }
 }

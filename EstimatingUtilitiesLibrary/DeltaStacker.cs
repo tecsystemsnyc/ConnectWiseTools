@@ -19,10 +19,10 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleChange(object sender, PropertyChangedEventArgs e)
         {
-            var args = e as PropertyChangedExtendedEventArgs<object>;
+            var args = e as PropertyChangedExtendedEventArgs;
             if(args != null)
             {
-
+                
             }
         }
     }

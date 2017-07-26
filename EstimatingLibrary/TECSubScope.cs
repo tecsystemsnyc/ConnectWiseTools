@@ -229,7 +229,7 @@ namespace EstimatingLibrary
         }
         private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+            PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
             if (e.PropertyName == "Quantity")
             {
                 NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);

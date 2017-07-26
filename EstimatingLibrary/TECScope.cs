@@ -147,9 +147,9 @@ namespace EstimatingLibrary
 
         private void AssCost_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var args = e as PropertyChangedExtendedEventArgs;
                 if ((args.PropertyName == "Cost") || (args.PropertyName == "Labor"))
                 {
                     var old = this.Copy() as TECScope;

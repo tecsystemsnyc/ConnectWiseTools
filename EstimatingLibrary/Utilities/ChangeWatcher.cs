@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary.Utilities
 {
 
-    public enum Change { Add, Remove };
+    public enum Change { Add, Remove, Edit };
     public enum ChangeType { Object, Instance };
     public class ChangeWatcher
     {
@@ -476,9 +476,9 @@ namespace EstimatingLibrary.Utilities
             string message = "Propertychanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
                 object newValue = args.NewValue;
                 if (e.PropertyName == "Add")
@@ -543,9 +543,9 @@ namespace EstimatingLibrary.Utilities
             string message = "InstanceChanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
                 object newValue = args.NewValue;
                 if (e.PropertyName == "Add")
@@ -603,7 +603,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs<object> args, Change change)
+        private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs args, Change change)
         {
             var oldValue = args.OldValue;
             var newValue = args.NewValue;

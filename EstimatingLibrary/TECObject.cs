@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -25,13 +26,11 @@ namespace EstimatingLibrary
         #region Property Changed
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue)
+        protected void NotifyPropertyChanged(Change change, string propertyName, TECObject sender,
+            object value, object oldValue = null)
         {
-            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
-        }
-        protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue, Type oldType, Type newType)
-        {
-            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue, oldType, newType));
+            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs(change, propertyName, sender,
+                value, oldValue));
         }
         protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

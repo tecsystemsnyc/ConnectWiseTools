@@ -94,10 +94,10 @@ namespace EstimatingUtilitiesLibrary
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
                 if (!isDoing) { RedoStack.Clear(); }
-                if (e is PropertyChangedExtendedEventArgs<Object>)
+                if (e is PropertyChangedExtendedEventArgs)
                 {
 
-                    PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                    PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                     StackItem item;
                     object oldValue = args.OldValue;
                     object newValue = args.NewValue;

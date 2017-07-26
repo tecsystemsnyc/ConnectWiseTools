@@ -337,7 +337,7 @@ namespace EstimatingLibrary
         {
             if (e.PropertyName == "ObjectPropertyChanged")
             {
-                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var args = e as PropertyChangedExtendedEventArgs;
                 var oldNew = args.NewValue as Tuple<object, object>;
                 foreach (TECEquipment equipment in this.Equipment)
                 {
@@ -363,9 +363,9 @@ namespace EstimatingLibrary
         {
             if (SystemInstances.Count > 0)
             {
-                if (e is PropertyChangedExtendedEventArgs<Object>)
+                if (e is PropertyChangedExtendedEventArgs)
                 {
-                    PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                    PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                     object oldValue = args.OldValue;
                     object newValue = args.NewValue;
                     if (e.PropertyName == "Add" ||

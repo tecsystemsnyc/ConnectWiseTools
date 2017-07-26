@@ -19,7 +19,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Change = change;
         }
-        public StackItem(Change change, PropertyChangedExtendedEventArgs<object> e) : this(change)
+        public StackItem(Change change, PropertyChangedExtendedEventArgs e) : this(change)
         {
             ReferenceObject = e.OldValue as TECObject;
             ReferenceType = e.OldType;

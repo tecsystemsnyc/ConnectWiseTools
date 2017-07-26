@@ -267,9 +267,9 @@ namespace TECUserControlLibrary.Models
         }
         private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var args = e as PropertyChangedExtendedEventArgs;
 
                 if (args.PropertyName == "ParentConnection")
                 {

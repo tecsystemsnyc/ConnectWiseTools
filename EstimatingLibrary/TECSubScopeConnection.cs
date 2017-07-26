@@ -31,7 +31,7 @@ namespace EstimatingLibrary
 
         private void SubScope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var args = e as PropertyChangedExtendedEventArgs<object>;
+            var args = e as PropertyChangedExtendedEventArgs;
             if(e.PropertyName == "CostComponentChanged" && args != null)
             {
                 var old = this.Copy() as TECSubScopeConnection;
