@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +16,10 @@ namespace EstimatingLibrary
             get { return _manufacturer; }
             set
             {
-                var temp = this.Copy();
+                var old = Manufacturer;
                 _manufacturer = value;
-                NotifyPropertyChanged("Manufacturer", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyPropertyChanged(Change.Edit, "Manufacturer", this, value, old);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public double ExtendedCost

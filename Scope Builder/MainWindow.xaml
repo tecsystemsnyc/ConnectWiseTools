@@ -154,9 +154,9 @@
                 <TabItem Header="Proposal">
                     <cLibViews:ProposalView ViewModel="{Binding DocumentBuilderVM}"/>
                 </TabItem>
-                <TabItem Header="Budget">
+                <!--<TabItem Header="Budget">
                     <cLibViews:BudgetView ViewModel="{Binding BudgetVM}"/>
-                </TabItem>
+                </TabItem>-->
                 <!--Misc Tab-->
                 <TabItem Visibility="Collapsed"/>
                 <TabItem Header="Settings">

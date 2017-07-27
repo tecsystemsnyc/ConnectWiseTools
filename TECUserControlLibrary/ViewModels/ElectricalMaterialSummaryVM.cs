@@ -119,7 +119,7 @@ namespace TECUserControlLibrary.ViewModels
             if (e is PropertyChangedExtendedEventArgs)
             {
                 PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-                var targetObject = args.NewValue;
+                var targetObject = args.Value;
                 var referenceObject = args.OldValue;
 
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
@@ -244,10 +244,10 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConnectionType" || args.PropertyName == "ConduitType")
                 {
-                    if (args.NewValue is TECConnection && args.OldValue is TECConnection)
+                    if (args.Value is TECConnection && args.OldValue is TECConnection)
                     {
                         removeConnection(args.OldValue as TECConnection);
-                        addConnection(args.NewValue as TECConnection);
+                        addConnection(args.Value as TECConnection);
                     }
                 }
             }

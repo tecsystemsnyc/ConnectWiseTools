@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace EstimateBuilder.Model
             {
                 double old = _total;
                 _total = value;
-                NotifyPropertyChanged("Total", old, _total);
+                NotifyPropertyChanged(Change.Edit, "Total", this, _total, old);
             }
         }
 
@@ -53,7 +54,7 @@ namespace EstimateBuilder.Model
             {
                 double old = _laborTotal;
                 _laborTotal = value;
-                NotifyPropertyChanged("LaborTotal", old, _laborTotal);
+                NotifyPropertyChanged(Change.Edit, "LaborTotal", this, _laborTotal, old);
             }
         }
 

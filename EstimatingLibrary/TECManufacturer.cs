@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace EstimatingLibrary
             get { return _multiplier; }
             set
             {
-                var temp = this.Copy();
+                var old = Multiplier;
                 _multiplier = value;
-                NotifyPropertyChanged("Multiplier", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Multiplier", this, value, old);
             }
         }
         private double _multiplier;

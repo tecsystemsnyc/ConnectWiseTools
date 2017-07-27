@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace EstimatingLibrary
             get { return _quantity; }
             set
             {
-                var temp = this.Copy();
+                var old = Quantity;
                 _quantity = value;
-                NotifyPropertyChanged("Quantity", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Quantity", this, value, old);
 
             }
         }

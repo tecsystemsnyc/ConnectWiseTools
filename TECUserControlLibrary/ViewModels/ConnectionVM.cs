@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
@@ -279,11 +280,11 @@ namespace TECUserControlLibrary.ViewModels
             var args = e as PropertyChangedExtendedEventArgs;
             if(args != null)
             {
-                if(args.PropertyName == "Add" && args.NewValue is TECSubScope)
+                if(args.Change == Change.Add && args.Value is TECSubScope)
                 {
                     populateSubScopeConnections();
                 }
-                else if(args.PropertyName == "Remove" && args.NewValue is TECSubScope)
+                else if(args.Change == Change.Remove && args.Value is TECSubScope)
                 {
                     checkForRemovedSubScope();
                 }

@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace TECUserControlLibrary.Models
             {
                 double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged("TotalCost", old, _totalCost);
+                NotifyPropertyChanged(Change.Edit, "TotalCost", this, _totalCost, old);
             }
         }
 
@@ -53,7 +54,7 @@ namespace TECUserControlLibrary.Models
             {
                 double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged("TotalLabor", old, _totalLabor);
+                NotifyPropertyChanged(Change.Edit, "TotalLabor", this, _totalLabor, old);
             }
         }
 
@@ -81,7 +82,7 @@ namespace TECUserControlLibrary.Models
             {
                 var old = this.Copy();
                 updateTotals();
-                NotifyPropertyChanged("Total", old, this);
+                NotifyPropertyChanged(Change.Edit, "Total", this, old);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,9 @@ namespace EstimatingLibrary
             get { return _ioPerModule; }
             set
             {
-                var temp = Copy();
+                var old =  IOPerModule;
                 _ioPerModule = value;
-                NotifyPropertyChanged("IOPerModule", temp, this);
+                NotifyPropertyChanged(Change.Edit, "IOPerModule", this, value, old);
             }
         }
         

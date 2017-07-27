@@ -18,14 +18,15 @@ namespace EstimatingLibrary
             get { return _subScope; }
             set
             {
-                var temp = this.Copy();
+                var old = SubScope;
                 if (SubScope != null)
                 {
                     SubScope.CollectionChanged -= SubScope_CollectionChanged;
                 }
                 _subScope = value;
                 SubScope.CollectionChanged += SubScope_CollectionChanged;
-                NotifyPropertyChanged("SubScope", temp, this);
+                NotifyPropertyChanged(Change.Edit, "SubScope", this, value, old);
+
                 RaisePropertyChanged("SubScopeQuantity");
                 subscribeToSubScope();
             }
@@ -117,7 +118,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged(Change.Add, "SubScope", this, item);
                     checkForTotalsInSubScope(item as TECSubScope);
                     if ((item as TECSubScope).Location == null)
                     {
@@ -129,13 +130,13 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
-                    NotifyPropertyChanged("RemovedSubScope", this, item);
+                    NotifyPropertyChanged(Change.Remove, "SubScope", this, item);
+                    //NotifyPropertyChanged("RemovedSubScope", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender, typeof(TECEquipment), typeof(TECSubScope));
+                NotifyPropertyChanged(Change.Edit, "SubScope", this, sender);
             }
             subscribeToSubScope();
         }
@@ -175,15 +176,18 @@ namespace EstimatingLibrary
         }
         private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "ObjectPropertyChanged")
+            if (e.PropertyName == "Location")
             {
                 var args = e as PropertyChangedExtendedEventArgs;
-                var oldNew = args.NewValue as Tuple<object, object>;
-                foreach (TECSubScope subScope in this.SubScope)
+                var location = args.Value as TECLabeled;
+                if(location.Flavor == Flavor.Location)
                 {
-                    if (subScope.Location == oldNew.Item1)
+                    foreach (TECSubScope subScope in this.SubScope)
                     {
-                        subScope.SetLocationFromParent(this.Location);
+                        if (subScope.Location == location)
+                        {
+                            subScope.SetLocationFromParent(this.Location);
+                        }
                     }
                 }
             }

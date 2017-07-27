@@ -257,7 +257,7 @@ namespace EstimatingLibrary
                 {
                     PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                     object oldValue = args.OldValue;
-                    object newValue = args.NewValue;
+                    object newValue = args.Value;
                     if (e.PropertyName == "Add")
                     {
                         message = "Add change: " + oldValue;

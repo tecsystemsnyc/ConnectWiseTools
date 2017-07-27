@@ -471,11 +471,11 @@ namespace EstimatingLibrary.Utilities
         }
         private void Instance_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
-                object newValue = args.NewValue;
+                object newValue = args.Value;
                 if (!isTypicalConnection(oldValue, newValue))
                 {
                     handleInstanceChanged(sender, e);
@@ -492,7 +492,7 @@ namespace EstimatingLibrary.Utilities
             {
                 PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
-                object newValue = args.NewValue;
+                object newValue = args.Value;
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
@@ -559,7 +559,7 @@ namespace EstimatingLibrary.Utilities
             {
                 PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
-                object newValue = args.NewValue;
+                object newValue = args.Value;
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
@@ -637,7 +637,7 @@ namespace EstimatingLibrary.Utilities
         private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs args, Change change)
         {
             var oldValue = args.OldValue;
-            var newValue = args.NewValue;
+            var newValue = args.Value;
             if (oldValue is TECSystem && newValue is TECSystem) {
                 InstanceChanged?.Invoke(sender, args);
                 if(change == Change.Add)

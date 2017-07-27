@@ -100,7 +100,7 @@ namespace EstimatingUtilitiesLibrary
                     PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                     StackItem item;
                     object oldValue = args.OldValue;
-                    object newValue = args.NewValue;
+                    object newValue = args.Value;
                     if (e.PropertyName == "Add" || e.PropertyName == "Remove")
                     {
                         message = e.PropertyName + " change: " + oldValue;
@@ -135,11 +135,11 @@ namespace EstimatingUtilitiesLibrary
                         var toSave = new List<StackItem>();
                         if (oldNew.Item1 != null)
                         {
-                            toSave.Add(new StackItem(removeChange, oldValue, oldNew.Item1, args.OldType, args.NewType));
+                            //toSave.Add(new StackItem(removeChange, oldValue, oldNew.Item1, args.OldType, args.NewType));
                         }
                         if (oldNew.Item2 != null)
                         {
-                            toSave.Add(new StackItem(addChange, oldValue, oldNew.Item2, args.OldType, args.NewType));
+                            //toSave.Add(new StackItem(addChange, oldValue, oldNew.Item2, args.OldType, args.NewType));
                         }
                         foreach (var save in toSave)
                         {

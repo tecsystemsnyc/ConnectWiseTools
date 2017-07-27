@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -24,13 +25,13 @@ namespace EstimatingLibrary
             }
             charactersticInstances[key].Add(value);
             
-            NotifyPropertyChanged("AddRelationship", key as object, value as object, typeof(T), typeof(T));
+            NotifyPropertyChanged(Change.Add, "AddItem", this, key as object, value as object);
         }
 
         public void RemoveItem(T key, T value)
         {
             charactersticInstances[key].Remove(value);
-            NotifyPropertyChanged("RemoveRelationship", key as object, value as object, typeof(T), typeof(T));
+            NotifyPropertyChanged(Change.Remove, "RemoveItem", this, key as object, value as object);
         }
 
         public List<T> GetInstances(T key)

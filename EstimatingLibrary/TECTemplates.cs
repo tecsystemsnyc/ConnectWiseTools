@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -23,11 +24,11 @@ namespace EstimatingLibrary
             get { return _systemTemplates; }
             set
             {
-                var temp = this.Copy();
-                SystemTemplates.CollectionChanged -= CollectionChanged;
+                var old = SystemTemplates;
+                SystemTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
                 _systemTemplates = value;
-                SystemTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("SystemTemplates", temp, this);
+                SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
+                NotifyPropertyChanged(Change.Edit, "SystemTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECEquipment> EquipmentTemplates
@@ -35,11 +36,11 @@ namespace EstimatingLibrary
             get { return _equipmentTemplates; }
             set
             {
-                var temp = this.Copy();
-                EquipmentTemplates.CollectionChanged -= CollectionChanged;
+                var old = EquipmentTemplates;
+                EquipmentTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
                 _equipmentTemplates = value;
-                EquipmentTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("EquipmentTemplates", temp, this);
+                EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
+                NotifyPropertyChanged(Change.Edit, "EquipmentTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECSubScope> SubScopeTemplates
@@ -47,11 +48,11 @@ namespace EstimatingLibrary
             get { return _subScopeTemplates; }
             set
             {
-                var temp = this.Copy();
-                SubScopeTemplates.CollectionChanged -= CollectionChanged;
+                var old = SubScopeTemplates;
+                SubScopeTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
                 _subScopeTemplates = value;
-                SubScopeTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("SubScopeTemplates", temp, this);
+                SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
+                NotifyPropertyChanged(Change.Edit, "SubScopeTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECController> ControllerTemplates
@@ -59,11 +60,11 @@ namespace EstimatingLibrary
             get { return _controllerTemplates; }
             set
             {
-                var temp = this.Copy();
-                ControllerTemplates.CollectionChanged -= CollectionChanged;
+                var old = ControllerTemplates;
+                ControllerTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
                 _controllerTemplates = value;
-                ControllerTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ControllerTemplates", temp, this);
+                ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
+                NotifyPropertyChanged(Change.Edit, "ControllerTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECMisc> MiscCostTemplates
@@ -71,11 +72,11 @@ namespace EstimatingLibrary
             get { return _miscCostTemplates; }
             set
             {
-                var temp = this.Copy();
-                MiscCostTemplates.CollectionChanged -= CollectionChanged;
+                var old = MiscCostTemplates;
+                MiscCostTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
                 _miscCostTemplates = value;
-                MiscCostTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscCostTemplates", temp, this);
+                MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
+                NotifyPropertyChanged(Change.Edit, "MiscCostTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECPanel> PanelTemplates
@@ -83,11 +84,11 @@ namespace EstimatingLibrary
             get { return _panelTemplates; }
             set
             {
-                var temp = this.Copy();
-                PanelTemplates.CollectionChanged -= CollectionChanged;
+                var old = PanelTemplates;
+                PanelTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
                 _panelTemplates = value;
-                PanelTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("PanelTemplates", temp, this);
+                PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
+                NotifyPropertyChanged(Change.Edit, "PanelTemplates", this, value, old);
             }
         }
         #endregion //Properties
@@ -121,12 +122,12 @@ namespace EstimatingLibrary
             _miscCostTemplates = new ObservableCollection<TECMisc>();
             _panelTemplates = new ObservableCollection<TECPanel>();
 
-            SystemTemplates.CollectionChanged += CollectionChanged;
-            EquipmentTemplates.CollectionChanged += CollectionChanged;
-            SubScopeTemplates.CollectionChanged += CollectionChanged;
-            ControllerTemplates.CollectionChanged += CollectionChanged;
-            MiscCostTemplates.CollectionChanged += CollectionChanged;
-            PanelTemplates.CollectionChanged += CollectionChanged;
+            SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
+            EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
+            SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
+            ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
+            MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
+            PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
 
             Catalogs.ScopeChildRemoved += scopeChildRemoved;
         }
@@ -252,25 +253,25 @@ namespace EstimatingLibrary
         }
 
         #region Collection Changed
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged(Change.Remove, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                NotifyPropertyChanged(Change.Edit, propertyName, this, sender);
             }
         }
         #endregion

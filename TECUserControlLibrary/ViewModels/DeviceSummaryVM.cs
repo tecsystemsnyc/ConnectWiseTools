@@ -470,7 +470,7 @@ namespace TECUserControlLibrary.ViewModels
                 if (args.PropertyName == "Total")
                 {
                     DeviceSubTotal -= (double)args.OldValue;
-                    DeviceSubTotal += (double)args.NewValue;
+                    DeviceSubTotal += (double)args.Value;
                 }
             }
         }

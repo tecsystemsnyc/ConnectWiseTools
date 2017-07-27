@@ -279,9 +279,9 @@ namespace TECUserControlLibrary.Models
                     }
                     RaisePropertyChanged("ParentController");
                     RefreshIsConnected();
-                    if ((args.NewValue as TECController).ParentConnection != null)
+                    if ((args.Value as TECController).ParentConnection != null)
                     {
-                        (args.NewValue as TECController).ParentConnection.PropertyChanged += ParentConnection_PropertyChanged;
+                        (args.Value as TECController).ParentConnection.PropertyChanged += ParentConnection_PropertyChanged;
                     }
                 }
             }

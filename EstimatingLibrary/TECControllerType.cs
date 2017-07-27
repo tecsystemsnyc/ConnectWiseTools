@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace EstimatingLibrary
 {
     public class TECControllerType : TECHardware
     {
-#region Properties
+        #region Properties
         private ObservableCollection<TECIO> _io;
 
         public ObservableCollection<TECIO> IO
@@ -17,17 +18,19 @@ namespace EstimatingLibrary
             get { return _io; }
             set
             {
-                var temp = this.Copy();
-                IO.CollectionChanged -= IO_CollectionChanged;
+                var old = IO;
+                IO.CollectionChanged -= (sender, args) => IO_CollectionChanged(sender, args, "IO");
                 _io = value;
-                NotifyPropertyChanged("IO", temp, this);
-                IO.CollectionChanged += IO_CollectionChanged;
+                NotifyPropertyChanged(Change.Edit,"IO", this, value, old);
+                IO.CollectionChanged += (sender, args) => IO_CollectionChanged(sender, args, "IO");
             }
         }
-#endregion
+        #endregion
 
         public TECControllerType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer) {
             _type = CostType.TEC;
+            _io = new ObservableCollection<TECIO>();
+            IO.CollectionChanged += (sender, args) => IO_CollectionChanged(sender, args, "IO");
         }
         public TECControllerType(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
         public TECControllerType(TECControllerType typeSource) : this(typeSource.Manufacturer)
@@ -40,8 +43,8 @@ namespace EstimatingLibrary
             }
         }
 
-#region Methods
-        private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        #region Methods
+        private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -49,7 +52,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyPropertyChanged("Add", this, (item as TECObject).Copy());
+                        NotifyPropertyChanged(Change.Add, propertyName, this, item);
                     }
                 }
             }
@@ -59,7 +62,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyPropertyChanged("Remove", this, (item as TECObject).Copy());
+                        NotifyPropertyChanged(Change.Remove, propertyName, this, item);
                     }
                 }
             }
@@ -100,7 +103,7 @@ namespace EstimatingLibrary
             outCost._guid = this.Guid;
             return outCost;
         }
-#endregion
+        #endregion
 
     }
 }

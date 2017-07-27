@@ -23,10 +23,10 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old = Type;
                 _type = value;
                 // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Type", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
             }
         }
         public int Quantity
@@ -34,9 +34,9 @@ namespace EstimatingLibrary
             get { return _quantity; }
             set
             {
-                var temp = this.Copy();
+                var old = Quantity;
                 _quantity = value;
-                NotifyPropertyChanged("Quantity", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Quantity", this, value, old);
 
             }
         }

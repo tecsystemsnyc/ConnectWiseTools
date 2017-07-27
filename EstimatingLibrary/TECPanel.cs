@@ -18,10 +18,10 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old= Type;
                 _type = value;
-                NotifyPropertyChanged("Type", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
 
@@ -31,11 +31,11 @@ namespace EstimatingLibrary
             get { return _controllers; }
             set
             {
-                var temp = this.Copy();
+                var old = Controllers;
                 _controllers = value;
-                Controllers.CollectionChanged -= collectionChanged;
-                NotifyPropertyChanged("Controllers", temp, this);
-                Controllers.CollectionChanged += collectionChanged;
+                Controllers.CollectionChanged -= controllersCollectionChanged;
+                NotifyPropertyChanged(Change.Edit, "Controllers", this, value, old);
+                Controllers.CollectionChanged += controllersCollectionChanged;
             }
         }
 
@@ -63,7 +63,7 @@ namespace EstimatingLibrary
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
             _type = type;
-            Controllers.CollectionChanged += collectionChanged;
+            Controllers.CollectionChanged += controllersCollectionChanged;
         }
         public TECPanel(TECPanelType type) : this(Guid.NewGuid(), type) { }
         public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type)
@@ -95,20 +95,20 @@ namespace EstimatingLibrary
             return outPanel;
         }
 
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void controllersCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("AddRelationship", this, item);
+                    NotifyPropertyChanged(Change.Add, "Controllers", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("RemoveRelationship", this, item);
+                    NotifyPropertyChanged(Change.Remove, "Controllers", this, item);
                 }
             }
         }

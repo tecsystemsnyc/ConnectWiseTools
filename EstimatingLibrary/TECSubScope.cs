@@ -23,9 +23,9 @@ namespace EstimatingLibrary
                 {
                     Devices.CollectionChanged -= Devices_CollectionChanged;
                 }
-                var temp = this.Copy();
+                var old = Devices;
                 _devices = value;
-                NotifyPropertyChanged("Devices", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Devices", this, value, old);
                 Devices.CollectionChanged += Devices_CollectionChanged;
             }
         }
@@ -40,10 +40,10 @@ namespace EstimatingLibrary
                 {
                     Points.CollectionChanged -= PointsCollectionChanged;
                 }
-                var temp = this.Copy();
+                var old = Points;
                 _points = value;
                 Points.CollectionChanged += PointsCollectionChanged;
-                NotifyPropertyChanged("Points", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Points", this, value, old);
             }
         }
 
@@ -181,7 +181,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged(Change.Add, "Points", this, item);
                 }
                 RaisePropertyChanged("PointNumber");
             }
@@ -189,13 +189,13 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged(Change.Remove, "Points", this, item);
                 }
                 RaisePropertyChanged("PointNumber");
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                NotifyPropertyChanged(Change.Edit, "Points", this, sender);
             }
         }
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -204,27 +204,27 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("AddCatalog", this, item);
+                    NotifyPropertyChanged(Change.Add, "Devices", this, item);
                     ((TECDevice)item).PropertyChanged += DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
                     var old = generateOldCostComponent(Change.Add, item as TECDevice);
-                    NotifyPropertyChanged<object>("CostComponentChanged", old, this);
+                    //NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("RemoveCatalog", this, item);
+                    NotifyPropertyChanged(Change.Remove, "Devices", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
                     var old = generateOldCostComponent(Change.Remove, item as TECDevice);
-                    NotifyPropertyChanged<object>("CostComponentChanged", old, this);
+                    //NotifyPropertyChanged<object>("CostComponentChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                NotifyPropertyChanged(Change.Edit, "Devices", this, sender);
             }
         }
         private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -232,16 +232,16 @@ namespace EstimatingLibrary
             PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
             if (e.PropertyName == "Quantity")
             {
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
             }
             if(args != null)
             {
                 if(e.PropertyName == "Cost" || e.PropertyName == "Manufacturer")
                 {
-                    var old = this.Copy() as TECSubScope;
-                    old.Devices.Remove(args.NewValue as TECDevice);
-                    old.Devices.Add(args.OldValue as TECDevice);
-                    NotifyPropertyChanged("CostComponentChanged", old, this);
+                    //var old = this.Copy() as TECSubScope;
+                    //old.Devices.Remove(args.NewValue as TECDevice);
+                    //old.Devices.Add(args.OldValue as TECDevice);
+                    //NotifyPropertyChanged("CostComponentChanged", old, this);
                 }
             }
         }

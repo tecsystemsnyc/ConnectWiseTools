@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,9 +31,9 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old = Type;
                 _type = value;
-                NotifyPropertyChanged("Type", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
             }
         }
 
@@ -42,9 +43,9 @@ namespace EstimatingLibrary
             get { return _quantity; }
             set
             {
-                var temp = this.Copy();
+                var old = Quantity;
                 _quantity = value;
-                NotifyPropertyChanged("Quantity", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Quantity", this, value, old);
             }
         }
 
@@ -54,12 +55,10 @@ namespace EstimatingLibrary
             get { return _ioModule; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_ioModule, value);
-                var temp = Copy();
+                var old = IOModule;
                 _ioModule = value;
-                NotifyPropertyChanged("IOModule", temp, this);
-                temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
+                NotifyPropertyChanged(Change.Edit, "IOModule", this, value, old);
+                //NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
             }
         }
 

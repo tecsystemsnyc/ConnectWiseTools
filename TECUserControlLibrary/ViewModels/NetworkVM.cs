@@ -141,7 +141,7 @@ namespace TECUserControlLibrary.ViewModels
             if (e is PropertyChangedExtendedEventArgs)
             {
                 PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-                var targetObject = args.NewValue;
+                var targetObject = args.Value;
                 var referenceObject = args.OldValue;
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
                 {

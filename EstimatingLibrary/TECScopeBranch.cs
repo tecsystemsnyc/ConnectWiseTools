@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace EstimatingLibrary
             get { return _branches; }
             set
             {
-                var temp = this.Copy();
+                var old = Branches;
                 _branches = value;
-                NotifyPropertyChanged("Branches", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Branches", this, value, old);
                 Branches.CollectionChanged += Branches_CollectionChanged;
             }
         }
@@ -65,14 +66,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged(Change.Add, "Branches", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged(Change.Remove, "Branches", this, item);
                 }
             }
         }

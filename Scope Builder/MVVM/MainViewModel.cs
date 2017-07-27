@@ -56,7 +56,7 @@ namespace Scope_Builder.MVVM
         public ScopeCollectionsTabVM ScopeCollection { get; set; }
 
         public ProposalVM DocumentBuilderVM { get; set; }
-        public BudgetVM BudgetVM { get; set; }
+        //public BudgetVM BudgetVM { get; set; }
         #endregion
 
         #region Commands Properties
@@ -242,14 +242,14 @@ namespace Scope_Builder.MVVM
                 throw new NotImplementedException();
             }
         }
-        private void setContextText(object selected)
+        private void setContextText(TECLocated selected)
         {
-            if (selected is TECScope && selected != null)
+            if (selected != null)
             {
-                StatusBarVM.ContextText = makeContextString(selected as TECScope);
+                StatusBarVM.ContextText = makeContextString(selected as TECLocated);
             }
         }
-        private string makeContextString(TECScope scope)
+        private string makeContextString(TECLocated scope)
         {
             var outString = "";
 
@@ -284,7 +284,7 @@ namespace Scope_Builder.MVVM
             {
                 ScopeDataGrid.Refresh(Bid);
                 LocationDataGrid.Refresh(Bid);
-                BudgetVM.Refresh(Bid);
+                //BudgetVM.Refresh(Bid);
                 ScopeCollection.Refresh(Templates);
             }
         }
@@ -293,7 +293,7 @@ namespace Scope_Builder.MVVM
             ScopeDataGrid = new SystemsVM(new TECBid());
             ScopeDataGrid.DragHandler += DragOver;
             ScopeDataGrid.DropHandler += Drop;
-            ScopeDataGrid.SelectionChanged += setContextText;
+            ScopeDataGrid.SelectionChanged += (selection) => setContextText(selection as TECLocated);
             ScopeDataGrid.AssignChildDelegates();
             ScopeDataGrid.DataGridVisibilty.SubScopeLength = Visibility.Collapsed;
 
@@ -313,7 +313,7 @@ namespace Scope_Builder.MVVM
         }
         private void setupBudget()
         {
-            BudgetVM = new BudgetVM(new TECBid());
+            //BudgetVM = new BudgetVM(new TECBid());
         }
         #endregion
 

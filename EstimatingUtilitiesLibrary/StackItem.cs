@@ -22,10 +22,17 @@ namespace EstimatingUtilitiesLibrary
         public StackItem(Change change, PropertyChangedExtendedEventArgs e) : this(change)
         {
             ReferenceObject = e.OldValue as TECObject;
-            ReferenceType = e.OldType;
+            if(e.OldValue != null)
+            {
+                ReferenceType = e.OldValue.GetType();
+            } else
+            {
+                ReferenceType = typeof(object);
+            }
+            
 
-            TargetObject = e.NewValue as TECObject;
-            TargetType = e.NewType;
+            TargetObject = e.Value as TECObject;
+            TargetType = e.Value.GetType();
         }
         public StackItem(Change change, object referenceObject, object targetObject) : this(change)
         {

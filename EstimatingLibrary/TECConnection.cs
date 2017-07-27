@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,9 +24,9 @@ namespace EstimatingLibrary
             get { return _length; }
             set
             {
-                var temp = this.Copy();
+                var old = Length;
                 _length = value;
-                NotifyPropertyChanged("Length", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Length", this, value, old);
             }
         }
         public double ConduitLength
@@ -33,9 +34,9 @@ namespace EstimatingLibrary
             get { return _conduitLength; }
             set
             {
-                var temp = this.Copy();
+                var old = ConduitLength;
                 _conduitLength = value;
-                NotifyPropertyChanged("ConduitLength", temp, this);
+                NotifyPropertyChanged(Change.Edit, "ConduitLength", this, value, old);
             }
         }
         public TECController ParentController
@@ -52,12 +53,9 @@ namespace EstimatingLibrary
             get { return _conduitType; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_conduitType, value);
-                var temp = Copy();
+                var old = ConduitType;
                 _conduitType = value;
-                NotifyPropertyChanged("ConduitType", temp, this);
-                temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECConnection), typeof(TECElectricalMaterial));
+                NotifyPropertyChanged(Change.Edit, "ConduitType", this, value, old);
             }
         }
 

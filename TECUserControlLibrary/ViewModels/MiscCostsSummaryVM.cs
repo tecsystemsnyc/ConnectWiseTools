@@ -452,7 +452,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     CostSummaryItem miscItem = miscCostDictionary[(args.OldValue as TECMisc).Guid];
                     miscItem.Quantity /= (args.OldValue as TECMisc).Quantity;
-                    miscItem.Quantity *= (args.NewValue as TECMisc).Quantity;
+                    miscItem.Quantity *= (args.Value as TECMisc).Quantity;
                 }
             }
         }
@@ -466,8 +466,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     MiscCostSubTotalCost -= (args.OldValue as CostSummaryItem).TotalCost;
                     MiscCostSubTotalLabor -= (args.OldValue as CostSummaryItem).TotalLabor;
-                    MiscCostSubTotalCost += (args.NewValue as CostSummaryItem).TotalCost;
-                    MiscCostSubTotalLabor += (args.NewValue as CostSummaryItem).TotalLabor;
+                    MiscCostSubTotalCost += (args.Value as CostSummaryItem).TotalCost;
+                    MiscCostSubTotalLabor += (args.Value as CostSummaryItem).TotalLabor;
                 }
             }
         }

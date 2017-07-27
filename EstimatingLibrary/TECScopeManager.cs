@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace EstimatingLibrary
             get { return _labor; }
             set
             {
-                var temp = Copy();
+                var old = Labor;
                 _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Labor", this, value, old);
             }
         }
 
@@ -28,9 +29,9 @@ namespace EstimatingLibrary
             get { return _catalogs; }
             set
             {
-                var temp = Copy();
+                var old = Catalogs;
                 _catalogs = value;
-                NotifyPropertyChanged("Catalogs", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Catalogs", this, value, old);
             }
         }
 
