@@ -173,7 +173,7 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                 }
-                else if (args.PropertyName == "NetworkType" && targetObject is TECController)
+                else if ((args.PropertyName == "NetworkType" || args.PropertyName == "ParentConnection") && targetObject is TECController)
                 {
                     refreshIsConnected();
                 }
