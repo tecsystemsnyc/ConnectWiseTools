@@ -132,6 +132,7 @@
     <Compile Include="ScopeWordDocumentBuilder.cs" />
     <Compile Include="SQLiteDatabase.cs" />
     <Compile Include="StackItem.cs" />
+    <Compile Include="TableHelper.cs" />
     <Compile Include="UtilitiesMethods.cs" />
   </ItemGroup>
   <ItemGroup>

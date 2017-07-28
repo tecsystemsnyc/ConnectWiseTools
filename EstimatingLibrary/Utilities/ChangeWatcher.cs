@@ -14,6 +14,7 @@ namespace EstimatingLibrary.Utilities
     public class ChangeWatcher
     {
         public Action<object, PropertyChangedEventArgs> Changed;
+        public Action<object, PropertyChangedExtendedEventArgs> ExtendedChanged;
         public Action<object, PropertyChangedEventArgs> InstanceChanged;
 
         private TECScopeManager scopeManager;
@@ -467,6 +468,10 @@ namespace EstimatingLibrary.Utilities
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             handlePropertyChanged(sender, e);
+            if(e is PropertyChangedExtendedEventArgs)
+            {
+                ExtendedChanged?.Invoke(sender, e as PropertyChangedExtendedEventArgs);
+            }
             Changed?.Invoke(sender, e);
         }
         private void Instance_PropertyChanged(object sender, PropertyChangedEventArgs e)

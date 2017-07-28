@@ -4,22 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 
 namespace EstimatingUtilitiesLibrary
 {
     public class StackItem
     {
-        public Change Change;
+        public StackChange Change;
         public TECObject ReferenceObject;
         public TECObject TargetObject;
         public Type ReferenceType;
         public Type TargetType;
 
-        public StackItem(Change change)
+        public StackItem(StackChange change)
         {
             Change = change;
         }
-        public StackItem(Change change, PropertyChangedExtendedEventArgs e) : this(change)
+        public StackItem(StackChange change, PropertyChangedExtendedEventArgs e) : this(change)
         {
             ReferenceObject = e.OldValue as TECObject;
             if(e.OldValue != null)
@@ -34,7 +35,7 @@ namespace EstimatingUtilitiesLibrary
             TargetObject = e.Value as TECObject;
             TargetType = e.Value.GetType();
         }
-        public StackItem(Change change, object referenceObject, object targetObject) : this(change)
+        public StackItem(StackChange change, object referenceObject, object targetObject) : this(change)
         {
             if(targetObject == null || referenceObject == null)
             {
@@ -46,7 +47,7 @@ namespace EstimatingUtilitiesLibrary
             TargetObject = targetObject as TECObject;
             if (TargetObject != null) { TargetType = targetObject.GetType(); }
         }
-        public StackItem(Change change, object referenceObject, object targetObject, Type referenceType, Type targetType) : this(change)
+        public StackItem(StackChange change, object referenceObject, object targetObject, Type referenceType, Type targetType) : this(change)
         {
             ReferenceObject = referenceObject as TECObject;
             ReferenceType = referenceType;
