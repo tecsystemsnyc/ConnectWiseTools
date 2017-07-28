@@ -45,7 +45,7 @@ namespace EstimatingUtilitiesLibrary
                 TableInfo info = new TableInfo(table);
                 foreach(TableField field in info.Fields)
                 {
-                    if(field.)
+
                 }
             }
         }
