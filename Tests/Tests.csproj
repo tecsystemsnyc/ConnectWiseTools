@@ -119,6 +119,7 @@
     <Compile Include="LoadBidTests.cs" />
     <Compile Include="LoadTemplatesTests.cs" />
     <Compile Include="ModelTests.cs" />
+    <Compile Include="NetworkVMTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
