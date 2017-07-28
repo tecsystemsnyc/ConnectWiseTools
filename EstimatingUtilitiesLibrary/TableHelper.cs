@@ -45,5 +45,53 @@ namespace EstimatingUtilitiesLibrary
             return null;
         }
         
+
+        public static Dictionary<string, string> PrepareDataForObjectTable(List<TableField> fields, object item)
+        {
+            Dictionary<string, string> fieldData = new Dictionary<string, string>();
+            foreach(TableField field in fields)
+            {
+                if(field.Property.ReflectedType == item.GetType())
+                {
+                    var dataString = objectToDBString(field.Property.GetValue(item, null));
+                    fieldData.Add(field.Name, dataString);
+                }
+            }
+            return fieldData;
+        }
+
+        public static Dictionary<string, string> PrepareDataForRelationTable(List<TableField> fields, object item, object child)
+        {
+            Dictionary<string, string> fieldData = new Dictionary<string, string>();
+            var parentField = fields[0];
+            var childField = fields[1];
+            if (parentField.Property.ReflectedType == item.GetType())
+            {
+                var dataString = objectToDBString(parentField.Property.GetValue(item, null));
+                fieldData.Add(parentField.Name, dataString);
+            }
+            if (childField.Property.ReflectedType == item.GetType())
+            {
+                var dataString = objectToDBString(childField.Property.GetValue(item, null));
+                fieldData.Add(childField.Name, dataString);
+            }
+            return fieldData;
+        }
+
+        private static string objectToDBString(Object inObject)
+        {
+            string outstring = "";
+            if (inObject is bool)
+            {
+                outstring = ((bool)inObject).ToInt().ToString();
+            }
+            else
+            {
+                outstring = inObject.ToString();
+            }
+
+            return outstring;
+        }
+
     }
 }
