@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,9 @@ namespace EstimatingLibrary
             get { return _cost; }
             set
             {
-                var temp = this.Copy();
+                var old = Cost;
                 _cost = value;
-                NotifyPropertyChanged("Cost", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Cost", this, value, old);
                 RaisePropertyChanged("TotalCost");
             }
         }
@@ -33,9 +34,9 @@ namespace EstimatingLibrary
             get { return _labor; }
             set
             {
-                var temp = this.Copy();
+                var old = Labor;
                 _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Labor", this, value, old);
                 RaisePropertyChanged("TotalLabor");
             }
         }
@@ -44,9 +45,9 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old = Type;
                 _type = value;
-                NotifyPropertyChanged("Type", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
             }
         }
         #endregion

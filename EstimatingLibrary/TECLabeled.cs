@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
@@ -19,10 +20,10 @@ namespace EstimatingLibrary
             get { return _label; }
             set
             {
-                var temp = this.Copy();
+                var old = Label;
                 _label = value;
                 // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Label", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Label", this, value, old);
             }
         }
 

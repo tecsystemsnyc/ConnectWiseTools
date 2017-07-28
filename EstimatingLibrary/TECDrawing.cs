@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,9 +16,9 @@ namespace EstimatingLibrary
             get { return _name; }
             set
             {
-                var temp = this.Copy();
+                var old = Name;
                 _name = value;
-                NotifyPropertyChanged("Name", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Name", this, value, old);
             }
         }
         private string _name;
@@ -27,9 +28,9 @@ namespace EstimatingLibrary
             get { return _description; }
             set
             {
-                var temp = this.Copy();
+                var old = Description;
                 _description = value;
-                NotifyPropertyChanged("Description", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Description", this, value, old);
             }
         }
         private string _description;
@@ -39,9 +40,9 @@ namespace EstimatingLibrary
             get { return _feetPerPoint; }
             set
             {
-                var temp = Copy();
+                var old = FeetPerPoint;
                 _feetPerPoint = value;
-                NotifyPropertyChanged("FeetPerPoint", temp, this);
+                NotifyPropertyChanged(Change.Edit, "FeetPerPoint", this, value, old);
             }
         }
         private double _feetPerPoint;
@@ -63,23 +64,23 @@ namespace EstimatingLibrary
             _description = "No description";
             _pages = new ObservableCollection<TECPage>();
 
-            Pages.CollectionChanged += Pages_CollectionChanged;
+            Pages.CollectionChanged += (sender, args) => Pages_CollectionChanged(sender, args, "Pages");
         }
 
-        private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged(Change.Remove, propertyName, this, item);
                 }
             }
         }

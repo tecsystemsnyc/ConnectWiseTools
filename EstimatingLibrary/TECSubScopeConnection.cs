@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,26 +18,25 @@ namespace EstimatingLibrary
             get { return _subScope; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_subScope, value);
-                var temp = Copy();
+                var old = SubScope;
                 if(SubScope != null)
                 { SubScope.PropertyChanged -= SubScope_PropertyChanged; }
                 _subScope = value;
                 if (SubScope != null)
                 { SubScope.PropertyChanged += SubScope_PropertyChanged; }
                 RaisePropertyChanged("SubScope");
-                NotifyPropertyChanged("RelationshipPropertyChanged", temp, oldNew);
+                NotifyPropertyChanged(Change.Edit, "SubScope", this, value, old);
             }
         }
 
         private void SubScope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var args = e as PropertyChangedExtendedEventArgs<object>;
+            var args = e as PropertyChangedExtendedEventArgs;
             if(e.PropertyName == "CostComponentChanged" && args != null)
             {
                 var old = this.Copy() as TECSubScopeConnection;
                 old.SubScope = args.OldValue as TECSubScope;
-                NotifyPropertyChanged("CostComponentChanged", old, this);
+                //NotifyPropertyChanged("CostComponentChanged", old, this);
             }
         }
 

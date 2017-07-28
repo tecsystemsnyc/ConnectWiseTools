@@ -445,29 +445,29 @@ namespace TECUserControlLibrary.ViewModels
         #region Event Handlers
         private void Misc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 if (args.PropertyName == "Quantity")
                 {
                     CostSummaryItem miscItem = miscCostDictionary[(args.OldValue as TECMisc).Guid];
                     miscItem.Quantity /= (args.OldValue as TECMisc).Quantity;
-                    miscItem.Quantity *= (args.NewValue as TECMisc).Quantity;
+                    miscItem.Quantity *= (args.Value as TECMisc).Quantity;
                 }
             }
         }
         private void MiscItem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
 
                 if (args.PropertyName == "Total")
                 {
                     MiscCostSubTotalCost -= (args.OldValue as CostSummaryItem).TotalCost;
                     MiscCostSubTotalLabor -= (args.OldValue as CostSummaryItem).TotalLabor;
-                    MiscCostSubTotalCost += (args.NewValue as CostSummaryItem).TotalCost;
-                    MiscCostSubTotalLabor += (args.NewValue as CostSummaryItem).TotalLabor;
+                    MiscCostSubTotalCost += (args.Value as CostSummaryItem).TotalCost;
+                    MiscCostSubTotalLabor += (args.Value as CostSummaryItem).TotalLabor;
                 }
             }
         }

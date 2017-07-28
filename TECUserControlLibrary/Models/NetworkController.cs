@@ -268,9 +268,9 @@ namespace TECUserControlLibrary.Models
         }
         private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                var args = e as PropertyChangedExtendedEventArgs<object>;
+                var args = e as PropertyChangedExtendedEventArgs;
 
                 if (args.PropertyName == "ParentConnection")
                 {
@@ -280,9 +280,9 @@ namespace TECUserControlLibrary.Models
                     }
                     RaisePropertyChanged("ParentController");
                     RefreshIsConnected();
-                    if ((args.NewValue as TECController).ParentConnection != null)
+                    if ((args.Value as TECController).ParentConnection != null)
                     {
-                        (args.NewValue as TECController).ParentConnection.PropertyChanged += ParentConnection_PropertyChanged;
+                        (args.Value as TECController).ParentConnection.PropertyChanged += ParentConnection_PropertyChanged;
                     }
                 }
             }

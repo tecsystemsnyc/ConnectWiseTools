@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace TECUserControlLibrary.Models
             {
                 double old = _total;
                 _total = value;
-                NotifyPropertyChanged("Total", old, _total);
+                NotifyPropertyChanged(Change.Edit, "Total", this, _total, old);
             }
         }
 

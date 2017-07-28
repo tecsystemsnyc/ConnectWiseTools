@@ -28,9 +28,9 @@ namespace EstimatingLibrary
             get { return _parentConnection; }
             set
             {
-                var temp = Copy();
+                var old = ParentConnection;
                 _parentConnection = value;
-                NotifyPropertyChanged("ParentConnection", temp, this);
+                NotifyPropertyChanged(Change.Edit, "ParentConnection", this, value, old);
                 RaisePropertyChanged("NetworkIO");
             }
         }
@@ -39,11 +39,11 @@ namespace EstimatingLibrary
             get { return _childrenConnections; }
             set
             {
-                var temp = this.Copy();
-                ChildrenConnections.CollectionChanged -= collectionChanged;
+                var old = ChildrenConnections;
+                ChildrenConnections.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
                 _childrenConnections = value;
-                ChildrenConnections.CollectionChanged += collectionChanged;
-                NotifyPropertyChanged("ChildrenConnections", temp, this);
+                ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
+                NotifyPropertyChanged(Change.Edit, "ChildrenConnections", this, value, old);
                 RaisePropertyChanged("ChildNetworkConnections");
             }
         }
@@ -52,10 +52,10 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old = Type;
                 _type = value;
-                NotifyPropertyChanged("Type", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public NetworkType NetworkType
@@ -63,9 +63,9 @@ namespace EstimatingLibrary
             get { return _networkType; }
             set
             {
-                var temp = Copy();
+                var old = NetworkType;
                 _networkType = value;
-                NotifyPropertyChanged("NetworkType", temp, this);
+                NotifyPropertyChanged(Change.Edit, "NetworkType", this, value, old);
             }
         }
 
@@ -97,7 +97,7 @@ namespace EstimatingLibrary
             IsGlobal = isGlobal;
             _type = type;
             _childrenConnections = new ObservableCollection<TECConnection>();
-            ChildrenConnections.CollectionChanged += collectionChanged;
+            ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
         }
 
         public TECController(TECControllerType type, bool isGlobal = true) : this(Guid.NewGuid(), type, isGlobal) { }
@@ -127,20 +127,20 @@ namespace EstimatingLibrary
         #endregion
 
         #region Event Handlers
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item, typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item, typeof(TECController), typeof(TECConnection));
+                    NotifyPropertyChanged(Change.Remove, propertyName, this, item);
                 }
             }
             if (sender == ChildrenConnections)

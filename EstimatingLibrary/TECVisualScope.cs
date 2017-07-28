@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -20,9 +21,9 @@ namespace EstimatingLibrary
             get { return _scope; }
             set
             {
-                var temp = this.Copy();
+                var old = Scope;
                 _scope = value;
-                NotifyPropertyChanged("Scope", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Scope", this, value, old);
             }
         }
         public double X
@@ -30,9 +31,9 @@ namespace EstimatingLibrary
             get { return _x; }
             set
             {
-                var temp = this.Copy();
+                var old = X;
                 _x = value;
-                NotifyPropertyChanged("X", temp, this);
+                NotifyPropertyChanged(Change.Edit, "X", this, value, old);
             }
         }
         public double Y
@@ -40,9 +41,9 @@ namespace EstimatingLibrary
             get { return _y; }
             set
             {
-                var temp = this.Copy();
+                var old = Y;
                 _y = value;
-                NotifyPropertyChanged("Y", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Y", this, value, old);
             }
         }
         public ObservableCollection<Tuple<TECObject, TECVisualScope, string>> ConnectableScope

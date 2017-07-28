@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,9 @@ namespace EstimatingUtilitiesLibrary
     {
         private List<UpdateItem> stack;
 
-        public DatabaseUpdater(List<UpdateItem> toUpdate)
+        public DatabaseUpdater(List<UpdateItem> updates)
         {
-            stack = toUpdate;
+            stack = updates;
         }
 
         public void Update(string dataBasePath)

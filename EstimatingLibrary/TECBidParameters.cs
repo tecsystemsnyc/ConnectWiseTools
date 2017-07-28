@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,9 +26,9 @@ namespace EstimatingLibrary
             get { return _escalation; }
             set
             {
-                var temp = this.Copy();
+                var old = Escalation;
                 _escalation = value;
-                NotifyPropertyChanged("Escalation", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Escalation", this, value, old);
             }
         }
         public double Overhead
@@ -35,9 +36,9 @@ namespace EstimatingLibrary
             get { return _overhead; }
             set
             {
-                var temp = this.Copy();
+                var old = Overhead;
                 _overhead = value;
-                NotifyPropertyChanged("Overhead", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Overhead", this, value, old);
             }
         }
         public double Profit
@@ -45,9 +46,9 @@ namespace EstimatingLibrary
             get { return _profit; }
             set
             {
-                var temp = this.Copy();
+                var old = Profit;
                 _profit = value;
-                NotifyPropertyChanged("Profit", temp, this);
+                NotifyPropertyChanged(Change.Edit, "Profit", this, value, old);
             }
         }
         public double SubcontractorMarkup
@@ -55,9 +56,9 @@ namespace EstimatingLibrary
             get { return _subcontractorMarkup; }
             set
             {
-                var temp = this.Copy();
+                var old = SubcontractorMarkup;
                 _subcontractorMarkup = value;
-                NotifyPropertyChanged("SubcontractorMarkup", temp, this);
+                NotifyPropertyChanged(Change.Edit, "SubcontractorMarkup", this, value, old);
             }
         }
         public double SubcontractorEscalation
@@ -65,9 +66,9 @@ namespace EstimatingLibrary
             get { return _subcontractorEscalation; }
             set
             {
-                var temp = this.Copy();
+                var old = SubcontractorEscalation;
                 _subcontractorEscalation = value;
-                NotifyPropertyChanged("SubcontractorEscalation", temp, this);
+                NotifyPropertyChanged(Change.Edit, "SubcontractorEscalation", this, value, old);
             }
         }
 
@@ -76,9 +77,9 @@ namespace EstimatingLibrary
             get { return _isTaxExempt; }
             set
             {
-                var temp = this.Copy();
+                var old = IsTaxExempt;
                 _isTaxExempt = value;
-                NotifyPropertyChanged("IsTaxExempt", temp, this);
+                NotifyPropertyChanged(Change.Edit, "IsTaxExempt", this, value, old);
             }
         }
         public bool RequiresBond
@@ -86,9 +87,9 @@ namespace EstimatingLibrary
             get { return _requiresBond; }
             set
             {
-                var temp = this.Copy();
+                var old = RequiresBond;
                 _requiresBond = value;
-                NotifyPropertyChanged("RequiresBond", temp, this);
+                NotifyPropertyChanged(Change.Edit, "RequiresBond", this, value, old);
             }
         }
         public bool RequiresWrapUp
@@ -96,9 +97,9 @@ namespace EstimatingLibrary
             get { return _requiresWrapUp; }
             set
             {
-                var temp = this.Copy();
+                var old = RequiresWrapUp;
                 _requiresWrapUp = value;
-                NotifyPropertyChanged("RequiresWrapUp", temp, this);
+                NotifyPropertyChanged(Change.Edit, "RequiresWrapUp", this, value, old);
             }
         }
         public bool HasBMS
@@ -106,9 +107,9 @@ namespace EstimatingLibrary
             get { return _hasBMS; }
             set
             {
-                var temp = this.Copy();
+                var old = HasBMS;
                 _hasBMS = value;
-                NotifyPropertyChanged("HasBMS", temp, this);
+                NotifyPropertyChanged(Change.Edit, "HasBMS", this, value, old);
             }
         }
         #endregion

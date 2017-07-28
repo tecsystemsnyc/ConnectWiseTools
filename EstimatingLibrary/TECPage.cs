@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -27,11 +28,11 @@ namespace EstimatingLibrary
             get { return _pageScope; }
             set
             {
-                var temp = this.Copy();
-                PageScope.CollectionChanged -= collectionChanged;
+                var old = PageScope;
+                PageScope.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "PageScope");
                 _pageScope = value;
-                NotifyPropertyChanged("PageScope", temp, this);
-                PageScope.CollectionChanged += collectionChanged;
+                NotifyPropertyChanged(Change.Edit, "PageScope", this, value, old);
+                PageScope.CollectionChanged += (sender, args) => collectionChanged(sender, args, "PageScope");
             }
         }
         private ObservableCollection<TECVisualScope> _pageScope;
@@ -40,11 +41,11 @@ namespace EstimatingLibrary
             get { return _connections; }
             set
             {
-                var temp = this.Copy();
-                Connections.CollectionChanged -= collectionChanged;
+                var old = Connections;
+                Connections.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Connections");
                 _connections = value;
-                NotifyPropertyChanged("Connections", temp, this);
-                Connections.CollectionChanged += collectionChanged;
+                NotifyPropertyChanged(Change.Edit, "Connections", this, value, old);
+                Connections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Connections");
             }
         }
         private ObservableCollection<TECVisualConnection> _connections;
@@ -57,8 +58,8 @@ namespace EstimatingLibrary
             _path = "";
             _pageScope = new ObservableCollection<TECVisualScope>();
             _connections = new ObservableCollection<TECVisualConnection>();
-            PageScope.CollectionChanged += collectionChanged;
-            Connections.CollectionChanged += collectionChanged;
+            PageScope.CollectionChanged += (sender, args) => collectionChanged(sender, args, "PageScope");
+            Connections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Connections");
         }
 
         public TECPage() : this(Guid.NewGuid()) { }
@@ -72,8 +73,8 @@ namespace EstimatingLibrary
             {
                 _pageScope.Add(vs.Copy() as TECVisualScope);
             }
-            PageScope.CollectionChanged += collectionChanged;
-            Connections.CollectionChanged += collectionChanged;
+            PageScope.CollectionChanged += (sender, args) => collectionChanged(sender, args, "PageScope");
+            Connections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Connections");
         }
 
         public override Object Copy()
@@ -82,20 +83,20 @@ namespace EstimatingLibrary
             return outPage;
         }
 
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyChanged)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    NotifyPropertyChanged(Change.Add, propertyChanged, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    NotifyPropertyChanged(Change.Remove, propertyChanged, this, item);
                 }
             }
         }

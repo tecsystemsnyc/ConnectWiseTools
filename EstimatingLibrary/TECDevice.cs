@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,15 +22,15 @@ namespace EstimatingLibrary
             {
                 if(ConnectionTypes != null)
                 {
-                    ConnectionTypes.CollectionChanged -= ConnectionTypes_CollectionChanged;
+                    ConnectionTypes.CollectionChanged -= (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
-                var temp = this.Copy();
+                var old = ConnectionTypes;
                 _connectionTypes = value; if (ConnectionTypes != null)
                 {
-                    ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
+                    ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
-                NotifyPropertyChanged("ConnectionTypes", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyPropertyChanged(Change.Edit, "ConnectionTypes", this, value, old);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public IOType IOType
@@ -37,10 +38,10 @@ namespace EstimatingLibrary
             get { return _ioType; }
             set
             {
-                var temp = this.Copy();
+                var old = IOType;
                 _ioType = value;
-                NotifyPropertyChanged("IOType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyPropertyChanged(Change.Add, "IOType", this, value, old);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         #endregion//Properties
@@ -51,7 +52,7 @@ namespace EstimatingLibrary
             _cost = 0;
             _connectionTypes = connectionTypes;
             _type = CostType.TEC;
-            ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
+            ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
         public TECDevice(ObservableCollection<TECElectricalMaterial> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
 
@@ -83,20 +84,20 @@ namespace EstimatingLibrary
             throw new Exception();
         }
 
-        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (TECElectricalMaterial type in e.NewItems)
                 {
-                    NotifyPropertyChanged<object>("AddCatalog", this, type);
+                    NotifyPropertyChanged(Change.Add, propertyName, this, type);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECElectricalMaterial type in e.OldItems)
                 {
-                    NotifyPropertyChanged<object>("RemoveCatalog", this, type);
+                    NotifyPropertyChanged(Change.Remove, propertyName, this, type);
                 }
             }
         }

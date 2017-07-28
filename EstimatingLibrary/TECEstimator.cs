@@ -253,11 +253,11 @@ namespace EstimatingLibrary
 
             if (!omitStrings.Contains(e.PropertyName))
             {
-                if (e is PropertyChangedExtendedEventArgs<Object>)
+                if (e is PropertyChangedExtendedEventArgs)
                 {
-                    PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                    PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                     object oldValue = args.OldValue;
-                    object newValue = args.NewValue;
+                    object newValue = args.Value;
                     if (e.PropertyName == "Add")
                     {
                         message = "Add change: " + oldValue;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -20,11 +21,11 @@ namespace EstimatingLibrary
             get { return _childrenControllers; }
             set
             {
-                var temp = this.Copy();
+                var old = ChildrenControllers;
                 ChildrenControllers.CollectionChanged -= ChildrenControllers_CollectionChanged;
                 _childrenControllers = value;
                 ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
-                NotifyPropertyChanged("ChildrenControllers", temp, this);
+                NotifyPropertyChanged(Change.Edit, "ChildrenControllers", this, value, old);
                 RaisePropertyChanged("PossibleIO");
             }
         }
@@ -33,10 +34,10 @@ namespace EstimatingLibrary
             get { return _connectionType; }
             set
             {
-                var temp = this.Copy();
+                var old = ConnectionType;
                 _connectionType = value;
-                NotifyPropertyChanged("ConnectionType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyPropertyChanged(Change.Edit, "ConnectionType", this, value, old);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public IOType IOType
@@ -44,10 +45,10 @@ namespace EstimatingLibrary
             get { return _ioType; }
             set
             {
-                var temp = this.Copy();
+                var old = IOType;
                 _ioType = value;
-                NotifyPropertyChanged("IOType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyPropertyChanged(Change.Edit, "IOType", this, value, old);
+                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
 
@@ -182,7 +183,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("AddRelationship", this, item);
+                    NotifyPropertyChanged(Change.Add, "ChildrenControllers", this, item);
                     RaisePropertyChanged("PossibleIO");
                 }
             }
@@ -190,7 +191,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("RemoveRelationship", this, item);
+                    NotifyPropertyChanged(Change.Remove, "ChildrenControllers", this, item);
                     RaisePropertyChanged("PossibleIO");
                 }
             }

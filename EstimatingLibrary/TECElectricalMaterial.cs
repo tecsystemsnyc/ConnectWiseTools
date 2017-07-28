@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,11 +18,11 @@ namespace EstimatingLibrary
             get { return _ratedCosts; }
             set
             {
-                var temp = this.Copy();
-                RatedCosts.CollectionChanged -= RatedCosts_CollectionChanged;
+                var old = RatedCosts;
+                RatedCosts.CollectionChanged -= (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
                 _ratedCosts = value;
-                RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
-                NotifyPropertyChanged("RatedCosts", temp, this);
+                RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
+                NotifyPropertyChanged(Change.Edit, "RatedCosts", this, value, old);
             }
         }
         #endregion
@@ -30,7 +31,7 @@ namespace EstimatingLibrary
         {
             _ratedCosts = new ObservableCollection<TECCost>();
             _type = CostType.Electrical;
-            RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
+            RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
         public TECElectricalMaterial() : this(Guid.NewGuid()) { }
         public TECElectricalMaterial(TECElectricalMaterial materialSource) : this()
@@ -39,9 +40,9 @@ namespace EstimatingLibrary
             var ratedCosts = new ObservableCollection<TECCost>();
             foreach (TECCost cost in materialSource.RatedCosts)
             { ratedCosts.Add(cost as TECCost); }
-            RatedCosts.CollectionChanged -= RatedCosts_CollectionChanged;
+            RatedCosts.CollectionChanged -= (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
             _ratedCosts = ratedCosts;
-            RatedCosts.CollectionChanged += RatedCosts_CollectionChanged;
+            RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
 
         public override object Copy()
@@ -53,25 +54,25 @@ namespace EstimatingLibrary
             foreach (TECCost cost in RatedCosts)
             { ratedCosts.Add(cost as TECCost); }
             outType._ratedCosts = ratedCosts;
-            outType.RatedCosts.CollectionChanged += outType.RatedCosts_CollectionChanged;
+            outType.RatedCosts.CollectionChanged += (sender, args) => outType.RatedCosts_CollectionChanged(sender, args, "RatedCosts");
 
             return outType;
         }
 
-        private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyPropertyChanged("AddCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECCost item in e.OldItems)
                 {
-                    NotifyPropertyChanged("RemoveCatalog", this as object, item as object, typeof(ElectricalMaterialComponent), typeof(TECCost));
+                    NotifyPropertyChanged(Change.Remove, propertyName, this, item);
                 }
             }
         }

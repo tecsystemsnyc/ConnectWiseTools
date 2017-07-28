@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary.Utilities
 {
 
-    public enum Change { Add, Remove };
+    public enum Change { Add, Remove, Edit };
     public enum ChangeType { Object, Instance };
     public class ChangeWatcher
     {
         public Action<object, PropertyChangedEventArgs> Changed;
+        public Action<object, PropertyChangedExtendedEventArgs> ExtendedChanged;
         public Action<object, PropertyChangedEventArgs> InstanceChanged;
 
         private TECScopeManager scopeManager;
@@ -467,15 +468,19 @@ namespace EstimatingLibrary.Utilities
         private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             handlePropertyChanged(sender, e);
+            if(e is PropertyChangedExtendedEventArgs)
+            {
+                ExtendedChanged?.Invoke(sender, e as PropertyChangedExtendedEventArgs);
+            }
             Changed?.Invoke(sender, e);
         }
         private void Instance_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
-                object newValue = args.NewValue;
+                object newValue = args.Value;
                 if (!isTypicalConnection(oldValue, newValue))
                 {
                     handleInstanceChanged(sender, e);
@@ -488,11 +493,11 @@ namespace EstimatingLibrary.Utilities
             string message = "Propertychanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
-                object newValue = args.NewValue;
+                object newValue = args.Value;
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
@@ -555,11 +560,11 @@ namespace EstimatingLibrary.Utilities
             string message = "InstanceChanged: " + e.PropertyName;
             DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
                 object oldValue = args.OldValue;
-                object newValue = args.NewValue;
+                object newValue = args.Value;
                 if (e.PropertyName == "Add")
                 {
                     message = "Add change: " + oldValue;
@@ -634,10 +639,10 @@ namespace EstimatingLibrary.Utilities
             return false;
         }
 
-        private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs<object> args, Change change)
+        private void checkForRaiseInstance(object sender, PropertyChangedExtendedEventArgs args, Change change)
         {
             var oldValue = args.OldValue;
-            var newValue = args.NewValue;
+            var newValue = args.Value;
             if (oldValue is TECSystem && newValue is TECSystem) {
                 InstanceChanged?.Invoke(sender, args);
                 if(change == Change.Add)

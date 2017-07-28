@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,12 +17,11 @@ namespace EstimatingLibrary
             get { return _location; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_location, value);
-                var temp = Copy();
+                var old = Location;
                 _location = value;
-                NotifyPropertyChanged("Location", temp, this);
-                temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
+                NotifyPropertyChanged(Change.Edit, "Location", this, value, old);
+                
+                //NotifyPropertyChanged(Change.Edit, "ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
             }
         }
         #endregion
@@ -31,11 +31,11 @@ namespace EstimatingLibrary
         #region Methods
         public void SetLocationFromParent(TECLabeled location)
         {
-            var oldNew = Tuple.Create<Object, Object>(_location, location);
+            var old = Location;
             _location = location;
             RaisePropertyChanged("Location");
-            var temp = Copy();
-            NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
+            NotifyPropertyChanged(Change.Edit, "Location", this, location, old);
+
         }
 
         protected void copyPropertiesFromLocated(TECLocated scope)

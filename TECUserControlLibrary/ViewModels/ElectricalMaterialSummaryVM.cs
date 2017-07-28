@@ -116,10 +116,10 @@ namespace TECUserControlLibrary.ViewModels
         #region Event Handlers
         private void instanceChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            if (e is PropertyChangedExtendedEventArgs)
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                var targetObject = args.NewValue;
+                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
+                var targetObject = args.Value;
                 var referenceObject = args.OldValue;
 
                 if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
@@ -244,10 +244,10 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConnectionType" || args.PropertyName == "ConduitType")
                 {
-                    if (args.NewValue is TECConnection && args.OldValue is TECConnection)
+                    if (args.Value is TECConnection && args.OldValue is TECConnection)
                     {
                         removeConnection(args.OldValue as TECConnection);
-                        addConnection(args.NewValue as TECConnection);
+                        addConnection(args.Value as TECConnection);
                     }
                 }
             }

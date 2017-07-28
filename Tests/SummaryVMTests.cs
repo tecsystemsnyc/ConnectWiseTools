@@ -254,38 +254,39 @@ namespace Tests
         [TestMethod]
         public void AddPoint()
         {
-            //Arrange
-            TECBid bid = TestHelper.CreateEmptyCatalogBid();
-            TECPoint point = TestHelper.CreateTestPoint(bid.Catalogs);
-            TestHelper.AssignSecondaryProperties(point, bid.Catalogs);
+            Assert.Fail();
+            ////Arrange
+            //TECBid bid = TestHelper.CreateEmptyCatalogBid();
+            //TECPoint point = TestHelper.CreateTestPoint(bid.Catalogs);
+            ////TestHelper.AssignSecondaryProperties(point, bid.Catalogs);
 
-            Total totalTEC = calculateTotal(point, CostType.TEC);
-            Total totalElec = calculateTotal(point, CostType.Electrical);
+            //Total totalTEC = calculateTotal(point, CostType.TEC);
+            //Total totalElec = calculateTotal(point, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
-            bid.Systems.Add(typical);
+            //TECSystem typical = new TECSystem();
+            //bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
-            typical.Equipment.Add(typEquip);
+            //TECEquipment typEquip = new TECEquipment();
+            //typical.Equipment.Add(typEquip);
 
-            TECSubScope typSS = new TECSubScope();
-            typEquip.SubScope.Add(typSS);
+            //TECSubScope typSS = new TECSubScope();
+            //typEquip.SubScope.Add(typSS);
 
-            typical.AddInstance(bid);
+            //typical.AddInstance(bid);
 
-            TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
-            ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
+            //TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
+            //ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
 
-            //Act
-            typSS.Points.Add(point);
+            ////Act
+            //typSS.Points.Add(point);
 
-            //Assert
-            Assert.AreEqual(tecVM.TotalCost, totalTEC.cost, delta, "Total tec cost didn't update properly.");
-            Assert.AreEqual(tecVM.TotalLabor, totalTEC.labor, delta, "Total tec labor didn't update properly.");
-            Assert.AreEqual(elecVM.TotalCost, totalElec.cost, delta, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(elecVM.TotalLabor, totalElec.labor, delta, "Total elec labor didn't update properly.");
+            ////Assert
+            //Assert.AreEqual(tecVM.TotalCost, totalTEC.cost, delta, "Total tec cost didn't update properly.");
+            //Assert.AreEqual(tecVM.TotalLabor, totalTEC.labor, delta, "Total tec labor didn't update properly.");
+            //Assert.AreEqual(elecVM.TotalCost, totalElec.cost, delta, "Total elec cost didn't update proplery.");
+            //Assert.AreEqual(elecVM.TotalLabor, totalElec.labor, delta, "Total elec labor didn't update properly.");
 
-            checkRefresh(tecVM, elecVM, bid);
+            //checkRefresh(tecVM, elecVM, bid);
         }
 
         [TestMethod]
@@ -423,7 +424,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
-            TECController controller = new TECController(bid.Catalogs.Manufacturers.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
 
             TECSystem typical = new TECSystem();
@@ -679,46 +680,47 @@ namespace Tests
         [TestMethod]
         public void RemovePoint()
         {
-            //Arrange
-            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+            Assert.Fail();
+            ////Arrange
+            //TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
-            TECSystem typical = new TECSystem();
-            bid.Systems.Add(typical);
+            //TECSystem typical = new TECSystem();
+            //bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
-            typical.Equipment.Add(typEquip);
+            //TECEquipment typEquip = new TECEquipment();
+            //typical.Equipment.Add(typEquip);
 
-            TECSubScope typSS = new TECSubScope();
-            typEquip.SubScope.Add(typSS);
+            //TECSubScope typSS = new TECSubScope();
+            //typEquip.SubScope.Add(typSS);
 
-            TECPoint point = TestHelper.CreateTestPoint(bid.Catalogs);
-            TestHelper.AssignSecondaryProperties(point, bid.Catalogs);
-            typSS.Points.Add(point);
+            //TECPoint point = TestHelper.CreateTestPoint(bid.Catalogs);
+            //TestHelper.AssignSecondaryProperties(point, bid.Catalogs);
+            //typSS.Points.Add(point);
 
-            typical.AddInstance(bid);
+            //typical.AddInstance(bid);
 
-            TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
-            ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
+            //TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
+            //ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
 
-            double initialTecCost = tecVM.TotalCost;
-            double initialTecLabor = tecVM.TotalLabor;
+            //double initialTecCost = tecVM.TotalCost;
+            //double initialTecLabor = tecVM.TotalLabor;
 
-            double initialElecCost = elecVM.TotalCost;
-            double initialElecLabor = elecVM.TotalLabor;
+            //double initialElecCost = elecVM.TotalCost;
+            //double initialElecLabor = elecVM.TotalLabor;
 
-            Total totalTEC = calculateTotal(point, CostType.TEC);
-            Total totalElec = calculateTotal(point, CostType.Electrical);
+            //Total totalTEC = calculateTotal(point, CostType.TEC);
+            //Total totalElec = calculateTotal(point, CostType.Electrical);
 
-            //Act
-            typSS.Points.Remove(point);
+            ////Act
+            //typSS.Points.Remove(point);
 
-            //Assert
-            Assert.AreEqual(tecVM.TotalCost, initialTecCost - totalTEC.cost, delta, "Total tec cost didn't update properly.");
-            Assert.AreEqual(tecVM.TotalLabor, initialTecLabor - totalTEC.labor, delta, "Total tec labor didn't update properly.");
-            Assert.AreEqual(elecVM.TotalCost, initialElecCost - totalElec.cost, delta, "Total elec cost didn't update properly.");
-            Assert.AreEqual(elecVM.TotalLabor, initialElecLabor - totalElec.labor, delta, "Total elec labor didn't update properly.");
+            ////Assert
+            //Assert.AreEqual(tecVM.TotalCost, initialTecCost - totalTEC.cost, delta, "Total tec cost didn't update properly.");
+            //Assert.AreEqual(tecVM.TotalLabor, initialTecLabor - totalTEC.labor, delta, "Total tec labor didn't update properly.");
+            //Assert.AreEqual(elecVM.TotalCost, initialElecCost - totalElec.cost, delta, "Total elec cost didn't update properly.");
+            //Assert.AreEqual(elecVM.TotalLabor, initialElecLabor - totalElec.labor, delta, "Total elec labor didn't update properly.");
 
-            checkRefresh(tecVM, elecVM, bid);
+            //checkRefresh(tecVM, elecVM, bid);
         }
 
         [TestMethod]
@@ -888,7 +890,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
-            TECController controller = new TECController(bid.Catalogs.Manufacturers.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
 
             TECSystem typical = new TECSystem();
@@ -939,7 +941,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
-            TECController controller = new TECController(bid.Catalogs.Manufacturers.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
 
             TECSystem typical = new TECSystem();
@@ -980,7 +982,7 @@ namespace Tests
             int qty = 1;
             if(cost is TECMisc)
             {
-                qty = cost.Quantity;
+                qty = (cost as TECMisc).Quantity;
             }
             if (cost.Type == type)
             {
@@ -1024,10 +1026,10 @@ namespace Tests
             {
                 total += calculateTotal(device, type);
             }
-            foreach(TECPoint point in subScope.Points)
-            {
-                total += calculateTotal(point, type);
-            }
+            //foreach(TECPoint point in subScope.Points)
+            //{
+            //    total += calculateTotal(point, type);
+            //}
             total += calculateTotal(subScope as TECScope, type);
             return total;
         }
@@ -1047,7 +1049,7 @@ namespace Tests
         {
             Total total = new Total();
             total += calculateTotal(controller as TECScope, type);
-            total += calculateTotal(controller as TECCost, type);
+            total += calculateTotal(controller.Type as TECCost, type);
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 total += calculateTotal(connection, type);
