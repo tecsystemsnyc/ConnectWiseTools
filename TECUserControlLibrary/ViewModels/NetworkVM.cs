@@ -210,7 +210,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Event Handlers
         private void Controller_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "ParentController" || e.PropertyName == "NetworkType")
+            if (e.PropertyName == "ParentConnection" || e.PropertyName == "NetworkType")
             {
                 refreshPossibleParents();
                 refreshIsConnected();
