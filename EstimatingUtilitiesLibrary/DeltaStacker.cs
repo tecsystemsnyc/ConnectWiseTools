@@ -12,6 +12,7 @@ namespace EstimatingUtilitiesLibrary
     public class DeltaStacker
     {
         private List<UpdateItem> stack;
+
         public DeltaStacker(ChangeWatcher changeWatcher)
         {
             changeWatcher.ExtendedChanged += handleChange;
@@ -69,6 +70,11 @@ namespace EstimatingUtilitiesLibrary
                     stack.Add(new UpdateItem(Change.Edit, info.Name, data));
                 }
             }
+        }
+
+        public List<UpdateItem> CleansedStack()
+        {
+            return stack;
         }
     }
 }
