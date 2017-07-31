@@ -589,13 +589,13 @@ namespace EstimatingLibrary.Utilities
         {
             foreach (var item in oldCharacteristicInstances.GetFullDictionary())
             {
-                foreach (TECScope charItem in characteristic)
+                foreach (TECObject charItem in characteristic)
                 {
                     if (item.Key.Guid == charItem.Guid)
                     {
                         foreach (var sub in item.Value)
                         {
-                            foreach (TECScope subInstance in instances)
+                            foreach (TECObject subInstance in instances)
                             {
                                 if (subInstance.Guid == sub.Guid)
                                 {

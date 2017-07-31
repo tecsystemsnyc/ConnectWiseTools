@@ -339,14 +339,11 @@ namespace EstimatingLibrary
             {
                 var args = e as PropertyChangedExtendedEventArgs;
                 var location = args.Value as TECLabeled;
-                if (location.Flavor == Flavor.Location)
+                foreach (TECEquipment equipment in this.Equipment)
                 {
-                    foreach (TECEquipment equipment in this.Equipment)
+                    if (equipment.Location == location)
                     {
-                        if (equipment.Location == location)
-                        {
-                            equipment.SetLocationFromParent(this.Location);
-                        }
+                        equipment.SetLocationFromParent(this.Location);
                     }
                 }
             }

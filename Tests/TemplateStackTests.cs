@@ -6,6 +6,7 @@ using EstimatingUtilitiesLibrary;
 using EstimatingLibrary;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using EstimatingLibrary.Utilities;
 
 namespace Tests
 {
@@ -77,9 +78,9 @@ namespace Tests
             TECSystem edit = new TECSystem();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -101,9 +102,9 @@ namespace Tests
             TECEquipment edit = new TECEquipment();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.EquipmentTemplates.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -125,9 +126,9 @@ namespace Tests
             TECSubScope edit = new TECSubScope();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SubScopeTemplates.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -152,9 +153,9 @@ namespace Tests
                 Template.Catalogs.Manufacturers[0]);
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.Devices.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -176,9 +177,9 @@ namespace Tests
             TECManufacturer edit = new TECManufacturer();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.Manufacturers.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -200,9 +201,9 @@ namespace Tests
             TECCost edit = new TECCost();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.AssociatedCosts.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -224,9 +225,9 @@ namespace Tests
             TECElectricalMaterial edit = new TECElectricalMaterial();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.ConnectionTypes.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -248,9 +249,9 @@ namespace Tests
             TECElectricalMaterial edit = new TECElectricalMaterial();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.ConduitTypes.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -272,9 +273,9 @@ namespace Tests
             TECLabeled edit = new TECLabeled();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.Tags.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -293,9 +294,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             system.Name = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -314,9 +315,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             system.Description = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -339,9 +340,9 @@ namespace Tests
             TECEquipment edit = new TECEquipment();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             system.Equipment.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -360,9 +361,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             equipment.Name = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -381,9 +382,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             equipment.Description = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -407,9 +408,9 @@ namespace Tests
             TECSubScope edit = new TECSubScope();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             equipment.SubScope.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -428,9 +429,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             subScope.Name = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -449,9 +450,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             subScope.Description = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -475,9 +476,9 @@ namespace Tests
             edit.Type = PointTypes.AI;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             subScope.Points.Add(edit);
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -499,9 +500,9 @@ namespace Tests
             }
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             subScope.Devices.Add(Template.Catalogs.Devices.RandomObject());
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -520,7 +521,7 @@ namespace Tests
             TECCost edit = new TECCost();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             subScope.AssociatedCosts.Add(edit);
             testStack.Undo();
 
@@ -540,9 +541,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             device.Name = edit;
-            //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            //Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -561,9 +562,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             device.Description = edit;
-            //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            //Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -582,9 +583,9 @@ namespace Tests
             double edit = 123;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             device.Cost = edit;
-            //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            //Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -603,9 +604,9 @@ namespace Tests
             TECManufacturer edit = new TECManufacturer();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             device.Manufacturer = edit;
-            //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            //Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -624,9 +625,9 @@ namespace Tests
             TECElectricalMaterial edit = Template.Catalogs.ConnectionTypes.RandomObject();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             device.ConnectionTypes.Add(edit);
-            //Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            //Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -644,9 +645,9 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -664,9 +665,9 @@ namespace Tests
             int edit = 3;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -684,9 +685,9 @@ namespace Tests
             PointTypes edit = PointTypes.AO;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -708,10 +709,10 @@ namespace Tests
             TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0]);
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
             Template.PanelTemplates.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -731,10 +732,10 @@ namespace Tests
             string edit = "edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
             Template.PanelTemplates[0].Name = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -756,10 +757,10 @@ namespace Tests
             TECMisc edit = new TECMisc();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
             Template.MiscCostTemplates.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -781,10 +782,10 @@ namespace Tests
             TECPanelType edit = new TECPanelType(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
             Template.Catalogs.PanelTypes.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -806,10 +807,10 @@ namespace Tests
             TECIOModule edit = new TECIOModule(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
             Template.Catalogs.IOModules.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
@@ -830,7 +831,7 @@ namespace Tests
             TECSystem edit = new TECSystem();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates.Add(edit);
             var expected = new ObservableCollection<TECSystem>();
             foreach (TECSystem item in Template.SystemTemplates)
@@ -854,7 +855,7 @@ namespace Tests
             TECEquipment edit = new TECEquipment();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.EquipmentTemplates.Add(edit);
             var expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in Template.EquipmentTemplates)
@@ -878,7 +879,7 @@ namespace Tests
             TECSubScope edit = new TECSubScope();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SubScopeTemplates.Add(edit);
             var expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in Template.SubScopeTemplates)
@@ -905,7 +906,7 @@ namespace Tests
                 Template.Catalogs.Manufacturers[0]);
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.Devices.Add(edit);
             var expected = new ObservableCollection<TECDevice>();
             foreach (TECDevice item in Template.Catalogs.Devices)
@@ -929,7 +930,7 @@ namespace Tests
             TECManufacturer edit = new TECManufacturer();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.Manufacturers.Add(edit);
             var expected = new ObservableCollection<TECManufacturer>();
             foreach (TECManufacturer item in Template.Catalogs.Manufacturers)
@@ -953,7 +954,7 @@ namespace Tests
             TECLabeled edit = new TECLabeled();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.Tags.Add(edit);
             var expected = new ObservableCollection<TECLabeled>();
             foreach (TECLabeled item in Template.Catalogs.Tags)
@@ -977,7 +978,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -996,7 +997,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Description = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1015,7 +1016,7 @@ namespace Tests
             TECEquipment edit = new TECEquipment();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment.Add(edit);
             var expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in Template.SystemTemplates[0].Equipment)
@@ -1039,7 +1040,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1058,7 +1059,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].Description = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1077,7 +1078,7 @@ namespace Tests
             TECSubScope edit = new TECSubScope();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope.Add(edit);
             var expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in Template.SystemTemplates[0].Equipment[0].SubScope)
@@ -1101,7 +1102,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1120,7 +1121,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Description = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1140,7 +1141,7 @@ namespace Tests
             edit.Type = PointTypes.AI;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Points.Add(edit);
             var expected = new ObservableCollection<TECPoint>();
             foreach (TECPoint item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Points)
@@ -1167,7 +1168,7 @@ namespace Tests
                 Template.Catalogs.Manufacturers[0]);
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(edit);
             var expected = new ObservableCollection<TECDevice>();
             foreach (TECDevice item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
@@ -1191,7 +1192,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1210,7 +1211,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Description = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1229,7 +1230,7 @@ namespace Tests
             double edit = 123;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1248,7 +1249,7 @@ namespace Tests
             TECManufacturer edit = new TECManufacturer();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Manufacturer = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1267,7 +1268,7 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1286,9 +1287,9 @@ namespace Tests
             int edit = 3;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
-            Assert.AreEqual(1, testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
             testStack.Redo();
 
@@ -1306,7 +1307,7 @@ namespace Tests
             PointTypes edit = PointTypes.AO;
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1330,10 +1331,10 @@ namespace Tests
             TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0]);
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
             Template.PanelTemplates.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
             testStack.Redo();
 
@@ -1353,10 +1354,10 @@ namespace Tests
             string edit = "edit";
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
-            int beforeCount = testStack.UndoStack.Count;
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
             Template.PanelTemplates[0].Name = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoStack.Count, "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
             testStack.Redo();
 
@@ -1373,7 +1374,7 @@ namespace Tests
             TECMisc edit = new TECMisc();
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.MiscCostTemplates.Add(edit);
             var expected = new ObservableCollection<TECMisc>();
             foreach (TECMisc item in Template.MiscCostTemplates)
@@ -1397,7 +1398,7 @@ namespace Tests
             TECPanelType edit = new TECPanelType(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.PanelTypes.Add(edit);
             var expected = new ObservableCollection<TECPanelType>();
             foreach (TECPanelType item in Template.Catalogs.PanelTypes)
@@ -1421,7 +1422,7 @@ namespace Tests
             TECIOModule edit = new TECIOModule(Template.Catalogs.Manufacturers.RandomObject());
 
             //Act
-            ChangeStack testStack = new ChangeStack(Template);
+            ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.IOModules.Add(edit);
             var expected = new ObservableCollection<TECIOModule>();
             foreach (TECIOModule item in Template.Catalogs.IOModules)
