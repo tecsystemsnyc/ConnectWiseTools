@@ -1695,6 +1695,15 @@ namespace EstimatingUtilitiesLibrary
             Type = type;
             Flavor = flavor;
         }
+
+        public static bool operator ==(FlavoredType left, FlavoredType right)
+        {
+            return ((left.Type == right.Type) && (left.Flavor == right.Flavor));
+        }
+        public static bool operator !=(FlavoredType left, FlavoredType right)
+        {
+            return !(left == right);
+        }
     }
     #endregion
 }

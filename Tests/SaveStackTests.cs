@@ -26,8 +26,8 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, controller, type));
-            expectedItems.Add(new StackItem(Change.Add, bid, controller));
+            expectedItems.Add(new StackItem(StackChange.Add, controller, type));
+            expectedItems.Add(new StackItem(StackChange.Add, bid, controller));
 
             int expectedCount = 2;
 
@@ -50,8 +50,8 @@ namespace Tests
             //Act
             ChangeStack stack = new ChangeStack(bid);
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, panel, type));
-            expectedItems.Add(new StackItem(Change.Add, bid, panel));
+            expectedItems.Add(new StackItem(StackChange.Add, panel, type));
+            expectedItems.Add(new StackItem(StackChange.Add, bid, panel));
 
             int expectedCount = 2;
             
@@ -72,7 +72,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, bid, misc);
+            StackItem expectedItem = new StackItem(StackChange.Add, bid, misc);
             int expectedCount = 1;
 
             bid.MiscCosts.Add(misc);
@@ -92,7 +92,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, bid, scopeBranch);
+            StackItem expectedItem = new StackItem(StackChange.Add, bid, scopeBranch);
             int expectedCount = 1;
 
             bid.ScopeTree.Add(scopeBranch);
@@ -115,7 +115,7 @@ namespace Tests
             //Act
             ChangeStack stack = new ChangeStack(bid);
 
-            StackItem expectedItem = new StackItem(Change.Add, bid, system);
+            StackItem expectedItem = new StackItem(StackChange.Add, bid, system);
 
             bid.Systems.Add(system);
 
@@ -138,7 +138,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             TECSystem instance = system.AddInstance(bid);
-            StackItem expectedItem = new StackItem(Change.Add, system, instance);
+            StackItem expectedItem = new StackItem(StackChange.Add, system, instance);
             int expectedCount = 1;
 
             //Assert
@@ -157,7 +157,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, system, equip);
+            StackItem expectedItem = new StackItem(StackChange.Add, system, equip);
             int expectedCount = 1;
 
             system.Equipment.Add(equip);
@@ -183,9 +183,9 @@ namespace Tests
             typical.Equipment.Add(equip);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Add, typical, equip));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, equip));
             
             int expectedCount = 3;
             
@@ -210,9 +210,9 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Add, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -237,7 +237,7 @@ namespace Tests
 
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            StackItem expectedItem = new StackItem(Change.Add, equipment, subScope);
+            StackItem expectedItem = new StackItem(StackChange.Add, equipment, subScope);
             int expectedCount = 1;
 
             //Assert
@@ -262,9 +262,9 @@ namespace Tests
             equipment.SubScope.Add(subScope);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.Add, system.Equipment[0], subScope));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, system.Equipment[0], subScope));
 
             int expectedCount = 3;
 
@@ -290,11 +290,11 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
             
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.Add, system, instance));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, system, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -321,7 +321,7 @@ namespace Tests
             TECPoint point = new TECPoint();
             subScope.Points.Add(point);
             
-            StackItem expectedItem = new StackItem(Change.Add, subScope, point);
+            StackItem expectedItem = new StackItem(StackChange.Add, subScope, point);
             int expectedCount = 1;
 
             //Assert
@@ -348,9 +348,9 @@ namespace Tests
             subScope.Points.Add(point);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
-            expectedItems.Add(new StackItem(Change.Add, system.Equipment[0].SubScope[0], point));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, system.Equipment[0].SubScope[0], point));
 
             int expectedCount = 3;
 
@@ -378,13 +378,13 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
-            expectedItems.Add(new StackItem(Change.Add, system, instance));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, system, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -411,7 +411,7 @@ namespace Tests
             TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
-            StackItem expectedItem = new StackItem(Change.Add, subScope, device);
+            StackItem expectedItem = new StackItem(StackChange.Add, subScope, device);
             int expectedCount = 1;
 
             //Assert
@@ -438,8 +438,8 @@ namespace Tests
             subScope.Devices.Add(device);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
-            expectedItems.Add(new StackItem(Change.Add, system.Equipment[0].SubScope[0], device));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, system.Equipment[0].SubScope[0], device));
 
             int expectedCount = 2;
 
@@ -468,12 +468,12 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
-            expectedItems.Add(new StackItem(Change.Add, system, instance));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, system, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -498,8 +498,8 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, controller, type));
-            expectedItems.Add(new StackItem(Change.Add, system, controller));
+            expectedItems.Add(new StackItem(StackChange.Add, controller, type));
+            expectedItems.Add(new StackItem(StackChange.Add, system, controller));
 
             int expectedCount = 2;
 
@@ -528,11 +528,11 @@ namespace Tests
             typical.Controllers.Add(controller);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Controllers[0], type));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Controllers[0]));
-            expectedItems.Add(new StackItem(Change.Add, controller, type));
-            expectedItems.Add(new StackItem(Change.Add, typical, controller));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Controllers[0], type));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Controllers[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, controller, type));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, controller));
 
             int expectedCount = 5;
 
@@ -561,10 +561,10 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Controllers[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Controllers[0], type));
-            expectedItems.Add(new StackItem(Change.Add, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Controllers[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Controllers[0], type));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -587,8 +587,8 @@ namespace Tests
             //Act
             ChangeStack stack = new ChangeStack(bid);
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, panel, type));
-            expectedItems.Add(new StackItem(Change.Add, system, panel));
+            expectedItems.Add(new StackItem(StackChange.Add, panel, type));
+            expectedItems.Add(new StackItem(StackChange.Add, system, panel));
             int expectedCount = 2;
 
             system.Panels.Add(panel);
@@ -615,11 +615,11 @@ namespace Tests
             typical.Panels.Add(panel);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance.Panels[0], type));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Panels[0]));
-            expectedItems.Add(new StackItem(Change.Add, panel, type));
-            expectedItems.Add(new StackItem(Change.Add, typical, panel));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Panels[0], type));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Panels[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, panel, type));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, panel));
 
             int expectedCount = expectedItems.Count;
 
@@ -646,10 +646,10 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.AddRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Add, instance, instance.Panels[0]));
-            expectedItems.Add(new StackItem(Change.Add, instance.Panels[0], type));
-            expectedItems.Add(new StackItem(Change.Add, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.AddRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Add, instance, instance.Panels[0]));
+            expectedItems.Add(new StackItem(StackChange.Add, instance.Panels[0], type));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -670,7 +670,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, system, misc);
+            StackItem expectedItem = new StackItem(StackChange.Add, system, misc);
             int expectedCount = 1;
 
             system.MiscCosts.Add(misc);
@@ -696,7 +696,7 @@ namespace Tests
             typical.MiscCosts.Add(misc);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, typical, misc));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, misc));
 
             int expectedCount = expectedItems.Count;
 
@@ -722,7 +722,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Add, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.Add, typical, instance));
 
             int expectedCount = 1;
 
@@ -743,7 +743,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Add, system, scopeBranch);
+            StackItem expectedItem = new StackItem(StackChange.Add, system, scopeBranch);
             int expectedCount = 1;
 
             system.ScopeBranches.Add(scopeBranch);
@@ -773,8 +773,8 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, controller, type));
-            expectedItems.Add(new StackItem(Change.Remove, bid, controller));
+            expectedItems.Add(new StackItem(StackChange.Remove, controller, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, bid, controller));
 
             int expectedCount = 2;
 
@@ -798,8 +798,8 @@ namespace Tests
             //Act
             ChangeStack stack = new ChangeStack(bid);
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, panel, type));
-            expectedItems.Add(new StackItem(Change.Remove, bid, panel));
+            expectedItems.Add(new StackItem(StackChange.Remove, panel, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, bid, panel));
             int expectedCount = 2;
 
             bid.Panels.Remove(panel);
@@ -820,7 +820,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, bid, misc);
+            StackItem expectedItem = new StackItem(StackChange.Remove, bid, misc);
             int expectedCount = 1;
 
             bid.MiscCosts.Remove(misc);
@@ -841,7 +841,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, bid, scopeBranch);
+            StackItem expectedItem = new StackItem(StackChange.Remove, bid, scopeBranch);
             int expectedCount = 1;
 
             bid.ScopeTree.Remove(scopeBranch);
@@ -864,7 +864,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, bid, system);
+            StackItem expectedItem = new StackItem(StackChange.Remove, bid, system);
 
             bid.Systems.Remove(system);
 
@@ -888,7 +888,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             system.SystemInstances.Remove(instance);
-            StackItem expectedItem = new StackItem(Change.Remove, system, instance);
+            StackItem expectedItem = new StackItem(StackChange.Remove, system, instance);
             int expectedCount = 1;
 
             //Assert
@@ -908,7 +908,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, system, equip);
+            StackItem expectedItem = new StackItem(StackChange.Remove, system, equip);
             int expectedCount = 1;
 
             system.Equipment.Remove(equip);
@@ -935,9 +935,9 @@ namespace Tests
             typical.Equipment.Remove(equip);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, removed, typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance, removed));
-            expectedItems.Add(new StackItem(Change.Remove, typical, equip));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, equip, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, removed));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, equip));
 
             int expectedCount = 3;
             
@@ -964,9 +964,9 @@ namespace Tests
             typical.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, instance));
 
             int expectedCount = 3;
 
@@ -992,7 +992,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             equipment.SubScope.Remove(subScope);
-            StackItem expectedItem = new StackItem(Change.Remove, equipment, subScope);
+            StackItem expectedItem = new StackItem(StackChange.Remove, equipment, subScope);
             int expectedCount = 1;
 
             //Assert
@@ -1019,9 +1019,9 @@ namespace Tests
             equipment.SubScope.Remove(subScope);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, subScope, removed, typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0], removed));
-            expectedItems.Add(new StackItem(Change.Remove, system.Equipment[0], subScope));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, subScope, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Equipment[0], removed));
+            expectedItems.Add(new StackItem(StackChange.Remove, system.Equipment[0], subScope));
 
             int expectedCount = expectedItems.Count;
 
@@ -1048,11 +1048,11 @@ namespace Tests
             system.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, system, instance));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, system, instance));
 
             int expectedCount = 5;
 
@@ -1080,7 +1080,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
             subScope.Points.Remove(point);
 
-            StackItem expectedItem = new StackItem(Change.Remove, subScope, point);
+            StackItem expectedItem = new StackItem(StackChange.Remove, subScope, point);
             int expectedCount = 1;
 
             //Assert
@@ -1109,9 +1109,9 @@ namespace Tests
             subScope.Points.Remove(point);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, point, removed, typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0].SubScope[0], removed));
-            expectedItems.Add(new StackItem(Change.Remove, system.Equipment[0].SubScope[0], point));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, point, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Equipment[0].SubScope[0], removed));
+            expectedItems.Add(new StackItem(StackChange.Remove, system.Equipment[0].SubScope[0], point));
 
             int expectedCount = 3;
 
@@ -1140,13 +1140,13 @@ namespace Tests
             system.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, system, instance));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Points[0]));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, point, instance.Equipment[0].SubScope[0].Points[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, system, instance));
 
             int expectedCount = 7;
 
@@ -1174,7 +1174,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
             subScope.Devices.Remove(device);
 
-            StackItem expectedItem = new StackItem(Change.RemoveRelationship, subScope, device);
+            StackItem expectedItem = new StackItem(StackChange.RemoveRelationship, subScope, device);
             int expectedCount = 1;
 
             //Assert
@@ -1203,8 +1203,8 @@ namespace Tests
             subScope.Devices.Remove(device);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, instance.Equipment[0].SubScope[0], device));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, system.Equipment[0].SubScope[0], device));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, instance.Equipment[0].SubScope[0], device));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, system.Equipment[0].SubScope[0], device));
 
             int expectedCount = 2;
 
@@ -1234,12 +1234,12 @@ namespace Tests
             system.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Equipment[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, system, instance));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, instance.Equipment[0]));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Equipment[0], instance.Equipment[0].SubScope[0]));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Equipment[0].SubScope[0], instance.Equipment[0].SubScope[0].Devices[0]));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, equipment, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, subScope, instance.Equipment[0].SubScope[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, system, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -1265,8 +1265,8 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, controller, type));
-            expectedItems.Add(new StackItem(Change.Remove, system, controller));
+            expectedItems.Add(new StackItem(StackChange.Remove, controller, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, system, controller));
 
             int expectedCount = 2;
 
@@ -1296,11 +1296,11 @@ namespace Tests
             typical.Controllers.Remove(controller);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, removed, typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, removed, type));
-            expectedItems.Add(new StackItem(Change.Remove, instance, removed));
-            expectedItems.Add(new StackItem(Change.Remove, controller, type));
-            expectedItems.Add(new StackItem(Change.Remove, typical, controller));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, controller, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, removed, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, removed));
+            expectedItems.Add(new StackItem(StackChange.Remove, controller, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, controller));
 
             int expectedCount = expectedItems.Count;
             
@@ -1328,10 +1328,10 @@ namespace Tests
             typical.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Controllers[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Controllers[0], instance.Controllers[0].Type));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, instance.Controllers[0]));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Controllers[0], instance.Controllers[0].Type));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, controller, instance.Controllers[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -1355,8 +1355,8 @@ namespace Tests
             //Act
             ChangeStack stack = new ChangeStack(bid);
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, panel, type));
-            expectedItems.Add(new StackItem(Change.Remove, system, panel));
+            expectedItems.Add(new StackItem(StackChange.Remove, panel, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, system, panel));
             int expectedCount = 2;
 
             system.Panels.Remove(panel);
@@ -1384,11 +1384,11 @@ namespace Tests
             typical.Panels.Remove(panel);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, panel, removed, typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, removed, type));
-            expectedItems.Add(new StackItem(Change.Remove, instance, removed));
-            expectedItems.Add(new StackItem(Change.Remove, panel, type));
-            expectedItems.Add(new StackItem(Change.Remove, typical, panel));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, panel, removed, typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, removed, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, removed));
+            expectedItems.Add(new StackItem(StackChange.Remove, panel, type));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, panel));
 
             int expectedCount = expectedItems.Count;
 
@@ -1415,10 +1415,10 @@ namespace Tests
             typical.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, instance, instance.Panels[0]));
-            expectedItems.Add(new StackItem(Change.Remove, instance.Panels[0], type));
-            expectedItems.Add(new StackItem(Change.RemoveRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new StackItem(Change.Remove, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance, instance.Panels[0]));
+            expectedItems.Add(new StackItem(StackChange.Remove, instance.Panels[0], type));
+            expectedItems.Add(new StackItem(StackChange.RemoveRelationship, panel, instance.Panels[0], typeof(TECScope), typeof(TECScope)));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -1440,7 +1440,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, system, misc);
+            StackItem expectedItem = new StackItem(StackChange.Remove, system, misc);
             int expectedCount = 1;
 
             system.MiscCosts.Remove(misc);
@@ -1465,7 +1465,7 @@ namespace Tests
             ChangeStack stack = new ChangeStack(bid);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, typical, misc));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, misc));
             int expectedCount = expectedItems.Count;
             typical.MiscCosts.Remove(misc);
 
@@ -1490,7 +1490,7 @@ namespace Tests
             typical.SystemInstances.Remove(instance);
 
             List<StackItem> expectedItems = new List<StackItem>();
-            expectedItems.Add(new StackItem(Change.Remove, typical, instance));
+            expectedItems.Add(new StackItem(StackChange.Remove, typical, instance));
 
             int expectedCount = expectedItems.Count;
 
@@ -1512,7 +1512,7 @@ namespace Tests
 
             //Act
             ChangeStack stack = new ChangeStack(bid);
-            StackItem expectedItem = new StackItem(Change.Remove, system, scopeBranch);
+            StackItem expectedItem = new StackItem(StackChange.Remove, system, scopeBranch);
             int expectedCount = 1;
 
             system.ScopeBranches.Remove(scopeBranch);

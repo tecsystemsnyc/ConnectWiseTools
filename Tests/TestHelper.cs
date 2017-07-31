@@ -548,6 +548,20 @@ namespace Tests
             testIOModule.Manufacturer = manufacturer1;
             outCatalogs.IOModules.Add(testIOModule);
 
+            //Controller Types
+            TECControllerType controllerType = new TECControllerType(manufacturer1);
+            controllerType.Name = "Test Controller Type";
+            controllerType.Cost = RandomDouble(0, 1000);
+            controllerType.Labor = RandomDouble(0, 1000);
+
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            io.Quantity = 100;
+
+            controllerType.IO.Add(io);
+
+            outCatalogs.ControllerTypes.Add(controllerType);
+
             //Panel Types
             TECPanelType panelType = new TECPanelType(manufacturer1);
             panelType.Cost = RandomDouble(0, 1000);
