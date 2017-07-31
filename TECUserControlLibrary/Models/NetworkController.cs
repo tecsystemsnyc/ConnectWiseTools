@@ -56,7 +56,7 @@ namespace TECUserControlLibrary.Models
                         Controller.NetworkType = NetworkType.DDC;
                     }
                     RaisePropertyChanged("IsServer");
-                    RaisePropertyChanged("IsConnected");
+                    RefreshIsConnected();
                 }
             }
         }
@@ -268,21 +268,22 @@ namespace TECUserControlLibrary.Models
         }
         private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs)
+            var args = e as PropertyChangedExtendedEventArgs;
+            if (args != null)
             {
-                var args = e as PropertyChangedExtendedEventArgs;
-
                 if (args.PropertyName == "ParentConnection")
                 {
-                    if ((args.OldValue as TECController).ParentConnection != null)
+                    TECNetworkConnection oldParent = args.OldValue as TECNetworkConnection;
+                    TECNetworkConnection newParent = args.Value as TECNetworkConnection;
+                    if (oldParent != null)
                     {
-                        (args.OldValue as TECController).ParentConnection.PropertyChanged -= ParentConnection_PropertyChanged;
+                        oldParent.PropertyChanged -= ParentConnection_PropertyChanged;
                     }
                     RaisePropertyChanged("ParentController");
                     RefreshIsConnected();
-                    if ((args.Value as TECController).ParentConnection != null)
+                    if (newParent != null)
                     {
-                        (args.Value as TECController).ParentConnection.PropertyChanged += ParentConnection_PropertyChanged;
+                        newParent.PropertyChanged += ParentConnection_PropertyChanged;
                     }
                 }
             }
