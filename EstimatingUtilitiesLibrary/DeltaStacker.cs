@@ -20,21 +20,17 @@ namespace EstimatingUtilitiesLibrary
 
         private void handleChange(object sender, PropertyChangedExtendedEventArgs e)
         {
-            if(e.Change == Change.Add)
+            if(e.Change == Change.Add || e.Change == Change.Remove)
             {
-                
-            }
-            else if (e.Change == Change.Remove)
-            {
-
+                addRemoveToStack(e.Change, sender as TECObject, e.Value as TECObject);
             }
             else if (e.Change == Change.Edit)
             {
-
+                editToStack(sender as TECObject, e.PropertyName, e.Value);
             }
         }
 
-        private void AddRemove(Change change, TECObject sender, TECObject item)
+        private void addRemoveToStack(Change change, TECObject sender, TECObject item)
         {
             List<TECObject> items = new List<TECObject>();
             items.Add(sender);
@@ -42,10 +38,35 @@ namespace EstimatingUtilitiesLibrary
             List<TableBase> tables = TableHelper.GetTables(items);
             foreach(TableBase table in tables)
             {
-                TableInfo info = new TableInfo(table);
-                foreach(TableField field in info.Fields)
+                var info = new TableInfo(table);
+                var data = new Dictionary<string, string>();
+                if (info.IsRelationTable)
                 {
-                    if(field.)
+                    var fields = new List<TableField>();
+                    fields.Add(info.Fields[0]);
+                    fields.Add(info.Fields[1]);
+                    data = TableHelper.PrepareDataForRelationTable(fields, sender, item);
+                }
+                else if (!info.IsCatalogTable || (info.IsCatalogTable && sender is TECCatalogs))
+                {
+                    var fields = info.Fields;
+                    data = TableHelper.PrepareDataForObjectTable(fields, sender);
+                }
+                stack.Add(new UpdateItem(change, info.Name, data));
+            }
+        }
+
+        private void editToStack(TECObject sender, string propertyName, object value)
+        {
+            List<TableBase> tables = TableHelper.GetTables(new List<TECObject> { sender });
+            foreach(TableBase table in tables)
+            {
+                var info = new TableInfo(table);
+                var fields = info.Fields;
+                var data = TableHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
+                if(data != null)
+                {
+                    stack.Add(new UpdateItem(Change.Edit, info.Name, data));
                 }
             }
         }

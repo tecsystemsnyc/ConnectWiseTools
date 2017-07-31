@@ -78,6 +78,21 @@ namespace EstimatingUtilitiesLibrary
             return fieldData;
         }
 
+        public static Dictionary<string, string> PrepareDataForEditObject(List<TableField> fields, object item, string propertyName, object value)
+        {
+            foreach(TableField field in fields)
+            {
+                if(field.Property.ReflectedType == item.GetType() && 
+                    field.Property.Name == propertyName)
+                {
+                    Dictionary<string, string> outData = new Dictionary<string, string>();
+                    outData[field.Name] = objectToDBString(value);
+                    return outData;
+                }
+            }
+            return null;
+        }
+
         private static string objectToDBString(Object inObject)
         {
             string outstring = "";
