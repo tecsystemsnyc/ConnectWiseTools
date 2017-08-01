@@ -17,7 +17,7 @@ namespace Tests
         
         #region Add
         [TestMethod]
-        public void AddTECCost()
+        public void AddTECCostToSystem()
         {
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
@@ -55,7 +55,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddElectricalCost()
+        public void AddElectricalCostToSystem()
         {
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid(); ;

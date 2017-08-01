@@ -10,9 +10,11 @@ namespace EstimatingLibrary.Utilities
 {
 
     public enum Change { Add, Remove, Edit };
-    public enum ChangeType { Object, Instance };
+    
     public class ChangeWatcher
     {
+        private enum ChangeType { Object, Instance };
+
         public Action<object, PropertyChangedEventArgs> Changed;
         public Action<object, PropertyChangedExtendedEventArgs> ExtendedChanged;
         public Action<object, PropertyChangedEventArgs> InstanceChanged;

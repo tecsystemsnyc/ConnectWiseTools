@@ -136,159 +136,159 @@ namespace TECUserControlLibrary.ViewModels
         #region Event Handlers
         private void instanceChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e is PropertyChangedExtendedEventArgs)
+            PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
+            if (args != null)
             {
-                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-                var targetObject = args.Value;
-                var referenceObject = args.OldValue;
+                var parent = args.Sender;
+                var child = args.Value;
 
-                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
+                if (args.Change == Change.Add)
                 {
-                    if (targetObject is TECSystem)
+                    if (child is TECSystem)
                     {
-                        if (referenceObject is TECBid)
+                        if (parent is TECBid)
                         {
-                            addTypicalSystem(targetObject as TECSystem);
+                            addTypicalSystem(child as TECSystem);
                         }
-                        else if (referenceObject is TECSystem)
+                        else if (parent is TECSystem)
                         {
-                            addInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                            addInstanceSystem(child as TECSystem, parent as TECSystem);
                         }
                         else
                         {
                             throw new NotImplementedException();
                         }
                     }
-                    else if (targetObject is TECEquipment)
+                    else if (child is TECEquipment)
                     {
-                        addEquipment(targetObject as TECEquipment);
+                        addEquipment(child as TECEquipment);
                     }
-                    else if (targetObject is TECSubScope)
+                    else if (child is TECSubScope)
                     {
-                        addSubScope(targetObject as TECSubScope);
+                        addSubScope(child as TECSubScope);
                     }
-                    else if (targetObject is TECDevice)
+                    else if (child is TECDevice)
                     {
-                        addDevice(targetObject as TECDevice);
+                        addDevice(child as TECDevice);
                     }
-                    else if (targetObject is TECController)
+                    else if (child is TECController)
                     {
-                        addController(targetObject as TECController);
+                        addController(child as TECController);
                     }
-                    else if (targetObject is TECPanel)
+                    else if (child is TECPanel)
                     {
-                        addPanel(targetObject as TECPanel);
+                        addPanel(child as TECPanel);
                     }
-                    else if (targetObject is TECConnection)
+                    else if (child is TECConnection)
                     {
-                        addConnection(targetObject as TECConnection);
+                        addConnection(child as TECConnection);
                     }
-                    else if (targetObject is TECMisc)
+                    else if (child is TECMisc)
                     {
-                        if (referenceObject is TECBid)
+                        if (parent is TECBid)
                         {
-                            addMiscCost(targetObject as TECMisc);
+                            addMiscCost(child as TECMisc);
                         }
-                        else if (referenceObject is TECSystem)
+                        else if (parent is TECSystem)
                         {
-                            foreach(TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            foreach(TECSystem instance in (parent as TECSystem).SystemInstances)
                             {
-                                addMiscCost(targetObject as TECMisc);
+                                addMiscCost(child as TECMisc);
                             }
                         }
                     }
-                    else if (targetObject is TECCost)
+                    else if (child is TECCost)
                     {
-                        if (referenceObject is TECController)
+                        if (parent is TECController)
                         {
-                            ControllerSummaryVM.AddCostToController(targetObject as TECCost);
+                            ControllerSummaryVM.AddCostToController(child as TECCost);
                         }
-                        else if (referenceObject is TECPanel)
+                        else if (parent is TECPanel)
                         {
-                            PanelTypeSummaryVM.AddCostToPanel(targetObject as TECCost);
+                            PanelTypeSummaryVM.AddCostToPanel(child as TECCost);
                         }
-                        else if (referenceObject is TECDevice)
+                        else if (parent is TECDevice)
                         {
-                            DeviceSummaryVM.AddCostToDevices(targetObject as TECCost, referenceObject as TECDevice);
+                            DeviceSummaryVM.AddCostToDevices(child as TECCost, parent as TECDevice);
                         }
                         else
                         {
-                            addAssCost(targetObject as TECCost);
+                            addAssCost(child as TECCost);
                         }
                     }
                 }
-                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
+                else if (args.Change == Change.Remove)
                 {
-                    if (targetObject is TECSystem)
+                    if (child is TECSystem)
                     {
-                        if (referenceObject is TECBid)
+                        if (parent is TECBid)
                         {
-                            removeTypicalSystem(targetObject as TECSystem);
+                            removeTypicalSystem(child as TECSystem);
                         }
-                        else if (referenceObject is TECSystem)
+                        else if (parent is TECSystem)
                         {
-                            removeInstanceSystem(targetObject as TECSystem, referenceObject as TECSystem);
+                            removeInstanceSystem(child as TECSystem, parent as TECSystem);
                         }
                         else
                         {
                             throw new NotImplementedException();
                         }
                     }
-                    else if (targetObject is TECEquipment)
+                    else if (child is TECEquipment)
                     {
-                        removeEquipment(targetObject as TECEquipment);
+                        removeEquipment(child as TECEquipment);
                     }
-                    else if (targetObject is TECSubScope)
+                    else if (child is TECSubScope)
                     {
-                        removeSubScope(targetObject as TECSubScope);
+                        removeSubScope(child as TECSubScope);
                     }
-                    else if (targetObject is TECDevice)
+                    else if (child is TECDevice)
                     {
-                        removeDevice(targetObject as TECDevice);
+                        removeDevice(child as TECDevice);
                     }
-                    else if (targetObject is TECController)
+                    else if (child is TECController)
                     {
-                        removeController(targetObject as TECController);
+                        removeController(child as TECController);
                     }
-                    else if (targetObject is TECPanel)
+                    else if (child is TECPanel)
                     {
-                        removePanel(targetObject as TECPanel);
+                        removePanel(child as TECPanel);
                     }
-                    else if (targetObject is TECConnection)
+                    else if (child is TECConnection)
                     {
-                        removeConnection(targetObject as TECConnection);
+                        removeConnection(child as TECConnection);
                     }
-                    else if (targetObject is TECMisc)
+                    else if (child is TECMisc)
                     {
-                        if (referenceObject is TECBid)
+                        if (parent is TECBid)
                         {
-                            removeMiscCost(targetObject as TECMisc);
+                            removeMiscCost(child as TECMisc);
                         }
-                        else if (referenceObject is TECSystem)
+                        else if (parent is TECSystem)
                         {
-                            foreach (TECSystem instance in (referenceObject as TECSystem).SystemInstances)
+                            foreach (TECSystem instance in (parent as TECSystem).SystemInstances)
                             {
-                                removeMiscCost(targetObject as TECMisc);
+                                removeMiscCost(child as TECMisc);
                             }
                         }
                     }
-                    else if (targetObject is TECCost)
+                    else if (child is TECCost)
                     {
-                        if (referenceObject is TECController)
+                        if (parent is TECController)
                         {
-                            ControllerSummaryVM.RemoveCostFromController(targetObject as TECCost);
+                            ControllerSummaryVM.RemoveCostFromController(child as TECCost);
                         }
-                        else if (referenceObject is TECPanel)
+                        else if (parent is TECPanel)
                         {
-                            PanelTypeSummaryVM.RemoveCostFromPanel(targetObject as TECCost);
+                            PanelTypeSummaryVM.RemoveCostFromPanel(child as TECCost);
                         }
-                        else if (referenceObject is TECDevice)
+                        else if (parent is TECDevice)
                         {
-                            DeviceSummaryVM.RemoveCostFromDevices(targetObject as TECCost, referenceObject as TECDevice);
+                            DeviceSummaryVM.RemoveCostFromDevices(child as TECCost, parent as TECDevice);
                         }
                         else
                         {
-                            removeAssCost(targetObject as TECCost);
+                            removeAssCost(child as TECCost);
                         }
                     }
                 }
