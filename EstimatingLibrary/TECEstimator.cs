@@ -246,19 +246,16 @@ namespace EstimatingLibrary
         }
 
         private void Object_PropertyChanged(PropertyChangedExtendedEventArgs e) { handlePropertyChanged(e); }
-        private void handlePropertyChanged(PropertyChangedEventArgs e)
+        private void handlePropertyChanged(PropertyChangedExtendedEventArgs args)
         {
-            string message = "Propertychanged: " + e.PropertyName;
+            string message = "Propertychanged: " + args.PropertyName;
             DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
 
-            if (!omitStrings.Contains(e.PropertyName))
+            if (!omitStrings.Contains(args.PropertyName))
             {
-                if (e is PropertyChangedExtendedEventArgs)
-                {
-                    PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-                    object oldValue = args.OldValue;
-                    object newValue = args.Value;
-                    if (e.PropertyName == "Add")
+                    object oldValue = args.Value;
+                    object newValue = args.Sender;
+                    if (args.PropertyName == "Add")
                     {
                         message = "Add change: " + oldValue;
                         DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
@@ -287,7 +284,7 @@ namespace EstimatingLibrary
                             }
                         }
                     }
-                    else if (e.PropertyName == "Remove")
+                    else if (args.PropertyName == "Remove")
                     {
                         message = "Remove change: " + oldValue;
                         DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
@@ -338,9 +335,9 @@ namespace EstimatingLibrary
                             editCost(newValue, oldValue);
                             editPoints(newValue, oldValue);
 
-                            if (bid.GetType().GetProperty(e.PropertyName) != null)
+                            if (bid.GetType().GetProperty(args.PropertyName) != null)
                             {
-                                var list = bid.GetType().GetProperty(e.PropertyName).GetValue(bid, null) as IList;
+                                var list = bid.GetType().GetProperty(args.PropertyName).GetValue(bid, null) as IList;
                                 if (list != null)
                                 {
                                     foreach (object item in list)
@@ -364,13 +361,6 @@ namespace EstimatingLibrary
                         }
                     }
                 }
-                else
-                {
-                    message = "Property not compatible: " + e.PropertyName;
-                    DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                }
-            }
         }
 
         private void handleRemoveMiscInSystem(TECMisc misc, TECSystem system)
@@ -530,8 +520,8 @@ namespace EstimatingLibrary
         }
         private void editCost(object newValue, object oldValue)
         {
-            Type newType = newValue.GetType();
-            Type oldType = oldValue.GetType();
+            Type newType = (newValue != null) ? newValue.GetType() : null;
+            Type oldType = (oldValue != null) ? oldValue.GetType() : null;
             if (newType == oldType && newValue is CostComponent)
             {
                 addCost(newValue);
