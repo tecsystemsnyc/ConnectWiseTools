@@ -114,6 +114,7 @@
     <Compile Include="DatabaseUpdater.cs" />
     <Compile Include="DBDefinitions.cs" />
     <Compile Include="DeltaStacker.cs" />
+    <Compile Include="DoStacker.cs" />
     <Compile Include="EstimateSpreadsheetExporter.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="PDFConverter.cs" />

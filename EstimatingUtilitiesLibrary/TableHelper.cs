@@ -45,7 +45,6 @@ namespace EstimatingUtilitiesLibrary
             return null;
         }
         
-
         public static Dictionary<string, string> PrepareDataForObjectTable(List<TableField> fields, object item)
         {
             Dictionary<string, string> fieldData = new Dictionary<string, string>();
