@@ -245,7 +245,7 @@ namespace EstimatingLibrary
             watcher.InstanceChanged += Object_PropertyChanged;
         }
 
-        private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e) { handlePropertyChanged(e); }
+        private void Object_PropertyChanged(PropertyChangedExtendedEventArgs e) { handlePropertyChanged(e); }
         private void handlePropertyChanged(PropertyChangedEventArgs e)
         {
             string message = "Propertychanged: " + e.PropertyName;

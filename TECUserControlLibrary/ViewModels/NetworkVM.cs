@@ -136,56 +136,52 @@ namespace TECUserControlLibrary.ViewModels
             controller.PropertyChanged -= Controller_PropertyChanged;
         }
 
-        private void instanceChanged(object sender, PropertyChangedEventArgs e)
+        private void instanceChanged(PropertyChangedExtendedEventArgs args)
         {
-            if (e is PropertyChangedExtendedEventArgs)
+            var targetObject = args.Value;
+            var referenceObject = args.OldValue;
+            if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
             {
-                PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-                var targetObject = args.Value;
-                var referenceObject = args.OldValue;
-                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
+                if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
                 {
-                    if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
+                    sortController(targetObject as TECController);
+                }
+                else if (targetObject is TECSystem && referenceObject is TECSystem)
+                {
+                    foreach(TECController controller in (targetObject as TECSystem).Controllers)
                     {
-                        sortController(targetObject as TECController);
-                    }
-                    else if (targetObject is TECSystem && referenceObject is TECSystem)
-                    {
-                        foreach(TECController controller in (targetObject as TECSystem).Controllers)
-                        {
-                            sortController(controller);
-                        }
-                    }
-                    else if (targetObject is TECIO && referenceObject is TECController)
-                    {
-                        refreshPossibleParents();
+                        sortController(controller);
                     }
                 }
-                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
+                else if (targetObject is TECIO && referenceObject is TECController)
                 {
-                    if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
-                    {
-                        removeController(targetObject as TECController);
-                        (targetObject as TECController).RemoveAllConnections();
-                    }
-                    else if (targetObject is TECSystem && referenceObject is TECSystem)
-                    {
-                        foreach(TECController controller in (targetObject as TECSystem).Controllers)
-                        {
-                            removeController(controller);
-                            controller.RemoveAllConnections();
-                        }
-                    }
-                    else if (targetObject is TECIO && referenceObject is TECController)
-                    {
-                        refreshPossibleParents();
-                    }
-                }
-                else if ((args.PropertyName == "NetworkType" || args.PropertyName == "ParentConnection") && targetObject is TECController)
-                {
-                    refreshIsConnected();
                     refreshPossibleParents();
                 }
+            }
+            else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
+            {
+                if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
+                {
+                    removeController(targetObject as TECController);
+                    (targetObject as TECController).RemoveAllConnections();
+                }
+                else if (targetObject is TECSystem && referenceObject is TECSystem)
+                {
+                    foreach(TECController controller in (targetObject as TECSystem).Controllers)
+                    {
+                        removeController(controller);
+                        controller.RemoveAllConnections();
+                    }
+                }
+                else if (targetObject is TECIO && referenceObject is TECController)
+                {
+                    refreshPossibleParents();
+                }
+            }
+            else if ((args.PropertyName == "NetworkType" || args.PropertyName == "ParentConnection") && targetObject is TECController)
+            {
+                refreshIsConnected();
+                refreshPossibleParents();
             }
         }
 

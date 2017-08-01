@@ -1082,7 +1082,8 @@ namespace Tests
             string edit = "Edit";
 
             //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            ChangeWatcher watcher = new ChangeWatcher(Bid);
+            DoStacker testStack = new DoStacker(watcher);
             Bid.Name = edit;
             testStack.Undo();
             testStack.Redo();

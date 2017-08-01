@@ -29,7 +29,7 @@ namespace EstimatingUtilitiesLibrary
         
         #endregion
 
-        private void objectChanged(object sender, PropertyChangedExtendedEventArgs e)
+        private void objectChanged(PropertyChangedExtendedEventArgs e)
         {
             undoStack.Add(e);
         }

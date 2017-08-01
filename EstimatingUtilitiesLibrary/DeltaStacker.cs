@@ -19,15 +19,15 @@ namespace EstimatingUtilitiesLibrary
             stack = new List<UpdateItem>();
         }
 
-        private void handleChange(object sender, PropertyChangedExtendedEventArgs e)
+        private void handleChange(PropertyChangedExtendedEventArgs e)
         {
             if(e.Change == Change.Add || e.Change == Change.Remove)
             {
-                addRemoveToStack(e.Change, sender as TECObject, e.Value as TECObject);
+                addRemoveToStack(e.Change, e.Sender as TECObject, e.Value as TECObject);
             }
             else if (e.Change == Change.Edit)
             {
-                editToStack(sender as TECObject, e.PropertyName, e.Value);
+                editToStack(e.Sender as TECObject, e.PropertyName, e.Value);
             }
         }
 
