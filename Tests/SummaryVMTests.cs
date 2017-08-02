@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EstimatingLibrary;
 using TECUserControlLibrary.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace Tests
 {
@@ -424,7 +425,9 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            bid.Catalogs.ControllerTypes.Add(controllerType);
+            TECController controller = new TECController(controllerType);
             bid.Controllers.Add(controller);
 
             TECSystem typical = new TECSystem();
@@ -433,20 +436,25 @@ namespace Tests
             TECEquipment typEquip = new TECEquipment();
             typical.Equipment.Add(typEquip);
 
-            TECSubScope ss = new TECSubScope();
-            typEquip.SubScope.Add(ss);
+            TECSubScope typSS = new TECSubScope();
+            typEquip.SubScope.Add(typSS);
+
+            ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            connectionTypes.Add(bid.Catalogs.ConnectionTypes.RandomObject());
+            TECDevice dev = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers.RandomObject());
+            bid.Catalogs.Devices.Add(dev);
+            typSS.Devices.Add(dev);
 
             TECMaterialSummaryVM tecVM = new TECMaterialSummaryVM(bid);
             ElectricalMaterialSummaryVM elecVM = new ElectricalMaterialSummaryVM(bid);
             
             //Act
-            TECConnection connection = controller.AddSubScope(ss);
+            TECConnection connection = controller.AddSubScope(typSS);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
 
             typical.AddInstance(bid);
-
 
             Total totalTEC = calculateTotal(connection, CostType.TEC);
             Total totalElec = calculateTotal(connection, CostType.Electrical);

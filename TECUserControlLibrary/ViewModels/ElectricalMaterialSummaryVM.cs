@@ -239,13 +239,14 @@ namespace TECUserControlLibrary.ViewModels
                     removeAssCost(child as TECCost);
                 }
             }
-            else if (args.PropertyName == "Length" || args.PropertyName == "ConduitLength" || args.PropertyName == "ConnectionType" || args.PropertyName == "ConduitType")
+            else if (args.Change == Change.Edit)
             {
-                if (args.Value is TECConnection && args.OldValue is TECConnection)
-                {
-                    removeConnection(args.OldValue as TECConnection);
-                    addConnection(args.Value as TECConnection);
-                }
+                //Do nothing
+                //This used to handle connection property changed, but that responsibility has been offloaded to LengthSummaryVM.
+            }
+            else
+            {
+                throw new NotImplementedException("Change type not recognized.");
             }
         }
 

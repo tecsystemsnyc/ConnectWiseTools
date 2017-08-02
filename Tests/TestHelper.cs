@@ -518,7 +518,9 @@ namespace Tests
             connectionType1.Labor = RandomInt(10, 100);
 
             var connectionType2 = new TECElectricalMaterial();
-            connectionType2.Name = "FourC18";
+            connectionType2.Name = "ThreeC18";
+            connectionType2.Cost = RandomInt(10, 100);
+            connectionType2.Labor = RandomInt(10, 100);
 
             outCatalogs.ConnectionTypes.Add(connectionType1);
             outCatalogs.ConnectionTypes.Add(connectionType2);
