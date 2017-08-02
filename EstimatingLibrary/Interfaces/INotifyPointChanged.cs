@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface PointComponent
+    interface INotifyPointChanged
     {
-        int PointNumber { get; }
+        event Action<List<TECPoint>> PointChanged;
+        void NotifyPointChanged(List<TECPoint> points);
     }
 }

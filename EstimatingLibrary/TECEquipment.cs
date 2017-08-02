@@ -9,10 +9,13 @@ using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyCostChanged, PointComponent, DragDropComponent
+    public class TECEquipment : TECLocated, INotifyCostChanged, INotifyPointChanged, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
+
+        public event Action<List<TECPoint>> PointChanged;
+
         public ObservableCollection<TECSubScope> SubScope
         {
             get { return _subScope; }
@@ -191,6 +194,11 @@ namespace EstimatingLibrary
                 totalPoints += subScope.PointNumber;
             }
             return totalPoints;
+        }
+
+        public void NotifyPointChanged(List<TECPoint> points)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

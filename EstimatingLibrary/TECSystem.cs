@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECLocated, PointComponent, DragDropComponent, INotifyCostChanged
+    public class TECSystem : TECLocated, INotifyPointChanged, DragDropComponent, INotifyCostChanged
     {//TECSystem is the largest encapsulating object in the System-Equipment hierarchy, offering a specific structure for the needs of the estimating tool. A seperate hierarchy exists for TECScopeBranch as a more generic object.
         #region Properties
         private ObservableCollection<TECEquipment> _equipment;
@@ -23,6 +23,8 @@ namespace EstimatingLibrary
         private ObservableItemToInstanceList<TECObject> _charactersticInstances;
         private bool _proposeEquipment;
         private ChangeWatcher watcher;
+
+        public event Action<List<TECPoint>> PointChanged;
 
         public ObservableCollection<TECEquipment> Equipment
         {
@@ -942,6 +944,11 @@ namespace EstimatingLibrary
             }
             SystemInstances.Add(newSystem);
             return (newSystem);
+        }
+
+        public void NotifyPointChanged(List<TECPoint> points)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
