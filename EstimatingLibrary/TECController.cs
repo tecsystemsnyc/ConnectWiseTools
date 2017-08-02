@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECLocated, CostComponent, DragDropComponent
+    public class TECController : TECLocated, INotifyCostChanged, DragDropComponent
     {
         #region Properties
         //---Stored---
@@ -370,19 +370,6 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public override Object Copy()
-        {
-            TECController outController = new TECController(this.Guid, this.Type);
-            outController.copyPropertiesFromLocated(this);
-            foreach (TECConnection connection in ChildrenConnections)
-            {
-                var outConnection = connection.Copy() as TECConnection;
-                outConnection.ParentController = outController;
-                outController.ChildrenConnections.Add(outConnection);
-            }
-
-            return outController;
-        }
         public Object DragDropCopy(TECScopeManager scopeManager)
         {
             var outController = new TECController(this);

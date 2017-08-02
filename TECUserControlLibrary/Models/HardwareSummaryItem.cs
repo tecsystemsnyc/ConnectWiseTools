@@ -64,10 +64,5 @@ namespace TECUserControlLibrary.Models
                 updateTotal();
             }
         }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

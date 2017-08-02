@@ -118,7 +118,6 @@
     <Compile Include="TECController.cs" />
     <Compile Include="TECCost.cs" />
     <Compile Include="TECDevice.cs" />
-    <Compile Include="TECDrawing.cs" />
     <Compile Include="TECEquipment.cs" />
     <Compile Include="TECIO.cs" />
     <Compile Include="TECLabor.cs" />
@@ -127,7 +126,6 @@
     <Compile Include="TECNetworkConnection.cs" />
     <Compile Include="TECLabeled.cs" />
     <Compile Include="TECObject.cs" />
-    <Compile Include="TECPage.cs" />
     <Compile Include="TECPanel.cs" />
     <Compile Include="TECPanelType.cs" />
     <Compile Include="TECScopeManager.cs" />
@@ -139,8 +137,6 @@
     <Compile Include="TECSubScopeConnection.cs" />
     <Compile Include="TECSystem.cs" />
     <Compile Include="TECTemplates.cs" />
-    <Compile Include="TECVisualConnection.cs" />
-    <Compile Include="TECVisualScope.cs" />
     <Compile Include="Utilities\ChangeWatcher.cs" />
   </ItemGroup>
   <ItemGroup>

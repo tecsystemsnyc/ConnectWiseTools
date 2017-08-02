@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, CostComponent, DragDropComponent
+    public class TECMisc : TECCost, INotifyCostChanged, DragDropComponent
     {
         private int _quantity;
 

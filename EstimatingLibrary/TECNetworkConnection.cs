@@ -166,16 +166,6 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        #region Methods
-        public override object Copy()
-        {
-            TECNetworkConnection connection = new TECNetworkConnection(this);
-            connection._guid = this._guid;
-
-            return connection;
-        }
-        #endregion Methods
-
         #region Event Handlers
         private void ChildrenControllers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

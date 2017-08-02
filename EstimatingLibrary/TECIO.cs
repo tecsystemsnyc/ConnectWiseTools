@@ -117,14 +117,5 @@ namespace EstimatingLibrary
                 default: return "";
             }
         }
-
-        public override object Copy()
-        {
-            var outIO = new TECIO(Guid);
-            outIO._type = Type;
-            outIO._quantity = Quantity;
-            outIO._ioModule = IOModule;
-            return outIO;
-        }
     }
 }

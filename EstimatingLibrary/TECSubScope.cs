@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, CostComponent, PointComponent, DragDropComponent
+    public class TECSubScope : TECLocated, INotifyCostChanged, PointComponent, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECDevice> _devices;
@@ -207,8 +207,8 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged(Change.Add, "Devices", this, item);
                     ((TECDevice)item).PropertyChanged += DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
-                    var old = generateOldCostComponent(Change.Add, item as TECDevice);
-                    //NotifyPropertyChanged<object>("CostComponentChanged", old, this);
+                    //var old = generateOldINotifyCostChanged(Change.Add, item as TECDevice);
+                    //NotifyPropertyChanged<object>("INotifyCostChangedChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -218,8 +218,8 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged(Change.Remove, "Devices", this, item);
                     ((TECDevice)item).PropertyChanged -= DeviceChanged;
                     RaisePropertyChanged("TotalDevices");
-                    var old = generateOldCostComponent(Change.Remove, item as TECDevice);
-                    //NotifyPropertyChanged<object>("CostComponentChanged", old, this);
+                    //var old = generateOldINotifyCostChanged(Change.Remove, item as TECDevice);
+                    //NotifyPropertyChanged<object>("INotifyCostChangedChanged", old, this);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -241,31 +241,13 @@ namespace EstimatingLibrary
                     //var old = this.Copy() as TECSubScope;
                     //old.Devices.Remove(args.NewValue as TECDevice);
                     //old.Devices.Add(args.OldValue as TECDevice);
-                    //NotifyPropertyChanged("CostComponentChanged", old, this);
+                    //NotifyPropertyChanged("INotifyCostChangedChanged", old, this);
                 }
             }
         }
         #endregion
 
         #region Methods
-
-        public override Object Copy()
-        {
-            TECSubScope outScope = new TECSubScope();
-            outScope._guid = Guid;
-            var devices = new ObservableCollection<TECDevice>();
-            foreach (TECDevice device in this.Devices)
-            { devices.Add(device); }
-            outScope._devices = devices;
-            var points = new ObservableCollection<TECPoint>();
-            foreach (TECPoint point in this.Points)
-            { points.Add(point.Copy() as TECPoint); }
-            outScope._points = points;
-            outScope.reSubscribeToCollections();
-
-            outScope.copyPropertiesFromLocated(this);
-            return outScope;
-        }
         public object DragDropCopy(TECScopeManager scopeManager)
         {
             TECSubScope outScope = new TECSubScope(this);
@@ -348,25 +330,6 @@ namespace EstimatingLibrary
             Points.CollectionChanged += PointsCollectionChanged;
             subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
-        }
-
-        private TECSubScope generateOldCostComponent(Change change, TECDevice device)
-        {
-            var old = this.Copy() as TECSubScope;
-            var oldDevices = new ObservableCollection<TECDevice>();
-            foreach(TECDevice oldDevice in old.Devices)
-            {
-                oldDevices.Add(oldDevice);
-            }
-            if(change == Change.Add)
-            {
-                oldDevices.Remove(device);
-            } else
-            {
-                oldDevices.Add(device);
-            }
-            old._devices = oldDevices;
-            return old;
         }
 
         public void LinkConnection(TECSubScopeConnection connection)

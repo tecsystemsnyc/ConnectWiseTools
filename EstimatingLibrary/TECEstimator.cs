@@ -452,11 +452,11 @@ namespace EstimatingLibrary
         #region Update From Changes
         private void addCost(object item)
         {
-            if (item is CostComponent)
+            if (item is INotifyCostChanged)
             {
                 bool tecChanged = false;
                 bool electricalChanged = false;
-                var costComponent = item as CostComponent;
+                var costComponent = item as INotifyCostChanged;
                 foreach(TECCost cost in costComponent.Costs)
                 {
                     if (cost.Type == CostType.TEC)
@@ -486,11 +486,11 @@ namespace EstimatingLibrary
         }
         private void removeCost(object item)
         {
-            if (item is CostComponent)
+            if (item is INotifyCostChanged)
             {
                 bool tecChanged = false;
                 bool electricalChanged = false;
-                var costComponent = item as CostComponent;
+                var costComponent = item as INotifyCostChanged;
                 foreach (TECCost cost in costComponent.Costs)
                 {
                     if (cost.Type == CostType.TEC)
@@ -522,7 +522,7 @@ namespace EstimatingLibrary
         {
             Type newType = (newValue != null) ? newValue.GetType() : null;
             Type oldType = (oldValue != null) ? oldValue.GetType() : null;
-            if (newType == oldType && newValue is CostComponent)
+            if (newType == oldType && newValue is INotifyCostChanged)
             {
                 addCost(newValue);
                 removeCost(oldValue);
@@ -1106,11 +1106,6 @@ namespace EstimatingLibrary
                 }
             }
             return false;
-        }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
         }
 
         private object previousObject(PropertyChangedExtendedEventArgs item)
