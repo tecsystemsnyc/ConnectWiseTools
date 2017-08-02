@@ -15,10 +15,10 @@ namespace TECUserControlLibrary.ViewModels
         #region Properties
         public TECBid Bid { get; private set; }
 
-        private Dictionary<Guid, DeviceSummaryItem> deviceDictionary;
+        private Dictionary<Guid, HardwareSummaryItem> deviceDictionary;
 
-        private ObservableCollection<DeviceSummaryItem> _deviceSummaryItems;
-        public ObservableCollection<DeviceSummaryItem> DeviceSummaryItems
+        private ObservableCollection<HardwareSummaryItem> _deviceSummaryItems;
+        public ObservableCollection<HardwareSummaryItem> DeviceSummaryItems
         {
             get { return _deviceSummaryItems; }
             set
@@ -77,8 +77,8 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Device Add/Remove/Replace
-        private DeviceSummaryItem _selectedDevice;
-        public DeviceSummaryItem SelectedDevice
+        private HardwareSummaryItem _selectedDevice;
+        public HardwareSummaryItem SelectedDevice
         {
             get { return _selectedDevice; }
             set
@@ -179,8 +179,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
 
-            deviceDictionary = new Dictionary<Guid, DeviceSummaryItem>();
-            DeviceSummaryItems = new ObservableCollection<DeviceSummaryItem>();
+            deviceDictionary = new Dictionary<Guid, HardwareSummaryItem>();
+            DeviceSummaryItems = new ObservableCollection<HardwareSummaryItem>();
             deviceAssCostDictionary = new Dictionary<Guid, CostSummaryItem>();
             DeviceAssCostSummaryItems = new ObservableCollection<CostSummaryItem>();
 
@@ -254,7 +254,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                DeviceSummaryItem deviceItem = new DeviceSummaryItem(device);
+                HardwareSummaryItem deviceItem = new HardwareSummaryItem(device);
                 deviceItem.PropertyChanged += DeviceItem_PropertyChanged;
                 deviceDictionary.Add(device.Guid, deviceItem);
                 DeviceSummaryItems.Add(deviceItem);

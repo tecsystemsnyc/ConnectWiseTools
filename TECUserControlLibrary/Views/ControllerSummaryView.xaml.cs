@@ -21,9 +21,9 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class ControllerSummaryView : UserControl
     {
-        public ControllerSummaryVM ViewModel
+        public ControllerTypeSummaryVM ViewModel
         {
-            get { return (ControllerSummaryVM)GetValue(ViewModelProperty); }
+            get { return (ControllerTypeSummaryVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
@@ -31,7 +31,7 @@ namespace TECUserControlLibrary.Views
         /// Identified the ViewModel dependency property
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(ControllerSummaryVM),
+            DependencyProperty.Register("ViewModel", typeof(ControllerTypeSummaryVM),
               typeof(ControllerSummaryView));
 
         public ControllerSummaryView()

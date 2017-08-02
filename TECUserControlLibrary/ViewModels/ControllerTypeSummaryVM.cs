@@ -10,22 +10,10 @@ using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ControllerSummaryVM : ViewModelBase
+    public class ControllerTypeSummaryVM : ViewModelBase
     {
         #region Properties
-        private TECBid _bid;
-        public TECBid Bid
-        {
-            get
-            {
-                return _bid;
-            }
-            private set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
+
 
         private ObservableCollection<TECController> _controllers;
         public ObservableCollection<TECController> Controllers
@@ -94,7 +82,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public ControllerSummaryVM(TECBid bid)
+        public ControllerTypeSummaryVM(TECBid bid)
         {
             reinitialize(bid);
         }
@@ -106,8 +94,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private void reinitialize(TECBid bid)
         {
-            Bid = bid;
-
             Controllers = new ObservableCollection<TECController>();
 
             controllerAssCostDictionary = new Dictionary<Guid, CostSummaryItem>();

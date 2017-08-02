@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface CostComponent
+    interface INotifyCostChanged
     {
-        List<TECCost> Costs { get; }
-        Guid Guid { get; }
+        event Action<List<TECCost>> CostChanged;
+        void NotifyCostChanged(List<TECCost> costs);
     }
 }

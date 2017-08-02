@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
 {
-    public class DeviceSummaryItem : TECObject
+    public class HardwareSummaryItem : TECObject
     {
-        private TECDevice _device;
-        public TECDevice Device
+        private TECHardware _hardware;
+        public TECHardware Hardware
         {
-            get { return _device; }
+            get { return _hardware; }
         }
 
         private int _quantity;
@@ -43,21 +43,21 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public DeviceSummaryItem(TECDevice device) : base (Guid.NewGuid())
+        public HardwareSummaryItem(TECHardware hardware) : base (Guid.NewGuid())
         {
-            _device = device;
+            _hardware = hardware;
             _quantity = 1;
-            device.PropertyChanged += Device_PropertyChanged;
-            device.Manufacturer.PropertyChanged += Device_PropertyChanged;
+            hardware.PropertyChanged += Hardware_PropertyChanged;
+            hardware.Manufacturer.PropertyChanged += Hardware_PropertyChanged;
             updateTotal();
         }
 
         private void updateTotal()
         {
-            Total = (Device.Cost * Device.Manufacturer.Multiplier * Quantity);
+            Total = (Hardware.Cost * Hardware.Manufacturer.Multiplier * Quantity);
         }
 
-        private void Device_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Hardware_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Cost" || e.PropertyName == "Multiplier" || e.PropertyName == "Manufacturer")
             {

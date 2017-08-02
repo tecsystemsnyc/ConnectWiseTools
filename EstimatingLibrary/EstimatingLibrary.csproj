@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Defaults.cs" />
-    <Compile Include="Interfaces\CostComponent.cs" />
+    <Compile Include="Interfaces\INotifyCostChanged.cs" />
     <Compile Include="Interfaces\DragDropComponent.cs" />
     <Compile Include="Interfaces\ElectricalMaterialComponent.cs" />
     <Compile Include="Interfaces\PointComponent.cs" />

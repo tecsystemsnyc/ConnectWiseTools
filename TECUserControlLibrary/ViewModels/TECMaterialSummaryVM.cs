@@ -32,7 +32,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #region View Models
         public DeviceSummaryVM DeviceSummaryVM { get; private set; }
-        public ControllerSummaryVM ControllerSummaryVM { get; private set; }
+        public ControllerTypeSummaryVM ControllerSummaryVM { get; private set; }
         public PanelTypeSummaryVM PanelTypeSummaryVM { get; private set; }
         public MiscCostsSummaryVM MiscCostsSummaryVM { get; private set; }
         #endregion
@@ -123,7 +123,7 @@ namespace TECUserControlLibrary.ViewModels
         private void initializeVMs(TECBid bid)
         {
             DeviceSummaryVM = new DeviceSummaryVM(bid);
-            ControllerSummaryVM = new ControllerSummaryVM(bid);
+            ControllerSummaryVM = new ControllerTypeSummaryVM(bid);
             PanelTypeSummaryVM = new PanelTypeSummaryVM(bid);
             MiscCostsSummaryVM = new MiscCostsSummaryVM(bid, CostType.TEC);
 
