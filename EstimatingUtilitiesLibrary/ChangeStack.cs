@@ -454,13 +454,6 @@ namespace EstimatingUtilitiesLibrary
             {
                 handlePanelChildren(newItem as TECPanel, item.Change);
             }
-            else if (newItem is TECDrawing)
-            {
-                foreach (TECPage page in ((TECDrawing)newItem).Pages)
-                {
-                    SaveStack.Add(new StackItem(StackChange.Add, newItem, page));
-                }
-            }
             else if (newItem is TECIOModule)
             {
                 handleIOModuelChildren(newItem as TECIOModule, item.Change);

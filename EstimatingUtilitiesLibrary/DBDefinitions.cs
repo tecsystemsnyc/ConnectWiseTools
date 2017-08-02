@@ -353,42 +353,6 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class DrawingTable : TableBase
-    {
-        public static new string TableName = "TECDrawing";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECDrawing), 0);
-
-        public static TableField DrawingID = new TableField("DrawingID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", ObjectType.Type.GetProperty("Description"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            DrawingID
-            };
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            ObjectType
-        };
-
-    }
-    public class PageTable : TableBase
-    {
-        public static new string TableName = "TECPage";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECPage), 0);
-
-        public static TableField PageID = new TableField("PageID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField Image = new TableField("Image", "BLOB", null);
-        public static TableField PageNum = new TableField("PageNum", "INTEGER", ObjectType.Type.GetProperty("PageNum"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            PageID
-            };
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            ObjectType
-        };
-
-    }
     public class LocationTable : CatalogTableBase
     {
         public static new string TableName = "TECLocation";
@@ -400,24 +364,6 @@ namespace EstimatingUtilitiesLibrary
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             LocationID
-            };
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            ObjectType
-        };
-
-    }
-    public class VisualScopeTable : TableBase
-    {
-        public static new string TableName = "TECVisualScope";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECVisualScope), 0);
-
-        public static TableField VisualScopeID = new TableField("VisualScopeID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField XPos = new TableField("XPos", "REAL", ObjectType.Type.GetProperty("XPos"));
-        public static TableField YPos = new TableField("YPos", "REAL", ObjectType.Type.GetProperty("YPos"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            VisualScopeID
             };
         public static new List<FlavoredType> Types = new List<FlavoredType>()
         {
@@ -999,67 +945,6 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class DrawingPageTable : TableBase
-    {
-        public static new string TableName = "TECDrawingTECPage";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECDrawing), 0);
-        public static FlavoredType ReferenceType = new FlavoredType(typeof(TECPage), 0);
-
-        public static TableField DrawingID = new TableField("DrawingID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField PageID = new TableField("PageID", "TEXT", ReferenceType.Type.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            DrawingID,
-            PageID
-            };
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-
-    }
-    public class PageVisualScopeTable : TableBase
-    {
-        public static new string TableName = "TECPageTECVisualScope";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECPage), 0);
-        public static FlavoredType ReferenceType = new FlavoredType(typeof(TECVisualScope), 0);
-
-        public static TableField PageID = new TableField("PageID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField VisualScopeID = new TableField("VisualScopeID", "TEXT", ReferenceType.Type.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            PageID,
-            VisualScopeID
-            };
-
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-
-    }
-    public class VisualScopeScopeTable : TableBase
-    {
-        public static new string TableName = "TECVisualScopeTECScope";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECVisualScope), 0);
-        public static FlavoredType ReferenceType = new FlavoredType(typeof(TECScope), 0);
-
-        public static TableField VisualScopeID = new TableField("VisualScopeID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField ScopeID = new TableField("ScopeID", "TEXT", ReferenceType.Type.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>() {
-            VisualScopeID,
-            ScopeID
-            };
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-
-    }
     public class LocationScopeTable : TableBase
     {
         public static new string TableName = "TECLocationTECScope";
@@ -1394,10 +1279,7 @@ namespace EstimatingUtilitiesLibrary
             new PointTable(),
             new TagTable(),
             new ManufacturerTable(),
-            new DrawingTable(),
-            new PageTable(),
             new LocationTable(),
-            new VisualScopeTable(),
             new BidParametersTable(),
             new MiscTable(),
             new PanelTable(),
@@ -1418,9 +1300,6 @@ namespace EstimatingUtilitiesLibrary
             new SubScopePointTable(),
             new ScopeTagTable(),
             new DeviceManufacturerTable(),
-            new DrawingPageTable(),
-            new PageVisualScopeTable(),
-            new VisualScopeScopeTable(),
             new LocationScopeTable(),
             new ControllerTable(),
             new AssociatedCostTable(),
@@ -1523,10 +1402,7 @@ namespace EstimatingUtilitiesLibrary
             new PointTable(),
             new TagTable(),
             new ManufacturerTable(),
-            new DrawingTable(),
-            new PageTable(),
             new LocationTable(),
-            new VisualScopeTable(),
             new BidParametersTable(),
             new MiscTable(),
             new PanelTypeTable(),
@@ -1553,9 +1429,6 @@ namespace EstimatingUtilitiesLibrary
             new ScopeTagTable(),
             new DeviceManufacturerTable(),
             new DeviceConnectionTypeTable(),
-            new DrawingPageTable(),
-            new PageVisualScopeTable(),
-            new VisualScopeScopeTable(),
             new LocationScopeTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
