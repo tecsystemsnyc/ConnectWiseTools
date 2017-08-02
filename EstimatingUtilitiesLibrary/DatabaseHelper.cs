@@ -29,7 +29,6 @@ namespace EstimatingUtilitiesLibrary
 
         static private SQLiteDatabase SQLiteDB;
 
-        static private Dictionary<TableBase, List<StackItem>> indexesToUpdate;
         static private bool isCompatbile;
         #region Public Functions
         static public TECScopeManager Load(string path)
@@ -95,61 +94,6 @@ namespace EstimatingUtilitiesLibrary
             //GC.WaitForPendingFinalizers();
             //watch.Stop();
             //Console.WriteLine("Save New: " + watch.ElapsedMilliseconds);
-        }
-        static public void Update(string path, ChangeStack changeStack, bool doBackup = true)
-        {
-            throw new NotImplementedException();
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-
-            //if (doBackup) { createBackup(path); }
-
-            //string tempPath = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + String.Format("{0:ffff}", DateTime.Now) + ".tmp";
-
-            //File.Copy(path, tempPath);
-
-            //SQLiteDB = new SQLiteDatabase(tempPath);
-            //SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
-            //indexesToUpdate = new Dictionary<TableBase, List<StackItem>>();
-            //var cleansedStack = cleanseStack(changeStack.SaveStack);
-            //foreach (StackItem change in cleansedStack)
-            //{
-            //    StackChange changeType = change.Change;
-            //    object targetObject = change.TargetObject;
-            //    object refObject = change.ReferenceObject;
-
-            //    if (changeType == StackChange.Add)
-            //    {
-            //        addObject(change);
-            //    }
-            //    else if (changeType == StackChange.Edit)
-            //    {
-            //        editObject(change);
-            //    }
-            //    else if (changeType == StackChange.Remove)
-            //    {
-            //        removeObject(change);
-            //    }
-            //    else if (changeType == StackChange.AddRelationship)
-            //    {
-            //        addRelationship(change);
-            //    }
-            //    else if (changeType == StackChange.RemoveRelationship)
-            //    {
-            //        removeRelationship(change);
-            //    }
-            //}
-            //saveIndexRelationships(indexesToUpdate);
-            //SQLiteDB.nonQueryCommand("END TRANSACTION");
-            //SQLiteDB.Connection.Close();
-
-            //GC.Collect();
-            //GC.WaitForPendingFinalizers();
-
-            //File.Copy(tempPath, path, true);
-
-            //File.Delete(tempPath);
-            // watch.Stop();
-            // Console.WriteLine("Update: " + watch.ElapsedMilliseconds);
         }
 
         static public void CreateDB(string path, DBType type = DBType.Bid)
