@@ -228,17 +228,6 @@ namespace EstimatingLibrary
             }
         }
 
-        private TECEstimator _estimate;
-        public TECEstimator Estimate
-        {
-            get { return _estimate; }
-            set
-            {
-                _estimate = value;
-                RaisePropertyChanged("Estimate");
-            }
-        }
-
         public List<TECCost> Costs
         {
             get;
@@ -268,7 +257,6 @@ namespace EstimatingLibrary
             _panels = new ObservableCollection<TECPanel>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
-            _estimate = new TECEstimator(this);
             Parameters.PropertyChanged += objectPropertyChanged;
             Labor.PropertyChanged += objectPropertyChanged;
 
@@ -465,12 +453,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        public void RefreshEstimate()
-        {
-            Estimate = new TECEstimator(this);
-        }
-
+        
         private void removeLocationFromScope(TECLabeled location)
         {
             foreach(TECSystem typical in this.Systems)

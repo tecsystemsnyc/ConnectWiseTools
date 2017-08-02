@@ -284,7 +284,6 @@
     <Compile Include="ViewModels\SystemsVM.cs" />
     <Compile Include="ViewModels\StatusBarVM.cs" />
     <Compile Include="BaseVMs\BidEditorBase.cs" />
-    <Compile Include="ViewModels\BudgetVM.cs" />
     <Compile Include="ViewModels\ProposalVM.cs" />
     <Compile Include="Views\BudgetView.xaml.cs">
       <DependentUpon>BudgetView.xaml</DependentUpon>

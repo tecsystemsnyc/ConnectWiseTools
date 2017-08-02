@@ -13,18 +13,23 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class ReviewVM : ViewModelBase
     {
-        private TECBid _bid;
-        public TECBid Bid
+        private TECEstimator _estimate;
+        public TECEstimator Estimate
         {
-            get { return _bid; }
+            get { return _estimate; }
             set
             {
-                Bid.Estimate.PropertyChanged -= Bid_PropertyChanged;
-                _bid = value;
-                Bid.Estimate.PropertyChanged += Bid_PropertyChanged;
+                if(_estimate != null)
+                {
+                    Estimate.PropertyChanged -= Bid_PropertyChanged;
+                }
+                _estimate = value;
+                Estimate.PropertyChanged += Bid_PropertyChanged;
                 RaisePropertyChanged("Bid");
             }
         }
+
+        private TECBidParameters parameters;
 
         private double _userPrice;
         public double UserPrice
@@ -33,8 +38,8 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _userPrice = value;
-                var newProfit = (value - Bid.Estimate.SubcontractorSubtotal) / (Bid.Estimate.TECCost * (1 + Bid.Parameters.Overhead / 100)) - 1;
-                Bid.Parameters.Profit = newProfit * 100;
+                var newProfit = (value - Estimate.SubcontractorSubtotal) / (Estimate.TECCost * (1 + parameters.Overhead / 100)) - 1;
+                parameters.Profit = newProfit * 100;
                 RaisePropertyChanged("UserPrice");
             }
         }
@@ -43,115 +48,115 @@ namespace TECUserControlLibrary.ViewModels
 
         public double MarginM8
         {
-            get { return Bid.Estimate.Margin - 8; }
+            get { return Estimate.Margin - 8; }
         }
         public double MarginM6
         {
-            get { return Bid.Estimate.Margin - 6; }
+            get { return Estimate.Margin - 6; }
         }
         public double MarginM4
         {
-            get { return Bid.Estimate.Margin - 4; }
+            get { return Estimate.Margin - 4; }
         }
         public double MarginM2
         {
-            get { return Bid.Estimate.Margin - 2; }
+            get { return Estimate.Margin - 2; }
         }
         public double MarginP2
         {
-            get { return Bid.Estimate.Margin + 2; }
+            get { return Estimate.Margin + 2; }
         }
         public double MarginP4
         {
-            get { return Bid.Estimate.Margin + 4; }
+            get { return Estimate.Margin + 4; }
         }
         public double MarginP6
         {
-            get { return Bid.Estimate.Margin + 6; }
+            get { return Estimate.Margin + 6; }
         }
         public double MarginP8
         {
-            get { return Bid.Estimate.Margin + 8; }
+            get { return Estimate.Margin + 8; }
         }
 
         #endregion
         #region Prices
         public double TotalPriceM8
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM8 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginM8 / 100); }
         }
         public double TotalPriceM6
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM6 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginM6 / 100); }
         }
         public double TotalPriceM4
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM4 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginM4 / 100); }
         }
         public double TotalPriceM2
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM2 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginM2 / 100); }
         }
         public double TotalPriceP2
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP2 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginP2 / 100); }
         }
         public double TotalPriceP4
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP4 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginP4 / 100); }
         }
         public double TotalPriceP6
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP6 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginP6 / 100); }
         }
         public double TotalPriceP8
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP8 / 100); }
+            get { return Estimate.TotalCost / (1 - MarginP8 / 100); }
         }
         #endregion
         #region Markups
         public double Markup
         {
-            get { return Bid.Estimate.TotalPrice - Bid.Estimate.TotalCost; }
+            get { return Estimate.TotalPrice - Estimate.TotalCost; }
         }
 
         public double MarkupM8
         {
-            get { return TotalPriceM8 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceM8 - Estimate.TotalCost; }
         }
         public double MarkupM6
         {
-            get { return TotalPriceM6 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceM6 - Estimate.TotalCost; }
         }
         public double MarkupM4
         {
-            get { return TotalPriceM4 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceM4 - Estimate.TotalCost; }
         }
         public double MarkupM2
         {
-            get { return TotalPriceM2 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceM2 - Estimate.TotalCost; }
         }
         public double MarkupP2
         {
-            get { return TotalPriceP2 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceP2 - Estimate.TotalCost; }
         }
         public double MarkupP4
         {
-            get { return TotalPriceP4 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceP4 - Estimate.TotalCost; }
         }
         public double MarkupP6
         {
-            get { return TotalPriceP6 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceP6 - Estimate.TotalCost; }
         }
         public double MarkupP8
         {
-            get { return TotalPriceP8 - Bid.Estimate.TotalCost; }
+            get { return TotalPriceP8 - Estimate.TotalCost; }
         }
         #endregion
 
         public ReviewVM()
         {
-            _bid = new TECBid();
+            _estimate = new TECEstimator(new TECBid());
         }
 
         private void Bid_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -162,9 +167,9 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void Refresh(TECBid bid)
+        public void Refresh(TECEstimator estimate)
         {
-            Bid = bid;
+            Estimate = estimate;
             raiseTable();
         }
 
