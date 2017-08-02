@@ -90,27 +90,27 @@
             <Label Content="TEC Cost" FontWeight="Bold"
                Grid.Row="4"/>
             <Label Content="Material Cost:" Grid.Row="5" />
-            <TextBlock Text="{Binding Bid.Estimate.TECMaterialCost, StringFormat= {} {0:C}}" 
+            <TextBlock Text="{Binding Estimate.TECMaterialCost, StringFormat= {} {0:C}}" 
                Grid.Row="5" Grid.Column="1"
                TextAlignment="Right"/>
             
             <Label Content="Tax:" Grid.Row="6" />
-            <TextBlock Text="{Binding Bid.Estimate.Tax, StringFormat= {} {0:C}}" 
+            <TextBlock Text="{Binding Estimate.Tax, StringFormat= {} {0:C}}" 
                Grid.Row="6" Grid.Column="1"
                TextAlignment="Right" />
             
             <Label Content="Shipping (3%):" Grid.Row="7"/>
-            <TextBlock Text="{Binding Bid.Estimate.TECShipping, StringFormat= {} {0:C}}"
+            <TextBlock Text="{Binding Estimate.TECShipping, StringFormat= {} {0:C}}"
                    Grid.Row="7" Grid.Column="1"
                    TextAlignment="Right"/>
 
             <Label Content="Warranty (5%):" Grid.Row="8"/>
-            <TextBlock Text="{Binding Bid.Estimate.TECWarranty, StringFormat= {} {0:C}}"
+            <TextBlock Text="{Binding Estimate.TECWarranty, StringFormat= {} {0:C}}"
                    Grid.Row="8" Grid.Column="1"
                    TextAlignment="Right"/>
 
             <Label Content="Labor:" Grid.Row="9" />
-            <TextBlock Text="{Binding Bid.Estimate.TECLaborCost, StringFormat= {} {0:C}}" 
+            <TextBlock Text="{Binding Estimate.TECLaborCost, StringFormat= {} {0:C}}" 
                Grid.Row="9" Grid.Column="1"
                TextAlignment="Right" />
 
@@ -141,7 +141,7 @@
 
             <Label Content="Subtotal:" 
                Grid.Row="13"  Grid.Column="0"/>
-            <TextBlock Text="{Binding Bid.Estimate.TECSubtotal, StringFormat= {} {0:C}}"
+            <TextBlock Text="{Binding Estimate.TECSubtotal, StringFormat= {} {0:C}}"
                  Grid.Row="13"
                  Grid.Column="1"
                TextAlignment="Right"/>
@@ -150,22 +150,22 @@
                Grid.Row="14" />
 
             <Label Content="Material Cost:" Grid.Row="15" />
-            <TextBlock Text="{Binding Bid.Estimate.ElectricalMaterialCost, StringFormat= {} {0:C}}" 
+            <TextBlock Text="{Binding Estimate.ElectricalMaterialCost, StringFormat= {} {0:C}}" 
                Grid.Row="15" Grid.Column="1"
                TextAlignment="Right"/>
 
             <Label Content="Shipping (3%):" Grid.Row="16"/>
-            <TextBlock Text="{Binding Bid.Estimate.ElectricalShipping, StringFormat= {} {0:C}}"
+            <TextBlock Text="{Binding Estimate.ElectricalShipping, StringFormat= {} {0:C}}"
                    Grid.Row="16" Grid.Column="1"
                    TextAlignment="Right"/>
 
             <Label Content="Warranty (5%):" Grid.Row="17"/>
-            <TextBlock Text="{Binding Bid.Estimate.ElectricalWarranty, StringFormat= {} {0:C}}"
+            <TextBlock Text="{Binding Estimate.ElectricalWarranty, StringFormat= {} {0:C}}"
                    Grid.Row="17" Grid.Column="1"
                    TextAlignment="Right"/>
 
             <Label Content="Labor:" Grid.Row="18" />
-            <TextBlock Text="{Binding Bid.Estimate.SubcontractorLaborCost, StringFormat= {} {0:C}}" 
+            <TextBlock Text="{Binding Estimate.SubcontractorLaborCost, StringFormat= {} {0:C}}" 
                Grid.Row="18" Grid.Column="1"
                TextAlignment="Right" />
 
@@ -187,7 +187,7 @@
 
             <Label Content="Subtotal:" 
                Grid.Row="21" />
-            <TextBlock Text="{Binding Bid.Estimate.SubcontractorSubtotal, StringFormat= {} {0:C}}"
+            <TextBlock Text="{Binding Estimate.SubcontractorSubtotal, StringFormat= {} {0:C}}"
                  Grid.Row="21"
                  Grid.Column="1"
                TextAlignment="Right"/>
@@ -239,12 +239,12 @@
                  Grid.Column="4"
                 BorderThickness="2"
                 BorderBrush="Black">
-                <TextBlock Text="{Binding Bid.Estimate.TotalPrice, StringFormat= {} {0:C}}" 
+                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat= {} {0:C}}" 
                        TextAlignment="Right"/>
             </Border>
 
             <Label Content="Total Markup:" Grid.Row="4" Grid.Column="5"/>
-            <TextBlock Text="{Binding Bid.Estimate.Margin, StringFormat={} {0:F2}%}" 
+            <TextBlock Text="{Binding Estimate.Margin, StringFormat={} {0:F2}%}" 
                Grid.Row="9" Grid.Column="3"
                TextAlignment="Right"/>
             <Border  Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="3"
@@ -351,12 +351,12 @@
             Grid.Column="4"
             BorderThickness="2"
             BorderBrush="Black">
-                <TextBlock Text="{Binding Bid.Estimate.TotalPrice, StringFormat=' \{0:C\}'}" TextAlignment="Right"/>
+                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat=' \{0:C\}'}" TextAlignment="Right"/>
             </Border>
 
             <Label Content="Total Cost:" 
             Grid.Row="15" Grid.Column="3"/>
-            <TextBlock Text="{Binding Bid.Estimate.TotalCost, StringFormat=' \{0:C\}'}"
+            <TextBlock Text="{Binding Estimate.TotalCost, StringFormat=' \{0:C\}'}"
             Grid.Row="15"
             Grid.Column="4"
             TextAlignment="Right"/>
@@ -368,7 +368,7 @@
             TextAlignment="Right"/>
 
             <Label Content="Price per Point:" Grid.Row="18" Grid.Column="3"/>
-            <TextBlock Text="{Binding Bid.Estimate.PricePerPoint, StringFormat= {} {0:C}}" 
+            <TextBlock Text="{Binding Estimate.PricePerPoint, StringFormat= {} {0:C}}" 
                Grid.Row="18" Grid.Column="4"
                TextAlignment="Right"/>
             <Label Content="Set Price:" 

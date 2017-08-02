@@ -25,11 +25,25 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 _estimate = value;
                 Estimate.PropertyChanged += Bid_PropertyChanged;
-                RaisePropertyChanged("Bid");
+                RaisePropertyChanged("Estimate");
             }
         }
 
-        private TECBidParameters parameters;
+        private TECBid _bid;
+        public TECBid Bid
+        {
+            get { return _bid; }
+            set
+            {
+                if (_bid != null)
+                {
+                    Bid.PropertyChanged -= Bid_PropertyChanged;
+                }
+                _bid = value;
+                Bid.PropertyChanged += Bid_PropertyChanged;
+                RaisePropertyChanged("Bid");
+            }
+        }
 
         private double _userPrice;
         public double UserPrice
@@ -38,8 +52,8 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _userPrice = value;
-                var newProfit = (value - Estimate.SubcontractorSubtotal) / (Estimate.TECCost * (1 + parameters.Overhead / 100)) - 1;
-                parameters.Profit = newProfit * 100;
+                var newProfit = (value - Estimate.SubcontractorSubtotal) / (Estimate.TECCost * (1 + Bid.Parameters.Overhead / 100)) - 1;
+                Bid.Parameters.Profit = newProfit * 100;
                 RaisePropertyChanged("UserPrice");
             }
         }
@@ -156,7 +170,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public ReviewVM()
         {
-            _estimate = new TECEstimator(new TECBid());
+            _bid = new TECBid();
+            _estimate = new TECEstimator(_bid);
         }
 
         private void Bid_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -167,9 +182,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void Refresh(TECEstimator estimate)
+        public void Refresh(TECEstimator estimate, TECBid bid)
         {
             Estimate = estimate;
+            Bid = bid;
             raiseTable();
         }
 
