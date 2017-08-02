@@ -19,8 +19,6 @@ namespace EstimatingLibrary
 
         const double ZERO = 0;
 
-        List<string> omitStrings = new List<string>(new string[]{"AddRelationship", "RemoveRelationship", "AddCatalog", "RemoveCatalog"});
-
         #region Cost Base
         private TECCost tecCost;
         private TECCost electricalCost;
@@ -236,6 +234,7 @@ namespace EstimatingLibrary
             getInitialValues();
             watcher = new ChangeWatcher(bid);
             watcher.CostChanged += CostChanged;
+            watcher.PointChanged += PointChanged;
         }
         
         private void CostChanged(List<TECCost> changes)
@@ -243,38 +242,17 @@ namespace EstimatingLibrary
             addCost(changes);
         }
         
-        
-        private void handleInstanceRemoved(TECSystem instance, TECSystem parent)
+        private void PointChanged(List<TECPoint> points)
         {
-            removePoints(instance);
+            addPoints(points);
         }
-
-        private void handleTypicalRemoved(TECSystem typical)
-        {
-            foreach(TECSystem instance in typical.SystemInstances)
-            {
-                handleInstanceRemoved(instance, typical);
-            }
-        }
-
-        private void handleInstanceAdded(TECSystem instance, TECSystem parent)
-        {
-            addPoints(instance);
-        }
-
         private void getInitialValues()
         {
             pointNumber = 0;
             tecCost = new TECCost();
             electricalCost = new TECCost();
 
-            foreach (TECSystem typical in bid.Systems)
-            {
-                foreach(TECSystem system in typical.SystemInstances)
-                {
-                    addPoints(system);
-                }
-            }
+            addPoints(bid.Points);
             addCost(bid.Costs);
         }
         
@@ -310,34 +288,13 @@ namespace EstimatingLibrary
             }
             
         }
-        private void addPoints(object item)
+        private void addPoints(List<TECPoint> points)
         {
-            if (item is PointComponent)
+            foreach(TECPoint point in points)
             {
-                pointNumber += (item as PointComponent).PointNumber;
-                if ((item as PointComponent).PointNumber != 0)
-                { raiseFromPoints(); }
+                pointNumber += point.Quantity;
             }
-        }
-        private void removePoints(object item)
-        {
-            if (item is PointComponent)
-            {
-                pointNumber -= (item as PointComponent).PointNumber;
-                if ((item as PointComponent).PointNumber != 0)
-                { raiseFromPoints(); }
-            }
-        }
-        private void editPoints(object newValue, object oldValue)
-        {
-            if (newValue.GetType() == oldValue.GetType())
-            {
-                if (newValue is TECPoint)
-                {
-                    addPoints(newValue);
-                    removePoints(oldValue);
-                }
-            }
+            raiseFromPoints(); 
         }
         #endregion
 

@@ -244,6 +244,11 @@ namespace EstimatingLibrary
             get;
             private set;
         }
+        public List<TECPoint> Points
+        {
+            get;
+            private set;
+        }
         #endregion //Properties
 
         #region Constructors
