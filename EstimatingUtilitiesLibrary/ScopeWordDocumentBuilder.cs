@@ -29,10 +29,12 @@ namespace EstimatingUtilitiesLibrary
     public class ScopeWordDocumentBuilder
     {
         private TECBid _bid;
+        private TECEstimator _estimate;
 
-        public void CreateScopeWordDocument(TECBid bid, string path, bool isEstimate)
+        public void CreateScopeWordDocument(TECBid bid, TECEstimator estimate, string path, bool isEstimate)
         {
             _bid = bid;
+            _estimate = estimate;
             CreatePackage(path);
             //    // Create a document by supplying the filepath. 
             //    using (WordprocessingDocument wordDocument =
@@ -1538,7 +1540,7 @@ namespace EstimatingUtilitiesLibrary
             priceRunProperties.Append(priceBold);
             priceRunProperties.Append(priceFontSize);
             Text priceText = new Text();
-            priceText.Text = _bid.Estimate.TotalPrice.ToString("N");
+            priceText.Text = _estimate.TotalPrice.ToString("N");
 
             priceRun.Append(priceRunProperties);
             priceRun.Append(priceText);
