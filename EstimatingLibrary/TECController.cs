@@ -68,14 +68,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged(Change.Edit, "NetworkType", this, value, old);
             }
         }
-
-        public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
-            }
-        }
         
         //---Derived---
         public ObservableCollection<IOType> AvailableIO
@@ -88,6 +80,8 @@ namespace EstimatingLibrary
             { return getNetworkIO(); }
         }
         public bool IsGlobal;
+
+        public event Action<List<TECCost>> CostChanged;
 
         #endregion
 
@@ -413,24 +407,11 @@ namespace EstimatingLibrary
 
             return outIO;
         }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            outCosts.Add(this.Type);
-            foreach (TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            foreach (TECConnection connection in ChildrenConnections)
-            {
-                foreach (TECCost cost in connection.Costs)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            return outCosts;
-        }
 
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
+        }
         #endregion
     }
 }

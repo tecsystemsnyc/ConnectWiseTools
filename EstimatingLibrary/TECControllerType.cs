@@ -95,14 +95,6 @@ namespace EstimatingLibrary
 
             return outNum;
         }
-
-        public override object Copy()
-        {
-            var outCost = new TECControllerType(Manufacturer);
-            outCost.copyPropertiesFromHardware(this);
-            outCost._guid = this.Guid;
-            return outCost;
-        }
         #endregion
 
     }

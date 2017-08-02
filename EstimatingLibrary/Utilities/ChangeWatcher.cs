@@ -213,20 +213,6 @@ namespace EstimatingLibrary.Utilities
             {
                 handleSubScopeChildren(newItem as TECSubScope, change, changeType);
             }
-            else if (newItem is TECDrawing)
-            {
-                foreach (TECPage page in ((TECDrawing)newItem).Pages)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        page.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        page.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-            }
             else if (newItem is TECController)
             {
                 handleControllerChildren(newItem as TECController, change, changeType);

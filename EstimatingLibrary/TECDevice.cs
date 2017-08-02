@@ -66,12 +66,6 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-        public override Object Copy()
-        {
-            TECDevice outDevice = new TECDevice(this);
-            return outDevice;
-        }
-
         public new Object DragDropCopy(TECScopeManager scopeManager)
         {
             foreach(TECDevice device in scopeManager.Catalogs.Devices)

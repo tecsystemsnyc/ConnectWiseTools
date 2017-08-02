@@ -16,13 +16,5 @@ namespace EstimatingLibrary
         {
             copyPropertiesFromCost(typeSource);
         }
-
-        public override object Copy()
-        {
-            var outCost = new TECPanelType(Manufacturer);
-            outCost.copyPropertiesFromHardware(this);
-            outCost._guid = this.Guid;
-            return outCost;
-        }
     }
 }

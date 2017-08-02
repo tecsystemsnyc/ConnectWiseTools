@@ -34,6 +34,9 @@ namespace EstimatingLibrary
 
         public event Action<List<TECPoint>> PointChanged;
 
+
+        public event Action<List<TECCost>> CostChanged;
+
         public ObservableCollection<TECPoint> Points
         {
             get { return _points; }
@@ -338,6 +341,11 @@ namespace EstimatingLibrary
         public void LinkConnection(TECSubScopeConnection connection)
         {
             _connection = connection;
+        }
+
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
         }
 
         public void NotifyPointChanged(List<TECPoint> points)

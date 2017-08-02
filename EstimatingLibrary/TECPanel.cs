@@ -26,6 +26,9 @@ namespace EstimatingLibrary
         }
 
         private ObservableCollection<TECController> _controllers;
+
+        public event Action<List<TECCost>> CostChanged;
+
         public ObservableCollection<TECController> Controllers
         {
             get { return _controllers; }
@@ -99,6 +102,11 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged(Change.Remove, "Controllers", this, item);
                 }
             }
+        }
+
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
         }
     }
 }

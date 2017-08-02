@@ -45,20 +45,6 @@ namespace EstimatingLibrary
             _label = scopeBranchSource.Label;
         }
         #endregion //Constructors
-
-        public override Object Copy()
-        {
-            TECScopeBranch outScope = new TECScopeBranch();
-            outScope._guid = Guid;
-            outScope._label = Label;
-
-            foreach (TECScopeBranch branch in this.Branches)
-            {
-                outScope.Branches.Add(branch.Copy() as TECScopeBranch);
-            }
-
-            return outScope;
-        }
         
         private void Branches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

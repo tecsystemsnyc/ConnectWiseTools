@@ -59,29 +59,6 @@ namespace EstimatingLibrary
                 return outIOTypes;
             }
         }
-
-        override public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
-            }
-        }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            TECCost thisCost = new TECCost();
-
-            foreach (TECElectricalMaterial connectionType in ConnectionTypes)
-            {
-                addCostsFromElectricalMaterial(connectionType, outCosts);
-            }
-            if(ConduitType != null)
-            {
-                addCostsFromElectricalMaterial(ConduitType, outCosts);
-            }
-            return outCosts;
-        }
         #endregion
 
         #region Constructors

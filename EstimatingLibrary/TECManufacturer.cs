@@ -37,15 +37,5 @@ namespace EstimatingLibrary
             _multiplier = manSource.Multiplier;
         }
         #endregion //Constructors
-
-        #region methods
-        public override Object Copy()
-        {
-            TECManufacturer outMan = new TECManufacturer(this);
-            outMan._guid = this.Guid;
-            return outMan;
-        }
-        #endregion
-
     }
 }

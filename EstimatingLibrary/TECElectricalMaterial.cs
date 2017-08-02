@@ -44,21 +44,7 @@ namespace EstimatingLibrary
             _ratedCosts = ratedCosts;
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
-
-        public override object Copy()
-        {
-            var outType = new TECElectricalMaterial();
-            outType._guid = this._guid;
-            outType.copyPropertiesFromCost(this);
-            var ratedCosts = new ObservableCollection<TECCost>();
-            foreach (TECCost cost in RatedCosts)
-            { ratedCosts.Add(cost as TECCost); }
-            outType._ratedCosts = ratedCosts;
-            outType.RatedCosts.CollectionChanged += (sender, args) => outType.RatedCosts_CollectionChanged(sender, args, "RatedCosts");
-
-            return outType;
-        }
-
+        
         private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

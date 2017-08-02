@@ -160,17 +160,6 @@ namespace EstimatingUtilitiesLibrary
             table.AddColumn(Unit.FromCentimeter(5.5));
             table.AddColumn(Unit.FromCentimeter(5.5));
 
-            foreach (TECDrawing drawing in bid.Drawings)
-            {
-                Row row = table.AddRow();
-                Cell cell = row.Cells[0];
-                cell.AddParagraph("Drawing:");
-                cell = row.Cells[1];
-                cell.AddParagraph(drawing.Name);
-                cell = row.Cells[2];
-                cell.AddParagraph("DATE NOT IMPLEMENTED");
-            }
-
             document.LastSection.Add(table);
         }
         private static void createScope(Document document, TECBid bid)

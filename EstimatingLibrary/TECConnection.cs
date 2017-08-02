@@ -58,9 +58,9 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged(Change.Edit, "ConduitType", this, value, old);
             }
         }
-
-        public abstract List<TECCost> Costs { get; }
         #endregion //Properties
+
+        public event Action<List<TECCost>> CostChanged;
 
         #region Constructors 
         public TECConnection(Guid guid) : base(guid)
@@ -77,8 +77,13 @@ namespace EstimatingLibrary
             _length = connectionSource.Length;
             _conduitLength = connectionSource.ConduitLength;
             if (connectionSource.ConduitType != null)
-            { _conduitType = connectionSource.ConduitType.Copy() as TECElectricalMaterial; }
+            { _conduitType = connectionSource.ConduitType; }
         }
         #endregion //Constructors
+
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
+        }
     }
 }
