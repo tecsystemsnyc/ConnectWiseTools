@@ -322,34 +322,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Bid_Drawings()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECDrawing> expected = new ObservableCollection<TECDrawing>();
-            foreach (TECDrawing item in Bid.Drawings)
-            {
-                expected.Add(item);
-            }
-            TECDrawing edit = new TECDrawing("This");
-
-            Trace.Write("Number of drawings: " + Bid.Drawings.Count + "\n");
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            int beforeCount = testStack.UndoCount();
-            Bid.Drawings.Add(edit);
-            Trace.Write("Undo count: " + testStack.UndoCount());
-            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECDrawing> actual = Bid.Drawings;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Bid_Locations()
         {
@@ -1388,31 +1361,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Bid_Drawings()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECDrawing edit = new TECDrawing("This");
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Drawings.Add(edit);
-            var expected = new ObservableCollection<TECDrawing>();
-            foreach (TECDrawing item in Bid.Drawings)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECDrawing> actual = Bid.Drawings;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Bid_Locations()
         {
