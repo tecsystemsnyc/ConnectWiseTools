@@ -49,14 +49,6 @@ namespace EstimatingLibrary
             copyPropertiesFromCost(miscSource);
         }
 
-        public override object Copy()
-        {
-            var outCost = new TECMisc();
-            outCost.copyPropertiesFromCost(this);
-            outCost._guid = this.Guid;
-            return outCost;
-        }
-
         public new object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECMisc(this);
