@@ -15,9 +15,11 @@ namespace EstimatingLibrary.Utilities
     {
         private enum ChangeType { Object, Instance };
 
-        public Action<object, PropertyChangedEventArgs> Changed;
-        public Action<PropertyChangedExtendedEventArgs> ExtendedChanged;
-        public Action<PropertyChangedExtendedEventArgs> InstanceChanged;
+        public event Action<object, PropertyChangedEventArgs> Changed;
+        public event Action<PropertyChangedExtendedEventArgs> ExtendedChanged;
+        public event Action<PropertyChangedExtendedEventArgs> InstanceChanged;
+        public event Action<List<TECCost>> CostChanged;
+        public event Action<List<TECPoint>> PointChanged;
 
         private TECScopeManager scopeManager;
 

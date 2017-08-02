@@ -12,11 +12,13 @@ namespace EstimatingLibrary
 
     public enum PointTypes { AI = 1, AO, BI, BO, Serial };
 
-    public class TECPoint : TECLabeled, PointComponent
+    public class TECPoint : TECLabeled, INotifyPointChanged
     {
         #region Properties
         private PointTypes _type;
         private int _quantity;
+
+        public event Action<List<TECPoint>> PointChanged;
 
         public PointTypes Type
         {
@@ -103,6 +105,11 @@ namespace EstimatingLibrary
                 case PointTypes.Serial: return "SERIAL";
                 default: return "";
             }
+        }
+
+        public void NotifyPointChanged(List<TECPoint> points)
+        {
+            throw new NotImplementedException();
         }
         #endregion //Conversion Methods
         #endregion

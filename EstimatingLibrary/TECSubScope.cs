@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyCostChanged, PointComponent, DragDropComponent
+    public class TECSubScope : TECLocated, INotifyCostChanged, INotifyPointChanged, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECDevice> _devices;
@@ -31,6 +31,9 @@ namespace EstimatingLibrary
         }
 
         private ObservableCollection<TECPoint> _points;
+
+        public event Action<List<TECPoint>> PointChanged;
+
 
         public event Action<List<TECCost>> CostChanged;
 
@@ -343,6 +346,11 @@ namespace EstimatingLibrary
         public void NotifyCostChanged(List<TECCost> costs)
         {
             CostChanged?.Invoke(costs);
+        }
+
+        public void NotifyPointChanged(List<TECPoint> points)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

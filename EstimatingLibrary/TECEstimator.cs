@@ -19,8 +19,6 @@ namespace EstimatingLibrary
 
         const double ZERO = 0;
 
-        List<string> omitStrings = new List<string>(new string[]{"AddRelationship", "RemoveRelationship", "AddCatalog", "RemoveCatalog"});
-
         #region Cost Base
         private TECCost tecCost;
         private TECCost electricalCost;
@@ -235,328 +233,68 @@ namespace EstimatingLibrary
             bid = Bid;
             getInitialValues();
             watcher = new ChangeWatcher(bid);
-            watcher.InstanceChanged += Object_PropertyChanged;
+            watcher.CostChanged += CostChanged;
+            watcher.PointChanged += PointChanged;
         }
-        public void Refresh()
+        
+        private void CostChanged(List<TECCost> changes)
         {
-            getInitialValues();
-            watcher.InstanceChanged -= Object_PropertyChanged;
-            watcher = new ChangeWatcher(bid);
-            watcher.InstanceChanged += Object_PropertyChanged;
+            addCost(changes);
         }
-
-        private void Object_PropertyChanged(PropertyChangedExtendedEventArgs e) { handlePropertyChanged(e); }
-        private void handlePropertyChanged(PropertyChangedExtendedEventArgs args)
+        
+        private void PointChanged(List<TECPoint> points)
         {
-            string message = "Propertychanged: " + args.PropertyName;
-            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-            object child = args.Value;
-            object sender = args.Sender;
-            if (args.Change == Change.Add)
-            {
-                message = "Add change: " + sender;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                if (!(sender is TECCatalogs))
-                {
-                    if (child is TECSystem && sender is TECSystem)
-                    {
-                        handleInstanceAdded(child as TECSystem, sender as TECSystem);
-                    }
-                    else if (child is TECMisc && sender is TECSystem)
-                    {
-                        handleAddMiscInSystem(child as TECMisc, sender as TECSystem);
-                    }
-                    else if (child is TECSubScopeConnection && sender is TECController)
-                    {
-                        if (!isTypical(child as TECSubScopeConnection))
-                        {
-                            addCost(child);
-                            addPoints(child);
-                        }
-                    }
-                    else
-                    {
-                        addCost(child);
-                        addPoints(child);
-                    }
-                }
-            }
-            else if (args.Change == Change.Remove)
-            {
-                message = "Remove change: " + sender;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                if (!(sender is TECCatalogs))
-                {
-                    if (child is TECSystem && sender is TECSystem)
-                    {
-                        handleInstanceRemoved(child as TECSystem, sender as TECSystem);
-                    }
-                    else if (child is TECMisc && sender is TECSystem)
-                    {
-                        handleRemoveMiscInSystem(child as TECMisc, sender as TECSystem);
-                    }
-                    else if (child is TECSystem && sender is TECBid)
-                    {
-                        handleTypicalRemoved(child as TECSystem);
-                    }
-                    else if (child is TECSubScopeConnection && sender is TECController)
-                    {
-                        if (!isTypical(child as TECSubScopeConnection))
-                        {
-                            removeCost(child);
-                            removePoints(child);
-                        }
-                    }
-                    else
-                    {
-                        removeCost(child);
-                        removePoints(child);
-                    }
-                }
-            }
-            else
-            {
-                var previousChild = args.OldValue;
-                message = "Edit change: " + sender;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                if (child is TECSubScopeConnection && previousChild is TECSubScopeConnection)
-                {
-                    if (!isTypical(child as TECSubScopeConnection))
-                    {
-                        editCost(child, previousChild);
-                        editPoints(child, previousChild);
-                    }
-                }
-                else
-                {
-                    var newItem = sender;
-                    var oldItem = previousObject(args);
-                    editCost(newItem, oldItem);
-                    editPoints(newItem, oldItem);
-
-                    if (bid.GetType().GetProperty(args.PropertyName) != null)
-                    {
-                        var list = bid.GetType().GetProperty(args.PropertyName).GetValue(bid, null) as IList;
-                        if (list != null)
-                        {
-                            foreach (object item in list)
-                            {
-                                addCost(item);
-                                addPoints(item);
-                            }
-                        }
-                    }
-                    if (child is TECBidParameters)
-                    {
-                        raiseMaterial();
-                        raiseTECTotals();
-                        raiseSubcontractorTotals();
-                    }
-                    else if (child is TECLabor)
-                    {
-                        raiseTECLabor();
-                        raiseElectricalLabor();
-                    }
-                }
-            }
+            addPoints(points);
         }
-
-        private void handleRemoveMiscInSystem(TECMisc misc, TECSystem system)
-        {
-            foreach(TECSystem instance in system.SystemInstances)
-            {
-                removeCost(misc);
-            }
-        }
-
-        private void handleAddMiscInSystem(TECMisc misc, TECSystem system)
-        {
-            foreach (TECSystem instance in system.SystemInstances)
-            {
-                addCost(misc);
-            }
-        }
-
-        private void handleInstanceRemoved(TECSystem instance, TECSystem parent)
-        {
-            removeCost(instance);
-            removePoints(instance);
-            foreach (TECMisc misc in parent.MiscCosts)
-            {
-                removeCost(misc);
-            }
-        }
-
-        private void handleTypicalRemoved(TECSystem typical)
-        {
-            foreach(TECSystem instance in typical.SystemInstances)
-            {
-                handleInstanceRemoved(instance, typical);
-            }
-        }
-
-        private void handleInstanceAdded(TECSystem instance, TECSystem parent)
-        {
-            addCost(instance);
-            addPoints(instance);
-            foreach (TECMisc misc in parent.MiscCosts)
-            {
-                addCost(misc);
-            }
-        }
-
         private void getInitialValues()
         {
             pointNumber = 0;
             tecCost = new TECCost();
             electricalCost = new TECCost();
 
-            foreach (TECSystem typical in bid.Systems)
-            {
-                foreach(TECSystem system in typical.SystemInstances)
-                {
-                    addCost(system);
-                    addPoints(system);
-                    foreach (TECMisc misc in typical.MiscCosts)
-                    {
-                        addCost(misc);
-                    }
-                }
-            }
-            foreach (TECPanel panel in bid.Panels)
-            {
-                addCost(panel);
-            }
-            foreach (TECController controller in bid.Controllers)
-            {
-                addCost(controller);
-                foreach(TECConnection connection in controller.ChildrenConnections)
-                {
-                    if(connection is TECSubScopeConnection)
-                    {
-                        if (isTypical(connection as TECSubScopeConnection))
-                        {
-                            removeCost(connection);
-                        }
-                    }
-                }
-            }
-            foreach (TECMisc miscCost in bid.MiscCosts)
-            {
-                addCost(miscCost);
-            }
+            addPoints(bid.Points);
+            addCost(bid.Costs);
         }
         
         #region Update From Changes
-        private void addCost(object item)
+        private void addCost(List<TECCost> costs)
         {
-            if (item is INotifyCostChanged)
+            bool tecChanged = false;
+            bool electricalChanged = false;
+            foreach(TECCost cost in costs)
             {
-                bool tecChanged = false;
-                bool electricalChanged = false;
-                var costComponent = item as INotifyCostChanged;
-                foreach(TECCost cost in costComponent.Costs)
+                if (cost.Type == CostType.TEC)
                 {
-                    if (cost.Type == CostType.TEC)
-                    {
-                        tecCost.Cost += cost.Cost;
-                        tecCost.Labor += cost.Labor;
-                        tecChanged = true;
-                    }
-                    else if (cost.Type == CostType.Electrical) 
-                    {
-                        electricalCost.Cost += cost.Cost;
-                        electricalCost.Labor += cost.Labor;
-                        electricalChanged = true;
-                    }
+                    tecCost.Cost += cost.Cost;
+                    tecCost.Labor += cost.Labor;
+                    tecChanged = true;
                 }
-                if (tecChanged)
+                else if (cost.Type == CostType.Electrical) 
                 {
-                    raiseMaterial();
-                    raiseTECLabor();
-                }
-                if (electricalChanged)
-                {
-                    raiseElectricalMaterial();
-                    raiseElectricalLabor();
+                    electricalCost.Cost += cost.Cost;
+                    electricalCost.Labor += cost.Labor;
+                    electricalChanged = true;
                 }
             }
+            if (tecChanged)
+            {
+                raiseMaterial();
+                raiseTECLabor();
+            }
+            if (electricalChanged)
+            {
+                raiseElectricalMaterial();
+                raiseElectricalLabor();
+            }
+            
         }
-        private void removeCost(object item)
+        private void addPoints(List<TECPoint> points)
         {
-            if (item is INotifyCostChanged)
+            foreach(TECPoint point in points)
             {
-                bool tecChanged = false;
-                bool electricalChanged = false;
-                var costComponent = item as INotifyCostChanged;
-                foreach (TECCost cost in costComponent.Costs)
-                {
-                    if (cost.Type == CostType.TEC)
-                    {
-                        tecCost.Cost -= cost.Cost;
-                        tecCost.Labor -= cost.Labor;
-                        tecChanged = true;
-                    }
-                    else if (cost.Type == CostType.Electrical)
-                    {
-                        electricalCost.Cost -= cost.Cost;
-                        electricalCost.Labor -= cost.Labor;
-                        electricalChanged = true;
-                    }
-                }
-                if (tecChanged)
-                {
-                    raiseMaterial();
-                    raiseLabor();
-                }
-                if (electricalChanged)
-                {
-                    raiseElectricalMaterial();
-                    raiseElectricalLabor();
-                }
+                pointNumber += point.Quantity;
             }
-        }
-        private void editCost(object newValue, object oldValue)
-        {
-            Type newType = (newValue != null) ? newValue.GetType() : null;
-            Type oldType = (oldValue != null) ? oldValue.GetType() : null;
-            if (newType == oldType && newValue is INotifyCostChanged)
-            {
-                addCost(newValue);
-                removeCost(oldValue);
-            }
-        }
-
-        private void addPoints(object item)
-        {
-            if (item is PointComponent)
-            {
-                pointNumber += (item as PointComponent).PointNumber;
-                if ((item as PointComponent).PointNumber != 0)
-                { raiseFromPoints(); }
-            }
-        }
-        private void removePoints(object item)
-        {
-            if (item is PointComponent)
-            {
-                pointNumber -= (item as PointComponent).PointNumber;
-                if ((item as PointComponent).PointNumber != 0)
-                { raiseFromPoints(); }
-            }
-        }
-        private void editPoints(object newValue, object oldValue)
-        {
-            if (newValue.GetType() == oldValue.GetType())
-            {
-                if (newValue is TECPoint)
-                {
-                    addPoints(newValue);
-                    removePoints(oldValue);
-                }
-            }
+            raiseFromPoints(); 
         }
         #endregion
 
@@ -1094,37 +832,6 @@ namespace EstimatingLibrary
             RaisePropertyChanged("Margin");
         }
         #endregion
-
-        private bool isTypical(TECSubScopeConnection ssConnect)
-        {
-            TECSubScope ss = ssConnect.SubScope;
-            foreach (TECSystem typical in bid.Systems)
-            {
-                if (typical.SubScope.Contains(ss))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private object previousObject(PropertyChangedExtendedEventArgs item)
-        {
-            var previousSender = item.Sender.Copy() as TECObject;
-            var oldValue = item.OldValue;
-            var property = item.Sender.GetType().GetProperty(item.PropertyName);
-
-            if (property.GetSetMethod() != null)
-            {
-                property.SetValue(previousSender, oldValue);
-                return previousSender;
-            }
-            else
-            {
-                string message = "Property could not be set: " + property.Name;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-                return null;
-            }
-        }
+        
     }
 }
