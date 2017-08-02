@@ -12,6 +12,8 @@ namespace EstimatingLibrary
     {
         private int _quantity;
 
+        public event Action<List<TECCost>> CostChanged;
+
         public int Quantity
         {
             get { return _quantity; }
@@ -52,6 +54,11 @@ namespace EstimatingLibrary
         public new object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECMisc(this);
+        }
+
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
         }
     }
 }

@@ -24,6 +24,8 @@ namespace EstimatingLibrary
         private bool _proposeEquipment;
         private ChangeWatcher watcher;
 
+        public event Action<List<TECCost>> CostChanged;
+
         public ObservableCollection<TECEquipment> Equipment
         {
             get { return _equipment; }
@@ -163,13 +165,6 @@ namespace EstimatingLibrary
             get
             {
                 return getPointNumber();
-            }
-        }
-        public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
             }
         }
         
@@ -849,43 +844,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            foreach (TECEquipment item in Equipment)
-            {
-                foreach (TECCost cost in item.Costs)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach (TECController item in Controllers)
-            {
-                foreach (TECCost cost in item.Costs)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach (TECPanel item in Panels)
-            {
-                foreach (TECCost cost in item.Costs)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach (TECCost item in AssociatedCosts)
-            {
-                outCosts.Add(item);
-            }
-            foreach (TECMisc item in MiscCosts)
-            {
-                foreach (TECSystem system in SystemInstances)
-                {
-                    outCosts.Add(item);
-                }
-            }
-            return outCosts;
-        }
 
         public void RefreshReferences()
         {
@@ -942,6 +900,11 @@ namespace EstimatingLibrary
             }
             SystemInstances.Add(newSystem);
             return (newSystem);
+        }
+
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
         }
         #endregion
     }

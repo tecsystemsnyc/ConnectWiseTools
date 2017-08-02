@@ -31,13 +31,5 @@ namespace EstimatingLibrary
             copyPropertiesFromHardware(this);
             _ioPerModule = ioModuleSource.IOPerModule;
         }
-        
-        public override object Copy()
-        {
-            var outObject = new TECIOModule(this.Guid, this.Manufacturer);
-            outObject.copyPropertiesFromCost(this);
-            outObject._ioPerModule = this.IOPerModule;
-            return outObject;
-        }
     }
 }

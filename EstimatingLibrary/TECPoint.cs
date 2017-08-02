@@ -79,13 +79,6 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-        public override Object Copy()
-        {
-            TECPoint outPoint = new TECPoint(this);
-            outPoint._guid = Guid;
-            return outPoint;
-        }
-        
         #region Conversion Methods
         public static PointTypes convertStringToType(string type)
         {

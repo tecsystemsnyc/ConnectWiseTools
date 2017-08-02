@@ -39,32 +39,9 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
-
-        public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
-            }
-        }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            foreach(TECSubScope ss in SubScope)
-            {
-                foreach(TECCost cost in ss.Costs)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            return outCosts;
-        }
-
         #endregion //Properties
+
+        public event Action<List<TECCost>> CostChanged;
 
         #region Constructors
         public TECEquipment(Guid guid) : base(guid)
@@ -191,6 +168,11 @@ namespace EstimatingLibrary
                 totalPoints += subScope.PointNumber;
             }
             return totalPoints;
+        }
+
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
         }
         #endregion
 

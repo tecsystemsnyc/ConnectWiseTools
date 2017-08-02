@@ -51,60 +51,7 @@ namespace EstimatingLibrary
                 //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
             }
         }
-
-        override public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
-            }
-        }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            TECCost thisCost = new TECCost();
-
-            if (ConnectionType != null)
-            {
-                thisCost = new TECCost();
-                thisCost.Type = ConnectionType.Type;
-                thisCost.Cost = ConnectionType.Cost * Length;
-                thisCost.Labor = ConnectionType.Labor * Length;
-                outCosts.Add(thisCost);
-                foreach (TECCost cost in ConnectionType.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-                foreach (TECCost cost in ConnectionType.RatedCosts)
-                {
-                    TECCost ratedCost = new TECCost();
-                    ratedCost.Type = cost.Type;
-                    ratedCost.Cost = cost.Cost * Length;
-                    ratedCost.Labor = cost.Labor * Length;
-                    outCosts.Add(ratedCost);
-                }
-            }
-            if (ConduitType != null)
-            {
-                thisCost = new TECCost();
-                thisCost.Type = ConduitType.Type;
-                thisCost.Cost = ConduitType.Cost * ConduitLength;
-                thisCost.Labor = ConduitType.Labor * ConduitLength;
-                outCosts.Add(thisCost);
-                foreach (TECCost cost in ConduitType.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-                foreach (TECCost cost in ConduitType.RatedCosts)
-                {
-                    TECCost ratedCost = new TECCost();
-                    ratedCost.Cost = cost.Cost * Length;
-                    ratedCost.Labor = cost.Labor * Length;
-                    outCosts.Add(ratedCost);
-                }
-            }
-            return outCosts;
-        }
+        
 
         //---Derived---
         public ObservableCollection<IOType> PossibleIO
