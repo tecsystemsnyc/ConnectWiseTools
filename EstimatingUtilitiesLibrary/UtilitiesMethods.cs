@@ -70,13 +70,6 @@ namespace EstimatingUtilitiesLibrary
             return css;
         }
 
-        public static double getLength(TECVisualScope scope1, TECVisualScope scope2, double scale)
-        {
-            var length = Math.Pow((Math.Pow((scope1.X - scope2.X), 2) + Math.Pow((scope1.Y - scope2.Y), 2)), 0.5) * scale;
-
-            return length;
-        }
-
         public static BitmapImage ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);

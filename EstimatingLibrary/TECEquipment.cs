@@ -177,6 +177,11 @@ namespace EstimatingLibrary
         {
             CostChanged?.Invoke(costs);
         }
+
+        public void NotifyPointChanged(List<TECPoint> points)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
     }
