@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECConnection : TECObject, CostComponent
+    public abstract class TECConnection : TECObject, INotifyCostChanged
     {
         #region Properties
         protected double _length;

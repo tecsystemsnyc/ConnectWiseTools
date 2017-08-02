@@ -23,7 +23,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECSystem> _systems { get; set; }
         private ObservableCollection<TECLabeled> _notes { get; set; }
         private ObservableCollection<TECLabeled> _exclusions { get; set; }
-        private ObservableCollection<TECDrawing> _drawings { get; set; }
         private ObservableCollection<TECLabeled> _locations { get; set; }
         private ObservableCollection<TECController> _controllers { get; set; }
         private ObservableCollection<TECMisc> _miscCosts { get; set; }
@@ -169,18 +168,6 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged(Change.Edit, "Exclusions", this, value, old);
             }
         }
-        public ObservableCollection<TECDrawing> Drawings
-        {
-            get { return _drawings; }
-            set
-            {
-                var old = Drawings;
-                Drawings.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Drawings");
-                _drawings = value;
-                Drawings.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Drawings");
-                NotifyPropertyChanged(Change.Edit, "Drawings", this, value, old);
-            }
-        }
         public ObservableCollection<TECLabeled> Locations
         {
             get { return _locations; }
@@ -270,7 +257,6 @@ namespace EstimatingLibrary
             _systems = new ObservableCollection<TECSystem>();
             _notes = new ObservableCollection<TECLabeled>();
             _exclusions = new ObservableCollection<TECLabeled>();
-            _drawings = new ObservableCollection<TECDrawing>();
             _locations = new ObservableCollection<TECLabeled>();
             _controllers = new ObservableCollection<TECController>();
             _miscCosts = new ObservableCollection<TECMisc>();
@@ -285,7 +271,6 @@ namespace EstimatingLibrary
             ScopeTree.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ScopeTree");
             Notes.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Notes");
             Exclusions.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Exclusions");
-            Drawings.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Drawings");
             Locations.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Locations");
             Locations.CollectionChanged += Locations_CollectionChanged;
             Controllers.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Controllers");
@@ -320,41 +305,6 @@ namespace EstimatingLibrary
             _parameters.SubcontractorMarkup = 20;
         }
 
-        //Copy Constructor
-        public TECBid(TECBid bidSource) : this()
-        {
-            _name = bidSource.Name;
-            _bidNumber = bidSource.BidNumber;
-            _dueDate = bidSource.DueDate;
-            _salesperson = bidSource.Salesperson;
-            _estimator = bidSource.Estimator;
-
-            _catalogs = bidSource.Catalogs.Copy() as TECCatalogs;
-            _labor = new TECLabor(bidSource.Labor);
-            _parameters = new TECBidParameters(bidSource.Parameters);
-            Parameters.PropertyChanged += objectPropertyChanged;
-            Labor.PropertyChanged += objectPropertyChanged;
-
-            foreach (TECScopeBranch branch in bidSource.ScopeTree)
-            { ScopeTree.Add(new TECScopeBranch(branch)); }
-            foreach (TECSystem system in bidSource.Systems)
-            { Systems.Add(new TECSystem(system)); }
-            foreach (TECLabeled note in bidSource.Notes)
-            { Notes.Add(new TECLabeled(note)); }
-            foreach (TECLabeled exclusion in bidSource.Exclusions)
-            { Exclusions.Add(new TECLabeled(exclusion)); }
-            foreach (TECLabeled location in bidSource.Locations)
-            { Locations.Add(new TECLabeled(location)); }
-            foreach (TECDrawing drawing in bidSource.Drawings)
-            { Drawings.Add(new TECDrawing(drawing)); }
-            foreach (TECController controller in bidSource.Controllers)
-            { Controllers.Add(new TECController(controller)); }
-            foreach (TECMisc cost in bidSource.MiscCosts)
-            { MiscCosts.Add(new TECMisc(cost)); }
-            foreach (TECPanel panel in bidSource.Panels)
-            { Panels.Add(new TECPanel(panel)); }
-        }
-
         #endregion //Constructors
 
         #region Methods
@@ -382,11 +332,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged(Change.Remove, collectionName, this, item);
-                    if (item is TECScope)
-                    {
-                        checkForVisualsToRemove((TECScope)item);
-                    }
-
                     if (item is TECCost)
                     {
                         (item as TECCost).PropertyChanged -= objectPropertyChanged;
@@ -469,77 +414,6 @@ namespace EstimatingLibrary
                 }
             }
             return totalPoints;
-        }
-
-        public override object Copy()
-        {
-            TECBid bid = new TECBid(Guid);
-
-            bid._name = this.Name;
-            bid._bidNumber = this.BidNumber;
-            bid._dueDate = this.DueDate;
-            bid._salesperson = this.Salesperson;
-            bid._estimator = this.Estimator;
-
-            bid._labor = this.Labor.Copy() as TECLabor;
-            bid._catalogs = this.Catalogs.Copy() as TECCatalogs;
-            bid._parameters = this.Parameters.Copy() as TECBidParameters;
-            bid.Parameters.PropertyChanged += bid.objectPropertyChanged;
-            bid.Labor.PropertyChanged += bid.objectPropertyChanged;
-
-            foreach (TECScopeBranch branch in this.ScopeTree)
-            { bid.ScopeTree.Add(branch.Copy() as TECScopeBranch); }
-            foreach (TECSystem system in this.Systems)
-            { bid.Systems.Add(system.Copy() as TECSystem); }
-            foreach (TECLabeled note in this.Notes)
-            { bid.Notes.Add(note.Copy() as TECLabeled); }
-            foreach (TECLabeled exclusion in this.Exclusions)
-            { bid.Exclusions.Add(exclusion.Copy() as TECLabeled); }
-            foreach (TECLabeled location in this.Locations)
-            { bid.Locations.Add(location.Copy() as TECLabeled); }
-            foreach (TECDrawing drawing in this.Drawings)
-            { bid.Drawings.Add(drawing.Copy() as TECDrawing); }
-            foreach (TECController controller in this.Controllers)
-            { bid.Controllers.Add(controller.Copy() as TECController); }
-            foreach (TECMisc cost in this.MiscCosts)
-            { bid.MiscCosts.Add(cost.Copy() as TECMisc); }
-            foreach (TECPanel panel in this.Panels)
-            { bid.Panels.Add(panel.Copy() as TECPanel); }
-            return bid;
-        }
-
-        private void checkForVisualsToRemove(TECScope item)
-        {
-            foreach (TECDrawing drawing in this.Drawings)
-            {
-                foreach (TECPage page in drawing.Pages)
-                {
-                    var vScopeToRemove = new List<TECVisualScope>();
-                    var vConnectionsToRemove = new List<TECVisualConnection>();
-                    foreach (TECVisualScope vScope in page.PageScope)
-                    {
-                        if (vScope.Scope == item)
-                        {
-                            vScopeToRemove.Add(vScope);
-                            foreach (TECVisualConnection vConnection in page.Connections)
-                            {
-                                if ((vConnection.Scope1 == vScope) || (vConnection.Scope2 == vScope))
-                                {
-                                    vConnectionsToRemove.Add(vConnection);
-                                }
-                            }
-                        }
-                    }
-                    foreach (TECVisualScope vScope in vScopeToRemove)
-                    {
-                        page.PageScope.Remove(vScope);
-                    }
-                    foreach (TECVisualConnection vConnection in vConnectionsToRemove)
-                    {
-                        page.Connections.Remove(vConnection);
-                    }
-                }
-            }
         }
         
         private void registerSystems()

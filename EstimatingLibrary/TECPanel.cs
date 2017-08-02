@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, CostComponent, DragDropComponent
+    public class TECPanel : TECLocated, INotifyCostChanged, DragDropComponent
     {
         #region Properties
         private TECPanelType _type;
@@ -75,18 +75,6 @@ namespace EstimatingLibrary
             {
                 _controllers.Add(new TECController(controller, guidDictionary));
             }
-        }
-
-        public override object Copy()
-        {
-            var outPanel = new TECPanel(this);
-            outPanel._controllers = new ObservableCollection<TECController>();
-            foreach (TECController controller in this.Controllers)
-            {
-                outPanel.Controllers.Add(controller.Copy() as TECController);
-            }
-            outPanel._guid = _guid;
-            return outPanel;
         }
         public object DragDropCopy(TECScopeManager scopeManager)
         {

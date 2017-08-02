@@ -19,24 +19,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = SubScope;
-                if(SubScope != null)
-                { SubScope.PropertyChanged -= SubScope_PropertyChanged; }
                 _subScope = value;
-                if (SubScope != null)
-                { SubScope.PropertyChanged += SubScope_PropertyChanged; }
                 RaisePropertyChanged("SubScope");
                 NotifyPropertyChanged(Change.Edit, "SubScope", this, value, old);
-            }
-        }
-
-        private void SubScope_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            var args = e as PropertyChangedExtendedEventArgs;
-            if(e.PropertyName == "CostComponentChanged" && args != null)
-            {
-                var old = this.Copy() as TECSubScopeConnection;
-                old.SubScope = args.OldValue as TECSubScope;
-                //NotifyPropertyChanged("CostComponentChanged", old, this);
             }
         }
 
@@ -112,14 +97,6 @@ namespace EstimatingLibrary
         #endregion Constructors
 
         #region Methods
-        public override Object Copy()
-        {
-            TECSubScopeConnection connection = new TECSubScopeConnection(this);
-            connection._guid = this._guid;
-            if (_subScope != null)
-            { connection._subScope = _subScope.Copy() as TECSubScope; }
-            return connection;
-        }
         private void addCostsFromElectricalMaterial(TECElectricalMaterial material, List<TECCost> costs)
         {
             TECCost thisCost = new TECCost();

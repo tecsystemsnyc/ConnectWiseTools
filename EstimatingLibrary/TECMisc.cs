@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, CostComponent, DragDropComponent
+    public class TECMisc : TECCost, INotifyCostChanged, DragDropComponent
     {
         private int _quantity;
 
@@ -47,14 +47,6 @@ namespace EstimatingLibrary
         public TECMisc(TECMisc miscSource) : this()
         {
             copyPropertiesFromCost(miscSource);
-        }
-
-        public override object Copy()
-        {
-            var outCost = new TECMisc();
-            outCost.copyPropertiesFromCost(this);
-            outCost._guid = this.Guid;
-            return outCost;
         }
 
         public new object DragDropCopy(TECScopeManager scopeManager)

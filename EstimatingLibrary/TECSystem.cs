@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECLocated, CostComponent, PointComponent, DragDropComponent
+    public class TECSystem : TECLocated, PointComponent, DragDropComponent, INotifyCostChanged
     {//TECSystem is the largest encapsulating object in the System-Equipment hierarchy, offering a specific structure for the needs of the estimating tool. A seperate hierarchy exists for TECScopeBranch as a more generic object.
         #region Properties
         private ObservableCollection<TECEquipment> _equipment;
@@ -248,36 +248,6 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-        public override Object Copy()
-        {
-            TECSystem outSystem = new TECSystem(_guid);
-            foreach (TECEquipment equipment in this.Equipment)
-            { outSystem.Equipment.Add(equipment.Copy() as TECEquipment); }
-            foreach (TECController controller in Controllers)
-            {
-                outSystem.Controllers.Add(controller.Copy() as TECController);
-            }
-            foreach (TECPanel panel in Panels)
-            {
-                outSystem.Panels.Add(panel.Copy() as TECPanel);
-            }
-            foreach(TECSystem system in SystemInstances)
-            {
-                outSystem.SystemInstances.Add(system.Copy() as TECSystem);
-            }
-            foreach(TECScopeBranch branch in ScopeBranches)
-            {
-                outSystem.ScopeBranches.Add(branch.Copy() as TECScopeBranch);
-            }
-            foreach(TECMisc misc in MiscCosts)
-            {
-                outSystem.MiscCosts.Add(misc.Copy() as TECMisc);
-            }
-            outSystem.copyPropertiesFromLocated(this);
-            outSystem._proposeEquipment = this.ProposeEquipment;
-            ModelLinkingHelper.LinkTypicalInstanceDictionary(CharactersticInstances, outSystem);
-            return outSystem;
-        }
         public object DragDropCopy(TECScopeManager scopeManager)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();

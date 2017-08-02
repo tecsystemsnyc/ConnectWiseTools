@@ -9,7 +9,7 @@ using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, CostComponent, PointComponent, DragDropComponent
+    public class TECEquipment : TECLocated, INotifyCostChanged, PointComponent, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
@@ -94,15 +94,6 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-        public override Object Copy()
-        {
-            TECEquipment outEquip = new TECEquipment();
-            outEquip._guid = this.Guid;
-            foreach (TECSubScope subScope in this.SubScope)
-            { outEquip.SubScope.Add(subScope.Copy() as TECSubScope); }
-            outEquip.copyPropertiesFromScope(this);
-            return outEquip;
-        }
 
         public object DragDropCopy(TECScopeManager scopeManager)
         {

@@ -475,13 +475,6 @@ namespace EstimatingLibrary
             RaisePropertyChanged("ElectricalSuperEffectiveRate");
         }
 
-        public override Object Copy()
-        {
-            TECLabor outLabor = new TECLabor(this);
-            outLabor._guid = this.Guid;
-            return outLabor;
-        }
-
         #endregion
     }
 }

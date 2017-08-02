@@ -47,9 +47,5 @@ namespace EstimatingLibrary
         {
             _guid = guid;
         }
-
-        #region Methods
-        abstract public Object Copy();
-        #endregion
     }
 }

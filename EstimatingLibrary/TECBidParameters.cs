@@ -142,22 +142,5 @@ namespace EstimatingLibrary
             _subcontractorMarkup = parametersSource.SubcontractorMarkup;
             _subcontractorEscalation = parametersSource.SubcontractorEscalation;
         }
-
-        public override object Copy()
-        {
-            var outParameters = new TECBidParameters();
-            outParameters._guid = _guid;
-            outParameters._escalation = _escalation;
-            outParameters._overhead = _overhead;
-            outParameters._profit = _profit;
-            outParameters._subcontractorMarkup = _subcontractorMarkup;
-            outParameters._subcontractorEscalation = _subcontractorEscalation;
-            outParameters._isTaxExempt = _isTaxExempt;
-            outParameters._requiresBond = _requiresBond;
-            outParameters._requiresWrapUp = _requiresWrapUp;
-            outParameters._hasBMS = _hasBMS;
-
-            return outParameters;
-        }
     }
 }

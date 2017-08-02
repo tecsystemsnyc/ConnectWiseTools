@@ -275,29 +275,5 @@ namespace EstimatingLibrary
             }
         }
         #endregion
-
-        public override object Copy()
-        {
-            var outTemplate = new TECTemplates(Guid);
-            outTemplate._catalogs = this.Catalogs.Copy() as TECCatalogs;
-            if (_labor != null)
-            {
-                outTemplate._labor = this.Labor;
-            }
-            foreach (TECSystem system in this.SystemTemplates)
-            { outTemplate.SystemTemplates.Add(system.Copy() as TECSystem); }
-            foreach (TECEquipment equip in this.EquipmentTemplates)
-            { outTemplate.EquipmentTemplates.Add(equip.Copy() as TECEquipment); }
-            foreach (TECSubScope subScope in this.SubScopeTemplates)
-            { outTemplate.SubScopeTemplates.Add(subScope.Copy() as TECSubScope); }
-            foreach (TECController controller in this.ControllerTemplates)
-            { outTemplate.ControllerTemplates.Add(controller.Copy() as TECController); }
-            foreach (TECMisc cost in this.MiscCostTemplates)
-            { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMisc); }
-            foreach (TECPanel panel in this.PanelTemplates)
-            { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
-            outTemplate.Catalogs.ScopeChildRemoved += outTemplate.scopeChildRemoved;
-            return outTemplate;
-        }
     }
 }

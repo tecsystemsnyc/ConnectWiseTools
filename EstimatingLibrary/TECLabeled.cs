@@ -40,13 +40,6 @@ namespace EstimatingLibrary
         {
             _label = source.Label;
         }
-
-        public override object Copy()
-        {
-            TECLabeled labeled = new TECLabeled(this);
-            labeled._guid = Guid;
-            return labeled;
-        }
         #endregion //Constructors
 
 

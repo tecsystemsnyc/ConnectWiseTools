@@ -128,9 +128,9 @@ namespace EstimatingLibrary
                 {
                     var assCost = item as TECCost;
                     assCost.PropertyChanged += AssCost_PropertyChanged;
-                    var old = this.Copy() as TECScope;
-                    old.AssociatedCosts.Remove(item as TECCost);
-                    //NotifyPropertyChanged("CostComponentChanged", old as object, this as object);
+                    //var old = this.Copy() as TECScope;
+                    //old.AssociatedCosts.Remove(item as TECCost);
+                    //NotifyPropertyChanged("INotifyCostChangedChanged", old as object, this as object);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -139,9 +139,9 @@ namespace EstimatingLibrary
                 {
                     var assCost = item as TECCost;
                     assCost.PropertyChanged -= AssCost_PropertyChanged;
-                    var old = this.Copy() as TECScope;
-                    old.AssociatedCosts.Add(item as TECCost);
-                    //NotifyPropertyChanged("CostComponentChanged", old as object, this as object);
+                    //var old = this.Copy() as TECScope;
+                    //old.AssociatedCosts.Add(item as TECCost);
+                    //NotifyPropertyChanged("INotifyCostChangedChanged", old as object, this as object);
                 }
             }
         }
@@ -156,7 +156,7 @@ namespace EstimatingLibrary
                     //var old = this.Copy() as TECScope;
                     //old.AssociatedCosts.Remove(args.NewValue as TECCost);
                     //old.AssociatedCosts.Add(args.OldValue as TECCost);
-                    //NotifyPropertyChanged("CostComponentChanged", old, this);
+                    //NotifyPropertyChanged("INotifyCostChangedChanged", old, this);
                 }
             }
         }

@@ -171,28 +171,6 @@ namespace EstimatingLibrary
             Tags.CollectionChanged += ScopeChildren_CollectionChanged;
         }
 
-        public override object Copy()
-        {
-            TECCatalogs catalogs = new TECCatalogs();
-            foreach (TECCost cost in this.AssociatedCosts)
-            { catalogs.AssociatedCosts.Add(cost.Copy() as TECCost); }
-            foreach (TECElectricalMaterial conduitType in this.ConduitTypes)
-            { catalogs.ConduitTypes.Add(conduitType.Copy() as TECElectricalMaterial); }
-            foreach (TECElectricalMaterial connectionType in this.ConnectionTypes)
-            { catalogs.ConnectionTypes.Add(connectionType.Copy() as TECElectricalMaterial); }
-            foreach (TECLabeled tag in this.Tags)
-            { catalogs.Tags.Add(tag.Copy() as TECLabeled); }
-            foreach (TECManufacturer manufacturer in this.Manufacturers)
-            { catalogs.Manufacturers.Add(manufacturer.Copy() as TECManufacturer); }
-            foreach (TECDevice device in this.Devices)
-            { catalogs.Devices.Add(device.Copy() as TECDevice); }
-            foreach (TECPanelType panelType in this.PanelTypes)
-            { catalogs.PanelTypes.Add(panelType.Copy() as TECPanelType); }
-            foreach (TECIOModule module in IOModules)
-            { catalogs.IOModules.Add(module.Copy() as TECIOModule); }
-            return catalogs;
-        }
-
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

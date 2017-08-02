@@ -71,18 +71,11 @@ namespace EstimatingLibrary
             _type = cost.Type;
         }
 
-        public override object Copy()
-        {
-            var outCost = new TECCost();
-            outCost.copyPropertiesFromCost(this);
-            outCost._guid = this.Guid;
-            return outCost;
-        }
-
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            return this.Copy();
+            var copy = new TECCost();
+            copy.copyPropertiesFromCost(this);
+            return copy;
         }
-        
     }
 }

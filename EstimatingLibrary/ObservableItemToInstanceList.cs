@@ -73,10 +73,5 @@ namespace EstimatingLibrary
             }
             return false;
         }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
