@@ -277,7 +277,6 @@
     <Compile Include="ViewModels\LocationVM.cs" />
     <Compile Include="ViewModels\MaterialVM.cs" />
     <Compile Include="BaseVMs\BuilderViewModel.cs" />
-    <Compile Include="ViewModels\DrawingVM.cs" />
     <Compile Include="ViewModels\ElectricalMaterialSummaryVM.cs" />
     <Compile Include="ViewModels\ElectricalVM.cs" />
     <Compile Include="ViewModels\LaborVM.cs" />
@@ -309,9 +308,6 @@
     </Compile>
     <Compile Include="Views\DeviceSummaryView.xaml.cs">
       <DependentUpon>DeviceSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DrawingView.xaml.cs">
-      <DependentUpon>DrawingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ElectricalMaterialSummaryView.xaml.cs">
       <DependentUpon>ElectricalMaterialSummaryView.xaml</DependentUpon>
@@ -630,10 +626,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DeviceSummaryView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\DrawingView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
