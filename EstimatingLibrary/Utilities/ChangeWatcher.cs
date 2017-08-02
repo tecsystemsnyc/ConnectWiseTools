@@ -18,6 +18,7 @@ namespace EstimatingLibrary.Utilities
         public Action<object, PropertyChangedEventArgs> Changed;
         public Action<PropertyChangedExtendedEventArgs> ExtendedChanged;
         public Action<PropertyChangedExtendedEventArgs> InstanceChanged;
+        public Action<List<TECCost>> CostChanged;
 
         private TECScopeManager scopeManager;
 

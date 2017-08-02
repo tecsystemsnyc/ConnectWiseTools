@@ -251,6 +251,12 @@ namespace EstimatingLibrary
                 RaisePropertyChanged("Estimate");
             }
         }
+
+        public List<TECCost> Costs
+        {
+            get;
+            private set;
+        }
         #endregion //Properties
 
         #region Constructors
