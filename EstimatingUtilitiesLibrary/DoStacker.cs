@@ -156,6 +156,10 @@ namespace EstimatingUtilitiesLibrary
         {
             return undoStack.Count;
         }
-       
+        public int RedoCount()
+        {
+            return redoStack.Count;
+        }
+
     }
 }

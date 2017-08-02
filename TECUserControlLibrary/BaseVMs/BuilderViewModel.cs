@@ -1,11 +1,13 @@
 ﻿using DebugLibrary;
 using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Deployment.Application;
 using System.Drawing.Imaging;
@@ -34,7 +36,6 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _workingScopeManager = value;
-                stack = new ChangeStack(value);
             }
         }
         protected FileDialogParameters workingFileParameters;
@@ -134,7 +135,9 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Fields
-        protected ChangeStack stack;
+        protected DoStacker doStack;
+        protected DeltaStacker deltaStack;
+        protected ChangeWatcher watcher;
         #endregion
 
         #region View Models
@@ -333,7 +336,6 @@ namespace TECUserControlLibrary.ViewModels
                 saveFilePath = path;
                 ScopeDirectoryPath = Path.GetDirectoryName(path);
 
-                stack.ClearStacks();
                 SetBusyStatus("Saving file: " + path, true);
 
                 if (async)
@@ -369,8 +371,6 @@ namespace TECUserControlLibrary.ViewModels
             if (saveFilePath != null && File.Exists(saveFilePath))
             {
                 SetBusyStatus("Saving to path: " + saveFilePath, true);
-                ChangeStack stackToSave = stack.Copy();
-                stack.ClearStacks();
 
                 if (async)
                 {
@@ -378,7 +378,7 @@ namespace TECUserControlLibrary.ViewModels
 
                     worker.DoWork += (s, e) =>
                     {
-                        saveDeltaToPath(saveFilePath, stackToSave);
+                        saveDeltaToPath(saveFilePath, deltaStack.CleansedStack());
                     };
 
                     worker.RunWorkerCompleted += (s, e) =>
@@ -392,7 +392,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    bool success = saveDeltaToPath(saveFilePath, stackToSave);
+                    bool success = saveDeltaToPath(saveFilePath, deltaStack.CleansedStack());
                     ResetStatus();
                     return success;
                 }
@@ -430,7 +430,7 @@ namespace TECUserControlLibrary.ViewModels
                         }
                         if(isNew)
                         {
-                            loadedStackLength = stack.SaveStack.Count;
+                            loadedStackLength = deltaStack.CleansedStack().Count;
                         }
                         else
                         {
@@ -475,13 +475,14 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
-        private bool saveDeltaToPath(string path, ChangeStack saveStack)
+        private bool saveDeltaToPath(string path, List<UpdateItem> updates)
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
                 try
                 {
-                    DatabaseHelper.Update(path, saveStack);
+                    DatabaseUpdater updater= new DatabaseUpdater(updates);
+                    updater.Update(path);
                     return true;
                 }
                 catch (Exception ex) when (DebugBooleans.CatchSaveDelta)
@@ -569,7 +570,7 @@ namespace TECUserControlLibrary.ViewModels
                 return;
             }
 
-            if (stack.SaveStack.Count > 0 && stack.SaveStack.Count != loadedStackLength)
+            if (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength)
             {
                 string message = "Would you like to save your changes before loading?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
@@ -618,22 +619,22 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void UndoExecute()
         {
-            stack.Undo();
+            doStack.Undo();
         }
         private bool UndoCanExecute()
         {
-            if (stack.UndoStack.Count > 0)
+            if (doStack.UndoCount() > 0)
                 return true;
             else
                 return false;
         }
         private void RedoExecute()
         {
-            stack.Redo();
+            doStack.Redo();
         }
         private bool RedoCanExecute()
         {
-            if (stack.RedoStack.Count > 0)
+            if (doStack.RedoCount() > 0)
                 return true;
             else
                 return false;
@@ -642,7 +643,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (IsReady)
             {
-                bool changesExist = (stack.SaveStack.Count > 0 && stack.SaveStack.Count != loadedStackLength);
+                bool changesExist = (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength);
                 if (changesExist)
                 {
                     MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
