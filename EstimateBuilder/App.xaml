@@ -27,9 +27,6 @@
             <DataTemplate DataType="{x:Type vm:ScopeEditorVM}">
                 <views:ScopeEditorView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:DrawingVM}">
-                <views:DrawingView />
-            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:LaborVM}">
                 <views:LaborView />
             </DataTemplate>

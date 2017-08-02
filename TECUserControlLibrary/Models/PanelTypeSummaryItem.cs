@@ -79,10 +79,5 @@ namespace EstimateBuilder.Model
                 updateTotal();
             }
         }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

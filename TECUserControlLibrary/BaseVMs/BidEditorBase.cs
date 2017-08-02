@@ -321,7 +321,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     //ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
                     var builder = new ScopeWordDocumentBuilder();
-                    builder.CreateScopeWordDocument(Bid, path, isEstimate);
+                    builder.CreateScopeWordDocument(Bid, Estimate, path, isEstimate);
                     DebugHandler.LogDebugMessage("Scope saved to document.");
                 }
                 else

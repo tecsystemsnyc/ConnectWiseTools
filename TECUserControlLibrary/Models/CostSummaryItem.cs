@@ -86,7 +86,7 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public override object Copy()
+        public object Copy()
         {
             CostSummaryItem item = new CostSummaryItem(Cost);
             item._quantity = Quantity;

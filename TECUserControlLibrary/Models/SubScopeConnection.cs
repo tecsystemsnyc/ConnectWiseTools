@@ -124,10 +124,5 @@ namespace TECUserControlLibrary.Models
                 SubScope.Connection.ConduitType = conduitType;
             }
         }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

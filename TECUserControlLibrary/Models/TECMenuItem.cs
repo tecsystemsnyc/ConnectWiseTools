@@ -34,10 +34,5 @@ namespace TECUserControlLibrary.Models
             TextBrush = textBrush;
             Items = new ObservableCollection<TECMenuItem>();
         }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

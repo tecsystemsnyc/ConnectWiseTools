@@ -344,10 +344,5 @@ namespace TECUserControlLibrary.Models
                 return parentIsConnected;
             }
         }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
