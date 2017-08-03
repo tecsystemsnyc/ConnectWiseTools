@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface INotifyCostChanged
+    public interface INotifyCostChanged
     {
         event Action<List<TECCost>> CostChanged;
-        void NotifyCostChanged(List<TECCost> costs);
     }
 }
