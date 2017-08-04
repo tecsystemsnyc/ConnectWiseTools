@@ -20,26 +20,38 @@ namespace TECUserControlLibrary.Models
         public int Quantity
         {
             get { return _quantity; }
-            set
+            private set
             {
                 _quantity = value;
                 RaisePropertyChanged("Quantity");
-                updateTotal();
             }
         }
 
-        private double _total;
-        public double Total
+        private double _totalCost;
+        public double TotalCost
         {
             get
             {
-                return _total;
+                return _totalCost;
             }
-            set
+            private set
             {
-                double old = _total;
-                _total = value;
-                NotifyPropertyChanged(Change.Edit, "Total", this, _total, old);
+                _totalCost = value;
+                RaisePropertyChanged("TotalCost");
+            }
+        }
+
+        private double _totalLabor;
+        public double TotalLabor
+        {
+            get
+            {
+                return _totalLabor;
+            }
+            private set
+            {
+                _totalLabor = value;
+                RaisePropertyChanged("TotalLabor");
             }
         }
 
@@ -47,22 +59,33 @@ namespace TECUserControlLibrary.Models
         {
             _hardware = hardware;
             _quantity = 1;
-            hardware.PropertyChanged += Hardware_PropertyChanged;
-            hardware.Manufacturer.PropertyChanged += Hardware_PropertyChanged;
-            updateTotal();
+            updateTotals();
         }
 
-        private void updateTotal()
+        public CostObject Increment()
         {
-            Total = (Hardware.Cost * Hardware.Manufacturer.Multiplier * Quantity);
+            Quantity++;
+            return updateTotals();
         }
 
-        private void Hardware_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        public CostObject Decrement()
         {
-            if (e.PropertyName == "Cost" || e.PropertyName == "Multiplier" || e.PropertyName == "Manufacturer")
-            {
-                updateTotal();
-            }
+            Quantity--;
+            return updateTotals();
+        }
+
+        private CostObject updateTotals()
+        {
+            double newCost = (Hardware.Cost * Hardware.Manufacturer.Multiplier * Quantity);
+            double newLabor = (Hardware.Labor * Quantity);
+            
+            double deltaCost = newCost - TotalCost;
+            double deltaLabor = newLabor - TotalLabor;
+
+            TotalCost = newCost;
+            TotalLabor = newLabor;
+
+            return new CostObject(deltaCost, deltaLabor);
         }
     }
 }

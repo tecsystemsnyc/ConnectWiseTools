@@ -110,6 +110,7 @@
     <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\HardwareSummaryVM.cs" />
     <Compile Include="ViewModels\LengthSummaryVM.cs" />
     <Compile Include="ViewModels\NetworkControllerVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
@@ -126,11 +127,9 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\ConnectionVM.cs" />
-    <Compile Include="ViewModels\ControllerTypeSummaryVM.cs" />
     <Compile Include="ViewModels\DeviceSummaryVM.cs" />
     <Compile Include="ViewModels\InstanceSystemVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
-    <Compile Include="ViewModels\PanelTypeSummaryVM.cs" />
     <Compile Include="ViewModels\SystemComponentVM.cs" />
     <Compile Include="Views\ControllerSummaryView.xaml.cs">
       <DependentUpon>ControllerSummaryView.xaml</DependentUpon>
@@ -226,7 +225,6 @@
     <Compile Include="Models\HardwareSummaryItem.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
     <Compile Include="Models\LengthSummaryItem.cs" />
-    <Compile Include="Models\PanelTypeSummaryItem.cs" />
     <Compile Include="Models\SubScopeConnection.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="UserControls\NotesGridControl.xaml.cs">

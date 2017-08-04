@@ -1,5 +1,4 @@
-﻿using EstimateBuilder.Model;
-using EstimatingLibrary;
+﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;

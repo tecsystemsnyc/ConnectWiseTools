@@ -10,6 +10,8 @@ namespace TECUserControlLibrary.Models
 {
     public class CostSummaryItem : TECObject
     {
+        public event Action<CostObject> CostChanged;
+
         private TECCost _cost;
         public TECCost Cost
         {
@@ -20,11 +22,10 @@ namespace TECUserControlLibrary.Models
         public int Quantity
         {
             get { return _quantity; }
-            set
+            private set
             {
                 _quantity = value;
                 RaisePropertyChanged("Quantity");
-                updateTotals();
             }
         }
 
@@ -35,11 +36,10 @@ namespace TECUserControlLibrary.Models
             {
                 return _totalCost;
             }
-            set
+            private set
             {
-                double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged(Change.Edit, "TotalCost", this, _totalCost, old);
+                RaisePropertyChanged("TotalCost");
             }
         }
 
@@ -50,49 +50,72 @@ namespace TECUserControlLibrary.Models
             {
                 return _totalLabor;
             }
-            set
+            private set
             {
-                double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged(Change.Edit, "TotalLabor", this, _totalLabor, old);
+                RaisePropertyChanged("TotalLabor");
             }
         }
 
         public CostSummaryItem(TECCost cost) : base(Guid.NewGuid())
         {
             _cost = cost;
-            _quantity = 1;
-            if(cost is TECMisc)
+            if(cost is TECMisc misc)
             {
-                _quantity = (cost as TECMisc).Quantity;
+                _quantity = misc.Quantity;
+            }
+            else
+            {
+                _quantity = 1;
             }
             Cost.PropertyChanged += Cost_PropertyChanged;
             updateTotals();
         }
 
-        private void updateTotals()
+        public CostObject AddQuantity(int quantity)
         {
-            TotalCost = (Cost.Cost * Quantity);
-            TotalLabor = (Cost.Labor * Quantity);
+            Quantity += quantity;
+            return updateTotals();
+        }
+        public CostObject RemoveQuantity(int quantity)
+        {
+            Quantity -= quantity;
+            return updateTotals();
+        }
+
+        private CostObject updateTotals()
+        {
+            double newCost = (Cost.Cost * Quantity);
+            double newLabor = (Cost.Labor * Quantity);
+
+            double deltaCost = newCost - TotalCost;
+            double deltaLabor = newLabor - TotalLabor;
+
+            TotalCost = newCost;
+            TotalLabor = newLabor;
+
+            return new CostObject(deltaCost, deltaLabor);
         }
 
         private void Cost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
             {
-                var old = this.Copy();
-                updateTotals();
-                NotifyPropertyChanged(Change.Edit, "Total", this, old);
+                CostChanged?.Invoke(updateTotals());
             }
-        }
-
-        public object Copy()
-        {
-            CostSummaryItem item = new CostSummaryItem(Cost);
-            item._quantity = Quantity;
-            item._totalCost = TotalCost;
-            item._totalLabor = TotalLabor;
-            return item;
+            else if (e.PropertyName == "Quantity")
+            {
+                if (e is PropertyChangedExtendedEventArgs args)
+                {
+                    int delta = (int)args.Value - (int)args.Value;
+                    Quantity += delta;
+                    CostChanged?.Invoke(updateTotals());
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
     }
 }
