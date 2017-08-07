@@ -10,8 +10,6 @@ namespace TECUserControlLibrary.Models
 {
     public class CostSummaryItem : TECObject
     {
-        public event Action<CostObject> CostChanged;
-
         private TECCost _cost;
         public TECCost Cost
         {
@@ -60,7 +58,7 @@ namespace TECUserControlLibrary.Models
         public CostSummaryItem(TECCost cost) : base(Guid.NewGuid())
         {
             _cost = cost;
-            if(cost is TECMisc misc)
+            if (cost is TECMisc misc)
             {
                 _quantity = misc.Quantity;
             }
@@ -95,27 +93,6 @@ namespace TECUserControlLibrary.Models
             TotalLabor = newLabor;
 
             return new CostObject(deltaCost, deltaLabor);
-        }
-
-        private void Cost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
-            {
-                CostChanged?.Invoke(updateTotals());
-            }
-            else if (e.PropertyName == "Quantity")
-            {
-                if (e is PropertyChangedExtendedEventArgs args)
-                {
-                    int delta = (int)args.Value - (int)args.Value;
-                    Quantity += delta;
-                    CostChanged?.Invoke(updateTotals());
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
         }
     }
 }
