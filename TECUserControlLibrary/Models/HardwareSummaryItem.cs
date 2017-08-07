@@ -95,15 +95,5 @@ namespace TECUserControlLibrary.Models
             return new CostObject(deltaCost, deltaLabor);
         }
         #endregion
-
-
-
-
-
-
-
-
-
-
     }
 }
