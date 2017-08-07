@@ -13,80 +13,23 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class HardwareSummaryVM : ViewModelBase
     {
-        #region Properties
-        public Type HardwareType { get; private set; }
-
+        #region Fields
         private Dictionary<Guid, HardwareSummaryItem> hardwareDictionary;
+        private Dictionary<Guid, CostSummaryItem> assocCostDictionary;
 
         private ObservableCollection<HardwareSummaryItem> _hardwareItems;
-        public ObservableCollection<HardwareSummaryItem> HardwareItems
-        {
-            get { return _hardwareItems; }
-            private set
-            {
-                _hardwareItems = value;
-                RaisePropertyChanged("HardwareItems");
-            }
-        }
-
-        private Dictionary<Guid, CostSummaryItem> assCostDictionary;
-
-        private ObservableCollection<CostSummaryItem> _assCostItems;
-        public ObservableCollection<CostSummaryItem> AssCostItems
-        {
-            get { return _assCostItems; }
-            private set
-            {
-                _assCostItems = value;
-                RaisePropertyChanged("CostItems");
-            }
-        }
+        private ObservableCollection<CostSummaryItem> _assocTECItems;
+        private ObservableCollection<CostSummaryItem> _assocElecItems;
 
         private double _hardwareCost;
-        public double HardwareCost
-        {
-            get { return _hardwareCost; }
-            set
-            {
-                _hardwareCost = value;
-                RaisePropertyChanged("HardwareCost");
-            }
-        }
-
         private double _hardwareLabor;
-        public double HardwareLabor
-        {
-            get { return _hardwareLabor; }
-            set
-            {
-                _hardwareLabor = value;
-                RaisePropertyChanged("HardwareLabor");
-            }
-        }
-
-        private double _associatedCostTotal;
-        public double AssociatedCostTotal
-        {
-            get { return _associatedCostTotal; }
-            set
-            {
-                _associatedCostTotal = value;
-                RaisePropertyChanged("AssociatedCostTotal");
-            }
-        }
-
-        private double _associatedLaborTotal;
-        public double AssociatedLaborTotal
-        {
-            get { return _associatedLaborTotal; }
-            set
-            {
-                _associatedLaborTotal = value;
-                RaisePropertyChanged("AssociatedLaborTotal");
-            }
-        }
+        private double _assocTECCostTotal;
+        private double _assocTECLaborTotal;
+        private double _assocElecCostTotal;
+        private double _assocElecLaborTotal;
         #endregion
 
+        //Constructor
         public HardwareSummaryVM(Type hardwareType)
         {
             if (hardwareType.IsSubclassOf(typeof(TECHardware)))
@@ -100,23 +43,97 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        #region Properties
+        public Type HardwareType { get; private set; }
+        
+        public ObservableCollection<HardwareSummaryItem> HardwareItems
+        {
+            get { return _hardwareItems; }
+            private set
+            {
+                _hardwareItems = value;
+                RaisePropertyChanged("HardwareItems");
+            }
+        }
+        public ObservableCollection<CostSummaryItem> AssocTECItems
+        {
+            get { return _assocTECItems; }
+            private set
+            {
+                _assocTECItems = value;
+                RaisePropertyChanged("AssocTECItems");
+            }
+        }
+        public ObservableCollection<CostSummaryItem> AssocElecItems
+        {
+            get { return _assocElecItems; }
+            private set
+            {
+                _assocElecItems = value;
+                RaisePropertyChanged("AssocElecItems");
+            }
+        }
+
+        public double HardwareCost
+        {
+            get { return _hardwareCost; }
+            private set
+            {
+                _hardwareCost = value;
+                RaisePropertyChanged("HardwareCost");
+            }
+        }
+        public double HardwareLabor
+        {
+            get { return _hardwareLabor; }
+            private set
+            {
+                _hardwareLabor = value;
+                RaisePropertyChanged("HardwareLabor");
+            }
+        }
+        public double AssocTECCostTotal
+        {
+            get { return _assocTECCostTotal; }
+            private set
+            {
+                _assocTECCostTotal = value;
+                RaisePropertyChanged("AssocTECCostTotal");
+            }
+        }
+        public double AssocTECLaborTotal
+        {
+            get { return _assocTECLaborTotal; }
+            private set
+            {
+                _assocTECLaborTotal = value;
+                RaisePropertyChanged("AssocTECLaborTotal");
+            }
+        }
+        public double AssocElecCostTotal
+        {
+            get { return _assocElecCostTotal; }
+            private set
+            {
+                _assocElecCostTotal = value;
+                RaisePropertyChanged("AssocElecCostTotal");
+            }
+        }
+        public double AssocElecLaborTotal
+        {
+            get { return _assocElecLaborTotal; }
+            private set
+            {
+                _assocElecLaborTotal = value;
+                RaisePropertyChanged("AssocElecLaborTotal");
+            }
+        }
+        #endregion
+
+        #region Methods
         public void Reset()
         {
             initialize();
-        }
-
-        private void initialize()
-        {
-            hardwareDictionary = new Dictionary<Guid, HardwareSummaryItem>();
-            assCostDictionary = new Dictionary<Guid, CostSummaryItem>();
-
-            HardwareItems = new ObservableCollection<HardwareSummaryItem>();
-            AssCostItems = new ObservableCollection<CostSummaryItem>();
-
-            HardwareCost = 0;
-            HardwareLabor = 0;
-            AssociatedCostTotal = 0;
-            AssociatedLaborTotal = 0;
         }
 
         public void AddHardware(TECHardware hardware)
@@ -139,7 +156,7 @@ namespace TECUserControlLibrary.ViewModels
                     HardwareCost += item.TotalCost;
                     HardwareLabor += item.TotalLabor;
                 }
-                foreach(TECCost cost in hardware.AssociatedCosts)
+                foreach (TECCost cost in hardware.AssociatedCosts)
                 {
                     AddCost(cost);
                 }
@@ -164,7 +181,7 @@ namespace TECUserControlLibrary.ViewModels
                     HardwareItems.Remove(item);
                     hardwareDictionary.Remove(hardware.Guid);
                 }
-                foreach(TECCost cost in hardware.AssociatedCosts)
+                foreach (TECCost cost in hardware.AssociatedCosts)
                 {
                     RemoveCost(cost);
                 }
@@ -175,55 +192,87 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private void initialize()
+        {
+            hardwareDictionary = new Dictionary<Guid, HardwareSummaryItem>();
+            assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+
+            HardwareItems = new ObservableCollection<HardwareSummaryItem>();
+            AssocTECItems = new ObservableCollection<CostSummaryItem>();
+            AssocElecItems = new ObservableCollection<CostSummaryItem>();
+
+            HardwareCost = 0;
+            HardwareLabor = 0;
+            AssocTECCostTotal = 0;
+            AssocTECLaborTotal = 0;
+            AssocElecCostTotal = 0;
+            AssocElecLaborTotal = 0;
+        }
+        
         private void AddCost(TECCost cost)
         {
-            bool containsItem = assCostDictionary.ContainsKey(cost.Guid);
+            bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
-                CostSummaryItem item = assCostDictionary[cost.Guid];
-                CostObject delta = null;
-                if (cost is TECMisc misc)
+                CostSummaryItem item = assocCostDictionary[cost.Guid];
+                CostObject delta = item.AddQuantity(1);
+                if (cost.Type == CostType.TEC)
                 {
-                    delta = item.AddQuantity(misc.Quantity);
+                    AssocTECCostTotal += delta.Cost;
+                    AssocTECLaborTotal += delta.Labor;
                 }
-                else
+                else if (cost.Type == CostType.Electrical)
                 {
-                    delta = item.AddQuantity(1);
+                    AssocElecCostTotal += delta.Cost;
+                    AssocElecLaborTotal += delta.Labor;
                 }
-                AssociatedCostTotal += delta.Cost;
-                AssociatedLaborTotal += delta.Labor;
             }
             else
             {
                 CostSummaryItem item = new CostSummaryItem(cost);
-                assCostDictionary.Add(cost.Guid, item);
-                AssCostItems.Add(item);
-                AssociatedCostTotal += item.TotalCost;
-                AssociatedLaborTotal += item.TotalLabor;
+                assocCostDictionary.Add(cost.Guid, item);
+                if (cost.Type == CostType.TEC)
+                {
+                    AssocTECItems.Add(item);
+                    AssocTECCostTotal += item.TotalCost;
+                    AssocTECLaborTotal += item.TotalLabor;
+                }
+                else if (cost.Type == CostType.Electrical)
+                {
+                    AssocElecItems.Add(item);
+                    AssocElecCostTotal += item.TotalCost;
+                    AssocElecLaborTotal += item.TotalLabor;
+                }
             }
         }
         private void RemoveCost(TECCost cost)
         {
-            bool containsItem = assCostDictionary.ContainsKey(cost.Guid);
+            bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
-                CostSummaryItem item = assCostDictionary[cost.Guid];
-                CostObject delta = null;
-                if (cost is TECMisc misc)
+                CostSummaryItem item = assocCostDictionary[cost.Guid];
+                CostObject delta = item.RemoveQuantity(1);
+                if (cost.Type == CostType.TEC)
                 {
-                    delta = item.RemoveQuantity(misc.Quantity);
+                    AssocTECCostTotal -= delta.Cost;
+                    AssocTECLaborTotal -= delta.Labor;
                 }
-                else
+                else if (cost.Type == CostType.Electrical)
                 {
-                    delta = item.RemoveQuantity(1);
+                    AssocElecCostTotal -= delta.Cost;
+                    AssocElecLaborTotal -= delta.Labor;
                 }
-                AssociatedCostTotal -= delta.Cost;
-                AssociatedLaborTotal -= delta.Labor;
-                
                 if (item.Quantity < 1)
                 {
-                    AssCostItems.Remove(item);
-                    assCostDictionary.Remove(cost.Guid);
+                    assocCostDictionary.Remove(cost.Guid);
+                    if (cost.Type == CostType.TEC)
+                    {
+                        AssocTECItems.Remove(item);
+                    }
+                    else if (cost.Type == CostType.Electrical)
+                    {
+                        AssocElecItems.Remove(item);
+                    }
                 }
             }
             else
@@ -237,5 +286,6 @@ namespace TECUserControlLibrary.ViewModels
             HardwareCost += deltaCost;
             HardwareLabor += deltaLabor;
         }
+        #endregion
     }
 }
