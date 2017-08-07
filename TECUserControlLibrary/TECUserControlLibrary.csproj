@@ -211,12 +211,6 @@
     <Compile Include="UserControls\EquipmentEditControl.xaml.cs">
       <DependentUpon>EquipmentEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ExclusionsGridControl.xaml.cs">
-      <DependentUpon>ExclusionsGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\LocationGridControl.xaml.cs">
-      <DependentUpon>LocationGridControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
@@ -227,9 +221,6 @@
     <Compile Include="Models\LengthSummaryItem.cs" />
     <Compile Include="Models\SubScopeConnection.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
-    <Compile Include="UserControls\NotesGridControl.xaml.cs">
-      <DependentUpon>NotesGridControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\PanelEditControl.xaml.cs">
       <DependentUpon>PanelEditControl.xaml</DependentUpon>
     </Compile>
@@ -474,23 +465,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\ExclusionsGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\LocationGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ManufacturersGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MaterialView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\NotesGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -558,7 +537,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\TagsGridControl.xaml">
+    <Page Include="UserControls\LabeledGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -599,8 +578,8 @@
     <Compile Include="Views\SystemsGridView.xaml.cs">
       <DependentUpon>SystemsGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\TagsGridControl.xaml.cs">
-      <DependentUpon>TagsGridControl.xaml</DependentUpon>
+    <Compile Include="UserControls\LabeledGridControl.xaml.cs">
+      <DependentUpon>LabeledGridControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\BudgetView.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -53,7 +53,7 @@
                         <views:InstanceSystemView ViewModel="{Binding InstanceSystemVM}"/>
                     </TabItem>
                     <TabItem Header="By Location">
-                        <views:LocationView LocationSource="{Binding Bid.Locations}"
+                        <views:LocationView LabeledSource="{Binding Bid.Locations}"
                                             ViewModel="{Binding LocationDataGrid}"/>
                     </TabItem>
                 </TabControl>

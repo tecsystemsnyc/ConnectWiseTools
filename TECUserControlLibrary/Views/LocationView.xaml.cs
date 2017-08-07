@@ -28,19 +28,19 @@ namespace TECUserControlLibrary.Views
         #region DPs
 
         /// <summary>
-        /// Gets or sets the LocationSource which is displayed
+        /// Gets or sets the LabeledSource which is displayed
         /// </summary>
-        public ObservableCollection<TECLabeled> LocationSource
+        public ObservableCollection<TECLabeled> LabeledSource
         {
-            get { return (ObservableCollection<TECLabeled>)GetValue(LocationSourceProperty); }
-            set { SetValue(LocationSourceProperty, value); }
+            get { return (ObservableCollection<TECLabeled>)GetValue(LabeledSourceProperty); }
+            set { SetValue(LabeledSourceProperty, value); }
         }
 
         /// <summary>
-        /// Identified the LocationSource dependency property
+        /// Identified the LabeledSource dependency property
         /// </summary>
-        public static readonly DependencyProperty LocationSourceProperty =
-            DependencyProperty.Register("LocationSource", typeof(ObservableCollection<TECLabeled>),
+        public static readonly DependencyProperty LabeledSourceProperty =
+            DependencyProperty.Register("LabeledSource", typeof(ObservableCollection<TECLabeled>),
               typeof(LocationView), new PropertyMetadata(default(ObservableCollection<TECLabeled>)));
 
         /// <summary>
