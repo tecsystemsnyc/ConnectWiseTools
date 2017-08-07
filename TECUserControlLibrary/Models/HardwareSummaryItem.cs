@@ -10,13 +10,29 @@ namespace TECUserControlLibrary.Models
 {
     public class HardwareSummaryItem : TECObject
     {
+        #region Fields
         private TECHardware _hardware;
+
+        private int _quantity;
+
+        private double _totalCost;
+        private double _totalLabor;
+        #endregion
+
+        //Constructor
+        public HardwareSummaryItem(TECHardware hardware) : base(Guid.NewGuid())
+        {
+            _hardware = hardware;
+            _quantity = 1;
+            updateTotals();
+        }
+
+        #region Properties
         public TECHardware Hardware
         {
             get { return _hardware; }
         }
 
-        private int _quantity;
         public int Quantity
         {
             get { return _quantity; }
@@ -27,7 +43,6 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        private double _totalCost;
         public double TotalCost
         {
             get
@@ -40,8 +55,6 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("TotalCost");
             }
         }
-
-        private double _totalLabor;
         public double TotalLabor
         {
             get
@@ -54,20 +67,14 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("TotalLabor");
             }
         }
+        #endregion
 
-        public HardwareSummaryItem(TECHardware hardware) : base (Guid.NewGuid())
-        {
-            _hardware = hardware;
-            _quantity = 1;
-            updateTotals();
-        }
-
+        #region Methods
         public CostObject Increment()
         {
             Quantity++;
             return updateTotals();
         }
-
         public CostObject Decrement()
         {
             Quantity--;
@@ -78,7 +85,7 @@ namespace TECUserControlLibrary.Models
         {
             double newCost = (Hardware.Cost * Hardware.Manufacturer.Multiplier * Quantity);
             double newLabor = (Hardware.Labor * Quantity);
-            
+
             double deltaCost = newCost - TotalCost;
             double deltaLabor = newLabor - TotalLabor;
 
@@ -87,5 +94,16 @@ namespace TECUserControlLibrary.Models
 
             return new CostObject(deltaCost, deltaLabor);
         }
+        #endregion
+
+
+
+
+
+
+
+
+
+
     }
 }
