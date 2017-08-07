@@ -10,71 +10,84 @@ namespace TECUserControlLibrary.Models
 {
     public class RatedCostSummaryItem : TECObject
     {
+        #region Fields
         private TECCost _ratedCost;
+
+        private double _length;
+
+        private double _totalCost;
+        private double _totalLabor;
+        #endregion
+
+        //Constructor
+        public RatedCostSummaryItem(TECCost ratedCost, double length) : base(Guid.NewGuid())
+        {
+            _ratedCost = ratedCost;
+            _length = length;
+            updateTotals();
+        }
+
+        #region Properties
         public TECCost RatedCost
         {
             get { return _ratedCost; }
         }
 
-        private double _length;
         public double Length
         {
             get { return _length; }
-            set
+            private set
             {
                 _length = value;
                 RaisePropertyChanged("Length");
-                updateTotals();
             }
         }
 
-        private double _totalCost;
         public double TotalCost
         {
             get { return _totalCost; }
-            set
+            private set
             {
-                double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged(Change.Edit, "TotalCost", this, _totalCost, old);
+                RaisePropertyChanged("TotalCost");
             }
         }
-
-        private double _totalLabor;
         public double TotalLabor
         {
-            get
+            get { return _totalLabor; }
+            private set
             {
-                return _totalLabor;
-            }
-            set
-            {
-                double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged(Change.Edit, "TotalLabor", this, _totalLabor, old);
+                RaisePropertyChanged("TotalLabor");
             }
         }
+        #endregion
 
-        public RatedCostSummaryItem(TECCost ratedCost, double length) : base(Guid.NewGuid())
+        #region Methods
+        public CostObject AddLength(double length)
         {
-            _ratedCost = ratedCost;
-            _length = length;
-            RatedCost.PropertyChanged += RatedCost_PropertyChanged;
-            updateTotals();
+            Length += length;
+            return updateTotals();
+        }
+        public CostObject RemoveLength(double length)
+        {
+            Length += length;
+            return updateTotals();
         }
 
-        private void updateTotals()
+        private CostObject updateTotals()
         {
-            TotalCost = (RatedCost.Cost * Length);
-            TotalLabor = (RatedCost.Labor * Length);
-        }
+            double newCost = (RatedCost.Cost * Length);
+            double newLabor = (RatedCost.Labor * Length);
 
-        private void RatedCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
-            {
-                updateTotals();
-            }
+            double deltaCost = newCost - TotalCost;
+            double deltaLabor = newLabor - TotalLabor;
+
+            TotalCost = newCost;
+            TotalLabor = newLabor;
+
+            return new CostObject(deltaCost, deltaLabor);
         }
+        #endregion
     }
 }

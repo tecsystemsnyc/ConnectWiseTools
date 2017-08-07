@@ -21,10 +21,10 @@ namespace TECUserControlLibrary.Models
         #endregion
 
         //Cosntructor
-        public LengthSummaryItem(TECElectricalMaterial material) : base(Guid.NewGuid())
+        public LengthSummaryItem(TECElectricalMaterial material, double length) : base(Guid.NewGuid())
         {
             _material = material;
-            _length = 0;
+            _length = length;
             updateTotals();
         }
 
