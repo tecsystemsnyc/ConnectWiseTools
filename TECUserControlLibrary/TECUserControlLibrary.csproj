@@ -127,7 +127,6 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\ConnectionVM.cs" />
-    <Compile Include="ViewModels\DeviceSummaryVM.cs" />
     <Compile Include="ViewModels\InstanceSystemVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
     <Compile Include="ViewModels\SystemComponentVM.cs" />
@@ -263,7 +262,6 @@
     <Compile Include="ViewModels\LocationVM.cs" />
     <Compile Include="ViewModels\MaterialVM.cs" />
     <Compile Include="BaseVMs\BuilderViewModel.cs" />
-    <Compile Include="ViewModels\ElectricalMaterialSummaryVM.cs" />
     <Compile Include="ViewModels\ElectricalVM.cs" />
     <Compile Include="ViewModels\LaborVM.cs" />
     <Compile Include="ViewModels\ScopeCollectionsTabVM.cs" />
@@ -275,7 +273,6 @@
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
-    <Compile Include="ViewModels\TECMaterialSummaryVM.cs" />
     <Compile Include="Views\SystemComponentView.xaml.cs">
       <DependentUpon>SystemComponentView.xaml</DependentUpon>
     </Compile>

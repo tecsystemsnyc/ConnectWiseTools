@@ -320,7 +320,7 @@ namespace TemplateBuilder.MVVM
         #region Commands Methods
         protected override void NewExecute()
         {
-            if (stack.SaveStack.Count > 0)
+            if (deltaStack.CleansedStack().Count > 0)
             {
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before creating new templates?", "Save?", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
@@ -358,7 +358,7 @@ namespace TemplateBuilder.MVVM
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            if (stack.SaveStack.Count > 0)
+            if (deltaStack.CleansedStack().Count > 0)
             {
                 string message = "Would you like to save your changes before loading?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);

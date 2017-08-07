@@ -38,7 +38,6 @@ namespace EstimateBuilder.MVVM
             buildTitleString();
             workingFileParameters = EstimateFileParameters;
 
-            LoadDrawingCommand = new RelayCommand(LoadDrawingExecute);
             ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
             setupMenuVM();
         }
@@ -115,18 +114,14 @@ namespace EstimateBuilder.MVVM
 
         #region ViewModels
         public ScopeEditorVM ScopeEditorVM { get; set; }
-        public DrawingVM DrawingVM { get; set; }
         public LaborVM LaborVM { get; set; }
         public ReviewVM ReviewVM { get; set; }
         public ProposalVM ProposalVM { get; set; }
         public ElectricalVM ElectricalVM { get; set; }
         public NetworkVM NetworkVM { get; set; }
-        public TECMaterialSummaryVM TECMaterialSummaryVM { get; set; }
-        public ElectricalMaterialSummaryVM ElectricalMaterialSummaryVM { get; set; }
         #endregion
 
         #region Command Properties
-        public ICommand LoadDrawingCommand { get; private set; }
         public ICommand ToggleTemplatesCommand { get; private set; }
         #endregion Command Properties
 
@@ -178,13 +173,6 @@ namespace EstimateBuilder.MVVM
                 ScopeEditorVM.TemplatesVisibility = Visibility.Visible;
             }
         }
-        private void setupDrawingVM(TECBid bid)
-        {
-            //DebugHandler.LogDebugMessage("Setting up drawing VM");
-            DrawingVM = new DrawingVM();
-            DrawingVM.Bid = bid;
-            DrawingVM.Templates = Templates;
-        }
         private void setupLaborVM(TECBid bid, TECTemplates templates)
         {
             LaborVM = new LaborVM();
@@ -215,60 +203,9 @@ namespace EstimateBuilder.MVVM
         {
             NetworkVM = new NetworkVM(bid);
         }
-        private void setupDeviceVM(TECBid bid)
-        {
-            TECMaterialSummaryVM = new TECMaterialSummaryVM(bid);
-        }
-        private void setupElectricalMaterialVM(TECBid bid)
-        {
-            ElectricalMaterialSummaryVM = new ElectricalMaterialSummaryVM(bid);
-        }
         #endregion
 
         #region Commands Methods
-        private void LoadDrawingExecute()
-        {
-            string path = getLoadDrawingsPath();
-
-            if (path != null)
-            {
-                if (!IsReady)
-                {
-                    MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                    return;
-                }
-
-                if (!UtilitiesMethods.IsFileLocked(path))
-                {
-                    SetBusyStatus("Loading drawings from file: " + path, true);
-                    var worker = new BackgroundWorker();
-
-                    worker.DoWork += (s, e) =>
-                    {
-                        TECDrawing drawing = PDFConverter.convertPDFToDrawing(path);
-                        e.Result = drawing;
-                    };
-                    worker.RunWorkerCompleted += (s, e) =>
-                    {
-                        if (e.Result is TECDrawing)
-                        {
-                            Bid.Drawings.Add((TECDrawing)e.Result);
-                            ResetStatus();
-                            MessageBox.Show("Drawings have finished loading.");
-                        }
-                        else
-                        {
-                            DebugHandler.LogError("Load Drawings Failed");
-                        }
-                    };
-                    worker.RunWorkerAsync();
-                }
-                else
-                {
-                    DebugHandler.LogError("File " + path + " could not be opened. File is open elsewhere.");
-                }
-            }
-        }
         private void ToggleTemplatesExecute()
         {
             if (TemplatesHidden)
@@ -287,48 +224,24 @@ namespace EstimateBuilder.MVVM
         {
             base.setupExtensions();
             setupScopeEditorVM(new TECBid(), new TECTemplates());
-            setupDrawingVM(new TECBid());
             setupLaborVM(new TECBid(), new TECTemplates());
             setupReviewVM(new TECBid());
             setupProposalVM(new TECBid());
             setupElectricalVM(new TECBid());
             setupMenuVM();
             setupNetworkVM(new TECBid());
-            setupDeviceVM(new TECBid());
-            setupElectricalMaterialVM(new TECBid());
         }
         override protected void refresh()
         {
             if (Bid != null && Templates != null)
             {
                 ScopeEditorVM.Refresh(Bid, Templates);
-                DrawingVM.Bid = Bid;
                 LaborVM.Refresh(Bid, Templates);
-                ReviewVM.Refresh(Bid);
+                //ReviewVM.Refresh(Bid);
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
                 NetworkVM.Refresh(Bid);
-                TECMaterialSummaryVM.Refresh(Bid);
-                ElectricalMaterialSummaryVM.Refresh(Bid);
             }
-        }
-        private string getLoadDrawingsPath()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
-            openFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
-            openFileDialog.DefaultExt = "pdf";
-            openFileDialog.AddExtension = true;
-
-            string path = null;
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                path = openFileDialog.FileName;
-            }
-
-            return path;
         }
         #endregion
 

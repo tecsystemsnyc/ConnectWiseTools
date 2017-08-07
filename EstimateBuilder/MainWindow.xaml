@@ -79,10 +79,6 @@
                     <views:NetworkView
                         ViewModel="{Binding NetworkVM}"/>
                 </TabItem>
-                <TabItem Header="Drawing" Visibility="Collapsed">
-                    <views:DrawingView
-                        ViewModel="{Binding DrawingVM}"/>
-                </TabItem>
                 <TabItem Header="Review">
                     <controls:ReviewTabControl
                         ViewModel="{Binding}"/>

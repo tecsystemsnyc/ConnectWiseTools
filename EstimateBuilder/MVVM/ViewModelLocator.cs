@@ -42,7 +42,6 @@ namespace EstimateBuilder.MVVM
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<ScopeEditorVM>();
-            SimpleIoc.Default.Register<DrawingVM>();
             SimpleIoc.Default.Register<LaborVM>();
             SimpleIoc.Default.Register<ReviewVM>();
             SimpleIoc.Default.Register<SettingsVM>();
@@ -75,21 +74,7 @@ namespace EstimateBuilder.MVVM
                 return ServiceLocator.Current.GetInstance<ScopeEditorVM>();
             }
         }
-
-        /// <summary>
-        /// Gets the Drawing property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public DrawingVM Drawing
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<DrawingVM>();
-            }
-        }
-
+        
         /// <summary>
         /// Gets the Labor property.
         /// </summary>
