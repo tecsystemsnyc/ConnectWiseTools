@@ -81,10 +81,10 @@
 
                     <TextBlock Text="Notes and Exclusions" Foreground="Black" FontSize="20"/>
 
-                    <controls:NotesGridControl NotesSource="{Binding Bid.Notes}"
+                    <controls:LabeledGridControl LabeledSource="{Binding Bid.Notes}" LabelName="Note"
                                             Grid.Row="1"/>
 
-                    <controls:ExclusionsGridControl ExclusionsSource="{Binding Bid.Exclusions}"
+                    <controls:LabeledGridControl LabeledSource="{Binding Bid.Exclusions}" LabelName="Exclusion"
                                                  Grid.Row="1" Grid.Column="1"/>
                 </Grid>
             </TabItem>

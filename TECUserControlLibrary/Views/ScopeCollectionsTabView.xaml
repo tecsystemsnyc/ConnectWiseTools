@@ -88,7 +88,7 @@
                             Grid.Row="1"
                             Command="{Binding Path=ViewModel.AddTagCommand}"
                                 Margin="5"/>
-                    <controls:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
+                    <controls:LabeledGridControl LabeledSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
                                            Grid.Row="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
@@ -203,8 +203,8 @@
                     <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToDeviceCommand}"
                             Margin="5"/>
-                    <controls:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
-                                           TagsSource="{Binding Path=ViewModel.DeviceTags}"/>
+                    <controls:LabeledGridControl Grid.ColumnSpan="2" Grid.Row="7"
+                                           LabeledSource="{Binding Path=ViewModel.DeviceTags}"/>
                     <Button Grid.Column="0"
                         Grid.Row="8"
                         Grid.ColumnSpan="3"
@@ -291,8 +291,8 @@
                     <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
                             Command="{Binding Path=ViewModel.AddTagToControllerCommand}"
                             Margin="5"/>
-                    <controls:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
-                                           TagsSource="{Binding Path=ViewModel.ControllerTags}"/>
+                    <controls:LabeledGridControl Grid.ColumnSpan="2" Grid.Row="7"
+                                           LabeledSource="{Binding Path=ViewModel.ControllerTags}"/>
                     <Button Content="Add Controller"
                             Command="{Binding Path=ViewModel.AddControllerCommand}"
                             Grid.Row="8"

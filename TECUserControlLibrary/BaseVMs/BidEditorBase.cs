@@ -33,6 +33,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         protected bool isEstimate;
 
+        private TECEstimator _estimate;
+
         protected override string defaultSaveFileName
         {
             get
@@ -77,6 +79,15 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
                 updateBidWithTemplates();
                 refresh();
+            }
+        }
+        public TECEstimator Estimate
+        {
+            get { return _estimate; }
+            set
+            {
+                _estimate = value;
+                RaisePropertyChanged("Estimate");
             }
         }
 
