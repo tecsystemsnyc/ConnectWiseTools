@@ -8,20 +8,13 @@ using System.Threading.Tasks;
 namespace EstimatingUtilitiesLibrary
 {
 
-    public class DatabaseUpdater
+    public static class DatabaseUpdater
     {
-        private List<UpdateItem> stack;
-
-        public DatabaseUpdater(List<UpdateItem> updates)
-        {
-            stack = updates;
-        }
-
-        public void Update(string dataBasePath)
+        public static void Update(string dataBasePath, List<UpdateItem> updates)
         {
             SQLiteDatabase db = new SQLiteDatabase(dataBasePath);
             db.nonQueryCommand("BEGIN TRANSACTION");
-            foreach(UpdateItem item in stack)
+            foreach(UpdateItem item in updates)
             {
                 if(item.Change == Change.Remove)
                 {
@@ -41,15 +34,15 @@ namespace EstimatingUtilitiesLibrary
             db.Connection.Close();
         }
 
-        private void add(UpdateItem item, SQLiteDatabase db)
+        private static void add(UpdateItem item, SQLiteDatabase db)
         {
             db.Insert(item.Table, item.FieldData);
         }
-        private void delete(UpdateItem item, SQLiteDatabase db)
+        private static void delete(UpdateItem item, SQLiteDatabase db)
         {
             db.Delete(item.Table, item.FieldData);
         }
-        private void edit(UpdateItem item, SQLiteDatabase db)
+        private static void edit(UpdateItem item, SQLiteDatabase db)
         {
             db.Insert(item.Table, item.FieldData);
         }

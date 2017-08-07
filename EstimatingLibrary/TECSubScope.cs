@@ -350,7 +350,7 @@ namespace EstimatingLibrary
 
         public void NotifyPointChanged(List<TECPoint> points)
         {
-            throw new NotImplementedException();
+            PointChanged?.Invoke(points);
         }
         #endregion
     }

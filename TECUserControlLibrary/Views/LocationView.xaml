@@ -22,8 +22,7 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <controls:LabeledGridControl LabeledSource="{Binding Path=LocationSource}" LabelName="Location"
-                                   ViewModel="{Binding Path=ViewModel}"/>
+        <controls:LabeledGridControl LabeledSource="{Binding Path=LocationSource}" LabelName="Location"/>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

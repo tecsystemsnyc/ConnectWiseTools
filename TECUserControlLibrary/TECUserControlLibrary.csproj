@@ -127,13 +127,9 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\ConnectionVM.cs" />
-    <Compile Include="ViewModels\DeviceSummaryVM.cs" />
     <Compile Include="ViewModels\InstanceSystemVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
     <Compile Include="ViewModels\SystemComponentVM.cs" />
-    <Compile Include="Views\ControllerSummaryView.xaml.cs">
-      <DependentUpon>ControllerSummaryView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\InstanceSystemView.xaml.cs">
       <DependentUpon>InstanceSystemView.xaml</DependentUpon>
     </Compile>
@@ -266,7 +262,6 @@
     <Compile Include="ViewModels\LocationVM.cs" />
     <Compile Include="ViewModels\MaterialVM.cs" />
     <Compile Include="BaseVMs\BuilderViewModel.cs" />
-    <Compile Include="ViewModels\ElectricalMaterialSummaryVM.cs" />
     <Compile Include="ViewModels\ElectricalVM.cs" />
     <Compile Include="ViewModels\LaborVM.cs" />
     <Compile Include="ViewModels\ScopeCollectionsTabVM.cs" />
@@ -274,14 +269,10 @@
     <Compile Include="ViewModels\StatusBarVM.cs" />
     <Compile Include="BaseVMs\BidEditorBase.cs" />
     <Compile Include="ViewModels\ProposalVM.cs" />
-    <Compile Include="Views\BudgetView.xaml.cs">
-      <DependentUpon>BudgetView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\MenuVM.cs" />
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
-    <Compile Include="ViewModels\TECMaterialSummaryVM.cs" />
     <Compile Include="Views\SystemComponentView.xaml.cs">
       <DependentUpon>SystemComponentView.xaml</DependentUpon>
     </Compile>
@@ -294,20 +285,11 @@
     <Compile Include="Views\ControllersPanelsView.xaml.cs">
       <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DeviceSummaryView.xaml.cs">
-      <DependentUpon>DeviceSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ElectricalMaterialSummaryView.xaml.cs">
-      <DependentUpon>ElectricalMaterialSummaryView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ElectricalView.xaml.cs">
       <DependentUpon>ElectricalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LaborView.xaml.cs">
       <DependentUpon>LaborView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PanelTypeSummaryView.xaml.cs">
-      <DependentUpon>PanelTypeSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ReviewTabControl.xaml.cs">
       <DependentUpon>ReviewTabControl.xaml</DependentUpon>
@@ -320,9 +302,6 @@
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TECMaterialSummaryView.xaml.cs">
-      <DependentUpon>TECMaterialSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\VisibilityModel.cs" />
     <Page Include="UserControls\AddAssociatedCostsControl.xaml">
@@ -350,10 +329,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\SystemProposalGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ControllerSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -581,10 +556,6 @@
     <Compile Include="UserControls\LabeledGridControl.xaml.cs">
       <DependentUpon>LabeledGridControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\BudgetView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -601,23 +572,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DeviceSummaryView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ElectricalMaterialSummaryView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\ElectricalView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LaborView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\PanelTypeSummaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -636,10 +595,6 @@
     <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TECMaterialSummaryView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
