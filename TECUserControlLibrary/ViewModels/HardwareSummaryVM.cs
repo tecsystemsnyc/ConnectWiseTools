@@ -254,13 +254,13 @@ namespace TECUserControlLibrary.ViewModels
                 CostObject delta = item.RemoveQuantity(1);
                 if (cost.Type == CostType.TEC)
                 {
-                    AssocTECCostTotal -= delta.Cost;
-                    AssocTECLaborTotal -= delta.Labor;
+                    AssocTECCostTotal += delta.Cost;
+                    AssocTECLaborTotal += delta.Labor;
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    AssocElecCostTotal -= delta.Cost;
-                    AssocElecLaborTotal -= delta.Labor;
+                    AssocElecCostTotal += delta.Cost;
+                    AssocElecLaborTotal += delta.Labor;
                 }
                 if (item.Quantity < 1)
                 {

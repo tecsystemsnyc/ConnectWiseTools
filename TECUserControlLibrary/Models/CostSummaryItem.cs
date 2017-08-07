@@ -66,7 +66,6 @@ namespace TECUserControlLibrary.Models
             {
                 _quantity = 1;
             }
-            Cost.PropertyChanged += Cost_PropertyChanged;
             updateTotals();
         }
 
