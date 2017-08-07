@@ -280,12 +280,6 @@ namespace TECUserControlLibrary.ViewModels
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
         }
-
-        private void Item_CostChanged(double deltaCost, double deltaLabor)
-        {
-            HardwareCost += deltaCost;
-            HardwareLabor += deltaLabor;
-        }
         #endregion
     }
 }
