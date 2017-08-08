@@ -481,8 +481,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 try
                 {
-                    DatabaseUpdater updater= new DatabaseUpdater(updates);
-                    updater.Update(path);
+                    DatabaseUpdater.Update(path, updates);
                     return true;
                 }
                 catch (Exception ex) when (DebugBooleans.CatchSaveDelta)
