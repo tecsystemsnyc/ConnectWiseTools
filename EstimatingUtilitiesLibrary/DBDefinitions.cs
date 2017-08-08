@@ -1011,10 +1011,10 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ControllerManufacturerTable : TableBase
+    public class ControllerTypeManufacturerTable : TableBase
     {
         public static new string TableName = "TECControllerTECManufacturer";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECController), 0);
+        public static FlavoredType ObjectType = new FlavoredType(typeof(TECControllerType), 0);
         public static FlavoredType ReferenceType = new FlavoredType(typeof(TECManufacturer), 0);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.Type.GetProperty("Guid"));
@@ -1027,6 +1027,25 @@ namespace EstimatingUtilitiesLibrary
         {
             ObjectType,
             ReferenceType
+        };
+    }
+    public class ControllerControllerTypeTable : TableBase
+    {
+        public static new string TableName = "TECControllerTECControllerType";
+        public static FlavoredType ControllerType = new FlavoredType(typeof(TECController), 0);
+        public static FlavoredType TypeType = new FlavoredType(typeof(TECControllerType), 0);
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.Type.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("TypeID", "TEXT", TypeType.Type.GetProperty("Guid"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            ControllerID,
+            TypeID
+            };
+        public static new List<FlavoredType> Types = new List<FlavoredType>()
+        {
+            ControllerType,
+            TypeType
         };
     }
     public class ConnectionConduitTypeTable : TableBase
@@ -1310,7 +1329,8 @@ namespace EstimatingUtilitiesLibrary
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
-            new ControllerManufacturerTable(),
+            new ControllerTypeManufacturerTable(),
+            new ControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
             new SystemControllerTable(),
             new SystemPanelTable(),
@@ -1367,7 +1387,8 @@ namespace EstimatingUtilitiesLibrary
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
-            new ControllerManufacturerTable(),
+            new ControllerTypeManufacturerTable(),
+            new ControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
             new PanelPanelTypeTable(),
             new SystemControllerTable(),
@@ -1432,7 +1453,8 @@ namespace EstimatingUtilitiesLibrary
             new LocationScopeTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
-            new ControllerManufacturerTable(),
+            new ControllerTypeManufacturerTable(),
+            new ControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
             new BidBidParametersTable(),
             new PanelPanelTypeTable(),

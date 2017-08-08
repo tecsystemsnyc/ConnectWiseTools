@@ -27,8 +27,18 @@ namespace Tests
             DeltaStacker stack = new DeltaStacker(watcher);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
-            expectedItems.Add(new UpdateItem(Change.Add, controller, type));
-            expectedItems.Add(new UpdateItem(Change.Add, bid, controller));
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerControllerTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerTable.Name.Name] = controller.Name;
+            data[ControllerTable.Description.Name] = controller.Name;
+            data[ControllerTable.Type.Name] = controller.Type.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
 
             int expectedCount = 2;
 
