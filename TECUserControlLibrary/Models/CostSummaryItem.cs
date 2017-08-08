@@ -79,6 +79,18 @@ namespace TECUserControlLibrary.Models
             Quantity -= quantity;
             return updateTotals();
         }
+        public CostObject ResetMiscQuantity()
+        {
+            if (Cost is TECMisc misc)
+            {
+                Quantity = misc.Quantity;
+                return updateTotals();
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot reset miscellaneous quantity. Cost isn't miscellaneous cost.");
+            }
+        }
 
         private CostObject updateTotals()
         {
