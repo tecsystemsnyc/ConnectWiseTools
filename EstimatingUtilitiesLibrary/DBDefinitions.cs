@@ -209,7 +209,7 @@ namespace EstimatingUtilitiesLibrary
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECScopeBranch), 0);
 
         public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Label"));
+        public static TableField Label = new TableField("Label", "TEXT", ObjectType.Type.GetProperty("Label"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ScopeBranchID
@@ -228,8 +228,6 @@ namespace EstimatingUtilitiesLibrary
         public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.Type.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.Type.GetProperty("Description"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.Type.GetProperty("Quantity"));
-        public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.Type.GetProperty("BudgetPriceModifier"));
         public static TableField ProposeEquipment = new TableField("ProposeEquipment", "INTEGER", ObjectType.Type.GetProperty("ProposeEquipment"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
@@ -249,8 +247,6 @@ namespace EstimatingUtilitiesLibrary
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ObjectType.Type.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.Type.GetProperty("Description"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.Type.GetProperty("Quantity"));
-        public static TableField BudgetPrice = new TableField("BudgetPrice", "REAL", ObjectType.Type.GetProperty("BudgetUnitPrice"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             EquipmentID
@@ -269,7 +265,6 @@ namespace EstimatingUtilitiesLibrary
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.Type.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.Type.GetProperty("Description"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.Type.GetProperty("Quantity"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID
@@ -474,7 +469,6 @@ namespace EstimatingUtilitiesLibrary
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.Type.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.Type.GetProperty("Description"));
-        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.Type.GetProperty("Cost"));
         public static TableField Type = new TableField("Type", "TEXT", ObjectType.Type.GetProperty("NetworkType"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
@@ -586,6 +580,27 @@ namespace EstimatingUtilitiesLibrary
             IOObjectType
         };
     }
+    public class ControllerTypeTable : TableBase
+    {
+        public static new string TableName = "TECControllerType";
+        public static FlavoredType ObjectType = new FlavoredType(typeof(TECControllerType), 0);
+
+        public static TableField TypeID = new TableField("ControllerID", "TEXT", ObjectType.Type.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.Type.GetProperty("Description"));
+        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.Type.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.Type.GetProperty("Labor"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.Type.GetProperty("Type"));
+        
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            TypeID
+            };
+        public static new List<FlavoredType> Types = new List<FlavoredType>()
+        {
+            ObjectType
+        };
+    }
     #endregion
 
     #region Relationship Tables
@@ -673,17 +688,17 @@ namespace EstimatingUtilitiesLibrary
             CostType
         };
     }
-    public class ControllerIOTable : TableBase
+    public class ControllerTypeIOTable : TableBase
     {
-        public static new string TableName = "TECControllerTECIO";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECController), 0);
+        public static new string TableName = "TECControllerTypeTECIO";
+        public static FlavoredType ObjectType = new FlavoredType(typeof(TECControllerType), 0);
         public static FlavoredType ReferenceType = new FlavoredType(typeof(TECIO), 0);
 
-        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.Type.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("TypeID", "TEXT", ObjectType.Type.GetProperty("Guid"));
         public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.Type.GetProperty("Guid"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
-            ControllerID,
+            TypeID,
             IOID
             };
         public static new List<FlavoredType> Types = new List<FlavoredType>()
