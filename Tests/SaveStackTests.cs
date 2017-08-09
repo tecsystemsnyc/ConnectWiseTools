@@ -61,8 +61,17 @@ namespace Tests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
-            expectedItems.Add(new UpdateItem(Change.Add, panel, type));
-            expectedItems.Add(new UpdateItem(Change.Add, bid, panel));
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[PanelPanelTypeTable.PanelID.Name] = panel.Guid.ToString();
+            data[PanelPanelTypeTable.PanelTypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, PanelPanelTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[PanelTable.PanelID.Name] = panel.Guid.ToString();
+            data[PanelTable.Name.Name] = panel.Name;
+            data[PanelTable.Description.Name] = panel.Name;
+            expectedItems.Add(new UpdateItem(Change.Add, PanelTable.TableName, data));
 
             int expectedCount = 2;
             
@@ -83,7 +92,15 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            UpdateItem expectedItem = new UpdateItem(Change.Add, bid, misc);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[MiscTable.MiscID.Name] = misc.Guid.ToString();
+            data[MiscTable.Name.Name] = misc.Name.ToString();
+            data[MiscTable.Cost.Name] = misc.Cost.ToString();
+            data[MiscTable.Labor.Name] = misc.Labor.ToString();
+            data[MiscTable.Type.Name] = misc.Type.ToString();
+            data[MiscTable.Quantity.Name] = misc.Quantity.ToString();
+            
+            UpdateItem expectedItem = new UpdateItem(Change.Add, MiscTable.TableName,data);
             int expectedCount = 1;
 
             bid.MiscCosts.Add(misc);
@@ -103,7 +120,11 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            UpdateItem expectedItem = new UpdateItem(Change.Add, bid, scopeBranch);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[ScopeBranchTable.ScopeBranchID.Name] = scopeBranch.Guid.ToString();
+            data[ScopeBranchTable.Label.Name] = scopeBranch.Label.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Add, ScopeBranchTable.TableName, data);
             int expectedCount = 1;
 
             bid.ScopeTree.Add(scopeBranch);
@@ -126,7 +147,13 @@ namespace Tests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
 
-            UpdateItem expectedItem = new UpdateItem(Change.Add, bid, system);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[SystemTable.SystemID.Name] = system.Guid.ToString();
+            data[SystemTable.Name.Name] = system.Name.ToString();
+            data[SystemTable.Description.Name] = system.Description.ToString();
+            data[SystemTable.ProposeEquipment.Name] = system.ProposeEquipment.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Add, SystemTable.TableName, data);
 
             bid.Systems.Add(system);
 
@@ -149,12 +176,27 @@ namespace Tests
             DeltaStacker stack = new DeltaStacker(watcher);
 
             TECSystem instance = system.AddInstance(bid);
-            UpdateItem expectedItem = new UpdateItem(Change.Add, system, instance);
-            int expectedCount = 1;
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[SystemTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemTable.Name.Name] = instance.Name.ToString();
+            data[SystemTable.Description.Name] = instance.Description.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+
+            expectedItems.Add( new UpdateItem(Change.Add, SystemTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
+            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+
+            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
+
+            int expectedCount = 2;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            checkUpdateItems(expectedItems, stack);
         }
         #region Equipment
         [TestMethod]
@@ -168,14 +210,27 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            UpdateItem expectedItem = new UpdateItem(Change.Add, system, equip);
-            int expectedCount = 1;
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[EquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
+            data[EquipmentTable.Name.Name] = equip.Name.ToString();
+            data[EquipmentTable.Description.Name] = equip.Description.ToString();
+
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = system.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
+
+            int expectedCount = 2;
 
             system.Equipment.Add(equip);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            checkUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -194,9 +249,18 @@ namespace Tests
             typical.Equipment.Add(equip);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
-            expectedItems.Add(new UpdateItem(Change.AddRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new UpdateItem(Change.Add, instance, instance.Equipment[0]));
-            expectedItems.Add(new UpdateItem(Change.Add, typical, equip));
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[CharacteristicScopeInstanceScopeTable.CharacteristicID.Name] = equip.Guid.ToString();
+            data[CharacteristicScopeInstanceScopeTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, CharacteristicScopeInstanceScopeTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = typical.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
             int expectedCount = 3;
             
@@ -221,9 +285,27 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
-            expectedItems.Add(new UpdateItem(Change.AddRelationship, equip, instance.Equipment[0], typeof(TECScope), typeof(TECScope)));
-            expectedItems.Add(new UpdateItem(Change.Add, instance, instance.Equipment[0]));
-            expectedItems.Add(new UpdateItem(Change.Add, typical, instance));
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[CharacteristicScopeInstanceScopeTable.CharacteristicID.Name] = equip.Guid.ToString();
+            data[CharacteristicScopeInstanceScopeTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, CharacteristicScopeInstanceScopeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemTable.Name.Name] = instance.Name.ToString();
+            data[SystemTable.Description.Name] = instance.Description.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemHierarchyTable.ParentID.Name] = typical.Guid.ToString();
+            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
 
@@ -245,15 +327,27 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            UpdateItem expectedItem = new UpdateItem(Change.Add, equipment, subScope);
-            int expectedCount = 1;
+
+            Dictionary<string, string>  data = new Dictionary<string, string>();
+            data[SubScopeTable.SubScopeID.Name] = subScope.Guid.ToString();
+            data[SubScopeTable.Name.Name] = subScope.Name.ToString();
+            data[SubScopeTable.Description.Name] = subScope.Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = equipment.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            checkUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
