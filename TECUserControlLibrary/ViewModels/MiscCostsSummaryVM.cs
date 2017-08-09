@@ -193,7 +193,6 @@ namespace TECUserControlLibrary.ViewModels
                 costDictionary.Add(cost.Guid, item);
                 if (cost is TECMisc misc)
                 {
-                    misc.PropertyChanged += Misc_PropertyChanged;
                     if (cost.Type == CostType.TEC)
                     {
                         MiscTECItems.Add(item);
@@ -224,7 +223,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         public void RemoveCost(TECCost cost)
         {
             bool containsItem = costDictionary.ContainsKey(cost.Guid);
@@ -264,7 +262,6 @@ namespace TECUserControlLibrary.ViewModels
                     costDictionary.Remove(cost.Guid);
                     if (cost is TECMisc miscToRemove)
                     {
-                        miscToRemove.PropertyChanged -= Misc_PropertyChanged;
                         if (cost.Type == CostType.TEC)
                         {
                             MiscTECItems.Remove(item);
@@ -292,6 +289,29 @@ namespace TECUserControlLibrary.ViewModels
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
         }
+        public void ResetMiscQuantity(TECMisc misc)
+        {
+            bool containsItem = costDictionary.ContainsKey(misc.Guid);
+            if (containsItem)
+            {
+                CostSummaryItem item = costDictionary[misc.Guid];
+                CostObject delta = item.ResetMiscQuantity();
+                if (misc.Type == CostType.TEC)
+                {
+                    MiscTECCostTotal += delta.Cost;
+                    MiscTECLaborTotal += delta.Labor;
+                }
+                else if (misc.Type == CostType.Electrical)
+                {
+                    MiscElecCostTotal += delta.Cost;
+                    MiscElecLaborTotal += delta.Labor;
+                }
+            }
+            else
+            {
+                throw new NullReferenceException("Misc item not present in dictionary.");
+            }
+        }
 
         private void initialize()
         {
@@ -310,27 +330,6 @@ namespace TECUserControlLibrary.ViewModels
             AssocTECLaborTotal = 0;
             AssocElecCostTotal = 0;
             AssocElecLaborTotal = 0;
-        }
-
-        private void Misc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Quantity" && e is PropertyChangedExtendedEventArgs args)
-            {
-                TECMisc misc = args.Sender as TECMisc;
-                CostSummaryItem item = costDictionary[misc.Guid];
-                int deltaQuantity = ((int)args.Value - (int)args.OldValue);
-                CostObject delta = item.AddQuantity(deltaQuantity);
-                if (misc.Type == CostType.TEC)
-                {
-                    MiscTECCostTotal += delta.Cost;
-                    MiscTECLaborTotal += delta.Labor;
-                }
-                else if (misc.Type == CostType.Electrical)
-                {
-                    MiscElecCostTotal += delta.Cost;
-                    MiscElecLaborTotal += delta.Labor;
-                }
-            }
         }
         #endregion
     }

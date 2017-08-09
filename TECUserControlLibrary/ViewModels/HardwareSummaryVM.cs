@@ -192,24 +192,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void initialize()
-        {
-            hardwareDictionary = new Dictionary<Guid, HardwareSummaryItem>();
-            assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
-
-            HardwareItems = new ObservableCollection<HardwareSummaryItem>();
-            AssocTECItems = new ObservableCollection<CostSummaryItem>();
-            AssocElecItems = new ObservableCollection<CostSummaryItem>();
-
-            HardwareCost = 0;
-            HardwareLabor = 0;
-            AssocTECCostTotal = 0;
-            AssocTECLaborTotal = 0;
-            AssocElecCostTotal = 0;
-            AssocElecLaborTotal = 0;
-        }
-        
-        private void AddCost(TECCost cost)
+        public void AddCost(TECCost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -245,7 +228,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        private void RemoveCost(TECCost cost)
+        public void RemoveCost(TECCost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -279,6 +262,23 @@ namespace TECUserControlLibrary.ViewModels
             {
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
+        }
+
+        private void initialize()
+        {
+            hardwareDictionary = new Dictionary<Guid, HardwareSummaryItem>();
+            assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+
+            HardwareItems = new ObservableCollection<HardwareSummaryItem>();
+            AssocTECItems = new ObservableCollection<CostSummaryItem>();
+            AssocElecItems = new ObservableCollection<CostSummaryItem>();
+
+            HardwareCost = 0;
+            HardwareLabor = 0;
+            AssocTECCostTotal = 0;
+            AssocTECLaborTotal = 0;
+            AssocElecCostTotal = 0;
+            AssocElecLaborTotal = 0;
         }
         #endregion
     }
