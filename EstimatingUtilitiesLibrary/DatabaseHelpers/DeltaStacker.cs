@@ -23,16 +23,18 @@ namespace EstimatingUtilitiesLibrary
         {
             if(e.Change == Change.Add || e.Change == Change.Remove)
             {
-                addRemoveToStack(e.Change, e.Sender as TECObject, e.Value as TECObject);
+                stack.AddRange(addRemoveToStack(e.Change, e.Sender as TECObject, e.Value as TECObject));
             }
             else if (e.Change == Change.Edit)
             {
-                editToStack(e.Sender as TECObject, e.PropertyName, e.Value);
+                stack.AddRange(editToStack(e.Sender as TECObject, e.PropertyName, e.Value));
             }
         }
 
-        private void addRemoveToStack(Change change, TECObject sender, TECObject item)
+        private static List<UpdateItem> addRemoveToStack(Change change, TECObject sender, TECObject item)
         {
+            List<UpdateItem> outStack = new List<UpdateItem>();
+
             List<TECObject> items = new List<TECObject>();
             items.Add(sender);
             items.Add(item);
@@ -53,12 +55,15 @@ namespace EstimatingUtilitiesLibrary
                     var fields = info.Fields;
                     data = TableHelper.PrepareDataForObjectTable(fields, sender);
                 }
-                stack.Add(new UpdateItem(change, info.Name, data));
+                outStack.Add(new UpdateItem(change, info.Name, data));
             }
+            return outStack;
         }
 
-        private void editToStack(TECObject sender, string propertyName, object value)
+        private static List<UpdateItem> editToStack(TECObject sender, string propertyName, object value)
         {
+            List<UpdateItem> outStack = new List<UpdateItem>();
+
             List<TableBase> tables = TableHelper.GetTables(new List<TECObject> { sender });
             foreach(TableBase table in tables)
             {
@@ -67,14 +72,24 @@ namespace EstimatingUtilitiesLibrary
                 var data = TableHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
                 if(data != null)
                 {
-                    stack.Add(new UpdateItem(Change.Edit, info.Name, data));
+                    outStack.Add(new UpdateItem(Change.Edit, info.Name, data));
                 }
             }
+            return outStack;
         }
 
         public List<UpdateItem> CleansedStack()
         {
             return stack;
+        }
+
+        public static List<UpdateItem> AddStack(TECObject sender, TECObject item)
+        {
+            if(item == null)
+            {
+                throw new Exception("Add and Remove must have an item which is being added to sender.");
+            }
+            return addRemoveToStack(Change.Add, sender, item);
         }
     }
 }
