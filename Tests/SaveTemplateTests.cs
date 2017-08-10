@@ -17,10 +17,8 @@ namespace Tests
     {
         static bool DEBUG = true;
 
-        static TECTemplates OGTemplates;
         TECTemplates templates;
-        ChangeStack testStack;
-        static string OGPath;
+        DeltaStacker testStack;
         string path;
 
         private TestContext testContextInstance;
@@ -35,31 +33,15 @@ namespace Tests
                 testContextInstance = value;
             }
         }
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext TestContext)
-        {
-            OGPath = Path.GetTempFileName();
-            OGTemplates = TestHelper.CreateTestTemplates();
-            DatabaseHelper.SaveNew(OGPath, OGTemplates);
-        }
-
+        
         [TestInitialize]
         public void TestInitialize()
         {
-            ////Arrange
-            //templates = TestHelper.CreateTestTemplates();
-            //testStack = new ChangeStack(templates);
-            //path = Path.GetTempFileName();
-            //File.Delete(path);
-            //path = Path.GetDirectoryName(path) + @"\" + Path.GetFileNameWithoutExtension(path) + ".tdb";
-            //EstimatingLibraryDatabase.SaveTemplatesToNewDB(path, templates);
-
-            templates = OGTemplates.Copy() as TECTemplates;
-            ModelLinkingHelper.LinkTemplates(templates);
-            testStack = new ChangeStack(templates);
             path = Path.GetTempFileName();
-            File.Copy(OGPath, path, true);
+            templates = TestHelper.CreateTestTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+            testStack = new DeltaStacker(watcher);
+            DatabaseHelper.SaveNew(path, templates);
         }
 
         [TestCleanup]
@@ -83,8 +65,6 @@ namespace Tests
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
-            File.Delete(OGPath);
         }
 
         #region Save Labor
@@ -95,7 +75,7 @@ namespace Tests
             //Act
             double expectedPM = 0.123;
             templates.Labor.PMCoef = expectedPM;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualPM = actualTemplates.Labor.PMCoef;
@@ -110,7 +90,7 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.PMRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.PMRate;
@@ -125,7 +105,7 @@ namespace Tests
             //Act
             double expectedENG = 0.123;
             templates.Labor.ENGCoef = expectedENG;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualENG = actualTemplates.Labor.ENGCoef;
@@ -140,7 +120,7 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.ENGRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ENGRate;
@@ -155,7 +135,7 @@ namespace Tests
             //Act
             double expectedComm = 0.123;
             templates.Labor.CommCoef = expectedComm;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualComm = actualTemplates.Labor.CommCoef;
@@ -170,7 +150,7 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.CommRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.CommRate;
@@ -185,7 +165,7 @@ namespace Tests
             //Act
             double expectedSoft = 0.123;
             templates.Labor.SoftCoef = expectedSoft;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualSoft = actualTemplates.Labor.SoftCoef;
@@ -200,7 +180,7 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.SoftRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.SoftRate;
@@ -215,7 +195,7 @@ namespace Tests
             //Act
             double expectedGraph = 0.123;
             templates.Labor.GraphCoef = expectedGraph;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualGraph = actualTemplates.Labor.GraphCoef;
@@ -230,7 +210,7 @@ namespace Tests
             //Act
             double expectedRate = 564.05;
             templates.Labor.GraphRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.GraphRate;
@@ -245,7 +225,7 @@ namespace Tests
             //Act
             double expectedRate = 0.123;
             templates.Labor.ElectricalRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalRate;
@@ -260,7 +240,7 @@ namespace Tests
             //Act
             double expectedRate = 0.456;
             templates.Labor.ElectricalNonUnionRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalNonUnionRate;
@@ -275,7 +255,7 @@ namespace Tests
             //Act
             double expectedRate = 0.123;
             templates.Labor.ElectricalSuperRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalSuperRate;
@@ -290,7 +270,7 @@ namespace Tests
             //Act
             double expectedRate = 23.94;
             templates.Labor.ElectricalSuperNonUnionRate = expectedRate;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
             double actualRate = actualTemplates.Labor.ElectricalSuperNonUnionRate;
@@ -314,7 +294,7 @@ namespace Tests
 
             templates.SystemTemplates.Add(expectedSystem);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -342,7 +322,7 @@ namespace Tests
 
             templates.SystemTemplates.Remove(systemToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates expectedTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -365,7 +345,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Name = "Save System Name";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -389,7 +369,7 @@ namespace Tests
             //Act
             TECSystem expectedSystem = templates.SystemTemplates[0];
             expectedSystem.Description = "Save System Description";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -420,7 +400,7 @@ namespace Tests
 
             templates.EquipmentTemplates.Add(expectedEquipment);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -448,7 +428,7 @@ namespace Tests
 
             templates.EquipmentTemplates.Remove(EquipmentToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -476,7 +456,7 @@ namespace Tests
 
             sysToModify.Equipment.Add(expectedEquipment);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -530,7 +510,7 @@ namespace Tests
 
             sysToModify.Equipment.Remove(equipToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -561,7 +541,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Name = "Save Equipment Name";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -585,7 +565,7 @@ namespace Tests
             //Act
             TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
             expectedEquipment.Description = "Save Equipment Description";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -615,7 +595,7 @@ namespace Tests
 
             templates.SubScopeTemplates.Add(expectedSubScope);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -643,7 +623,7 @@ namespace Tests
 
             templates.SubScopeTemplates.Remove(SubScopeToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -665,7 +645,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Name = "Save SubScope Name";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -689,7 +669,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
             expectedSubScope.Description = "Save SubScope Description";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -715,7 +695,7 @@ namespace Tests
             TECCost expectedCost = templates.Catalogs.AssociatedCosts[1];
             expectedSubScope.AssociatedCosts.Add(templates.Catalogs.AssociatedCosts[1]);
             int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -762,7 +742,7 @@ namespace Tests
 
             templates.Catalogs.Devices.Add(expectedDevice);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -792,7 +772,7 @@ namespace Tests
 
             templates.Catalogs.Devices.Remove(deviceToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -811,7 +791,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             expectedDevice.Name = "Save Device Name";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -835,7 +815,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             expectedDevice.Description = "Save Device Description";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -858,7 +838,7 @@ namespace Tests
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             expectedDevice.Cost = 46.89;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -884,7 +864,7 @@ namespace Tests
             testConnectionType.Name = "Test Add Connection Type Device";
             templates.Catalogs.ConnectionTypes.Add(testConnectionType);
             expectedDevice.ConnectionTypes.Add(testConnectionType);
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -926,7 +906,7 @@ namespace Tests
             manToAdd.Multiplier = 1;
             templates.Catalogs.Manufacturers.Add(manToAdd);
             expectedDevice.Manufacturer = manToAdd;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -955,7 +935,7 @@ namespace Tests
 
             templates.ControllerTemplates.Add(expectedController);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -983,7 +963,7 @@ namespace Tests
 
             templates.ControllerTemplates.Remove(controllerToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1002,7 +982,7 @@ namespace Tests
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
             expectedController.Name = "Test save controller name";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1026,7 +1006,7 @@ namespace Tests
             //Act
             TECController expectedController = templates.ControllerTemplates[0];
             expectedController.Description = "Save Device Description";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1050,7 +1030,7 @@ namespace Tests
         //    //Act
         //    TECController expectedController = templates.ControllerTemplates[0];
         //    expectedController.Cost = 46.89;
-        //    DatabaseHelper.Update(path, testStack);
+        //    DatabaseUpdater.Update(path, testStack.CleansedStack());
 
         //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1076,7 +1056,7 @@ namespace Tests
         //    var testManufacturer = new TECManufacturer();
         //    templates.Catalogs.Manufacturers.Add(testManufacturer);
         //    expectedController.Manufacturer = testManufacturer;
-        //    DatabaseHelper.Update(path, testStack);
+        //    DatabaseUpdater.Update(path, testStack.CleansedStack());
 
         //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1104,7 +1084,7 @@ namespace Tests
         //    testio.Type = IOType.BACnetIP;
         //    expectedController.IO.Add(testio);
         //    bool hasBACnetIP = false;
-        //    DatabaseHelper.Update(path, testStack);
+        //    DatabaseUpdater.Update(path, testStack.CleansedStack());
 
         //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
         //    TECController actualController = null;
@@ -1140,7 +1120,7 @@ namespace Tests
 
         //    expectedController.IO.Remove(ioToRemove);
 
-        //    DatabaseHelper.Update(path, testStack);
+        //    DatabaseUpdater.Update(path, testStack.CleansedStack());
 
         //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1171,7 +1151,7 @@ namespace Tests
         //    TECIO ioToChange = expectedController.IO[0];
         //    ioToChange.Quantity = 69;
 
-        //    DatabaseHelper.Update(path, testStack);
+        //    DatabaseUpdater.Update(path, testStack.CleansedStack());
 
         //    TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1211,7 +1191,7 @@ namespace Tests
 
             templates.Catalogs.Manufacturers.Add(expectedManufacturer);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1238,7 +1218,7 @@ namespace Tests
             //Act
             TECManufacturer expectedManufacturer = templates.Catalogs.Manufacturers[0];
             expectedManufacturer.Label = "Test save manufacturer name";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1262,7 +1242,7 @@ namespace Tests
             //Act
             TECManufacturer expectedManufacturer = templates.Catalogs.Manufacturers[0];
             expectedManufacturer.Multiplier = 987.41;
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1294,7 +1274,7 @@ namespace Tests
 
             templates.Catalogs.Tags.Add(expectedTag);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1322,7 +1302,7 @@ namespace Tests
 
             templates.Catalogs.Tags.Remove(tagToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1364,7 +1344,7 @@ namespace Tests
             expectedConnectionType.RatedCosts.Add(expectedRated);
             int expectedRatedCount = expectedConnectionType.RatedCosts.Count;
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1409,7 +1389,7 @@ namespace Tests
             expectedConnectionType.RatedCosts.Add(expectedRated);
             int expectedRatedCount = expectedConnectionType.RatedCosts.Count;
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1463,7 +1443,7 @@ namespace Tests
             expectedConduitType.RatedCosts.Add(expectedRated);
             int expectedRatedCount = expectedConduitType.RatedCosts.Count;
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1494,7 +1474,7 @@ namespace Tests
 
             templates.Catalogs.ConduitTypes.Remove(conduitTypeToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1526,7 +1506,7 @@ namespace Tests
             expectedConduitType.RatedCosts.Add(expectedRated);
             int expectedRatedCount = expectedConduitType.RatedCosts.Count;
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1568,7 +1548,7 @@ namespace Tests
 
             templates.Catalogs.AssociatedCosts.Add(expectedAssociatedCost);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1598,7 +1578,7 @@ namespace Tests
 
             templates.Catalogs.AssociatedCosts.Remove(costToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1624,7 +1604,7 @@ namespace Tests
 
             templates.MiscCostTemplates.Add(expectedCost);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1651,7 +1631,7 @@ namespace Tests
             TECMisc costToRemove = templates.MiscCostTemplates[0];
             templates.MiscCostTemplates.Remove(costToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
@@ -1670,7 +1650,7 @@ namespace Tests
             TECMisc expectedCost = templates.MiscCostTemplates[0];
             expectedCost.Name = "Test Save Cost Name";
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECMisc actualCost = null;
@@ -1694,7 +1674,7 @@ namespace Tests
             TECMisc expectedCost = templates.MiscCostTemplates[0];
             expectedCost.Cost = 489.1238;
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECMisc actualCost = null;
@@ -1724,7 +1704,7 @@ namespace Tests
 
             templates.Catalogs.PanelTypes.Add(expectedCost);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1750,7 +1730,7 @@ namespace Tests
             TECPanelType costToRemove = templates.Catalogs.PanelTypes[0];
             templates.Catalogs.PanelTypes.Remove(costToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
@@ -1769,7 +1749,7 @@ namespace Tests
             TECPanelType expectedCost = templates.Catalogs.PanelTypes[0];
             expectedCost.Name = "Test Save Cost Name";
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanelType actualCost = null;
@@ -1793,7 +1773,7 @@ namespace Tests
             TECPanelType expectedCost = templates.Catalogs.PanelTypes[0];
             expectedCost.Cost = 489.1238;
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanelType actualCost = null;
@@ -1824,7 +1804,7 @@ namespace Tests
 
             templates.Catalogs.IOModules.Add(expectedModule);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -1850,7 +1830,7 @@ namespace Tests
             TECIOModule costToRemove = templates.Catalogs.IOModules[0];
             templates.Catalogs.IOModules.Remove(costToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
@@ -1869,7 +1849,7 @@ namespace Tests
             TECIOModule expectedCost = templates.Catalogs.IOModules[0];
             expectedCost.Name = "Test Save IOModule Name";
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECIOModule actualCost = null;
@@ -1893,7 +1873,7 @@ namespace Tests
             TECIOModule expectedCost = templates.Catalogs.IOModules[0];
             expectedCost.Cost = 489.1238;
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECIOModule actualCost = null;
@@ -1922,7 +1902,7 @@ namespace Tests
             expectedPanel.Description = "Test description";
             templates.PanelTemplates.Add(expectedPanel);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanel actualpanel = null;
@@ -1949,7 +1929,7 @@ namespace Tests
 
             templates.PanelTemplates.Remove(panelToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             //Assert
@@ -1968,7 +1948,7 @@ namespace Tests
             //Act
             TECPanel expectedPanel = templates.PanelTemplates[0];
             expectedPanel.Name = "Test save panel name";
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
             TECPanel actualPanel = null;
@@ -2012,7 +1992,7 @@ namespace Tests
             scopePanel.Name = "Test Scope Name";
             expectedScope.Panels.Add(scopePanel);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
@@ -2055,7 +2035,7 @@ namespace Tests
 
             templates.SystemTemplates.Remove(scopeToRemove);
 
-            DatabaseHelper.Update(path, testStack);
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates expectedTemplates = DatabaseHelper.Load(path) as TECTemplates;
 
