@@ -20,11 +20,11 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             var tableNames = DatabaseHelper.TableNames(SQLiteDB);
             if (tableNames.Contains("TECBidInfo"))
             {
-                workingScopeManager = loadBid();
+                //workingScopeManager = loadBid();
             }
             else if (tableNames.Contains("TECTemplatesInfo"))
             {
-                workingScopeManager = loadTemplates();
+                //workingScopeManager = loadTemplates();
             }
             else
             {
@@ -40,10 +40,10 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             return workingScopeManager;
         }
 
-        private TECObject loadObject(TableBase table, )
-        {
+        //private TECObject loadObject(TableBase table, )
+        //{
 
-        }
+        //}
 
     }
 }
