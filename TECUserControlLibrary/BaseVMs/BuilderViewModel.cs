@@ -2,6 +2,7 @@
 using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
+using EstimatingUtilitiesLibrary.DatabaseHelpers;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -466,7 +467,7 @@ namespace TECUserControlLibrary.ViewModels
                     File.Delete(path);
                 }
                 //Create new database
-                DatabaseHelper.SaveNew(path, workingScopeManager);
+                DatabaseSaver.Save(workingScopeManager, path);
                 return true;
             }
             else
@@ -502,7 +503,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDirectoryPath = Path.GetDirectoryName(path);
             TECScopeManager outScope = null;
             if (!UtilitiesMethods.IsFileLocked(path))
-            { outScope = DatabaseHelper.Load(path); }
+            { outScope = DatabaseLoader.Load(path); }
             else
             {
                 DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");

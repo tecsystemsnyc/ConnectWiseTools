@@ -107,8 +107,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSVWriter.cs" />
+    <Compile Include="DatabaseHelpers\DatabaseGenerator.cs" />
     <Compile Include="DatabaseHelpers\DatabaseLoader.cs" />
+    <Compile Include="DatabaseHelpers\DatabaseSaver.cs" />
     <Compile Include="DatabaseHelpers\DatabaseUpdater.cs" />
+    <Compile Include="DatabaseHelpers\DatabaseVersionManager.cs" />
     <Compile Include="DatabaseHelpers\DBDefinitions.cs" />
     <Compile Include="DatabaseHelpers\DeltaStacker.cs" />
     <Compile Include="DoStacker.cs" />

@@ -8,6 +8,7 @@ using EstimatingUtilitiesLibrary;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Collections;
+using EstimatingUtilitiesLibrary.DatabaseHelpers;
 
 namespace Tests
 {
@@ -453,13 +454,13 @@ namespace Tests
 
         public static TECBid LoadTestBid(string path)
         {
-            TECBid testBid = DatabaseHelper.Load(path) as TECBid;
+            TECBid testBid = DatabaseLoader.Load(path) as TECBid;
             return testBid;
         }
 
         public static TECTemplates LoadTestTemplates(string path)
         {
-            return DatabaseHelper.Load(path) as TECTemplates;
+            return DatabaseLoader.Load(path) as TECTemplates;
         }
 
         public static TECBid CreateEstimatorBid()
