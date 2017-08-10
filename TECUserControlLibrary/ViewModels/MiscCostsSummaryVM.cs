@@ -295,7 +295,7 @@ namespace TECUserControlLibrary.ViewModels
             if (containsItem)
             {
                 CostSummaryItem item = costDictionary[misc.Guid];
-                CostObject delta = item.ResetMiscQuantity();
+                CostObject delta = item.Refresh();
                 if (misc.Type == CostType.TEC)
                 {
                     MiscTECCostTotal += delta.Cost;
