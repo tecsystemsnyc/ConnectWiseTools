@@ -136,10 +136,11 @@ namespace TECUserControlLibrary.ViewModels
             initialize();
         }
 
-        public void AddHardware(TECHardware hardware)
+        public List<CostObject> AddHardware(TECHardware hardware)
         {
             if (hardware.GetType() == HardwareType)
             {
+                List<CostObject> deltas = new List<CostObject>();
                 bool containsItem = hardwareDictionary.ContainsKey(hardware.Guid);
                 if (containsItem)
                 {
@@ -147,6 +148,8 @@ namespace TECUserControlLibrary.ViewModels
                     CostObject delta = item.Increment();
                     HardwareCost += delta.Cost;
                     HardwareLabor += delta.Labor;
+                    delta.Type = CostType.TEC;
+                    deltas.Add(delta);
                 }
                 else
                 {
@@ -155,24 +158,28 @@ namespace TECUserControlLibrary.ViewModels
                     HardwareItems.Add(item);
                     HardwareCost += item.TotalCost;
                     HardwareLabor += item.TotalLabor;
+                    deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, CostType.TEC));
                 }
                 foreach (TECCost cost in hardware.AssociatedCosts)
                 {
-                    AddCost(cost);
+                    deltas.AddRange(AddCost(cost));
                 }
+                return deltas;
             }
             else
             {
                 throw new ArgumentException("Invalid hardware type.");
             }
         }
-        public void RemoveHardware(TECHardware hardware)
+        public List<CostObject> RemoveHardware(TECHardware hardware)
         {
             bool containsItem = hardwareDictionary.ContainsKey(hardware.Guid);
             if (containsItem)
             {
+                List<CostObject> deltas = new List<CostObject>();
                 HardwareSummaryItem item = hardwareDictionary[hardware.Guid];
                 CostObject delta = item.Decrement();
+                deltas.Add(delta);
                 HardwareCost += delta.Cost;
                 HardwareLabor += delta.Labor;
 
@@ -183,8 +190,9 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 foreach (TECCost cost in hardware.AssociatedCosts)
                 {
-                    RemoveCost(cost);
+                    deltas.AddRange(RemoveCost(cost));
                 }
+                return deltas;
             }
             else
             {
@@ -192,7 +200,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void AddCost(TECCost cost)
+        public List<CostObject> AddCost(TECCost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -209,6 +217,9 @@ namespace TECUserControlLibrary.ViewModels
                     AssocElecCostTotal += delta.Cost;
                     AssocElecLaborTotal += delta.Labor;
                 }
+                List<CostObject> deltas = new List<CostObject>();
+                deltas.Add(delta);
+                return deltas;
             }
             else
             {
@@ -226,9 +237,12 @@ namespace TECUserControlLibrary.ViewModels
                     AssocElecCostTotal += item.TotalCost;
                     AssocElecLaborTotal += item.TotalLabor;
                 }
+                List<CostObject> deltas = new List<CostObject>();
+                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, cost.Type));
+                return deltas;
             }
         }
-        public void RemoveCost(TECCost cost)
+        public List<CostObject> RemoveCost(TECCost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -257,6 +271,9 @@ namespace TECUserControlLibrary.ViewModels
                         AssocElecItems.Remove(item);
                     }
                 }
+                List<CostObject> deltas = new List<CostObject>();
+                deltas.Add(delta);
+                return deltas;
             }
             else
             {

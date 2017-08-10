@@ -92,7 +92,7 @@ namespace TECUserControlLibrary.Models
             TotalCost = newCost;
             TotalLabor = newLabor;
 
-            return new CostObject(deltaCost, deltaLabor);
+            return new CostObject(deltaCost, deltaLabor, CostType.TEC);
         }
         #endregion
     }

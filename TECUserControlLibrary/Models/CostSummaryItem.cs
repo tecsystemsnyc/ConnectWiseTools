@@ -79,17 +79,9 @@ namespace TECUserControlLibrary.Models
             Quantity -= quantity;
             return updateTotals();
         }
-        public CostObject ResetMiscQuantity()
+        public CostObject Refresh()
         {
-            if (Cost is TECMisc misc)
-            {
-                Quantity = misc.Quantity;
-                return updateTotals();
-            }
-            else
-            {
-                throw new InvalidOperationException("Cannot reset miscellaneous quantity. Cost isn't miscellaneous cost.");
-            }
+            return updateTotals();
         }
 
         private CostObject updateTotals()
@@ -103,7 +95,7 @@ namespace TECUserControlLibrary.Models
             TotalCost = newCost;
             TotalLabor = newLabor;
 
-            return new CostObject(deltaCost, deltaLabor);
+            return new CostObject(deltaCost, deltaLabor, Cost.Type);
         }
     }
 }
