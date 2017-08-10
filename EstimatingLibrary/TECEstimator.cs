@@ -228,11 +228,10 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECEstimator(TECBid Bid) : base(Guid.NewGuid())
+        public TECEstimator(TECBid Bid, ChangeWatcher watcher) : base(Guid.NewGuid())
         {
             bid = Bid;
             getInitialValues();
-            watcher = new ChangeWatcher(bid);
             watcher.CostChanged += CostChanged;
             watcher.PointChanged += PointChanged;
         }

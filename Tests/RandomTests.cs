@@ -73,10 +73,11 @@ namespace Tests
             DatabaseHelper.SaveNew(path, bid);
             
             bid = DatabaseHelper.Load(path) as TECBid;
+            var watcher = new ChangeWatcher(bid);
 
-            ChangeStack stack = new ChangeStack(bid);
+            DeltaStacker stack = new DeltaStacker(watcher);
             bid.RandomEquipment().SubScope.Add(new TECSubScope());
-            DatabaseHelper.Update(path, stack, false);
+            DatabaseUpdater.Update(path, stack.CleansedStack());
 
             bid = DatabaseHelper.Load(path) as TECBid;
         }

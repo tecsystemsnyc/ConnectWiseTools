@@ -171,7 +171,7 @@ namespace TECUserControlLibrary.ViewModels
         public ReviewVM()
         {
             _bid = new TECBid();
-            _estimate = new TECEstimator(_bid);
+            _estimate = new TECEstimator(_bid, new EstimatingLibrary.Utilities.ChangeWatcher(_bid));
         }
 
         private void Bid_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

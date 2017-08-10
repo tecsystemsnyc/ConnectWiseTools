@@ -53,7 +53,7 @@ namespace Tests
             AddToBidBidParametersTable();
             AddToBidScopeBranchTable();
             AddToBidMiscTable();
-            AddToControllerIOTable();
+            //AddToControllerIOTable();
             AddToIOModuleManufacturerTable();
             AddToIOIOModuleTable();
             AddToControllerConnectionTable();
@@ -72,7 +72,7 @@ namespace Tests
             AddToLocationScopeTable();
             AddToScopeAssociatedCostTable();
             AddElectricalComponentRatedCostTable();
-            AddToControllerManufacturerTable();
+            //AddToControllerManufacturerTable();
             AddToConnectionConduitTypeTable();
             AddToNetworkConnectionConnectionTypeTable();
             AddToNetworkConnectionControllerTable();
@@ -118,7 +118,7 @@ namespace Tests
             AddToIOTable();
             AddToScopeBranchTable();
 
-            AddToControllerIOTable();
+            //AddToControllerIOTable();
             AddToIOModuleManufacturerTable();
             AddToIOIOModuleTable();
             AddToControllerConnectionTable();
@@ -127,7 +127,7 @@ namespace Tests
             AddToScopeTagTable();
             AddToScopeAssociatedCostTable();
             AddElectricalComponentRatedCostTable();
-            AddToControllerManufacturerTable();
+            //AddToControllerManufacturerTable();
             AddToConnectionConduitTypeTable();
             AddToSubScopeConnectionChildrenTable();
             AddToPanelPanelTypeTable();
@@ -725,48 +725,48 @@ namespace Tests
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
             AddDataToTable(new BidMiscTable(), values);
         }
-        private static void AddToControllerIOTable()
-        {
-            List<string> values = new List<string>();
-            values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
-            values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            AddDataToTable(new ControllerIOTable(), values);
+        //private static void AddToControllerIOTable()
+        //{
+        //    List<string> values = new List<string>();
+        //    values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+        //    values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+        //    AddDataToTable(new ControllerIOTable(), values);
 
-            values = new List<string>();
-            values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
-            values.Add("fbae3851-3320-4e94-a674-ddec86bc4964");
-            AddDataToTable(new ControllerIOTable(), values);
+        //    values = new List<string>();
+        //    values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
+        //    values.Add("fbae3851-3320-4e94-a674-ddec86bc4964");
+        //    AddDataToTable(new ControllerIOTable(), values);
 
-            values = new List<string>();
-            values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
-            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
-            AddDataToTable(new ControllerIOTable(), values);
+        //    values = new List<string>();
+        //    values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
+        //    values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
+        //    AddDataToTable(new ControllerIOTable(), values);
 
-            values = new List<string>();
-            values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
-            values.Add("de2d29b7-c63d-4ddf-8b9c-987915e58cd2");
-            AddDataToTable(new ControllerIOTable(), values);
+        //    values = new List<string>();
+        //    values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+        //    values.Add("de2d29b7-c63d-4ddf-8b9c-987915e58cd2");
+        //    AddDataToTable(new ControllerIOTable(), values);
 
-            values = new List<string>();
-            values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
-            values.Add("81827dfc-1375-476f-bfd8-290764403545");
-            AddDataToTable(new ControllerIOTable(), values);
+        //    values = new List<string>();
+        //    values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+        //    values.Add("81827dfc-1375-476f-bfd8-290764403545");
+        //    AddDataToTable(new ControllerIOTable(), values);
 
-            values = new List<string>();
-            values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
-            values.Add("6afb5c4d-4ee9-4c86-b37a-fa26a7be64b0");
-            AddDataToTable(new ControllerIOTable(), values);
+        //    values = new List<string>();
+        //    values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+        //    values.Add("6afb5c4d-4ee9-4c86-b37a-fa26a7be64b0");
+        //    AddDataToTable(new ControllerIOTable(), values);
 
-            values = new List<string>();
-            values.Add("7b6825df-57da-458a-a859-a9459c15907b");
-            values.Add("7cb05a42-07fe-44f6-8f33-df0eab7416a5");
-            AddDataToTable(new ControllerIOTable(), values);
+        //    values = new List<string>();
+        //    values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+        //    values.Add("7cb05a42-07fe-44f6-8f33-df0eab7416a5");
+        //    AddDataToTable(new ControllerIOTable(), values);
 
-            values = new List<string>();
-            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
-            values.Add("4ce8ee4b-03f3-4460-9387-b14ec5bdc5db");
-            AddDataToTable(new ControllerIOTable(), values);
-        }
+        //    values = new List<string>();
+        //    values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+        //    values.Add("4ce8ee4b-03f3-4460-9387-b14ec5bdc5db");
+        //    AddDataToTable(new ControllerIOTable(), values);
+        //}
         private static void AddToIOModuleManufacturerTable()
         {
             List<string> values = new List<string>();
@@ -1362,48 +1362,48 @@ namespace Tests
             AddDataToTable(new ElectricalMaterialRatedCostTable(), values);
             
         }
-        private static void AddToControllerManufacturerTable()
-        {
-            List<string> values = new List<string>();
-            values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
+        //private static void AddToControllerManufacturerTable()
+        //{
+        //    List<string> values = new List<string>();
+        //    values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
 
-            values = new List<string>();
-            values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
+        //    values = new List<string>();
+        //    values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
 
-            values = new List<string>();
-            values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
+        //    values = new List<string>();
+        //    values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
 
-            values = new List<string>();
-            values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
+        //    values = new List<string>();
+        //    values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
 
-            values = new List<string>();
-            values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
+        //    values = new List<string>();
+        //    values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
 
-            values = new List<string>();
-            values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
+        //    values = new List<string>();
+        //    values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
 
-            values = new List<string>();
-            values.Add("7b6825df-57da-458a-a859-a9459c15907b");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
+        //    values = new List<string>();
+        //    values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
 
-            values = new List<string>();
-            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            AddDataToTable(new ControllerManufacturerTable(), values);
-        }
+        //    values = new List<string>();
+        //    values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+        //    values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+        //    AddDataToTable(new ControllerManufacturerTable(), values);
+        //}
         private static void AddToConnectionConduitTypeTable()
         {
             List<string> values = new List<string>();

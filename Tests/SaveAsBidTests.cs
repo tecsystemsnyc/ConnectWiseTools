@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -666,15 +667,19 @@ namespace Tests
         public void SaveAs_Bid_Estimate()
         {
             TECBid saveBid = TestHelper.CreateTestBid();
-            var expectedTotalCost = saveBid.Estimate.TotalCost;
+            var watcher = new ChangeWatcher(saveBid);
+            TECEstimator estimate = new TECEstimator(saveBid, watcher);
+            var expectedTotalCost = estimate.TotalCost;
             double delta = 0.0001;
             
             //Act
             path = Path.GetTempFileName();
             DatabaseHelper.SaveNew(path, saveBid);
             TECBid loadedBid = DatabaseHelper.Load(path) as TECBid;
+            var loadedWatcher = new ChangeWatcher(saveBid);
+            TECEstimator loadedEstimate = new TECEstimator(loadedBid, loadedWatcher);
 
-            Assert.AreEqual(expectedTotalCost, loadedBid.Estimate.TotalCost, delta);
+            Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
         }
     }
 }
