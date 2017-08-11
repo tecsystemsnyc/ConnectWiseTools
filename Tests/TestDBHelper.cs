@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using EstimatingUtilitiesLibrary.DatabaseHelpers;
 
 namespace Tests
 {
@@ -14,7 +15,7 @@ namespace Tests
 
         public static void CreateTestBid(string path)
         {
-            DatabaseHelper.CreateDB(path);
+            DatabaseGenerator.CreateBidDatabase(path);
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
 
@@ -92,7 +93,7 @@ namespace Tests
 
         public static void CreateTestTemplates(string path)
         {
-            DatabaseHelper.CreateDB(path, DatabaseHelper.DBType.Templates);
+            DatabaseGenerator.CreateTemplateDatabase(path);
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
 

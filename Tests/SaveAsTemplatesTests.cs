@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
+using EstimatingUtilitiesLibrary.DatabaseHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -73,9 +74,9 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseHelper.SaveNew(path, expectedTemplates);
+            DatabaseSaver.Save(expectedTemplates, path);
 
-            actualTemplates = DatabaseHelper.Load(path) as TECTemplates;
+            actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {

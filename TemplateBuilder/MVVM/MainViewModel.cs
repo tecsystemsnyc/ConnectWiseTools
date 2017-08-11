@@ -21,6 +21,7 @@ using System.Windows.Controls;
 using DebugLibrary;
 using TECUserControlLibrary.ViewModels;
 using TECUserControlLibrary.Utilities;
+using EstimatingUtilitiesLibrary.DatabaseHelpers;
 
 namespace TemplateBuilder.MVVM
 {
@@ -228,7 +229,7 @@ namespace TemplateBuilder.MVVM
             if ((TemplatesFilePath != "") && (File.Exists(TemplatesFilePath)))
             {
                 if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                { Templates = DatabaseHelper.Load(TemplatesFilePath) as TECTemplates; }
+                { Templates = DatabaseLoader.Load(TemplatesFilePath) as TECTemplates; }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
@@ -247,7 +248,7 @@ namespace TemplateBuilder.MVVM
                     {
                         if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                         {
-                            Templates = DatabaseHelper.Load(TemplatesFilePath) as TECTemplates;
+                            Templates = DatabaseLoader.Load(TemplatesFilePath) as TECTemplates;
                         }
                         else
                         {

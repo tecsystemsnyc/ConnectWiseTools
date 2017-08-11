@@ -6,6 +6,7 @@ using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using System.IO;
 using EstimatingLibrary.Utilities;
+using EstimatingUtilitiesLibrary.DatabaseHelpers;
 
 namespace Tests
 {
@@ -70,16 +71,16 @@ namespace Tests
 
             var path = Path.GetTempFileName();
             
-            DatabaseHelper.SaveNew(path, bid);
+            DatabaseSaver.Save(bid, path);
             
-            bid = DatabaseHelper.Load(path) as TECBid;
+            bid = DatabaseLoader.Load(path) as TECBid;
             var watcher = new ChangeWatcher(bid);
 
             DeltaStacker stack = new DeltaStacker(watcher);
             bid.RandomEquipment().SubScope.Add(new TECSubScope());
             DatabaseUpdater.Update(path, stack.CleansedStack());
 
-            bid = DatabaseHelper.Load(path) as TECBid;
+            bid = DatabaseLoader.Load(path) as TECBid;
         }
     }
 }

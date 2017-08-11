@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
+using EstimatingUtilitiesLibrary.DatabaseHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -122,8 +123,8 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseHelper.SaveNew(path, expectedBid);
-            actualBid = DatabaseHelper.Load(path) as TECBid;
+            DatabaseSaver.Save(expectedBid, path);
+            actualBid = DatabaseLoader.Load(path) as TECBid;
             actualLabor = actualBid.Labor;
 
             foreach (TECSystem sys in actualBid.Systems)
@@ -644,8 +645,8 @@ namespace Tests
             
             //Act
             path = Path.GetTempFileName();
-            DatabaseHelper.SaveNew(path, saveBid);
-            TECBid loadedBid = DatabaseHelper.Load(path) as TECBid;
+            DatabaseSaver.Save(saveBid, path);
+            TECBid loadedBid = DatabaseLoader.Load(path) as TECBid;
             TECSystem loadedSystem = loadedBid.Systems[0];
             
             Assert.AreEqual(system.SystemInstances.Count, loadedSystem.SystemInstances.Count);
@@ -674,8 +675,8 @@ namespace Tests
             
             //Act
             path = Path.GetTempFileName();
-            DatabaseHelper.SaveNew(path, saveBid);
-            TECBid loadedBid = DatabaseHelper.Load(path) as TECBid;
+            DatabaseSaver.Save(saveBid, path);
+            TECBid loadedBid = DatabaseLoader.Load(path) as TECBid;
             var loadedWatcher = new ChangeWatcher(saveBid);
             TECEstimator loadedEstimate = new TECEstimator(loadedBid, loadedWatcher);
 
