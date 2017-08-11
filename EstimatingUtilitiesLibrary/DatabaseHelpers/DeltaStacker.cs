@@ -15,7 +15,7 @@ namespace EstimatingUtilitiesLibrary
 
         public DeltaStacker(ChangeWatcher changeWatcher)
         {
-            changeWatcher.ExtendedChanged += handleChange;
+            changeWatcher.BidChanged += handleChange;
             stack = new List<UpdateItem>();
         }
 
