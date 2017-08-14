@@ -26,7 +26,7 @@ namespace EstimatingLibrary
             {
                 var old = Length;
                 _length = value;
-                NotifyPropertyChanged(Change.Edit, "Length", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Length", this, value, old);
             }
         }
         public double ConduitLength
@@ -36,7 +36,7 @@ namespace EstimatingLibrary
             {
                 var old = ConduitLength;
                 _conduitLength = value;
-                NotifyPropertyChanged(Change.Edit, "ConduitLength", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
             }
         }
         public TECController ParentController
@@ -55,7 +55,7 @@ namespace EstimatingLibrary
             {
                 var old = ConduitType;
                 _conduitType = value;
-                NotifyPropertyChanged(Change.Edit, "ConduitType", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
             }
         }
 

@@ -28,7 +28,7 @@ namespace EstimatingLibrary
             {
                 var old = Escalation;
                 _escalation = value;
-                NotifyPropertyChanged(Change.Edit, "Escalation", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Escalation", this, value, old);
             }
         }
         public double Overhead
@@ -38,7 +38,7 @@ namespace EstimatingLibrary
             {
                 var old = Overhead;
                 _overhead = value;
-                NotifyPropertyChanged(Change.Edit, "Overhead", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Overhead", this, value, old);
             }
         }
         public double Profit
@@ -48,7 +48,7 @@ namespace EstimatingLibrary
             {
                 var old = Profit;
                 _profit = value;
-                NotifyPropertyChanged(Change.Edit, "Profit", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Profit", this, value, old);
             }
         }
         public double SubcontractorMarkup
@@ -58,7 +58,7 @@ namespace EstimatingLibrary
             {
                 var old = SubcontractorMarkup;
                 _subcontractorMarkup = value;
-                NotifyPropertyChanged(Change.Edit, "SubcontractorMarkup", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "SubcontractorMarkup", this, value, old);
             }
         }
         public double SubcontractorEscalation
@@ -68,7 +68,7 @@ namespace EstimatingLibrary
             {
                 var old = SubcontractorEscalation;
                 _subcontractorEscalation = value;
-                NotifyPropertyChanged(Change.Edit, "SubcontractorEscalation", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "SubcontractorEscalation", this, value, old);
             }
         }
 
@@ -79,7 +79,7 @@ namespace EstimatingLibrary
             {
                 var old = IsTaxExempt;
                 _isTaxExempt = value;
-                NotifyPropertyChanged(Change.Edit, "IsTaxExempt", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "IsTaxExempt", this, value, old);
             }
         }
         public bool RequiresBond
@@ -89,7 +89,7 @@ namespace EstimatingLibrary
             {
                 var old = RequiresBond;
                 _requiresBond = value;
-                NotifyPropertyChanged(Change.Edit, "RequiresBond", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "RequiresBond", this, value, old);
             }
         }
         public bool RequiresWrapUp
@@ -99,7 +99,7 @@ namespace EstimatingLibrary
             {
                 var old = RequiresWrapUp;
                 _requiresWrapUp = value;
-                NotifyPropertyChanged(Change.Edit, "RequiresWrapUp", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "RequiresWrapUp", this, value, old);
             }
         }
         public bool HasBMS
@@ -109,7 +109,7 @@ namespace EstimatingLibrary
             {
                 var old = HasBMS;
                 _hasBMS = value;
-                NotifyPropertyChanged(Change.Edit, "HasBMS", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "HasBMS", this, value, old);
             }
         }
         #endregion

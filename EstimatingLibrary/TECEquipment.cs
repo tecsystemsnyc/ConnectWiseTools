@@ -28,7 +28,7 @@ namespace EstimatingLibrary
                 }
                 _subScope = value;
                 SubScope.CollectionChanged += SubScope_CollectionChanged;
-                NotifyPropertyChanged(Change.Edit, "SubScope", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "SubScope", this, value, old);
             }
         }
         
@@ -95,7 +95,7 @@ namespace EstimatingLibrary
                 {
                     pointNumber += item.PointNumber;
                     costs.AddRange(item.Costs);
-                    NotifyPropertyChanged(Change.Add, "SubScope", this, item);
+                    NotifyCombinedChanged(Change.Add, "SubScope", this, item);
                     if ((item as TECSubScope).Location == null)
                     {
                         (item as TECSubScope).SetLocationFromParent(this.Location);
@@ -112,14 +112,14 @@ namespace EstimatingLibrary
                 {
                     pointNumber += item.PointNumber;
                     costs.AddRange(item.Costs);
-                    NotifyPropertyChanged(Change.Remove, "SubScope", this, item);
+                    NotifyCombinedChanged(Change.Remove, "SubScope", this, item);
                 }
                 PointChanged?.Invoke(pointNumber * -1);
                 NotifyCostChanged(CostHelper.NegativeCosts(costs));
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged(Change.Edit, "SubScope", this, sender);
+                NotifyCombinedChanged(Change.Edit, "SubScope", this, sender);
             }
         }
         

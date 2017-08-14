@@ -21,7 +21,7 @@ namespace EstimatingLibrary
                 var old = SubScope;
                 _subScope = value;
                 RaisePropertyChanged("SubScope");
-                NotifyPropertyChanged(Change.Edit, "SubScope", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "SubScope", this, value, old);
             }
         }
 

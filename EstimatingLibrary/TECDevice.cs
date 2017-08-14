@@ -29,8 +29,8 @@ namespace EstimatingLibrary
                 {
                     ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
-                NotifyPropertyChanged(Change.Edit, "ConnectionTypes", this, value, old);
-                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
+                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public IOType IOType
@@ -40,8 +40,8 @@ namespace EstimatingLibrary
             {
                 var old = IOType;
                 _ioType = value;
-                NotifyPropertyChanged(Change.Add, "IOType", this, value, old);
-                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyCombinedChanged(Change.Add, "IOType", this, value, old);
+                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
         #endregion//Properties
@@ -84,14 +84,14 @@ namespace EstimatingLibrary
             {
                 foreach (TECElectricalMaterial type in e.NewItems)
                 {
-                    NotifyPropertyChanged(Change.Add, propertyName, this, type);
+                    NotifyCombinedChanged(Change.Add, propertyName, this, type);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECElectricalMaterial type in e.OldItems)
                 {
-                    NotifyPropertyChanged(Change.Remove, propertyName, this, type);
+                    NotifyCombinedChanged(Change.Remove, propertyName, this, type);
                 }
             }
         }

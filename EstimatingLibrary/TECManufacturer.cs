@@ -18,7 +18,7 @@ namespace EstimatingLibrary
             {
                 var old = Multiplier;
                 _multiplier = value;
-                NotifyPropertyChanged(Change.Edit, "Multiplier", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Multiplier", this, value, old);
             }
         }
         private double _multiplier;

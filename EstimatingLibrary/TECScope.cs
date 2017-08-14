@@ -31,7 +31,7 @@ namespace EstimatingLibrary
                 var old = Name;
                 _name = value;
                 // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged(Change.Edit, "Name", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Name", this, value, old);
             }
         }
         public string Description
@@ -42,7 +42,7 @@ namespace EstimatingLibrary
                 var old = Description;
                 _description = value;
                 // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged(Change.Edit, "Description", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Description", this, value, old);
 
             }
         }
@@ -55,7 +55,7 @@ namespace EstimatingLibrary
                 var old = Tags;
                 Tags.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Tags");
                 _tags = value;
-                NotifyPropertyChanged(Change.Edit, "Tags", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Tags", this, value, old);
                 Tags.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Tags");
             }
         }
@@ -66,7 +66,7 @@ namespace EstimatingLibrary
             {
                 var old = AssociatedCosts;
                 _associatedCosts = value;
-                NotifyPropertyChanged(Change.Edit, "AssociatedCosts", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
             }
         }
 
@@ -110,7 +110,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     if(item is TECCost cost) { costs.AddRange(costs); }
-                    NotifyPropertyChanged(Change.Add, propertyName, this, item);
+                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
                 NotifyCostChanged(costs);
             }
@@ -120,7 +120,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     if (item is TECCost cost) { costs.AddRange(costs); }
-                    NotifyPropertyChanged(Change.Remove, propertyName, this, item);
+                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
                 NotifyCostChanged(CostHelper.NegativeCosts(costs));
             }

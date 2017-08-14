@@ -20,8 +20,8 @@ namespace EstimatingLibrary
             {
                 var old= Type;
                 _type = value;
-                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
-                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
 
@@ -34,7 +34,7 @@ namespace EstimatingLibrary
                 var old = Controllers;
                 _controllers = value;
                 Controllers.CollectionChanged -= controllersCollectionChanged;
-                NotifyPropertyChanged(Change.Edit, "Controllers", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
                 Controllers.CollectionChanged += controllersCollectionChanged;
             }
         }
@@ -86,14 +86,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged(Change.Add, "Controllers", this, item);
+                    NotifyCombinedChanged(Change.Add, "Controllers", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged(Change.Remove, "Controllers", this, item);
+                    NotifyCombinedChanged(Change.Remove, "Controllers", this, item);
                 }
             }
         }

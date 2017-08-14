@@ -19,7 +19,7 @@ namespace EstimatingLibrary
             {
                 var old = Labor;
                 _labor = value;
-                NotifyPropertyChanged(Change.Edit, "Labor", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Labor", this, value, old);
             }
         }
 
@@ -31,7 +31,7 @@ namespace EstimatingLibrary
             {
                 var old = Catalogs;
                 _catalogs = value;
-                NotifyPropertyChanged(Change.Edit, "Catalogs", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Catalogs", this, value, old);
             }
         }
 

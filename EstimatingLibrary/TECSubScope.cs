@@ -25,7 +25,7 @@ namespace EstimatingLibrary
                 }
                 var old = Devices;
                 _devices = value;
-                NotifyPropertyChanged(Change.Edit, "Devices", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Devices", this, value, old);
                 Devices.CollectionChanged += Devices_CollectionChanged;
             }
         }
@@ -46,7 +46,7 @@ namespace EstimatingLibrary
                 var old = Points;
                 _points = value;
                 Points.CollectionChanged += PointsCollectionChanged;
-                NotifyPropertyChanged(Change.Edit, "Points", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
 
@@ -150,7 +150,7 @@ namespace EstimatingLibrary
                 foreach (TECPoint item in e.NewItems)
                 {
                     pointNumber += item.PointNumber;
-                    NotifyPropertyChanged(Change.Add, "Points", this, item);
+                    NotifyCombinedChanged(Change.Add, "Points", this, item);
                 }
                 PointChanged?.Invoke(pointNumber);
             }
@@ -159,13 +159,13 @@ namespace EstimatingLibrary
                 int pointNumber = 0;
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged(Change.Remove, "Points", this, item);
+                    NotifyCombinedChanged(Change.Remove, "Points", this, item);
                 }
                 PointChanged?.Invoke(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged(Change.Edit, "Points", this, sender);
+                NotifyCombinedChanged(Change.Edit, "Points", this, sender);
             }
         }
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -175,7 +175,7 @@ namespace EstimatingLibrary
                 List<TECCost> costs = new List<TECCost>();
                 foreach (TECDevice item in e.NewItems)
                 {
-                    NotifyPropertyChanged(Change.Add, "Devices", this, item);
+                    NotifyCombinedChanged(Change.Add, "Devices", this, item);
                     costs.AddRange(deviceCost(item));
                 }
                 NotifyCostChanged(costs);
@@ -185,14 +185,14 @@ namespace EstimatingLibrary
                 List<TECCost> costs = new List<TECCost>();
                 foreach (TECDevice item in e.OldItems)
                 {
-                    NotifyPropertyChanged(Change.Remove, "Devices", this, item);
+                    NotifyCombinedChanged(Change.Remove, "Devices", this, item);
                     costs.AddRange(deviceCost(item));
                 }
                 NotifyCostChanged(CostHelper.NegativeCosts(costs));
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged(Change.Edit, "Devices", this, sender);
+                NotifyCombinedChanged(Change.Edit, "Devices", this, sender);
             }
         }
         #endregion

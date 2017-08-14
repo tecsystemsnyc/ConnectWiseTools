@@ -19,9 +19,9 @@ namespace EstimatingLibrary
             {
                 var old = Location;
                 _location = value;
-                NotifyPropertyChanged(Change.Edit, "Location", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Location", this, value, old);
                 
-                //NotifyPropertyChanged(Change.Edit, "ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
+                //NotifyCombinedChanged(Change.Edit, "ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
             }
         }
         #endregion
@@ -34,7 +34,7 @@ namespace EstimatingLibrary
             var old = Location;
             _location = location;
             RaisePropertyChanged("Location");
-            NotifyPropertyChanged(Change.Edit, "Location", this, location, old);
+            NotifyCombinedChanged(Change.Edit, "Location", this, location, old);
 
         }
 

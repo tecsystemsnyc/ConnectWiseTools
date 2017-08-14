@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace TECUserControlLibrary.Utilities
 {
-    public class VisibilityModel : INotifyPropertyChanged
+    public class VisibilityModel : INotifyCombinedChanged
     {
         #region System Datagrid Visibilities
         private Visibility _systemName;

@@ -30,7 +30,7 @@ namespace EstimatingLibrary
             {
                 var old = ParentConnection;
                 _parentConnection = value;
-                NotifyPropertyChanged(Change.Edit, "ParentConnection", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "ParentConnection", this, value, old);
                 RaisePropertyChanged("NetworkIO");
             }
         }
@@ -43,7 +43,7 @@ namespace EstimatingLibrary
                 ChildrenConnections.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
                 _childrenConnections = value;
                 ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
-                NotifyPropertyChanged(Change.Edit, "ChildrenConnections", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "ChildrenConnections", this, value, old);
                 RaisePropertyChanged("ChildNetworkConnections");
             }
         }
@@ -54,8 +54,8 @@ namespace EstimatingLibrary
             {
                 var old = Type;
                 _type = value;
-                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
-                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public NetworkType NetworkType
@@ -65,7 +65,7 @@ namespace EstimatingLibrary
             {
                 var old = NetworkType;
                 _networkType = value;
-                NotifyPropertyChanged(Change.Edit, "NetworkType", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "NetworkType", this, value, old);
             }
         }
         
@@ -131,14 +131,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged(Change.Add, propertyName, this, item);
+                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged(Change.Remove, propertyName, this, item);
+                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
             if (sender == ChildrenConnections)

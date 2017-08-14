@@ -28,7 +28,7 @@ namespace EstimatingLibrary
                 var old = Type;
                 _type = value;
                 // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
             }
         }
         public int Quantity
@@ -39,7 +39,7 @@ namespace EstimatingLibrary
                 var old = Quantity;
                 PointChanged?.Invoke(old - value);
                 _quantity = value;
-                NotifyPropertyChanged(Change.Edit, "Quantity", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
 
             }
         }

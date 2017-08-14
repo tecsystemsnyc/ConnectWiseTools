@@ -25,7 +25,7 @@ namespace EstimatingLibrary
             {
                 var old = Cost;
                 _cost = value;
-                NotifyPropertyChanged(Change.Edit, "Cost", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Cost", this, value, old);
             }
         }
         public double Labor
@@ -35,7 +35,7 @@ namespace EstimatingLibrary
             {
                 var old = Labor;
                 _labor = value;
-                NotifyPropertyChanged(Change.Edit, "Labor", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Labor", this, value, old);
             }
         }
         public CostType Type
@@ -45,7 +45,7 @@ namespace EstimatingLibrary
             {
                 var old = Type;
                 _type = value;
-                NotifyPropertyChanged(Change.Edit, "Type", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
             }
         }
         #endregion

@@ -23,7 +23,7 @@ namespace EstimatingLibrary
                 var old = Label;
                 _label = value;
                 // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged(Change.Edit, "Label", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Label", this, value, old);
             }
         }
 

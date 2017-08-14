@@ -19,7 +19,7 @@ namespace EstimatingLibrary
             {
                 var old = Quantity;
                 _quantity = value;
-                NotifyPropertyChanged(Change.Edit, "Quantity", this, value, old);
+                NotifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
 
             }
         }

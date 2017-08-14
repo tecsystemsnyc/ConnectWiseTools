@@ -18,8 +18,8 @@ namespace EstimatingLibrary
             {
                 var old = Manufacturer;
                 _manufacturer = value;
-                NotifyPropertyChanged(Change.Edit, "Manufacturer", this, value, old);
-                //NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                NotifyCombinedChanged(Change.Edit, "Manufacturer", this, value, old);
+                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
         public double ExtendedCost
