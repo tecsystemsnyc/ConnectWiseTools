@@ -30,7 +30,7 @@ namespace EstimatingLibrary.Utilities
         public ChangeWatcher(TECSystem system)
         {
             type = WatcherType.System;
-            registerSystem(system, OccuranceType.Typical);
+            initialize(system);
         }
         #endregion
 
@@ -57,6 +57,11 @@ namespace EstimatingLibrary.Utilities
         {
             occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
             registerBidChanges(bid);
+        }
+        private void initialize(TECSystem system)
+        {
+            occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
+            registerSystem(system, OccuranceType.Typical);
         }
 
         #region Registration
@@ -267,7 +272,7 @@ namespace EstimatingLibrary.Utilities
 
         private void registerChange(TECChangedEventArgs args)
         {
-            if (args.Value is TECObject value)
+            if (args.Value is TECObject value && args.PropertyName != "TypicalInstanceDictionary")
             {
                 if (args.Change == Change.Add)
                 {

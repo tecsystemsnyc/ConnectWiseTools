@@ -27,7 +27,6 @@ namespace EstimatingLibrary
         #region Constructors
         public TECSystem(Guid guid) : base(guid)
         {
-            new ChangeWatcher(this).SystemChanged += handleSystemChanged;
 
             _proposeEquipment = false;
 
@@ -46,6 +45,9 @@ namespace EstimatingLibrary
             _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
             _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
+
+            new ChangeWatcher(this).SystemChanged += handleSystemChanged;
+
         }
 
         public TECSystem() : this(Guid.NewGuid()) { }
