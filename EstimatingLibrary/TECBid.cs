@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECBid : TECScopeManager
+    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged
     {
         #region Properties
         private string _name;
@@ -18,6 +19,9 @@ namespace EstimatingLibrary
         private string _salesperson;
         private string _estimator;
         private TECBidParameters _parameters;
+
+        public event Action<List<TECCost>> CostChanged;
+        public event Action<int> PointChanged;
 
         private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
         private ObservableCollection<TECSystem> _systems { get; set; }
@@ -94,28 +98,8 @@ namespace EstimatingLibrary
             set
             {
                 var old = Parameters;
-                Parameters.PropertyChanged -= objectPropertyChanged;
                 _parameters = value;
                 NotifyPropertyChanged(Change.Edit, "Parameters", this, value, old);
-                Parameters.PropertyChanged += objectPropertyChanged;
-            }
-        }
-        public override TECLabor Labor
-        {
-            get
-            {
-                return base.Labor;
-            }
-
-            set
-            {
-                if(Labor != null)
-                {
-                    Labor.PropertyChanged -= objectPropertyChanged;
-                }
-                base.Labor = value;
-                Labor.PropertyChanged += objectPropertyChanged;
-                
             }
         }
 
@@ -219,23 +203,17 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged(Change.Edit, "Panels", this, value, old);
             }
         }
-
-        public int TotalPointNumber
+        
+        public List<TECCost> Costs
+        {
+            get { return costs();  }
+        }
+        public int PointNumber
         {
             get
             {
                 return pointNumber();
             }
-        }
-
-        public List<TECCost> Costs
-        {
-            get { return costs();  }
-        }
-        
-        public List<TECPoint> Points
-        {
-            get { return points(); }
         }
         #endregion //Properties
 
@@ -256,8 +234,6 @@ namespace EstimatingLibrary
             _panels = new ObservableCollection<TECPanel>();
             _labor = new TECLabor();
             _parameters = new TECBidParameters();
-            Parameters.PropertyChanged += objectPropertyChanged;
-            Labor.PropertyChanged += objectPropertyChanged;
 
             Systems.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Systems");
             ScopeTree.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ScopeTree");
@@ -305,30 +281,32 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
+                int pointNumber = 0;
+                List<TECCost> costs = new List<TECCost>();
                 foreach (object item in e.NewItems)
                 {
+                    if (item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
+                    if (item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
                     NotifyPropertyChanged(Change.Add, collectionName, this, item);
-                    if (item is TECCost)
-                    {
-                        (item as TECObject).PropertyChanged += objectPropertyChanged;
-                    }
-                    else if (item is TECSystem)
+                    if (item is TECSystem)
                     {
                         var sys = item as TECSystem;
                         sys.PropertyChanged += System_PropertyChanged;
                     }
                 }
+                PointChanged?.Invoke(pointNumber);
+                CostChanged?.Invoke(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
+                int pointNumber = 0;
+                List<TECCost> costs = new List<TECCost>();
                 foreach (object item in e.OldItems)
                 {
+                    if(item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
+                    if(item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
                     NotifyPropertyChanged(Change.Remove, collectionName, this, item);
-                    if (item is TECCost)
-                    {
-                        (item as TECCost).PropertyChanged -= objectPropertyChanged;
-                    }
-                    else if (item is TECSystem)
+                    if (item is TECSystem)
                     {
                         var sys = item as TECSystem;
                         sys.PropertyChanged -= System_PropertyChanged;
@@ -339,6 +317,8 @@ namespace EstimatingLibrary
                         (item as TECController).RemoveAllConnections();
                     }
                 }
+                PointChanged?.Invoke(pointNumber);
+                CostChanged?.Invoke(CostHelper.NegativeCosts(costs));
                 
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -371,43 +351,8 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private void objectPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (sender is TECLabor)
-            {
-                List<string> userAdjustmentPropertyNames = new List<string>()
-                {
-                    "PMExtraHours",
-                    "SoftExtraHours",
-                    "GraphExtraHours",
-                    "ENGExtraHours",
-                    "CommExtraHours"
-                };
-                if (userAdjustmentPropertyNames.Contains(e.PropertyName))
-                {
-                    NotifyPropertyChanged(Change.Edit, "Labor", this, Labor);
-                }
-            }
-        }
         #endregion
-
-        private List<TECPoint> points()
-        {
-            List<TECPoint> totalPoints = new List<TECPoint>();
-            foreach (TECSystem sys in Systems)
-            {
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    foreach (TECSubScope sub in equip.SubScope)
-                    {
-                        foreach (TECPoint point in sub.Points)
-                        { totalPoints.Add(point); }
-                    }
-                }
-            }
-            return totalPoints;
-        }
-
+        
         private List<TECCost> costs()
         {
             List<TECCost> outCosts = new List<TECCost>();

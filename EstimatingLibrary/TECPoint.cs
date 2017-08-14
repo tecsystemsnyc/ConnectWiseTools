@@ -18,7 +18,7 @@ namespace EstimatingLibrary
         private PointTypes _type;
         private int _quantity;
 
-        public event Action<List<TECPoint>> PointChanged;
+        public event Action<int> PointChanged;
 
         public PointTypes Type
         {
@@ -37,6 +37,7 @@ namespace EstimatingLibrary
             set
             {
                 var old = Quantity;
+                PointChanged?.Invoke(old - value);
                 _quantity = value;
                 NotifyPropertyChanged(Change.Edit, "Quantity", this, value, old);
 
@@ -66,6 +67,7 @@ namespace EstimatingLibrary
                 return Quantity;
             }
         }
+        
         #endregion //Properties
 
         #region Constructors

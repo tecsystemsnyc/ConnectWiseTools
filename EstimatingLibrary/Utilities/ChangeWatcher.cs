@@ -34,7 +34,7 @@ namespace EstimatingLibrary.Utilities
         public event Action<PropertyChangedExtendedEventArgs> BidChanged;
         public event Action<PropertyChangedExtendedEventArgs> InstanceChanged;
         public event Action<List<TECCost>> CostChanged;
-        public event Action<List<TECPoint>> PointChanged;
+        public event Action<int> PointChanged;
         #endregion
 
         #region Enums
@@ -56,6 +56,8 @@ namespace EstimatingLibrary.Utilities
         #region Registration
         private void registerBidChanges(TECBid bid)
         {
+            bid.PointChanged += (e) => handlePointChanged(bid, e);
+            bid.CostChanged += (e) => handleCostChanged(bid, e);
             registerTECObject(bid, OccuranceType.None);
             registerTECObject(bid.Labor, OccuranceType.None);
             registerTECObject(bid.Parameters, OccuranceType.None);
@@ -416,11 +418,11 @@ namespace EstimatingLibrary.Utilities
                 CostChanged?.Invoke(obj);
             }
         }
-        private void handlePointChanged(TECObject sender, List<TECPoint> obj)
+        private void handlePointChanged(TECObject sender, int num)
         {
             if (isInstance(sender))
             {
-                PointChanged?.Invoke(obj);
+                PointChanged?.Invoke(num);
             }
         }
         #endregion

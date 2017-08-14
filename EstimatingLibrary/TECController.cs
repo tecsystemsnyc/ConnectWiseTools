@@ -80,10 +80,8 @@ namespace EstimatingLibrary
             { return getNetworkIO(); }
         }
         public bool IsGlobal;
-
-        public event Action<List<TECCost>> CostChanged;
-
-        public List<TECCost> Costs
+        
+        new public List<TECCost> Costs
         {
             get { return costs(); }
         }
@@ -428,11 +426,6 @@ namespace EstimatingLibrary
                 }
             }
             return outCosts;
-        }
-
-        public void NotifyCostChanged(List<TECCost> costs)
-        {
-            CostChanged?.Invoke(costs);
         }
         #endregion
     }

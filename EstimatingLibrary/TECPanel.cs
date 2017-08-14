@@ -26,9 +26,6 @@ namespace EstimatingLibrary
         }
 
         private ObservableCollection<TECController> _controllers;
-
-        public event Action<List<TECCost>> CostChanged;
-
         public ObservableCollection<TECController> Controllers
         {
             get { return _controllers; }
@@ -42,7 +39,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECCost> Costs
+        new public List<TECCost> Costs
         {
             get
             {
@@ -53,10 +50,7 @@ namespace EstimatingLibrary
         {
             var outCosts = new List<TECCost>();
             outCosts.Add(Type);
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
+            outCosts.AddRange(AssociatedCosts);
             return outCosts;
         }
         #endregion
@@ -102,11 +96,6 @@ namespace EstimatingLibrary
                     NotifyPropertyChanged(Change.Remove, "Controllers", this, item);
                 }
             }
-        }
-
-        public void NotifyCostChanged(List<TECCost> costs)
-        {
-            CostChanged?.Invoke(costs);
         }
     }
 }

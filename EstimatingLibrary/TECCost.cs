@@ -26,7 +26,6 @@ namespace EstimatingLibrary
                 var old = Cost;
                 _cost = value;
                 NotifyPropertyChanged(Change.Edit, "Cost", this, value, old);
-                RaisePropertyChanged("TotalCost");
             }
         }
         public double Labor
@@ -37,7 +36,6 @@ namespace EstimatingLibrary
                 var old = Labor;
                 _labor = value;
                 NotifyPropertyChanged(Change.Edit, "Labor", this, value, old);
-                RaisePropertyChanged("TotalLabor");
             }
         }
         public CostType Type
@@ -58,6 +56,10 @@ namespace EstimatingLibrary
             _cost = 0;
             _labor = 0;
             _type = 0;
+        }
+        public TECCost(TECCost cost) : this()
+        {
+            copyPropertiesFromCost(cost);
         }
 
         public TECCost() : this(Guid.NewGuid()) { }

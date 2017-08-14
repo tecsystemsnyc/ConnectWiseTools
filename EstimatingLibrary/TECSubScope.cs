@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyCostChanged, INotifyPointChanged, DragDropComponent
+    public class TECSubScope : TECLocated, INotifyPointChanged, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECDevice> _devices;
@@ -32,10 +32,7 @@ namespace EstimatingLibrary
 
         private ObservableCollection<TECPoint> _points;
 
-        public event Action<List<TECPoint>> PointChanged;
-
-
-        public event Action<List<TECCost>> CostChanged;
+        public event Action<int> PointChanged;
 
         public ObservableCollection<TECPoint> Points
         {
@@ -90,30 +87,14 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECCost> Costs
+        new public List<TECCost> Costs
         {
             get
             {
-                return getCosts();
+                return costs();
             }
         }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            foreach(TECDevice dev in Devices)
-            {
-                outCosts.Add(dev);
-                foreach(TECCost cost in dev.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            return outCosts;
-        }
+        
         #endregion //Properties
 
         #region Constructors
@@ -121,7 +102,6 @@ namespace EstimatingLibrary
         {
             _devices = new ObservableCollection<TECDevice>();
             _points = new ObservableCollection<TECPoint>();
-            subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
         }
@@ -164,40 +144,24 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            //_ai = 0;
-            //_ao = 0;
-            //_bi = 0;
-            //_bo = 0;
-            //_serial = 0;
-            //foreach (TECPoint point in Points)
-            //{
-            //    if (point.Type == PointTypes.AI) { _ai++; }
-            //    else if (point.Type == PointTypes.AO) { _ao++; }
-            //    else if (point.Type == PointTypes.BI) { _bi++; }
-            //    else if (point.Type == PointTypes.BO) { _bo++; }
-            //    else if (point.Type == PointTypes.Serial) { _serial++; }
-            //    else
-            //    {
-            //        string message = "Invalid Point Type in PointsColllectionChanged in TECSubScope";
-            //        throw new InvalidCastException(message);
-            //    }
-            //}
-
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (object item in e.NewItems)
+                int pointNumber = 0;
+                foreach (TECPoint item in e.NewItems)
                 {
+                    pointNumber += item.PointNumber;
                     NotifyPropertyChanged(Change.Add, "Points", this, item);
                 }
-                RaisePropertyChanged("PointNumber");
+                PointChanged?.Invoke(pointNumber);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
+                int pointNumber = 0;
                 foreach (object item in e.OldItems)
                 {
                     NotifyPropertyChanged(Change.Remove, "Points", this, item);
                 }
-                RaisePropertyChanged("PointNumber");
+                PointChanged?.Invoke(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -208,47 +172,27 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (object item in e.NewItems)
+                List<TECCost> costs = new List<TECCost>();
+                foreach (TECDevice item in e.NewItems)
                 {
                     NotifyPropertyChanged(Change.Add, "Devices", this, item);
-                    ((TECDevice)item).PropertyChanged += DeviceChanged;
-                    RaisePropertyChanged("TotalDevices");
-                    //var old = generateOldINotifyCostChanged(Change.Add, item as TECDevice);
-                    //NotifyPropertyChanged<object>("INotifyCostChangedChanged", old, this);
+                    costs.AddRange(deviceCost(item));
                 }
+                NotifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (object item in e.OldItems)
+                List<TECCost> costs = new List<TECCost>();
+                foreach (TECDevice item in e.OldItems)
                 {
                     NotifyPropertyChanged(Change.Remove, "Devices", this, item);
-                    ((TECDevice)item).PropertyChanged -= DeviceChanged;
-                    RaisePropertyChanged("TotalDevices");
-                    //var old = generateOldINotifyCostChanged(Change.Remove, item as TECDevice);
-                    //NotifyPropertyChanged<object>("INotifyCostChangedChanged", old, this);
+                    costs.AddRange(deviceCost(item));
                 }
+                NotifyCostChanged(CostHelper.NegativeCosts(costs));
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 NotifyPropertyChanged(Change.Edit, "Devices", this, sender);
-            }
-        }
-        private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-            if (e.PropertyName == "Quantity")
-            {
-                //NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
-            }
-            if(args != null)
-            {
-                if(e.PropertyName == "Cost" || e.PropertyName == "Manufacturer")
-                {
-                    //var old = this.Copy() as TECSubScope;
-                    //old.Devices.Remove(args.NewValue as TECDevice);
-                    //old.Devices.Add(args.OldValue as TECDevice);
-                    //NotifyPropertyChanged("INotifyCostChangedChanged", old, this);
-                }
             }
         }
         #endregion
@@ -273,22 +217,7 @@ namespace EstimatingLibrary
             }
             return outTypes;
         }
-
-        private void subscribeToDevices()
-        {
-            foreach (TECDevice item in this._devices)
-            {
-                item.PropertyChanged += DeviceChanged;
-            }
-        }
-        private void unSubscribeToDevices()
-        {
-            foreach (TECDevice item in this._devices)
-            {
-                item.PropertyChanged -= DeviceChanged;
-            }
-        }
-
+        
         private List<TECElectricalMaterial> getAvailableConnectionTypes()
         {
             var availableConnections = new List<TECElectricalMaterial>();
@@ -334,7 +263,6 @@ namespace EstimatingLibrary
         private void reSubscribeToCollections()
         {
             Points.CollectionChanged += PointsCollectionChanged;
-            subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
         }
 
@@ -343,15 +271,31 @@ namespace EstimatingLibrary
             _connection = connection;
         }
 
-        public void NotifyCostChanged(List<TECCost> costs)
+        private List<TECCost> costs()
         {
-            CostChanged?.Invoke(costs);
+            var outCosts = new List<TECCost>();
+            foreach (TECDevice dev in Devices)
+            {
+                outCosts.AddRange(deviceCost(dev));
+            }
+            foreach (TECCost cost in AssociatedCosts)
+            {
+                outCosts.Add(cost);
+            }
+            return outCosts;
         }
 
-        public void NotifyPointChanged(List<TECPoint> points)
+        private List<TECCost> deviceCost(TECDevice device)
         {
-            PointChanged?.Invoke(points);
+            var outCosts = new List<TECCost>();
+            outCosts.Add(device);
+            foreach (TECCost cost in device.AssociatedCosts)
+            {
+                outCosts.Add(cost);
+            }
+            return outCosts;
         }
+        
         #endregion
     }
 }

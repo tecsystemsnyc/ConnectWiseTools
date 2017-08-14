@@ -11,9 +11,7 @@ namespace EstimatingLibrary
     public class TECMisc : TECCost, INotifyCostChanged, DragDropComponent
     {
         private int _quantity;
-
-        public event Action<List<TECCost>> CostChanged;
-
+        
         public int Quantity
         {
             get { return _quantity; }
@@ -26,7 +24,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECCost> Costs
+        new public List<TECCost> Costs
         {
             get
             {
@@ -54,11 +52,6 @@ namespace EstimatingLibrary
         public new object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECMisc(this);
-        }
-
-        public void NotifyCostChanged(List<TECCost> costs)
-        {
-            CostChanged?.Invoke(costs);
         }
     }
 }

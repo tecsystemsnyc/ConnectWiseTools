@@ -23,10 +23,8 @@ namespace EstimatingLibrary
         private ObservableItemToInstanceList<TECObject> _charactersticInstances;
         private bool _proposeEquipment;
         private ChangeWatcher watcher;
-
-        public event Action<List<TECCost>> CostChanged;
-
-        public event Action<List<TECPoint>> PointChanged;
+        
+        public event Action<int> PointChanged;
 
         public ObservableCollection<TECEquipment> Equipment
         {
@@ -170,7 +168,7 @@ namespace EstimatingLibrary
             }
         }
         
-        public List<TECCost> Costs
+        new public List<TECCost> Costs
         {
             get { return costs(); }
         }
@@ -261,10 +259,12 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
+                int pointNumber = 0;
                 foreach (object item in e.NewItems)
                 {
                     if (item != null)
                     {
+                        if(item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
                         NotifyPropertyChanged(Change.Add, propertyName, this, item);
                         if(item is TECController)
                         {
@@ -272,13 +272,17 @@ namespace EstimatingLibrary
                         }
                     }
                 }
+                PointChanged?.Invoke(pointNumber);
+
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
+                int pointNumber = 0;
                 foreach (object item in e.OldItems)
                 {
                     if (item != null)
                     {
+                        if (item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
                         NotifyPropertyChanged(Change.Remove, propertyName, this, item);
                         if (item is TECSystem)
                         {
@@ -286,6 +290,7 @@ namespace EstimatingLibrary
                         }
                     }
                 }
+                PointChanged?.Invoke(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -918,12 +923,7 @@ namespace EstimatingLibrary
             SystemInstances.Add(newSystem);
             return (newSystem);
         }
-
-        public void NotifyCostChanged(List<TECCost> costs)
-        {
-            CostChanged?.Invoke(costs);
-        }
-
+        
         public void NotifyPointChanged(List<TECPoint> points)
         {
             throw new NotImplementedException();

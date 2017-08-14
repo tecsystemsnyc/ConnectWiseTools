@@ -8,7 +8,7 @@ namespace EstimatingLibrary.Interfaces
 {
     interface INotifyPointChanged
     {
-        event Action<List<TECPoint>> PointChanged;
-        void NotifyPointChanged(List<TECPoint> points);
+        event Action<int> PointChanged;
+        int PointNumber { get; }
     }
 }

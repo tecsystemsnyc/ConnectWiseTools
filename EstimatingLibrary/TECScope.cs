@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECScope : TECObject
+    public abstract class TECScope : TECObject, INotifyCostChanged
     {
         #region Properties
 
@@ -20,6 +20,8 @@ namespace EstimatingLibrary
 
         protected ObservableCollection<TECLabeled> _tags;
         protected ObservableCollection<TECCost> _associatedCosts;
+
+        public event Action<List<TECCost>> CostChanged;
 
         public string Name
         {
@@ -63,13 +65,13 @@ namespace EstimatingLibrary
             set
             {
                 var old = AssociatedCosts;
-                AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
                 _associatedCosts = value;
                 NotifyPropertyChanged(Change.Edit, "AssociatedCosts", this, value, old);
-                AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
             }
         }
-        
+
+        public List<TECCost> Costs { get { return this.AssociatedCosts.ToList(); } }
+
         #endregion
 
         #region Constructors
@@ -82,7 +84,6 @@ namespace EstimatingLibrary
             _tags = new ObservableCollection<TECLabeled>();
             _associatedCosts = new ObservableCollection<TECCost>();
             Tags.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Tags");
-            AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
         }
 
         #endregion 
@@ -105,61 +106,31 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
+                List<TECCost> costs = new List<TECCost>();
                 foreach (object item in e.NewItems)
                 {
+                    if(item is TECCost cost) { costs.AddRange(costs); }
                     NotifyPropertyChanged(Change.Add, propertyName, this, item);
                 }
+                NotifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
+                List<TECCost> costs = new List<TECCost>();
                 foreach (object item in e.OldItems)
                 {
+                    if (item is TECCost cost) { costs.AddRange(costs); }
                     NotifyPropertyChanged(Change.Remove, propertyName, this, item);
                 }
+                NotifyCostChanged(CostHelper.NegativeCosts(costs));
             }
+        }
+        
+        public void NotifyCostChanged(List<TECCost> costs)
+        {
+            CostChanged?.Invoke(costs);
         }
 
-        private void AssociatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            collectionChanged(sender, e, "AssociatedCosts");
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    var assCost = item as TECCost;
-                    assCost.PropertyChanged += AssCost_PropertyChanged;
-                    //var old = this.Copy() as TECScope;
-                    //old.AssociatedCosts.Remove(item as TECCost);
-                    //NotifyPropertyChanged("INotifyCostChangedChanged", old as object, this as object);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    var assCost = item as TECCost;
-                    assCost.PropertyChanged -= AssCost_PropertyChanged;
-                    //var old = this.Copy() as TECScope;
-                    //old.AssociatedCosts.Add(item as TECCost);
-                    //NotifyPropertyChanged("INotifyCostChangedChanged", old as object, this as object);
-                }
-            }
-        }
-
-        private void AssCost_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e is PropertyChangedExtendedEventArgs)
-            {
-                var args = e as PropertyChangedExtendedEventArgs;
-                if ((args.PropertyName == "Cost") || (args.PropertyName == "Labor"))
-                {
-                    //var old = this.Copy() as TECScope;
-                    //old.AssociatedCosts.Remove(args.NewValue as TECCost);
-                    //old.AssociatedCosts.Add(args.OldValue as TECCost);
-                    //NotifyPropertyChanged("INotifyCostChangedChanged", old, this);
-                }
-            }
-        }
         #endregion Methods
     }
 }

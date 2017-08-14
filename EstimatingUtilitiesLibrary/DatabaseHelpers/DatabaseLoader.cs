@@ -24,7 +24,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         public static TECScopeManager Load(string path)
         {
             TECScopeManager workingScopeManager = null;
-            var SQLiteDB = new SQLiteDatabase(path);
+            SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
 
             var tableNames = DatabaseHelper.TableNames(SQLiteDB);

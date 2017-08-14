@@ -15,8 +15,6 @@ namespace EstimatingLibrary
     {
 
         TECBid bid;
-        ChangeWatcher watcher;
-
         const double ZERO = 0;
 
         #region Cost Base
@@ -241,9 +239,9 @@ namespace EstimatingLibrary
             addCost(changes);
         }
         
-        private void PointChanged(List<TECPoint> points)
+        private void PointChanged(int pointNum)
         {
-            addPoints(points);
+            addPoints(pointNum);
         }
         private void getInitialValues()
         {
@@ -251,7 +249,7 @@ namespace EstimatingLibrary
             tecCost = new TECCost();
             electricalCost = new TECCost();
 
-            addPoints(bid.Points);
+            addPoints(bid.PointNumber);
             addCost(bid.Costs);
         }
         
@@ -287,12 +285,9 @@ namespace EstimatingLibrary
             }
             
         }
-        private void addPoints(List<TECPoint> points)
+        private void addPoints(int poitNum)
         {
-            foreach(TECPoint point in points)
-            {
-                pointNumber += point.Quantity;
-            }
+            pointNumber += poitNum;
             raiseFromPoints(); 
         }
         #endregion

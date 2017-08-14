@@ -9,12 +9,12 @@ using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyCostChanged, INotifyPointChanged, DragDropComponent
+    public class TECEquipment : TECLocated, INotifyPointChanged, DragDropComponent
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
 
-        public event Action<List<TECPoint>> PointChanged;
+        public event Action<int> PointChanged;
 
         public ObservableCollection<TECSubScope> SubScope
         {
@@ -29,9 +29,6 @@ namespace EstimatingLibrary
                 _subScope = value;
                 SubScope.CollectionChanged += SubScope_CollectionChanged;
                 NotifyPropertyChanged(Change.Edit, "SubScope", this, value, old);
-
-                RaisePropertyChanged("SubScopeQuantity");
-                subscribeToSubScope();
             }
         }
         
@@ -42,13 +39,15 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
-        public List<TECCost> Costs
+        new public List<TECCost> Costs
         {
             get { return costs(); }
         }
+        public List<TECPoint> Points
+        {
+            get { return points(); }
+        }
         #endregion //Properties
-
-        public event Action<List<TECCost>> CostChanged;
 
         #region Constructors
         public TECEquipment(Guid guid) : base(guid)
@@ -88,67 +87,42 @@ namespace EstimatingLibrary
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            RaisePropertyChanged("SubScopeQuantity");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (object item in e.NewItems)
+                int pointNumber = 0;
+                List<TECCost> costs = new List<TECCost>();
+                foreach (TECSubScope item in e.NewItems)
                 {
+                    pointNumber += item.PointNumber;
+                    costs.AddRange(item.Costs);
                     NotifyPropertyChanged(Change.Add, "SubScope", this, item);
-                    checkForTotalsInSubScope(item as TECSubScope);
                     if ((item as TECSubScope).Location == null)
                     {
                         (item as TECSubScope).SetLocationFromParent(this.Location);
                     }
                 }
+                PointChanged?.Invoke(pointNumber);
+                NotifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (object item in e.OldItems)
+                int pointNumber = 0;
+                List<TECCost> costs = new List<TECCost>();
+                foreach (TECSubScope item in e.OldItems)
                 {
+                    pointNumber += item.PointNumber;
+                    costs.AddRange(item.Costs);
                     NotifyPropertyChanged(Change.Remove, "SubScope", this, item);
-                    //NotifyPropertyChanged("RemovedSubScope", this, item);
                 }
+                PointChanged?.Invoke(pointNumber * -1);
+                NotifyCostChanged(CostHelper.NegativeCosts(costs));
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 NotifyPropertyChanged(Change.Edit, "SubScope", this, sender);
             }
-            subscribeToSubScope();
         }
-        private void SubScopeChanged(string name)
-        {
-            if (name == "PointNumber")
-            {
-                RaisePropertyChanged("PointNumber");
-            }
-            else if (name == "TotalDevices")
-            {
-                RaisePropertyChanged("TotalDevices");
-            }
-            else if (name == "Length")
-            {
-                RaisePropertyChanged("SubLength");
-            }
-        }
-        private void subscribeToSubScope()
-        {
-            foreach (TECSubScope scope in this.SubScope)
-            {
-                scope.PropertyChanged += (scopeSender, args) => this.SubScopeChanged(args.PropertyName);
-            }
-        }
-
-        private void checkForTotalsInSubScope(TECSubScope subScope)
-        {
-            if (subScope.Points.Count > 0)
-            {
-                RaisePropertyChanged("PointNumber");
-            }
-            if (subScope.Devices.Count > 0)
-            {
-                RaisePropertyChanged("TotalDevices");
-            }
-        }
+        
         private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Location")
@@ -184,12 +158,17 @@ namespace EstimatingLibrary
             {
                 outCosts.AddRange(subScope.Costs);
             }
+            outCosts.AddRange(this.AssociatedCosts);
             return outCosts;
         }
-
-        public void NotifyCostChanged(List<TECCost> costs)
+        private List<TECPoint> points()
         {
-            CostChanged?.Invoke(costs);
+            List<TECPoint> outPoints = new List<TECPoint>();
+            foreach(TECSubScope subScope in this.SubScope)
+            {
+                outPoints.AddRange(subScope.Points);
+            }
+            return outPoints;
         }
 
         public void NotifyPointChanged(List<TECPoint> points)
