@@ -494,7 +494,7 @@ namespace Tests
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
             {
-                foreach (TECSystem instance in system.SystemInstances)
+                foreach (TECSystem instance in system.Instances)
                 {
                     if (expectedSystem.Guid == instance.Guid)
                     {
@@ -526,7 +526,7 @@ namespace Tests
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
             {
-                foreach (TECSystem instance in system.SystemInstances)
+                foreach (TECSystem instance in system.Instances)
                 {
                     if (expectedSystem.Guid == instance.Guid)
                     {

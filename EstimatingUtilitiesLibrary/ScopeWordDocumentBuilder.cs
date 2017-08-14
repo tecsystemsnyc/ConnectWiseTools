@@ -13366,9 +13366,9 @@ namespace EstimatingUtilitiesLibrary
             text34.Text = scope.Name;
             if(scope is TECSystem)
             {
-                if((scope as TECSystem).SystemInstances.Count > 1)
+                if((scope as TECSystem).Instances.Count > 1)
                 {
-                    text34.Text += ": (Qty. " + (scope as TECSystem).SystemInstances.Count + ")";
+                    text34.Text += ": (Qty. " + (scope as TECSystem).Instances.Count + ")";
                 }
             }
 

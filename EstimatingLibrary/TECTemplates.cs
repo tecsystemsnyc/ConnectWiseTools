@@ -199,7 +199,7 @@ namespace EstimatingLibrary
                         removeChildFromScope(ss, child);
                     }
                 }
-                foreach(TECSystem instance in sys.SystemInstances)
+                foreach(TECSystem instance in sys.Instances)
                 {
                     removeChildFromScope(sys, child);
                     foreach (TECEquipment equip in sys.Equipment)

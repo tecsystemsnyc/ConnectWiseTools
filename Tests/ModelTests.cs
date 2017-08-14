@@ -132,8 +132,8 @@ namespace Tests
                 system.AddInstance(bid);
             }
 
-            Assert.AreEqual(system.SystemInstances.Count, qty);
-            foreach (TECSystem instance in system.SystemInstances)
+            Assert.AreEqual(system.Instances.Count, qty);
+            foreach (TECSystem instance in system.Instances)
             {
                 Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
                 Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
@@ -159,7 +159,7 @@ namespace Tests
             system.Controllers.Add(TestHelper.CreateTestController(bid.Catalogs));
             system.Panels.Add(TestHelper.CreateTestPanel(bid.Catalogs));
 
-            foreach (TECSystem instance in system.SystemInstances)
+            foreach (TECSystem instance in system.Instances)
             {
                 Assert.AreEqual(system.Equipment.Count, instance.Equipment.Count);
                 Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
@@ -185,7 +185,7 @@ namespace Tests
             
             Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
 
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
 
             Assert.AreEqual(1, bidController.ChildrenConnections.Count, "Connection not removed");
             

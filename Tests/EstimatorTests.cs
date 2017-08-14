@@ -172,7 +172,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Estimate_AddSystemInstancesWithController()
+        public void Estimate_AddInstancesWithController()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
@@ -196,7 +196,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Estimate_RemoveSystemInstancesWithController()
+        public void Estimate_RemoveInstancesWithController()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
@@ -452,7 +452,7 @@ namespace Tests
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
 
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -510,7 +510,7 @@ namespace Tests
             bid.Systems.Add(system);
             var instance = system.AddInstance(bid);
 
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -626,7 +626,7 @@ namespace Tests
 
             var instance = system.AddInstance(bid);
 
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -691,7 +691,7 @@ namespace Tests
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
 
-            foreach(TECSystem instance in system.SystemInstances)
+            foreach(TECSystem instance in system.Instances)
             {
                 foreach(TECController instanceController in instance.Controllers)
                 {
@@ -769,7 +769,7 @@ namespace Tests
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
 
-            foreach (TECSystem instance in system.SystemInstances)
+            foreach (TECSystem instance in system.Instances)
             {
                 foreach (TECController instanceController in instance.Controllers)
                 {
@@ -1354,7 +1354,7 @@ namespace Tests
             bid.Controllers.Add(controller1);
             system.Controllers.Add(controller2);
             system.AddInstance(bid);
-            var instanceController = system.SystemInstances.RandomObject().Controllers.RandomObject();
+            var instanceController = system.Instances.RandomObject().Controllers.RandomObject();
 
             var connection = controller1.AddController(instanceController, connectionType);
             connection.Length = 50;
@@ -1388,7 +1388,7 @@ namespace Tests
             bid.Controllers.Add(controller1);
             system.Controllers.Add(controller2);
             system.AddInstance(bid);
-            var instanceController = system.SystemInstances.RandomObject().Controllers.RandomObject();
+            var instanceController = system.Instances.RandomObject().Controllers.RandomObject();
 
             var connection = controller1.AddController(instanceController, connectionType);
             connection.Length = 50;
@@ -1743,7 +1743,7 @@ namespace Tests
             TECSubScopeConnection ssConnect = controller.AddSubScope(subScope);
             ssConnect.Length = 50;
 
-            typical.SystemInstances.Remove(instance);
+            typical.Instances.Remove(instance);
 
             //Assert
             assertNoCostOrLabor(estimate);

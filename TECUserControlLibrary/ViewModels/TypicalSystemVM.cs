@@ -230,7 +230,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool deleteControlledScopeCanExecute()
         {
-            if (SelectedChild != null && SelectedSystem.SystemInstances.Contains(SelectedChild))
+            if (SelectedChild != null && SelectedSystem.Instances.Contains(SelectedChild))
             {
                 return true;
             }
@@ -241,7 +241,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void deleteControlledScopeExecute()
         {
-            SelectedSystem.SystemInstances.Remove(SelectedChild);
+            SelectedSystem.Instances.Remove(SelectedChild);
         }
 
         public void DragOver(IDropInfo dropInfo)

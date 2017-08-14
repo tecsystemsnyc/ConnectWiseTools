@@ -798,7 +798,7 @@ namespace Tests
             Total totalElec = calculateTotalInstanceSystem(instance, typical, CostType.Electrical);
 
             //Act
-            typical.SystemInstances.Remove(instance);
+            typical.Instances.Remove(instance);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.cost, delta, "Total tec cost didn't update properly.");

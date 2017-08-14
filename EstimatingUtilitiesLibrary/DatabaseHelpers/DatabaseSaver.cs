@@ -141,7 +141,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 saveStack.AddRange(DeltaStacker.AddStack(item, branch));
                 saveStack.AddRange(scopeBranchChildrenSaveStack(branch));
             }
-            foreach(TECSystem instance in item.SystemInstances)
+            foreach(TECSystem instance in item.Instances)
             {
                 saveStack.AddRange(DeltaStacker.AddStack(item, instance));
                 saveStack.AddRange(systemChildrenSaveStack(instance));

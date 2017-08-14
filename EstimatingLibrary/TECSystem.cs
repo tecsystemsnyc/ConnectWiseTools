@@ -40,7 +40,7 @@ namespace EstimatingLibrary
 
             TypicalInstanceDictionary = new ListDictionary<TECObject>();
 
-            _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
+            _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
             _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
             _controllers.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Controllers");
             _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
@@ -107,10 +107,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = _instances;
-                _instances.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
+                _instances.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Instances");
                 _instances = value;
                 NotifyTECChanged(Change.Edit, "Instances", this, value, old);
-                _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
+                _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
             }
         }
         public ObservableCollection<TECEquipment> Equipment

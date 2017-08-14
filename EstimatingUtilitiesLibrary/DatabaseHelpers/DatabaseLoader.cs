@@ -1038,7 +1038,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             //watch.Stop();
             //Console.WriteLine("getPanelsInSystem: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
-            system.SystemInstances = getChildrenSystems(guid);
+            system.Instances = getChildrenSystems(guid);
             //watch.Stop();
             //Console.WriteLine("getChildrenSystems: " + watch.ElapsedMilliseconds);
             //watch = System.Diagnostics.Stopwatch.StartNew();
@@ -1053,7 +1053,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             getScopeChildren(system);
             // watch.Stop();
             // Console.WriteLine("getScopeChildren: " + watch.ElapsedMilliseconds);
-            system.RefreshReferences();
 
             return system;
         }

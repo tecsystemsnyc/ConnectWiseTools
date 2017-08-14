@@ -213,9 +213,9 @@ namespace EstimatingUtilitiesLibrary
                  paragraph = document.LastSection.AddParagraph();
                 paragraph.AddTab();
                 string systemString = system.Name;
-                if (system.SystemInstances.Count > 1)
+                if (system.Instances.Count > 1)
                 {
-                    systemString += " (" + system.SystemInstances.Count.ToString() + ")";
+                    systemString += " (" + system.Instances.Count.ToString() + ")";
                 }
                 if (system.Description != "")
                 {

@@ -64,7 +64,7 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <controls:ControlledScopeGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                                   SystemSource="{Binding SelectedSystem.SystemInstances}"
+                                                   SystemSource="{Binding SelectedSystem.Instances}"
                                                    SelectedItem="{Binding SelectedChild}"
                                                          ShowInstanceCount="Collapsed"
                                                          UserCanAddRows="False"/>

@@ -37,7 +37,7 @@
                             <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>
                         <Label Content="Systems" FontSize="10"/>
-                        <views:SystemsGridView SystemsSource="{Binding SystemInstances}"
+                        <views:SystemsGridView SystemsSource="{Binding Instances}"
                                                ViewModel="{Binding ElementName=parent, Path=ViewModel}"
                                                AllowAddingNew="False"
                                                />

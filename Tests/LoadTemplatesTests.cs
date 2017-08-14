@@ -160,7 +160,7 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualSystem.Description);
             Assert.AreEqual(expectedProposeEquipment, actualSystem.ProposeEquipment);
 
-            foreach (TECSystem instance in actualSystem.SystemInstances)
+            foreach (TECSystem instance in actualSystem.Instances)
             {
                 Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
                 Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);

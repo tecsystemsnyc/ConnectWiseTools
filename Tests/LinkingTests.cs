@@ -120,7 +120,7 @@ namespace Tests
             {
                 checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
                 checkScopeLocationLinks(typical, bid);
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     checkScopeChildrenCatalogLinks(instance, bid.Catalogs);
                     checkScopeLocationLinks(instance, bid);
@@ -219,7 +219,7 @@ namespace Tests
         {
             foreach(TECSystem typical in bid.Systems)
             {
-                ObservableItemToInstanceList<TECObject> list = typical.CharactersticInstances;
+                ListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
                 int scopeFound = 0;
                 foreach(TECEquipment equip in typical.Equipment)
                 {
@@ -270,8 +270,8 @@ namespace Tests
         {
             foreach(TECSystem typical in bid.Systems)
             {
-                ObservableItemToInstanceList<TECObject> list = typical.CharactersticInstances;
-                foreach (TECSystem instance in typical.SystemInstances)
+                ListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
+                foreach (TECSystem instance in typical.Instances)
                 {
                     int scopeFound = 0;
                     foreach (TECEquipment equip in instance.Equipment)
@@ -326,7 +326,7 @@ namespace Tests
         {
             foreach (TECSystem typical in bid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
@@ -366,7 +366,7 @@ namespace Tests
                     }
                     Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
                 }
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach(TECSystem instance in typical.Instances)
                 {
                     foreach (TECPanel panel in instance.Panels)
                     {
@@ -386,7 +386,7 @@ namespace Tests
         {
             foreach (TECSystem typical in bid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECEquipment equip in instance.Equipment)
                     {
@@ -493,7 +493,7 @@ namespace Tests
         {
             foreach (TECSystem typical in bid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
@@ -547,7 +547,7 @@ namespace Tests
                         }
                     }
                 }
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach(TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
@@ -600,7 +600,7 @@ namespace Tests
                         var subScopeConnection = connection as TECSubScopeConnection;
                         if (subScopeConnection != null)
                         {
-                            Assert.IsTrue(typical.SubScope.Contains(subScopeConnection.SubScope));
+                            Assert.IsTrue(typical.AllSubScope().Contains(subScopeConnection.SubScope));
                         }
                     }
                 }
@@ -614,7 +614,7 @@ namespace Tests
             List<TECController> allControllers = new List<TECController>();
             foreach (TECSystem typical in bid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {

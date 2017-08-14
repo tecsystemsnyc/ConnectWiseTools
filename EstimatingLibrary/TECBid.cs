@@ -442,7 +442,7 @@ namespace EstimatingLibrary
             foreach(TECSystem typical in this.Systems)
             {
                 if (typical.Location == location) typical.Location = null;
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach(TECSystem instance in typical.Instances)
                 {
                     if (instance.Location == location) instance.Location = null;
                     foreach(TECEquipment equip in instance.Equipment)

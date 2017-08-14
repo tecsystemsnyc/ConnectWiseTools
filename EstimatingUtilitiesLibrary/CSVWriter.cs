@@ -97,7 +97,7 @@ namespace EstimatingUtilitiesLibrary
                                 {
                                     row.Add("");
                                 }
-                                row.Add((system.SystemInstances.Count).ToString());
+                                row.Add((system.Instances.Count).ToString());
                                 WriteRow(writer, row);
                             }
                         }
@@ -110,7 +110,7 @@ namespace EstimatingUtilitiesLibrary
                             {
                                 row.Add("");
                             }
-                            row.Add((system.SystemInstances.Count).ToString());
+                            row.Add((system.Instances.Count).ToString());
                             WriteRow(writer, row);
                         }
                     }
@@ -123,7 +123,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         row.Add("");
                     }
-                    row.Add((system.SystemInstances.Count).ToString());
+                    row.Add((system.Instances.Count).ToString());
                     WriteRow(writer, row);
                 }
 

@@ -976,13 +976,13 @@ namespace Tests
         {
             foreach(TECSystem typical in bid.Systems)
             {
-                if (typical.SubScope.Contains(subScope))
+                if (typical.AllSubScope().Contains(subScope))
                 {
                     return true;
                 }
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach(TECSystem instance in typical.Instances)
                 {
-                    if (instance.SubScope.Contains(subScope))
+                    if (instance.AllSubScope().Contains(subScope))
                     {
                         return true;
                     }

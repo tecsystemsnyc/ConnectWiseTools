@@ -27,7 +27,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70"/>
-                <DataGridTextColumn Binding="{Binding SystemInstances.Count}" Header="Instances" Width="Auto" MinWidth="70"
+                <DataGridTextColumn Binding="{Binding Instances.Count}" Header="Instances" Width="Auto" MinWidth="70"
                                     Visibility="{Binding Data, Source={StaticResource visibilityProxy}}"
                                     IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Panels.Count}" Header="Panels" Width="Auto" MinWidth="40"

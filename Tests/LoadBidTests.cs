@@ -314,10 +314,10 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedName, actualSystem.Name);
             Assert.AreEqual(expectedDescription, actualSystem.Description);
-            Assert.AreEqual(expectedChildren, actualSystem.SystemInstances.Count);
+            Assert.AreEqual(expectedChildren, actualSystem.Instances.Count);
             Assert.AreEqual(expectedProposeEquipment, actualSystem.ProposeEquipment);
 
-            foreach(TECSystem instance in actualSystem.SystemInstances)
+            foreach(TECSystem instance in actualSystem.Instances)
             {
                 Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
                 Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
@@ -342,7 +342,7 @@ namespace Tests
             TECSystem actualSystem = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach(TECSystem instance in typical.Instances)
                 {
                     if (instance.Guid == expectedGuid)
                     {
@@ -415,7 +415,7 @@ namespace Tests
             TECEquipment actualEquipment = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach(TECEquipment equip in instance.Equipment)
                     {
@@ -531,7 +531,7 @@ namespace Tests
             TECSubScope actualSubScope = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach (TECSystem system in typical.SystemInstances)
+                foreach (TECSystem system in typical.Instances)
                 {
                     foreach (TECEquipment equipment in system.Equipment)
                     {
@@ -677,7 +677,7 @@ namespace Tests
             TECPoint actualPoint = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECEquipment equip in instance.Equipment)
                     {
@@ -923,7 +923,7 @@ namespace Tests
             TECSubScopeConnection actualConnection = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach (TECSystem system in typical.SystemInstances)
+                foreach (TECSystem system in typical.Instances)
                 {
                     foreach (TECController controller in system.Controllers)
                     {
@@ -1060,7 +1060,7 @@ namespace Tests
             TECNetworkConnection actualNetConnect = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach(TECSystem instance in typical.SystemInstances)
+                foreach(TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
@@ -1281,7 +1281,7 @@ namespace Tests
             //TECController actualController = null;
             //foreach (TECSystem typical in actualBid.Systems)
             //{
-            //    foreach (TECSystem system in typical.SystemInstances)
+            //    foreach (TECSystem system in typical.Instances)
             //    {
             //        foreach (TECController controller in system.Controllers)
             //        {
@@ -1482,7 +1482,7 @@ namespace Tests
             TECPanel actualPanel = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
-                foreach (TECSystem system in typical.SystemInstances)
+                foreach (TECSystem system in typical.Instances)
                 {
                     foreach (TECPanel panel in system.Panels)
                     {
@@ -1604,7 +1604,7 @@ namespace Tests
             //TECIO actualIO = null;
             //foreach (TECSystem typical in actualBid.Systems)
             //{
-            //    foreach(TECSystem system in typical.SystemInstances)
+            //    foreach(TECSystem system in typical.Instances)
             //    foreach (TECController controller in system.Controllers)
             //    {
             //        foreach (TECIO io in controller.IO)

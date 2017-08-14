@@ -1336,7 +1336,7 @@ namespace Tests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
 
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1448,7 +1448,7 @@ namespace Tests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
 
-            typical.SystemInstances.Remove(instance);
+            typical.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1580,7 +1580,7 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1730,7 +1730,7 @@ namespace Tests
             
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1870,7 +1870,7 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            system.SystemInstances.Remove(instance);
+            system.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -2032,7 +2032,7 @@ namespace Tests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
 
-            typical.SystemInstances.Remove(instance);
+            typical.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -2177,7 +2177,7 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            typical.SystemInstances.Remove(instance);
+            typical.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -2297,7 +2297,7 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            typical.SystemInstances.Remove(instance);
+            typical.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();

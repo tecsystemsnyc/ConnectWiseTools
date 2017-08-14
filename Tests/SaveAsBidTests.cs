@@ -316,13 +316,13 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
-            Assert.AreEqual(expectedSystem.SystemInstances.Count, actualSystem.SystemInstances.Count);
+            Assert.AreEqual(expectedSystem.Instances.Count, actualSystem.Instances.Count);
             Assert.AreEqual(expectedSystem.Equipment.Count, actualSystem.Equipment.Count);
             Assert.AreEqual(expectedSystem.Controllers.Count, actualSystem.Controllers.Count);
             Assert.AreEqual(expectedSystem.Panels.Count, actualSystem.Panels.Count);
             Assert.AreEqual(expectedSystem.ScopeBranches.Count, actualSystem.ScopeBranches.Count);
             Assert.AreEqual(expectedSystem.AssociatedCosts.Count, actualSystem.AssociatedCosts.Count);
-            Assert.AreEqual(expectedSystem.CharactersticInstances.GetFullDictionary().Count, actualSystem.CharactersticInstances.GetFullDictionary().Count);
+            Assert.AreEqual(expectedSystem.TypicalInstanceDictionary.GetFullDictionary().Count, actualSystem.TypicalInstanceDictionary.GetFullDictionary().Count);
             Assert.AreEqual(expectedSystem.MiscCosts.Count, actualSystem.MiscCosts.Count);
         }
 
@@ -649,10 +649,10 @@ namespace Tests
             TECBid loadedBid = DatabaseLoader.Load(path) as TECBid;
             TECSystem loadedSystem = loadedBid.Systems[0];
             
-            Assert.AreEqual(system.SystemInstances.Count, loadedSystem.SystemInstances.Count);
-            foreach(TECSystem loadedInstance in loadedSystem.SystemInstances)
+            Assert.AreEqual(system.Instances.Count, loadedSystem.Instances.Count);
+            foreach(TECSystem loadedInstance in loadedSystem.Instances)
             {
-                foreach(TECSystem saveInstance in system.SystemInstances)
+                foreach(TECSystem saveInstance in system.Instances)
                 {
                     if(loadedInstance.Guid == saveInstance.Guid)
                     {
