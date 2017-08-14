@@ -99,7 +99,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Events
-        public event Action<List<int>> PointChanged;
+        public event Action<int> PointChanged;
         #endregion
 
         #region Properties
@@ -186,6 +186,22 @@ namespace EstimatingLibrary
                 NotifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
             }
         }
+
+        new public List<TECCost> Costs
+        {
+            get
+            {
+                return costs();
+            }
+        }
+        public int PointNumber
+        {
+            get
+            {
+                return points();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -260,7 +276,7 @@ namespace EstimatingLibrary
             }
             return outSubScope;
         }
-        public int NumPoints()
+        private int points()
         {
             var totalPoints = 0;
             foreach (TECEquipment equipment in Equipment)
@@ -269,6 +285,33 @@ namespace EstimatingLibrary
             }
             return totalPoints;
         }
+
+        private List<TECCost> costs()
+        {
+            var outCosts = new List<TECCost>();
+            foreach (TECEquipment item in Equipment)
+            {
+                outCosts.AddRange(item.Costs);
+            }
+            foreach (TECController item in Controllers)
+            {
+                outCosts.AddRange(item.Costs);
+            }
+            foreach (TECPanel item in Panels)
+            {
+                outCosts.AddRange(item.Costs);
+            }
+            outCosts.AddRange(AssociatedCosts);
+            foreach (TECMisc item in MiscCosts)
+            {
+                foreach (TECSystem system in Instances)
+                {
+                    outCosts.AddRange(item.Costs);
+                }
+            }
+            return outCosts;
+        }
+
 
         public void SetTypicalInstanceDictionary(ListDictionary<TECObject> newDictionary)
         {
