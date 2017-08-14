@@ -83,6 +83,12 @@ namespace EstimatingLibrary
 
         public event Action<List<TECCost>> CostChanged;
 
+        public List<TECCost> Costs
+        {
+            get { return costs(); }
+        }
+
+
         #endregion
 
         #region Constructors
@@ -406,6 +412,22 @@ namespace EstimatingLibrary
             }
 
             return outIO;
+        }
+
+
+        private List<TECCost> costs()
+        {
+            var outCosts = new List<TECCost>();
+            outCosts.Add(this.Type);
+            outCosts.AddRange(this.AssociatedCosts);
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                foreach (TECCost cost in connection.Costs)
+                {
+                    outCosts.Add(cost);
+                }
+            }
+            return outCosts;
         }
 
         public void NotifyCostChanged(List<TECCost> costs)

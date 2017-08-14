@@ -42,6 +42,10 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
+        public List<TECCost> Costs
+        {
+            get { return costs(); }
+        }
         #endregion //Properties
 
         public event Action<List<TECCost>> CostChanged;
@@ -171,6 +175,16 @@ namespace EstimatingLibrary
                 totalPoints += subScope.PointNumber;
             }
             return totalPoints;
+        }
+        private List<TECCost> costs()
+        {
+            List<TECCost> outCosts = new List<TECCost>();
+
+            foreach(TECSubScope subScope in SubScope)
+            {
+                outCosts.AddRange(subScope.Costs);
+            }
+            return outCosts;
         }
 
         public void NotifyCostChanged(List<TECCost> costs)
