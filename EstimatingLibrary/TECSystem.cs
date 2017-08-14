@@ -351,10 +351,14 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
+                List<TECCost> costs = new List<TECCost>();
+                int pointNum = 0;
                 foreach (object item in e.NewItems)
                 {
                     if (item != null)
                     {
+                        if (item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
+                        if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
                         NotifyTECChanged(Change.Add, propertyName, this, item);
                         if (item is TECController controller)
                         {
@@ -362,13 +366,19 @@ namespace EstimatingLibrary
                         }
                     }
                 }
+                NotifyCostChanged(costs);
+                PointChanged?.Invoke(pointNum);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
+                List<TECCost> costs = new List<TECCost>();
+                int pointNum = 0;
                 foreach (object item in e.OldItems)
                 {
                     if (item != null)
                     {
+                        if (item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
+                        if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
                         NotifyTECChanged(Change.Remove, propertyName, this, item);
                         if (item is TECSystem system)
                         {
@@ -376,6 +386,8 @@ namespace EstimatingLibrary
                         }
                     }
                 }
+                NotifyCostChanged(CostHelper.NegativeCosts(costs));
+                PointChanged?.Invoke(pointNum * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
