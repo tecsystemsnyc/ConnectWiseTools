@@ -22,8 +22,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECScopeBranch> _scopeBranches;
         
         private bool _proposeEquipment;
-
-        private ListDictionary<TECObject> typicalInstanceDictionary;
         #endregion
 
         #region Constructors
@@ -40,7 +38,7 @@ namespace EstimatingLibrary
             _miscCosts = new ObservableCollection<TECMisc>();
             _scopeBranches = new ObservableCollection<TECScopeBranch>();
 
-            typicalInstanceDictionary = new ListDictionary<TECObject>();
+            TypicalInstanceDictionary = new ListDictionary<TECObject>();
 
             _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
             _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
@@ -187,6 +185,8 @@ namespace EstimatingLibrary
                 NotifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
             }
         }
+
+        public ListDictionary<TECObject> TypicalInstanceDictionary { get; set; }
         #endregion
 
         #region Methods
@@ -198,7 +198,7 @@ namespace EstimatingLibrary
             newSystem.Description = Description;
             foreach (TECEquipment equipment in Equipment)
             {
-                var toAdd = new TECEquipment(equipment, guidDictionary, typicalInstanceDictionary);
+                var toAdd = new TECEquipment(equipment, guidDictionary, TypicalInstanceDictionary);
                 addTypicalInstance(equipment, toAdd);
                 newSystem.Equipment.Add(toAdd);
             }
@@ -222,7 +222,7 @@ namespace EstimatingLibrary
             var newSubScope = newSystem.AllSubScope();
             foreach (TECSubScope subScope in AllSubScope())
             {
-                var instances = typicalInstanceDictionary.GetInstances(subScope);
+                var instances = TypicalInstanceDictionary.GetInstances(subScope);
                 foreach (TECSubScope subInstance in instances)
                 {
                     if (newSubScope.Contains(subInstance))
@@ -271,20 +271,15 @@ namespace EstimatingLibrary
             return totalPoints;
         }
 
-        public void SetTypicalInstanceDictionary(ListDictionary<TECObject> newDictionary)
-        {
-            typicalInstanceDictionary = newDictionary;
-        }
-
         private void addTypicalInstance(TECObject typical, TECObject instance)
         {
-            typicalInstanceDictionary.AddItem(typical, instance);
-            NotifyTECChanged(Change.Add, "typicalInstanceDictionary", typical, instance);
+            TypicalInstanceDictionary.AddItem(typical, instance);
+            NotifyTECChanged(Change.Add, "TypicalInstanceDictionary", typical, instance);
         }
         private void removeTypicalInstance(TECObject typical, TECObject instance)
         {
-            typicalInstanceDictionary.RemoveItem(typical, instance);
-            NotifyTECChanged(Change.Remove, "typicalInstanceDictionary", typical, instance);
+            TypicalInstanceDictionary.RemoveItem(typical, instance);
+            NotifyTECChanged(Change.Remove, "TypicalInstanceDictionary", typical, instance);
         }
 
         #region Event Handlers
@@ -358,9 +353,9 @@ namespace EstimatingLibrary
         private void handlePointChanged(TECPoint point, string propertyName)
         {
             PropertyInfo property = typeof(TECPoint).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-            if (property != null && property.CanWrite && typicalInstanceDictionary.ContainsKey(point))
+            if (property != null && property.CanWrite && TypicalInstanceDictionary.ContainsKey(point))
             {
-                foreach (TECPoint instance in typicalInstanceDictionary.GetInstances(point))
+                foreach (TECPoint instance in TypicalInstanceDictionary.GetInstances(point))
                 {
                     property.SetValue(instance, property.GetValue(point), null);
                 }
@@ -368,11 +363,11 @@ namespace EstimatingLibrary
         }
         private void handleSubScopeConnectionChanged(TECSubScope subScope)
         {
-            if (typicalInstanceDictionary.ContainsKey(subScope))
+            if (TypicalInstanceDictionary.ContainsKey(subScope))
             {
                 if (subScope.Connection == null)
                 {
-                    foreach (TECSubScope instance in typicalInstanceDictionary.GetInstances(subScope))
+                    foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
                     {
                         if (instance.Connection == null || !instance.Connection.ParentController.IsGlobal)
                         {
@@ -383,7 +378,7 @@ namespace EstimatingLibrary
                 }
                 else if (subScope.Connection.ParentController.IsGlobal)
                 {
-                    foreach (TECSubScope instance in typicalInstanceDictionary.GetInstances(subScope))
+                    foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
                     {
                         subScope.Connection.ParentController.AddSubScope(instance);
                     }
@@ -425,7 +420,7 @@ namespace EstimatingLibrary
                 var characteristicEquipment = value as TECEquipment;
                 foreach (TECSystem system in Instances)
                 {
-                    var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: typicalInstanceDictionary);
+                    var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: TypicalInstanceDictionary);
                     addTypicalInstance(characteristicEquipment, equipmentToAdd);
                     system.Equipment.Add(equipmentToAdd);
                 }
@@ -434,11 +429,11 @@ namespace EstimatingLibrary
             {
                 var characteristicEquipment = sender as TECEquipment;
                 var characteristicSubScope = value as TECSubScope;
-                if (typicalInstanceDictionary.ContainsKey(characteristicEquipment))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicEquipment))
                 {
-                    foreach (TECEquipment equipment in typicalInstanceDictionary.GetInstances(characteristicEquipment))
+                    foreach (TECEquipment equipment in TypicalInstanceDictionary.GetInstances(characteristicEquipment))
                     {
-                        var subScopeToAdd = new TECSubScope(characteristicSubScope, characteristicReference: typicalInstanceDictionary);
+                        var subScopeToAdd = new TECSubScope(characteristicSubScope, characteristicReference: TypicalInstanceDictionary);
                         addTypicalInstance(characteristicSubScope, subScopeToAdd);
                         equipment.SubScope.Add(subScopeToAdd);
                     }
@@ -448,9 +443,9 @@ namespace EstimatingLibrary
             {
                 var characteristicSubScope = sender as TECSubScope;
                 var device = value as TECDevice;
-                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         subScope.Devices.Add(device);
                     }
@@ -460,9 +455,9 @@ namespace EstimatingLibrary
             {
                 var characteristicSubScope = sender as TECSubScope;
                 var characteristicPoint = value as TECPoint;
-                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         var pointToAdd = new TECPoint(characteristicPoint);
                         addTypicalInstance(characteristicPoint, pointToAdd);
@@ -475,12 +470,12 @@ namespace EstimatingLibrary
                 var characteristicConnection = value as TECSubScopeConnection;
                 var characteristicSubScope = (value as TECSubScopeConnection).SubScope;
                 var characteristicController = (sender as TECController);
-                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope) && (typicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope) && (TypicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
                 {
                     foreach (TECSystem system in Instances)
                     {
                         TECSubScope subScopeToConnect = null;
-                        foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
+                        foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                         {
                             foreach (TECEquipment equipment in system.Equipment)
                             {
@@ -502,7 +497,7 @@ namespace EstimatingLibrary
                             }
                             else
                             {
-                                foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
+                                foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
@@ -521,12 +516,12 @@ namespace EstimatingLibrary
             {
                 var characteristicController = value as TECController;
                 var characteristicPanel = sender as TECPanel;
-                if (typicalInstanceDictionary.ContainsKey(characteristicPanel) && typicalInstanceDictionary.ContainsKey(characteristicController))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicPanel) && TypicalInstanceDictionary.ContainsKey(characteristicController))
                 {
                     foreach (TECSystem system in Instances)
                     {
                         TECController controllerToConnect = null;
-                        foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
+                        foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
                         {
                             if (system.Controllers.Contains(controller))
                             {
@@ -536,7 +531,7 @@ namespace EstimatingLibrary
                         }
                         if (controllerToConnect != null)
                         {
-                            foreach (TECPanel panel in typicalInstanceDictionary.GetInstances(characteristicPanel))
+                            foreach (TECPanel panel in TypicalInstanceDictionary.GetInstances(characteristicPanel))
                             {
                                 if (system.Panels.Contains(panel))
                                 {
@@ -562,9 +557,9 @@ namespace EstimatingLibrary
                 {
                     var characteristicScope = sender as TECScope;
                     var cost = value as TECCost;
-                    if (typicalInstanceDictionary.ContainsKey(characteristicScope))
+                    if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
-                        foreach (TECScope scope in typicalInstanceDictionary.GetInstances(characteristicScope))
+                        foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))
                         {
                             scope.AssociatedCosts.Add(cost);
                         }
@@ -590,7 +585,7 @@ namespace EstimatingLibrary
                     var controllersToRemove = new List<TECController>();
                     foreach (TECController controller in system.Controllers)
                     {
-                        if (typicalInstanceDictionary.GetInstances(characteristicController).Contains(controller))
+                        if (TypicalInstanceDictionary.GetInstances(characteristicController).Contains(controller))
                         {
                             controllersToRemove.Add(controller);
                             removeTypicalInstance(characteristicController, controller);
@@ -610,7 +605,7 @@ namespace EstimatingLibrary
                     var panelsToRemove = new List<TECPanel>();
                     foreach (TECPanel panel in system.Panels)
                     {
-                        if (typicalInstanceDictionary.GetInstances(characteristicPanel).Contains(panel))
+                        if (TypicalInstanceDictionary.GetInstances(characteristicPanel).Contains(panel))
                         {
                             panelsToRemove.Add(panel);
                             removeTypicalInstance(characteristicPanel, panel);
@@ -630,7 +625,7 @@ namespace EstimatingLibrary
                     var equipmentToRemove = new List<TECEquipment>();
                     foreach (TECEquipment equipment in system.Equipment)
                     {
-                        if (typicalInstanceDictionary.GetInstances(characteristicEquipment).Contains(equipment))
+                        if (TypicalInstanceDictionary.GetInstances(characteristicEquipment).Contains(equipment))
                         {
                             equipmentToRemove.Add(equipment);
                             removeTypicalInstance(characteristicEquipment, equipment);
@@ -646,14 +641,14 @@ namespace EstimatingLibrary
             {
                 var characteristicEquipment = sender as TECEquipment;
                 var characteristicSubScope = value as TECSubScope;
-                if (typicalInstanceDictionary.ContainsKey(characteristicEquipment))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicEquipment))
                 {
-                    foreach (TECEquipment equipment in typicalInstanceDictionary.GetInstances(characteristicEquipment))
+                    foreach (TECEquipment equipment in TypicalInstanceDictionary.GetInstances(characteristicEquipment))
                     {
                         var subScopeToRemove = new List<TECSubScope>();
                         foreach (TECSubScope subScope in equipment.SubScope)
                         {
-                            if (typicalInstanceDictionary.GetInstances(characteristicSubScope).Contains(subScope))
+                            if (TypicalInstanceDictionary.GetInstances(characteristicSubScope).Contains(subScope))
                             {
                                 subScopeToRemove.Add(subScope);
                                 removeTypicalInstance(characteristicSubScope, subScope);
@@ -671,9 +666,9 @@ namespace EstimatingLibrary
             {
                 var characteristicSubScope = sender as TECSubScope;
                 var device = value as TECDevice;
-                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         subScope.Devices.Remove(device);
                     }
@@ -683,14 +678,14 @@ namespace EstimatingLibrary
             {
                 var characteristicSubScope = sender as TECSubScope;
                 var characteristicPoint = value as TECPoint;
-                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         var pointsToRemove = new List<TECPoint>();
                         foreach (TECPoint point in subScope.Points)
                         {
-                            if (typicalInstanceDictionary.GetInstances(characteristicPoint).Contains(point))
+                            if (TypicalInstanceDictionary.GetInstances(characteristicPoint).Contains(point))
                             {
                                 pointsToRemove.Add(point);
                                 removeTypicalInstance(characteristicPoint, point);
@@ -708,12 +703,12 @@ namespace EstimatingLibrary
                 var characteristicConnection = value as TECSubScopeConnection;
                 var characteristicSubScope = (value as TECSubScopeConnection).SubScope;
                 var characteristicController = (sender as TECController);
-                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope) && (typicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope) && (TypicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
                 {
                     foreach (TECSystem system in Instances)
                     {
                         TECSubScope subScopeToRemove = null;
-                        foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
+                        foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                         {
                             foreach (TECEquipment equipment in system.Equipment)
                             {
@@ -732,7 +727,7 @@ namespace EstimatingLibrary
                             }
                             else
                             {
-                                foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
+                                foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
@@ -748,12 +743,12 @@ namespace EstimatingLibrary
             {
                 var characteristicController = value as TECController;
                 var characteristicPanel = sender as TECPanel;
-                if (typicalInstanceDictionary.ContainsKey(characteristicController) && typicalInstanceDictionary.ContainsKey(characteristicPanel))
+                if (TypicalInstanceDictionary.ContainsKey(characteristicController) && TypicalInstanceDictionary.ContainsKey(characteristicPanel))
                 {
                     foreach (TECSystem system in Instances)
                     {
                         TECController controllerToRemove = null;
-                        foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
+                        foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
                         {
                             foreach (TECPanel panel in system.Panels)
                             {
@@ -766,7 +761,7 @@ namespace EstimatingLibrary
                         }
                         if (controllerToRemove != null)
                         {
-                            foreach (TECPanel panel in typicalInstanceDictionary.GetInstances(characteristicPanel))
+                            foreach (TECPanel panel in TypicalInstanceDictionary.GetInstances(characteristicPanel))
                             {
                                 if (system.Panels.Contains(panel))
                                 {
@@ -793,9 +788,9 @@ namespace EstimatingLibrary
                 {
                     var characteristicScope = sender as TECScope;
                     var cost = value as TECCost;
-                    if (typicalInstanceDictionary.ContainsKey(characteristicScope))
+                    if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
-                        foreach (TECScope scope in typicalInstanceDictionary.GetInstances(characteristicScope))
+                        foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))
                         {
                             scope.AssociatedCosts.Remove(cost);
                         }

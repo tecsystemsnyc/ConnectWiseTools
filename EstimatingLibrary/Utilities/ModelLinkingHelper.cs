@@ -26,7 +26,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     allControllers.Add(controller);
                 }
-                foreach (TECSystem instance in sys.SystemInstances)
+                foreach (TECSystem instance in sys.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
@@ -113,15 +113,15 @@ namespace EstimatingLibrary.Utilities
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
-            linkSubScopeConnections(system.Controllers, system.SubScope, guidDictionary);
+            linkSubScopeConnections(system.Controllers, new ObservableCollection<TECSubScope>(system.AllSubScope()), guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
         }
 
         //Was LinkCharacteristicInstances()
-        public static void LinkTypicalInstanceDictionary(ObservableItemToInstanceList<TECObject> oldDictionary, TECSystem newTypical)
+        public static void LinkTypicalInstanceDictionary(ListDictionary<TECObject> oldDictionary, TECSystem newTypical)
         {
-            ObservableItemToInstanceList<TECObject> newCharacteristicInstances = new ObservableItemToInstanceList<TECObject>();
-            foreach (TECSystem instance in newTypical.SystemInstances)
+            ListDictionary<TECObject> newCharacteristicInstances = new ListDictionary<TECObject>();
+            foreach (TECSystem instance in newTypical.Instances)
             {
                 linkCharacteristicCollections(newTypical.Equipment, instance.Equipment, oldDictionary, newCharacteristicInstances);
                 foreach (TECEquipment equipment in newTypical.Equipment)
@@ -141,7 +141,7 @@ namespace EstimatingLibrary.Utilities
                 linkCharacteristicCollections(newTypical.Controllers, instance.Controllers, oldDictionary, newCharacteristicInstances);
                 linkCharacteristicCollections(newTypical.Panels, instance.Panels, oldDictionary, newCharacteristicInstances);
             }
-            newTypical.CharactersticInstances = newCharacteristicInstances;
+            newTypical.TypicalInstanceDictionary = newCharacteristicInstances;
         }
 
         #region public static void LinkScopeItem(TECScope scope, TECBid Bid)
@@ -149,7 +149,7 @@ namespace EstimatingLibrary.Utilities
         {
             linkScopeChildrenToCatalogs(scope, bid.Catalogs);
             linkLocation(scope, bid.Locations);
-            foreach (TECSystem instance in scope.SystemInstances)
+            foreach (TECSystem instance in scope.Instances)
             {
                 LinkScopeItem(instance, bid);
             }
@@ -250,7 +250,7 @@ namespace EstimatingLibrary.Utilities
             //Should assume linking a typical system with potential instances, controllers and panels.
 
             linkScopeChildrenToCatalogs(system, catalogs);
-            foreach(TECSystem instance in system.SystemInstances)
+            foreach(TECSystem instance in system.Instances)
             {
                 linkSystemToCatalogs(instance, catalogs);
             }
@@ -533,7 +533,7 @@ namespace EstimatingLibrary.Utilities
         private static void linkLocation(TECSystem system, ObservableCollection<TECLabeled> locations)
         {
             linkLocation(system as TECLocated, locations);
-            foreach (TECSystem instance in system.SystemInstances)
+            foreach (TECSystem instance in system.Instances)
             {
                 linkLocation(instance, locations);
             }
@@ -584,8 +584,8 @@ namespace EstimatingLibrary.Utilities
         /// <param name="oldCharacteristicInstances">A previosuly linked scope dictionary, from the original system before copying</param>
         /// <param name="newCharacteristicInstances">The scope dictionary that must be linked</param>
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
-            ObservableItemToInstanceList<TECObject> oldCharacteristicInstances,
-            ObservableItemToInstanceList<TECObject> newCharacteristicInstances)
+            ListDictionary<TECObject> oldCharacteristicInstances,
+            ListDictionary<TECObject> newCharacteristicInstances)
         {
             foreach (var item in oldCharacteristicInstances.GetFullDictionary())
             {
@@ -620,21 +620,21 @@ namespace EstimatingLibrary.Utilities
             {
                 return;
             }
-            foreach (TECSystem instance in typical.SystemInstances)
+            foreach (TECSystem instance in typical.Instances)
             {
                 foreach (TECEquipment equipment in typical.Equipment)
                 {
-                    linkCharacteristicWithInstances(equipment, instance.Equipment, guidDictionary, typical.CharactersticInstances);
+                    linkCharacteristicWithInstances(equipment, instance.Equipment, guidDictionary, typical.TypicalInstanceDictionary);
                     foreach (TECSubScope subscope in equipment.SubScope)
                     {
                         foreach (TECEquipment instanceEquipment in instance.Equipment)
                         {
-                            linkCharacteristicWithInstances(subscope, instanceEquipment.SubScope, guidDictionary, typical.CharactersticInstances);
+                            linkCharacteristicWithInstances(subscope, instanceEquipment.SubScope, guidDictionary, typical.TypicalInstanceDictionary);
                             foreach (TECPoint point in subscope.Points)
                             {
                                 foreach (TECSubScope instanceSubScope in instanceEquipment.SubScope)
                                 {
-                                    linkCharacteristicWithInstances(point, instanceSubScope.Points, guidDictionary, typical.CharactersticInstances);
+                                    linkCharacteristicWithInstances(point, instanceSubScope.Points, guidDictionary, typical.TypicalInstanceDictionary);
                                 }
                             }
                         }
@@ -642,11 +642,11 @@ namespace EstimatingLibrary.Utilities
                 }
                 foreach (TECController controller in typical.Controllers)
                 {
-                    linkCharacteristicWithInstances(controller, instance.Controllers, guidDictionary, typical.CharactersticInstances);
+                    linkCharacteristicWithInstances(controller, instance.Controllers, guidDictionary, typical.TypicalInstanceDictionary);
                 }
                 foreach (TECPanel panel in typical.Panels)
                 {
-                    linkCharacteristicWithInstances(panel, instance.Panels, guidDictionary, typical.CharactersticInstances);
+                    linkCharacteristicWithInstances(panel, instance.Panels, guidDictionary, typical.TypicalInstanceDictionary);
                 }
             }
         }
@@ -659,7 +659,7 @@ namespace EstimatingLibrary.Utilities
         /// <param name="characteristicList"></param>
         private static void linkCharacteristicWithInstances(TECObject characteristic, IList instances,
             Dictionary<Guid, List<Guid>> referenceDict,
-            ObservableItemToInstanceList<TECObject> characteristicList)
+            ListDictionary<TECObject> characteristicList)
         {
             foreach (TECScope item in instances)
             {
