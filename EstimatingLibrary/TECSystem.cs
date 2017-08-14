@@ -106,7 +106,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECSystem> Instances
         {
             get { return _instances; }
-            private set
+            set
             {
                 var old = _instances;
                 _instances.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
@@ -118,7 +118,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECEquipment> Equipment
         {
             get { return _equipment; }
-            private set
+            set
             {
                 var old = _equipment;
                 _equipment.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Equipment");
@@ -130,7 +130,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECController> Controllers
         {
             get { return _controllers; }
-            private set
+            set
             {
                 var old = _controllers;
                 _controllers.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Controllers");
@@ -142,7 +142,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECPanel> Panels
         {
             get { return _panels; }
-            private set
+            set
             {
                 var old = _panels;
                 _panels.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Panels");
@@ -154,7 +154,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECMisc> MiscCosts
         {
             get { return _miscCosts; }
-            private set
+            set
             {
                 var old = _miscCosts;
                 _miscCosts.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECScopeBranch> ScopeBranches
         {
             get { return _scopeBranches; }
-            private set
+            set
             {
                 var old = _scopeBranches;
                 _scopeBranches.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
