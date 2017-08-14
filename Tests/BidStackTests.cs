@@ -1191,57 +1191,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
-
-        [TestMethod]
-        public void Redo_Bid_Catalogs_Devices()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
-            types.Add(Bid.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Catalogs.Devices.Add(edit);
-            var expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in Bid.Catalogs.Devices)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECDevice> actual = Bid.Catalogs.Devices;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Bid_Catalogs_Manufacturers()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECManufacturer edit = new TECManufacturer();
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Catalogs.Manufacturers.Add(edit);
-            var expected = new ObservableCollection<TECManufacturer>();
-            foreach (TECManufacturer item in Bid.Catalogs.Manufacturers)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECManufacturer> actual = Bid.Catalogs.Manufacturers;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
+        
         [TestMethod]
         public void Redo_Bid_Notes()
         {
