@@ -87,7 +87,7 @@ namespace EstimatingLibrary
             }
         }
 
-        new public List<TECCost> Costs
+        override public List<TECCost> Costs
         {
             get
             {

@@ -39,7 +39,7 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
-        new public List<TECCost> Costs
+        override public List<TECCost> Costs
         {
             get { return costs(); }
         }

@@ -70,7 +70,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECCost> Costs { get { return this.AssociatedCosts.ToList(); } }
+        virtual public List<TECCost> Costs { get { return this.AssociatedCosts.ToList(); } }
 
         #endregion
 
