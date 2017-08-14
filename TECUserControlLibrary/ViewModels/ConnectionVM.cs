@@ -277,7 +277,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void Equipment_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var args = e as PropertyChangedExtendedEventArgs;
+            var args = e as TECChangedEventArgs;
             if(args != null)
             {
                 if(args.Change == Change.Add && args.Value is TECSubScope)

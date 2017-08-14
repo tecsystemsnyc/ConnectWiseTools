@@ -340,7 +340,7 @@ namespace EstimatingLibrary
         {
             if (e.PropertyName == "RemovedSubScope")
             {
-                var args = e as PropertyChangedExtendedEventArgs;
+                var args = e as TECChangedEventArgs;
                 if (args.Sender is TECEquipment)
                 {
                     handleEquipmentSubScopeRemoval(args.Value as TECEquipment);

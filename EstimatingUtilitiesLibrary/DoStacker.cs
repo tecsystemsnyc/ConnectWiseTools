@@ -12,8 +12,8 @@ namespace EstimatingUtilitiesLibrary
 {
     public class DoStacker
     {
-        private List<PropertyChangedExtendedEventArgs> undoStack;
-        private List<PropertyChangedExtendedEventArgs> redoStack;
+        private List<TECChangedEventArgs> undoStack;
+        private List<TECChangedEventArgs> redoStack;
         private ChangeWatcher watcher;
         private bool isDoing = false;
 
@@ -23,13 +23,13 @@ namespace EstimatingUtilitiesLibrary
             watcher = changeWatcher;
             watcher.BidChanged += objectChanged;
 
-            undoStack = new List<PropertyChangedExtendedEventArgs>();
-            redoStack = new List<PropertyChangedExtendedEventArgs>();
+            undoStack = new List<TECChangedEventArgs>();
+            redoStack = new List<TECChangedEventArgs>();
         }
         
         #endregion
 
-        private void objectChanged(PropertyChangedExtendedEventArgs e)
+        private void objectChanged(TECChangedEventArgs e)
         {
             undoStack.Add(e);
         }
@@ -37,7 +37,7 @@ namespace EstimatingUtilitiesLibrary
         public void Undo()
         {
             isDoing = true;
-            PropertyChangedExtendedEventArgs item = undoStack.Last();
+            TECChangedEventArgs item = undoStack.Last();
             DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + undoStack.Count() + "    #Redo: " + redoStack.Count(), DebugBooleans.Stack);
             if (item.Change == Change.Add)
             {
@@ -56,7 +56,7 @@ namespace EstimatingUtilitiesLibrary
             else if (item.Change == Change.Edit)
             {
                 int index = undoStack.IndexOf(item);
-                redoStack.Add(new PropertyChangedExtendedEventArgs(Change.Edit, item.PropertyName, item.Sender, item.OldValue, item.Value));
+                redoStack.Add(new TECChangedEventArgs(Change.Edit, item.PropertyName, item.Sender, item.OldValue, item.Value));
                 handleEdit(item);
                 for (int x = (undoStack.Count - 1); x >= index; x--)
                 {
@@ -72,7 +72,7 @@ namespace EstimatingUtilitiesLibrary
         public void Redo()
         {
             isDoing = true;
-            PropertyChangedExtendedEventArgs item = redoStack.Last();
+            TECChangedEventArgs item = redoStack.Last();
 
             string message = "Redoing:       " + item.Change.ToString() + "    #Undo: " + undoStack.Count() + "    #Redo: " + redoStack.Count();
             DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
@@ -109,7 +109,7 @@ namespace EstimatingUtilitiesLibrary
             isDoing = false;
         }
 
-        private void handleAdd(PropertyChangedExtendedEventArgs item)
+        private void handleAdd(TECChangedEventArgs item)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace EstimatingUtilitiesLibrary
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
-        private void handleRemove(PropertyChangedExtendedEventArgs item)
+        private void handleRemove(TECChangedEventArgs item)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace EstimatingUtilitiesLibrary
                 DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
             }
         }
-        private void handleEdit(PropertyChangedExtendedEventArgs item)
+        private void handleEdit(TECChangedEventArgs item)
         {
             var sender = item.Sender;
             var oldValue = item.OldValue;

@@ -136,7 +136,7 @@ namespace TECUserControlLibrary.ViewModels
             controller.PropertyChanged -= Controller_PropertyChanged;
         }
 
-        private void instanceChanged(PropertyChangedExtendedEventArgs args)
+        private void instanceChanged(TECChangedEventArgs args)
         {
             var targetObject = args.Value;
             var referenceObject = args.OldValue;

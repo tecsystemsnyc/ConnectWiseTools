@@ -19,7 +19,7 @@ namespace EstimatingUtilitiesLibrary
             stack = new List<UpdateItem>();
         }
 
-        private void handleChange(PropertyChangedExtendedEventArgs e)
+        private void handleChange(TECChangedEventArgs e)
         {
             if(e.Change == Change.Add || e.Change == Change.Remove)
             {

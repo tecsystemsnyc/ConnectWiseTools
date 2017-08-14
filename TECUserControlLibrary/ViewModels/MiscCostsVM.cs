@@ -200,7 +200,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void Misc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var args = e as PropertyChangedExtendedEventArgs;
+            var args = e as TECChangedEventArgs;
             if(e.PropertyName == "Type")
             {
                 TECMisc old = args.OldValue as TECMisc;

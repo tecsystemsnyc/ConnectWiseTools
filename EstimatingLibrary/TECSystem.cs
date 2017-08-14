@@ -12,203 +12,55 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
     public class TECSystem : TECLocated, INotifyPointChanged, DragDropComponent, INotifyCostChanged
-    {//TECSystem is the largest encapsulating object in the System-Equipment hierarchy, offering a specific structure for the needs of the estimating tool. A seperate hierarchy exists for TECScopeBranch as a more generic object.
-        #region Properties
+    {
+        #region Fields
+        private ObservableCollection<TECSystem> _instances;
         private ObservableCollection<TECEquipment> _equipment;
-        private ObservableCollection<TECController> _controllers { get; set; }
-        private ObservableCollection<TECPanel> _panels { get; set; }
-        private ObservableCollection<TECSystem> _systemInstances;
+        private ObservableCollection<TECController> _controllers;
+        private ObservableCollection<TECPanel> _panels;
         private ObservableCollection<TECMisc> _miscCosts;
         private ObservableCollection<TECScopeBranch> _scopeBranches;
-        private ObservableItemToInstanceList<TECObject> _charactersticInstances;
+        
         private bool _proposeEquipment;
-        private ChangeWatcher watcher;
-        
-        public event Action<int> PointChanged;
 
-        public ObservableCollection<TECEquipment> Equipment
-        {
-            get { return _equipment; }
-            set
-            {
-                var old = Equipment;
-                if (Equipment != null)
-                {
-                    Equipment.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Equipment");
-                }
-                _equipment = value;
-                NotifyPropertyChanged(Change.Edit, "Equipment", this, value, old);
-                Equipment.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Equipment");
-            }
-        }
-        public ObservableCollection<TECController> Controllers
-        {
-            get { return _controllers; }
-            set
-            {
-                var old = Controllers;
-                if (Controllers != null)
-                {
-                    Controllers.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Controllers");
-                }
-                _controllers = value;
-                Controllers.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Controllers");
-                NotifyPropertyChanged(Change.Edit, "Controllers", this, value, old);
-            }
-        }
-        public ObservableCollection<TECPanel> Panels
-        {
-            get { return _panels; }
-            set
-            {
-                var old = Panels;
-                if (Panels != null)
-                {
-                    Panels.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Panels");
-                }
-
-                _panels = value;
-                Panels.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Panels");
-                NotifyPropertyChanged(Change.Edit, "Panels", this, value, old);
-            }
-        }
-        public ObservableCollection<TECSystem> SystemInstances
-        {
-            get { return _systemInstances; }
-            set
-            {
-                var old = SystemInstances;
-                if (SystemInstances != null)
-                {
-                    SystemInstances.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SystemInstances");
-                }
-
-                _systemInstances = value;
-                SystemInstances.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemInstances");
-                NotifyPropertyChanged(Change.Edit, "SystemInstances", this, value, old);
-            }
-        }
-        public ObservableCollection<TECMisc> MiscCosts
-        {
-            get { return _miscCosts; }
-            set
-            {
-                var old = MiscCosts;
-                if (MiscCosts != null)
-                {
-                    MiscCosts.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "MiscCosts");
-                }
-                _miscCosts = value;
-                MiscCosts.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCosts");
-                NotifyPropertyChanged(Change.Edit, "MiscCosts", this, value, old);
-            }
-        }
-        public ObservableCollection<TECScopeBranch> ScopeBranches
-        {
-            get { return _scopeBranches; }
-            set
-            {
-                var old = ScopeBranches;
-                if (ScopeBranches != null)
-                {
-                    ScopeBranches.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "ScopeBranches");
-                }
-
-                _scopeBranches = value;
-                ScopeBranches.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ScopeBranches");
-                NotifyPropertyChanged(Change.Edit, "ScopeBranches", this, value, old);
-
-            }
-        }
-        public ObservableItemToInstanceList<TECObject> CharactersticInstances
-        {
-            get { return _charactersticInstances; }
-            set
-            {
-                if (CharactersticInstances != null)
-                {
-                    CharactersticInstances.PropertyChanged -= CharactersticInstances_PropertyChanged;
-                }
-                _charactersticInstances = value;
-                CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
-
-            }
-        }
-
-        public bool ProposeEquipment
-        {
-            get { return _proposeEquipment; }
-            set
-            {
-                var old = ProposeEquipment;
-                _proposeEquipment = value;
-                NotifyPropertyChanged(Change.Edit, "ProposeEquipment", this, value, old);
-            }
-        }
-        public ObservableCollection<TECSubScope> SubScope
-        {
-            get
-            {
-                var outSubScope = new ObservableCollection<TECSubScope>();
-                foreach (TECEquipment equip in Equipment)
-                {
-                    foreach (TECSubScope sub in equip.SubScope)
-                    {
-                        outSubScope.Add(sub);
-                    }
-                }
-                return outSubScope;
-            }
-        }
-        public int PointNumber
-        {
-            get
-            {
-                return getPointNumber();
-            }
-        }
-        
-        new public List<TECCost> Costs
-        {
-            get { return costs(); }
-        }
-        #endregion //Properties
+        private ListDictionary<TECObject> typicalInstanceDictionary;
+        #endregion
 
         #region Constructors
         public TECSystem(Guid guid) : base(guid)
         {
+            new ChangeWatcher(this).SystemChanged += handleSystemChanged;
+
             _proposeEquipment = false;
-            base.PropertyChanged += TECSystem_PropertyChanged;
-            
+
+            _instances = new ObservableCollection<TECSystem>();
             _equipment = new ObservableCollection<TECEquipment>();
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
-            _systemInstances = new ObservableCollection<TECSystem>();
-            _scopeBranches = new ObservableCollection<TECScopeBranch>();
             _miscCosts = new ObservableCollection<TECMisc>();
-            _charactersticInstances = new ObservableItemToInstanceList<TECObject>();
-            CharactersticInstances.PropertyChanged += CharactersticInstances_PropertyChanged;
-            Equipment.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Equipment");
-            Controllers.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Controllers");
-            Panels.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Panels");
-            SystemInstances.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemInstances");
-            ScopeBranches.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ScopeBranches");
-            MiscCosts.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCosts");
-            watcher = new ChangeWatcher(this);
-            watcher.BidChanged += Object_PropertyChanged;
+            _scopeBranches = new ObservableCollection<TECScopeBranch>();
+
+            typicalInstanceDictionary = new ListDictionary<TECObject>();
+
+            _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
+            _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
+            _controllers.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Controllers");
+            _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
+            _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
+            _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
         }
+
         public TECSystem() : this(Guid.NewGuid()) { }
 
-        //Copy Constructor
         public TECSystem(TECSystem source, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECObject> characteristicReference = null) : this()
+            ListDictionary<TECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = source.Guid; }
             foreach (TECEquipment equipment in source.Equipment)
             {
                 var toAdd = new TECEquipment(equipment, guidDictionary, characteristicReference);
-                if(characteristicReference != null)
+                if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(equipment, toAdd);
                 }
@@ -230,23 +82,165 @@ namespace EstimatingLibrary
                 {
                     characteristicReference.AddItem(panel, toAdd);
                 }
-                 _panels.Add(toAdd);
+                _panels.Add(toAdd);
             }
-            foreach(TECScopeBranch branch in source._scopeBranches)
+            foreach (TECScopeBranch branch in source._scopeBranches)
             {
                 var toAdd = new TECScopeBranch(branch);
                 _scopeBranches.Add(toAdd);
             }
-            foreach(TECMisc misc in source.MiscCosts)
+            foreach (TECMisc misc in source.MiscCosts)
             {
                 var toAdd = new TECMisc(misc);
                 _miscCosts.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
         }
-        #endregion //Constructors
+        #endregion
+
+        #region Events
+        public event Action<List<TECCost>> CostChanged;
+        public event Action<List<TECPoint>> PointChanged;
+        #endregion
+
+        #region Properties
+        public ObservableCollection<TECSystem> Instances
+        {
+            get { return _instances; }
+            private set
+            {
+                var old = _instances;
+                _instances.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
+                _instances = value;
+                NotifyTECChanged(Change.Edit, "Instances", this, value, old);
+                _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "SystemInstances");
+            }
+        }
+        public ObservableCollection<TECEquipment> Equipment
+        {
+            get { return _equipment; }
+            private set
+            {
+                var old = _equipment;
+                _equipment.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Equipment");
+                _equipment = value;
+                NotifyTECChanged(Change.Edit, "Equipment", this, value, old);
+                _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
+            }
+        }
+        public ObservableCollection<TECController> Controllers
+        {
+            get { return _controllers; }
+            private set
+            {
+                var old = _controllers;
+                _controllers.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Controllers");
+                _controllers = value;
+                NotifyTECChanged(Change.Edit, "Controllers", this, value, old);
+                _controllers.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Controllers");
+            }
+        }
+        public ObservableCollection<TECPanel> Panels
+        {
+            get { return _panels; }
+            private set
+            {
+                var old = _panels;
+                _panels.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Panels");
+                _panels = value;
+                NotifyTECChanged(Change.Edit, "Panels", this, value, old);
+                _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
+            }
+        }
+        public ObservableCollection<TECMisc> MiscCosts
+        {
+            get { return _miscCosts; }
+            private set
+            {
+                var old = _miscCosts;
+                _miscCosts.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
+                _miscCosts = value;
+                NotifyTECChanged(Change.Edit, "MiscCosts", this, value, old);
+                _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
+            }
+        }
+        public ObservableCollection<TECScopeBranch> ScopeBranches
+        {
+            get { return _scopeBranches; }
+            private set
+            {
+                var old = _scopeBranches;
+                _scopeBranches.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
+                _scopeBranches = value;
+                NotifyTECChanged(Change.Edit, "ScopeBranches", this, value, old);
+                _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
+            }
+        }
+
+        public bool ProposeEquipment
+        {
+            get { return _proposeEquipment; }
+            set
+            {
+                var old = ProposeEquipment;
+                _proposeEquipment = value;
+                NotifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
+            }
+        }
+        #endregion
 
         #region Methods
+        public TECSystem AddInstance(TECBid bid)
+        {
+            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+            var newSystem = new TECSystem();
+            newSystem.Name = Name;
+            newSystem.Description = Description;
+            foreach (TECEquipment equipment in Equipment)
+            {
+                var toAdd = new TECEquipment(equipment, guidDictionary, typicalInstanceDictionary);
+                addTypicalInstance(equipment, toAdd);
+                newSystem.Equipment.Add(toAdd);
+            }
+            foreach (TECController controller in Controllers)
+            {
+                var toAdd = new TECController(controller, guidDictionary);
+                addTypicalInstance(controller, toAdd);
+                newSystem.Controllers.Add(toAdd);
+            }
+            foreach (TECPanel panel in Panels)
+            {
+                var toAdd = new TECPanel(panel, guidDictionary);
+                addTypicalInstance(panel, toAdd);
+                newSystem.Panels.Add(toAdd);
+            }
+            foreach (TECCost cost in AssociatedCosts)
+            {
+                newSystem.AssociatedCosts.Add(cost);
+            }
+            ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
+            var newSubScope = newSystem.AllSubScope();
+            foreach (TECSubScope subScope in AllSubScope())
+            {
+                var instances = typicalInstanceDictionary.GetInstances(subScope);
+                foreach (TECSubScope subInstance in instances)
+                {
+                    if (newSubScope.Contains(subInstance))
+                    {
+                        if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
+                        {
+                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance);
+                            instanceSSConnect.Length = subScope.Connection.Length;
+                            instanceSSConnect.ConduitLength = subScope.Connection.ConduitLength;
+                            instanceSSConnect.ConduitType = subScope.Connection.ConduitType;
+                        }
+                    }
+                }
+            }
+            Instances.Add(newSystem);
+            return (newSystem);
+        }
+
         public object DragDropCopy(TECScopeManager scopeManager)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
@@ -254,78 +248,20 @@ namespace EstimatingLibrary
             ModelLinkingHelper.LinkSystem(outSystem, scopeManager, guidDictionary);
             return outSystem;
         }
-        
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+
+        public List<TECSubScope> AllSubScope()
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            var outSubScope = new List<TECSubScope>();
+            foreach (TECEquipment equip in Equipment)
             {
-                int pointNumber = 0;
-                foreach (object item in e.NewItems)
+                foreach (TECSubScope sub in equip.SubScope)
                 {
-                    if (item != null)
-                    {
-                        if(item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
-                        NotifyPropertyChanged(Change.Add, propertyName, this, item);
-                        if(item is TECController)
-                        {
-                            (item as TECController).IsGlobal = false;
-                        }
-                    }
+                    outSubScope.Add(sub);
                 }
-                PointChanged?.Invoke(pointNumber);
-
             }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                int pointNumber = 0;
-                foreach (object item in e.OldItems)
-                {
-                    if (item != null)
-                    {
-                        if (item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
-                        NotifyPropertyChanged(Change.Remove, propertyName, this, item);
-                        if (item is TECSystem)
-                        {
-                            handleInstanceRemoved(item as TECSystem);
-                        }
-                    }
-                }
-                PointChanged?.Invoke(pointNumber * -1);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                NotifyPropertyChanged(Change.Edit, propertyName, this, sender);
-            }
+            return outSubScope;
         }
-
-        private void handleInstanceRemoved(TECSystem instance)
-        {
-            foreach(TECSubScope subScope in instance.SubScope)
-            {
-                if(subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
-                {
-                    subScope.Connection.ParentController.RemoveSubScope(subScope);
-                }
-            }
-        }
-
-        private void TECSystem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Location")
-            {
-                var args = e as PropertyChangedExtendedEventArgs;
-                var location = args.Value as TECLabeled;
-                foreach (TECEquipment equipment in this.Equipment)
-                {
-                    if (equipment.Location == location)
-                    {
-                        equipment.SetLocationFromParent(this.Location);
-                    }
-                }
-            }
-        }
-
-        private int getPointNumber()
+        public int NumPoints()
         {
             var totalPoints = 0;
             foreach (TECEquipment equipment in Equipment)
@@ -335,52 +271,110 @@ namespace EstimatingLibrary
             return totalPoints;
         }
 
-        private void Object_PropertyChanged(PropertyChangedExtendedEventArgs args)
+        public void SetTypicalInstanceDictionary(ListDictionary<TECObject> newDictionary)
         {
-            if (SystemInstances.Count > 0)
+            typicalInstanceDictionary = newDictionary;
+        }
+
+        private void addTypicalInstance(TECObject typical, TECObject instance)
+        {
+            typicalInstanceDictionary.AddItem(typical, instance);
+            NotifyTECChanged(Change.Add, "typicalInstanceDictionary", typical, instance);
+        }
+        private void removeTypicalInstance(TECObject typical, TECObject instance)
+        {
+            typicalInstanceDictionary.RemoveItem(typical, instance);
+            NotifyTECChanged(Change.Remove, "typicalInstanceDictionary", typical, instance);
+        }
+
+        #region Event Handlers
+        private void handleSystemChanged(TECChangedEventArgs args)
+        {
+            if (Instances.Count > 0)
             {
-                object oldValue = args.OldValue;
-                object newValue = args.Value;
                 if (args.Change == Change.Add)
                 {
-                    handleAdd(newValue, oldValue);
+                    handleAdd(args.Value as TECObject, args.Sender);
                 }
                 else if (args.Change == Change.Remove)
                 {
-                    handleRemove(newValue, oldValue);
+                    handleRemove(args.Value as TECObject, args.Sender);
                 }
-                else if(oldValue is TECPoint && oldValue is TECPoint)
+                else if (args.Value is TECPoint && args.OldValue is TECPoint)
                 {
-                    handlePointChanged(newValue as TECPoint, args.PropertyName);
+                    handlePointChanged(args.Value as TECPoint, args.PropertyName);
                 }
-            } else if (args.PropertyName == "Connection" && args.Sender is TECSubScope)
+            }
+            else if (args.PropertyName == "Connection" && args.Sender is TECSubScope)
             {
                 handleSubScopeConnectionChanged(args.Sender as TECSubScope);
             }
         }
-
+        private void handleCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    if (item != null)
+                    {
+                        NotifyTECChanged(Change.Add, propertyName, this, item);
+                        if (item is TECController controller)
+                        {
+                            controller.IsGlobal = false;
+                        }
+                    }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    if (item != null)
+                    {
+                        NotifyTECChanged(Change.Remove, propertyName, this, item);
+                        if (item is TECSystem system)
+                        {
+                            handleInstanceRemoved(system);
+                        }
+                    }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                NotifyTECChanged(Change.Edit, propertyName, this, sender);
+            }
+        }
+        private void handleInstanceRemoved(TECSystem instance)
+        {
+            foreach (TECSubScope subScope in instance.AllSubScope())
+            {
+                if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
+                {
+                    subScope.Connection.ParentController.RemoveSubScope(subScope);
+                }
+            }
+        }
         private void handlePointChanged(TECPoint point, string propertyName)
         {
             PropertyInfo property = typeof(TECPoint).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-            if(property != null && property.CanWrite && CharactersticInstances.ContainsKey(point))
+            if (property != null && property.CanWrite && typicalInstanceDictionary.ContainsKey(point))
             {
-                foreach (TECPoint instance in CharactersticInstances.GetInstances(point))
+                foreach (TECPoint instance in typicalInstanceDictionary.GetInstances(point))
                 {
                     property.SetValue(instance, property.GetValue(point), null);
                 }
             }
-            
         }
-
         private void handleSubScopeConnectionChanged(TECSubScope subScope)
         {
-            if (CharactersticInstances.ContainsKey(subScope))
+            if (typicalInstanceDictionary.ContainsKey(subScope))
             {
                 if (subScope.Connection == null)
                 {
-                    foreach (TECSubScope instance in CharactersticInstances.GetInstances(subScope))
+                    foreach (TECSubScope instance in typicalInstanceDictionary.GetInstances(subScope))
                     {
-                        if(instance.Connection == null || !instance.Connection.ParentController.IsGlobal)
+                        if (instance.Connection == null || !instance.Connection.ParentController.IsGlobal)
                         {
                             break;
                         }
@@ -389,110 +383,104 @@ namespace EstimatingLibrary
                 }
                 else if (subScope.Connection.ParentController.IsGlobal)
                 {
-                    foreach (TECSubScope instance in CharactersticInstances.GetInstances(subScope))
+                    foreach (TECSubScope instance in typicalInstanceDictionary.GetInstances(subScope))
                     {
                         subScope.Connection.ParentController.AddSubScope(instance);
                     }
                 }
             }
         }
-
-        private void CharactersticInstances_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void handleAdd(TECObject value, TECObject sender)
         {
-            RaiseExtendedPropertyChanged(sender, e as PropertyChangedExtendedEventArgs);
-        }
-
-        private void handleAdd(object targetObject, object referenceObject)
-        {
-            if(referenceObject is TECSystem)
+            if (sender is TECSystem)
             {
-                if((referenceObject as TECSystem).SystemInstances.Count == 0)
+                if ((sender as TECSystem).Instances.Count == 0)
                 {
                     return;
                 }
             }
-            if (targetObject is TECController && referenceObject is TECSystem)
+            if (value is TECController && sender is TECSystem)
             {
-                var characteristicController = targetObject as TECController;
-                foreach (TECSystem system in SystemInstances)
+                var characteristicController = value as TECController;
+                foreach (TECSystem system in Instances)
                 {
                     var controllerToAdd = new TECController(characteristicController);
                     controllerToAdd.IsGlobal = false;
-                    CharactersticInstances.AddItem(characteristicController, controllerToAdd);
+                    addTypicalInstance(characteristicController, controllerToAdd);
                     system.Controllers.Add(controllerToAdd);
                 }
             }
-            else if (targetObject is TECPanel && referenceObject is TECSystem)
+            else if (value is TECPanel && sender is TECSystem)
             {
-                var characteristicPanel = targetObject as TECPanel;
-                foreach (TECSystem system in SystemInstances)
+                var characteristicPanel = value as TECPanel;
+                foreach (TECSystem system in Instances)
                 {
                     var panelToAdd = new TECPanel(characteristicPanel);
-                    CharactersticInstances.AddItem(characteristicPanel, panelToAdd);
+                    addTypicalInstance(characteristicPanel, panelToAdd);
                     system.Panels.Add(panelToAdd);
                 }
             }
-            else if (targetObject is TECEquipment && referenceObject is TECSystem)
+            else if (value is TECEquipment && sender is TECSystem)
             {
-                var characteristicEquipment = targetObject as TECEquipment;
-                foreach (TECSystem system in SystemInstances)
+                var characteristicEquipment = value as TECEquipment;
+                foreach (TECSystem system in Instances)
                 {
-                    var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: CharactersticInstances);
-                    CharactersticInstances.AddItem(characteristicEquipment, equipmentToAdd);
+                    var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: typicalInstanceDictionary);
+                    addTypicalInstance(characteristicEquipment, equipmentToAdd);
                     system.Equipment.Add(equipmentToAdd);
                 }
             }
-            else if (targetObject is TECSubScope && referenceObject is TECEquipment)
+            else if (value is TECSubScope && sender is TECEquipment)
             {
-                var characteristicEquipment = referenceObject as TECEquipment;
-                var characteristicSubScope = targetObject as TECSubScope;
-                if (CharactersticInstances.ContainsKey(characteristicEquipment))
+                var characteristicEquipment = sender as TECEquipment;
+                var characteristicSubScope = value as TECSubScope;
+                if (typicalInstanceDictionary.ContainsKey(characteristicEquipment))
                 {
-                    foreach (TECEquipment equipment in CharactersticInstances.GetInstances(characteristicEquipment))
+                    foreach (TECEquipment equipment in typicalInstanceDictionary.GetInstances(characteristicEquipment))
                     {
-                        var subScopeToAdd = new TECSubScope(characteristicSubScope, characteristicReference: CharactersticInstances);
-                        CharactersticInstances.AddItem(characteristicSubScope, subScopeToAdd);
+                        var subScopeToAdd = new TECSubScope(characteristicSubScope, characteristicReference: typicalInstanceDictionary);
+                        addTypicalInstance(characteristicSubScope, subScopeToAdd);
                         equipment.SubScope.Add(subScopeToAdd);
                     }
                 }
             }
-            else if (targetObject is TECDevice && referenceObject is TECSubScope)
+            else if (value is TECDevice && sender is TECSubScope)
             {
-                var characteristicSubScope = referenceObject as TECSubScope;
-                var device = targetObject as TECDevice;
-                if (CharactersticInstances.ContainsKey(characteristicSubScope))
+                var characteristicSubScope = sender as TECSubScope;
+                var device = value as TECDevice;
+                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         subScope.Devices.Add(device);
                     }
                 }
             }
-            else if (targetObject is TECPoint && referenceObject is TECSubScope)
+            else if (value is TECPoint && sender is TECSubScope)
             {
-                var characteristicSubScope = referenceObject as TECSubScope;
-                var characteristicPoint = targetObject as TECPoint;
-                if (CharactersticInstances.ContainsKey(characteristicSubScope))
+                var characteristicSubScope = sender as TECSubScope;
+                var characteristicPoint = value as TECPoint;
+                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         var pointToAdd = new TECPoint(characteristicPoint);
-                        CharactersticInstances.AddItem(characteristicPoint, pointToAdd);
+                        addTypicalInstance(characteristicPoint, pointToAdd);
                         subScope.Points.Add(pointToAdd);
                     }
                 }
             }
-            else if (targetObject is TECSubScopeConnection && referenceObject is TECController)
+            else if (value is TECSubScopeConnection && sender is TECController)
             {
-                var characteristicConnection = targetObject as TECSubScopeConnection;
-                var characteristicSubScope = (targetObject as TECSubScopeConnection).SubScope;
-                var characteristicController = (referenceObject as TECController);
-                if (CharactersticInstances.ContainsKey(characteristicSubScope) && (CharactersticInstances.ContainsKey(characteristicController) || characteristicController.IsGlobal))
+                var characteristicConnection = value as TECSubScopeConnection;
+                var characteristicSubScope = (value as TECSubScopeConnection).SubScope;
+                var characteristicController = (sender as TECController);
+                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope) && (typicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
                 {
-                    foreach (TECSystem system in SystemInstances)
+                    foreach (TECSystem system in Instances)
                     {
                         TECSubScope subScopeToConnect = null;
-                        foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
+                        foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
                         {
                             foreach (TECEquipment equipment in system.Equipment)
                             {
@@ -514,7 +502,7 @@ namespace EstimatingLibrary
                             }
                             else
                             {
-                                foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                                foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
@@ -529,16 +517,16 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECController && referenceObject is TECPanel)
+            else if (value is TECController && sender is TECPanel)
             {
-                var characteristicController = targetObject as TECController;
-                var characteristicPanel = referenceObject as TECPanel;
-                if (CharactersticInstances.ContainsKey(characteristicPanel) && CharactersticInstances.ContainsKey(characteristicController))
+                var characteristicController = value as TECController;
+                var characteristicPanel = sender as TECPanel;
+                if (typicalInstanceDictionary.ContainsKey(characteristicPanel) && typicalInstanceDictionary.ContainsKey(characteristicController))
                 {
-                    foreach (TECSystem system in SystemInstances)
+                    foreach (TECSystem system in Instances)
                     {
                         TECController controllerToConnect = null;
-                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                        foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
                         {
                             if (system.Controllers.Contains(controller))
                             {
@@ -548,7 +536,7 @@ namespace EstimatingLibrary
                         }
                         if (controllerToConnect != null)
                         {
-                            foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
+                            foreach (TECPanel panel in typicalInstanceDictionary.GetInstances(characteristicPanel))
                             {
                                 if (system.Panels.Contains(panel))
                                 {
@@ -560,51 +548,52 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECCost && referenceObject is TECScope && !(targetObject is TECMisc)
-                && !(targetObject is TECController) && !(targetObject is TECDevice))
+            else if (value is TECCost && sender is TECScope && !(value is TECMisc)
+                && !(value is TECController) && !(value is TECDevice))
             {
-                if(referenceObject is TECSystem)
+                if (sender is TECSystem)
                 {
-                    foreach(TECSystem system in SystemInstances)
+                    foreach (TECSystem system in Instances)
                     {
-                        system.AssociatedCosts.Add(targetObject as TECCost);
+                        system.AssociatedCosts.Add(value as TECCost);
                     }
-                }else
+                }
+                else
                 {
-                    var characteristicScope = referenceObject as TECScope;
-                    var cost = targetObject as TECCost;
-                    if (CharactersticInstances.ContainsKey(characteristicScope))
+                    var characteristicScope = sender as TECScope;
+                    var cost = value as TECCost;
+                    if (typicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
-                        foreach (TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                        foreach (TECScope scope in typicalInstanceDictionary.GetInstances(characteristicScope))
                         {
                             scope.AssociatedCosts.Add(cost);
                         }
                     }
                 }
-                
+
             }
         }
-        private void handleRemove(object targetObject, object referenceObject)
+        private void handleRemove(TECObject value, TECObject sender)
         {
-            if (referenceObject is TECSystem)
+            if (sender is TECSystem)
             {
-                if ((referenceObject as TECSystem).SystemInstances.Count == 0)
+                if ((sender as TECSystem).Instances.Count == 0)
                 {
                     return;
                 }
             }
-            if (targetObject is TECController && referenceObject is TECSystem)
+            if (value is TECController && sender is TECSystem)
             {
-                var characteristicController = targetObject as TECController;
-                foreach (TECSystem system in SystemInstances)
+                var characteristicController = value as TECController;
+                foreach (TECSystem system in Instances)
                 {
                     var controllersToRemove = new List<TECController>();
                     foreach (TECController controller in system.Controllers)
                     {
-                        if (CharactersticInstances.GetInstances(characteristicController).Contains(controller))
+                        if (typicalInstanceDictionary.GetInstances(characteristicController).Contains(controller))
                         {
                             controllersToRemove.Add(controller);
-                            CharactersticInstances.RemoveItem(characteristicController, controller);
+                            removeTypicalInstance(characteristicController, controller);
                         }
                     }
                     foreach (TECController controller in controllersToRemove)
@@ -613,18 +602,18 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECPanel && referenceObject is TECSystem)
+            else if (value is TECPanel && sender is TECSystem)
             {
-                var characteristicPanel = targetObject as TECPanel;
-                foreach (TECSystem system in SystemInstances)
+                var characteristicPanel = value as TECPanel;
+                foreach (TECSystem system in Instances)
                 {
                     var panelsToRemove = new List<TECPanel>();
                     foreach (TECPanel panel in system.Panels)
                     {
-                        if (CharactersticInstances.GetInstances(characteristicPanel).Contains(panel))
+                        if (typicalInstanceDictionary.GetInstances(characteristicPanel).Contains(panel))
                         {
                             panelsToRemove.Add(panel);
-                            CharactersticInstances.RemoveItem(characteristicPanel, panel);
+                            removeTypicalInstance(characteristicPanel, panel);
                         }
                     }
                     foreach (TECPanel panel in panelsToRemove)
@@ -633,18 +622,18 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECEquipment && referenceObject is TECSystem)
+            else if (value is TECEquipment && sender is TECSystem)
             {
-                var characteristicEquipment = targetObject as TECEquipment;
-                foreach (TECSystem system in SystemInstances)
+                var characteristicEquipment = value as TECEquipment;
+                foreach (TECSystem system in Instances)
                 {
                     var equipmentToRemove = new List<TECEquipment>();
                     foreach (TECEquipment equipment in system.Equipment)
                     {
-                        if (CharactersticInstances.GetInstances(characteristicEquipment).Contains(equipment))
+                        if (typicalInstanceDictionary.GetInstances(characteristicEquipment).Contains(equipment))
                         {
                             equipmentToRemove.Add(equipment);
-                            CharactersticInstances.RemoveItem(characteristicEquipment, equipment);
+                            removeTypicalInstance(characteristicEquipment, equipment);
                         }
                     }
                     foreach (TECEquipment equipment in equipmentToRemove)
@@ -653,21 +642,21 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECSubScope && referenceObject is TECEquipment)
+            else if (value is TECSubScope && sender is TECEquipment)
             {
-                var characteristicEquipment = referenceObject as TECEquipment;
-                var characteristicSubScope = targetObject as TECSubScope;
-                if (CharactersticInstances.ContainsKey(characteristicEquipment))
+                var characteristicEquipment = sender as TECEquipment;
+                var characteristicSubScope = value as TECSubScope;
+                if (typicalInstanceDictionary.ContainsKey(characteristicEquipment))
                 {
-                    foreach (TECEquipment equipment in CharactersticInstances.GetInstances(characteristicEquipment))
+                    foreach (TECEquipment equipment in typicalInstanceDictionary.GetInstances(characteristicEquipment))
                     {
                         var subScopeToRemove = new List<TECSubScope>();
                         foreach (TECSubScope subScope in equipment.SubScope)
                         {
-                            if (CharactersticInstances.GetInstances(characteristicSubScope).Contains(subScope))
+                            if (typicalInstanceDictionary.GetInstances(characteristicSubScope).Contains(subScope))
                             {
                                 subScopeToRemove.Add(subScope);
-                                CharactersticInstances.RemoveItem(characteristicSubScope, subScope);
+                                removeTypicalInstance(characteristicSubScope, subScope);
 
                             }
                         }
@@ -678,33 +667,33 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECDevice && referenceObject is TECSubScope)
+            else if (value is TECDevice && sender is TECSubScope)
             {
-                var characteristicSubScope = referenceObject as TECSubScope;
-                var device = targetObject as TECDevice;
-                if (CharactersticInstances.ContainsKey(characteristicSubScope))
+                var characteristicSubScope = sender as TECSubScope;
+                var device = value as TECDevice;
+                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         subScope.Devices.Remove(device);
                     }
                 }
             }
-            else if (targetObject is TECPoint && referenceObject is TECSubScope)
+            else if (value is TECPoint && sender is TECSubScope)
             {
-                var characteristicSubScope = referenceObject as TECSubScope;
-                var characteristicPoint = targetObject as TECPoint;
-                if (CharactersticInstances.ContainsKey(characteristicSubScope))
+                var characteristicSubScope = sender as TECSubScope;
+                var characteristicPoint = value as TECPoint;
+                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
-                    foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
+                    foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         var pointsToRemove = new List<TECPoint>();
                         foreach (TECPoint point in subScope.Points)
                         {
-                            if (CharactersticInstances.GetInstances(characteristicPoint).Contains(point))
+                            if (typicalInstanceDictionary.GetInstances(characteristicPoint).Contains(point))
                             {
                                 pointsToRemove.Add(point);
-                                CharactersticInstances.RemoveItem(characteristicPoint, point);
+                                removeTypicalInstance(characteristicPoint, point);
                             }
                         }
                         foreach (TECPoint point in pointsToRemove)
@@ -714,17 +703,17 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECSubScopeConnection && referenceObject is TECController)
+            else if (value is TECSubScopeConnection && sender is TECController)
             {
-                var characteristicConnection = targetObject as TECSubScopeConnection;
-                var characteristicSubScope = (targetObject as TECSubScopeConnection).SubScope;
-                var characteristicController = (referenceObject as TECController);
-                if (CharactersticInstances.ContainsKey(characteristicSubScope) && (CharactersticInstances.ContainsKey(characteristicController) || characteristicController.IsGlobal))
+                var characteristicConnection = value as TECSubScopeConnection;
+                var characteristicSubScope = (value as TECSubScopeConnection).SubScope;
+                var characteristicController = (sender as TECController);
+                if (typicalInstanceDictionary.ContainsKey(characteristicSubScope) && (typicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
                 {
-                    foreach (TECSystem system in SystemInstances)
+                    foreach (TECSystem system in Instances)
                     {
                         TECSubScope subScopeToRemove = null;
-                        foreach (TECSubScope subScope in CharactersticInstances.GetInstances(characteristicSubScope))
+                        foreach (TECSubScope subScope in typicalInstanceDictionary.GetInstances(characteristicSubScope))
                         {
                             foreach (TECEquipment equipment in system.Equipment)
                             {
@@ -743,7 +732,7 @@ namespace EstimatingLibrary
                             }
                             else
                             {
-                                foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                                foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
@@ -755,16 +744,16 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECController && referenceObject is TECPanel)
+            else if (value is TECController && sender is TECPanel)
             {
-                var characteristicController = targetObject as TECController;
-                var characteristicPanel = referenceObject as TECPanel;
-                if (CharactersticInstances.ContainsKey(characteristicController) && CharactersticInstances.ContainsKey(characteristicPanel))
+                var characteristicController = value as TECController;
+                var characteristicPanel = sender as TECPanel;
+                if (typicalInstanceDictionary.ContainsKey(characteristicController) && typicalInstanceDictionary.ContainsKey(characteristicPanel))
                 {
-                    foreach (TECSystem system in SystemInstances)
+                    foreach (TECSystem system in Instances)
                     {
                         TECController controllerToRemove = null;
-                        foreach (TECController controller in CharactersticInstances.GetInstances(characteristicController))
+                        foreach (TECController controller in typicalInstanceDictionary.GetInstances(characteristicController))
                         {
                             foreach (TECPanel panel in system.Panels)
                             {
@@ -777,7 +766,7 @@ namespace EstimatingLibrary
                         }
                         if (controllerToRemove != null)
                         {
-                            foreach (TECPanel panel in CharactersticInstances.GetInstances(characteristicPanel))
+                            foreach (TECPanel panel in typicalInstanceDictionary.GetInstances(characteristicPanel))
                             {
                                 if (system.Panels.Contains(panel))
                                 {
@@ -790,23 +779,23 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (targetObject is TECCost && referenceObject is TECScope && !(targetObject is TECMisc)
-                && !(targetObject is TECController) && !(targetObject is TECDevice))
+            else if (value is TECCost && sender is TECScope && !(value is TECMisc)
+                && !(value is TECController) && !(value is TECDevice))
             {
-                if (referenceObject is TECSystem)
+                if (sender is TECSystem)
                 {
-                    foreach (TECSystem system in SystemInstances)
+                    foreach (TECSystem system in Instances)
                     {
-                        system.AssociatedCosts.Remove(targetObject as TECCost);
+                        system.AssociatedCosts.Remove(value as TECCost);
                     }
                 }
                 else
                 {
-                    var characteristicScope = referenceObject as TECScope;
-                    var cost = targetObject as TECCost;
-                    if (CharactersticInstances.ContainsKey(characteristicScope))
+                    var characteristicScope = sender as TECScope;
+                    var cost = value as TECCost;
+                    if (typicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
-                        foreach (TECScope scope in CharactersticInstances.GetInstances(characteristicScope))
+                        foreach (TECScope scope in typicalInstanceDictionary.GetInstances(characteristicScope))
                         {
                             scope.AssociatedCosts.Remove(cost);
                         }
@@ -814,7 +803,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         private void handleSystemSubScopeRemoval(TECSystem system)
         {
             foreach (TECEquipment equipment in system.Equipment)
@@ -847,87 +835,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        private List<TECCost> costs()
-        {
-            List<TECCost> outCosts = new List<TECCost>();
-            foreach(TECEquipment equipment in Equipment)
-            {
-                outCosts.AddRange(equipment.Costs);
-            }
-            foreach(TECController controller in Controllers)
-            {
-                outCosts.AddRange(controller.Costs);
-            }
-            foreach(TECPanel panel in Panels)
-            {
-                outCosts.AddRange(panel.Costs);
-            }
-            outCosts.AddRange(this.AssociatedCosts);
-            return outCosts;
-        }
-
-        public void RefreshReferences()
-        {
-            watcher.BidChanged -= Object_PropertyChanged;
-            watcher = new ChangeWatcher(this);
-            watcher.BidChanged += Object_PropertyChanged;
-        }
-        public TECSystem AddInstance(TECBid bid)
-        {
-            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            var newSystem = new TECSystem();
-            newSystem.Name = Name;
-            newSystem.Description = Description;
-            foreach (TECEquipment equipment in Equipment)
-            {
-                var toAdd = new TECEquipment(equipment, guidDictionary, CharactersticInstances);
-                CharactersticInstances.AddItem(equipment, toAdd);
-                newSystem.Equipment.Add(toAdd);
-            }
-            foreach (TECController controller in Controllers)
-            {
-                var toAdd = new TECController(controller, guidDictionary);
-                CharactersticInstances.AddItem(controller, toAdd);
-                newSystem.Controllers.Add(toAdd);
-            }
-            foreach (TECPanel panel in Panels)
-            {
-                var toAdd = new TECPanel(panel, guidDictionary);
-                CharactersticInstances.AddItem(panel, toAdd);
-                newSystem.Panels.Add(toAdd);
-            }
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                newSystem.AssociatedCosts.Add(cost);
-            }
-            ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
-            var newSubScope = newSystem.SubScope;
-            foreach(TECSubScope subScope in SubScope)
-            {
-                var instances = CharactersticInstances.GetInstances(subScope);
-                foreach(TECSubScope subInstance in instances)
-                {
-                    if (newSubScope.Contains(subInstance))
-                    {
-                        if(subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
-                        {
-                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance);
-                            instanceSSConnect.Length = subScope.Connection.Length;
-                            instanceSSConnect.ConduitLength = subScope.Connection.ConduitLength;
-                            instanceSSConnect.ConduitType = subScope.Connection.ConduitType;
-                        }
-                    }
-                }
-            }
-            SystemInstances.Add(newSystem);
-            return (newSystem);
-        }
-        
-        public void NotifyPointChanged(List<TECPoint> points)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
         #endregion
     }
 }
