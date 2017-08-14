@@ -224,19 +224,18 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getPointNumber();
+                return pointNumber();
             }
         }
 
         public List<TECCost> Costs
         {
-            get;
-            private set;
+            get { return costs();  }
         }
+        
         public List<TECPoint> Points
         {
-            get;
-            private set;
+            get { return points(); }
         }
         #endregion //Properties
 
@@ -392,7 +391,46 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        private int getPointNumber()
+        private List<TECPoint> points()
+        {
+            List<TECPoint> totalPoints = new List<TECPoint>();
+            foreach (TECSystem sys in Systems)
+            {
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope sub in equip.SubScope)
+                    {
+                        foreach (TECPoint point in sub.Points)
+                        { totalPoints.Add(point); }
+                    }
+                }
+            }
+            return totalPoints;
+        }
+
+        private List<TECCost> costs()
+        {
+            List<TECCost> outCosts = new List<TECCost>();
+            foreach(TECMisc misc in this.MiscCosts)
+            {
+                outCosts.AddRange(misc.Costs);
+            }
+            foreach(TECSystem system in this.Systems)
+            {
+                outCosts.AddRange(system.Costs);
+            }
+            foreach(TECController controller in this.Controllers)
+            {
+                outCosts.AddRange(controller.Costs);
+            }
+            foreach(TECPanel panel in this.Panels)
+            {
+                outCosts.AddRange(panel.Costs);
+            }
+            return outCosts;
+        }
+
+        private int pointNumber()
         {
             int totalPoints = 0;
             foreach (TECSystem sys in Systems)

@@ -58,6 +58,8 @@ namespace EstimatingLibrary
                 NotifyPropertyChanged(Change.Edit, "ConduitType", this, value, old);
             }
         }
+
+        public abstract List<TECCost> Costs { get; }
         #endregion //Properties
 
         public event Action<List<TECCost>> CostChanged;

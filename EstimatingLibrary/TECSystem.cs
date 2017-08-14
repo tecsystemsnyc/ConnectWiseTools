@@ -170,6 +170,10 @@ namespace EstimatingLibrary
             }
         }
         
+        public List<TECCost> Costs
+        {
+            get { return costs(); }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -845,6 +849,25 @@ namespace EstimatingLibrary
                     controller.RemoveSubScope(sub);
                 }
             }
+        }
+
+        private List<TECCost> costs()
+        {
+            List<TECCost> outCosts = new List<TECCost>();
+            foreach(TECEquipment equipment in Equipment)
+            {
+                outCosts.AddRange(equipment.Costs);
+            }
+            foreach(TECController controller in Controllers)
+            {
+                outCosts.AddRange(controller.Costs);
+            }
+            foreach(TECPanel panel in Panels)
+            {
+                outCosts.AddRange(panel.Costs);
+            }
+            outCosts.AddRange(this.AssociatedCosts);
+            return outCosts;
         }
 
         public void RefreshReferences()
