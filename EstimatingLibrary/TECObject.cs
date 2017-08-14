@@ -12,7 +12,7 @@ namespace EstimatingLibrary
     public enum Flavor { Tag=1, Location, Note, Exclusion, Wire, Conduit }
     public enum Change { Add, Remove, Edit }
 
-    public abstract class TECObject : INotifyCombinedChanged, INotifyTECChanged
+    public abstract class TECObject : INotifyPropertyChanged, INotifyTECChanged
     {
         #region Properties
         protected Guid _guid;

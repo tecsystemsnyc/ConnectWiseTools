@@ -98,7 +98,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach (TECSystem typical in bid.Systems)
             {
-                foreach (TECSystem instance in typical.SystemInstances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECController control in instance.Controllers)
                     {
