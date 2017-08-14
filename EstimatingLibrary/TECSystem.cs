@@ -99,8 +99,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Events
-        public event Action<List<TECCost>> CostChanged;
-        public event Action<List<TECPoint>> PointChanged;
+        public event Action<List<int>> PointChanged;
         #endregion
 
         #region Properties
