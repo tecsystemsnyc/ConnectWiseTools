@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
     public enum Flavor { Tag=1, Location, Note, Exclusion, Wire, Conduit }
+    public enum Change { Add, Remove, Edit }
 
     public abstract class TECObject : INotifyPropertyChanged
     {
@@ -25,6 +26,7 @@ namespace EstimatingLibrary
 
         #region Property Changed
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<PropertyChangedExtendedEventArgs> TECChanged;
 
         protected void NotifyPropertyChanged(Change change, string propertyName, TECObject sender,
             object value, object oldValue = null)
@@ -32,9 +34,10 @@ namespace EstimatingLibrary
             RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs(change, propertyName, sender,
                 value, oldValue));
         }
-        protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedExtendedEventArgs args)
         {
-            PropertyChanged?.Invoke(sender, e);
+            PropertyChanged?.Invoke(sender, args);
+            TECChanged?.Invoke(args);
         }
 
         protected void RaisePropertyChanged(string name)

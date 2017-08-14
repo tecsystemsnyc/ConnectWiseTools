@@ -1,4 +1,5 @@
 ﻿using DebugLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,589 +9,434 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Utilities
 {
-
-    public enum Change { Add, Remove, Edit };
-    
     public class ChangeWatcher
     {
-        private enum ChangeType { Object, Instance };
+        #region Fields
+        private Dictionary<TECObject, OccuranceType> occuranceDictionary;
+        #endregion
 
-        public event Action<object, PropertyChangedEventArgs> Changed;
-        public event Action<PropertyChangedExtendedEventArgs> ExtendedChanged;
-        public event Action<PropertyChangedExtendedEventArgs> InstanceChanged;
-        public event Action<List<TECCost>> CostChanged;
-        public event Action<List<TECPoint>> PointChanged;
-
-        private TECScopeManager scopeManager;
-
-        public ChangeWatcher(TECScopeManager scopeManager)
+        #region Constructors
+        public ChangeWatcher(TECBid bid)
         {
-            this.scopeManager = scopeManager;
-            registerScopeManager(scopeManager);
-            if (scopeManager is TECBid)
-            {
-                registerBidChanges(scopeManager as TECBid);
-            }
-            else if (scopeManager is TECTemplates)
-            {
-                registerTemplatesChanges(scopeManager as TECTemplates);
-            }
+            initialize(bid);
+        }
+        public ChangeWatcher(TECTemplates templates)
+        {
+            throw new NotImplementedException();
         }
         public ChangeWatcher(TECSystem system)
         {
-            registerSystem(system);
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Events
+        public event Action<PropertyChangedExtendedEventArgs> BidChanged;
+        public event Action<PropertyChangedExtendedEventArgs> InstanceChanged;
+        public event Action<List<TECCost>> CostChanged;
+        public event Action<List<TECPoint>> PointChanged;
+        #endregion
+
+        #region Enums
+        private enum OccuranceType { None, Typical, Instance };
+        #endregion
+
+        #region Methods
+        public void Refresh(TECBid bid)
+        {
+            initialize(bid);
         }
 
-        private void registerBidChanges(TECBid Bid)
+        private void initialize(TECBid bid)
         {
-            Bid.Parameters.PropertyChanged += Object_PropertyChanged;
-            foreach (TECScopeBranch branch in Bid.ScopeTree)
-            { registerScopeBranch(branch); }
-            foreach (TECLabeled note in Bid.Notes)
-            { note.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECLabeled exclusion in Bid.Exclusions)
-            { exclusion.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECLabeled location in Bid.Locations)
-            { location.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECSystem system in Bid.Systems)
-            { registerSystem(system); }
-            foreach (TECController controller in Bid.Controllers)
+            occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
+            registerBidChanges(bid);
+        }
+
+        #region Registration
+        private void registerBidChanges(TECBid bid)
+        {
+            registerTECObject(bid, OccuranceType.None);
+            registerTECObject(bid.Labor, OccuranceType.None);
+            registerTECObject(bid.Parameters, OccuranceType.None);
+
+            foreach(TECSystem typical in bid.Systems)
             {
-                registerController(controller, ChangeType.Instance);
+                registerSystem(typical, OccuranceType.Typical);
             }
-            foreach (TECMisc cost in Bid.MiscCosts)
+            foreach(TECController controller in bid.Controllers)
             {
-                cost.PropertyChanged += Object_PropertyChanged;
-                cost.PropertyChanged += Instance_PropertyChanged;
+                registerController(controller, OccuranceType.Instance);
             }
-            foreach (TECPanel panel in Bid.Panels)
+            foreach(TECPanel panel in bid.Panels)
             {
-                panel.PropertyChanged += Object_PropertyChanged;
-                panel.PropertyChanged += Instance_PropertyChanged;
+                registerTECObject(panel, OccuranceType.Instance);
+            }
+            foreach(TECMisc misc in bid.MiscCosts)
+            {
+                registerTECObject(misc, OccuranceType.Instance);
+            }
+            foreach(TECScopeBranch branch in bid.ScopeTree)
+            {
+                registerScopeBranch(branch);
+            }
+            foreach(TECLabeled note in bid.Notes)
+            {
+                registerTECObject(note, OccuranceType.None);
+            }
+            foreach(TECLabeled exclusion in bid.Exclusions)
+            {
+                registerTECObject(exclusion, OccuranceType.None);
+            }
+            foreach(TECLabeled location in bid.Locations)
+            {
+                registerTECObject(location, OccuranceType.None);
             }
         }
-        private void registerTemplatesChanges(TECTemplates Templates)
+
+        private void registerTECObject(TECObject ob, OccuranceType ot)
         {
-            foreach (TECSystem system in Templates.SystemTemplates)
-            { registerSystem(system); }
-            foreach (TECEquipment equipment in Templates.EquipmentTemplates)
-            { registerEquipment(equipment); }
-            foreach (TECSubScope subScope in Templates.SubScopeTemplates)
-            { registerSubScope(subScope); }
-            foreach (TECController controller in Templates.ControllerTemplates)
-            { registerController(controller); }
-            foreach (TECMisc addition in Templates.MiscCostTemplates)
-            { addition.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanel panel in Templates.PanelTemplates)
-            { panel.PropertyChanged += Object_PropertyChanged; }
-        }
-        private void registerScopeManager(TECScopeManager scopeManager)
-        {
-            scopeManager.PropertyChanged += Object_PropertyChanged;
-            scopeManager.Labor.PropertyChanged += Object_PropertyChanged;
-            scopeManager.Catalogs.PropertyChanged += Object_PropertyChanged;
-            registerCatalogs(scopeManager.Catalogs);
-        }
-        private void registerCatalogs(TECCatalogs catalogs)
-        {
-            foreach (TECManufacturer manufacturer in catalogs.Manufacturers)
-            { manufacturer.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECDevice device in catalogs.Devices)
-            { device.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECIOModule ioModule in catalogs.IOModules)
-            { ioModule.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECPanelType panelType in catalogs.PanelTypes)
-            { panelType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECElectricalMaterial connectionType in catalogs.ConnectionTypes)
-            { connectionType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECElectricalMaterial conduitType in catalogs.ConduitTypes)
-            { conduitType.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECCost cost in catalogs.AssociatedCosts)
-            { cost.PropertyChanged += Object_PropertyChanged; }
-            foreach (TECLabeled tag in catalogs.Tags)
-            { tag.PropertyChanged += Object_PropertyChanged; }
-        }
-        private void registerSubScope(TECSubScope subScope, ChangeType changeType = ChangeType.Object)
-        {
-            //Subscope Changed
-            subScope.PropertyChanged += Object_PropertyChanged;
-            if (changeType == ChangeType.Instance)
+            occuranceDictionary.Add(ob, ot);
+            ob.TECChanged += handleTECChanged;
+            if (ob is INotifyCostChanged costOb)
             {
-                subScope.PropertyChanged += Instance_PropertyChanged;
+                costOb.CostChanged += (e) => handleCostChanged(ob, e);
             }
-            foreach (TECPoint point in subScope.Points)
+            if (ob is INotifyPointChanged pointOb)
             {
-                //Point Changed
-                point.PropertyChanged += Object_PropertyChanged;
-                if (changeType == ChangeType.Instance)
+                pointOb.PointChanged += (e) => handlePointChanged(ob, e);
+            }
+        }
+        private void unregisterTECObject(TECObject ob)
+        {
+            occuranceDictionary.Remove(ob);
+            ob.TECChanged -= handleTECChanged;
+            if (ob is INotifyCostChanged costOb)
+            {
+                costOb.CostChanged -= (e) => handleCostChanged(ob, e);
+            }
+            if (ob is INotifyPointChanged pointOb)
+            {
+                pointOb.PointChanged -= (e) => handlePointChanged(ob, e);
+            }
+        }
+
+        private void registerSystem(TECSystem sys, OccuranceType ot)
+        {
+            registerTECObject(sys, ot);
+            foreach(TECSystem instance in sys.SystemInstances)
+            {
+                registerSystem(instance, OccuranceType.Instance);
+            }
+            foreach(TECEquipment equip in sys.Equipment)
+            {
+                registerEquipment(equip, ot);
+            }
+            foreach(TECController controller in sys.Controllers)
+            {
+                registerController(controller, ot);
+            }
+            foreach(TECPanel panel in sys.Panels)
+            {
+                registerTECObject(panel, ot);
+            }
+            foreach(TECMisc misc in sys.MiscCosts)
+            {
+                registerTECObject(misc, ot);
+            }
+        }
+        private void registerEquipment(TECEquipment equip, OccuranceType ot)
+        {
+            registerTECObject(equip, ot);
+            foreach(TECSubScope ss in equip.SubScope)
+            {
+                registerSubScope(ss, ot);
+            }
+        }
+        private void registerSubScope(TECSubScope ss, OccuranceType ot)
+        {
+            registerTECObject(ss, ot);
+            foreach(TECPoint point in ss.Points)
+            {
+                registerTECObject(point, ot);
+            }
+        }
+        private void registerController(TECController controller, OccuranceType ot)
+        {
+            registerTECObject(controller, ot);
+            foreach(TECConnection connection in controller.ChildrenConnections)
+            {
+                if (connection is TECNetworkConnection)
                 {
-                    point.PropertyChanged += Instance_PropertyChanged;
+                    registerTECObject(connection, ot);
+                }
+                else if (connection is TECSubScopeConnection ssConnect)
+                {
+                    registerSubScopeConnection(ssConnect);
+                }
+                else
+                {
+                    throw new InvalidCastException("Connection type not recognized.");
                 }
             }
         }
-        private void registerEquipment(TECEquipment equipment, ChangeType changeType = ChangeType.Object)
+        private void registerSubScopeConnection(TECSubScopeConnection connection)
         {
-            //equipment Changed
-            equipment.PropertyChanged += Object_PropertyChanged;
-            if (changeType == ChangeType.Instance)
+            if (isInstance(connection.ParentController) && isInstance(connection.SubScope))
             {
-                equipment.PropertyChanged += Instance_PropertyChanged;
+                registerTECObject(connection, OccuranceType.Instance);
             }
-            foreach (TECSubScope subScope in equipment.SubScope)
+            else
             {
-                registerSubScope(subScope, changeType);
+                registerTECObject(connection, OccuranceType.Typical);
             }
         }
         private void registerScopeBranch(TECScopeBranch branch)
         {
-            branch.PropertyChanged += Object_PropertyChanged;
-            foreach (TECScopeBranch scope in branch.Branches)
+            registerTECObject(branch, OccuranceType.None);
+            foreach(TECScopeBranch subBranch in branch.Branches)
             {
-                registerScopeBranch(scope);
-            }
-        }
-        private void registerSystem(TECSystem scope, ChangeType changeType = ChangeType.Object)
-        {
-            scope.PropertyChanged += Object_PropertyChanged;
-            if (changeType == ChangeType.Instance)
-            {
-                scope.PropertyChanged += Instance_PropertyChanged;
-            }
-            foreach (TECPanel panel in scope.Panels)
-            {
-                panel.PropertyChanged += Object_PropertyChanged;
-                if(changeType == ChangeType.Instance)
-                {
-                    panel.PropertyChanged += Instance_PropertyChanged;
-                }
-            }
-            foreach (TECController controller in scope.Controllers)
-            {
-                registerController(controller, changeType);
-            }
-            foreach (TECEquipment equipment in scope.Equipment)
-            {
-                registerEquipment(equipment, changeType);
-            }
-            foreach(TECSystem system in scope.SystemInstances)
-            {
-                registerSystem(system, ChangeType.Instance);
-            }
-            foreach(TECMisc misc in scope.MiscCosts)
-            {
-                misc.PropertyChanged += Object_PropertyChanged;
-                misc.PropertyChanged += Instance_PropertyChanged;
-            }
-        }
-        private void registerController(TECController controller, ChangeType changeType = ChangeType.Object)
-        {
-            controller.PropertyChanged += Object_PropertyChanged;
-            if (changeType == ChangeType.Instance)
-            {
-                controller.PropertyChanged += Instance_PropertyChanged;
-            }
-            foreach (TECConnection connection in controller.ChildrenConnections)
-            {
-                connection.PropertyChanged += Object_PropertyChanged;
-                if(changeType == ChangeType.Instance)
-                {
-                    connection.PropertyChanged += Instance_PropertyChanged;
-                }
+                registerScopeBranch(subBranch);
             }
         }
 
-        private void handleChildren(object newItem, Change change, ChangeType changeType)
+        private void unregisterSystem(TECSystem sys)
         {
-            if (newItem is TECSystem)
+            unregisterTECObject(sys);
+            foreach(TECSystem instance in sys.SystemInstances)
             {
-                handleSystemChildren(newItem as TECSystem, change, changeType);
+                unregisterSystem(instance);
             }
-            else if (newItem is TECEquipment)
+            foreach(TECEquipment equip in sys.Equipment)
             {
-                handleEquipmentChildren(newItem as TECEquipment, change, changeType);
+                unregisterEquipment(equip);
             }
-            else if (newItem is TECSubScope)
+            foreach(TECController controller in sys.Controllers)
             {
-                handleSubScopeChildren(newItem as TECSubScope, change, changeType);
+                unregisterController(controller);
             }
-            else if (newItem is TECController)
+            foreach(TECPanel panel in sys.Panels)
             {
-                handleControllerChildren(newItem as TECController, change, changeType);
+                unregisterTECObject(panel);
+            }
+            foreach(TECMisc misc in sys.MiscCosts)
+            {
+                unregisterTECObject(misc);
             }
         }
-        private void handleSystemChildren(TECSystem system, Change change, ChangeType changeType)
+        private void unregisterEquipment(TECEquipment equip)
         {
-            foreach (TECEquipment newEquipment in system.Equipment)
+            unregisterTECObject(equip);
+            foreach(TECSubScope ss in equip.SubScope)
             {
-                if (change == Change.Add)
-                {
-                    if(changeType == ChangeType.Instance)
-                    {
-                        newEquipment.PropertyChanged += Instance_PropertyChanged;
-                    } else
-                    {
-                        newEquipment.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        newEquipment.PropertyChanged -= Instance_PropertyChanged;
-                    }else
-                    {
-                        newEquipment.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-                handleEquipmentChildren(newEquipment, change, changeType);
-            }
-            foreach(TECController controller in system.Controllers)
-            {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        controller.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        controller.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        controller.PropertyChanged -= Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        controller.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-                handleControllerChildren(controller, change, changeType);
-            }
-            foreach(TECPanel panel in system.Panels)
-            {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        panel.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        panel.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        panel.PropertyChanged -= Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        panel.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-            }
-            foreach (TECScopeBranch branch in system.ScopeBranches)
-            {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        branch.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        branch.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        branch.PropertyChanged -= Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        branch.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-            }
-            foreach (TECSystem instance in system.SystemInstances)
-            {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        instance.PropertyChanged += Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        instance.PropertyChanged += Object_PropertyChanged;
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        instance.PropertyChanged -= Instance_PropertyChanged;
-                    }
-                    else
-                    {
-                        instance.PropertyChanged -= Object_PropertyChanged;
-                    }
-                }
-                handleSystemChildren(instance, change, changeType);
+                unregisterSubScope(ss);
             }
         }
-        private void handleEquipmentChildren(TECEquipment equipment, Change change, ChangeType changeType)
+        private void unregisterSubScope(TECSubScope ss)
         {
-            foreach (TECSubScope newSubScope in equipment.SubScope)
+            unregisterTECObject(ss);
+            foreach(TECPoint point in ss.Points)
             {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        newSubScope.PropertyChanged += Instance_PropertyChanged;
-                    }else
-                    {
-                        newSubScope.PropertyChanged += Object_PropertyChanged;
-
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        newSubScope.PropertyChanged -= Instance_PropertyChanged;
-                    } else
-                    {
-                        newSubScope.PropertyChanged -= Object_PropertyChanged;
-
-                    }
-                }
-                handleSubScopeChildren(newSubScope, change, changeType);
+                unregisterTECObject(point);
             }
         }
-        private void handleSubScopeChildren(TECSubScope subScope, Change change, ChangeType changeType)
+        private void unregisterController(TECController controller)
         {
-
-            foreach (TECPoint newPoint in subScope.Points)
+            unregisterTECObject(controller);
+            foreach(TECConnection connection in controller.ChildrenConnections)
             {
-                if (change == Change.Add)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        newPoint.PropertyChanged += Instance_PropertyChanged;
-                    } else
-                    {
-                        newPoint.PropertyChanged += Object_PropertyChanged;
-
-                    }
-                }
-                else if (change == Change.Remove)
-                {
-                    if (changeType == ChangeType.Instance)
-                    {
-                        newPoint.PropertyChanged -= Instance_PropertyChanged;
-                    } else
-                    {
-                        newPoint.PropertyChanged -= Object_PropertyChanged;
-
-                    }
-                }
+                unregisterTECObject(connection);
             }
-
         }
-        private void handleControllerChildren(TECController controller, Change change, ChangeType changeType)
+        private void unregisterScopeBranch(TECScopeBranch branch)
         {
-            if(change == Change.Add)
+            unregisterTECObject(branch);
+            foreach(TECScopeBranch subBranch in branch.Branches)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
-                {
-                    
-                    if (changeType == ChangeType.Instance)
-                    {
-                        connection.PropertyChanged += Instance_PropertyChanged;
-                    } else{
-                        connection.PropertyChanged += Object_PropertyChanged;
-                    }
-
-                }
+                unregisterTECObject(subBranch);
             }
-            else if(change == Change.Remove)
+        }
+
+        private void registerChange(PropertyChangedExtendedEventArgs args)
+        {
+            if (args.Value is TECObject value)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                if (args.Change == Change.Add)
                 {
-                    
-                    if (changeType == ChangeType.Instance)
-                    {
-                        connection.PropertyChanged += Instance_PropertyChanged;
-                    } else {
-                        connection.PropertyChanged -= Object_PropertyChanged;
-                    }
+                    registerAdd(args.Sender, value);
+                }
+                else if (args.Change == Change.Remove)
+                {
+                    registerRemove(value);
+                }
+                else if (args.Change == Change.Edit && args.OldValue is TECObject old)
+                {
+                    registerEdit(args.Sender, value, old);
                 }
             }
         }
-        
-        private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void registerAdd(TECObject parent, TECObject child)
         {
-            PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-            if(args != null)
+            OccuranceType parentOT = occuranceDictionary[parent];
+            if (child is TECSystem sys)
             {
-                handleExtendedPropertyChanged(args);
-                ExtendedChanged?.Invoke(args);
-            }
-            Changed?.Invoke(sender, e);
-        }
-        private void Instance_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-            if (args != null)
-            {
-                if (args.Value is TECSubScopeConnection)
+                if (parent is TECBid)
                 {
-                    if (!isTypicalConnection(args.Value as TECSubScopeConnection, scopeManager as TECBid))
+                    registerSystem(sys, OccuranceType.Typical);
+                }
+                else if (parent is TECSystem)
+                {
+                    registerSystem(sys, OccuranceType.Instance);
+                }
+            }
+            else if (child is TECEquipment equip)
+            {
+                registerEquipment(equip, parentOT);
+            }
+            else if (child is TECSubScope ss)
+            {
+                registerSubScope(ss, parentOT);
+            }
+            else if (child is TECPoint point)
+            {
+                registerTECObject(point, parentOT);
+            }
+            else if (child is TECController controller)
+            {
+                if (parent is TECBid)
+                {
+                    registerController(controller, OccuranceType.Instance);
+                }
+                else if (parent is TECSystem)
+                {
+                    registerController(controller, parentOT);
+                }
+            }
+            else if (child is TECPanel panel)
+            {
+                registerTECObject(panel, parentOT);
+            }
+            else if (child is TECConnection connection)
+            {
+                if (connection is TECNetworkConnection netConnect)
+                {
+                    registerTECObject(netConnect, parentOT);
+                }
+                else if (connection is TECSubScopeConnection ssConnect)
+                {
+                    registerSubScopeConnection(ssConnect);
+                }
+            }
+            else if (child is TECMisc misc)
+            {
+                registerTECObject(misc, parentOT);
+            }
+            else if (child is TECLabeled labelled)
+            {
+                if (labelled is TECScopeBranch branch)
+                {
+                    registerScopeBranch(branch);
+                }
+                else if (labelled.Flavor == Flavor.Location)
+                {
+                    if (parent is TECBid)
                     {
-                        handleInstanceChanged(args);
-                        InstanceChanged?.Invoke(args);
+                        registerTECObject(labelled, OccuranceType.None);
                     }
                 }
                 else
                 {
-                    handleInstanceChanged(args);
-                    InstanceChanged?.Invoke(args);
-                }
-            }
-        }
-        private void handleExtendedPropertyChanged(PropertyChangedExtendedEventArgs args)
-        {
-            string message = "Propertychanged: " + args.PropertyName;
-            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-            
-            if (args.Change == Change.Add)
-            {
-                message = "Add change: " + args.PropertyName;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                ((TECObject)args.Value).PropertyChanged += Object_PropertyChanged;
-                handleChildren(args.Value, Change.Add, ChangeType.Object);
-                checkForRaiseInstance(args);
-            }
-            else if (args.Change == Change.Remove)
-            {
-                message = "Remove change: " + args.PropertyName;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                ((TECObject)args.Value).PropertyChanged -= Object_PropertyChanged;
-                handleChildren(args.Value, Change.Remove, ChangeType.Object);
-                checkForRaiseInstance(args);
-            }
-            else if (args.Change == Change.Edit)
-            {
-                if (args.Value is TECBidParameters || args.Value is TECLabor)
-                {
-                    (args.Value as TECObject).PropertyChanged += Object_PropertyChanged;
-                }
-                else if (args.Sender is TECBidParameters || args.Sender is TECLabor)
-                {
-                    InstanceChanged?.Invoke(args);
+                    registerTECObject(labelled, OccuranceType.None);
                 }
             }
             else
             {
-                throw new NotImplementedException("Change type not recognized.");
+                throw new InvalidOperationException("TECObject type not recognized.");
             }
         }
-        private void handleInstanceChanged(PropertyChangedExtendedEventArgs args)
+        private void registerRemove(TECObject oldchild)
         {
-            string message = "InstanceChanged: " + args.PropertyName;
-            DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-            if (args.Change == Change.Add)
+            if (oldchild is TECSystem sys)
             {
-                message = "Add change: " + args.PropertyName;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                ((TECObject)args.Value).PropertyChanged += Instance_PropertyChanged;
-                handleChildren(args.Value, Change.Add, ChangeType.Instance);
+                unregisterSystem(sys);
             }
-            else if (args.Change == Change.Remove)
+            else if (oldchild is TECEquipment equip)
             {
-                message = "Remove change: " + args.PropertyName;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
-
-                ((TECObject)args.Value).PropertyChanged -= Instance_PropertyChanged;
-                handleChildren(args.Value, Change.Remove, ChangeType.Instance);
+                unregisterEquipment(equip);
             }
-            else if (args.Change == Change.Edit)
+            else if (oldchild is TECSubScope ss)
             {
-                if (args.Value is TECBidParameters || args.Value is TECLabor)
-                {
-                    (args.Value as TECObject).PropertyChanged += Instance_PropertyChanged;
-                }
+                unregisterSubScope(ss);
             }
-            
+            else if (oldchild is TECController controller)
+            {
+                unregisterController(controller);
+            }
+            else if (oldchild is TECScopeBranch branch)
+            {
+                unregisterScopeBranch(branch);
+            }
+            else
+            {
+                unregisterTECObject(oldchild);
+            }
         }
-
-        private bool isTypicalConnection(TECSubScopeConnection ssConnect, TECBid bid)
+        private void registerEdit(TECObject parent, TECObject newChild, TECObject oldChild)
         {
-            if(ssConnect != null && bid != null)
+            if (parent is TECBid)
             {
-                foreach(TECSystem system in bid.Systems)
+                if (newChild is TECLabor)
                 {
-                    if (system.SubScope.Contains(ssConnect.SubScope))
-                    {
-                        return true;
-                    }
+                    unregisterTECObject(oldChild);
+                    registerTECObject(newChild, OccuranceType.None);
+                }
+                else if (newChild is TECBidParameters)
+                {
+                    unregisterTECObject(oldChild);
+                    registerTECObject(newChild, OccuranceType.None);
                 }
             }
-            return false;
         }
+        #endregion
 
-        private void checkForRaiseInstance(PropertyChangedExtendedEventArgs args)
+        #region Event Handlers
+        private void handleTECChanged(PropertyChangedExtendedEventArgs obj)
         {
-            if (args.Sender is TECSystem && args.Value is TECSystem) {
-                InstanceChanged?.Invoke(args);
-                if(args.Change == Change.Add)
-                {
-                    (args.Value as TECSystem).PropertyChanged += Instance_PropertyChanged;
-                }
-                else if (args.Change == Change.Remove)
-                {
-                    (args.Value as TECSystem).PropertyChanged -= Instance_PropertyChanged;
-                }
-                handleSystemChildren(args.Value as TECSystem, args.Change, ChangeType.Instance);
-            }
-            else if (
-                args.Sender is TECBid && args.Value is TECController ||
-                args.Sender is TECBid && args.Value is TECPanel ||
-                args.Sender is TECBid && args.Value is TECMisc ||
-                args.Sender is TECSystem && args.Value is TECMisc)
+            registerChange(obj);
+            BidChanged?.Invoke(obj);
+            if (isInstance(obj.Sender))
             {
-                InstanceChanged?.Invoke(args);
-                if (args.Change == Change.Add)
-                {
-                    (args.Value as TECObject).PropertyChanged += Instance_PropertyChanged;
-                }
-                else if (args.Change == Change.Remove)
-                {
-                    (args.Value as TECObject).PropertyChanged -= Instance_PropertyChanged;
-                }
-                if (args.Value is TECController)
-                {
-                    handleControllerChildren(args.Value as TECController, args.Change, ChangeType.Instance);
-                }
-                
-            }
-            else if (args.Change == Change.Remove && args.Sender is TECBid && args.Value is TECSystem)
-            {
-                 InstanceChanged?.Invoke(args);
+                InstanceChanged?.Invoke(obj);
             }
         }
+        private void handleCostChanged(TECObject sender, List<TECCost> obj)
+        {
+            if (isInstance(sender))
+            {
+                CostChanged?.Invoke(obj);
+            }
+        }
+        private void handlePointChanged(TECObject sender, List<TECPoint> obj)
+        {
+            if (isInstance(sender))
+            {
+                PointChanged?.Invoke(obj);
+            }
+        }
+        #endregion
+
+        private bool isInstance(TECObject ob)
+        {
+            if (occuranceDictionary.ContainsKey(ob))
+            {
+                OccuranceType ot = occuranceDictionary[ob];
+                return (ot == OccuranceType.Instance);
+            }
+            else
+            {
+                throw new NullReferenceException("Occurance dictionary doesn't contain TECObject.");
+            }
+        }
+        #endregion
     }
 }

@@ -197,7 +197,7 @@ namespace EstimatingLibrary
             ScopeBranches.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ScopeBranches");
             MiscCosts.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCosts");
             watcher = new ChangeWatcher(this);
-            watcher.Changed += Object_PropertyChanged;
+            watcher.BidChanged += Object_PropertyChanged;
         }
         public TECSystem() : this(Guid.NewGuid()) { }
 
@@ -330,35 +330,27 @@ namespace EstimatingLibrary
             return totalPoints;
         }
 
-        private void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Object_PropertyChanged(PropertyChangedExtendedEventArgs args)
         {
             if (SystemInstances.Count > 0)
             {
-                if (e is PropertyChangedExtendedEventArgs)
+                object oldValue = args.OldValue;
+                object newValue = args.Value;
+                if (args.Change == Change.Add)
                 {
-                    PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
-                    object oldValue = args.OldValue;
-                    object newValue = args.Value;
-                    if (e.PropertyName == "Add" ||
-                        e.PropertyName == "AddRelationship" ||
-                        e.PropertyName == "AddCatalog")
-                    {
-                        handleAdd(newValue, oldValue);
-                    }
-                    else if (e.PropertyName == "Remove" ||
-                        e.PropertyName == "RemoveRelationship" ||
-                        e.PropertyName == "RemoveCatalog")
-                    {
-                        handleRemove(newValue, oldValue);
-                    }
-                    else if(oldValue is TECPoint && oldValue is TECPoint)
-                    {
-                        handlePointChanged(newValue as TECPoint, e.PropertyName);
-                    }
-                } else if (e.PropertyName == "Connection" && sender is TECSubScope)
-                {
-                    handleSubScopeConnectionChanged(sender as TECSubScope);
+                    handleAdd(newValue, oldValue);
                 }
+                else if (args.Change == Change.Remove)
+                {
+                    handleRemove(newValue, oldValue);
+                }
+                else if(oldValue is TECPoint && oldValue is TECPoint)
+                {
+                    handlePointChanged(newValue as TECPoint, args.PropertyName);
+                }
+            } else if (args.PropertyName == "Connection" && args.Sender is TECSubScope)
+            {
+                handleSubScopeConnectionChanged(args.Sender as TECSubScope);
             }
         }
 
@@ -402,7 +394,7 @@ namespace EstimatingLibrary
 
         private void CharactersticInstances_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaiseExtendedPropertyChanged(sender, e);
+            RaiseExtendedPropertyChanged(sender, e as PropertyChangedExtendedEventArgs);
         }
 
         private void handleAdd(object targetObject, object referenceObject)
@@ -872,9 +864,9 @@ namespace EstimatingLibrary
 
         public void RefreshReferences()
         {
-            watcher.Changed -= Object_PropertyChanged;
+            watcher.BidChanged -= Object_PropertyChanged;
             watcher = new ChangeWatcher(this);
-            watcher.Changed += Object_PropertyChanged;
+            watcher.BidChanged += Object_PropertyChanged;
         }
         public TECSystem AddInstance(TECBid bid)
         {

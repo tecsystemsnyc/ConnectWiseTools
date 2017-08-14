@@ -122,9 +122,9 @@ namespace TECUserControlLibrary.ViewModels
 
         private void initializeVMs()
         {
-            DeviceSummaryVM = new HardwareSummaryVM(typeof(TECDevice));
-            ControllerSummaryVM = new HardwareSummaryVM(typeof(TECController));
-            PanelSummaryVM = new HardwareSummaryVM(typeof(TECPanel));
+            DeviceSummaryVM = new HardwareSummaryVM();
+            ControllerSummaryVM = new HardwareSummaryVM();
+            PanelSummaryVM = new HardwareSummaryVM();
             WireSummaryVM = new LengthSummaryVM();
             ConduitSummaryVM = new LengthSummaryVM();
             MiscSummaryVM = new MiscCostsSummaryVM();
@@ -223,7 +223,10 @@ namespace TECUserControlLibrary.ViewModels
                     deltas.AddRange(WireSummaryVM.AddRun(connectionType, ssConnect.Length));
                 }
             }
-            deltas.AddRange(ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+            if (connection.ConduitType != null)
+            {
+                deltas.AddRange(ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+            }
             return deltas;
         }
         
@@ -342,6 +345,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (args.Value is TECDevice dev && args.Sender is TECSubScope sub)
                 {
+                    updateTotals(DeviceSummaryVM.AddHardware(dev));
                     if (sub.Connection != null)
                     {
                         foreach(TECElectricalMaterial connectionType in dev.ConnectionTypes)
@@ -379,6 +383,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (args.Value is TECDevice dev && args.Sender is TECSubScope sub)
                 {
+                    updateTotals(DeviceSummaryVM.RemoveHardware(dev));
                     if (sub.Connection != null)
                     {
                         foreach(TECElectricalMaterial connectionType in dev.ConnectionTypes)
@@ -409,8 +414,11 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (args.PropertyName == "ConduitLength")
                     {
-                        double deltaLength = (double)args.Value - (double)args.OldValue;
-                        updateTotals(ConduitSummaryVM.AddLength(connection.ConduitType, deltaLength));
+                        if (connection.ConduitType != null)
+                        {
+                            double deltaLength = (double)args.Value - (double)args.OldValue;
+                            updateTotals(ConduitSummaryVM.AddLength(connection.ConduitType, deltaLength));
+                        }
                     }
                     else if (args.PropertyName == "ConnectionType")
                     {
@@ -419,8 +427,14 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (args.PropertyName == "ConduitType")
                     {
-                        updateTotals(ConduitSummaryVM.RemoveRun(args.OldValue as TECElectricalMaterial, connection.ConduitLength));
-                        updateTotals(ConduitSummaryVM.AddRun(args.Value as TECElectricalMaterial, connection.ConduitLength));
+                        if (args.OldValue != null)
+                        {
+                            updateTotals(ConduitSummaryVM.RemoveRun(args.OldValue as TECElectricalMaterial, connection.ConduitLength));
+                        }
+                        if (args.Value != null)
+                        {
+                            updateTotals(ConduitSummaryVM.AddRun(args.Value as TECElectricalMaterial, connection.ConduitLength));
+                        }
                     }
                 }
                 else if (args.Sender is TECMisc misc)

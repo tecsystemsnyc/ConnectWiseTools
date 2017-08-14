@@ -30,22 +30,12 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         //Constructor
-        public HardwareSummaryVM(Type hardwareType)
+        public HardwareSummaryVM()
         {
-            if (hardwareType.IsSubclassOf(typeof(TECHardware)))
-            {
-                HardwareType = hardwareType;
-                initialize();
-            }
-            else
-            {
-                throw new ArgumentException("Invalid hardware type.");
-            }
+            initialize();
         }
 
         #region Properties
-        public Type HardwareType { get; private set; }
-        
         public ObservableCollection<HardwareSummaryItem> HardwareItems
         {
             get { return _hardwareItems; }
@@ -138,38 +128,31 @@ namespace TECUserControlLibrary.ViewModels
 
         public List<CostObject> AddHardware(TECHardware hardware)
         {
-            if (hardware.GetType() == HardwareType)
+            List<CostObject> deltas = new List<CostObject>();
+            bool containsItem = hardwareDictionary.ContainsKey(hardware.Guid);
+            if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
-                bool containsItem = hardwareDictionary.ContainsKey(hardware.Guid);
-                if (containsItem)
-                {
-                    HardwareSummaryItem item = hardwareDictionary[hardware.Guid];
-                    CostObject delta = item.Increment();
-                    HardwareCost += delta.Cost;
-                    HardwareLabor += delta.Labor;
-                    delta.Type = CostType.TEC;
-                    deltas.Add(delta);
-                }
-                else
-                {
-                    HardwareSummaryItem item = new HardwareSummaryItem(hardware);
-                    hardwareDictionary.Add(hardware.Guid, item);
-                    HardwareItems.Add(item);
-                    HardwareCost += item.TotalCost;
-                    HardwareLabor += item.TotalLabor;
-                    deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, CostType.TEC));
-                }
-                foreach (TECCost cost in hardware.AssociatedCosts)
-                {
-                    deltas.AddRange(AddCost(cost));
-                }
-                return deltas;
+                HardwareSummaryItem item = hardwareDictionary[hardware.Guid];
+                CostObject delta = item.Increment();
+                HardwareCost += delta.Cost;
+                HardwareLabor += delta.Labor;
+                delta.Type = CostType.TEC;
+                deltas.Add(delta);
             }
             else
             {
-                throw new ArgumentException("Invalid hardware type.");
+                HardwareSummaryItem item = new HardwareSummaryItem(hardware);
+                hardwareDictionary.Add(hardware.Guid, item);
+                HardwareItems.Add(item);
+                HardwareCost += item.TotalCost;
+                HardwareLabor += item.TotalLabor;
+                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, CostType.TEC));
             }
+            foreach (TECCost cost in hardware.AssociatedCosts)
+            {
+                deltas.AddRange(AddCost(cost));
+            }
+            return deltas;
         }
         public List<CostObject> RemoveHardware(TECHardware hardware)
         {

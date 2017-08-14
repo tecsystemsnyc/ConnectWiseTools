@@ -21,7 +21,7 @@ namespace EstimatingUtilitiesLibrary
         public DoStacker(ChangeWatcher changeWatcher)
         {
             watcher = changeWatcher;
-            watcher.ExtendedChanged += objectChanged;
+            watcher.BidChanged += objectChanged;
 
             undoStack = new List<PropertyChangedExtendedEventArgs>();
             redoStack = new List<PropertyChangedExtendedEventArgs>();
