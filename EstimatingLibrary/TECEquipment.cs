@@ -58,7 +58,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECObject> characteristicReference = null) : this()
+            ListDictionary<TECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
@@ -149,7 +149,7 @@ namespace EstimatingLibrary
         {
             if (e.PropertyName == "Location")
             {
-                var args = e as PropertyChangedExtendedEventArgs;
+                var args = e as TECChangedEventArgs;
                 var location = args.Value as TECLabeled;
                 if(location.Flavor == Flavor.Location)
                 {

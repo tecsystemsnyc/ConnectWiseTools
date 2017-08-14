@@ -315,7 +315,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        private void instanceChanged(PropertyChangedExtendedEventArgs args)
+        private void instanceChanged(TECChangedEventArgs args)
         {
             if (args.Change == Change.Add)
             {

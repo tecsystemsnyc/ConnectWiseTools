@@ -13,32 +13,38 @@ namespace EstimatingLibrary.Utilities
     {
         #region Fields
         private Dictionary<TECObject, OccuranceType> occuranceDictionary;
+        private WatcherType type;
         #endregion
 
         #region Constructors
         public ChangeWatcher(TECBid bid)
         {
+            type = WatcherType.Bid;
             initialize(bid);
         }
         public ChangeWatcher(TECTemplates templates)
         {
+            type = WatcherType.Templates;
             throw new NotImplementedException();
         }
         public ChangeWatcher(TECSystem system)
         {
-            throw new NotImplementedException();
+            type = WatcherType.System;
+            registerSystem(system, OccuranceType.Typical);
         }
         #endregion
 
         #region Events
-        public event Action<PropertyChangedExtendedEventArgs> BidChanged;
-        public event Action<PropertyChangedExtendedEventArgs> InstanceChanged;
+        public event Action<TECChangedEventArgs> BidChanged;
+        public event Action<TECChangedEventArgs> InstanceChanged;
+        public event Action<TECChangedEventArgs> SystemChanged;
         public event Action<List<TECCost>> CostChanged;
         public event Action<List<TECPoint>> PointChanged;
         #endregion
 
         #region Enums
         private enum OccuranceType { None, Typical, Instance };
+        private enum WatcherType { Bid, Templates, System };
         #endregion
 
         #region Methods
@@ -124,7 +130,7 @@ namespace EstimatingLibrary.Utilities
         private void registerSystem(TECSystem sys, OccuranceType ot)
         {
             registerTECObject(sys, ot);
-            foreach(TECSystem instance in sys.SystemInstances)
+            foreach(TECSystem instance in sys.Instances)
             {
                 registerSystem(instance, OccuranceType.Instance);
             }
@@ -203,7 +209,7 @@ namespace EstimatingLibrary.Utilities
         private void unregisterSystem(TECSystem sys)
         {
             unregisterTECObject(sys);
-            foreach(TECSystem instance in sys.SystemInstances)
+            foreach(TECSystem instance in sys.Instances)
             {
                 unregisterSystem(instance);
             }
@@ -257,7 +263,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private void registerChange(PropertyChangedExtendedEventArgs args)
+        private void registerChange(TECChangedEventArgs args)
         {
             if (args.Value is TECObject value)
             {
@@ -400,13 +406,20 @@ namespace EstimatingLibrary.Utilities
         #endregion
 
         #region Event Handlers
-        private void handleTECChanged(PropertyChangedExtendedEventArgs obj)
+        private void handleTECChanged(TECChangedEventArgs obj)
         {
             registerChange(obj);
-            BidChanged?.Invoke(obj);
-            if (isInstance(obj.Sender))
+            if (type == WatcherType.Bid)
             {
-                InstanceChanged?.Invoke(obj);
+                BidChanged?.Invoke(obj);
+                if (isInstance(obj.Sender))
+                {
+                    InstanceChanged?.Invoke(obj);
+                }
+            }
+            else if (type == WatcherType.System)
+            {
+                SystemChanged?.Invoke(obj);
             }
         }
         private void handleCostChanged(TECObject sender, List<TECCost> obj)

@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +12,7 @@ namespace EstimatingLibrary
     public enum Flavor { Tag=1, Location, Note, Exclusion, Wire, Conduit }
     public enum Change { Add, Remove, Edit }
 
-    public abstract class TECObject : INotifyPropertyChanged
+    public abstract class TECObject : INotifyPropertyChanged, INotifyTECChanged
     {
         #region Properties
         protected Guid _guid;
@@ -26,16 +27,19 @@ namespace EstimatingLibrary
 
         #region Property Changed
         public event PropertyChangedEventHandler PropertyChanged;
-        public event Action<PropertyChangedExtendedEventArgs> TECChanged;
+        public event Action<TECChangedEventArgs> TECChanged;
 
-        protected void NotifyPropertyChanged(Change change, string propertyName, TECObject sender,
+        protected void NotifyTECChanged(Change change, string propertyName, TECObject sender,
             object value, object oldValue = null)
         {
-            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs(change, propertyName, sender,
-                value, oldValue));
+            TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);
+            TECChanged?.Invoke(args);
         }
-        protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedExtendedEventArgs args)
+
+        protected void NotifyCombinedChanged(Change change, string propertyName, TECObject sender,
+            object value, object oldValue = null)
         {
+            TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);
             PropertyChanged?.Invoke(sender, args);
             TECChanged?.Invoke(args);
         }

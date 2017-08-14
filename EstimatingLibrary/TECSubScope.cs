@@ -129,7 +129,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECObject> characteristicReference = null) : this()
+            ListDictionary<TECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
@@ -235,7 +235,7 @@ namespace EstimatingLibrary
         }
         private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            PropertyChangedExtendedEventArgs args = e as PropertyChangedExtendedEventArgs;
+            TECChangedEventArgs args = e as TECChangedEventArgs;
             if (e.PropertyName == "Quantity")
             {
                 //NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
