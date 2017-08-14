@@ -362,6 +362,10 @@ namespace EstimatingLibrary.Utilities
                     registerTECObject(labelled, OccuranceType.None);
                 }
             }
+            else if (child is TECDevice)
+            {
+                return;
+            }
             else
             {
                 throw new InvalidOperationException("TECObject type not recognized.");
@@ -419,7 +423,7 @@ namespace EstimatingLibrary.Utilities
             if (type == WatcherType.Bid)
             {
                 BidChanged?.Invoke(obj);
-                if (isInstance(obj.Sender))
+                if (isInstance(obj.Sender, obj.PropertyName))
                 {
                     InstanceChanged?.Invoke(obj);
                 }
@@ -445,8 +449,12 @@ namespace EstimatingLibrary.Utilities
         }
         #endregion
 
-        private bool isInstance(TECObject ob)
+        private bool isInstance(TECObject ob, string propertyName = null)
         {
+            if(propertyName == "TypicalInstanceDictionary")
+            {
+                return false;
+            }
             if (occuranceDictionary.ContainsKey(ob))
             {
                 OccuranceType ot = occuranceDictionary[ob];
