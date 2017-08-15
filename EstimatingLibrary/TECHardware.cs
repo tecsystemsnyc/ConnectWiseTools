@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECHardware : TECCost
+    public abstract class TECHardware : TECCost
     {
         private TECManufacturer _manufacturer;
 
