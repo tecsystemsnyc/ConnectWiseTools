@@ -112,6 +112,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CostChangedTests.cs" />
     <Compile Include="EstimateBuilderTests.cs" />
     <Compile Include="EstimatorTests.cs" />
     <Compile Include="IntegratedSaveLoadTests.cs" />
