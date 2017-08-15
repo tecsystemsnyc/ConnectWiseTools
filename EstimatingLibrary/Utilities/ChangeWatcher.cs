@@ -329,7 +329,7 @@ namespace EstimatingLibrary.Utilities
             {
                 registerTECObject(panel, parentOT);
             }
-            else if (child is TECConnection connection)
+            else if (child is TECConnection connection && parent is TECController)
             {
                 if (connection is TECNetworkConnection netConnect)
                 {
