@@ -488,6 +488,22 @@ namespace Tests
         public static TECCatalogs CreateTestCatalogs()
         {
             TECCatalogs outCatalogs = new TECCatalogs();
+
+            //Associated Costs
+            TECCost testAssociatedCost = new TECCost();
+            testAssociatedCost.Name = "Elec Cost";
+            testAssociatedCost.Cost = RandomDouble(10, 100);
+            testAssociatedCost.Labor = RandomDouble(1, 10);
+            testAssociatedCost.Type = CostType.Electrical;
+            outCatalogs.AssociatedCosts.Add(testAssociatedCost);
+
+            var testCost2 = new TECCost();
+            testCost2.Name = "TEC Cost";
+            testCost2.Cost = RandomDouble(10, 100);
+            testCost2.Labor = RandomDouble(1, 10);
+            testCost2.Type = CostType.TEC;
+            outCatalogs.AssociatedCosts.Add(testCost2);
+
             //Tags
             var tag1 = new TECLabeled();
             tag1.Label = "Tag 1";
@@ -541,6 +557,7 @@ namespace Tests
             device1.Description = "Description 1";
             device1.Cost = RandomInt(10, 100);
             device1.Tags.Add(tag1);
+            AssignSecondaryProperties(device1, outCatalogs);
 
             outCatalogs.Devices.Add(device1);
 
@@ -556,6 +573,7 @@ namespace Tests
             controllerType.Name = "Test Controller Type";
             controllerType.Cost = RandomDouble(0, 1000);
             controllerType.Labor = RandomDouble(0, 1000);
+            AssignSecondaryProperties(controllerType, outCatalogs);
 
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
@@ -570,28 +588,11 @@ namespace Tests
             panelType.Cost = RandomDouble(0, 1000);
             panelType.Labor = RandomDouble(0, 1000);
             panelType.Name = "Test Panel Type";
+            AssignSecondaryProperties(panelType, outCatalogs);
 
             outCatalogs.PanelTypes.Add(panelType);
 
-            //Associated Costs
-            TECCost testAssociatedCost = new TECCost();
-            testAssociatedCost.Name = "Flex";
-            testAssociatedCost.Cost = 42;
-            testAssociatedCost.Labor = 39;
-            testAssociatedCost.Type = CostType.Electrical;
-
-            outCatalogs.AssociatedCosts.Add(testAssociatedCost);
-
-            var testCost2 = new TECCost();
-            testCost2.Name = "Other Cost";
-            testCost2.Cost = 98;
-            testCost2.Labor = 72;
-            testCost2.Type = CostType.TEC;
-            outCatalogs.AssociatedCosts.Add(testCost2);
-
-
             return outCatalogs;
-
         }
 
         public static TECSystem CreateTestSystem(TECCatalogs catalogs)
