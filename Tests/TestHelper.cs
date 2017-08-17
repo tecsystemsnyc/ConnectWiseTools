@@ -490,19 +490,19 @@ namespace Tests
             TECCatalogs outCatalogs = new TECCatalogs();
 
             //Associated Costs
-            TECCost testAssociatedCost = new TECCost();
-            testAssociatedCost.Name = "Elec Cost";
-            testAssociatedCost.Cost = RandomDouble(10, 100);
-            testAssociatedCost.Labor = RandomDouble(1, 10);
-            testAssociatedCost.Type = CostType.Electrical;
-            outCatalogs.AssociatedCosts.Add(testAssociatedCost);
+            TECCost elecCost = new TECCost();
+            elecCost.Name = "Elec Cost";
+            elecCost.Cost = RandomDouble(10, 100);
+            elecCost.Labor = RandomDouble(1, 10);
+            elecCost.Type = CostType.Electrical;
+            outCatalogs.AssociatedCosts.Add(elecCost);
 
-            var testCost2 = new TECCost();
-            testCost2.Name = "TEC Cost";
-            testCost2.Cost = RandomDouble(10, 100);
-            testCost2.Labor = RandomDouble(1, 10);
-            testCost2.Type = CostType.TEC;
-            outCatalogs.AssociatedCosts.Add(testCost2);
+            TECCost tecCost = new TECCost();
+            tecCost.Name = "TEC Cost";
+            tecCost.Cost = RandomDouble(10, 100);
+            tecCost.Labor = RandomDouble(1, 10);
+            tecCost.Type = CostType.TEC;
+            outCatalogs.AssociatedCosts.Add(tecCost);
 
             //Tags
             var tag1 = new TECLabeled();
@@ -518,6 +518,9 @@ namespace Tests
             conduitType1.Name = "Test Conduit 1";
             conduitType1.Cost = RandomInt(10, 100);
             conduitType1.Labor = RandomInt(10, 100);
+            AssignSecondaryProperties(conduitType1, outCatalogs);
+            conduitType1.RatedCosts.Add(tecCost);
+            conduitType1.RatedCosts.Add(elecCost);
 
             outCatalogs.ConduitTypes.Add(conduitType1);
 
@@ -525,6 +528,9 @@ namespace Tests
             conduitType2.Name = "Test Conduit 2";
             conduitType2.Cost = RandomInt(10, 100);
             conduitType2.Labor = RandomInt(10, 100);
+            AssignSecondaryProperties(conduitType2, outCatalogs);
+            conduitType2.RatedCosts.Add(tecCost);
+            conduitType2.RatedCosts.Add(elecCost);
 
             outCatalogs.ConduitTypes.Add(conduitType2);
 
@@ -533,11 +539,17 @@ namespace Tests
             connectionType1.Name = "FourC18";
             connectionType1.Cost = RandomInt(10, 100);
             connectionType1.Labor = RandomInt(10, 100);
+            AssignSecondaryProperties(connectionType1, outCatalogs);
+            connectionType1.RatedCosts.Add(tecCost);
+            connectionType1.RatedCosts.Add(elecCost);
 
             var connectionType2 = new TECElectricalMaterial();
             connectionType2.Name = "ThreeC18";
             connectionType2.Cost = RandomInt(10, 100);
             connectionType2.Labor = RandomInt(10, 100);
+            AssignSecondaryProperties(connectionType1, outCatalogs);
+            connectionType1.RatedCosts.Add(tecCost);
+            connectionType1.RatedCosts.Add(elecCost);
 
             outCatalogs.ConnectionTypes.Add(connectionType1);
             outCatalogs.ConnectionTypes.Add(connectionType2);
