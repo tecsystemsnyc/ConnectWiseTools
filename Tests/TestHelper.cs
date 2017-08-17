@@ -768,8 +768,21 @@ namespace Tests
             {
                 return default(T);
             }
-            
-            
+        }
+        public static T RandomObject<T>(this List<T> list)
+        {
+            int index = 0;
+            if (list.Count > 0)
+            {
+                index = RandomInt(0, list.Count);
+                return list[index];
+            }
+            else
+            {
+                return default(T);
+            }
+
+
         }
         public static int RandomInt(int min, int max)
         {
