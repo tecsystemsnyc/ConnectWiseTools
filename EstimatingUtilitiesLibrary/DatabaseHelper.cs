@@ -86,6 +86,7 @@ namespace EstimatingUtilitiesLibrary
                 saveCompleteTemplate(scopeManager as TECTemplates);
             }
             saveIndexRelationships(indexesToUpdate);
+            SQLiteDB.Insert(MetadataTable.TableName, new Dictionary<string, string>() { { MetadataTable.Version.Name, Properties.Settings.Default.Version } });
             SQLiteDB.nonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
 
