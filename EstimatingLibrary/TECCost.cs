@@ -10,7 +10,7 @@ namespace EstimatingLibrary
 {
     public enum CostType { None, TEC, Electrical }
 
-    public class TECCost : TECScope, DragDropComponent
+    public class TECCost : TECScope, IDragDropable
     { 
         #region Properties
 

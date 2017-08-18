@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, INotifyCostChanged, DragDropComponent
+    public class TECPanel : TECLocated, INotifyCostChanged, IDragDropable
     {
         #region Properties
         private TECPanelType _type;

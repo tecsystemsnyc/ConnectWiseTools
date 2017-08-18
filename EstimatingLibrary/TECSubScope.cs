@@ -10,11 +10,14 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, DragDropComponent
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable
     {
         #region Properties
-        private ObservableCollection<TECDevice> _devices;
-        public ObservableCollection<TECDevice> Devices
+        private ObservableCollection<ITECConnectable> _devices;
+        private ObservableCollection<TECPoint> _points;
+        private TECSubScopeConnection _connection { get; set; }
+
+        public ObservableCollection<ITECConnectable> Devices
         {
             get { return _devices; }
             set
@@ -29,11 +32,6 @@ namespace EstimatingLibrary
                 Devices.CollectionChanged += Devices_CollectionChanged;
             }
         }
-
-        private ObservableCollection<TECPoint> _points;
-
-        public event Action<int> PointChanged;
-
         public ObservableCollection<TECPoint> Points
         {
             get { return _points; }
@@ -49,8 +47,6 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
-
-        private TECSubScopeConnection _connection { get; set; }
         public TECSubScopeConnection Connection
         {
             get { return _connection; }
@@ -58,10 +54,9 @@ namespace EstimatingLibrary
             {
                 _connection = value;
                 RaisePropertyChanged("Connection");
-                
             }
         }
-
+        
         public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return getConnectionTypes(); }
@@ -74,11 +69,6 @@ namespace EstimatingLibrary
         {
             get { return getAllPointTypes(); }
         }
-        public ObservableCollection<IOType> AllIOTypes
-        {
-            get { return getAllIOTypes(); }
-        }
-
         public int PointNumber
         {
             get
@@ -86,7 +76,6 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
-
         override public List<TECCost> Costs
         {
             get
@@ -100,7 +89,7 @@ namespace EstimatingLibrary
         #region Constructors
         public TECSubScope(Guid guid) : base(guid)
         {
-            _devices = new ObservableCollection<TECDevice>();
+            _devices = new ObservableCollection<ITECConnectable>();
             _points = new ObservableCollection<TECPoint>();
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
@@ -125,6 +114,10 @@ namespace EstimatingLibrary
             this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors
+
+        #region Events
+        public event Action<int> PointChanged;
+        #endregion
 
         #region Num Point Types
         //private int _ai;
@@ -239,17 +232,7 @@ namespace EstimatingLibrary
 
             return allPointTypes;
         }
-        private ObservableCollection<IOType> getAllIOTypes()
-        {
-            var allIOTypes = new ObservableCollection<IOType>();
-
-            foreach (TECDevice device in Devices)
-            {
-                allIOTypes.Add(device.IOType);
-            }
-            return allIOTypes;
-        }
-
+        
         private int getPointNumber()
         {
             var totalPoints = 0;

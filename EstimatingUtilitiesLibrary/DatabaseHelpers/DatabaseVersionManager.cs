@@ -172,7 +172,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 {
                     var infoBid = DatabaseLoader.GetBidInfo(db);
                     string commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
-                    commandString += "where " + BidInfoTable.BidID.Name + " = '" + infoBid.Guid.ToString() + "'";
+                    commandString += "where " + BidInfoTable.ID.Name + " = '" + infoBid.Guid.ToString() + "'";
                     db.nonQueryCommand(commandString);
                 }
                 else if (type == typeof(TECTemplates))
@@ -182,7 +182,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                     Dictionary<string, string> data = new Dictionary<string, string>();
 
                     data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-                    data.Add(TemplatesInfoTable.TemplateID.Name, templateGuid.ToString());
+                    data.Add(TemplatesInfoTable.ID.Name, templateGuid.ToString());
 
                     db.Replace(TemplatesInfoTable.TableName, data);
                 }
