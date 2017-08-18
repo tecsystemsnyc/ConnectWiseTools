@@ -46,7 +46,7 @@ namespace EstimatingLibrary
             _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
 
-            new ChangeWatcher(this).SystemChanged += handleSystemChanged;
+            new ChangeWatcher(this).Changed += handleSystemChanged;
 
         }
 

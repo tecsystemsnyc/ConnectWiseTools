@@ -13,31 +13,26 @@ namespace EstimatingLibrary.Utilities
     {
         #region Fields
         private Dictionary<TECObject, OccuranceType> occuranceDictionary;
-        private WatcherType type;
         #endregion
 
         #region Constructors
         public ChangeWatcher(TECBid bid)
         {
-            type = WatcherType.Bid;
             initialize(bid);
         }
         public ChangeWatcher(TECTemplates templates)
         {
-            type = WatcherType.Templates;
             throw new NotImplementedException();
         }
         public ChangeWatcher(TECSystem system)
         {
-            type = WatcherType.System;
             initialize(system);
         }
         #endregion
 
         #region Events
-        public event Action<TECChangedEventArgs> BidChanged;
+        public event Action<TECChangedEventArgs> Changed;
         public event Action<TECChangedEventArgs> InstanceChanged;
-        public event Action<TECChangedEventArgs> SystemChanged;
         public event Action<List<TECCost>> CostChanged;
         public event Action<int> PointChanged;
         #endregion
@@ -420,17 +415,17 @@ namespace EstimatingLibrary.Utilities
         private void handleTECChanged(TECChangedEventArgs obj)
         {
             registerChange(obj);
-            if (type == WatcherType.Bid)
+            Changed?.Invoke(obj);
+            if (obj.Value is TECSubScopeConnection ssConnect)
             {
-                BidChanged?.Invoke(obj);
-                if (isInstance(obj.Sender, obj.PropertyName))
+                if (ssConnectIsInstance(ssConnect))
                 {
                     InstanceChanged?.Invoke(obj);
                 }
             }
-            else if (type == WatcherType.System)
+            else if (isInstance(obj.Sender, obj.PropertyName))
             {
-                SystemChanged?.Invoke(obj);
+                InstanceChanged?.Invoke(obj);
             }
         }
         private void handleCostChanged(TECObject sender, List<TECCost> obj)
@@ -448,7 +443,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
         #endregion
-
+        
         private bool isInstance(TECObject ob, string propertyName = null)
         {
             if(propertyName == "TypicalInstanceDictionary")
@@ -464,6 +459,10 @@ namespace EstimatingLibrary.Utilities
             {
                 throw new NullReferenceException("Occurance dictionary doesn't contain TECObject.");
             }
+        }
+        private bool ssConnectIsInstance(TECSubScopeConnection ssConnect)
+        {
+            return (isInstance(ssConnect.ParentController) && isInstance(ssConnect.SubScope));
         }
         #endregion
     }
