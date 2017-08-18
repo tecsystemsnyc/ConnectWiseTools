@@ -17,6 +17,10 @@ namespace EstimatingUtilitiesLibrary
         public static Type HelperType = typeof(HelperProperties);
 
         public static TableField Version = new TableField("Version", "TEXT", HelperType.GetProperty("DBVersion"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            Version
+        };
     }
 
     public class BidInfoTable : TableBase
