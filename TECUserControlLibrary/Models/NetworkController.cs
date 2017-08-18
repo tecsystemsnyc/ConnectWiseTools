@@ -20,6 +20,7 @@ namespace TECUserControlLibrary.Models
             {
                 Controller.SetParentController(value, defaultWireType);
                 RaisePropertyChanged("ParentController");
+                RefreshIsConnected();
             }
         }
         
@@ -286,7 +287,6 @@ namespace TECUserControlLibrary.Models
                 }
             }
         }
-
         private void ParentConnection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Length")

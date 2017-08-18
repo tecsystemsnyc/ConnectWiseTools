@@ -156,6 +156,10 @@ namespace TECUserControlLibrary.ViewModels
                             sortController(controller);
                         }
                     }
+                    else if (targetObject is TECIO && referenceObject is TECController)
+                    {
+                        refreshPossibleParents();
+                    }
                 }
                 else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
                 {
@@ -172,10 +176,15 @@ namespace TECUserControlLibrary.ViewModels
                             controller.RemoveAllConnections();
                         }
                     }
+                    else if (targetObject is TECIO && referenceObject is TECController)
+                    {
+                        refreshPossibleParents();
+                    }
                 }
-                else if (args.PropertyName == "NetworkType" && targetObject is TECController)
+                else if ((args.PropertyName == "NetworkType" || args.PropertyName == "ParentConnection") && targetObject is TECController)
                 {
                     refreshIsConnected();
+                    refreshPossibleParents();
                 }
             }
         }
