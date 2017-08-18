@@ -1363,51 +1363,25 @@ namespace EstimatingUtilitiesLibrary
         static private bool checkDatabaseVersion(Type type)
         {
             string currentVersion = Properties.Settings.Default.Version;
-            string lowestCompatible = "1.6.0.11";
-            DataTable infoDT = new DataTable();
-            if (type == typeof(TECBid))
-            { infoDT = SQLiteDB.getDataFromTable(BidInfoTable.TableName); }
-            else if (type == typeof(TECTemplates))
+            DataTable infoDT = null;
+            try
             {
-                try
-                {
-                    infoDT = SQLiteDB.getDataFromTable(TemplatesInfoTable.TableName);
-                }
-                catch
-                {
-                    killTemplatesInfo();
-                    return false;
-                }
+                infoDT = SQLiteDB.getDataFromTable(MetadataTable.TableName);
             }
-            else
-            { throw new ArgumentException("checkDatabaseVersion given invalid type"); }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
 
             if (infoDT.Rows.Count < 1)
-            {
-                if (type == typeof(TECBid))
-                {
-                    isCompatbile = false;
-                    throw new DataException("Could not load from TECBidInfo");
-                }
-                else if (type == typeof(TECTemplates))
-                {
-                    isCompatbile = false;
-                    return false;
-                }
-                else
-                { return false; }
-            }
+            { return false; }
             else if ((infoDT.Rows.Count == 1) || (type == typeof(TECBid)))
             {
                 DataRow infoRow = infoDT.Rows[0];
-                if (infoDT.Columns.Contains(BidInfoTable.DBVersion.Name) || infoDT.Columns.Contains(TemplatesInfoTable.DBVersion.Name))
+                if (infoDT.Columns.Contains(MetadataTable.Version.Name))
                 {
-                    string version = infoRow[BidInfoTable.DBVersion.Name].ToString();
-                    if (UtilitiesMethods.IsLowerVersion(lowestCompatible, version))
-                    {
-                        isCompatbile = false;
-                        return false;
-                    }
+                    string version = infoRow[MetadataTable.Version.Name].ToString();
                     isCompatbile = true;
                     return (!UtilitiesMethods.IsLowerVersion(currentVersion, version));
                 }
@@ -1499,25 +1473,11 @@ namespace EstimatingUtilitiesLibrary
         {
             if (type == typeof(TECBid) || type == typeof(TECTemplates))
             {
-                Dictionary<string, string> Data = new Dictionary<string, string>();
-                if (type == typeof(TECBid))
-                {
-                    var infoBid = getBidInfo();
-                    string commandString = "update " + BidInfoTable.TableName + " set " + BidInfoTable.DBVersion.Name + " = '" + Properties.Settings.Default.Version + "' ";
-                    commandString += "where " + BidInfoTable.BidID.Name + " = '" + infoBid.Guid.ToString() + "'";
-                    SQLiteDB.nonQueryCommand(commandString);
-                }
-                else if (type == typeof(TECTemplates))
-                {
-                    var templateGuid = getTemplatesInfo().Guid;
+                Dictionary<string, string> data = new Dictionary<string, string>();
 
-                    Dictionary<string, string> data = new Dictionary<string, string>();
+                data.Add(MetadataTable.Version.Name, Properties.Settings.Default.Version);
 
-                    data.Add(TemplatesInfoTable.DBVersion.Name, Properties.Settings.Default.Version);
-                    data.Add(TemplatesInfoTable.TemplateID.Name, templateGuid.ToString());
-
-                    SQLiteDB.Replace(TemplatesInfoTable.TableName, data);
-                }
+                SQLiteDB.Replace(MetadataTable.TableName, data);
             }
         }
         private static void killTemplatesInfo()

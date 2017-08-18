@@ -11,14 +11,21 @@ namespace EstimatingUtilitiesLibrary
 {
     #region Table Definitions
     #region Object Tables
+    public class MetadataTable : TableBase
+    {
+        public static new string TableName = "Metadata";
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField Version = new TableField("Version", "TEXT", HelperType.GetProperty("DBVersion"));
+    }
+
     public class BidInfoTable : TableBase
     {
         public static new string TableName = "TECBidInfo";
         public static Type ObjectType = typeof(TECBid);
 
         public static Type HelperType = typeof(HelperProperties);
-
-        public static TableField DBVersion = new TableField("DBVersion", "TEXT", HelperType.GetProperty("DBVersion"));
+        
         public static TableField BidName = new TableField("BidName", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField BidNumber = new TableField("BidNumber", "TEXT", ObjectType.GetProperty("BidNumber"));
@@ -43,7 +50,6 @@ namespace EstimatingUtilitiesLibrary
         public static Type HelperType = typeof(HelperProperties);
 
         public static TableField TemplateID = new TableField("TemplateID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField DBVersion = new TableField("DBVersion", "TEXT", HelperType.GetProperty("DBVersion"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -1374,6 +1380,7 @@ namespace EstimatingUtilitiesLibrary
     public static class AllBidTables
     {
         public static List<object> Tables = new List<object>() {
+            new MetadataTable(),
             new BidInfoTable(),
             new LaborConstantsTable(),
             new UserAdjustmentsTable(),
@@ -1448,6 +1455,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static List<object> Tables = new List<object>()
         {
+            new MetadataTable(),
             new TemplatesInfoTable(),
             new LaborConstantsTable(),
             new SubcontractorConstantsTable(),
@@ -1501,6 +1509,7 @@ namespace EstimatingUtilitiesLibrary
     {
         public static List<object> Tables = new List<object>()
         {
+            new MetadataTable(),
             new BidInfoTable(),
             new TemplatesInfoTable(),
             new LaborConstantsTable(),

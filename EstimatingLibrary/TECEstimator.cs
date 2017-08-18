@@ -13,6 +13,7 @@ namespace EstimatingLibrary
 {
     public class TECEstimator : TECObject
     {
+        const double BOND = 0.015;
 
         TECBid bid;
         ChangeWatcher watcher;
@@ -947,7 +948,7 @@ namespace EstimatingLibrary
             double outPrice = tecSubtotal + subcontractSubtotal;
             if (bid.Parameters.RequiresBond)
             {
-                outPrice *= 1.013;
+                outPrice *= (1 + BOND);
             }
             return outPrice;
         }
