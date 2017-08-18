@@ -1376,7 +1376,310 @@ namespace Tests
         #endregion
 
         #region Length Summary VM
+        [TestMethod]
+        public void AddElectricalMaterialRunToLengthVM()
+        {
+            //Arrange
+            LengthSummaryVM lengthVM = new LengthSummaryVM();
+            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
+            elecMats.AddRange(catalogs.ConnectionTypes);
+            elecMats.AddRange(catalogs.ConduitTypes);
+            TECElectricalMaterial elecMat = elecMats.RandomObject();
+            double length = TestHelper.RandomDouble(1, 100);
 
+            //Act
+            List<CostObject> deltas = lengthVM.AddRun(elecMat, length);
+            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
+            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
+            foreach (CostObject delta in deltas)
+            {
+                if (delta.Type == CostType.TEC)
+                {
+                    tecDelta += delta;
+                }
+                else if (delta.Type == CostType.Electrical)
+                {
+                    elecDelta += delta;
+                }
+            }
+
+            double expectedLengthCost = elecMat.Cost * length;
+            double expectedLengthLabor = elecMat.Labor * length;
+
+            Total expectedAssocTECTotal = new Total();
+            Total expectedAssocElecTotal = new Total();
+            foreach (TECCost cost in elecMat.AssociatedCosts)
+            {
+                expectedAssocTECTotal += calculateTotal(cost, CostType.TEC);
+                expectedAssocElecTotal += calculateTotal(cost, CostType.Electrical);
+            }
+
+            Total expectedRatedTECTotal = new Total();
+            Total expectedRatedElecTotal = new Total();
+            foreach (TECCost cost in elecMat.RatedCosts)
+            {
+                expectedRatedTECTotal += calculateTotal(cost, CostType.TEC);
+                expectedRatedElecTotal += calculateTotal(cost, CostType.Electrical);
+            }
+            expectedRatedTECTotal *= length;
+            expectedRatedElecTotal *= length;
+
+            double expectedTECCostDelta = expectedAssocTECTotal.cost + expectedRatedTECTotal.cost;
+            double expectedTECLaborDelta = expectedAssocTECTotal.labor + expectedRatedTECTotal.labor;
+            double expectedElecCostDelta = expectedLengthCost + expectedAssocElecTotal.cost + expectedRatedElecTotal.cost;
+            double expectedElecLaborDelta = expectedLengthLabor + expectedAssocElecTotal.labor + expectedRatedElecTotal.labor;
+
+            //Assert
+            //Check length properties
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            //Check assoc properties
+            Assert.AreEqual(expectedAssocTECTotal.cost, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocTECTotal.labor, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.cost, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.labor, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check rated properties
+            Assert.AreEqual(expectedRatedTECTotal.cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check returned deltas
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+        }
+        [TestMethod]
+        public void RemoveElectricalMaterialRunFromLengthVM()
+        {
+            //Arrange
+            LengthSummaryVM lengthVM = new LengthSummaryVM();
+            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
+            elecMats.AddRange(catalogs.ConnectionTypes);
+            elecMats.AddRange(catalogs.ConduitTypes);
+            TECElectricalMaterial elecMat = elecMats.RandomObject();
+            double addLength = TestHelper.RandomDouble(1, 100);
+            double removeLength = TestHelper.RandomDouble(1, addLength);
+            double length = addLength - removeLength;
+
+            //Act
+            lengthVM.AddLength(elecMat, addLength);
+            List<CostObject> deltas = lengthVM.RemoveLength(elecMat, removeLength);
+            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
+            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
+            foreach (CostObject delta in deltas)
+            {
+                if (delta.Type == CostType.TEC)
+                {
+                    tecDelta += delta;
+                }
+                else if (delta.Type == CostType.Electrical)
+                {
+                    elecDelta += delta;
+                }
+            }
+
+            double expectedLengthCost = elecMat.Cost * length;
+            double expectedLengthLabor = elecMat.Labor * length;
+            double removedLengthCost = elecMat.Cost * removeLength;
+            double removedLengthLabor = elecMat.Labor * removeLength;
+
+            Total removedAssocTECTotal = new Total();
+            Total removedAssocElecTotal = new Total();
+            foreach (TECCost cost in elecMat.AssociatedCosts)
+            {
+                removedAssocTECTotal += calculateTotal(cost, CostType.TEC);
+                removedAssocElecTotal += calculateTotal(cost, CostType.Electrical);
+            }
+            removedAssocTECTotal *= 1;
+            removedAssocElecTotal *= 1;
+
+            Total ratedTECTotal = new Total();
+            Total ratedElecTotal = new Total();
+            foreach (TECCost cost in elecMat.RatedCosts)
+            {
+                ratedTECTotal += calculateTotal(cost, CostType.TEC);
+                ratedElecTotal += calculateTotal(cost, CostType.Electrical);
+            }
+            Total expectedRatedTECTotal = ratedTECTotal * length;
+            Total expectedRatedElecTotal = ratedElecTotal * length;
+            Total removedRatedTECTotal = ratedTECTotal * removeLength;
+            Total removedRatedElecTotal = ratedTECTotal * removeLength;
+
+            double expectedTECCostDelta = (-removedAssocTECTotal.cost + -removedRatedTECTotal.cost);
+            double expectedTECLaborDelta = (-removedAssocTECTotal.labor + -removedRatedTECTotal.labor);
+            double expectedElecCostDelta = (-removedAssocElecTotal.cost + -removedRatedElecTotal.cost + -removedLengthCost);
+            double expectedElecLaborDelta = (-removedAssocElecTotal.labor + -removedRatedElecTotal.labor + -removedLengthLabor);
+
+            //Assert
+            //Check length properties
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            //Check assoc properties
+            Assert.AreEqual(0, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check rated properties
+            Assert.AreEqual(expectedRatedTECTotal.cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check returned deltas
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+        }
+        [TestMethod]
+        public void AddElectricalMaterialLengthToLengthVM()
+        {
+            //Arrange
+            LengthSummaryVM lengthVM = new LengthSummaryVM();
+            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
+            elecMats.AddRange(catalogs.ConnectionTypes);
+            elecMats.AddRange(catalogs.ConduitTypes);
+            TECElectricalMaterial elecMat = elecMats.RandomObject();
+            double length = TestHelper.RandomDouble(1, 100);
+
+            //Act
+            List<CostObject> deltas = lengthVM.AddRun(elecMat, length);
+            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
+            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
+            foreach (CostObject delta in deltas)
+            {
+                if (delta.Type == CostType.TEC)
+                {
+                    tecDelta += delta;
+                }
+                else if (delta.Type == CostType.Electrical)
+                {
+                    elecDelta += delta;
+                }
+            }
+
+            double expectedLengthCost = elecMat.Cost * length;
+            double expectedLengthLabor = elecMat.Labor * length;
+
+            Total expectedRatedTECTotal = new Total();
+            Total expectedRatedElecTotal = new Total();
+            foreach (TECCost cost in elecMat.RatedCosts)
+            {
+                expectedRatedTECTotal += calculateTotal(cost, CostType.TEC);
+                expectedRatedElecTotal += calculateTotal(cost, CostType.Electrical);
+            }
+            expectedRatedTECTotal *= length;
+            expectedRatedElecTotal *= length;
+
+            double expectedTECCostDelta = expectedRatedTECTotal.cost;
+            double expectedTECLaborDelta = expectedRatedTECTotal.labor;
+            double expectedElecCostDelta = expectedLengthCost + expectedRatedElecTotal.cost;
+            double expectedElecLaborDelta = expectedLengthLabor + expectedRatedElecTotal.labor;
+
+            //Assert
+            //Check length properties
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            //Check assoc properties
+            Assert.AreEqual(0, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check rated properties
+            Assert.AreEqual(expectedRatedTECTotal.cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check returned deltas
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+        }
+        [TestMethod]
+        public void RemoveElectricalMaterialLengthFromLengthVM()
+        {
+            //Arrange
+            LengthSummaryVM lengthVM = new LengthSummaryVM();
+            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
+            elecMats.AddRange(catalogs.ConnectionTypes);
+            elecMats.AddRange(catalogs.ConduitTypes);
+            TECElectricalMaterial elecMat = elecMats.RandomObject();
+            double addLength = TestHelper.RandomDouble(1, 100);
+            double removeLength = TestHelper.RandomDouble(1, addLength);
+            double length = addLength - removeLength;
+
+            //Act
+            lengthVM.AddLength(elecMat, addLength);
+            List<CostObject> deltas = lengthVM.RemoveRun(elecMat, removeLength);
+            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
+            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
+            foreach (CostObject delta in deltas)
+            {
+                if (delta.Type == CostType.TEC)
+                {
+                    tecDelta += delta;
+                }
+                else if (delta.Type == CostType.Electrical)
+                {
+                    elecDelta += delta;
+                }
+            }
+
+            double expectedLengthCost = elecMat.Cost * length;
+            double expectedLengthLabor = elecMat.Labor * length;
+            double removedLengthCost = elecMat.Cost * removeLength;
+            double removedLengthLabor = elecMat.Labor * removeLength;
+
+            Total expectedAssocTECTotal = new Total();
+            Total expectedAssocElecTotal = new Total();
+            foreach (TECCost cost in elecMat.AssociatedCosts)
+            {
+                expectedAssocTECTotal += calculateTotal(cost, CostType.TEC);
+                expectedAssocElecTotal += calculateTotal(cost, CostType.Electrical);
+            }
+
+            Total ratedTECTotal = new Total();
+            Total ratedElecTotal = new Total();
+            foreach (TECCost cost in elecMat.RatedCosts)
+            {
+                ratedTECTotal += calculateTotal(cost, CostType.TEC);
+                ratedElecTotal += calculateTotal(cost, CostType.Electrical);
+            }
+            Total expectedRatedTECTotal = ratedTECTotal * length;
+            Total expectedRatedElecTotal = ratedElecTotal * length;
+            Total removedRatedTECTotal = ratedTECTotal * removeLength;
+            Total removedRatedElecTotal = ratedTECTotal * removeLength;
+
+            double expectedTECCostDelta = (-removedRatedTECTotal.cost);
+            double expectedTECLaborDelta = (-removedRatedTECTotal.labor);
+            double expectedElecCostDelta = (-removedRatedElecTotal.cost + -removedLengthCost);
+            double expectedElecLaborDelta = (-removedRatedElecTotal.labor + -removedLengthLabor);
+
+            //Assert
+            //Check length properties
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            //Check assoc properties
+            Assert.AreEqual(expectedAssocTECTotal.cost, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocTECTotal.labor, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.cost, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.labor, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check rated properties
+            Assert.AreEqual(expectedRatedTECTotal.cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            //Check returned deltas
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+        }
         #endregion
 
         #region Misc Costs Summary VM

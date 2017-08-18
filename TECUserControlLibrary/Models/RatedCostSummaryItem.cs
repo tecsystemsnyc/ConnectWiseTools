@@ -71,7 +71,7 @@ namespace TECUserControlLibrary.Models
         }
         public CostObject RemoveLength(double length)
         {
-            Length += length;
+            Length -= length;
             return updateTotals();
         }
 
