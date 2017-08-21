@@ -289,7 +289,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new PanelTable()) + " from " + PanelTable.TableName + " where " + PanelTable.PanelID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new PanelTable()) + " from " + PanelTable.TableName + " where " + PanelTable.ID.Name + " in ";
             command += "(select " + SystemPanelTable.PanelID.Name + " from " + SystemPanelTable.TableName + " where ";
             command += SystemPanelTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -327,7 +327,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             ObservableCollection<TECSystem> children = new ObservableCollection<TECSystem>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
-            command += " where " + SystemTable.SystemID.Name + " in ";
+            command += " where " + SystemTable.ID.Name + " in ";
             command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName;
             command += " where " + SystemHierarchyTable.ParentID.Name + " = '";
             command += parentID;
@@ -344,7 +344,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECController> getControllersInSystem(Guid guid)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ID.Name + " in ";
             command += "(select " + SystemControllerTable.ControllerID.Name + " from " + SystemControllerTable.TableName + " where ";
             command += SystemControllerTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -362,7 +362,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECScopeBranch> getScopeBranchesInSystem(Guid guid)
         {
             ObservableCollection<TECScopeBranch> branches = new ObservableCollection<TECScopeBranch>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ID.Name + " in ";
             command += "(select " + SystemScopeBranchTable.BranchID.Name + " from " + SystemScopeBranchTable.TableName + " where ";
             command += SystemScopeBranchTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -376,7 +376,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private Dictionary<Guid, List<Guid>> getCharacteristicInstancesList()
         {
             Dictionary<Guid, List<Guid>> outDict = new Dictionary<Guid, List<Guid>>();
-            DataTable dictDT = SQLiteDB.getDataFromTable(CharacteristicScopeInstanceScopeTable.TableName);
+            DataTable dictDT = SQLiteDB.getDataFromTable(TypicalInstanceTable.TableName);
             foreach (DataRow row in dictDT.Rows)
             {
                 addRowToPlaceholderDict(row, outDict);
@@ -386,7 +386,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.ID.Name + " in ";
             command += "(select " + SystemMiscTable.MiscID.Name + " from " + SystemMiscTable.TableName + " where ";
             command += SystemMiscTable.SystemID.Name + " = '" + guid;
             command += "')";
@@ -445,8 +445,8 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 //command += "(select " + LocationScopeTable.LocationID.Name + " from " + LocationScopeTable.TableName + " where ";
                 //command += LocationScopeTable.ScopeID.Name + " = '" + ScopeID;
                 //command += "')";
-                string command = "select " + LocationScopeTable.LocationID.Name + " from " + LocationScopeTable.TableName + " where ";
-                command += LocationScopeTable.ScopeID.Name + " = '" + ScopeID;
+                string command = "select " + ScopeLocationTable.LocationID.Name + " from " + ScopeLocationTable.TableName + " where ";
+                command += ScopeLocationTable.ScopeID.Name + " = '" + ScopeID;
                 command += "'";
                 DataTable locationDT = SQLiteDB.getDataFromCommand(command);
                 if (locationDT.Rows.Count > 0)
@@ -470,9 +470,9 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
 
             DataRow bidInfoRow = bidInfoDT.Rows[0];
 
-            TECBid outBid = new TECBid(new Guid(bidInfoRow[BidInfoTable.BidID.Name].ToString()));
-            outBid.Name = bidInfoRow[BidInfoTable.BidName.Name].ToString();
-            outBid.BidNumber = bidInfoRow[BidInfoTable.BidNumber.Name].ToString();
+            TECBid outBid = new TECBid(new Guid(bidInfoRow[BidInfoTable.ID.Name].ToString()));
+            outBid.Name = bidInfoRow[BidInfoTable.Name.Name].ToString();
+            outBid.BidNumber = bidInfoRow[BidInfoTable.Number.Name].ToString();
 
             string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
             outBid.DueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
@@ -493,7 +493,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             DataRow templateInfoRow = templateInfoDT.Rows[0];
 
-            Guid infoGuid = new Guid(templateInfoRow[TemplatesInfoTable.TemplateID.Name].ToString());
+            Guid infoGuid = new Guid(templateInfoRow[TemplatesInfoTable.ID.Name].ToString());
 
             return new TECTemplates(infoGuid);
         }
@@ -502,8 +502,8 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             ObservableCollection<TECScopeBranch> mainBranches = new ObservableCollection<TECScopeBranch>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName;
-            command += " where " + ScopeBranchTable.ScopeBranchID.Name;
-            command += " in (select " + ScopeBranchTable.ScopeBranchID.Name;
+            command += " where " + ScopeBranchTable.ID.Name;
+            command += " in (select " + ScopeBranchTable.ID.Name;
             command += " from " + BidScopeBranchTable.TableName + " where " + BidScopeBranchTable.ScopeBranchID.Name + " not in ";
             command += "(select " + ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName + "))";
 
@@ -521,7 +521,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             ObservableCollection<TECScopeBranch> childBranches = new ObservableCollection<TECScopeBranch>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName;
-            command += " where " + ScopeBranchTable.ScopeBranchID.Name + " in ";
+            command += " where " + ScopeBranchTable.ID.Name + " in ";
             command += "(select " + ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName;
             command += " where " + ScopeBranchHierarchyTable.ParentID.Name + " = '";
             command += parentID;
@@ -544,7 +544,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 + " inner join "
                 + BidSystemTable.TableName
                 + " on ("
-                + SystemTable.TableName + "." + SystemTable.SystemID.Name
+                + SystemTable.TableName + "." + SystemTable.ID.Name
                 + " = "
                 + BidSystemTable.TableName + "." + BidSystemTable.SystemID.Name
                 + ")) order by "
@@ -566,7 +566,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new EquipmentTable()) + " from " + EquipmentTable.TableName;
-            command += " where " + EquipmentTable.EquipmentID.Name + " not in ";
+            command += " where " + EquipmentTable.ID.Name + " not in ";
             command += "(select " + SystemEquipmentTable.EquipmentID.Name;
             command += " from " + SystemEquipmentTable.TableName + ")";
 
@@ -580,7 +580,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new SubScopeTable()) + " from " + SubScopeTable.TableName;
-            command += " where " + SubScopeTable.SubScopeID.Name + " not in ";
+            command += " where " + SubScopeTable.ID.Name + " not in ";
             command += "(select " + EquipmentSubScopeTable.SubScopeID.Name + " from " + EquipmentSubScopeTable.TableName + ")";
             DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
             foreach (DataRow row in subScopeDT.Rows)
@@ -618,6 +618,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         static private ObservableCollection<TECDevice> getDevicesInSubScope(Guid subScopeID)
         {
+            throw new NotImplementedException();
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
 
             string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
@@ -650,32 +651,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
 
             return points;
         }
-        static private TECManufacturer getManufacturerInDevice(Guid deviceID)
-        {
-            string command = "select " + DeviceManufacturerTable.ManufacturerID.Name + " from " + DeviceManufacturerTable.TableName;
-            command += " where " + DeviceManufacturerTable.DeviceID.Name + " = '";
-            command += deviceID;
-            command += "'";
-            DataTable manTable = SQLiteDB.getDataFromCommand(command);
-            if (manTable.Rows.Count > 0)
-            { return getPlaceholderDeviceManufacturerFromRow(manTable.Rows[0]); }
-            else
-            { return null; }
-        }
-        static private TECManufacturer getManufacturerInIOModule(Guid guid)
-        {
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ManufacturerTable()) + " from " + ManufacturerTable.TableName + " where " + ManufacturerTable.ManufacturerID.Name + " in ";
-            command += "(select " + IOModuleManufacturerTable.ManufacturerID.Name + " from " + IOModuleManufacturerTable.TableName;
-            command += " where " + IOModuleManufacturerTable.IOModuleID.Name + " = '";
-            command += guid;
-            command += "')";
-
-            DataTable manTable = SQLiteDB.getDataFromCommand(command);
-            if (manTable.Rows.Count > 0)
-            { return getManufacturerFromRow(manTable.Rows[0]); }
-            else
-            { return null; }
-        }
         static private ObservableCollection<TECElectricalMaterial> getConnectionTypesInDevice(Guid deviceID)
         {
             ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
@@ -695,7 +670,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         static private TECElectricalMaterial getConduitTypeInConnection(Guid connectionID)
         {
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ConduitTypeTable()) + " from " + ConduitTypeTable.TableName + " where " + ConduitTypeTable.ConduitTypeID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ConduitTypeTable()) + " from " + ConduitTypeTable.TableName + " where " + ConduitTypeTable.ID.Name + " in ";
             command += "(select " + ConnectionConduitTypeTable.TypeID.Name + " from " + ConnectionConduitTypeTable.TableName + " where ";
             command += ConnectionConduitTypeTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
@@ -708,7 +683,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         static private TECElectricalMaterial getConnectionTypeInNetworkConnection(Guid netConnectionID)
         {
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ConnectionTypeTable()) + " from " + ConnectionTypeTable.TableName + " where " + ConnectionTypeTable.ConnectionTypeID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ConnectionTypeTable()) + " from " + ConnectionTypeTable.TableName + " where " + ConnectionTypeTable.ID.Name + " in ";
             command += "(select " + NetworkConnectionConnectionTypeTable.TypeID.Name + " from " + NetworkConnectionConnectionTypeTable.TableName + " where ";
             command += NetworkConnectionConnectionTypeTable.ConnectionID.Name + " = '" + netConnectionID;
             command += "')";
@@ -753,7 +728,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName;
-            command += " where " + ControllerTable.ControllerID.Name + " not in ";
+            command += " where " + ControllerTable.ID.Name + " not in ";
             command += "(select " + SystemControllerTable.ControllerID.Name;
             command += " from " + SystemControllerTable.TableName + ")";
 
@@ -770,7 +745,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECIO> getIOInControllerType(Guid typeId)
         {
             ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new IOTable()) + " from " + IOTable.TableName + " where " + IOTable.IOID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new IOTable()) + " from " + IOTable.TableName + " where " + IOTable.ID.Name + " in ";
             command += "(select " + ControllerTypeIOTable.IOID.Name + " from " + ControllerTypeIOTable.TableName + " where ";
             command += ControllerTypeIOTable.TypeID.Name + " = '" + typeId;
             command += "')";
@@ -814,7 +789,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             var outScope = new ObservableCollection<TECController>();
 
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ID.Name + " in ";
             command += "(select " + NetworkConnectionControllerTable.ControllerID.Name + " from " + NetworkConnectionControllerTable.TableName + " where ";
             command += NetworkConnectionControllerTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
@@ -842,12 +817,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         static private TECBidParameters getBidParameters(TECBid bid)
         {
-            string constsCommand = "select " + DatabaseHelper.AllFieldsInTableString(new BidParametersTable()) + " from (" + BidParametersTable.TableName + " inner join ";
-            constsCommand += BidBidParametersTable.TableName + " on ";
-            constsCommand += "(TECBidTECParameters.ParametersID = TECBidTECParameters.ParametersID";
-            constsCommand += " and " + BidBidParametersTable.BidID.Name + " = '";
-            constsCommand += bid.Guid;
-            constsCommand += "'))";
+            string constsCommand = "select " + DatabaseHelper.AllFieldsInTableString(new BidParametersTable()) + " from " + BidParametersTable.TableName;
 
             DataTable DT = SQLiteDB.getDataFromCommand(constsCommand);
 
@@ -880,7 +850,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new PanelTable()) + " from " + PanelTable.TableName;
-            command += " where " + PanelTable.PanelID.Name + " not in ";
+            command += " where " + PanelTable.ID.Name + " not in ";
             command += "(select " + SystemPanelTable.PanelID.Name;
             command += " from " + SystemPanelTable.TableName + ")";
 
@@ -897,9 +867,9 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
-            command += " where " + SystemTable.SystemID.Name;
-            command += " in (select " + SystemTable.SystemID.Name;
-            command += " from " + SystemTable.TableName + " where " + SystemTable.SystemID.Name + " not in ";
+            command += " where " + SystemTable.ID.Name;
+            command += " in (select " + SystemTable.ID.Name;
+            command += " from " + SystemTable.TableName + " where " + SystemTable.ID.Name + " not in ";
             command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName + "))";
 
             DatabaseHelper.Explain(command, SQLiteDB);
@@ -913,7 +883,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         static private TECPanelType getPanelTypeInPanel(Guid guid)
         {
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new PanelTypeTable()) + " from " + PanelTypeTable.TableName + " where " + PanelTypeTable.PanelTypeID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new PanelTypeTable()) + " from " + PanelTypeTable.TableName + " where " + PanelTypeTable.ID.Name + " in ";
             command += "(select " + PanelPanelTypeTable.PanelTypeID.Name + " from " + PanelPanelTypeTable.TableName;
             command += " where " + PanelPanelTypeTable.PanelID.Name + " = '";
             command += guid;
@@ -928,7 +898,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECController> getControllersInPanel(Guid guid)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ControllerID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ID.Name + " in ";
             command += "(select " + PanelControllerTable.ControllerID.Name + " from " + PanelControllerTable.TableName + " where ";
             command += PanelControllerTable.PanelID.Name + " = '" + guid;
             command += "')";
@@ -949,7 +919,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
 
             if (tables.Contains(NetworkConnectionTable.TableName))
             {
-                command = "select " + DatabaseHelper.AllFieldsInTableString(new NetworkConnectionTable()) + " from " + NetworkConnectionTable.TableName + " where " + NetworkConnectionTable.ConnectionID.Name + " in ";
+                command = "select " + DatabaseHelper.AllFieldsInTableString(new NetworkConnectionTable()) + " from " + NetworkConnectionTable.TableName + " where " + NetworkConnectionTable.ID.Name + " in ";
                 command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
                 command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
                 command += "')";
@@ -964,7 +934,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 }
             }
 
-            command = "select " + DatabaseHelper.AllFieldsInTableString(new SubScopeConnectionTable()) + " from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ConnectionID.Name + " in ";
+            command = "select " + DatabaseHelper.AllFieldsInTableString(new SubScopeConnectionTable()) + " from " + SubScopeConnectionTable.TableName + " where " + SubScopeConnectionTable.ID.Name + " in ";
             command += "(select " + ControllerConnectionTable.ConnectionID.Name + " from " + ControllerConnectionTable.TableName + " where ";
             command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
             command += "')";
@@ -1001,7 +971,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECMisc> getMiscInBid()
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.MiscID.Name + " in ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.ID.Name + " in ";
             command += "(select " + BidMiscTable.MiscID.Name + " from " + BidMiscTable.TableName;
             command += ")";
             DataTable miscDT = SQLiteDB.getDataFromCommand(command);
@@ -1013,13 +983,29 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             return misc;
         }
 
+        static private TECManufacturer getPlaceholderManufacturer(Guid hardwareGuid)
+        {
+            throw new NotImplementedException();
+            //string command = "select " + ManufacturerTable.ID.Name + " from " + ManufacturerTable.TableName + " where " + PanelTypeTable.ID.Name + " in ";
+            //command += "(select " + PanelPanelTypeTable.PanelTypeID.Name + " from " + PanelPanelTypeTable.TableName;
+            //command += " where " + PanelPanelTypeTable.PanelID.Name + " = '";
+            //command += guid;
+            //command += "')";
+
+            //DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            //if (manTable.Rows.Count > 0)
+            //{ return getPanelTypeFromRow(manTable.Rows[0]); }
+            //else
+            //{ return null; }
+        }
+
         #endregion //Loading from DB Methods
         
         #region Row to Object Methods
         #region Base Scope
         private static TECSystem getSystemFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[SystemTable.SystemID.Name].ToString());
+            Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
             TECSystem system = new TECSystem(guid);
 
             system.Name = row[SystemTable.Name.Name].ToString();
@@ -1059,7 +1045,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
 
         private static TECEquipment getEquipmentFromRow(DataRow row)
         {
-            Guid equipmentID = new Guid(row[EquipmentTable.EquipmentID.Name].ToString());
+            Guid equipmentID = new Guid(row[EquipmentTable.ID.Name].ToString());
             TECEquipment equipmentToAdd = new TECEquipment(equipmentID);
             equipmentToAdd.Name = row[EquipmentTable.Name.Name].ToString();
             equipmentToAdd.Description = row[EquipmentTable.Description.Name].ToString();
@@ -1069,18 +1055,18 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECSubScope getSubScopeFromRow(DataRow row)
         {
-            Guid subScopeID = new Guid(row[SubScopeTable.SubScopeID.Name].ToString());
+            Guid subScopeID = new Guid(row[SubScopeTable.ID.Name].ToString());
             TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
             subScopeToAdd.Name = row[SubScopeTable.Name.Name].ToString();
             subScopeToAdd.Description = row[SubScopeTable.Description.Name].ToString();
-            subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
+            //subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
             getScopeChildren(subScopeToAdd);
             return subScopeToAdd;
         }
         private static TECPoint getPointFromRow(DataRow row)
         {
-            Guid pointID = new Guid(row[PointTable.PointID.Name].ToString());
+            Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
             TECPoint pointToAdd = new TECPoint(pointID);
             pointToAdd.Label = row[PointTable.Name.Name].ToString();
             pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
@@ -1091,7 +1077,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         #region Catalogs
         private static TECElectricalMaterial getConnectionTypeFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[ConnectionTypeTable.ConnectionTypeID.Name].ToString());
+            Guid guid = new Guid(row[ConnectionTypeTable.ID.Name].ToString());
             string name = row[ConnectionTypeTable.Name.Name].ToString();
             string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
             string costString = row[ConnectionTypeTable.Cost.Name].ToString();
@@ -1109,7 +1095,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECElectricalMaterial getConduitTypeFromRow(DataRow row)
         {
-            Guid conduitGuid = new Guid(row[ConduitTypeTable.ConduitTypeID.Name].ToString());
+            Guid conduitGuid = new Guid(row[ConduitTypeTable.ID.Name].ToString());
             string name = row[ConduitTypeTable.Name.Name].ToString();
             double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
             double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
@@ -1124,7 +1110,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
 
         private static TECCost getAssociatedCostFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[AssociatedCostTable.AssociatedCostID.Name].ToString());
+            Guid guid = new Guid(row[AssociatedCostTable.ID.Name].ToString());
             string name = row[AssociatedCostTable.Name.Name].ToString();
             double cost = row[AssociatedCostTable.Cost.Name].ToString().ToDouble(0);
             double labor = row[AssociatedCostTable.Labor.Name].ToString().ToDouble(0);
@@ -1141,9 +1127,9 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECDevice getDeviceFromRow(DataRow row)
         {
-            Guid deviceID = new Guid(row[DeviceTable.DeviceID.Name].ToString());
+            Guid deviceID = new Guid(row[DeviceTable.ID.Name].ToString());
             ObservableCollection<TECElectricalMaterial> connectionType = getConnectionTypesInDevice(deviceID);
-            TECManufacturer manufacturer = getManufacturerInDevice(deviceID);
+            TECManufacturer manufacturer = getPlaceholderManufacturer(deviceID);
             TECDevice deviceToAdd = new TECDevice(deviceID, connectionType, manufacturer);
             deviceToAdd.Name = row[DeviceTable.Name.Name].ToString();
             deviceToAdd.Description = row[DeviceTable.Description.Name].ToString();
@@ -1153,7 +1139,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECManufacturer getManufacturerFromRow(DataRow row)
         {
-            Guid manufacturerID = new Guid(row[ManufacturerTable.ManufacturerID.Name].ToString());
+            Guid manufacturerID = new Guid(row[ManufacturerTable.ID.Name].ToString());
             var manufacturer = new TECManufacturer(manufacturerID);
             manufacturer.Label = row[ManufacturerTable.Name.Name].ToString();
             manufacturer.Multiplier = row[ManufacturerTable.Multiplier.Name].ToString().ToDouble(1);
@@ -1161,7 +1147,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECLabeled getLocationFromRow(DataRow row)
         {
-            Guid locationID = new Guid(row[LocationTable.LocationID.Name].ToString());
+            Guid locationID = new Guid(row[LocationTable.ID.Name].ToString());
             var location = new TECLabeled(locationID);
             location.Label = row[LocationTable.Name.Name].ToString();
             return location;
@@ -1180,7 +1166,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         /// <returns></returns>
         private static TECPanelType getPanelTypeFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[PanelTypeTable.PanelTypeID.Name].ToString());
+            Guid guid = new Guid(row[PanelTypeTable.ID.Name].ToString());
             TECPanelType panelType = new TECPanelType(guid, new TECManufacturer());
 
             panelType.Name = row[PanelTypeTable.Name.Name].ToString();
@@ -1191,8 +1177,8 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECIOModule getIOModuleFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[IOModuleTable.IOModuleID.Name].ToString());
-            TECManufacturer manufacturer = getManufacturerInIOModule(guid);
+            Guid guid = new Guid(row[IOModuleTable.ID.Name].ToString());
+            TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
 
             TECIOModule module = new TECIOModule(guid, manufacturer);
 
@@ -1207,7 +1193,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         #region Scope Qualifiers
         private static TECScopeBranch getScopeBranchFromRow(DataRow row)
         {
-            Guid scopeBranchID = new Guid(row[ScopeBranchTable.ScopeBranchID.Name].ToString());
+            Guid scopeBranchID = new Guid(row[ScopeBranchTable.ID.Name].ToString());
             TECScopeBranch branch = new TECScopeBranch(scopeBranchID);
             branch.Label = row[ScopeBranchTable.Label.Name].ToString();
             branch.Branches = getChildBranchesInBranch(scopeBranchID);
@@ -1215,7 +1201,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECLabeled getNoteFromRow(DataRow row)
         {
-            Guid noteID = new Guid(row[NoteTable.NoteID.Name].ToString());
+            Guid noteID = new Guid(row[NoteTable.ID.Name].ToString());
             var note = new TECLabeled(noteID);
             note.Label = row["NoteText"].ToString();
             note.Flavor = Flavor.Note;
@@ -1234,7 +1220,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         #region Control Scope
         private static TECPanel getPanelFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[PanelTable.PanelID.Name].ToString());
+            Guid guid = new Guid(row[PanelTable.ID.Name].ToString());
             TECPanelType type = getPanelTypeInPanel(guid);
             TECPanel panel = new TECPanel(guid, type);
 
@@ -1247,7 +1233,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECController getControllerFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
+            Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
             TECController controller = new TECController(guid, getTypeInController(guid));
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
@@ -1259,7 +1245,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECIO getIOFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[IOTable.IOID.Name].ToString());
+            Guid guid = new Guid(row[IOTable.ID.Name].ToString());
             var io = new TECIO(guid);
             io.Type = TECIO.convertStringToType(row[IOTable.IOType.Name].ToString());
             io.Quantity = row[IOTable.Quantity.Name].ToString().ToInt();
@@ -1268,7 +1254,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[SubScopeConnectionTable.ConnectionID.Name].ToString());
+            Guid guid = new Guid(row[SubScopeConnectionTable.ID.Name].ToString());
             TECSubScopeConnection connection = new TECSubScopeConnection(guid);
             connection.Length = row[SubScopeConnectionTable.Length.Name].ToString().ToDouble();
             connection.ConduitLength = row[SubScopeConnectionTable.ConduitLength.Name].ToString().ToDouble(0);
@@ -1278,7 +1264,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECNetworkConnection getNetworkConnectionFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[NetworkConnectionTable.ConnectionID.Name].ToString());
+            Guid guid = new Guid(row[NetworkConnectionTable.ID.Name].ToString());
             TECNetworkConnection connection = new TECNetworkConnection(guid);
             connection.Length = row[NetworkConnectionTable.Length.Name].ToString().ToDouble();
             connection.ConduitLength = row[NetworkConnectionTable.ConduitLength.Name].ToString().ToDouble(0);
@@ -1293,7 +1279,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         #region Misc
         private static TECMisc getMiscFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[MiscTable.MiscID.Name].ToString());
+            Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
             TECMisc cost = new TECMisc(guid);
 
             cost.Name = row[MiscTable.Name.Name].ToString();
@@ -1307,7 +1293,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECBidParameters getBidParametersFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[BidParametersTable.ParametersID.Name].ToString());
+            Guid guid = new Guid(row[BidParametersTable.ID.Name].ToString());
             TECBidParameters paramters = new TECBidParameters(guid);
 
             paramters.Escalation = row[BidParametersTable.Escalation.Name].ToString().ToDouble(0);
@@ -1345,7 +1331,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECController getControllerPlaceholderFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[ControllerTable.ControllerID.Name].ToString());
+            Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
             TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()));
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
@@ -1372,7 +1358,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECLabeled getPlaceholderLocationFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[LocationScopeTable.LocationID.Name].ToString());
+            Guid guid = new Guid(row[ScopeLocationTable.LocationID.Name].ToString());
             TECLabeled location = new TECLabeled(guid);
             return location;
         }
@@ -1387,13 +1373,13 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static TECManufacturer getPlaceholderDeviceManufacturerFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[DeviceManufacturerTable.ManufacturerID.Name].ToString());
+            Guid guid = new Guid(row[HardwareManufacturerTable.ManufacturerID.Name].ToString());
             TECManufacturer man = new TECManufacturer(guid);
             return man;
         }
         private static TECControllerType getPlaceholderControllerTypeFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[ControllerTypeTable.TypeID.Name].ToString());
+            Guid guid = new Guid(row[ControllerTypeTable.ID.Name].ToString());
             TECControllerType type = new TECControllerType(guid, new TECManufacturer());
             return type;
         }
@@ -1412,8 +1398,8 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict)
         {
-            Guid key = new Guid(row[CharacteristicScopeInstanceScopeTable.CharacteristicID.Name].ToString());
-            Guid value = new Guid(row[CharacteristicScopeInstanceScopeTable.InstanceID.Name].ToString());
+            Guid key = new Guid(row[TypicalInstanceTable.TypicalID.Name].ToString());
+            Guid value = new Guid(row[TypicalInstanceTable.InstanceID.Name].ToString());
 
             if (!dict.ContainsKey(key))
             {

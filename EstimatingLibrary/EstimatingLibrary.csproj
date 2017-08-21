@@ -103,6 +103,7 @@
     <Compile Include="Interfaces\INotifyTECChanged.cs" />
     <Compile Include="Interfaces\INotifyPointChanged.cs" />
     <Compile Include="Interfaces\ITECConnectable.cs" />
+    <Compile Include="TECValve.cs" />
     <Compile Include="Utilities\ListDictionary.cs" />
     <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECEstimator.cs" />

@@ -1231,12 +1231,12 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
+            (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Cost = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            double actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            double actual = (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Cost;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }

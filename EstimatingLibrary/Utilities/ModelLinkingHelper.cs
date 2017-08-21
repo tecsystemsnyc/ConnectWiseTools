@@ -508,25 +508,26 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkSubScopeToDevices(TECSubScope subScope, ObservableCollection<TECDevice> devices)
         {
-            ObservableCollection<TECDevice> replacements = new ObservableCollection<TECDevice>();
-            foreach(TECDevice device in subScope.Devices)
-            {
-                bool found = false;
-                foreach(TECDevice catalogDevice in devices)
-                {
-                    if (device.Guid == catalogDevice.Guid)
-                    {
-                        replacements.Add(catalogDevice);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    throw new Exception("Subscope device not found.");
-                }
-            }
-            subScope.Devices = replacements;
+            throw new NotImplementedException();
+            //ObservableCollection<TECDevice> replacements = new ObservableCollection<TECDevice>();
+            //foreach(TECDevice device in subScope.Devices)
+            //{
+            //    bool found = false;
+            //    foreach(TECDevice catalogDevice in devices)
+            //    {
+            //        if (device.Guid == catalogDevice.Guid)
+            //        {
+            //            replacements.Add(catalogDevice);
+            //            found = true;
+            //            break;
+            //        }
+            //    }
+            //    if (!found)
+            //    {
+            //        throw new Exception("Subscope device not found.");
+            //    }
+            //}
+            //subScope.Devices = replacements;
         }
 
         #region Location Linking

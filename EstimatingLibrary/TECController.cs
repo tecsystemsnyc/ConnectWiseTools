@@ -384,14 +384,6 @@ namespace EstimatingLibrary
                     availableIO.Add(type.Type);
                 }
             }
-
-            foreach (TECSubScopeConnection connected in ChildrenConnections)
-            {
-                foreach (TECDevice device in connected.SubScope.Devices)
-                {
-                    availableIO.Remove(device.IOType);
-                }
-            }
             return availableIO;
         }
         private ObservableCollection<IOType> getNetworkIO()

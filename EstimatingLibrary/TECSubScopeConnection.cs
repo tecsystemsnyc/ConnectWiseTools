@@ -51,10 +51,10 @@ namespace EstimatingLibrary
             {
                 var outIOTypes = new ObservableCollection<IOType>();
 
-                foreach (TECDevice dev in SubScope.Devices)
-                {
-                    outIOTypes.Add(dev.IOType);
-                }
+                //foreach (TECDevice dev in SubScope.Devices)
+                //{
+                //    outIOTypes.Add(dev.IOType);
+                //}
 
                 return outIOTypes;
             }
