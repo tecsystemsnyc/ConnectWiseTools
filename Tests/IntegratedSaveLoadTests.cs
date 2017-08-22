@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.DatabaseHelpers;
@@ -940,7 +941,7 @@ namespace Tests
             TECSubScope subScopeToModify = bid.RandomSubScope();
 
             //Makes a copy, as devices can only be added via drag drop.
-            subScopeToModify.Devices = new ObservableCollection<TECDevice>();
+            subScopeToModify.Devices = new ObservableCollection<ITECConnectable>();
             int expectedQuantity = 5;
             subScopeToModify.Devices.Add(expectedDevice);
             subScopeToModify.Devices.Add(expectedDevice);
@@ -1002,7 +1003,7 @@ namespace Tests
             }
 
             int oldNumDevices = ssToModify.Devices.Count();
-            TECDevice deviceToRemove = ssToModify.Devices[0];
+            TECDevice deviceToRemove = (ssToModify.Devices[0] as TECDevice);
 
             int numThisDevice = 0;
             foreach (TECDevice dev in ssToModify.Devices)
@@ -1066,7 +1067,7 @@ namespace Tests
                 ssToModify = bid.RandomSubScope();
             }
 
-            TECDevice deviceToRemove = ssToModify.Devices[0];
+            TECDevice deviceToRemove = (ssToModify.Devices[0] as TECDevice);
 
             int oldNumDevices = 0;
 
@@ -1121,7 +1122,7 @@ namespace Tests
             {
                 ssToModify = bid.RandomSubScope();
             }
-            TECDevice expectedDevice = ssToModify.Devices[0];
+            TECDevice expectedDevice = (ssToModify.Devices[0] as TECDevice);
 
             int expectedNumDevices = 0;
 

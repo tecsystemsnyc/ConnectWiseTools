@@ -229,13 +229,13 @@ namespace Tests
             //Arrange
             TECEquipment expectedSysEquipment = expectedSystem.Equipment[0];
             TECSubScope expectedSysSubScope = expectedSysEquipment.SubScope[0];
-            TECDevice expectedChildDevice = expectedSysSubScope.Devices[0];
+            TECDevice expectedChildDevice = expectedSysSubScope.Devices[0] as TECDevice;
             TECPoint expectedSysPoint = expectedSysSubScope.Points[0];
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
 
             TECEquipment actualSysEquipment = actualSystem.Equipment[0];
             TECSubScope actualSysSubScope = actualSysEquipment.SubScope[0];
-            TECDevice actualChildDevice = actualSysSubScope.Devices[0];
+            TECDevice actualChildDevice = actualSysSubScope.Devices[0] as TECDevice;
             TECPoint actualSysPoint = actualSysSubScope.Points[0];
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
@@ -281,12 +281,12 @@ namespace Tests
         {
             //Arrange
             TECSubScope actualEquipSubScope = actualEquipment.SubScope[0];
-            TECDevice actualChildDevice = actualEquipSubScope.Devices[0];
+            TECDevice actualChildDevice = actualEquipSubScope.Devices[0] as TECDevice;
             TECPoint actualEquipPoint = actualEquipSubScope.Points[0];
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
             TECSubScope expectedEquipSubScope = expectedEquipment.SubScope[0];
-            TECDevice expectedChildDevice = expectedEquipSubScope.Devices[0];
+            TECDevice expectedChildDevice = expectedEquipSubScope.Devices[0] as TECDevice;
             TECPoint expectedEquipPoint = expectedEquipSubScope.Points[0];
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
 
@@ -317,11 +317,11 @@ namespace Tests
         public void SaveAs_Templates_SubScope()
         {
             //Arrange
-            TECDevice actualChildDevice = actualSubScope.Devices[0];
+            TECDevice actualChildDevice = actualSubScope.Devices[0] as TECDevice;
             TECPoint actualSSPoint = actualSubScope.Points[0];
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
-            TECDevice expectedChildDevice = expectedSubScope.Devices[0];
+            TECDevice expectedChildDevice = expectedSubScope.Devices[0] as TECDevice;
             TECPoint expectedSSPoint = expectedSubScope.Points[0];
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
 

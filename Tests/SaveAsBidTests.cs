@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.DatabaseHelpers;
@@ -45,7 +46,7 @@ namespace Tests
         static TECEquipment actualEquipment;
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
-        static ObservableCollection<TECDevice> actualDevices;
+        static ObservableCollection<ITECConnectable> actualDevices;
         static TECManufacturer actualManufacturer;
         static TECPoint actualPoint;
         static TECScopeBranch actualBranch;
