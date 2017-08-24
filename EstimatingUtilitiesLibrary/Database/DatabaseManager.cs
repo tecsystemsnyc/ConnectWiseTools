@@ -53,7 +53,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             catch
             {
-                return null;
+                return null; 
             }
         }
     }

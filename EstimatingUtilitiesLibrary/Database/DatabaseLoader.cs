@@ -1327,6 +1327,20 @@ namespace EstimatingUtilitiesLibrary.Database
         #endregion
         #endregion
 
+        static private ObservableCollection<T> getListFromTable<T>(string tableName)
+        {
+            ObservableCollection<T> list = new ObservableCollection<T>();
+            DataTable dt = SQLiteDB.GetDataFromTable(tableName);
+            foreach (DataRow row in dt.Rows)
+            { list.Add(getDataFromRow<T>(row)); }
+            return list;
+        }
+
+        private static T getDataFromRow<T>(DataRow row)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void assignValuePropertiesFromTable(object item, TableBase table, DataRow row)
         {
             TableInfo tableInfo = new TableInfo(table);
