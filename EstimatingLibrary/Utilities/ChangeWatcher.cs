@@ -39,7 +39,6 @@ namespace EstimatingLibrary.Utilities
 
         #region Enums
         private enum OccuranceType { None, Typical, Instance };
-        private enum WatcherType { Bid, Templates, System };
         #endregion
 
         #region Methods
