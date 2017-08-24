@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using EstimatingUtilitiesLibrary.DatabaseHelpers;
+using EstimatingUtilitiesLibrary.Database;
 
 namespace Tests
 {
@@ -17,7 +17,7 @@ namespace Tests
         {
             DatabaseGenerator.CreateBidDatabase(path);
             SQLiteDB = new SQLiteDatabase(path);
-            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+            SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
             AddToBidInfoTable();
             AddToBidParametersTable();
@@ -84,7 +84,7 @@ namespace Tests
             AddToSystemMiscTable();
             AddToCharacteristicScopeInstanceScopeTable();
             
-            SQLiteDB.nonQueryCommand("END TRANSACTION");
+            SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }
 
@@ -92,7 +92,7 @@ namespace Tests
         {
             DatabaseGenerator.CreateTemplateDatabase(path);
             SQLiteDB = new SQLiteDatabase(path);
-            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+            SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
             AddToTemplatesInfoTable();
             AddToLaborConstantsTable();
@@ -142,7 +142,7 @@ namespace Tests
             AddToDeviceManufacturerTable();
             AddToDeviceConnectionTypeTable();
 
-            SQLiteDB.nonQueryCommand("END TRANSACTION");
+            SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }
         

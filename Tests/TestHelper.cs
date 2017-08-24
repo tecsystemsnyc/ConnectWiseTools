@@ -8,7 +8,7 @@ using EstimatingUtilitiesLibrary;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Collections;
-using EstimatingUtilitiesLibrary.DatabaseHelpers;
+using EstimatingUtilitiesLibrary.Database;
 
 namespace Tests
 {

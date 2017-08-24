@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingUtilitiesLibrary
+namespace EstimatingUtilitiesLibrary.Database
 {
-    public class TableHelper
+    internal class TableHelper
     {
         public static List<TableBase> GetTables(List<TECObject> items)
         {

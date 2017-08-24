@@ -1,7 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
-using EstimatingUtilitiesLibrary.DatabaseHelpers;
+using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,8 @@ namespace Tests
             templates = TestHelper.CreateTestTemplates();
             ChangeWatcher watcher = new ChangeWatcher(templates);
             testStack = new DeltaStacker(watcher);
-            DatabaseSaver.Save(templates, path);
+            DatabaseManager manager = new DatabaseManager(path);
+            manager.New(templates);
         }
 
         [TestCleanup]

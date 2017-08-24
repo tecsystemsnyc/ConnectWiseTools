@@ -2,7 +2,7 @@
 using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
-using EstimatingUtilitiesLibrary.DatabaseHelpers;
+using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -303,9 +303,9 @@ namespace TECUserControlLibrary.ViewModels
             LoadCommand = new RelayCommand(LoadExecute);
             SaveCommand = new RelayCommand(SaveExecute);
             SaveAsCommand = new RelayCommand(SaveAsExecute);
-            UndoCommand = new RelayCommand(UndoExecute, UndoCanExecute);
-            RedoCommand = new RelayCommand(RedoExecute, RedoCanExecute);
-            ClosingCommand = new RelayCommand<CancelEventArgs>(e => ClosingExecute(e));
+            UndoCommand = new RelayCommand(undoExecute, undoCanExecute);
+            RedoCommand = new RelayCommand(redoExecute, redoCanExecute);
+            ClosingCommand = new RelayCommand<CancelEventArgs>(e => closingExecute(e));
         }
         protected abstract void setupMenu();
         private void setupStatusBar()
@@ -467,7 +467,8 @@ namespace TECUserControlLibrary.ViewModels
                     File.Delete(path);
                 }
                 //Create new database
-                DatabaseSaver.Save(workingScopeManager, path);
+                DatabaseManager manager = new DatabaseManager(path);
+                manager.New(workingScopeManager);
                 return true;
             }
             else
@@ -482,7 +483,8 @@ namespace TECUserControlLibrary.ViewModels
             {
                 try
                 {
-                    DatabaseUpdater.Update(path, updates);
+                    DatabaseManager manager = new DatabaseManager(path);
+                    manager.Save(updates);
                     return true;
                 }
                 catch (Exception ex) when (DebugBooleans.CatchSaveDelta)
@@ -501,9 +503,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             saveFilePath = path;
             ScopeDirectoryPath = Path.GetDirectoryName(path);
+            DatabaseManager manager = new DatabaseManager(path);
             TECScopeManager outScope = null;
             if (!UtilitiesMethods.IsFileLocked(path))
-            { outScope = DatabaseLoader.Load(path); }
+            { outScope = manager.Load(); }
             else
             {
                 DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
@@ -617,29 +620,29 @@ namespace TECUserControlLibrary.ViewModels
             }
             saveNew(true);
         }
-        private void UndoExecute()
+        private void undoExecute()
         {
             doStack.Undo();
         }
-        private bool UndoCanExecute()
+        private bool undoCanExecute()
         {
             if (doStack.UndoCount() > 0)
                 return true;
             else
                 return false;
         }
-        private void RedoExecute()
+        private void redoExecute()
         {
             doStack.Redo();
         }
-        private bool RedoCanExecute()
+        private bool redoCanExecute()
         {
             if (doStack.RedoCount() > 0)
                 return true;
             else
                 return false;
         }
-        private void ClosingExecute(CancelEventArgs e)
+        private void closingExecute(CancelEventArgs e)
         {
             if (IsReady)
             {

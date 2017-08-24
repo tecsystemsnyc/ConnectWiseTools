@@ -2,7 +2,7 @@
 using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
-using EstimatingUtilitiesLibrary.DatabaseHelpers;
+using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -242,13 +242,13 @@ namespace TECUserControlLibrary.ViewModels
             if (TemplatesFilePath != null)
             {
                 SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
-
+                DatabaseManager manager = new DatabaseManager(TemplatesFilePath);
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += (s, e) => 
                 {
                     if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                     {
-                        loadedTemplates = DatabaseLoader.Load(TemplatesFilePath) as TECTemplates;
+                        loadedTemplates = manager.Load() as TECTemplates;
                     }
                     else
                     {

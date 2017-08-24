@@ -12,9 +12,9 @@ using DebugLibrary;
 using EstimatingLibrary.Utilities;
 using System.Globalization;
 
-namespace EstimatingUtilitiesLibrary.DatabaseHelpers
+namespace EstimatingUtilitiesLibrary.Database
 {
-    public class DatabaseLoader
+    internal class DatabaseLoader
     {
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
         private const string DB_FMT = "O";
@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             TECScopeManager workingScopeManager = null;
             SQLiteDB = new SQLiteDatabase(path);
-            SQLiteDB.nonQueryCommand("BEGIN TRANSACTION");
+            SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
             var tableNames = DatabaseHelper.TableNames(SQLiteDB);
             if (tableNames.Contains("TECBidInfo"))
@@ -42,7 +42,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 return null;
             }
 
-            SQLiteDB.nonQueryCommand("END TRANSACTION");
+            SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -99,7 +99,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         static private void getUserAdjustments(TECBid bid)
         {
-            DataTable adjDT = SQLiteDB.getDataFromTable(UserAdjustmentsTable.TableName);
+            DataTable adjDT = SQLiteDB.GetDataFromTable(UserAdjustmentsTable.TableName);
 
             if (adjDT.Rows.Count < 1)
             {
@@ -129,7 +129,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 constsCommand += scopeManager.Guid;
                 constsCommand += "'))";
 
-                laborDT = SQLiteDB.getDataFromCommand(constsCommand);
+                laborDT = SQLiteDB.GetDataFromCommand(constsCommand);
 
                 string subConstsCommand = "select * from (" + SubcontractorConstantsTable.TableName + " inner join ";
                 subConstsCommand += BidLaborTable.TableName + " on ";
@@ -138,12 +138,12 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 subConstsCommand += scopeManager.Guid;
                 subConstsCommand += "'))";
 
-                subConstsDT = SQLiteDB.getDataFromCommand(subConstsCommand);
+                subConstsDT = SQLiteDB.GetDataFromCommand(subConstsCommand);
             }
             else if (scopeManager is TECTemplates)
             {
-                laborDT = SQLiteDB.getDataFromTable(LaborConstantsTable.TableName);
-                subConstsDT = SQLiteDB.getDataFromTable(SubcontractorConstantsTable.TableName);
+                laborDT = SQLiteDB.GetDataFromTable(LaborConstantsTable.TableName);
+                subConstsDT = SQLiteDB.GetDataFromTable(SubcontractorConstantsTable.TableName);
             }
             else
             {
@@ -223,7 +223,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new DeviceTable()), DeviceTable.TableName);
-            DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
+            DataTable devicesDT = SQLiteDB.GetDataFromCommand(command);
 
             foreach (DataRow row in devicesDT.Rows)
             { devices.Add(getDeviceFromRow(row)); }
@@ -233,7 +233,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             ObservableCollection<TECManufacturer> manufacturers = new ObservableCollection<TECManufacturer>();
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new ManufacturerTable()), ManufacturerTable.TableName);
-            DataTable manufacturersDT = SQLiteDB.getDataFromCommand(command);
+            DataTable manufacturersDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in manufacturersDT.Rows)
             { manufacturers.Add(getManufacturerFromRow(row)); }
             return manufacturers;
@@ -242,7 +242,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             ObservableCollection<TECElectricalMaterial> conduitTypes = new ObservableCollection<TECElectricalMaterial>();
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new ConduitTypeTable()), ConduitTypeTable.TableName);
-            DataTable conduitTypesDT = SQLiteDB.getDataFromCommand(command);
+            DataTable conduitTypesDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in conduitTypesDT.Rows)
             { conduitTypes.Add(getConduitTypeFromRow(row)); }
             return conduitTypes;
@@ -251,7 +251,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             ObservableCollection<TECPanelType> panelTypes = new ObservableCollection<TECPanelType>();
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new PanelTypeTable()), PanelTypeTable.TableName);
-            DataTable panelTypesDT = SQLiteDB.getDataFromCommand(command);
+            DataTable panelTypesDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in panelTypesDT.Rows)
             {
                 panelTypes.Add(getPanelTypeFromRow(row));
@@ -263,7 +263,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new ConnectionTypeTable()), ConnectionTypeTable.TableName);
-            DataTable connectionTypesDT = SQLiteDB.getDataFromCommand(command);
+            DataTable connectionTypesDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in connectionTypesDT.Rows)
             { connectionTypes.Add(getConnectionTypeFromRow(row)); }
             return connectionTypes;
@@ -274,7 +274,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             string command = "select " + ElectricalMaterialRatedCostTable.CostID.Name + ", " + ElectricalMaterialRatedCostTable.Quantity.Name + " from " + ElectricalMaterialRatedCostTable.TableName + " where ";
             command += ElectricalMaterialRatedCostTable.ComponentID.Name + " = '" + componentID;
             command += "'";
-            DataTable DT = SQLiteDB.getDataFromCommand(command);
+            DataTable DT = SQLiteDB.GetDataFromCommand(command);
             var costs = new ObservableCollection<TECCost>();
             foreach (DataRow row in DT.Rows)
             {
@@ -294,7 +294,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += SystemPanelTable.SystemID.Name + " = '" + guid;
             command += "')";
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable dt = SQLiteDB.getDataFromCommand(command);
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
             { panels.Add(getPanelFromRow(row)); }
 
@@ -317,7 +317,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             //    EquipmentTable.TableName, EquipmentTable.EquipmentID.Name, SystemEquipmentTable.EquipmentID.Name, SystemEquipmentTable.TableName,
             //    systemEquipmentIndex, SystemEquipmentTable.SystemID.Name, systemID);
 
-            DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
+            DataTable equipmentDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in equipmentDT.Rows)
             { equipment.Add(getEquipmentFromRow(row)); }
             return equipment;
@@ -333,7 +333,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += parentID;
             command += "')";
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable childDT = SQLiteDB.getDataFromCommand(command);
+            DataTable childDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in childDT.Rows)
             {
                 children.Add(getSystemFromRow(row));
@@ -349,7 +349,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += SystemControllerTable.SystemID.Name + " = '" + guid;
             command += "')";
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
+            DataTable controllerDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
             {
                 var controller = getControllerFromRow(row);
@@ -367,7 +367,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += SystemScopeBranchTable.SystemID.Name + " = '" + guid;
             command += "')";
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable branchDT = SQLiteDB.getDataFromCommand(command);
+            DataTable branchDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in branchDT.Rows)
             { branches.Add(getScopeBranchFromRow(row)); }
 
@@ -376,7 +376,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private Dictionary<Guid, List<Guid>> getCharacteristicInstancesList()
         {
             Dictionary<Guid, List<Guid>> outDict = new Dictionary<Guid, List<Guid>>();
-            DataTable dictDT = SQLiteDB.getDataFromTable(TypicalInstanceTable.TableName);
+            DataTable dictDT = SQLiteDB.GetDataFromTable(TypicalInstanceTable.TableName);
             foreach (DataRow row in dictDT.Rows)
             {
                 addRowToPlaceholderDict(row, outDict);
@@ -391,7 +391,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += SystemMiscTable.SystemID.Name + " = '" + guid;
             command += "')";
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable miscDT = SQLiteDB.getDataFromCommand(command);
+            DataTable miscDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row));
@@ -412,7 +412,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             string command = "select " + ScopeTagTable.TagID.Name + " from " + ScopeTagTable.TableName + " where ";
             command += ScopeTagTable.ScopeID.Name + " = '" + scopeID;
             command += "'";
-            DataTable tagsDT = SQLiteDB.getDataFromCommand(command);
+            DataTable tagsDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in tagsDT.Rows)
             { tags.Add(getPlaceholderTagFromRow(row)); }
             return tags;
@@ -426,7 +426,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             string command = "select " + ScopeAssociatedCostTable.AssociatedCostID.Name + ", " + ScopeAssociatedCostTable.Quantity.Name + " from " + ScopeAssociatedCostTable.TableName + " where ";
             command += ScopeAssociatedCostTable.ScopeID.Name + " = '" + scopeID;
             command += "'";
-            DataTable DT = SQLiteDB.getDataFromCommand(command);
+            DataTable DT = SQLiteDB.GetDataFromCommand(command);
             var associatedCosts = new ObservableCollection<TECCost>();
             foreach (DataRow row in DT.Rows)
             {
@@ -448,7 +448,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 string command = "select " + ScopeLocationTable.LocationID.Name + " from " + ScopeLocationTable.TableName + " where ";
                 command += ScopeLocationTable.ScopeID.Name + " = '" + ScopeID;
                 command += "'";
-                DataTable locationDT = SQLiteDB.getDataFromCommand(command);
+                DataTable locationDT = SQLiteDB.GetDataFromCommand(command);
                 if (locationDT.Rows.Count > 0)
                 { return getPlaceholderLocationFromRow(locationDT.Rows[0]); }
                 else
@@ -461,7 +461,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
 
         public static TECBid GetBidInfo(SQLiteDatabase db)
         {
-            DataTable bidInfoDT = db.getDataFromTable(BidInfoTable.TableName);
+            DataTable bidInfoDT = db.GetDataFromTable(BidInfoTable.TableName);
             if (bidInfoDT.Rows.Count < 1)
             {
                 DebugHandler.LogError("Bid info not found in database. Bid info and labor will be missing.");
@@ -484,7 +484,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         public static TECTemplates GetTemplatesInfo(SQLiteDatabase db)
         {
-            DataTable templateInfoDT = db.getDataFromTable(TemplatesInfoTable.TableName);
+            DataTable templateInfoDT = db.GetDataFromTable(TemplatesInfoTable.TableName);
 
             if (templateInfoDT.Rows.Count < 1)
             {
@@ -507,7 +507,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += " from " + BidScopeBranchTable.TableName + " where " + BidScopeBranchTable.ScopeBranchID.Name + " not in ";
             command += "(select " + ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName + "))";
 
-            DataTable mainBranchDT = SQLiteDB.getDataFromCommand(command);
+            DataTable mainBranchDT = SQLiteDB.GetDataFromCommand(command);
 
             foreach (DataRow row in mainBranchDT.Rows)
             {
@@ -527,7 +527,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += parentID;
             command += "')";
 
-            DataTable childBranchDT = SQLiteDB.getDataFromCommand(command);
+            DataTable childBranchDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in childBranchDT.Rows)
             {
                 childBranches.Add(getScopeBranchFromRow(row));
@@ -550,11 +550,11 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 + ")) order by "
                 + BidSystemTable.Index.Name;
 
-            DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
+            DataTable systemsDT = SQLiteDB.GetDataFromCommand(command);
             if (systemsDT.Rows.Count < 1)
             {
                 command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
-                systemsDT = SQLiteDB.getDataFromCommand(command);
+                systemsDT = SQLiteDB.GetDataFromCommand(command);
             }
             foreach (DataRow row in systemsDT.Rows)
             { systems.Add(getSystemFromRow(row)); }
@@ -570,7 +570,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += "(select " + SystemEquipmentTable.EquipmentID.Name;
             command += " from " + SystemEquipmentTable.TableName + ")";
 
-            DataTable equipmentDT = SQLiteDB.getDataFromCommand(command);
+            DataTable equipmentDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in equipmentDT.Rows)
             { equipment.Add(getEquipmentFromRow(row)); }
 
@@ -582,7 +582,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new SubScopeTable()) + " from " + SubScopeTable.TableName;
             command += " where " + SubScopeTable.ID.Name + " not in ";
             command += "(select " + EquipmentSubScopeTable.SubScopeID.Name + " from " + EquipmentSubScopeTable.TableName + ")";
-            DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable subScopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in subScopeDT.Rows)
             { subScope.Add(getSubScopeFromRow(row)); }
             return subScope;
@@ -590,7 +590,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECLabeled> getAllLocations()
         {
             ObservableCollection<TECLabeled> locations = new ObservableCollection<TECLabeled>();
-            DataTable locationsDT = SQLiteDB.getDataFromTable(LocationTable.TableName);
+            DataTable locationsDT = SQLiteDB.GetDataFromTable(LocationTable.TableName);
             foreach (DataRow row in locationsDT.Rows)
             { locations.Add(getLocationFromRow(row)); }
             return locations;
@@ -598,7 +598,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECCost> getAssociatedCosts()
         {
             ObservableCollection<TECCost> associatedCosts = new ObservableCollection<TECCost>();
-            DataTable associatedCostsDT = SQLiteDB.getDataFromTable(AssociatedCostTable.TableName);
+            DataTable associatedCostsDT = SQLiteDB.GetDataFromTable(AssociatedCostTable.TableName);
             foreach (DataRow row in associatedCostsDT.Rows)
             { associatedCosts.Add(getAssociatedCostFromRow(row)); }
             return associatedCosts;
@@ -611,7 +611,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += EquipmentSubScopeTable.EquipmentID.Name + "= '" + equipmentID;
             command += "')) order by " + EquipmentSubScopeTable.ScopeIndex.Name + "";
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable subScopeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable subScopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in subScopeDT.Rows)
             { subScope.Add(getSubScopeFromRow(row)); }
             return subScope;
@@ -625,7 +625,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 SubScopeDeviceTable.DeviceID.Name, SubScopeDeviceTable.TableName,
                 SubScopeDeviceTable.SubScopeID.Name, subScopeID, SubScopeDeviceTable.Quantity.Name);
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable devicesDT = SQLiteDB.getDataFromCommand(command);
+            DataTable devicesDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in devicesDT.Rows)
             {
                 var deviceToAdd = getPlaceholderSubScopeDeviceFromRow(row);
@@ -645,7 +645,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += SubScopePointTable.SubScopeID.Name + " = '" + subScopeID;
             command += "'))";
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable pointsDT = SQLiteDB.getDataFromCommand(command);
+            DataTable pointsDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in pointsDT.Rows)
             { points.Add(getPointFromRow(row)); }
 
@@ -658,7 +658,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 DeviceConnectionTypeTable.TypeID.Name, DeviceConnectionTypeTable.Quantity.Name, DeviceConnectionTypeTable.TableName,
                 DeviceConnectionTypeTable.DeviceID.Name, deviceID);
 
-            DataTable connectionTypeTable = SQLiteDB.getDataFromCommand(command);
+            DataTable connectionTypeTable = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in connectionTypeTable.Rows)
             {
                 var connectionTypeToAdd = new TECElectricalMaterial(new Guid(row[DeviceConnectionTypeTable.TypeID.Name].ToString()));
@@ -675,7 +675,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += ConnectionConduitTypeTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
 
-            DataTable conduitTypeTable = SQLiteDB.getDataFromCommand(command);
+            DataTable conduitTypeTable = SQLiteDB.GetDataFromCommand(command);
             if (conduitTypeTable.Rows.Count > 0)
             { return (getConduitTypeFromRow(conduitTypeTable.Rows[0])); }
             else
@@ -688,7 +688,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += NetworkConnectionConnectionTypeTable.ConnectionID.Name + " = '" + netConnectionID;
             command += "')";
 
-            DataTable connectionTypeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable connectionTypeDT = SQLiteDB.GetDataFromCommand(command);
             if (connectionTypeDT.Rows.Count > 0)
             {
                 return (getConnectionTypeFromRow(connectionTypeDT.Rows[0]));
@@ -701,7 +701,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECLabeled> getNotes()
         {
             ObservableCollection<TECLabeled> notes = new ObservableCollection<TECLabeled>();
-            DataTable notesDT = SQLiteDB.getDataFromTable(NoteTable.TableName);
+            DataTable notesDT = SQLiteDB.GetDataFromTable(NoteTable.TableName);
             foreach (DataRow row in notesDT.Rows)
             { notes.Add(getNoteFromRow(row)); }
             return notes;
@@ -709,7 +709,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECLabeled> getExclusions()
         {
             ObservableCollection<TECLabeled> exclusions = new ObservableCollection<TECLabeled>();
-            DataTable exclusionsDT = SQLiteDB.getDataFromTable(ExclusionTable.TableName);
+            DataTable exclusionsDT = SQLiteDB.GetDataFromTable(ExclusionTable.TableName);
             foreach (DataRow row in exclusionsDT.Rows)
             { exclusions.Add(getExclusionFromRow(row)); }
             return exclusions;
@@ -717,7 +717,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECLabeled> getAllTags()
         {
             ObservableCollection<TECLabeled> tags = new ObservableCollection<TECLabeled>();
-            DataTable tagsDT = SQLiteDB.getDataFromTable(TagTable.TableName);
+            DataTable tagsDT = SQLiteDB.GetDataFromTable(TagTable.TableName);
             foreach (DataRow row in tagsDT.Rows)
             { tags.Add(getTagFromRow(row)); }
             return tags;
@@ -732,7 +732,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += "(select " + SystemControllerTable.ControllerID.Name;
             command += " from " + SystemControllerTable.TableName + ")";
 
-            DataTable controllersDT = SQLiteDB.getDataFromCommand(command);
+            DataTable controllersDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllersDT.Rows)
             {
                 var controller = getControllerFromRow(row);
@@ -750,7 +750,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += ControllerTypeIOTable.TypeID.Name + " = '" + typeId;
             command += "')";
 
-            DataTable typeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable typeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in typeDT.Rows)
             { outIO.Add(getIOFromRow(row)); }
             return outIO;
@@ -758,7 +758,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         static private ObservableCollection<TECIOModule> getIOModules()
         {
             ObservableCollection<TECIOModule> ioModules = new ObservableCollection<TECIOModule>();
-            DataTable ioModuleDT = SQLiteDB.getDataFromTable(IOModuleTable.TableName);
+            DataTable ioModuleDT = SQLiteDB.GetDataFromTable(IOModuleTable.TableName);
 
             foreach (DataRow row in ioModuleDT.Rows)
             { ioModules.Add(getIOModuleFromRow(row)); }
@@ -777,7 +777,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += SubScopeConnectionChildrenTable.ConnectionID.Name + " = '" + connectionID;
             command += "'";
 
-            DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable scopeDT = SQLiteDB.GetDataFromCommand(command);
             if (scopeDT.Rows.Count > 0)
             {
                 return getSubScopeConnectionChildPlaceholderFromRow(scopeDT.Rows[0]);
@@ -794,7 +794,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += NetworkConnectionControllerTable.ConnectionID.Name + " = '" + connectionID;
             command += "')";
 
-            DataTable scopeDT = SQLiteDB.getDataFromCommand(command);
+            DataTable scopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
             { outScope.Add(getControllerPlaceholderFromRow(row)); }
 
@@ -809,7 +809,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += controllerID;
             command += "'";
 
-            DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPlaceholderControllerTypeFromRow(manTable.Rows[0]); }
             else
@@ -819,7 +819,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             string constsCommand = "select " + DatabaseHelper.AllFieldsInTableString(new BidParametersTable()) + " from " + BidParametersTable.TableName;
 
-            DataTable DT = SQLiteDB.getDataFromCommand(constsCommand);
+            DataTable DT = SQLiteDB.GetDataFromCommand(constsCommand);
 
             if (DT.Rows.Count > 1)
             {
@@ -836,7 +836,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
 
-            DataTable miscDT = SQLiteDB.getDataFromTable(MiscTable.TableName);
+            DataTable miscDT = SQLiteDB.GetDataFromTable(MiscTable.TableName);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row));
@@ -854,7 +854,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += "(select " + SystemPanelTable.PanelID.Name;
             command += " from " + SystemPanelTable.TableName + ")";
 
-            DataTable panelsDT = SQLiteDB.getDataFromCommand(command);
+            DataTable panelsDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in panelsDT.Rows)
             {
                 panels.Add(getPanelFromRow(row));
@@ -873,7 +873,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += "(select " + SystemHierarchyTable.ChildID.Name + " from " + SystemHierarchyTable.TableName + "))";
 
             DatabaseHelper.Explain(command, SQLiteDB);
-            DataTable systemsDT = SQLiteDB.getDataFromCommand(command);
+            DataTable systemsDT = SQLiteDB.GetDataFromCommand(command);
 
             foreach (DataRow row in systemsDT.Rows)
             {
@@ -889,7 +889,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += guid;
             command += "')";
 
-            DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPanelTypeFromRow(manTable.Rows[0]); }
             else
@@ -903,7 +903,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += PanelControllerTable.PanelID.Name + " = '" + guid;
             command += "')";
 
-            DataTable controllerDT = SQLiteDB.getDataFromCommand(command);
+            DataTable controllerDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
             { controllers.Add(getControllerFromRow(row)); }
 
@@ -924,7 +924,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
                 command += "')";
 
-                scopeDT = SQLiteDB.getDataFromCommand(command);
+                scopeDT = SQLiteDB.GetDataFromCommand(command);
                 foreach (DataRow row in scopeDT.Rows)
                 {
                     var networkConnection = getNetworkConnectionFromRow(row);
@@ -939,7 +939,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += ControllerConnectionTable.ControllerID.Name + " = '" + controller.Guid;
             command += "')";
 
-            scopeDT = SQLiteDB.getDataFromCommand(command);
+            scopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
             {
                 var subScopeConnection = getSubScopeConnectionFromRow(row);
@@ -961,7 +961,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             command += ioID;
             command += "'";
 
-            DataTable moduleTable = SQLiteDB.getDataFromCommand(command);
+            DataTable moduleTable = SQLiteDB.GetDataFromCommand(command);
             if (moduleTable.Rows.Count > 0)
             { return getPlaceholderIOModuleFromRow(moduleTable.Rows[0]); }
             else
@@ -974,7 +974,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.ID.Name + " in ";
             command += "(select " + BidMiscTable.MiscID.Name + " from " + BidMiscTable.TableName;
             command += ")";
-            DataTable miscDT = SQLiteDB.getDataFromCommand(command);
+            DataTable miscDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row));
@@ -992,7 +992,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             //command += guid;
             //command += "')";
 
-            //DataTable manTable = SQLiteDB.getDataFromCommand(command);
+            //DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             //if (manTable.Rows.Count > 0)
             //{ return getPanelTypeFromRow(manTable.Rows[0]); }
             //else
@@ -1057,9 +1057,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         {
             Guid subScopeID = new Guid(row[SubScopeTable.ID.Name].ToString());
             TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
-            subScopeToAdd.Name = row[SubScopeTable.Name.Name].ToString();
-            subScopeToAdd.Description = row[SubScopeTable.Description.Name].ToString();
-            //subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
+            assignValuePropertiesFromTable(subScopeToAdd, new TableInfo(new SubScopeTable()), row);
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
             getScopeChildren(subScopeToAdd);
             return subScopeToAdd;
@@ -1409,6 +1407,17 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
         }
         #endregion
         #endregion
+
+        private static void assignValuePropertiesFromTable(object item, TableInfo tableInfo, DataRow row)
+        {
+            foreach(TableField field in tableInfo.Fields)
+            {
+                if(field.Property.DeclaringType == item.GetType() && field.Property.SetMethod != null)
+                {
+                    field.Property.SetValue(item, row[field.Name]);
+                }
+            }
+        }
         
     }
 }

@@ -2,7 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
-using EstimatingUtilitiesLibrary.DatabaseHelpers;
+using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -28,8 +28,9 @@ namespace Tests
         {
             path = Path.GetTempFileName();
             bid = TestHelper.CreateTestBid();
-            DatabaseSaver.Save(bid, path);
-            bid = DatabaseLoader.Load(path) as TECBid;
+            DatabaseManager manager = new DatabaseManager(path);
+            manager.New(bid);
+            bid = manager.Load() as TECBid;
             ChangeWatcher watcher = new ChangeWatcher(bid);
             testStack = new DeltaStacker(watcher);
         }

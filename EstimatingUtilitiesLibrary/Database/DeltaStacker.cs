@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using EstimatingLibrary;
 
-namespace EstimatingUtilitiesLibrary
+namespace EstimatingUtilitiesLibrary.Database
 {
     public class DeltaStacker
     {
