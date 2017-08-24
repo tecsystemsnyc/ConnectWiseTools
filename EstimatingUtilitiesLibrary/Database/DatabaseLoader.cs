@@ -28,11 +28,11 @@ namespace EstimatingUtilitiesLibrary.Database
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
             var tableNames = DatabaseHelper.TableNames(SQLiteDB);
-            if (tableNames.Contains("TECBidInfo"))
+            if (tableNames.Contains("BidInfo"))
             {
                 workingScopeManager = loadBid();
             }
-            else if (tableNames.Contains("TECTemplatesInfo"))
+            else if (tableNames.Contains("TemplatesInfo"))
             {
                 workingScopeManager = loadTemplates();
             }
@@ -985,18 +985,16 @@ namespace EstimatingUtilitiesLibrary.Database
 
         static private TECManufacturer getPlaceholderManufacturer(Guid hardwareGuid)
         {
-            throw new NotImplementedException();
-            //string command = "select " + ManufacturerTable.ID.Name + " from " + ManufacturerTable.TableName + " where " + PanelTypeTable.ID.Name + " in ";
-            //command += "(select " + PanelPanelTypeTable.PanelTypeID.Name + " from " + PanelPanelTypeTable.TableName;
-            //command += " where " + PanelPanelTypeTable.PanelID.Name + " = '";
-            //command += guid;
-            //command += "')";
+            string command = "select " + HardwareManufacturerTable.ManufacturerID.Name + " from " + HardwareManufacturerTable.TableName;
+            command += " where " + HardwareManufacturerTable.HardwareID.Name + " = '";
+            command += hardwareGuid;
+            command += "'";
 
-            //DataTable manTable = SQLiteDB.GetDataFromCommand(command);
-            //if (manTable.Rows.Count > 0)
-            //{ return getPanelTypeFromRow(manTable.Rows[0]); }
-            //else
-            //{ return null; }
+            DataTable manTable = SQLiteDB.GetDataFromCommand(command);
+            if (manTable.Rows.Count > 0)
+            { return getPlaceholderManufacturerFromRow(manTable.Rows[0]); }
+            else
+            { return null; }
         }
 
         #endregion //Loading from DB Methods
@@ -1288,7 +1286,7 @@ namespace EstimatingUtilitiesLibrary.Database
             device.Description = "placeholder";
             return device;
         }
-        private static TECManufacturer getPlaceholderDeviceManufacturerFromRow(DataRow row)
+        private static TECManufacturer getPlaceholderManufacturerFromRow(DataRow row)
         {
             Guid guid = new Guid(row[HardwareManufacturerTable.ManufacturerID.Name].ToString());
             TECManufacturer man = new TECManufacturer(guid);

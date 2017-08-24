@@ -1293,6 +1293,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal static class AllBidTables
     {
         public static List<TableBase> Tables = new List<TableBase>() {
+            new MetadataTable(),
             new BidInfoTable(),
             new LaborConstantsTable(),
             new UserAdjustmentsTable(),
@@ -1346,7 +1347,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new SystemHierarchyTable(),
             new SystemMiscTable(),
             new TypicalInstanceTable(),
-            new BidParametersTable(),
             new BidMiscTable(),
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
@@ -1360,6 +1360,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static List<TableBase> Tables = new List<TableBase>()
         {
+            new MetadataTable(),
             new TemplatesInfoTable(),
             new LaborConstantsTable(),
             new SubcontractorConstantsTable(),
@@ -1412,6 +1413,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static List<object> Tables = new List<object>()
         {
+            new MetadataTable(),
             new BidInfoTable(),
             new TemplatesInfoTable(),
             new LaborConstantsTable(),
@@ -1460,7 +1462,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new ElectricalMaterialRatedCostTable(),
             new ControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
-            new BidParametersTable(),
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
             new SystemControllerTable(),
