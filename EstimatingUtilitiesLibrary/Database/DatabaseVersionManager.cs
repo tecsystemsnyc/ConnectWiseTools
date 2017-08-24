@@ -87,8 +87,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             foreach (DataRow row in dataTable.Rows)
             {
-                migrateData(row[tableString(originalVersion)] as string, row[fieldString(originalVersion)] as string,
+                if(row[fieldString(originalVersion)].ToString() != "NONE" || row[fieldString(updateVersion)].ToString() !="NONE")
+                {
+                    migrateData(row[tableString(originalVersion)] as string, row[fieldString(originalVersion)] as string,
                     tableMap[row[tableString(updateVersion)] as string], row[fieldString(updateVersion)] as string);
+                }
             }
         }
         static private void migrateFromTempTables(List<TableBase> tables, SQLiteDatabase db)

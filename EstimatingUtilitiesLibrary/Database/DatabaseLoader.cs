@@ -1008,37 +1008,14 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
             TECSystem system = new TECSystem(guid);
 
-            system.Name = row[SystemTable.Name.Name].ToString();
-            system.Description = row[SystemTable.Description.Name].ToString();
-            system.ProposeEquipment = row[SystemTable.ProposeEquipment.Name].ToString().ToInt(0).ToBool();
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
+            assignValuePropertiesFromTable(system, new SystemTable(), row);
             system.Controllers = getControllersInSystem(guid);
-            //watch.Stop();
-            //Console.WriteLine("getControllersInSystem: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
             system.Equipment = getEquipmentInSystem(guid);
-            //watch.Stop();
-            //Console.WriteLine("getEquipmentInSystem: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
             system.Panels = getPanelsInSystem(guid);
-            //watch.Stop();
-            //Console.WriteLine("getPanelsInSystem: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
             system.Instances = getChildrenSystems(guid);
-            //watch.Stop();
-            //Console.WriteLine("getChildrenSystems: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
             system.MiscCosts = getMiscInSystem(guid);
-            //watch.Stop();
-            //Console.WriteLine("getMiscInSystem: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
             system.ScopeBranches = getScopeBranchesInSystem(guid);
-            // watch.Stop();
-            // Console.WriteLine("getScopeBranchesInSystem: " + watch.ElapsedMilliseconds);
-            // watch = System.Diagnostics.Stopwatch.StartNew();
             getScopeChildren(system);
-            // watch.Stop();
-            // Console.WriteLine("getScopeChildren: " + watch.ElapsedMilliseconds);
 
             return system;
         }
@@ -1047,8 +1024,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid equipmentID = new Guid(row[EquipmentTable.ID.Name].ToString());
             TECEquipment equipmentToAdd = new TECEquipment(equipmentID);
-            equipmentToAdd.Name = row[EquipmentTable.Name.Name].ToString();
-            equipmentToAdd.Description = row[EquipmentTable.Description.Name].ToString();
+            assignValuePropertiesFromTable(equipmentToAdd, new EquipmentTable(), row);
             getScopeChildren(equipmentToAdd);
             equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID);
             return equipmentToAdd;
@@ -1057,7 +1033,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid subScopeID = new Guid(row[SubScopeTable.ID.Name].ToString());
             TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
-            assignValuePropertiesFromTable(subScopeToAdd, new TableInfo(new SubScopeTable()), row);
+            assignValuePropertiesFromTable(subScopeToAdd, new SubScopeTable(), row);
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
             getScopeChildren(subScopeToAdd);
             return subScopeToAdd;
@@ -1066,9 +1042,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
             TECPoint pointToAdd = new TECPoint(pointID);
-            pointToAdd.Label = row[PointTable.Name.Name].ToString();
-            pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
-            pointToAdd.Quantity = row[PointTable.Quantity.Name].ToString().ToInt();
+            assignValuePropertiesFromTable(pointToAdd, new PointTable(), row);
             return pointToAdd;
         }
         #endregion
@@ -1076,17 +1050,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECElectricalMaterial getConnectionTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTypeTable.ID.Name].ToString());
-            string name = row[ConnectionTypeTable.Name.Name].ToString();
-            string laborString = row[ConnectionTypeTable.Labor.Name].ToString();
-            string costString = row[ConnectionTypeTable.Cost.Name].ToString();
-
-            double cost = costString.ToDouble(0);
-            double labor = laborString.ToDouble(0);
-
             var outConnectionType = new TECElectricalMaterial(guid);
-            outConnectionType.Name = name;
-            outConnectionType.Cost = cost;
-            outConnectionType.Labor = labor;
+            assignValuePropertiesFromTable(outConnectionType, new ConnectionTypeTable(), row);
             getScopeChildren(outConnectionType);
             outConnectionType.RatedCosts = getRatedCostsInComponent(outConnectionType.Guid);
             return outConnectionType;
@@ -1094,13 +1059,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECElectricalMaterial getConduitTypeFromRow(DataRow row)
         {
             Guid conduitGuid = new Guid(row[ConduitTypeTable.ID.Name].ToString());
-            string name = row[ConduitTypeTable.Name.Name].ToString();
-            double cost = row[ConduitTypeTable.Cost.Name].ToString().ToDouble(0);
-            double labor = row[ConduitTypeTable.Labor.Name].ToString().ToDouble(0);
             var conduitType = new TECElectricalMaterial(conduitGuid);
-            conduitType.Name = name;
-            conduitType.Cost = cost;
-            conduitType.Labor = labor;
+            assignValuePropertiesFromTable(conduitType, new ConduitTypeTable(), row);
             getScopeChildren(conduitType);
             conduitType.RatedCosts = getRatedCostsInComponent(conduitType.Guid);
             return conduitType;
@@ -1109,18 +1069,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECCost getAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[AssociatedCostTable.ID.Name].ToString());
-            string name = row[AssociatedCostTable.Name.Name].ToString();
-            double cost = row[AssociatedCostTable.Cost.Name].ToString().ToDouble(0);
-            double labor = row[AssociatedCostTable.Labor.Name].ToString().ToDouble(0);
-            string costTypeString = row[AssociatedCostTable.Type.Name].ToString();
-
             var associatedCost = new TECCost(guid);
-
-            associatedCost.Name = name;
-            associatedCost.Cost = cost;
-            associatedCost.Labor = labor;
-            associatedCost.Type = UtilitiesMethods.StringToEnum(costTypeString, CostType.None);
-
+            assignValuePropertiesFromTable(associatedCost, new AssociatedCostTable(), row);
             return associatedCost;
         }
         private static TECDevice getDeviceFromRow(DataRow row)
@@ -1129,9 +1079,7 @@ namespace EstimatingUtilitiesLibrary.Database
             ObservableCollection<TECElectricalMaterial> connectionType = getConnectionTypesInDevice(deviceID);
             TECManufacturer manufacturer = getPlaceholderManufacturer(deviceID);
             TECDevice deviceToAdd = new TECDevice(deviceID, connectionType, manufacturer);
-            deviceToAdd.Name = row[DeviceTable.Name.Name].ToString();
-            deviceToAdd.Description = row[DeviceTable.Description.Name].ToString();
-            deviceToAdd.Cost = row[DeviceTable.Cost.Name].ToString().ToDouble();
+            assignValuePropertiesFromTable(deviceToAdd, new DeviceTable(), row);
             getScopeChildren(deviceToAdd);
             return deviceToAdd;
         }
@@ -1139,21 +1087,21 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid manufacturerID = new Guid(row[ManufacturerTable.ID.Name].ToString());
             var manufacturer = new TECManufacturer(manufacturerID);
-            manufacturer.Label = row[ManufacturerTable.Name.Name].ToString();
-            manufacturer.Multiplier = row[ManufacturerTable.Multiplier.Name].ToString().ToDouble(1);
+            assignValuePropertiesFromTable(manufacturer, new ManufacturerTable(), row);
             return manufacturer;
         }
         private static TECLabeled getLocationFromRow(DataRow row)
         {
             Guid locationID = new Guid(row[LocationTable.ID.Name].ToString());
             var location = new TECLabeled(locationID);
-            location.Label = row[LocationTable.Name.Name].ToString();
+            assignValuePropertiesFromTable(location, new LocationTable(), row);
+            location.Flavor = Flavor.Location;
             return location;
         }
         private static TECLabeled getTagFromRow(DataRow row)
         {
-            var tag = new TECLabeled(new Guid(row["TagID"].ToString()));
-            tag.Label = row["TagString"].ToString();
+            var tag = new TECLabeled(new Guid(row[TagTable.ID.Name].ToString()));
+            assignValuePropertiesFromTable(tag, new TagTable(), row);
             tag.Flavor = Flavor.Tag;
             return tag;
         }
@@ -1166,10 +1114,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[PanelTypeTable.ID.Name].ToString());
             TECPanelType panelType = new TECPanelType(guid, new TECManufacturer());
-
-            panelType.Name = row[PanelTypeTable.Name.Name].ToString();
-            panelType.Cost = row[PanelTypeTable.Cost.Name].ToString().ToDouble(0);
-            panelType.Labor = row[PanelTypeTable.Labor.Name].ToString().ToDouble(0);
+            assignValuePropertiesFromTable(panelType, new PanelTypeTable(), row);
 
             return panelType;
         }
@@ -1179,11 +1124,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
 
             TECIOModule module = new TECIOModule(guid, manufacturer);
-
-            module.Name = row[IOModuleTable.Name.Name].ToString();
-            module.Description = row[IOModuleTable.Description.Name].ToString();
-            module.Cost = row[IOModuleTable.Cost.Name].ToString().ToDouble(0);
-            module.IOPerModule = row[IOModuleTable.IOPerModule.Name].ToString().ToInt(1);
+            assignValuePropertiesFromTable(module, new IOModuleTable(), row);
             return module;
         }
 
@@ -1193,7 +1134,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid scopeBranchID = new Guid(row[ScopeBranchTable.ID.Name].ToString());
             TECScopeBranch branch = new TECScopeBranch(scopeBranchID);
-            branch.Label = row[ScopeBranchTable.Label.Name].ToString();
+            assignValuePropertiesFromTable(branch, new ScopeBranchTable(), row);
             branch.Branches = getChildBranchesInBranch(scopeBranchID);
             return branch;
         }
@@ -1201,7 +1142,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid noteID = new Guid(row[NoteTable.ID.Name].ToString());
             var note = new TECLabeled(noteID);
-            note.Label = row["NoteText"].ToString();
+            assignValuePropertiesFromTable(note, new NoteTable(), row);
             note.Flavor = Flavor.Note;
             return note;
         }
@@ -1209,7 +1150,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid exclusionId = new Guid(row["ExclusionID"].ToString());
             TECLabeled exclusion = new TECLabeled(exclusionId);
-            exclusion.Label = row["ExclusionText"].ToString();
+            assignValuePropertiesFromTable(exclusion, new ExclusionTable(), row);
             exclusion.Flavor = Flavor.Exclusion;
             return exclusion;
         }
@@ -1222,8 +1163,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECPanelType type = getPanelTypeInPanel(guid);
             TECPanel panel = new TECPanel(guid, type);
 
-            panel.Name = row[PanelTable.Name.Name].ToString();
-            panel.Description = row[PanelTable.Description.Name].ToString();
+            assignValuePropertiesFromTable(panel, new PanelTable(), row);
             panel.Controllers = getControllersInPanel(guid);
             getScopeChildren(panel);
 
@@ -1234,9 +1174,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
             TECController controller = new TECController(guid, getTypeInController(guid));
 
-            controller.Name = row[ControllerTable.Name.Name].ToString();
-            controller.Description = row[ControllerTable.Description.Name].ToString();
-            controller.NetworkType = UtilitiesMethods.StringToEnum<NetworkType>(row[ControllerTable.Type.Name].ToString(), 0);
+            assignValuePropertiesFromTable(controller, new ControllerTable(), row);
             getScopeChildren(controller);
             controller.ChildrenConnections = getConnectionsInController(controller);
             return controller;
@@ -1245,8 +1183,8 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[IOTable.ID.Name].ToString());
             var io = new TECIO(guid);
+            assignValuePropertiesFromTable(io, new IOTable(), row);
             io.Type = TECIO.convertStringToType(row[IOTable.IOType.Name].ToString());
-            io.Quantity = row[IOTable.Quantity.Name].ToString().ToInt();
             io.IOModule = getModuleInIO(guid);
             return io;
         }
@@ -1254,8 +1192,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[SubScopeConnectionTable.ID.Name].ToString());
             TECSubScopeConnection connection = new TECSubScopeConnection(guid);
-            connection.Length = row[SubScopeConnectionTable.Length.Name].ToString().ToDouble();
-            connection.ConduitLength = row[SubScopeConnectionTable.ConduitLength.Name].ToString().ToDouble(0);
+            assignValuePropertiesFromTable(connection, new SubScopeConnectionTable(), row);
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid);
             return connection;
@@ -1264,9 +1201,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[NetworkConnectionTable.ID.Name].ToString());
             TECNetworkConnection connection = new TECNetworkConnection(guid);
-            connection.Length = row[NetworkConnectionTable.Length.Name].ToString().ToDouble();
-            connection.ConduitLength = row[NetworkConnectionTable.ConduitLength.Name].ToString().ToDouble(0);
-            connection.IOType = UtilitiesMethods.StringToEnum<IOType>(row[NetworkConnectionTable.IOType.Name].ToString());
+            assignValuePropertiesFromTable(connection, new NetworkConnectionTable(), row);
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.ChildrenControllers = getControllersInNetworkConnection(connection.Guid);
             connection.ConnectionType = getConnectionTypeInNetworkConnection(connection.Guid);
@@ -1279,13 +1214,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
             TECMisc cost = new TECMisc(guid);
-
-            cost.Name = row[MiscTable.Name.Name].ToString();
-            cost.Cost = row[MiscTable.Cost.Name].ToString().ToDouble(0);
-            cost.Labor = row[MiscTable.Labor.Name].ToString().ToDouble(0);
-            cost.Quantity = row[MiscTable.Quantity.Name].ToString().ToInt(1);
-            string costTypeString = row[AssociatedCostTable.Type.Name].ToString();
-            cost.Type = UtilitiesMethods.StringToEnum(costTypeString, CostType.None);
+            assignValuePropertiesFromTable(cost, new MiscTable(), row);
             getScopeChildren(cost);
             return cost;
         }
@@ -1293,17 +1222,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[BidParametersTable.ID.Name].ToString());
             TECBidParameters paramters = new TECBidParameters(guid);
-
-            paramters.Escalation = row[BidParametersTable.Escalation.Name].ToString().ToDouble(0);
-            paramters.Overhead = row[BidParametersTable.Overhead.Name].ToString().ToDouble(0);
-            paramters.Profit = row[BidParametersTable.Profit.Name].ToString().ToDouble(0);
-            paramters.SubcontractorMarkup = row[BidParametersTable.SubcontractorMarkup.Name].ToString().ToDouble(0);
-            paramters.SubcontractorEscalation = row[BidParametersTable.SubcontractorEscalation.Name].ToString().ToDouble(0);
-
-            paramters.IsTaxExempt = row[BidParametersTable.IsTaxExempt.Name].ToString().ToInt(0).ToBool();
-            paramters.RequiresBond = row[BidParametersTable.RequiresBond.Name].ToString().ToInt(0).ToBool();
-            paramters.RequiresWrapUp = row[BidParametersTable.RequiresWrapUp.Name].ToString().ToInt(0).ToBool();
-
+            assignValuePropertiesFromTable(paramters, new BidParametersTable(), row);
             return paramters;
         }
 
@@ -1408,13 +1327,33 @@ namespace EstimatingUtilitiesLibrary.Database
         #endregion
         #endregion
 
-        private static void assignValuePropertiesFromTable(object item, TableInfo tableInfo, DataRow row)
+        private static void assignValuePropertiesFromTable(object item, TableBase table, DataRow row)
         {
+            TableInfo tableInfo = new TableInfo(table);
             foreach(TableField field in tableInfo.Fields)
             {
                 if(field.Property.DeclaringType == item.GetType() && field.Property.SetMethod != null)
                 {
-                    field.Property.SetValue(item, row[field.Name]);
+                    if(field.Property.PropertyType == typeof(string))
+                    {
+                        field.Property.SetValue(item, row[field.Name].ToString());
+                    }
+                    else if (field.Property.PropertyType == typeof(bool))
+                    {
+                        field.Property.SetValue(item, row[field.Name].ToString().ToInt(0).ToBool());
+                    }
+                    else if (field.Property.PropertyType == typeof(int))
+                    {
+                        field.Property.SetValue(item, row[field.Name].ToString().ToInt());
+                    }
+                    else if (field.Property.PropertyType == typeof(double))
+                    {
+                        field.Property.SetValue(item, row[field.Name].ToString().ToDouble(0));
+                    }
+                    else if (field.Property.PropertyType == typeof(Enum))
+                    {
+                        field.Property.SetValue(item, UtilitiesMethods.StringToEnum(row[field.Name].ToString(), 0));
+                    }
                 }
             }
         }
