@@ -113,9 +113,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CostChangedTests.cs" />
+    <Compile Include="CostTestingUtilities.cs" />
     <Compile Include="EstimateBuilderTests.cs" />
     <Compile Include="EstimatorTests.cs" />
     <Compile Include="IntegratedSaveLoadTests.cs" />
+    <Compile Include="ItemSummaryVMTests.cs" />
     <Compile Include="LinkingTests.cs" />
     <Compile Include="LoadBidTests.cs" />
     <Compile Include="LoadTemplatesTests.cs" />
@@ -134,7 +136,7 @@
     <Compile Include="SaveTemplateTests.cs" />
     <Compile Include="BidStackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SummaryVMTests.cs" />
+    <Compile Include="MaterialSummaryVMTests.cs" />
     <Compile Include="TemplateStackTests.cs" />
     <Compile Include="TestDBHelper.cs" />
     <Compile Include="TestHelper.cs" />
