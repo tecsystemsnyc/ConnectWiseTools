@@ -6,7 +6,7 @@ using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
 using System.IO;
 using EstimatingLibrary.Utilities;
-using EstimatingUtilitiesLibrary.DatabaseHelpers;
+using EstimatingUtilitiesLibrary.Database;
 
 namespace Tests
 {
@@ -70,10 +70,10 @@ namespace Tests
             TECBid bid = TestHelper.CreateTestBid();
 
             var path = Path.GetTempFileName();
-            
-            DatabaseSaver.Save(bid, path);
-            
-            bid = DatabaseLoader.Load(path) as TECBid;
+
+            DatabaseManager manager = new DatabaseManager(path);
+            manager.New(bid);
+            bid = manager.Load() as TECBid;
             var watcher = new ChangeWatcher(bid);
 
             DeltaStacker stack = new DeltaStacker(watcher);

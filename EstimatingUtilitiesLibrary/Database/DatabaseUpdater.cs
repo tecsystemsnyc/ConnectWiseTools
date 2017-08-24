@@ -6,15 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingUtilitiesLibrary
+namespace EstimatingUtilitiesLibrary.Database
 {
 
-    public static class DatabaseUpdater
+    internal static class DatabaseUpdater
     {
         public static void Update(string dataBasePath, List<UpdateItem> updates)
         {
             SQLiteDatabase db = new SQLiteDatabase(dataBasePath);
-            db.nonQueryCommand("BEGIN TRANSACTION");
+            db.NonQueryCommand("BEGIN TRANSACTION");
             foreach(UpdateItem item in updates)
             {
                 if(item.Change == Change.Remove)
@@ -31,7 +31,7 @@ namespace EstimatingUtilitiesLibrary
                 }
             }
 
-            db.nonQueryCommand("END TRANSACTION");
+            db.NonQueryCommand("END TRANSACTION");
             db.Connection.Close();
         }
 

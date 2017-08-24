@@ -5,17 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingUtilitiesLibrary.DatabaseHelpers
+namespace EstimatingUtilitiesLibrary.Database
 {
-    public class DatabaseSaver
+    internal class DatabaseNewStacker
     {
-
-        public static void Save(TECScopeManager scopeManager, string path)
+        public static List<UpdateItem> NewStack(TECScopeManager scopeManager)
         {
-            throw new NotImplementedException();
+            if(scopeManager is TECBid bid)
+            {
+                return NewStack(bid);
+            } else if (scopeManager is TECTemplates templates)
+            {
+                return NewStack(templates);
+            } else
+            {
+                throw new NotSupportedException();
+            }
         }
-
-        public static void Save(TECBid bid, string path)
+        public static List<UpdateItem> NewStack(TECBid bid)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             saveStack.AddRange(scopeManagerSaveStack(bid));
@@ -45,23 +52,21 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 saveStack.AddRange(DeltaStacker.AddStack(bid, scopeBranch));
                 saveStack.AddRange(scopeBranchChildrenSaveStack(scopeBranch));
             }
+            return saveStack;
         }
-
-
-        public static void Save(TECTemplates templates, string path)
+        public static List<UpdateItem> NewStack(TECTemplates templates)
         {
             throw new NotImplementedException();
         }
 
-        public static List<UpdateItem> scopeManagerSaveStack(TECScopeManager scopeManager)
+        private static List<UpdateItem> scopeManagerSaveStack(TECScopeManager scopeManager)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             saveStack.AddRange(DeltaStacker.AddStack(scopeManager, scopeManager.Labor));
             saveStack.AddRange(catalogsSaveStack(scopeManager.Catalogs));
             return saveStack;
         }
-
-        public static List<UpdateItem> catalogsSaveStack(TECCatalogs catalogs)
+        private static List<UpdateItem> catalogsSaveStack(TECCatalogs catalogs)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             saveStack.AddRange(catalogsHardwareCollectionSaveStack(catalogs, catalogs.Devices));
@@ -75,7 +80,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             return saveStack;
 
         }
-        public static List<UpdateItem> catalogsHardwareCollectionSaveStack(TECCatalogs catalogs, IEnumerable<TECHardware> hardware)
+        private static List<UpdateItem> catalogsHardwareCollectionSaveStack(TECCatalogs catalogs, IEnumerable<TECHardware> hardware)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             foreach(TECHardware item in hardware)
@@ -85,7 +90,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             return saveStack;
         }
-        public static List<UpdateItem> electricalMaterialCollectionSaveStack(TECCatalogs catalogs, IEnumerable<TECElectricalMaterial> materials)
+        private static List<UpdateItem> electricalMaterialCollectionSaveStack(TECCatalogs catalogs, IEnumerable<TECElectricalMaterial> materials)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             foreach (TECElectricalMaterial item in materials)
@@ -95,8 +100,7 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             return saveStack;
         }
-
-        public static List<UpdateItem> labeledSaveStack(TECObject parent, IEnumerable<TECLabeled> labeled)
+        private static List<UpdateItem> labeledSaveStack(TECObject parent, IEnumerable<TECLabeled> labeled)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             foreach(TECLabeled item in labeled)
@@ -105,7 +109,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             return saveStack;
         }
-
         private static List<UpdateItem> electricalMaterialChildrenSaveStack(TECElectricalMaterial item)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -116,7 +119,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             saveStack.AddRange(scopeChildrenSaveStack(item));
             return saveStack;
         }
-
         private static List<UpdateItem> systemChildrenSaveStack(TECSystem item)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -148,7 +150,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             return saveStack;
         }
-
         private static IEnumerable<UpdateItem> panelChildrenSaveStack(TECPanel panel)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -160,7 +161,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             saveStack.AddRange(scopeChildrenSaveStack(panel));
             return saveStack;
         }
-
         private static List<UpdateItem> controllerChildrenSaveStack(TECController controller)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -180,7 +180,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             return saveStack;
 
         }
-
         private static List<UpdateItem> scopeBranchChildrenSaveStack(TECScopeBranch scopeBranch)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -191,7 +190,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             return saveStack;
         }
-
         private static List<UpdateItem> subscopeConnectionChildrenSaveStack(TECSubScopeConnection subConnection)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -199,7 +197,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             return saveStack;
 
         }
-
         private static List<UpdateItem> networkConnectionChildrenSaveStack(TECNetworkConnection netConnection)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -209,7 +206,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             return saveStack;
         }
-
         private static List<UpdateItem> equipmentChildrenSaveStack(TECEquipment item)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -222,7 +218,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             return saveStack;
 
         }
-
         private static List<UpdateItem> subscopeChildrenSaveStack(TECSubScope item)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -237,7 +232,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             saveStack.AddRange(locatedChildrenSaveStack(item));
             return saveStack;
         }
-        
         private static List<UpdateItem> scopeChildrenSaveStack(TECScope item)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -248,7 +242,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             }
             return saveStack;
         }
-
         private static List<UpdateItem> locatedChildrenSaveStack(TECLocated item)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
@@ -259,7 +252,6 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
             saveStack.AddRange(scopeChildrenSaveStack(item));
             return saveStack;
         }
-
         private static List<UpdateItem> hardwareChildrenSaveStack(TECHardware item)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();

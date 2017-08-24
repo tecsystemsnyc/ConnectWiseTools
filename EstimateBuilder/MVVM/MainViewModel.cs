@@ -38,7 +38,7 @@ namespace EstimateBuilder.MVVM
             buildTitleString();
             workingFileParameters = EstimateFileParameters;
 
-            ToggleTemplatesCommand = new RelayCommand(ToggleTemplatesExecute);
+            ToggleTemplatesCommand = new RelayCommand(toggleTemplatesExecute);
             setupMenuVM();
         }
 
@@ -163,7 +163,7 @@ namespace EstimateBuilder.MVVM
         private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
         {
             ScopeEditorVM = new ScopeEditorVM(bid, templates);
-            ScopeEditorVM.PropertyChanged += ScopeEditorVM_PropertyChanged;
+            ScopeEditorVM.PropertyChanged += scopeEditorVM_PropertyChanged;
             if (TemplatesHidden)
             {
                 ScopeEditorVM.TemplatesVisibility = Visibility.Hidden;
@@ -206,7 +206,7 @@ namespace EstimateBuilder.MVVM
         #endregion
 
         #region Commands Methods
-        private void ToggleTemplatesExecute()
+        private void toggleTemplatesExecute()
         {
             if (TemplatesHidden)
             {
@@ -248,7 +248,7 @@ namespace EstimateBuilder.MVVM
         #endregion
 
         #region Event Handlers
-        private void SettingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void settingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TemplatesHidden")
             {
@@ -259,7 +259,7 @@ namespace EstimateBuilder.MVVM
                 TemplatesFilePath = SettingsVM.TemplatesLoadPath;
             }
         }
-        private void ScopeEditorVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void scopeEditorVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TemplatesVisibility")
             {

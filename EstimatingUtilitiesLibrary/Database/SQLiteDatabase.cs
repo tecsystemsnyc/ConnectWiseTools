@@ -9,7 +9,7 @@ using System.IO;
 using System.Windows;
 using DebugLibrary;
 
-namespace EstimatingUtilitiesLibrary
+namespace EstimatingUtilitiesLibrary.Database
 {
     public class SQLiteDatabase
     {
@@ -54,7 +54,7 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public void overwriteFile()
+        public void OverwriteFile()
         {
             Connection.Close();
             File.Delete(DBPath);
@@ -132,7 +132,7 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
-                nonQueryCommand(command);
+                NonQueryCommand(command);
                 return true;
             }
             catch (Exception fail)
@@ -159,7 +159,7 @@ namespace EstimatingUtilitiesLibrary
 
             try
             {
-                nonQueryCommand(commandString);
+                NonQueryCommand(commandString);
                 return true;
             }
             catch (Exception e)
@@ -169,13 +169,13 @@ namespace EstimatingUtilitiesLibrary
             }
         }
 
-        public void nonQueryCommand(string commandText)
+        public void NonQueryCommand(string commandText)
         {
             SQLiteCommand command = new SQLiteCommand(commandText, Connection);
             command.ExecuteNonQuery();
         }
 
-        public DataTable getDataFromTable(string tableName, params string[] fields)
+        public DataTable GetDataFromTable(string tableName, params string[] fields)
         {
             DataTable data = new DataTable();
             string fieldString;
@@ -199,12 +199,12 @@ namespace EstimatingUtilitiesLibrary
             string query = "select " + fieldString;
             query += "from " + tableName;
 
-            data = getDataFromCommand(query);
+            data = GetDataFromCommand(query);
 
             return data;
         }
 
-        public DataTable getDataFromCommand(string commandText)
+        public DataTable GetDataFromCommand(string commandText)
         {
             DataTable data = new DataTable();
             SQLiteCommand command = new SQLiteCommand(commandText, Connection);

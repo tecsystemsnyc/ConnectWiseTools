@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingUtilitiesLibrary.DatabaseHelpers
+namespace EstimatingUtilitiesLibrary.Database
 {
-    public class DatabaseGenerator
+    internal class DatabaseGenerator
     {
         public static void CreateBidDatabase(string path)
         {
             var db = new SQLiteDatabase(path);
-            db.nonQueryCommand("BEGIN TRANSACTION");
+            db.NonQueryCommand("BEGIN TRANSACTION");
             createAllBidTables(db);
-            db.nonQueryCommand("END TRANSACTION");
+            db.NonQueryCommand("END TRANSACTION");
             db.Connection.Close();
         }
         public static void CreateTemplateDatabase(string path)
         {
             var db = new SQLiteDatabase(path);
-            db.nonQueryCommand("BEGIN TRANSACTION");
+            db.NonQueryCommand("BEGIN TRANSACTION");
             createAllTemplateTables(db);
-            db.nonQueryCommand("END TRANSACTION");
+            db.NonQueryCommand("END TRANSACTION");
             db.Connection.Close();
         }
 
@@ -51,9 +51,9 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 { createString += ")"; }
             }
             createString += ")";
-            db.nonQueryCommand(createString);
+            db.NonQueryCommand(createString);
         }
-        public static void CreateTempTableFromDefinition(TableBase table, SQLiteDatabase db)
+        public static string CreateTempTableFromDefinition(TableBase table, SQLiteDatabase db)
         {
             var tableInfo = new TableInfo(table);
             string tableName = "temp_" + tableInfo.Name;
@@ -78,7 +78,8 @@ namespace EstimatingUtilitiesLibrary.DatabaseHelpers
                 { createString += ")"; }
             }
             createString += ")";
-            db.nonQueryCommand(createString);
+            db.NonQueryCommand(createString);
+            return tableName;
         }
         static private void createAllBidTables(SQLiteDatabase db)
         {

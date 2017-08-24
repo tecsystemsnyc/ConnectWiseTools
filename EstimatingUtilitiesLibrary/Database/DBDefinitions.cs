@@ -7,18 +7,29 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingUtilitiesLibrary
+namespace EstimatingUtilitiesLibrary.Database
 {
     #region Table Definitions
     #region Object Tables
-    public class BidInfoTable : TableBase
+    internal class MetadataTable : TableBase
+    {
+        public static new string TableName = "Metadata";
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField Version = new TableField("Version", "TEXT", HelperType.GetProperty("DBVersion"));
+
+        public static new List<TableField> PrimaryKey = new List<TableField>() {
+            Version
+        };
+    }
+
+    internal class BidInfoTable : TableBase
     {
         public static new string TableName = "BidInfo";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECBid), 0);
 
         public static Type HelperType = typeof(HelperProperties);
 
-        public static TableField DBVersion = new TableField("DBVersion", "TEXT", HelperType.GetProperty("DBVersion"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.Type.GetProperty("Guid"));
         public static TableField Number = new TableField("Number", "TEXT", ObjectType.Type.GetProperty("BidNumber"));
@@ -35,7 +46,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class TemplatesInfoTable : TableBase
+    internal class TemplatesInfoTable : TableBase
     {
         public static new string TableName = "TemplatesInfo";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECTemplates), 0);
@@ -55,7 +66,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class BidParametersTable : TableBase
+    internal class BidParametersTable : TableBase
     {
         public static new string TableName = "Parameters";
         public static FlavoredType ParameterType = new FlavoredType(typeof(TECBidParameters), 0);
@@ -82,7 +93,7 @@ namespace EstimatingUtilitiesLibrary
             ParameterType
         };
     }
-    public class LaborConstantsTable : TableBase
+    internal class LaborConstantsTable : TableBase
     {
         public static new string TableName = "TECLaborConst";
         public static FlavoredType LaborType = new FlavoredType(typeof(TECLabor), 0);
@@ -114,7 +125,7 @@ namespace EstimatingUtilitiesLibrary
             LaborType
         };
     }
-    public class SubcontractorConstantsTable : TableBase
+    internal class SubcontractorConstantsTable : TableBase
     {
         public static new string TableName = "TECSubcontractorConst";
         public static FlavoredType LaborType = new FlavoredType(typeof(TECLabor), 0);
@@ -140,7 +151,7 @@ namespace EstimatingUtilitiesLibrary
             LaborType
         };
     }
-    public class UserAdjustmentsTable : TableBase
+    internal class UserAdjustmentsTable : TableBase
     {
         public static new string TableName = "TECUserAdjustments";
         public static FlavoredType BidType = new FlavoredType( typeof(TECBid), 0);
@@ -166,7 +177,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class NoteTable : TableBase
+    internal class NoteTable : TableBase
     {
         public static new string TableName = "Note";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECLabeled), Flavor.Note);
@@ -184,7 +195,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ExclusionTable : TableBase
+    internal class ExclusionTable : TableBase
     {
         public static new string TableName = "Exclusion";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECLabeled), Flavor.Exclusion);
@@ -203,7 +214,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ScopeBranchTable : TableBase
+    internal class ScopeBranchTable : TableBase
     {
         public static new string TableName = "ScopeBranch";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECScopeBranch), 0);
@@ -220,7 +231,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class SystemTable : TableBase
+    internal class SystemTable : TableBase
     {
         public static new string TableName = "System";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECSystem), 0);
@@ -239,7 +250,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class EquipmentTable : TableBase
+    internal class EquipmentTable : TableBase
     {
         public static new string TableName = "Equipment";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECEquipment), 0);
@@ -257,7 +268,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class SubScopeTable : TableBase
+    internal class SubScopeTable : TableBase
     {
         public static new string TableName = "SubScope";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECSubScope), 0);
@@ -275,7 +286,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class DeviceTable : CatalogTableBase
+    internal class DeviceTable : CatalogTableBase
     {
         public static new string TableName = "Device";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECDevice), 0);
@@ -294,7 +305,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class PointTable : TableBase
+    internal class PointTable : TableBase
     {
         public static new string TableName = "Point";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECPoint), 0);
@@ -313,7 +324,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class TagTable : CatalogTableBase
+    internal class TagTable : CatalogTableBase
     {
         public static new string TableName = "Tag";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECLabeled), Flavor.Tag);
@@ -330,7 +341,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ManufacturerTable : CatalogTableBase
+    internal class ManufacturerTable : CatalogTableBase
     {
         public static new string TableName = "Manufacturer";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECManufacturer), 0);
@@ -348,7 +359,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class LocationTable : CatalogTableBase
+    internal class LocationTable : CatalogTableBase
     {
         public static new string TableName = "Location";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECLabeled), Flavor.Location);
@@ -366,7 +377,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ConnectionTypeTable : CatalogTableBase
+    internal class ConnectionTypeTable : CatalogTableBase
     {
         public static new string TableName = "Connectiontype";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECElectricalMaterial).BaseType, Flavor.Wire);
@@ -386,7 +397,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ConduitTypeTable : CatalogTableBase
+    internal class ConduitTypeTable : CatalogTableBase
     {
         public static new string TableName = "ConduitType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECElectricalMaterial), Flavor.Conduit);
@@ -406,7 +417,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class AssociatedCostTable : CatalogTableBase
+    internal class AssociatedCostTable : CatalogTableBase
     {
         public static new string TableName = "AssociatedCost";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECCost), 0);
@@ -426,7 +437,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class SubScopeConnectionTable : TableBase
+    internal class SubScopeConnectionTable : TableBase
     {
         public static new string TableName = "SubScopeConnection";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECSubScopeConnection), 0);
@@ -443,7 +454,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class NetworkConnectionTable : TableBase
+    internal class NetworkConnectionTable : TableBase
     {
         public static new string TableName = "NetworkConnection";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECNetworkConnection), 0);
@@ -461,7 +472,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ControllerTable : TableBase
+    internal class ControllerTable : TableBase
     {
         public static new string TableName = "Controller";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECController), 0);
@@ -479,7 +490,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class MiscTable : TableBase
+    internal class MiscTable : TableBase
     {
         public static new string TableName = "Misc";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECMisc), 0);
@@ -501,7 +512,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class PanelTypeTable : CatalogTableBase
+    internal class PanelTypeTable : CatalogTableBase
     {
         public static new string TableName = "PanelType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECPanelType), 0);
@@ -521,7 +532,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class PanelTable : TableBase
+    internal class PanelTable : TableBase
     {
         public static new string TableName = "Panel";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECPanel), 0);
@@ -540,7 +551,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class IOModuleTable : CatalogTableBase
+    internal class IOModuleTable : CatalogTableBase
     {
         public static new string TableName = "IOModule";
         public static FlavoredType IOModuleType = new FlavoredType(typeof(TECIOModule), 0);
@@ -562,7 +573,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class IOTable : TableBase
+    internal class IOTable : TableBase
     {
         public static new string TableName = "IO";
         public static FlavoredType IOObjectType = new FlavoredType(typeof(TECIO), 0);
@@ -579,7 +590,7 @@ namespace EstimatingUtilitiesLibrary
             IOObjectType
         };
     }
-    public class ControllerTypeTable : TableBase
+    internal class ControllerTypeTable : TableBase
     {
         public static new string TableName = "ControllerType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECControllerType), 0);
@@ -600,7 +611,7 @@ namespace EstimatingUtilitiesLibrary
             ObjectType
         };
     }
-    public class ValveTable : TableBase
+    internal class ValveTable : TableBase
     {
         public static new string TableName = "Valve";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECValve), 0);
@@ -627,7 +638,7 @@ namespace EstimatingUtilitiesLibrary
     #endregion
 
     #region Relationship Tables
-    public class BidLaborTable : TableBase
+    internal class BidLaborTable : TableBase
     {
         public static new string TableName = "BidLabor";
         public static FlavoredType BidType = new FlavoredType(typeof(TECBid), 0);
@@ -648,7 +659,7 @@ namespace EstimatingUtilitiesLibrary
             LaborType
         };
     }
-    public class BidScopeBranchTable : TableBase
+    internal class BidScopeBranchTable : TableBase
     {
         public static new string TableName = "BidScopeBranch";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECScopeBranch), 0);
@@ -669,7 +680,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class BidMiscTable : TableBase
+    internal class BidMiscTable : TableBase
     {
         public static new string TableName = "BidMisc";
         public static FlavoredType BidType = new FlavoredType(typeof(TECBid), 0);
@@ -690,7 +701,7 @@ namespace EstimatingUtilitiesLibrary
             CostType
         };
     }
-    public class ControllerTypeIOTable : TableBase
+    internal class ControllerTypeIOTable : TableBase
     {
         public static new string TableName = "ControllerTypeIO";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECControllerType), 0);
@@ -709,7 +720,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class HardwareManufacturerTable : TableBase
+    internal class HardwareManufacturerTable : TableBase
     {
         public static new string TableName = "HardwareManufacturer";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECHardware), 0);
@@ -728,7 +739,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class IOIOModuleTable : TableBase
+    internal class IOIOModuleTable : TableBase
     {
         public static new string TableName = "IOModuleIO";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECIOModule), 0);
@@ -747,7 +758,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ControllerConnectionTable : TableBase
+    internal class ControllerConnectionTable : TableBase
     {
         public static new string TableName = "ControllerConnection";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECController), 0);
@@ -766,7 +777,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ScopeBranchHierarchyTable : TableBase
+    internal class ScopeBranchHierarchyTable : TableBase
     {
         public static new string TableName = "ScopeBranchHierarchy";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECScopeBranch), 0);
@@ -786,7 +797,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class BidSystemTable : IndexedRelationTableBase
+    internal class BidSystemTable : IndexedRelationTableBase
     {
         public static new string TableName = "BidSystem";
         public static FlavoredType SystemType = new FlavoredType(typeof(TECSystem), 0);
@@ -809,7 +820,7 @@ namespace EstimatingUtilitiesLibrary
             SystemType
         };
     }
-    public class SystemEquipmentTable : IndexedRelationTableBase
+    internal class SystemEquipmentTable : IndexedRelationTableBase
     {
         public static new string TableName = "SystemEquipment";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECSystem), 0);
@@ -832,7 +843,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class EquipmentSubScopeTable : IndexedRelationTableBase
+    internal class EquipmentSubScopeTable : IndexedRelationTableBase
     {
         public static new string TableName = "EquipmentSubScope";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECEquipment), 0);
@@ -855,7 +866,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class SubScopeDeviceTable : IndexedRelationTableBase
+    internal class SubScopeDeviceTable : IndexedRelationTableBase
     {
         public static new string TableName = "SubScopeDevice";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECSubScope), 0);
@@ -879,7 +890,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class SubScopePointTable : IndexedRelationTableBase
+    internal class SubScopePointTable : IndexedRelationTableBase
     {
         public static new string TableName = "SubScopePoint";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECSubScope), 0);
@@ -901,7 +912,7 @@ namespace EstimatingUtilitiesLibrary
         };
 
     }
-    public class ScopeTagTable : TableBase
+    internal class ScopeTagTable : TableBase
     {
         public static new string TableName = "ScopeTag";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECScope), 0);
@@ -920,7 +931,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class DeviceConnectionTypeTable : IndexedRelationTableBase
+    internal class DeviceConnectionTypeTable : IndexedRelationTableBase
     {
         public static new string TableName = "DeviceConnectionType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECDevice), 0);
@@ -944,7 +955,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ScopeLocationTable : TableBase
+    internal class ScopeLocationTable : TableBase
     {
         public static new string TableName = "ScopeLocation";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECScope), 0);
@@ -963,7 +974,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ScopeAssociatedCostTable : IndexedRelationTableBase
+    internal class ScopeAssociatedCostTable : IndexedRelationTableBase
     {
         public static new string TableName = "ScopeAssociatedCost";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECScope), 0);
@@ -986,7 +997,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ElectricalMaterialRatedCostTable : IndexedRelationTableBase
+    internal class ElectricalMaterialRatedCostTable : IndexedRelationTableBase
     {
         public static new string TableName = "ElectricalMaterialRatedCost";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECElectricalMaterial), 0);
@@ -1009,7 +1020,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class ControllerControllerTypeTable : TableBase
+    internal class ControllerControllerTypeTable : TableBase
     {
         public static new string TableName = "ControllerControllerType";
         public static FlavoredType ControllerType = new FlavoredType(typeof(TECController), 0);
@@ -1028,7 +1039,7 @@ namespace EstimatingUtilitiesLibrary
             TypeType
         };
     }
-    public class ConnectionConduitTypeTable : TableBase
+    internal class ConnectionConduitTypeTable : TableBase
     {
         public static new string TableName = "ConnectionConduitType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECConnection), 0);
@@ -1048,7 +1059,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class NetworkConnectionConnectionTypeTable : TableBase
+    internal class NetworkConnectionConnectionTypeTable : TableBase
     {
         public static new string TableName = "NetworkConnectionConnectionType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECNetworkConnection), 0);
@@ -1067,7 +1078,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class NetworkConnectionControllerTable : TableBase
+    internal class NetworkConnectionControllerTable : TableBase
     {
         public static new string TableName = "NetworkConnectionController";
         public static FlavoredType ConnectionType = new FlavoredType(typeof(TECNetworkConnection), 0);
@@ -1086,7 +1097,7 @@ namespace EstimatingUtilitiesLibrary
             ControllerType
         };
     }
-    public class SubScopeConnectionChildrenTable : TableBase
+    internal class SubScopeConnectionChildrenTable : TableBase
     {
         public static new string TableName = "SubScopeConnectionChild";
         public static FlavoredType ConnectionType = new FlavoredType(typeof(TECSubScopeConnection), 0);
@@ -1106,7 +1117,7 @@ namespace EstimatingUtilitiesLibrary
             ChildType
         };
     }
-    public class PanelPanelTypeTable : TableBase
+    internal class PanelPanelTypeTable : TableBase
     {
         public static new string TableName = "PanelPanelType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECPanel), 0);
@@ -1126,7 +1137,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class PanelControllerTable : TableBase
+    internal class PanelControllerTable : TableBase
     {
         public static new string TableName = "PanelController";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECPanel), 0);
@@ -1145,7 +1156,7 @@ namespace EstimatingUtilitiesLibrary
             ReferenceType
         };
     }
-    public class SystemControllerTable : TableBase
+    internal class SystemControllerTable : TableBase
     {
         public static new string TableName = "SystemController";
         public static FlavoredType SystemType = new FlavoredType(typeof(TECSystem), 0);
@@ -1164,7 +1175,7 @@ namespace EstimatingUtilitiesLibrary
             ControllerType
         };
     }
-    public class SystemPanelTable : TableBase
+    internal class SystemPanelTable : TableBase
     {
         public static new string TableName = "SystemPanel";
         public static FlavoredType SystemType = new FlavoredType(typeof(TECSystem), 0);
@@ -1183,7 +1194,7 @@ namespace EstimatingUtilitiesLibrary
             PanelType
         };
     }
-    public class SystemScopeBranchTable : TableBase
+    internal class SystemScopeBranchTable : TableBase
     {
         public static new string TableName = "SystemScopeBranch";
         public static FlavoredType SystemType = new FlavoredType(typeof(TECSystem), 0);
@@ -1202,7 +1213,7 @@ namespace EstimatingUtilitiesLibrary
             ScopeBranchType
         };
     }
-    public class SystemHierarchyTable : TableBase
+    internal class SystemHierarchyTable : TableBase
     {
         public static new string TableName = "SystemHierarchy";
         public static FlavoredType SystemType = new FlavoredType(typeof(TECSystem), 0);
@@ -1220,7 +1231,7 @@ namespace EstimatingUtilitiesLibrary
             SystemType
         };
     }
-    public class SystemMiscTable : TableBase
+    internal class SystemMiscTable : TableBase
     {
         public static new string TableName = "SystemMisc";
         public static FlavoredType SystemType = new FlavoredType(typeof(TECSystem), 0);
@@ -1239,7 +1250,7 @@ namespace EstimatingUtilitiesLibrary
             MiscType
         };
     }
-    public class ValveActuatorTable : TableBase
+    internal class ValveActuatorTable : TableBase
     {
         public static new string TableName = "ValveActuator";
         public static FlavoredType ValveType = new FlavoredType(typeof(TECValve), 0);
@@ -1259,7 +1270,7 @@ namespace EstimatingUtilitiesLibrary
         };
     }
 
-    public class TypicalInstanceTable : TableBase
+    internal class TypicalInstanceTable : TableBase
     {
         public static new string TableName = "TypicalInstance";
         public static FlavoredType ScopeType = new FlavoredType(typeof(TECScope), 0);
@@ -1279,9 +1290,9 @@ namespace EstimatingUtilitiesLibrary
     }
     #endregion
 
-    public static class AllBidTables
+    internal static class AllBidTables
     {
-        public static List<object> Tables = new List<object>() {
+        public static List<TableBase> Tables = new List<TableBase>() {
             new BidInfoTable(),
             new LaborConstantsTable(),
             new UserAdjustmentsTable(),
@@ -1345,9 +1356,9 @@ namespace EstimatingUtilitiesLibrary
             };
     }
 
-    public static class AllTemplateTables
+    internal static class AllTemplateTables
     {
-        public static List<object> Tables = new List<object>()
+        public static List<TableBase> Tables = new List<TableBase>()
         {
             new TemplatesInfoTable(),
             new LaborConstantsTable(),
@@ -1397,7 +1408,7 @@ namespace EstimatingUtilitiesLibrary
         };
     }
 
-    public static class AllTables
+    internal static class AllTables
     {
         public static List<object> Tables = new List<object>()
         {
@@ -1465,7 +1476,7 @@ namespace EstimatingUtilitiesLibrary
         };
     }
 
-    public class TableBase
+    internal class TableBase
     {
         public static string TableName;
         public static List<FlavoredType> Types;
@@ -1473,11 +1484,11 @@ namespace EstimatingUtilitiesLibrary
         public static List<TableField> PrimaryKey;
     }
 
-    public class IndexedRelationTableBase : TableBase { }
+    internal class IndexedRelationTableBase : TableBase { }
 
-    public class CatalogTableBase : TableBase { }
+    internal class CatalogTableBase : TableBase { }
 
-    public class TableField
+    internal class TableField
     {
         public string Name;
         public string FieldType;
@@ -1491,7 +1502,7 @@ namespace EstimatingUtilitiesLibrary
         }
     }
 
-    public class HelperProperties
+    internal class HelperProperties
     {
         public bool Index { get; set; }
         public bool Quantity { get; set; }
@@ -1506,7 +1517,7 @@ namespace EstimatingUtilitiesLibrary
 
     }
 
-    public class TableInfo
+    internal class TableInfo
     {
         //Returns Tuple<TableName, List<AllTableFields>, List<PrimaryKeyTableFields>, List<RelevantTypesInTable>, isRelationTable>
         public string Name { get; set; }
@@ -1572,7 +1583,7 @@ namespace EstimatingUtilitiesLibrary
 
     }
 
-    public struct FlavoredType
+    internal struct FlavoredType
     {
         public Type Type { get; private set; }
         public Flavor Flavor { get; private set; }
