@@ -98,11 +98,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Defaults.cs" />
+    <Compile Include="Interfaces\IDragDropable.cs" />
     <Compile Include="Interfaces\INotifyCostChanged.cs" />
-    <Compile Include="Interfaces\DragDropComponent.cs" />
-    <Compile Include="Interfaces\ElectricalMaterialComponent.cs" />
     <Compile Include="Interfaces\INotifyTECChanged.cs" />
     <Compile Include="Interfaces\INotifyPointChanged.cs" />
+    <Compile Include="Interfaces\ITECConnectable.cs" />
+    <Compile Include="TECValve.cs" />
     <Compile Include="Utilities\ListDictionary.cs" />
     <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECEstimator.cs" />

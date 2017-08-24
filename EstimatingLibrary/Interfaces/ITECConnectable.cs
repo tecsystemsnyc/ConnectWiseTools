@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface DragDropComponent
+    public interface ITECConnectable
     {
-        Object DragDropCopy(TECScopeManager scopeManager);
+        ObservableCollection<TECElectricalMaterial> ConnectionTypes { get; }
     }
 }

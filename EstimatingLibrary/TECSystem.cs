@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECLocated, INotifyPointChanged, DragDropComponent
+    public class TECSystem : TECLocated, INotifyPointChanged, IDragDropable
     {
         #region Fields
         private ObservableCollection<TECSystem> _instances;

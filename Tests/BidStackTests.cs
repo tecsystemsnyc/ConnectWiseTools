@@ -5,6 +5,7 @@ using EstimatingUtilitiesLibrary;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Interfaces;
 
 namespace Tests
 {
@@ -855,7 +856,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECDevice> actual = subScope.Devices;
+            ObservableCollection<ITECConnectable> actual = subScope.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1735,7 +1736,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECDevice> actual = subscope.Devices;
+            ObservableCollection<ITECConnectable> actual = subscope.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

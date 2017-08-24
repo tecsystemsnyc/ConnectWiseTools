@@ -7,6 +7,7 @@ using EstimatingLibrary;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Interfaces;
 
 namespace Tests
 {
@@ -506,7 +507,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECDevice> actual = subScope.Devices;
+            ObservableCollection<ITECConnectable> actual = subScope.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1179,7 +1180,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECDevice> actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices;
+            ObservableCollection<ITECConnectable> actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1193,12 +1194,12 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Name = edit;
+            (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Name;
+            string actual = (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1212,12 +1213,12 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Description = edit;
+            (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Description = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Description;
+            string actual = (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Description;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1231,12 +1232,12 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost = edit;
+            ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Cost = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            double actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Cost;
+            double actual = ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Cost;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1250,12 +1251,12 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Manufacturer = edit;
+            (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Manufacturer = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            TECManufacturer actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0].Manufacturer;
+            TECManufacturer actual = (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Manufacturer;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }

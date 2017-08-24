@@ -9,7 +9,7 @@ using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyPointChanged, DragDropComponent
+    public class TECEquipment : TECLocated, INotifyPointChanged, IDragDropable
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;

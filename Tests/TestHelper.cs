@@ -815,7 +815,7 @@ namespace Tests
                 {
                     foreach(TECSubScope subScope in equipment.SubScope)
                     {
-                        device = subScope.Devices.RandomObject();
+                        device = subScope.Devices.RandomObject() as TECDevice;
                         if(device != null)
                         {
                             return device;

@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECHardware, DragDropComponent
+    public class TECDevice : TECHardware, IDragDropable, ITECConnectable
     {
-        #region Properties
+
+        #region fields
         private ObservableCollection<TECElectricalMaterial> _connectionTypes;
-        private IOType _ioType;
-        
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+
+        #endregion
+        #region Properties
+        virtual public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
@@ -30,17 +32,6 @@ namespace EstimatingLibrary
                     ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
                 NotifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
-                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
-            }
-        }
-        public IOType IOType
-        {
-            get { return _ioType; }
-            set
-            {
-                var old = IOType;
-                _ioType = value;
-                NotifyCombinedChanged(Change.Add, "IOType", this, value, old);
                 //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
@@ -61,7 +52,6 @@ namespace EstimatingLibrary
             : this(deviceSource.Guid, deviceSource.ConnectionTypes, deviceSource.Manufacturer)
         {
             this.copyPropertiesFromHardware(deviceSource);
-            _ioType = deviceSource.IOType;
         }
         #endregion //Constructors
 

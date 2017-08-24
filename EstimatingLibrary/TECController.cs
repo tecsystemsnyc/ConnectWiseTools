@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECLocated, INotifyCostChanged, DragDropComponent
+    public class TECController : TECLocated, INotifyCostChanged, IDragDropable
     {
         #region Properties
         //---Stored---
@@ -382,14 +382,6 @@ namespace EstimatingLibrary
                 for (var x = 0; x < type.Quantity; x++)
                 {
                     availableIO.Add(type.Type);
-                }
-            }
-
-            foreach (TECSubScopeConnection connected in ChildrenConnections)
-            {
-                foreach (TECDevice device in connected.SubScope.Devices)
-                {
-                    availableIO.Remove(device.IOType);
                 }
             }
             return availableIO;
