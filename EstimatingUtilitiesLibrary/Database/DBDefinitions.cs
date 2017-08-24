@@ -384,7 +384,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Flavor ObjectFlavor = Flavor.Wire;
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Label"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.Type.GetProperty("Cost"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.Type.GetProperty("Labor"));
 
@@ -404,7 +404,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Flavor ObejctFlavor = Flavor.Conduit;
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.Type.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Label"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.Type.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.Type.GetProperty("Cost"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.Type.GetProperty("Labor"));
 
