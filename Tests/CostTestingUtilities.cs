@@ -9,6 +9,8 @@ namespace Tests
 {
     static public class CostTestingUtilities
     {
+        public const double DELTA = 1.0 / 1000.0;
+
         public class Total
         {
             public double Cost;
