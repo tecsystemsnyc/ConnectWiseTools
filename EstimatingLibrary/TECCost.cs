@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public enum CostType { None, TEC, Electrical }
+    public enum CostType { TEC, Electrical }
 
     public class TECCost : TECScope, IDragDropable
     { 
@@ -51,18 +51,18 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECCost(Guid guid) : base(guid)
+        public TECCost(Guid guid, CostType type) : base(guid)
         {
             _cost = 0;
             _labor = 0;
-            _type = 0;
+            _type = type;
         }
-        public TECCost(TECCost cost) : this()
+        public TECCost(TECCost cost) : this(cost.Type)
         {
             copyPropertiesFromCost(cost);
         }
 
-        public TECCost() : this(Guid.NewGuid()) { }
+        public TECCost(CostType type) : this(Guid.NewGuid(), type) { }
         #endregion
 
         protected void copyPropertiesFromCost(TECCost cost)
@@ -75,9 +75,7 @@ namespace EstimatingLibrary
 
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            var copy = new TECCost();
-            copy.copyPropertiesFromCost(this);
-            return copy;
+            return new TECCost(this);
         }
     }
 }
