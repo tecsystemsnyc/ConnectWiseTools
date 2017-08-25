@@ -98,7 +98,7 @@
                     <views:MaterialView ViewModel="{Binding MaterialsTab}"/>
                 </TabItem>
                 <TabItem Header="Constants">
-                    <views:ConstantsView ViewModel="{Binding ConstantsVM}"/>
+                    <Label Content="CONSTANTS VIEW DEPRECATED"/>
                 </TabItem>
                 <TabItem Header="Settings">
                     <views:SettingsView ViewModel="{Binding SettingsVM}"/>

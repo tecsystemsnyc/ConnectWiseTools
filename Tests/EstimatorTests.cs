@@ -23,7 +23,7 @@ namespace Tests
 
         private TestContext testContextInstance;
 
-        private static TECLabor labor;
+        private static TECParameters parameters;
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -49,12 +49,12 @@ namespace Tests
         [ClassInitialize()]
         public static void MyClassInitialize(TestContext testContext)
         {
-            labor = new TECLabor();
-            labor.PMCoef = 1.54;
-            labor.ENGCoef = 1.25;
-            labor.SoftCoef = 0.37;
-            labor.GraphCoef = 0.53;
-            labor.CommCoef = 1.34;
+            parameters = new TECParameters(Guid.NewGuid());
+            parameters.PMCoef = 1.54;
+            parameters.ENGCoef = 1.25;
+            parameters.SoftCoef = 0.37;
+            parameters.GraphCoef = 0.53;
+            parameters.CommCoef = 1.34;
         }
         //
         // Use ClassCleanup to run code after all tests in a class have run
@@ -1756,7 +1756,7 @@ namespace Tests
         public void Estimate_TECLaborHoursFromPoints()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            bid.Labor = labor;
+            bid.Parameters = parameters;
             var system = new TECSystem();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
@@ -1785,12 +1785,12 @@ namespace Tests
         public void Estimate_TECLaborHoursFromLump()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            bid.Labor = labor;
-            labor.PMExtraHours = 10;
-            labor.ENGExtraHours = 10;
-            labor.SoftExtraHours = 10;
-            labor.GraphExtraHours = 10;
-            labor.CommExtraHours = 10;
+            bid.Parameters = parameters;
+            bid.ExtraLabor.PMExtraHours = 10;
+            bid.ExtraLabor.ENGExtraHours = 10;
+            bid.ExtraLabor.SoftExtraHours = 10;
+            bid.ExtraLabor.GraphExtraHours = 10;
+            bid.ExtraLabor.CommExtraHours = 10;
 
             Assert.AreEqual(10, estimate.PMLaborHours, "PM labor calcualtion");
             Assert.AreEqual(10, estimate.ENGLaborHours, "PM labor calcualtion");

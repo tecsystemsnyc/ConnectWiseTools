@@ -59,6 +59,7 @@ namespace EstimatingUtilitiesLibrary.Database
             getScopeManagerProperties(bid);
 
             bid.Parameters = getBidParameters(bid);
+            bid.ExtraLabor = getExtraLabor(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid();
             bid.Locations = getAllLocations();
@@ -71,7 +72,6 @@ namespace EstimatingUtilitiesLibrary.Database
             var placeholderDict = getCharacteristicInstancesList();
 
             ModelLinkingHelper.LinkBid(bid, placeholderDict);
-            getUserAdjustments(bid);
             //Breaks Visual Scope in a page
             //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
@@ -95,115 +95,8 @@ namespace EstimatingUtilitiesLibrary.Database
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();
-            scopeManager.Labor = getLaborConsts(scopeManager);
         }
-        static private void getUserAdjustments(TECBid bid)
-        {
-            DataTable adjDT = SQLiteDB.GetDataFromTable(UserAdjustmentsTable.TableName);
-
-            if (adjDT.Rows.Count < 1)
-            {
-                DebugHandler.LogError("UserAdjustments not found in database.");
-                return;
-            }
-
-            DataRow adjRow = adjDT.Rows[0];
-
-            bid.Labor.PMExtraHours = adjRow[UserAdjustmentsTable.PMExtraHours.Name].ToString().ToDouble();
-            bid.Labor.ENGExtraHours = adjRow[UserAdjustmentsTable.ENGExtraHours.Name].ToString().ToDouble();
-            bid.Labor.CommExtraHours = adjRow[UserAdjustmentsTable.CommExtraHours.Name].ToString().ToDouble();
-            bid.Labor.SoftExtraHours = adjRow[UserAdjustmentsTable.SoftExtraHours.Name].ToString().ToDouble();
-            bid.Labor.GraphExtraHours = adjRow[UserAdjustmentsTable.GraphExtraHours.Name].ToString().ToDouble();
-        }
-
-        static private TECLabor getLaborConsts(TECScopeManager scopeManager)
-        {
-            DataTable laborDT = null;
-            DataTable subConstsDT = null;
-            if (scopeManager is TECBid)
-            {
-                string constsCommand = "select * from (" + LaborConstantsTable.TableName + " inner join ";
-                constsCommand += BidLaborTable.TableName + " on ";
-                constsCommand += "(TECLaborConst.LaborID = TECBidTECLabor.LaborID";
-                constsCommand += " and " + BidLaborTable.BidID.Name + " = '";
-                constsCommand += scopeManager.Guid;
-                constsCommand += "'))";
-
-                laborDT = SQLiteDB.GetDataFromCommand(constsCommand);
-
-                string subConstsCommand = "select * from (" + SubcontractorConstantsTable.TableName + " inner join ";
-                subConstsCommand += BidLaborTable.TableName + " on ";
-                subConstsCommand += "(TECSubcontractorConst.LaborID = TECBidTECLabor.LaborID";
-                subConstsCommand += " and " + BidLaborTable.BidID.Name + " = '";
-                subConstsCommand += scopeManager.Guid;
-                subConstsCommand += "'))";
-
-                subConstsDT = SQLiteDB.GetDataFromCommand(subConstsCommand);
-            }
-            else if (scopeManager is TECTemplates)
-            {
-                laborDT = SQLiteDB.GetDataFromTable(LaborConstantsTable.TableName);
-                subConstsDT = SQLiteDB.GetDataFromTable(SubcontractorConstantsTable.TableName);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
-            if (laborDT.Rows.Count > 1)
-            {
-                DebugHandler.LogError("Multiple rows found in labor constants table. Using first found.");
-            }
-            else if (laborDT.Rows.Count < 1)
-            {
-                DebugHandler.LogError("Labor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
-                return new TECLabor();
-            }
-
-            DataRow laborRow = laborDT.Rows[0];
-            Guid laborID = new Guid(laborRow[LaborConstantsTable.LaborID.Name].ToString());
-            TECLabor labor = new TECLabor(laborID);
-
-            labor.PMCoef = laborRow[LaborConstantsTable.PMCoef.Name].ToString().ToDouble(0);
-            labor.PMRate = laborRow[LaborConstantsTable.PMRate.Name].ToString().ToDouble(0);
-
-            labor.ENGCoef = laborRow[LaborConstantsTable.ENGCoef.Name].ToString().ToDouble(0);
-            labor.ENGRate = laborRow[LaborConstantsTable.ENGRate.Name].ToString().ToDouble(0);
-
-            labor.CommCoef = laborRow[LaborConstantsTable.CommCoef.Name].ToString().ToDouble(0);
-            labor.CommRate = laborRow[LaborConstantsTable.CommRate.Name].ToString().ToDouble(0);
-
-            labor.SoftCoef = laborRow[LaborConstantsTable.SoftCoef.Name].ToString().ToDouble(0);
-            labor.SoftRate = laborRow[LaborConstantsTable.SoftRate.Name].ToString().ToDouble(0);
-
-            labor.GraphCoef = laborRow[LaborConstantsTable.GraphCoef.Name].ToString().ToDouble(0);
-            labor.GraphRate = laborRow[LaborConstantsTable.GraphRate.Name].ToString().ToDouble(0);
-
-
-
-            if (subConstsDT.Rows.Count > 1)
-            {
-                DebugHandler.LogError("Multiple rows found in subcontractor constants table. Using first found.");
-            }
-            else if (subConstsDT.Rows.Count < 1)
-            {
-                DebugHandler.LogError("Subcontractor constants not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
-                return labor;
-            }
-
-            DataRow subContractRow = subConstsDT.Rows[0];
-
-            labor.ElectricalRate = subContractRow[SubcontractorConstantsTable.ElectricalRate.Name].ToString().ToDouble(0);
-            labor.ElectricalNonUnionRate = subContractRow[SubcontractorConstantsTable.ElectricalNonUnionRate.Name].ToString().ToDouble(0);
-            labor.ElectricalSuperRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperRate.Name].ToString().ToDouble(0);
-            labor.ElectricalSuperNonUnionRate = subContractRow[SubcontractorConstantsTable.ElectricalSuperNonUnionRate.Name].ToString().ToDouble(0);
-            labor.ElectricalSuperRatio = subContractRow[SubcontractorConstantsTable.ElectricalSuperRatio.Name].ToString().ToDouble(0);
-
-            labor.ElectricalIsOnOvertime = subContractRow[SubcontractorConstantsTable.ElectricalIsOnOvertime.Name].ToString().ToInt(0).ToBool();
-            labor.ElectricalIsUnion = subContractRow[SubcontractorConstantsTable.ElectricalIsUnion.Name].ToString().ToInt(0).ToBool();
-
-            return labor;
-        }
+        
 
         #region Catalogs
         static private TECCatalogs getCatalogs()
@@ -496,6 +389,20 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid infoGuid = new Guid(templateInfoRow[TemplatesInfoTable.ID.Name].ToString());
 
             return new TECTemplates(infoGuid);
+        }
+        static private TECExtraLabor getExtraLabor(TECBid bid)
+        {
+            DataTable DT = SQLiteDB.GetDataFromTable(ExtraLaborTable.TableName);
+            if (DT.Rows.Count > 1)
+            {
+                DebugHandler.LogError("Multiple rows found in extra labor table. Using first found.");
+            }
+            else if (DT.Rows.Count < 1)
+            {
+                DebugHandler.LogError("Extra labor not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                return new TECExtraLabor(bid.Guid);
+            }
+            return getExtraLaborFromRow(DT.Rows[0]);
         }
         static private ObservableCollection<TECScopeBranch> getBidScopeBranches()
         {
@@ -815,9 +722,9 @@ namespace EstimatingUtilitiesLibrary.Database
             else
             { return null; }
         }
-        static private TECBidParameters getBidParameters(TECBid bid)
+        static private TECParameters getBidParameters(TECBid bid)
         {
-            string constsCommand = "select " + DatabaseHelper.AllFieldsInTableString(new BidParametersTable()) + " from " + BidParametersTable.TableName;
+            string constsCommand = "select " + DatabaseHelper.AllFieldsInTableString(new ParametersTable()) + " from " + ParametersTable.TableName;
 
             DataTable DT = SQLiteDB.GetDataFromCommand(constsCommand);
 
@@ -828,7 +735,7 @@ namespace EstimatingUtilitiesLibrary.Database
             else if (DT.Rows.Count < 1)
             {
                 DebugHandler.LogError("Bid paramters not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
-                return new TECBidParameters();
+                return new TECParameters(bid.Guid);
             }
             return getBidParametersFromRow(DT.Rows[0]);
         }
@@ -1216,14 +1123,20 @@ namespace EstimatingUtilitiesLibrary.Database
             getScopeChildren(cost);
             return cost;
         }
-        private static TECBidParameters getBidParametersFromRow(DataRow row)
+        private static TECParameters getBidParametersFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[BidParametersTable.ID.Name].ToString());
-            TECBidParameters paramters = new TECBidParameters(guid);
-            assignValuePropertiesFromTable(paramters, new BidParametersTable(), row);
+            Guid guid = new Guid(row[ParametersTable.ID.Name].ToString());
+            TECParameters paramters = new TECParameters(guid);
+            assignValuePropertiesFromTable(paramters, new ParametersTable(), row);
             return paramters;
         }
-
+        private static TECExtraLabor getExtraLaborFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ExtraLaborTable.ID.Name].ToString());
+            TECExtraLabor labor = new TECExtraLabor(guid);
+            assignValuePropertiesFromTable(labor, new ExtraLaborTable(), row);
+            return labor;
+        }
         #endregion
 
         private static void getScopeChildren(TECScope scope)

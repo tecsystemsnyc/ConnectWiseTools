@@ -64,7 +64,7 @@ namespace EstimatingLibrary.Utilities
             bid.PointChanged += (e) => handlePointChanged(bid, e);
             bid.CostChanged += (e) => handleCostChanged(bid, e);
             registerTECObject(bid, OccuranceType.None);
-            registerTECObject(bid.Labor, OccuranceType.None);
+            registerTECObject(bid.ExtraLabor, OccuranceType.None);
             registerTECObject(bid.Parameters, OccuranceType.None);
 
             foreach(TECSystem typical in bid.Systems)
@@ -396,12 +396,12 @@ namespace EstimatingLibrary.Utilities
         {
             if (parent is TECBid)
             {
-                if (newChild is TECLabor)
+                if (newChild is TECExtraLabor)
                 {
                     unregisterTECObject(oldChild);
                     registerTECObject(newChild, OccuranceType.None);
                 }
-                else if (newChild is TECBidParameters)
+                else if (newChild is TECParameters)
                 {
                     unregisterTECObject(oldChild);
                     registerTECObject(newChild, OccuranceType.None);

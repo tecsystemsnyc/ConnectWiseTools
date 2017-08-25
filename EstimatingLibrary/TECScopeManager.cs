@@ -11,18 +11,6 @@ namespace EstimatingLibrary
     public abstract class TECScopeManager : TECObject
     {
         #region Properties
-        protected TECLabor _labor;
-        virtual public TECLabor Labor
-        {
-            get { return _labor; }
-            set
-            {
-                var old = Labor;
-                _labor = value;
-                NotifyCombinedChanged(Change.Edit, "Labor", this, value, old);
-            }
-        }
-
         protected TECCatalogs _catalogs;
         virtual public TECCatalogs Catalogs
         {
@@ -39,7 +27,6 @@ namespace EstimatingLibrary
 
         protected TECScopeManager(Guid guid): base(guid)
         {
-            _labor = new TECLabor();
             _catalogs = new TECCatalogs();
         }
 

@@ -45,51 +45,53 @@ namespace Tests
         [TestMethod]
         public void Load_Templates_LaborConsts()
         {
-            //Assert
-            double expectedPMCoef = 2;
-            double expectedPMRate = 30;
-            Assert.AreEqual(expectedPMCoef, actualTemplates.Labor.PMCoef, "PM Coefficient didn't load properly.");
-            Assert.AreEqual(expectedPMRate, actualTemplates.Labor.PMRate, "PM Rate didn't load properly.");
+            throw new NotImplementedException();
+            ////Assert
+            //double expectedPMCoef = 2;
+            //double expectedPMRate = 30;
+            //Assert.AreEqual(expectedPMCoef, actualTemplates.Parameters.PMCoef, "PM Coefficient didn't load properly.");
+            //Assert.AreEqual(expectedPMRate, actualTemplates.Parameters.PMRate, "PM Rate didn't load properly.");
 
-            double expectedENGCoef = 2;
-            double expectedENGRate = 40;
-            Assert.AreEqual(expectedENGCoef, actualTemplates.Labor.ENGCoef, "ENG Coefficient didn't load properly.");
-            Assert.AreEqual(expectedENGRate, actualTemplates.Labor.ENGRate, "ENG Rate didn't load properly.");
+            //double expectedENGCoef = 2;
+            //double expectedENGRate = 40;
+            //Assert.AreEqual(expectedENGCoef, actualTemplates.Parameters.ENGCoef, "ENG Coefficient didn't load properly.");
+            //Assert.AreEqual(expectedENGRate, actualTemplates.Parameters.ENGRate, "ENG Rate didn't load properly.");
 
-            double expectedCommCoef = 2;
-            double expectedCommRate = 50;
-            Assert.AreEqual(expectedCommCoef, actualTemplates.Labor.CommCoef, "Comm Coefficient didn't load properly.");
-            Assert.AreEqual(expectedCommRate, actualTemplates.Labor.CommRate, "Comm Rate didn't load properly.");
+            //double expectedCommCoef = 2;
+            //double expectedCommRate = 50;
+            //Assert.AreEqual(expectedCommCoef, actualTemplates.Parameters.CommCoef, "Comm Coefficient didn't load properly.");
+            //Assert.AreEqual(expectedCommRate, actualTemplates.Parameters.CommRate, "Comm Rate didn't load properly.");
 
-            double expectedSoftCoef = 2;
-            double expectedSoftRate = 60;
-            Assert.AreEqual(expectedSoftCoef, actualTemplates.Labor.SoftCoef, "Software Coefficient didn't load properly.");
-            Assert.AreEqual(expectedSoftRate, actualTemplates.Labor.SoftRate, "Software Rate didn't load properly.");
+            //double expectedSoftCoef = 2;
+            //double expectedSoftRate = 60;
+            //Assert.AreEqual(expectedSoftCoef, actualTemplates.Parameters.SoftCoef, "Software Coefficient didn't load properly.");
+            //Assert.AreEqual(expectedSoftRate, actualTemplates.Parameters.SoftRate, "Software Rate didn't load properly.");
 
-            double expectedGraphCoef = 2;
-            double expectedGraphRate = 70;
-            Assert.AreEqual(expectedGraphCoef, actualTemplates.Labor.GraphCoef, "Graphics Coefficient didn't load properly.");
-            Assert.AreEqual(expectedGraphRate, actualTemplates.Labor.GraphRate, "Graphics Rate didn't load properly.");
+            //double expectedGraphCoef = 2;
+            //double expectedGraphRate = 70;
+            //Assert.AreEqual(expectedGraphCoef, actualTemplates.Parameters.GraphCoef, "Graphics Coefficient didn't load properly.");
+            //Assert.AreEqual(expectedGraphRate, actualTemplates.Parameters.GraphRate, "Graphics Rate didn't load properly.");
         }
 
         [TestMethod]
         public void Load_Templates_SubcontractorConsts()
         {
-            //Assert
-            double expectedElectricalRate = 50;
-            double expectedElectricalSuperRate = 60;
-            double expectedElectricalNonUnionRate = 30;
-            double expectedElectricalSuperNonUnionRate = 40;
-            double expectedElectricalSuperRatio = 0.25;
-            bool expectedOT = false;
-            bool expectedUnion = true;
-            Assert.AreEqual(expectedElectricalRate, actualTemplates.Labor.ElectricalRate, "Electrical rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRate, actualTemplates.Labor.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalNonUnionRate, actualTemplates.Labor.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualTemplates.Labor.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRatio, actualTemplates.Labor.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
-            Assert.AreEqual(expectedOT, actualTemplates.Labor.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
-            Assert.AreEqual(expectedUnion, actualTemplates.Labor.ElectricalIsUnion, "Electrical union bool didn't load properly.");
+            throw new NotImplementedException();
+            ////Assert
+            //double expectedElectricalRate = 50;
+            //double expectedElectricalSuperRate = 60;
+            //double expectedElectricalNonUnionRate = 30;
+            //double expectedElectricalSuperNonUnionRate = 40;
+            //double expectedElectricalSuperRatio = 0.25;
+            //bool expectedOT = false;
+            //bool expectedUnion = true;
+            //Assert.AreEqual(expectedElectricalRate, actualTemplates.Parameters.ElectricalRate, "Electrical rate didn't load properly.");
+            //Assert.AreEqual(expectedElectricalSuperRate, actualTemplates.Parameters.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
+            //Assert.AreEqual(expectedElectricalNonUnionRate, actualTemplates.Parameters.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
+            //Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualTemplates.Parameters.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
+            //Assert.AreEqual(expectedElectricalSuperRatio, actualTemplates.Parameters.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
+            //Assert.AreEqual(expectedOT, actualTemplates.Parameters.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
+            //Assert.AreEqual(expectedUnion, actualTemplates.Parameters.ElectricalIsUnion, "Electrical union bool didn't load properly.");
         }
 
         [TestMethod]

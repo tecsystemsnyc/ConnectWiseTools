@@ -102,9 +102,9 @@ namespace EstimatingUtilitiesLibrary.Properties {
         ///TECBidInfo,Estimator,BidInfo,Estimator
         ///TECTemplatesInfo,TemplateID,TemplatesInfo,ID
         ///TECTemplatesInfo,DBVersion,TemplatesInfo,DBVersion
-        ///TECBidParameters,ParametersID,Parameters,ID
-        ///TECBidParameters,Escalation,Parameters,Escalation
-        ///TECBidParameters,Overhead, [rest of string was truncated]&quot;;.
+        ///TECParameters,ParametersID,Parameters,ID
+        ///TECParameters,Escalation,Parameters,Escalation
+        ///TECParameters,Overhead, [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionDefinition {
             get {

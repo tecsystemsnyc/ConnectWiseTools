@@ -68,7 +68,8 @@ namespace TECUserControlLibrary.ViewModels
             //Check again to see if templates are properly loaded after reloading. Should not be else.
             if (TemplatesLoaded)
             {
-                Bid.Labor.UpdateConstants(Templates.Labor);
+                throw new NotImplementedException();
+                //Bid.Labor.UpdateConstants(Templates.Labor);
             }
         }
 

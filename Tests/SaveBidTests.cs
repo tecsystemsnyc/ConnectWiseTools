@@ -141,11 +141,11 @@ namespace Tests
         {
             //Act
             double expectedPM = 0.123;
-            bid.Labor.PMCoef = expectedPM;
+            bid.Parameters.PMCoef = expectedPM;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualPM = actualBid.Labor.PMCoef;
+            double actualPM = actualBid.Parameters.PMCoef;
 
             //Assert
             Assert.AreEqual(expectedPM, actualPM);
@@ -156,11 +156,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 564.05;
-            bid.Labor.PMRate = expectedRate;
+            bid.Parameters.PMRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Labor.PMRate;
+            double actualRate = actualbid.Parameters.PMRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -171,11 +171,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Labor.PMExtraHours = expectedHours;
+            bid.Parameters.PMExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Labor.PMExtraHours;
+            double actualHours = actualBid.Parameters.PMExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -186,11 +186,11 @@ namespace Tests
         {
             //Act
             double expectedENG = 0.123;
-            bid.Labor.ENGCoef = expectedENG;
+            bid.Parameters.ENGCoef = expectedENG;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualENG = actualBid.Labor.ENGCoef;
+            double actualENG = actualBid.Parameters.ENGCoef;
 
             //Assert
             Assert.AreEqual(expectedENG, actualENG);
@@ -201,11 +201,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 564.05;
-            bid.Labor.ENGRate = expectedRate;
+            bid.Parameters.ENGRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Labor.ENGRate;
+            double actualRate = actualbid.Parameters.ENGRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -216,11 +216,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Labor.ENGExtraHours = expectedHours;
+            bid.Parameters.ENGExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Labor.ENGExtraHours;
+            double actualHours = actualBid.Parameters.ENGExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -231,11 +231,11 @@ namespace Tests
         {
             //Act
             double expectedComm = 0.123;
-            bid.Labor.CommCoef = expectedComm;
+            bid.Parameters.CommCoef = expectedComm;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualComm = actualBid.Labor.CommCoef;
+            double actualComm = actualBid.Parameters.CommCoef;
 
             //Assert
             Assert.AreEqual(expectedComm, actualComm);
@@ -246,11 +246,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 564.05;
-            bid.Labor.CommRate = expectedRate;
+            bid.Parameters.CommRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Labor.CommRate;
+            double actualRate = actualbid.Parameters.CommRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -261,11 +261,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Labor.CommExtraHours = expectedHours;
+            bid.Parameters.CommExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Labor.CommExtraHours;
+            double actualHours = actualBid.Parameters.CommExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -276,11 +276,11 @@ namespace Tests
         {
             //Act
             double expectedSoft = 0.123;
-            bid.Labor.SoftCoef = expectedSoft;
+            bid.Parameters.SoftCoef = expectedSoft;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualSoft = actualBid.Labor.SoftCoef;
+            double actualSoft = actualBid.Parameters.SoftCoef;
 
             //Assert
             Assert.AreEqual(expectedSoft, actualSoft);
@@ -291,11 +291,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 564.05;
-            bid.Labor.SoftRate = expectedRate;
+            bid.Parameters.SoftRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Labor.SoftRate;
+            double actualRate = actualbid.Parameters.SoftRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -306,11 +306,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Labor.SoftExtraHours = expectedHours;
+            bid.Parameters.SoftExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Labor.SoftExtraHours;
+            double actualHours = actualBid.Parameters.SoftExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -321,11 +321,11 @@ namespace Tests
         {
             //Act
             double expectedGraph = 0.123;
-            bid.Labor.GraphCoef = expectedGraph;
+            bid.Parameters.GraphCoef = expectedGraph;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualGraph = actualBid.Labor.GraphCoef;
+            double actualGraph = actualBid.Parameters.GraphCoef;
 
             //Assert
             Assert.AreEqual(expectedGraph, actualGraph);
@@ -336,11 +336,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 564.05;
-            bid.Labor.GraphRate = expectedRate;
+            bid.Parameters.GraphRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Labor.GraphRate;
+            double actualRate = actualbid.Parameters.GraphRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -351,11 +351,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Labor.GraphExtraHours = expectedHours;
+            bid.Parameters.GraphExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Labor.GraphExtraHours;
+            double actualHours = actualBid.Parameters.GraphExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -366,11 +366,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 0.123;
-            bid.Labor.ElectricalRate = expectedRate;
+            bid.Parameters.ElectricalRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualBid.Labor.ElectricalRate;
+            double actualRate = actualBid.Parameters.ElectricalRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -381,11 +381,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 0.456;
-            bid.Labor.ElectricalNonUnionRate = expectedRate;
+            bid.Parameters.ElectricalNonUnionRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualBid.Labor.ElectricalNonUnionRate;
+            double actualRate = actualBid.Parameters.ElectricalNonUnionRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -396,11 +396,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 0.123;
-            bid.Labor.ElectricalSuperRate = expectedRate;
+            bid.Parameters.ElectricalSuperRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualBid.Labor.ElectricalSuperRate;
+            double actualRate = actualBid.Parameters.ElectricalSuperRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -411,11 +411,11 @@ namespace Tests
         {
             //Act
             double expectedRate = 23.94;
-            bid.Labor.ElectricalSuperNonUnionRate = expectedRate;
+            bid.Parameters.ElectricalSuperNonUnionRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualBid.Labor.ElectricalSuperNonUnionRate;
+            double actualRate = actualBid.Parameters.ElectricalSuperNonUnionRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -425,26 +425,26 @@ namespace Tests
         public void Save_Bid_Labor_ElecIsOnOT()
         {
             //Act
-            bid.Labor.ElectricalIsOnOvertime = !bid.Labor.ElectricalIsOnOvertime;
+            bid.Parameters.ElectricalIsOnOvertime = !bid.Parameters.ElectricalIsOnOvertime;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
 
             //Assert
-            Assert.AreEqual(bid.Labor.ElectricalIsOnOvertime, actualBid.Labor.ElectricalIsOnOvertime);
+            Assert.AreEqual(bid.Parameters.ElectricalIsOnOvertime, actualBid.Parameters.ElectricalIsOnOvertime);
         }
 
         [TestMethod]
         public void Save_Bid_Labor_ElecIsUnion()
         {
             //Act
-            bid.Labor.ElectricalIsUnion = !bid.Labor.ElectricalIsUnion;
+            bid.Parameters.ElectricalIsUnion = !bid.Parameters.ElectricalIsUnion;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
 
             //Assert
-            Assert.AreEqual(bid.Labor.ElectricalIsUnion, actualBid.Labor.ElectricalIsUnion);
+            Assert.AreEqual(bid.Parameters.ElectricalIsUnion, actualBid.Parameters.ElectricalIsUnion);
         }
 
         #endregion Save Labor

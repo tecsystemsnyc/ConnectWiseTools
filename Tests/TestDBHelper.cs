@@ -21,10 +21,8 @@ namespace Tests
 
             addToMetadataTable();
             addToBidInfoTable();
-            addToBidParametersTable();
-            addToLaborConstantsTable();
-            addToSubcontractorConstantsTable();
-            addToUserAdjustmentsTable();
+            addToParametersTable();
+            addToExtraLaborTable();
             addToNoteTable();
             addToExlusionTable();
             addToScopeBranchTable();
@@ -51,7 +49,6 @@ namespace Tests
             addToIOModuleTable();
             addToIOTable();
 
-            addToBidLaborTable();
             addToBidScopeBranchTable();
             addToBidMiscTable();
             addToIOModuleManufacturerTable();
@@ -97,8 +94,6 @@ namespace Tests
 
             addToMetadataTable();
             addToTemplatesInfoTable();
-            addToLaborConstantsTable();
-            addToSubcontractorConstantsTable();
             addToSystemTable();
             addToEquipmentTable();
             addToSubScopeTable();
@@ -192,7 +187,7 @@ namespace Tests
             values.Add("1.6.0.13");
             addDataToTable(new TemplatesInfoTable(), values);
         }
-        private static void addToBidParametersTable()
+        private static void addToParametersTable()
         {
             List<string> values = new List<string>();
             values.Add("655ed4a6-4ce4-431f-ae4b-7185e28d20ef");
@@ -204,13 +199,7 @@ namespace Tests
             values.Add("0");
             values.Add("0");
             values.Add("0");
-            addDataToTable(new BidParametersTable(), values);
 
-        }
-        private static void addToLaborConstantsTable()
-        {
-            List<string> values = new List<string>();
-            values.Add("ab534ec6-73ec-4145-9c58-3abbbc9ae3d5");
             values.Add("2");
             values.Add("30");
             values.Add("2");
@@ -221,12 +210,7 @@ namespace Tests
             values.Add("60");
             values.Add("2");
             values.Add("70");
-            addDataToTable(new LaborConstantsTable(), values);
-        }
-        private static void addToSubcontractorConstantsTable()
-        {
-            List<string> values = new List<string>();
-            values.Add("ab534ec6-73ec-4145-9c58-3abbbc9ae3d5");
+
             values.Add("50");
             values.Add("60");
             values.Add("30");
@@ -234,9 +218,10 @@ namespace Tests
             values.Add("0.25");
             values.Add("0");
             values.Add("1");
-            addDataToTable(new SubcontractorConstantsTable(), values);
+            addDataToTable(new ParametersTable(), values);
+
         }
-        private static void addToUserAdjustmentsTable()
+        private static void addToExtraLaborTable()
         {
             List<string> values = new List<string>();
             values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
@@ -245,7 +230,7 @@ namespace Tests
             values.Add("100");
             values.Add("90");
             values.Add("80");
-            addDataToTable(new UserAdjustmentsTable(), values);
+            addDataToTable(new ExtraLaborTable(), values);
         }
         private static void addToNoteTable()
         {
@@ -670,13 +655,6 @@ namespace Tests
         #endregion
 
         #region Relationship Tables
-        private static void addToBidLaborTable()
-        {
-            List<string> values = new List<string>();
-            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
-            values.Add("ab534ec6-73ec-4145-9c58-3abbbc9ae3d5");
-            addDataToTable(new BidLaborTable(), values);
-        }
         private static void addToBidScopeBranchTable()
         {
             List<string> values = new List<string>();

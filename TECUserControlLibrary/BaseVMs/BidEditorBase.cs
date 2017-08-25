@@ -217,7 +217,8 @@ namespace TECUserControlLibrary.ViewModels
                 ModelLinkingHelper.LinkBidToCatalogs(Bid);
                 if (isNew)
                 {
-                    Bid.Labor.UpdateConstants(Templates.Labor);
+                    throw new NotImplementedException();
+                    //Bid.Parameters.UpdateConstants(Templates.Labor);
                     loadedStackLength = deltaStack.CleansedStack().Count;
                 }
             }

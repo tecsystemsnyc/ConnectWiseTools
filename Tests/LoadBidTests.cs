@@ -92,28 +92,28 @@ namespace Tests
             //Assert
             double expectedPMCoef = 2;
             double expectedPMRate = 30;
-            Assert.AreEqual(expectedPMCoef, actualBid.Labor.PMCoef, "PM Coefficient didn't load properly.");
-            Assert.AreEqual(expectedPMRate, actualBid.Labor.PMRate, "PM Rate didn't load properly.");
+            Assert.AreEqual(expectedPMCoef, actualBid.Parameters.PMCoef, "PM Coefficient didn't load properly.");
+            Assert.AreEqual(expectedPMRate, actualBid.Parameters.PMRate, "PM Rate didn't load properly.");
 
             double expectedENGCoef = 2;
             double expectedENGRate = 40;
-            Assert.AreEqual(expectedENGCoef, actualBid.Labor.ENGCoef, "ENG Coefficient didn't load properly.");
-            Assert.AreEqual(expectedENGRate, actualBid.Labor.ENGRate, "ENG Rate didn't load properly.");
+            Assert.AreEqual(expectedENGCoef, actualBid.Parameters.ENGCoef, "ENG Coefficient didn't load properly.");
+            Assert.AreEqual(expectedENGRate, actualBid.Parameters.ENGRate, "ENG Rate didn't load properly.");
 
             double expectedCommCoef = 2;
             double expectedCommRate = 50;
-            Assert.AreEqual(expectedCommCoef, actualBid.Labor.CommCoef, "Comm Coefficient didn't load properly.");
-            Assert.AreEqual(expectedCommRate, actualBid.Labor.CommRate, "Comm Rate didn't load properly.");
+            Assert.AreEqual(expectedCommCoef, actualBid.Parameters.CommCoef, "Comm Coefficient didn't load properly.");
+            Assert.AreEqual(expectedCommRate, actualBid.Parameters.CommRate, "Comm Rate didn't load properly.");
 
             double expectedSoftCoef = 2;
             double expectedSoftRate = 60;
-            Assert.AreEqual(expectedSoftCoef, actualBid.Labor.SoftCoef, "Software Coefficient didn't load properly.");
-            Assert.AreEqual(expectedSoftRate, actualBid.Labor.SoftRate, "Software Rate didn't load properly.");
+            Assert.AreEqual(expectedSoftCoef, actualBid.Parameters.SoftCoef, "Software Coefficient didn't load properly.");
+            Assert.AreEqual(expectedSoftRate, actualBid.Parameters.SoftRate, "Software Rate didn't load properly.");
 
             double expectedGraphCoef = 2;
             double expectedGraphRate = 70;
-            Assert.AreEqual(expectedGraphCoef, actualBid.Labor.GraphCoef, "Graphics Coefficient didn't load properly.");
-            Assert.AreEqual(expectedGraphRate, actualBid.Labor.GraphRate, "Graphics Rate didn't load properly.");
+            Assert.AreEqual(expectedGraphCoef, actualBid.Parameters.GraphCoef, "Graphics Coefficient didn't load properly.");
+            Assert.AreEqual(expectedGraphRate, actualBid.Parameters.GraphRate, "Graphics Rate didn't load properly.");
         }
 
         [TestMethod]
@@ -127,13 +127,13 @@ namespace Tests
             double expectedElectricalSuperRatio = 0.25;
             bool expectedOT = false;
             bool expectedUnion = true;
-            Assert.AreEqual(expectedElectricalRate, actualBid.Labor.ElectricalRate, "Electrical rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Labor.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Labor.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Labor.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRatio, actualBid.Labor.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
-            Assert.AreEqual(expectedOT, actualBid.Labor.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
-            Assert.AreEqual(expectedUnion, actualBid.Labor.ElectricalIsUnion, "Electrical union bool didn't load properly.");
+            Assert.AreEqual(expectedElectricalRate, actualBid.Parameters.ElectricalRate, "Electrical rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Parameters.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Parameters.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Parameters.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRatio, actualBid.Parameters.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
+            Assert.AreEqual(expectedOT, actualBid.Parameters.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
+            Assert.AreEqual(expectedUnion, actualBid.Parameters.ElectricalIsUnion, "Electrical union bool didn't load properly.");
         }
 
         [TestMethod]
@@ -146,11 +146,11 @@ namespace Tests
             double expectedSoftExtra = 90;
             double expectedGraphExtra = 80;
 
-            Assert.AreEqual(expectedPMExtra, actualBid.Labor.PMExtraHours, "PM Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedENGExtra, actualBid.Labor.ENGExtraHours, "ENG Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedCommExtra, actualBid.Labor.CommExtraHours, "Comm Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedSoftExtra, actualBid.Labor.SoftExtraHours, "Soft Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedGraphExtra, actualBid.Labor.GraphExtraHours, "Graph Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedPMExtra, actualBid.ExtraLabor.PMExtraHours, "PM Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedENGExtra, actualBid.ExtraLabor.ENGExtraHours, "ENG Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedCommExtra, actualBid.ExtraLabor.CommExtraHours, "Comm Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedSoftExtra, actualBid.ExtraLabor.SoftExtraHours, "Soft Extra Hours didn't load properly.");
+            Assert.AreEqual(expectedGraphExtra, actualBid.ExtraLabor.GraphExtraHours, "Graph Extra Hours didn't load properly.");
         }
 
         [TestMethod]

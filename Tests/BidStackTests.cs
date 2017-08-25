@@ -433,17 +433,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.SoftCoef;
+            double expected = Bid.Parameters.SoftCoef;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Labor.SoftCoef = 1.1;
+            Bid.Parameters.SoftCoef = 1.1;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            double actual = Bid.Labor.SoftCoef;
+            double actual = Bid.Parameters.SoftCoef;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -452,17 +452,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.PMCoef;
+            double expected = Bid.Parameters.PMCoef;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Labor.PMCoef = 1.1;
+            Bid.Parameters.PMCoef = 1.1;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            double actual = Bid.Labor.PMCoef;
+            double actual = Bid.Parameters.PMCoef;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -471,17 +471,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.ENGCoef;
+            double expected = Bid.Parameters.ENGCoef;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Labor.ENGCoef = 1.1;
+            Bid.Parameters.ENGCoef = 1.1;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            double actual = Bid.Labor.ENGCoef;
+            double actual = Bid.Parameters.ENGCoef;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -490,17 +490,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.CommCoef;
+            double expected = Bid.Parameters.CommCoef;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Labor.CommCoef = 1.1;
+            Bid.Parameters.CommCoef = 1.1;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            double actual = Bid.Labor.CommCoef;
+            double actual = Bid.Parameters.CommCoef;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -509,17 +509,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.GraphCoef;
+            double expected = Bid.Parameters.GraphCoef;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Labor.GraphCoef = 1.1;
+            Bid.Parameters.GraphCoef = 1.1;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            double actual = Bid.Labor.GraphCoef;
+            double actual = Bid.Parameters.GraphCoef;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -528,17 +528,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            double expected = Bid.Labor.ElectricalRate;
+            double expected = Bid.Parameters.ElectricalRate;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Labor.ElectricalRate = 1.1;
+            Bid.Parameters.ElectricalRate = 1.1;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            double actual = Bid.Labor.ElectricalRate;
+            double actual = Bid.Parameters.ElectricalRate;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -547,17 +547,17 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            bool expected = Bid.Labor.ElectricalIsOnOvertime;
+            bool expected = Bid.Parameters.ElectricalIsOnOvertime;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Labor.ElectricalIsOnOvertime = !Bid.Labor.ElectricalIsOnOvertime;
+            Bid.Parameters.ElectricalIsOnOvertime = !Bid.Parameters.ElectricalIsOnOvertime;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            bool actual = Bid.Labor.ElectricalIsOnOvertime;
+            bool actual = Bid.Parameters.ElectricalIsOnOvertime;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -1363,7 +1363,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Labor.PMCoef = 1.1;
+            Bid.Parameters.PMCoef = 1.1;
             double expected = 1.1;
 
             //Act
@@ -1371,7 +1371,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            double actual = Bid.Labor.PMCoef;
+            double actual = Bid.Parameters.PMCoef;
             Assert.AreEqual(expected, actual, "Not Redone");
 
         }
@@ -1382,7 +1382,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Labor.ENGCoef = 1.1;
+            Bid.Parameters.ENGCoef = 1.1;
             double expected = 1.1;
 
             //Act
@@ -1390,7 +1390,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            double actual = Bid.Labor.ENGCoef;
+            double actual = Bid.Parameters.ENGCoef;
             Assert.AreEqual(expected, actual, "Not Redone");
 
         }
@@ -1401,7 +1401,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Labor.CommCoef = 1.1;
+            Bid.Parameters.CommCoef = 1.1;
             double expected = 1.1;
 
             //Act
@@ -1409,7 +1409,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            double actual = Bid.Labor.CommCoef;
+            double actual = Bid.Parameters.CommCoef;
             Assert.AreEqual(expected, actual, "Not Redone");
 
         }
@@ -1420,7 +1420,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Labor.SoftCoef = 1.1;
+            Bid.Parameters.SoftCoef = 1.1;
             double expected = 1.1;
 
             //Act
@@ -1428,7 +1428,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            double actual = Bid.Labor.SoftCoef;
+            double actual = Bid.Parameters.SoftCoef;
             Assert.AreEqual(expected, actual, "Not Redone");
 
         }
@@ -1439,7 +1439,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Labor.GraphCoef = 1.1;
+            Bid.Parameters.GraphCoef = 1.1;
             double expected = 1.1;
 
             //Act
@@ -1447,7 +1447,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            double actual = Bid.Labor.GraphCoef;
+            double actual = Bid.Parameters.GraphCoef;
             Assert.AreEqual(expected, actual, "Not Redone");
 
         }
@@ -1458,7 +1458,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Labor.ElectricalRate = 1.1;
+            Bid.Parameters.ElectricalRate = 1.1;
             double expected = 1.1;
 
             //Act
@@ -1466,7 +1466,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            double actual = Bid.Labor.ElectricalRate;
+            double actual = Bid.Parameters.ElectricalRate;
             Assert.AreEqual(expected, actual, "Not Redone");
 
         }
@@ -1477,15 +1477,15 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Labor.ElectricalIsOnOvertime = !Bid.Labor.ElectricalIsOnOvertime;
-            bool expected = Bid.Labor.ElectricalIsOnOvertime;
+            Bid.Parameters.ElectricalIsOnOvertime = !Bid.Parameters.ElectricalIsOnOvertime;
+            bool expected = Bid.Parameters.ElectricalIsOnOvertime;
 
             //Act
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            bool actual = Bid.Labor.ElectricalIsOnOvertime;
+            bool actual = Bid.Parameters.ElectricalIsOnOvertime;
             Assert.AreEqual(expected, actual, "Not Redone");
         }
 

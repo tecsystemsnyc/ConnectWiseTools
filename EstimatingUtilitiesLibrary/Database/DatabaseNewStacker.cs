@@ -27,7 +27,8 @@ namespace EstimatingUtilitiesLibrary.Database
             List<UpdateItem> saveStack = new List<UpdateItem>();
             saveStack.AddRange(scopeManagerSaveStack(bid));
             saveStack.AddRange(DeltaStacker.AddStack(bid, bid.Parameters));
-            foreach(TECSystem system in bid.Systems)
+            saveStack.AddRange(DeltaStacker.AddStack(bid, bid.ExtraLabor));
+            foreach (TECSystem system in bid.Systems)
             {
                 saveStack.AddRange(DeltaStacker.AddStack(bid, system));
                 systemChildrenSaveStack(system);
@@ -62,7 +63,6 @@ namespace EstimatingUtilitiesLibrary.Database
         private static List<UpdateItem> scopeManagerSaveStack(TECScopeManager scopeManager)
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
-            saveStack.AddRange(DeltaStacker.AddStack(scopeManager, scopeManager.Labor));
             saveStack.AddRange(catalogsSaveStack(scopeManager.Catalogs));
             return saveStack;
         }
