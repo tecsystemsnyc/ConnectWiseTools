@@ -14,8 +14,6 @@ namespace Tests
     [TestClass]
     public class ItemSummaryVMTests
     {
-        private static double delta = 1.0 / 1000.0;
-
         #region Hardware Summary VM
         [TestMethod]
         public void AddControllerTypeToHardwareVM()
@@ -54,18 +52,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(controllerType.ExtendedCost, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(controllerType.Labor, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(controllerType.ExtendedCost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(controllerType.Labor, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(controllerTypeTotalTEC.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(controllerTypeTotalTEC.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(controllerTypeTotalElec.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(controllerTypeTotalElec.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(controllerTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(controllerTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(controllerTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(controllerTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveControllerTypeFromHardwareVM()
@@ -97,18 +95,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(0, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(-controllerTypeTotalTEC.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-controllerTypeTotalTEC.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-controllerTypeTotalElec.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-controllerTypeTotalElec.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(-controllerTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-controllerTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-controllerTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-controllerTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddPanelTypeToHardwareVM()
@@ -147,18 +145,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(panelType.ExtendedCost, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(panelType.Labor, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(panelType.ExtendedCost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(panelType.Labor, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(panelTypeTotalTEC.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(panelTypeTotalTEC.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(panelTypeTotalElec.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(panelTypeTotalElec.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(panelTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(panelTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(panelTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(panelTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemovePanelTypeFromHardwareVM()
@@ -190,18 +188,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(0, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(-panelTypeTotalTEC.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-panelTypeTotalTEC.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-panelTypeTotalElec.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-panelTypeTotalElec.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(-panelTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-panelTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-panelTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-panelTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddDeviceToHardwareVM()
@@ -240,18 +238,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(device.ExtendedCost, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(device.Labor, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(device.ExtendedCost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(device.Labor, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(deviceTotalTEC.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(deviceTotalTEC.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(deviceTotalElec.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(deviceTotalElec.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(deviceTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(deviceTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(deviceTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(deviceTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveDeviceFromHardwareVM()
@@ -283,18 +281,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(0, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(-deviceTotalTEC.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-deviceTotalTEC.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-deviceTotalElec.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-deviceTotalElec.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(-deviceTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-deviceTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-deviceTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-deviceTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddTECCostToHardwareVM()
@@ -330,18 +328,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(0, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(tecCost.Cost, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(tecCost.Labor, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(tecCost.Cost, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(tecCost.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(tecCost.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(tecCost.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveTECCostFromHardwareVM()
@@ -378,18 +376,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(0, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(-tecCost.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-tecCost.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(-tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElecCostToHardwareVM()
@@ -425,18 +423,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(0, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(elecCost.Cost, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(elecCost.Labor, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(elecCost.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(elecCost.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(elecCost.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(elecCost.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElecCostFromHardwareVM()
@@ -473,18 +471,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(0, hardwareVM.HardwareCost, delta, "HardwareCost property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.HardwareLabor, delta, "HardwareLabor property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
-            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-elecCost.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-elecCost.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         #endregion
 
@@ -545,23 +543,23 @@ namespace Tests
 
             //Assert
             //Check length properties
-            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, DELTA, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, DELTA, "LengthLaborTotal property in LengthSummaryVM is wrong.");
             //Check assoc properties
-            Assert.AreEqual(expectedAssocTECTotal.Cost, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedAssocTECTotal.Labor, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedAssocElecTotal.Cost, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedAssocElecTotal.Labor, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocTECTotal.Cost, lengthVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocTECTotal.Labor, lengthVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.Cost, lengthVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.Labor, lengthVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check rated properties
-            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, DELTA, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElectricalMaterialRunFromLengthVM()
@@ -628,23 +626,23 @@ namespace Tests
 
             //Assert
             //Check length properties
-            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, DELTA, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, DELTA, "LengthLaborTotal property in LengthSummaryVM is wrong.");
             //Check assoc properties
-            Assert.AreEqual(0, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(0, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(0, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(0, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check rated properties
-            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, DELTA, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElectricalMaterialLengthToLengthVM()
@@ -694,23 +692,23 @@ namespace Tests
 
             //Assert
             //Check length properties
-            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, DELTA, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, DELTA, "LengthLaborTotal property in LengthSummaryVM is wrong.");
             //Check assoc properties
-            Assert.AreEqual(0, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(0, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(0, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(0, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(0, lengthVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check rated properties
-            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, DELTA, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElectricalMaterialLengthFromLengthVM()
@@ -775,23 +773,23 @@ namespace Tests
 
             //Assert
             //Check length properties
-            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, delta, "LengthCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, delta, "LengthLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthCost, lengthVM.LengthCostTotal, DELTA, "LengthCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedLengthLabor, lengthVM.LengthLaborTotal, DELTA, "LengthLaborTotal property in LengthSummaryVM is wrong.");
             //Check assoc properties
-            Assert.AreEqual(expectedAssocTECTotal.Cost, lengthVM.AssocTECCostTotal, delta, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedAssocTECTotal.Labor, lengthVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedAssocElecTotal.Cost, lengthVM.AssocElecCostTotal, delta, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedAssocElecTotal.Labor, lengthVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocTECTotal.Cost, lengthVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocTECTotal.Labor, lengthVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.Cost, lengthVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedAssocElecTotal.Labor, lengthVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check rated properties
-            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, delta, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, delta, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, delta, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
-            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, delta, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Cost, lengthVM.RatedTECCostTotal, DELTA, "RatedTECCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
+            Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         #endregion
 
@@ -830,20 +828,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(0, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(tecCost.Cost, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(tecCost.Labor, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(tecCost.Cost, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(tecCost.Labor, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(tecCost.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(tecCost.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveTECCostFromMiscCostsVM()
@@ -880,20 +878,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(0, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(-tecCost.Cost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-tecCost.Labor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(-tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElecCostToMiscCostsVM()
@@ -929,20 +927,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(0, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(elecCost.Cost, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(elecCost.Labor, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(elecCost.Cost, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(elecCost.Labor, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(elecCost.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(elecCost.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElecCostFromMiscCostsVM()
@@ -979,20 +977,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(0, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-elecCost.Cost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-elecCost.Labor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddTECMiscToMiscCostsVM()
@@ -1026,20 +1024,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(expectedCost, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(expectedLabor, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedCost, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedLabor, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(expectedCost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedLabor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(expectedCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveTECMiscFromMiscCostsVM()
@@ -1074,20 +1072,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(0, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(-expectedCost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-expectedLabor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(-expectedCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-expectedLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElecMiscToMiscCostsVM()
@@ -1121,20 +1119,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(0, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(expectedCost, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(expectedLabor, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedCost, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedLabor, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedCost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedLabor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedCost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedLabor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElecMiscFromMiscCostsVM()
@@ -1169,20 +1167,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(0, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-expectedCost, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-expectedLabor, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-expectedCost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-expectedLabor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void ChangeCostQuantityInMiscCostsVM()
@@ -1221,20 +1219,20 @@ namespace Tests
             double expectedDeltaLabor = deltaQuantity * misc.Labor;
 
             //Check Misc properties
-            Assert.AreEqual(expectedCost, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(expectedLabor, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedCost, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedLabor, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(expectedDeltaCost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedDeltaLabor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(expectedDeltaCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedDeltaLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void UpdateCostInMiscCostsVM()
@@ -1277,20 +1275,20 @@ namespace Tests
 
             //Assert
             //Check Misc properties
-            Assert.AreEqual(expectedCost, miscVM.MiscTECCostTotal, delta, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(expectedLabor, miscVM.MiscTECLaborTotal, delta, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecCostTotal, delta, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, delta, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedCost, miscVM.MiscTECCostTotal, DELTA, "MiscTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(expectedLabor, miscVM.MiscTECLaborTotal, DELTA, "MiscTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecCostTotal, DELTA, "MiscElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.MiscElecLaborTotal, DELTA, "MiscElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check Assoc properties
-            Assert.AreEqual(0, miscVM.AssocTECCostTotal, delta, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, delta, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecCostTotal, delta, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
-            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, delta, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
+            Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
             //Check returned deltas
-            Assert.AreEqual(expectedDeltaCost, tecDelta.Cost, delta, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedDeltaLabor, tecDelta.Labor, delta, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, delta, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, delta, "Returned Elec labor delta is wrong.");
+            Assert.AreEqual(expectedDeltaCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedDeltaLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
         }
         #endregion
     }
