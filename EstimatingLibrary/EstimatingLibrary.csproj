@@ -103,6 +103,7 @@
     <Compile Include="Interfaces\INotifyTECChanged.cs" />
     <Compile Include="Interfaces\INotifyPointChanged.cs" />
     <Compile Include="Interfaces\ITECConnectable.cs" />
+    <Compile Include="TECExtraLabor.cs" />
     <Compile Include="TECValve.cs" />
     <Compile Include="Utilities\ListDictionary.cs" />
     <Compile Include="TECCatalogs.cs" />
@@ -123,7 +124,6 @@
     <Compile Include="TECDevice.cs" />
     <Compile Include="TECEquipment.cs" />
     <Compile Include="TECIO.cs" />
-    <Compile Include="TECLabor.cs" />
     <Compile Include="TECManufacturer.cs" />
     <Compile Include="TECMisc.cs" />
     <Compile Include="TECNetworkConnection.cs" />

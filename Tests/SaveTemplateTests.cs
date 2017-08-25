@@ -74,211 +74,225 @@ namespace Tests
         [TestMethod]
         public void Save_Templates_Labor_PMCoef()
         {
-            //Act
-            double expectedPM = 0.123;
-            templates.Labor.PMCoef = expectedPM;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedPM = 0.123;
+            //templates.Labor.PMCoef = expectedPM;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualPM = actualTemplates.Labor.PMCoef;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualPM = actualTemplates.Labor.PMCoef;
 
-            //Assert
-            Assert.AreEqual(expectedPM, actualPM);
+            ////Assert
+            //Assert.AreEqual(expectedPM, actualPM);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_PMRate()
         {
-            //Act
-            double expectedRate = 564.05;
-            templates.Labor.PMRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 564.05;
+            //templates.Labor.PMRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.PMRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.PMRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_ENGCoef()
         {
-            //Act
-            double expectedENG = 0.123;
-            templates.Labor.ENGCoef = expectedENG;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedENG = 0.123;
+            //templates.Labor.ENGCoef = expectedENG;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualENG = actualTemplates.Labor.ENGCoef;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualENG = actualTemplates.Labor.ENGCoef;
 
-            //Assert
-            Assert.AreEqual(expectedENG, actualENG);
+            ////Assert
+            //Assert.AreEqual(expectedENG, actualENG);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_ENGRate()
         {
-            //Act
-            double expectedRate = 564.05;
-            templates.Labor.ENGRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 564.05;
+            //templates.Labor.ENGRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.ENGRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.ENGRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_CommCoef()
         {
-            //Act
-            double expectedComm = 0.123;
-            templates.Labor.CommCoef = expectedComm;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedComm = 0.123;
+            //templates.Labor.CommCoef = expectedComm;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualComm = actualTemplates.Labor.CommCoef;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualComm = actualTemplates.Labor.CommCoef;
 
-            //Assert
-            Assert.AreEqual(expectedComm, actualComm);
+            ////Assert
+            //Assert.AreEqual(expectedComm, actualComm);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_CommRate()
         {
-            //Act
-            double expectedRate = 564.05;
-            templates.Labor.CommRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 564.05;
+            //templates.Labor.CommRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.CommRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.CommRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_SoftCoef()
         {
-            //Act
-            double expectedSoft = 0.123;
-            templates.Labor.SoftCoef = expectedSoft;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedSoft = 0.123;
+            //templates.Labor.SoftCoef = expectedSoft;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualSoft = actualTemplates.Labor.SoftCoef;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualSoft = actualTemplates.Labor.SoftCoef;
 
-            //Assert
-            Assert.AreEqual(expectedSoft, actualSoft);
+            ////Assert
+            //Assert.AreEqual(expectedSoft, actualSoft);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_SoftRate()
         {
-            //Act
-            double expectedRate = 564.05;
-            templates.Labor.SoftRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 564.05;
+            //templates.Labor.SoftRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.SoftRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.SoftRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_GraphCoef()
         {
-            //Act
-            double expectedGraph = 0.123;
-            templates.Labor.GraphCoef = expectedGraph;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedGraph = 0.123;
+            //templates.Labor.GraphCoef = expectedGraph;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualGraph = actualTemplates.Labor.GraphCoef;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualGraph = actualTemplates.Labor.GraphCoef;
 
-            //Assert
-            Assert.AreEqual(expectedGraph, actualGraph);
+            ////Assert
+            //Assert.AreEqual(expectedGraph, actualGraph);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_GraphRate()
         {
-            //Act
-            double expectedRate = 564.05;
-            templates.Labor.GraphRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 564.05;
+            //templates.Labor.GraphRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.GraphRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.GraphRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_ElecRate()
         {
-            //Act
-            double expectedRate = 0.123;
-            templates.Labor.ElectricalRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 0.123;
+            //templates.Labor.ElectricalRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.ElectricalRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.ElectricalRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_ElecNonUnionRate()
         {
-            //Act
-            double expectedRate = 0.456;
-            templates.Labor.ElectricalNonUnionRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 0.456;
+            //templates.Labor.ElectricalNonUnionRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.ElectricalNonUnionRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.ElectricalNonUnionRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_ElecSuperRate()
         {
-            //Act
-            double expectedRate = 0.123;
-            templates.Labor.ElectricalSuperRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 0.123;
+            //templates.Labor.ElectricalSuperRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.ElectricalSuperRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.ElectricalSuperRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
         [TestMethod]
         public void Save_Templates_Labor_ElecSuperNonUnionRate()
         {
-            //Act
-            double expectedRate = 23.94;
-            templates.Labor.ElectricalSuperNonUnionRate = expectedRate;
-            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            throw new NotImplementedException();
+            ////Act
+            //double expectedRate = 23.94;
+            //templates.Labor.ElectricalSuperNonUnionRate = expectedRate;
+            //DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
-            double actualRate = actualTemplates.Labor.ElectricalSuperNonUnionRate;
+            //TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
+            //double actualRate = actualTemplates.Labor.ElectricalSuperNonUnionRate;
 
-            //Assert
-            Assert.AreEqual(expectedRate, actualRate);
+            ////Assert
+            //Assert.AreEqual(expectedRate, actualRate);
         }
 
 

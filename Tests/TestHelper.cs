@@ -31,11 +31,9 @@ namespace Tests
             bid.Salesperson = "Mrs. Test";
             bid.Estimator = "Mr. Test";
 
-            //Bid Parameters
-            bid.Parameters.IsTaxExempt = true;
-
-            //Bid Labor
-            bid.Labor = CreateTestLabor();
+            //Bid Objects
+            bid.ExtraLabor = CreateTestExtraLabor(bid.Guid);
+            bid.Parameters = CreateTestParameters(bid.Guid);
             bid.Catalogs = CreateTestCatalogs();
             
             //Locations
@@ -205,7 +203,7 @@ namespace Tests
             TECTemplates templates = new TECTemplates();
 
             //Labor
-            templates.Labor = CreateTestLabor();
+            //templates.Labor = CreateTestLabor();
 
             //Tags
             TECLabeled testTag = new TECLabeled();
@@ -705,39 +703,47 @@ namespace Tests
             panel.Tags.Add(catalogs.Tags.RandomObject());
             return panel;
         }
-        public static TECLabor CreateTestLabor()
+        public static TECExtraLabor CreateTestExtraLabor(Guid bidGuid)
         {
-            var labor = new TECLabor();
-            labor.PMCoef = 0.1;
-            labor.PMRate = 0.11;
+            TECExtraLabor labor = new TECExtraLabor(bidGuid);
             labor.PMExtraHours = 1.1;
-
-            labor.ENGCoef = 0.2;
-            labor.ENGRate = 0.22;
-            labor.ENGExtraHours = 2.2;
-
-            labor.CommCoef = 0.3;
-            labor.CommRate = 0.33;
             labor.CommExtraHours = 3.3;
-
-            labor.SoftCoef = 0.4;
-            labor.SoftRate = 0.44;
+            labor.ENGExtraHours = 2.2;
             labor.SoftExtraHours = 4.4;
-
-            labor.GraphCoef = 0.5;
-            labor.GraphRate = 0.55;
             labor.GraphExtraHours = 5.5;
-
-            labor.ElectricalRate = 0.6;
-            labor.ElectricalSuperRate = 0.66;
-            labor.ElectricalSuperRatio = 1.0 / 7.0;
-
-            labor.ElectricalNonUnionRate = 0.7;
-            labor.ElectricalSuperNonUnionRate = 0.77;
-
-            labor.ElectricalIsOnOvertime = true;
-            labor.ElectricalIsUnion = true;
             return labor;
+
+        }
+        public static TECParameters CreateTestParameters(Guid bidGuid)
+        {
+            var parameters = new TECParameters(bidGuid);
+            parameters.IsTaxExempt = true;
+
+            parameters.PMCoef = 0.1;
+            parameters.PMRate = 0.11;
+
+            parameters.ENGCoef = 0.2;
+            parameters.ENGRate = 0.22;
+
+            parameters.CommCoef = 0.3;
+            parameters.CommRate = 0.33;
+
+            parameters.SoftCoef = 0.4;
+            parameters.SoftRate = 0.44;
+
+            parameters.GraphCoef = 0.5;
+            parameters.GraphRate = 0.55;
+
+            parameters.ElectricalRate = 0.6;
+            parameters.ElectricalSuperRate = 0.66;
+            parameters.ElectricalSuperRatio = 1.0 / 7.0;
+
+            parameters.ElectricalNonUnionRate = 0.7;
+            parameters.ElectricalSuperNonUnionRate = 0.77;
+
+            parameters.ElectricalIsOnOvertime = true;
+            parameters.ElectricalIsUnion = true;
+            return parameters;
         }
         public static TECMisc CreateTestMisc(CostType type = 0)
         {

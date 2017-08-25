@@ -66,10 +66,10 @@ namespace EstimatingUtilitiesLibrary.Database
             ObjectType
         };
     }
-    internal class BidParametersTable : TableBase
+    internal class ParametersTable : TableBase
     {
         public static new string TableName = "Parameters";
-        public static FlavoredType ParameterType = new FlavoredType(typeof(TECBidParameters), 0);
+        public static FlavoredType ParameterType = new FlavoredType(typeof(TECParameters), 0);
 
         public static TableField ID = new TableField("ID", "TEXT", ParameterType.Type.GetProperty("Guid"));
 
@@ -83,6 +83,34 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.Type.GetProperty("RequiresBond"));
         public static TableField RequiresWrapUp = new TableField("RequiresWrapUp", "INTEGER", ParameterType.Type.GetProperty("RequiresWrapUp"));
 
+        #region Labor
+        public static TableField PMCoef = new TableField("PMCoef", "REAL", ParameterType.Type.GetProperty("PMCoef"));
+        public static TableField PMRate = new TableField("PMRate", "REAL", ParameterType.Type.GetProperty("PMRate"));
+
+        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", ParameterType.Type.GetProperty("ENGCoef"));
+        public static TableField ENGRate = new TableField("ENGRate", "REAL", ParameterType.Type.GetProperty("ENGRate"));
+
+        public static TableField CommCoef = new TableField("CommCoef", "REAL", ParameterType.Type.GetProperty("CommCoef"));
+        public static TableField CommRate = new TableField("CommRate", "REAL", ParameterType.Type.GetProperty("CommRate"));
+
+        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", ParameterType.Type.GetProperty("SoftCoef"));
+        public static TableField SoftRate = new TableField("SoftRate", "REAL", ParameterType.Type.GetProperty("SoftRate"));
+
+        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", ParameterType.Type.GetProperty("GraphCoef"));
+        public static TableField GraphRate = new TableField("GraphRate", "REAL", ParameterType.Type.GetProperty("GraphRate"));
+        #endregion
+
+        #region SubContractor
+        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", ParameterType.Type.GetProperty("ElectricalRate"));
+        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", ParameterType.Type.GetProperty("ElectricalSuperRate"));
+        public static TableField ElectricalNonUnionRate = new TableField("ElectricalNonUnionRate", "REAL", ParameterType.Type.GetProperty("ElectricalNonUnionRate"));
+        public static TableField ElectricalSuperNonUnionRate = new TableField("ElectricalSuperNonUnionRate", "REAL", ParameterType.Type.GetProperty("ElectricalSuperNonUnionRate"));
+        public static TableField ElectricalSuperRatio = new TableField("ElectricalSuperRatio", "REAL", ParameterType.Type.GetProperty("ElectricalSuperRatio"));
+
+        public static TableField ElectricalIsOnOvertime = new TableField("ElectricalIsOnOvertime", "INTEGER", ParameterType.Type.GetProperty("ElectricalIsOnOvertime"));
+        public static TableField ElectricalIsUnion = new TableField("ElectricalIsUnion", "INTEGER", ParameterType.Type.GetProperty("ElectricalIsUnion"));
+        #endregion
+
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
             ID
@@ -93,87 +121,27 @@ namespace EstimatingUtilitiesLibrary.Database
             ParameterType
         };
     }
-    internal class LaborConstantsTable : TableBase
+    internal class ExtraLaborTable : TableBase
     {
-        public static new string TableName = "TECLaborConst";
-        public static FlavoredType LaborType = new FlavoredType(typeof(TECLabor), 0);
+        public static new string TableName = "ExtraLabor";
+        public static FlavoredType ObjectType = new FlavoredType( typeof(TECExtraLabor), 0);
 
-        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.Type.GetProperty("Guid"));
+        public static TableField ID = new TableField("BidID", "TEXT", ObjectType.Type.GetProperty("Guid"));
 
-        public static TableField PMCoef = new TableField("PMCoef", "REAL", LaborType.Type.GetProperty("PMCoef"));
-        public static TableField PMRate = new TableField("PMRate", "REAL", LaborType.Type.GetProperty("PMRate"));
-
-        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", LaborType.Type.GetProperty("ENGCoef"));
-        public static TableField ENGRate = new TableField("ENGRate", "REAL", LaborType.Type.GetProperty("ENGRate"));
-
-        public static TableField CommCoef = new TableField("CommCoef", "REAL", LaborType.Type.GetProperty("CommCoef"));
-        public static TableField CommRate = new TableField("CommRate", "REAL", LaborType.Type.GetProperty("CommRate"));
-
-        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", LaborType.Type.GetProperty("SoftCoef"));
-        public static TableField SoftRate = new TableField("SoftRate", "REAL", LaborType.Type.GetProperty("SoftRate"));
-
-        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", LaborType.Type.GetProperty("GraphCoef"));
-        public static TableField GraphRate = new TableField("GraphRate", "REAL", LaborType.Type.GetProperty("GraphRate"));
+        public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL", ObjectType.Type.GetProperty("PMExtraHours"));
+        public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL", ObjectType.Type.GetProperty("ENGExtraHours"));
+        public static TableField CommExtraHours = new TableField("CommExtraHours", "REAL", ObjectType.Type.GetProperty("CommExtraHours"));
+        public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL", ObjectType.Type.GetProperty("SoftExtraHours"));
+        public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL", ObjectType.Type.GetProperty("GraphExtraHours"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
-            LaborID
+            ID
         };
 
         public static new List<FlavoredType> Types = new List<FlavoredType>()
         {
-            LaborType
-        };
-    }
-    internal class SubcontractorConstantsTable : TableBase
-    {
-        public static new string TableName = "TECSubcontractorConst";
-        public static FlavoredType LaborType = new FlavoredType(typeof(TECLabor), 0);
-
-        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.Type.GetProperty("Guid"));
-
-        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", LaborType.Type.GetProperty("ElectricalRate"));
-        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", LaborType.Type.GetProperty("ElectricalSuperRate"));
-        public static TableField ElectricalNonUnionRate = new TableField("ElectricalNonUnionRate", "REAL", LaborType.Type.GetProperty("ElectricalNonUnionRate"));
-        public static TableField ElectricalSuperNonUnionRate = new TableField("ElectricalSuperNonUnionRate", "REAL", LaborType.Type.GetProperty("ElectricalSuperNonUnionRate"));
-        public static TableField ElectricalSuperRatio = new TableField("ElectricalSuperRatio", "REAL", LaborType.Type.GetProperty("ElectricalSuperRatio"));
-
-        public static TableField ElectricalIsOnOvertime = new TableField("ElectricalIsOnOvertime", "INTEGER", LaborType.Type.GetProperty("ElectricalIsOnOvertime"));
-        public static TableField ElectricalIsUnion = new TableField("ElectricalIsUnion", "INTEGER", LaborType.Type.GetProperty("ElectricalIsUnion"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            LaborID
-        };
-
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            LaborType
-        };
-    }
-    internal class UserAdjustmentsTable : TableBase
-    {
-        public static new string TableName = "TECUserAdjustments";
-        public static FlavoredType BidType = new FlavoredType( typeof(TECBid), 0);
-        public static FlavoredType LaborType = new FlavoredType( typeof(TECLabor), 0);
-
-        public static TableField BidID = new TableField("BidID", "TEXT", BidType.Type.GetProperty("Guid"));
-
-        public static TableField PMExtraHours = new TableField("PMExtraHours", "REAL", LaborType.Type.GetProperty("PMExtraHours"));
-        public static TableField ENGExtraHours = new TableField("ENGExtraHours", "REAL", LaborType.Type.GetProperty("ENGExtraHours"));
-        public static TableField CommExtraHours = new TableField("CommExtraHours", "REAL", LaborType.Type.GetProperty("CommExtraHours"));
-        public static TableField SoftExtraHours = new TableField("SoftExtraHours", "REAL", LaborType.Type.GetProperty("SoftExtraHours"));
-        public static TableField GraphExtraHours = new TableField("GraphExtraHours", "REAL", LaborType.Type.GetProperty("GraphExtraHours"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            BidID
-        };
-
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            BidType,
-            LaborType
+            ObjectType
         };
 
     }
@@ -638,27 +606,6 @@ namespace EstimatingUtilitiesLibrary.Database
     #endregion
 
     #region Relationship Tables
-    internal class BidLaborTable : TableBase
-    {
-        public static new string TableName = "BidLabor";
-        public static FlavoredType BidType = new FlavoredType(typeof(TECBid), 0);
-        public static FlavoredType LaborType = new FlavoredType(typeof(TECLabor), 0);
-
-        public static TableField BidID = new TableField("BidID", "TEXT", BidType.Type.GetProperty("Guid"));
-        public static TableField LaborID = new TableField("LaborID", "TEXT", LaborType.Type.GetProperty("Guid"));
-
-        public static new List<TableField> PrimaryKey = new List<TableField>()
-        {
-            BidID,
-            LaborID
-        };
-
-        public static new List<FlavoredType> Types = new List<FlavoredType>()
-        {
-            BidType,
-            LaborType
-        };
-    }
     internal class BidScopeBranchTable : TableBase
     {
         public static new string TableName = "BidScopeBranch";
@@ -1295,9 +1242,8 @@ namespace EstimatingUtilitiesLibrary.Database
         public static List<TableBase> Tables = new List<TableBase>() {
             new MetadataTable(),
             new BidInfoTable(),
-            new LaborConstantsTable(),
-            new UserAdjustmentsTable(),
-            new SubcontractorConstantsTable(),
+            new ExtraLaborTable(),
+            new ExtraLaborTable(),
             new NoteTable(),
             new ExclusionTable(),
             new ScopeBranchTable(),
@@ -1309,7 +1255,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new TagTable(),
             new ManufacturerTable(),
             new LocationTable(),
-            new BidParametersTable(),
             new MiscTable(),
             new PanelTable(),
             new PanelTypeTable(),
@@ -1318,7 +1263,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new IOTable(),
             new IOModuleTable(),
 
-            new BidLaborTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new ScopeBranchHierarchyTable(),
@@ -1362,8 +1306,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             new MetadataTable(),
             new TemplatesInfoTable(),
-            new LaborConstantsTable(),
-            new SubcontractorConstantsTable(),
+            new ExtraLaborTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),
@@ -1416,9 +1359,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new MetadataTable(),
             new BidInfoTable(),
             new TemplatesInfoTable(),
-            new LaborConstantsTable(),
-            new SubcontractorConstantsTable(),
-            new UserAdjustmentsTable(),
+            new ExtraLaborTable(),
             new NoteTable(),
             new ExclusionTable(),
             new BidScopeBranchTable(),
@@ -1431,7 +1372,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new TagTable(),
             new ManufacturerTable(),
             new LocationTable(),
-            new BidParametersTable(),
             new MiscTable(),
             new PanelTypeTable(),
             new PanelTable(),
@@ -1440,7 +1380,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new IOModuleTable(),
             new IOTable(),
             
-            new BidLaborTable(),
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new AssociatedCostTable(),

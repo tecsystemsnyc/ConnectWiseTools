@@ -20,7 +20,8 @@ namespace Tests
         private const bool DEBUG = true;
 
         static TECBid expectedBid;
-        static TECLabor expectedLabor;
+        static TECParameters expectedParameters;
+        static TECExtraLabor expectedLabor;
         static TECSystem expectedSystem;
         static TECSystem expectedSystem1;
         static TECEquipment expectedEquipment;
@@ -40,7 +41,8 @@ namespace Tests
         static string path;
 
         static TECBid actualBid;
-        static TECLabor actualLabor;
+        static TECParameters actualParameters;
+        static TECExtraLabor actualLabor;
         static TECSystem actualSystem;
         static TECSystem actualSystem1;
         static TECEquipment actualEquipment;
@@ -77,7 +79,8 @@ namespace Tests
         {
             //Arrange
             expectedBid = TestHelper.CreateTestBid();
-            expectedLabor = expectedBid.Labor;
+            expectedLabor = expectedBid.ExtraLabor;
+            expectedParameters = expectedBid.Parameters;
             foreach (TECSystem system in expectedBid.Systems)
             {
                 if (system.Equipment.Count >  0)
@@ -127,7 +130,8 @@ namespace Tests
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(expectedBid);
             actualBid = manager.Load() as TECBid;
-            actualLabor = actualBid.Labor;
+            actualLabor = actualBid.ExtraLabor;
+            actualBid.Parameters = actualBid.Parameters;
 
             foreach (TECSystem sys in actualBid.Systems)
             {
@@ -266,33 +270,33 @@ namespace Tests
         public void SaveAs_Bid_LaborConstants()
         {
             //Assert
-            Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
-            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
+            Assert.AreEqual(expectedParameters.PMCoef, actualParameters.PMCoef);
+            Assert.AreEqual(expectedParameters.PMRate, actualParameters.PMRate);
 
-            Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
-            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
+            Assert.AreEqual(expectedParameters.ENGCoef, actualParameters.ENGCoef);
+            Assert.AreEqual(expectedParameters.ENGRate, actualParameters.ENGRate);
 
-            Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
-            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
+            Assert.AreEqual(expectedParameters.CommCoef, actualParameters.CommCoef);
+            Assert.AreEqual(expectedParameters.CommRate, actualParameters.CommRate);
 
-            Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
-            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
+            Assert.AreEqual(expectedParameters.SoftCoef, actualParameters.SoftCoef);
+            Assert.AreEqual(expectedParameters.SoftRate, actualParameters.SoftRate);
 
-            Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
-            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
+            Assert.AreEqual(expectedParameters.GraphCoef, actualParameters.GraphCoef);
+            Assert.AreEqual(expectedParameters.GraphRate, actualParameters.GraphRate);
         }
 
         [TestMethod]
         public void SaveAs_Bid_SubContracterConstants()
         {
             //Assert
-            Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
-            Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate);
-            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
-            Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate);
+            Assert.AreEqual(expectedParameters.ElectricalRate, actualParameters.ElectricalRate);
+            Assert.AreEqual(expectedParameters.ElectricalNonUnionRate, actualParameters.ElectricalNonUnionRate);
+            Assert.AreEqual(expectedParameters.ElectricalSuperRate, actualParameters.ElectricalSuperRate);
+            Assert.AreEqual(expectedParameters.ElectricalSuperNonUnionRate, actualParameters.ElectricalSuperNonUnionRate);
 
-            Assert.AreEqual(expectedLabor.ElectricalIsOnOvertime, actualLabor.ElectricalIsOnOvertime);
-            Assert.AreEqual(expectedLabor.ElectricalIsUnion, actualLabor.ElectricalIsUnion);
+            Assert.AreEqual(expectedParameters.ElectricalIsOnOvertime, actualParameters.ElectricalIsOnOvertime);
+            Assert.AreEqual(expectedParameters.ElectricalIsUnion, actualParameters.ElectricalIsUnion);
         }
 
         [TestMethod]

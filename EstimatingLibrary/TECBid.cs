@@ -18,7 +18,8 @@ namespace EstimatingLibrary
         private DateTime _dueDate;
         private string _salesperson;
         private string _estimator;
-        private TECBidParameters _parameters;
+        private TECParameters _parameters;
+        private TECExtraLabor _extraLabor;
 
         public event Action<List<TECCost>> CostChanged;
         public event Action<int> PointChanged;
@@ -92,7 +93,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public TECBidParameters Parameters
+        public TECParameters Parameters
         {
             get { return _parameters; }
             set
@@ -102,6 +103,17 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
             }
         }
+        public TECExtraLabor ExtraLabor
+        {
+            get { return _extraLabor; }
+            set
+            {
+                var old = ExtraLabor;
+                _extraLabor = value;
+                NotifyCombinedChanged(Change.Edit, "ExtraLabor", this, value, old);
+            }
+
+        }
 
         public ObservableCollection<TECScopeBranch> ScopeTree
         {
@@ -109,9 +121,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = ScopeTree;
-                ScopeTree.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "ScopeTree");
+                ScopeTree.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ScopeTree");
                 _scopeTree = value;
-                ScopeTree.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ScopeTree");
+                ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
                 NotifyCombinedChanged(Change.Edit, "ScopeTree", this, value, old);
             }
         }
@@ -121,10 +133,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = Systems;
-                Systems.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Systems");
+                Systems.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Systems");
                 _systems = value;
                 registerSystems();
-                Systems.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Systems");
+                Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
                 NotifyCombinedChanged(Change.Edit, "Systems", this, value, old);
             }
         }
@@ -134,9 +146,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = Notes;
-                Notes.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Notes");
+                Notes.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Notes");
                 _notes = value;
-                Notes.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Notes");
+                Notes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Notes");
                 NotifyCombinedChanged(Change.Edit, "Notes", this, value, old);
             }
         }
@@ -146,9 +158,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = Exclusions;
-                Exclusions.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Exclusions");
+                Exclusions.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Exclusions");
                 _exclusions = value;
-                Exclusions.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Exclusions");
+                Exclusions.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Exclusions");
                 NotifyCombinedChanged(Change.Edit, "Exclusions", this, value, old);
             }
         }
@@ -158,11 +170,11 @@ namespace EstimatingLibrary
             set
             {
                 var old = Locations;
-                Locations.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Locations");
-                Locations.CollectionChanged -= Locations_CollectionChanged;
+                Locations.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Locations");
+                Locations.CollectionChanged -= locations_CollectionChanged;
                 _locations = value;
-                Locations.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Locations");
-                Locations.CollectionChanged += Locations_CollectionChanged;
+                Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
+                Locations.CollectionChanged += locations_CollectionChanged;
                 NotifyCombinedChanged(Change.Edit, "Locations", this, value, old);
             }
         }
@@ -173,9 +185,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = Controllers;
-                Controllers.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Controllers");
+                Controllers.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Controllers");
                 _controllers = value;
-                Controllers.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Controllers");
+                Controllers.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Controllers");
                 NotifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
             }
         }
@@ -185,9 +197,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = MiscCosts;
-                MiscCosts.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "MiscCosts");
+                MiscCosts.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "MiscCosts");
                 _miscCosts = value;
-                MiscCosts.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCosts");
+                MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
                 NotifyCombinedChanged(Change.Edit, "MiscCosts", this, value, old);
             }
         }
@@ -197,9 +209,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = Panels;
-                Panels.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Panels");
+                Panels.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Panels");
                 _panels = value;
-                Panels.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Panels");
+                Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
                 NotifyCombinedChanged(Change.Edit, "Panels", this, value, old);
             }
         }
@@ -232,18 +244,18 @@ namespace EstimatingLibrary
             _controllers = new ObservableCollection<TECController>();
             _miscCosts = new ObservableCollection<TECMisc>();
             _panels = new ObservableCollection<TECPanel>();
-            _labor = new TECLabor();
-            _parameters = new TECBidParameters();
+            _extraLabor = new TECExtraLabor(this.Guid);
+            _parameters = new TECParameters(this.Guid);
 
-            Systems.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Systems");
-            ScopeTree.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ScopeTree");
-            Notes.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Notes");
-            Exclusions.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Exclusions");
-            Locations.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Locations");
-            Locations.CollectionChanged += Locations_CollectionChanged;
-            Controllers.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Controllers");
-            MiscCosts.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCosts");
-            Panels.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Panels");
+            Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
+            ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
+            Notes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Notes");
+            Exclusions.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Exclusions");
+            Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
+            Locations.CollectionChanged += locations_CollectionChanged;
+            Controllers.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Controllers");
+            MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
+            Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
 
             registerSystems();
         }
@@ -277,7 +289,7 @@ namespace EstimatingLibrary
 
         #region Methods
         #region Event Handlers
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string collectionName)
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string collectionName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -291,7 +303,7 @@ namespace EstimatingLibrary
                     if (item is TECSystem)
                     {
                         var sys = item as TECSystem;
-                        sys.PropertyChanged += System_PropertyChanged;
+                        sys.PropertyChanged += system_PropertyChanged;
                     }
                 }
                 PointChanged?.Invoke(pointNumber);
@@ -309,7 +321,7 @@ namespace EstimatingLibrary
                     if (item is TECSystem)
                     {
                         var sys = item as TECSystem;
-                        sys.PropertyChanged -= System_PropertyChanged;
+                        sys.PropertyChanged -= system_PropertyChanged;
                         handleSystemSubScopeRemoval(item as TECSystem);
                     }
                     else if (item is TECController)
@@ -326,7 +338,7 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, collectionName, this, e.NewItems, e.OldItems);
             }
         }
-        private void Locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -336,7 +348,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private void System_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void system_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "RemovedSubScope")
             {
@@ -396,7 +408,7 @@ namespace EstimatingLibrary
         {
             foreach (TECSystem system in Systems)
             {
-                system.PropertyChanged += System_PropertyChanged;
+                system.PropertyChanged += system_PropertyChanged;
             }
         }
 

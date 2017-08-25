@@ -51,7 +51,6 @@ namespace TemplateBuilder.MVVM
         public EditTabVM EditTab { get; set; }
         public MaterialVM MaterialsTab { get; set; }
         public TypicalSystemVM TypicalSystemsTab { get; set; }
-        public ConstantsVM ConstantsVM { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
         #endregion
         protected override TECScopeManager workingScopeManager
@@ -212,7 +211,6 @@ namespace TemplateBuilder.MVVM
                 EditTab.Refresh(Templates);
                 MaterialsTab.Refresh(Templates);
                 TypicalSystemsTab.Refresh(Templates);
-                ConstantsVM.Refresh(Templates.Labor);
                 ControllersPanelsVM.Refresh(Templates);
             }
         }
@@ -269,7 +267,6 @@ namespace TemplateBuilder.MVVM
             setupScopeDataGrid();
             setupMaterialsTab();
             setupTypicalSystemseTab();
-            setupConstantsVM();
             setupControllersPanelsVM();
         }
 
@@ -308,10 +305,6 @@ namespace TemplateBuilder.MVVM
             TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;
             TypicalSystemsTab.ComponentVM.SelectionChanged += EditTab.updateSelection;
             TypicalSystemsTab.AssignChildDelegates();
-        }
-        private void setupConstantsVM()
-        {
-            ConstantsVM = new ConstantsVM(Templates.Labor);
         }
         private void setupControllersPanelsVM()
         {

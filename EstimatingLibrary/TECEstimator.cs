@@ -33,7 +33,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                { return TECFieldHours * bid.Labor.CommRate; }
+                { return TECFieldHours * bid.Parameters.CommRate; }
             }
         }
         
@@ -293,12 +293,12 @@ namespace EstimatingLibrary
         #endregion
 
         #region Calculate Derivatives
-        public double getTECShipping()
+        private double getTECShipping()
         {
             return (TECMaterialCost * 0.03);
         }
 
-        public double getTECWarranty()
+        private double getTECWarranty()
         {
             return (TECMaterialCost * 0.05);
         }
@@ -306,23 +306,23 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns TEC material costs of devices and their associated costs
         /// </summary>
-        public double getExtendedMaterialCost()
+        private double getExtendedMaterialCost()
         {
             return (TECMaterialCost + TECShipping + TECWarranty + Tax);
         }
         /// <summary>
         /// Returns TEC labor costs of associated costs
         /// </summary>
-        public double getMaterialLabor(TECBid bid)
+        private double getMaterialLabor(TECBid bid)
         {
             double laborHours = tecCost.Labor;
-            double cost = tecCost.Labor * bid.Labor.CommRate;
+            double cost = tecCost.Labor * bid.Parameters.CommRate;
             return cost;
         }
         /// <summary>
         /// Returns tax from the TEC materials cost at 8.75% if tax is not exempt
         /// </summary>
-        public double getTax(TECBid bid)
+        private double getTax(TECBid bid)
         {
             double outTax = 0;
 
@@ -337,7 +337,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns cost of all TEC material and labor with escalation and tax
         /// </summary>
-        public double getTECCost(TECBid bid)
+        private double getTECCost(TECBid bid)
         {
             double outCost = 0;
             outCost += getTECLaborCost(bid);
@@ -350,7 +350,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns TEC Cost plus profit
         /// </summary>
-        public double getTECSubtotal(TECBid bid)
+        private double getTECSubtotal(TECBid bid)
         {
             double outCost = 0;
             outCost += getTECCost(bid);
@@ -359,18 +359,18 @@ namespace EstimatingLibrary
 
             return outCost;
         }
-        
-        public double getElectricalShipping()
+
+        private double getElectricalShipping()
         {
             return (ElectricalMaterialCost * 0.03);
         }
 
-        public double getElectricalWarranty()
+        private double getElectricalWarranty()
         {
             return (ElectricalMaterialCost * 0.05);
         }
 
-        public double getExtendedElectricalMaterialCost()
+        private double getExtendedElectricalMaterialCost()
         {
             return (ElectricalMaterialCost + ElectricalShipping + ElectricalWarranty);
         }
@@ -379,28 +379,28 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns PM labor hours based on points
         /// </summary>
-        public double getPMPointHours(TECBid bid)
+        private double getPMPointHours(TECBid bid)
         {
-            double hours = pointNumber * bid.Labor.PMCoef;
+            double hours = pointNumber * bid.Parameters.PMCoef;
 
             return hours;
         }
         /// <summary>
         /// Returns total PM labor hours
         /// </summary>
-        public double getPMTotalHours(TECBid bid)
+        private double getPMTotalHours(TECBid bid)
         {
             double hours = getPMPointHours(bid);
-            hours += bid.Labor.PMExtraHours;
+            hours += bid.Parameters.PMExtraHours;
 
             return hours;
         }
         /// <summary>
         /// Returns PM labor cost
         /// </summary>
-        public double getPMLaborCost(TECBid bid)
+        private double getPMLaborCost(TECBid bid)
         {
-            double cost = getPMTotalHours(bid) * bid.Labor.PMRate;
+            double cost = getPMTotalHours(bid) * bid.Parameters.PMRate;
 
             return cost;
         }
@@ -408,28 +408,28 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns ENG labor hours based on points
         /// </summary>
-        public double getENGPointHours(TECBid bid)
+        private double getENGPointHours(TECBid bid)
         {
-            double hours = pointNumber * bid.Labor.ENGCoef;
+            double hours = pointNumber * bid.Parameters.ENGCoef;
 
             return hours;
         }
         /// <summary>
         /// Returns total ENG labor hours
         /// </summary>
-        public double getENGTotalHours(TECBid bid)
+        private double getENGTotalHours(TECBid bid)
         {
             double hours = getENGPointHours(bid);
-            hours += bid.Labor.ENGExtraHours;
+            hours += bid.Parameters.ENGExtraHours;
 
             return hours;
         }
         /// <summary>
         /// Returns ENG labor cost
         /// </summary>
-        public double getENGLaborCost(TECBid bid)
+        private double getENGLaborCost(TECBid bid)
         {
-            double cost = getENGTotalHours(bid) * bid.Labor.ENGRate;
+            double cost = getENGTotalHours(bid) * bid.Parameters.ENGRate;
 
             return cost;
         }
@@ -437,28 +437,28 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns PM labor hours based on points
         /// </summary>
-        public double getCommPointHours(TECBid bid)
+        private double getCommPointHours(TECBid bid)
         {
-            double hours = pointNumber * bid.Labor.CommCoef;
+            double hours = pointNumber * bid.Parameters.CommCoef;
 
             return hours;
         }
         /// <summary>
         /// Returns total PM labor hours
         /// </summary>
-        public double getCommTotalHours(TECBid bid)
+        private double getCommTotalHours(TECBid bid)
         {
             double hours = getCommPointHours(bid);
-            hours += bid.Labor.CommExtraHours;
+            hours += bid.Parameters.CommExtraHours;
 
             return hours;
         }
         /// <summary>
         /// Returns PM labor cost
         /// </summary>
-        public double getCommLaborCost(TECBid bid)
+        private double getCommLaborCost(TECBid bid)
         {
-            double cost = getCommTotalHours(bid) * bid.Labor.CommRate;
+            double cost = getCommTotalHours(bid) * bid.Parameters.CommRate;
 
             return cost;
         }
@@ -466,28 +466,28 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns Soft labor hours based on points
         /// </summary>
-        public double getSoftPointHours(TECBid bid)
+        private double getSoftPointHours(TECBid bid)
         {
-            double hours = pointNumber * bid.Labor.SoftCoef;
+            double hours = pointNumber * bid.Parameters.SoftCoef;
 
             return hours;
         }
         /// <summary>
         /// Returns total Soft labor hours
         /// </summary>
-        public double getSoftTotalHours(TECBid bid)
+        private double getSoftTotalHours(TECBid bid)
         {
             double hours = getSoftPointHours(bid);
-            hours += bid.Labor.SoftExtraHours;
+            hours += bid.Parameters.SoftExtraHours;
 
             return hours;
         }
         /// <summary>
         /// Returns Soft labor cost
         /// </summary>
-        public double getSoftLaborCost(TECBid bid)
+        private double getSoftLaborCost(TECBid bid)
         {
-            double cost = getSoftTotalHours(bid) * bid.Labor.SoftRate;
+            double cost = getSoftTotalHours(bid) * bid.Parameters.SoftRate;
 
             return cost;
         }
@@ -495,37 +495,37 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns Graph labor hours based on points
         /// </summary>
-        public double getGraphPointHours(TECBid bid)
+        private double getGraphPointHours(TECBid bid)
         {
-            double hours = pointNumber * bid.Labor.GraphCoef;
+            double hours = pointNumber * bid.Parameters.GraphCoef;
 
             return hours;
         }
         /// <summary>
         /// Returns total Graph labor hours
         /// </summary>
-        public double getGraphTotalHours(TECBid bid)
+        private double getGraphTotalHours(TECBid bid)
         {
             double hours = getGraphPointHours(bid);
-            hours += bid.Labor.GraphExtraHours;
+            hours += bid.Parameters.GraphExtraHours;
 
             return hours;
         }
         /// <summary>
         /// Returns Graph labor cost
         /// </summary>
-        public double getGraphLaborCost(TECBid bid)
+        private double getGraphLaborCost(TECBid bid)
         {
-            double cost = getGraphTotalHours(bid) * bid.Labor.GraphRate;
+            double cost = getGraphTotalHours(bid) * bid.Parameters.GraphRate;
 
             return cost;
         }
-        
+
 
         /// <summary>
         /// Returns all TEC labor hours
         /// </summary>
-        public double getTECLaborHours(TECBid bid)
+        private double getTECLaborHours(TECBid bid)
         {
             double outLabor = 0;
             outLabor += getPMTotalHours(bid);
@@ -539,7 +539,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns all TEC labor cost
         /// </summary>
-        public double getTECLaborCost(TECBid bid)
+        private double getTECLaborCost(TECBid bid)
         {
             double outCost = 0;
             outCost += getPMLaborCost(bid);
@@ -554,10 +554,10 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the Journeyman electrical labor cost
         /// </summary>
-        public double getElectricalLaborCost(TECBid bid)
+        private double getElectricalLaborCost(TECBid bid)
         {
             double electricalHours = electricalCost.Labor;
-            double electricalRate = bid.Labor.ElectricalEffectiveRate;
+            double electricalRate = bid.Parameters.ElectricalEffectiveRate;
             double cost = electricalHours * electricalRate;
 
             return cost;
@@ -565,23 +565,23 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical super labor hours
         /// </summary>
-        public double getElectricalSuperLaborHours()
+        private double getElectricalSuperLaborHours()
         {
-            return electricalCost.Labor * bid.Labor.ElectricalSuperRatio;
+            return electricalCost.Labor * bid.Parameters.ElectricalSuperRatio;
         }
         /// <summary>
         /// Returns the electrical super labor cost
         /// </summary>
-        public double getElectricalSuperLaborCost(TECBid bid)
+        private double getElectricalSuperLaborCost(TECBid bid)
         {
-            double cost = getElectricalSuperLaborHours() * bid.Labor.ElectricalSuperEffectiveRate;
+            double cost = getElectricalSuperLaborHours() * bid.Parameters.ElectricalSuperEffectiveRate;
 
             return cost;
         }
         /// <summary>
         /// Returns the electrical labor hours of all wire, conduit, and their associated costs 
         /// </summary>
-        public double getTotalElectricalLaborHours()
+        private double getTotalElectricalLaborHours()
         {
             double laborCost = electricalCost.Labor + getElectricalSuperLaborHours();
             return laborCost;
@@ -589,7 +589,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical labor cost of all wire, conduit, and their associated costs 
         /// </summary>
-        public double getTotalElectricalLaborCost(TECBid bid)
+        private double getTotalElectricalLaborCost(TECBid bid)
         {
             double electricalLaborCost = getElectricalLaborCost(bid);
             double electricalSuperLaborCost = getElectricalSuperLaborCost(bid);
@@ -600,7 +600,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the subcontractor labor hours
         /// </summary>
-        public double getSubcontractorLaborHours(TECBid bid)
+        private double getSubcontractorLaborHours(TECBid bid)
         {
             double laborHours = getTotalElectricalLaborHours();
             return laborHours;
@@ -608,7 +608,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the subcontractor labor cost
         /// </summary>
-        public double getSubcontractorLaborCost(TECBid bid)
+        private double getSubcontractorLaborCost(TECBid bid)
         {
             double laborHours = getTotalElectricalLaborCost(bid);
             return laborHours;
@@ -617,7 +617,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the total labor cost
         /// </summary>
-        public double getTotalLaborCost(TECBid bid)
+        private double getTotalLaborCost(TECBid bid)
         {
             double cost = getSubcontractorLaborCost(bid) + getTECLaborCost(bid);
             return cost;
@@ -627,7 +627,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical material and labor costs with escalation 
         /// </summary>
-        public double getSubcontractorCost(TECBid bid)
+        private double getSubcontractorCost(TECBid bid)
         {
             double subcontractorLaborCost = getSubcontractorLaborCost(bid);
             double extendedElectricalMaterialCost = getExtendedElectricalMaterialCost();
@@ -640,7 +640,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the electrical total with markup 
         /// </summary>
-        public double getSubcontractorSubtotal(TECBid bid)
+        private double getSubcontractorSubtotal(TECBid bid)
         {
             double subContractorCost = getSubcontractorCost(bid);
             double subContractorMarkup = bid.Parameters.SubcontractorMarkup;
@@ -650,14 +650,14 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the total cost
         /// </summary>
-        public double getTotalCost(TECBid bid)
+        private double getTotalCost(TECBid bid)
         {
             return getSubcontractorCost(bid) + getTECCost(bid);
         }
         /// <summary>
         /// Returns the final sell price 
         /// </summary>
-        public double getTotalPrice(TECBid bid)
+        private double getTotalPrice(TECBid bid)
         {
             double tecSubtotal = getTECSubtotal(bid);
             double subcontractSubtotal = getSubcontractorSubtotal(bid);
@@ -669,19 +669,19 @@ namespace EstimatingLibrary
             }
             return outPrice;
         }
-        
+
         #region Metrics
         /// <summary>
         /// Returns the final price per point 
         /// </summary>
-        public double getPricePerPoint(TECBid bid)
+        private double getPricePerPoint(TECBid bid)
         {
             return (getTotalPrice(bid) / pointNumber);
         }
         /// <summary>
         /// Returns the Margin based on sell price and cost 
         /// </summary>
-        public double getMargin(TECBid bid)
+        private double getMargin(TECBid bid)
         {
             double margin;
             double totalPrice = getTotalPrice(bid);

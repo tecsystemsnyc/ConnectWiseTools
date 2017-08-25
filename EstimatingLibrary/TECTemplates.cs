@@ -113,8 +113,6 @@ namespace EstimatingLibrary
         public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
         {
-            _labor = new TECLabor();
-
             _systemTemplates = new ObservableCollection<TECSystem>();
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
@@ -133,10 +131,6 @@ namespace EstimatingLibrary
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
-            if (_labor != null)
-            {
-                _labor = templatesSource.Labor;
-            }
             foreach (TECSystem system in templatesSource.SystemTemplates)
             { SystemTemplates.Add(new TECSystem(system)); }
             foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
