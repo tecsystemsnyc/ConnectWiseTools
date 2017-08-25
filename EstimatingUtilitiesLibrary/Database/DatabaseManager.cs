@@ -48,8 +48,13 @@ namespace EstimatingUtilitiesLibrary.Database
             try
             {
                 DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
-                DatabaseVersionManager.CheckAndUpdate(path, versionMap);
-                return DatabaseLoader.Load(path);
+                if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
+                {
+                    return DatabaseLoader.Load(path);
+                } else
+                {
+                    return null;
+                }
             }
             catch
             {

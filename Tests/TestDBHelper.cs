@@ -19,6 +19,7 @@ namespace Tests
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
+            addToMetadataTable();
             addToBidInfoTable();
             addToBidParametersTable();
             addToLaborConstantsTable();
@@ -94,6 +95,7 @@ namespace Tests
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
+            addToMetadataTable();
             addToTemplatesInfoTable();
             addToLaborConstantsTable();
             addToSubcontractorConstantsTable();
@@ -165,10 +167,15 @@ namespace Tests
         }
 
         #region Object Tables
+        private static void addToMetadataTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("1");
+            addDataToTable(new MetadataTable(), values);
+        }
         private static void addToBidInfoTable()
         {
             List<string> values = new List<string>();
-            values.Add("1.6.0.13");
             values.Add("Testimate");
             values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("7357");
@@ -259,25 +266,21 @@ namespace Tests
             List<string> values = new List<string>();
             values.Add("25e815fa-4ac7-4b69-9640-5ae220f0cd40");
             values.Add("Bid Scope Branch");
-            values.Add("Bid Scope Branch Description");
             addDataToTable(new ScopeBranchTable(), values);
 
             values = new List<string>();
             values.Add("814710f1-f2dd-4ae6-9bc4-9279288e4994");
             values.Add("System Scope Branch");
-            values.Add("System Scope Branch Description");
             addDataToTable(new ScopeBranchTable(), values);
 
             values = new List<string>();
             values.Add("81adfc62-20ec-466f-a2a0-430e1223f64f");
             values.Add("Bid Child Branch");
-            values.Add("Bid Child Branch Description");
             addDataToTable(new ScopeBranchTable(), values);
 
             values = new List<string>();
             values.Add("542802f6-a7b1-4020-9be4-e58225c433a8");
             values.Add("System Child Branch");
-            values.Add("System Child Branch Description");
             addDataToTable(new ScopeBranchTable(), values);
         }
         private static void addToSystemTable()
@@ -287,16 +290,12 @@ namespace Tests
             values.Add("Typical System");
             values.Add("Typical System Description");
             values.Add("1");
-            values.Add("100");
-            values.Add("1");
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("Instance System");
             values.Add("Instance System Description");
-            values.Add("1");
-            values.Add("100");
             values.Add("0");
             addDataToTable(new SystemTable(), values);
         }
@@ -306,24 +305,18 @@ namespace Tests
             values.Add("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
             values.Add("Typical Equip");
             values.Add("Typical Equip Description");
-            values.Add("1");
-            values.Add("50");
             addDataToTable(new EquipmentTable(), values);
 
             values = new List<string>();
             values.Add("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
             values.Add("Instance Equip");
             values.Add("Instance Equip Description");
-            values.Add("1");
-            values.Add("50");
             addDataToTable(new EquipmentTable(), values);
 
             values = new List<string>();
             values.Add("1645886c-fce7-4380-a5c3-295f91961d16");
             values.Add("Template Equip");
             values.Add("Template Equip Description");
-            values.Add("1");
-            values.Add("25");
             addDataToTable(new EquipmentTable(), values);
         }
         private static void addToSubScopeTable()
@@ -332,28 +325,24 @@ namespace Tests
             values.Add("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
             values.Add("Typical SS");
             values.Add("Typical SS Description");
-            values.Add("1");
             addDataToTable(new SubScopeTable(), values);
 
             values = new List<string>();
             values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
             values.Add("Instance SS");
             values.Add("Instance SS Description");
-            values.Add("1");
             addDataToTable(new SubScopeTable(), values);
 
             values = new List<string>();
             values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
             values.Add("Template SS");
             values.Add("Template SS Description");
-            values.Add("1");
             addDataToTable(new SubScopeTable(), values);
 
             values = new List<string>();
             values.Add("214dc8d1-22be-4fbf-8b6b-d66c21105f61");
             values.Add("Child SS");
             values.Add("Child SS Description");
-            values.Add("1");
             addDataToTable(new SubScopeTable(), values);
         }
         private static void addToDeviceTable()
@@ -370,7 +359,6 @@ namespace Tests
             List<string> values = new List<string>();
             values.Add("03a16819-9205-4e65-a16b-96616309f171");
             values.Add("Typical Point");
-            values.Add("Typical Point Description");
             values.Add("1");
             values.Add("AI");
             addDataToTable(new PointTable(), values);
@@ -378,7 +366,6 @@ namespace Tests
             values = new List<string>();
             values.Add("e60437bc-09a1-47eb-9fd5-78711d942a12");
             values.Add("Instance Point");
-            values.Add("Instance Point Description");
             values.Add("1");
             values.Add("AI");
             addDataToTable(new PointTable(), values);
@@ -386,7 +373,6 @@ namespace Tests
             values = new List<string>();
             values.Add("6776a30b-0325-42ad-8aa3-3c065b4bb908");
             values.Add("Child Point");
-            values.Add("Child Point Description");
             values.Add("1");
             values.Add("BO");
             addDataToTable(new PointTable(), values);
@@ -519,7 +505,6 @@ namespace Tests
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             values.Add("Bid Controller");
             values.Add("Bid Controller Description");
-            values.Add("1812");
             values.Add("Server");
             addDataToTable(new ControllerTable(), values);
 
@@ -527,7 +512,6 @@ namespace Tests
             values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
             values.Add("Typical Controller");
             values.Add("Typical Controller Description");
-            values.Add("1776");
             values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
@@ -535,7 +519,6 @@ namespace Tests
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
             values.Add("Instance Controller");
             values.Add("Instance Controller Description");
-            values.Add("1776");
             values.Add("DDC");
             addDataToTable(new ControllerTable(), values);
 
@@ -544,14 +527,12 @@ namespace Tests
             values.Add("Child Bid Controller");
             values.Add("");
             values.Add("0");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
             values.Add("Child Instance Controller");
             values.Add("");
-            values.Add("0");
             values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
@@ -560,7 +541,6 @@ namespace Tests
             values.Add("Daisy 1");
             values.Add("");
             values.Add("0");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
@@ -568,14 +548,12 @@ namespace Tests
             values.Add("Daisy 2");
             values.Add("");
             values.Add("0");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("Child Typical Controller");
             values.Add("");
-            values.Add("0");
             values.Add("0");
             addDataToTable(new ControllerTable(), values);
         }
@@ -614,21 +592,18 @@ namespace Tests
             values.Add("a8cdd31c-e690-4eaa-81ea-602c72904391");
             values.Add("Bid Panel");
             values.Add("Bid Panel Description");
-            values.Add("1");
             addDataToTable(new PanelTable(), values);
 
             values = new List<string>();
             values.Add("e7695d68-d79f-44a2-92f5-b303436186af");
             values.Add("Typical Panel");
             values.Add("Typical Panel Description");
-            values.Add("1");
             addDataToTable(new PanelTable(), values);
 
             values = new List<string>();
             values.Add("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
             values.Add("Instance Panel");
             values.Add("Instance Panel Description");
-            values.Add("1");
             addDataToTable(new PanelTable(), values);
         }
         private static void addToIOModuleTable()

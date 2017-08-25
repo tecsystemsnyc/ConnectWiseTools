@@ -280,7 +280,7 @@ namespace EstimatingLibrary.Utilities
         private static void linkSubScopeToCatalogs(TECSubScope ss, TECCatalogs catalogs)
         {
             linkScopeChildrenToCatalogs(ss, catalogs);
-            linkSubScopeToDevices(ss, catalogs.Devices);
+            linkSubScopeToDevices(ss, catalogs.Devices, catalogs.Valves);
         }
 
         private static void linkDeviceToCatalogs(TECDevice dev, TECCatalogs catalogs)
@@ -506,28 +506,48 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkSubScopeToDevices(TECSubScope subScope, ObservableCollection<TECDevice> devices)
+        private static void linkSubScopeToDevices(TECSubScope subScope, IEnumerable<TECDevice> devices, IEnumerable<TECValve> valves)
         {
-            throw new NotImplementedException();
-            //ObservableCollection<TECDevice> replacements = new ObservableCollection<TECDevice>();
-            //foreach(TECDevice device in subScope.Devices)
-            //{
-            //    bool found = false;
-            //    foreach(TECDevice catalogDevice in devices)
-            //    {
-            //        if (device.Guid == catalogDevice.Guid)
-            //        {
-            //            replacements.Add(catalogDevice);
-            //            found = true;
-            //            break;
-            //        }
-            //    }
-            //    if (!found)
-            //    {
-            //        throw new Exception("Subscope device not found.");
-            //    }
-            //}
-            //subScope.Devices = replacements;
+            ObservableCollection<ITECConnectable> replacements = new ObservableCollection<ITECConnectable>();
+            foreach (ITECConnectable item in subScope.Devices)
+            {
+                if(item is TECDevice device)
+                {
+                    bool found = false;
+                    foreach (TECDevice catalogDevice in devices)
+                    {
+                        if (device.Guid == catalogDevice.Guid)
+                        {
+                            replacements.Add(catalogDevice);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        throw new Exception("Subscope device not found.");
+                    }
+                }
+                 else if (item is TECValve valve)
+                {
+                    bool found = false;
+                    foreach (TECValve catalogValve in valves)
+                    {
+                        if (valve.Guid == catalogValve.Guid)
+                        {
+                            replacements.Add(catalogValve);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        throw new Exception("Subscope device not found.");
+                    }
+                }
+
+            }
+            subScope.Devices = replacements;
         }
 
         #region Location Linking

@@ -17,6 +17,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECControllerType> _controllerTypes;
         private ObservableCollection<TECIOModule> _ioModules;
         private ObservableCollection<TECDevice> _devices;
+        private ObservableCollection<TECValve> _valves;
         private ObservableCollection<TECManufacturer> _manufacturers;
         private ObservableCollection<TECLabeled> _tags;
 
@@ -42,6 +43,18 @@ namespace EstimatingLibrary
                 _devices = value;
                 Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
                 NotifyCombinedChanged(Change.Edit, "Devices", this, value, old);
+            }
+        }
+        public ObservableCollection<TECValve> Valves
+        {
+            get { return _valves; }
+            set
+            {
+                var old = Valves;
+                Valves.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Valves");
+                _valves = value;
+                Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
+                NotifyCombinedChanged(Change.Edit, "Valves", this, value, old);
             }
         }
         public ObservableCollection<TECManufacturer> Manufacturers
@@ -150,6 +163,7 @@ namespace EstimatingLibrary
             _controllerTypes = new ObservableCollection<TECControllerType>();
             _ioModules = new ObservableCollection<TECIOModule>();
             _devices = new ObservableCollection<TECDevice>();
+            _valves = new ObservableCollection<TECValve>();
             _manufacturers = new ObservableCollection<TECManufacturer>();
             _tags = new ObservableCollection<TECLabeled>();
 
@@ -164,6 +178,7 @@ namespace EstimatingLibrary
             ControllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
             IOModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
             Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
+            Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
             Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
             Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
 
