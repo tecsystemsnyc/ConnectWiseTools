@@ -12,35 +12,50 @@ namespace EstimatingUtilitiesLibrary.Database
         public static List<TableBase> GetTables(List<TECObject> items)
         {
             List<TableBase> tables = new List<TableBase>();
+            if(items.Count > 2 || items.Count == 0)
+            { throw new NotImplementedException(); }
+
             foreach(TableBase table in AllTables.Tables)
             {
                 TableInfo info = new TableInfo(table);
-                if(info.Types.Count == items.Count)
+                if(matchesAllTypes(items, info.Types))
                 {
-                    bool allMatch = false;
-                    for (int x = 0; x < items.Count; x++)
-                    {
-                        FlavoredType tableType = info.Types[x];
-                        FlavoredType itemType = new FlavoredType(items[x].GetType(), items[x].Flavor);
-                        if(tableType.Type == itemType.Type &&
-                            tableType.Flavor == itemType.Flavor)
-                        {
-                            allMatch = true;
-                        }
-                        else
-                        {
-                            allMatch = false;
-                            break;
-                        }
-                       
-                    }
-                    if (allMatch)
-                    {
-                        tables.Add(table);
-                    }
+                    tables.Add(table);
                 }
+                else if (items.Count == 2 && matchesObjectType(items[1], info.Types))
+                {
+                    tables.Add(table);
+                }
+                
             }
             return tables;
+        }
+
+        private static bool matchesAllTypes(List<TECObject> items, List<FlavoredType> tableTypes)
+        {
+            if (items.Count == tableTypes.Count)
+            {
+                for (int x = 0; x < items.Count; x++)
+                {
+                    if(items[x].GetType() != tableTypes[x].Type
+                        || items[x].Flavor != tableTypes[x].Flavor)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private static bool matchesObjectType(TECObject item, List<FlavoredType> tableTypes)
+        {
+            if(tableTypes.Count != 1)
+            {
+                return false;
+            }
+            FlavoredType ft = tableTypes[0];
+            return (item.GetType() == ft.Type && item.Flavor == ft.Flavor);
         }
 
         public static TableField GetField(TableBase table, string propertyName)
