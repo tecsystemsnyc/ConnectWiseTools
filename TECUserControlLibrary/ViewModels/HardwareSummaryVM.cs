@@ -126,18 +126,17 @@ namespace TECUserControlLibrary.ViewModels
             initialize();
         }
 
-        public List<CostObject> AddHardware(TECHardware hardware)
+        public CostBatch AddHardware(TECHardware hardware)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             bool containsItem = hardwareDictionary.ContainsKey(hardware.Guid);
             if (containsItem)
             {
                 HardwareSummaryItem item = hardwareDictionary[hardware.Guid];
-                CostObject delta = item.Increment();
-                HardwareCost += delta.Cost;
-                HardwareLabor += delta.Labor;
-                delta.Type = CostType.TEC;
-                deltas.Add(delta);
+                CostBatch delta = item.Increment();
+                HardwareCost += delta.GetCost(hardware.Type);
+                HardwareLabor += delta.GetLabor(hardware.Type);
+                deltas += delta;
             }
             else
             {
@@ -146,25 +145,25 @@ namespace TECUserControlLibrary.ViewModels
                 HardwareItems.Add(item);
                 HardwareCost += item.TotalCost;
                 HardwareLabor += item.TotalLabor;
-                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, CostType.TEC));
+                deltas += new CostBatch(item.TotalCost, item.TotalLabor, hardware.Type);
             }
             foreach (TECCost cost in hardware.AssociatedCosts)
             {
-                deltas.AddRange(AddCost(cost));
+                deltas.AddCost(cost);
             }
             return deltas;
         }
-        public List<CostObject> RemoveHardware(TECHardware hardware)
+        public CostBatch RemoveHardware(TECHardware hardware)
         {
             bool containsItem = hardwareDictionary.ContainsKey(hardware.Guid);
             if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
+                CostBatch deltas = new CostBatch();
                 HardwareSummaryItem item = hardwareDictionary[hardware.Guid];
-                CostObject delta = item.Decrement();
-                deltas.Add(delta);
-                HardwareCost += delta.Cost;
-                HardwareLabor += delta.Labor;
+                CostBatch delta = item.Decrement();
+                deltas += delta;
+                HardwareCost += delta.GetCost(hardware.Type);
+                HardwareLabor += delta.GetLabor(hardware.Type);
 
                 if (item.Quantity < 1)
                 {
@@ -173,7 +172,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 foreach (TECCost cost in hardware.AssociatedCosts)
                 {
-                    deltas.AddRange(RemoveCost(cost));
+                    deltas.RemoveCost(cost);
                 }
                 return deltas;
             }
@@ -183,26 +182,24 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public List<CostObject> AddCost(TECCost cost)
+        public CostBatch AddCost(TECCost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
                 CostSummaryItem item = assocCostDictionary[cost.Guid];
-                CostObject delta = item.AddQuantity(1);
+                CostBatch delta = item.AddQuantity(1);
                 if (cost.Type == CostType.TEC)
                 {
-                    AssocTECCostTotal += delta.Cost;
-                    AssocTECLaborTotal += delta.Labor;
+                    AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                    AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    AssocElecCostTotal += delta.Cost;
-                    AssocElecLaborTotal += delta.Labor;
+                    AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                    AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
                 }
-                List<CostObject> deltas = new List<CostObject>();
-                deltas.Add(delta);
-                return deltas;
+                return delta;
             }
             else
             {
@@ -220,27 +217,25 @@ namespace TECUserControlLibrary.ViewModels
                     AssocElecCostTotal += item.TotalCost;
                     AssocElecLaborTotal += item.TotalLabor;
                 }
-                List<CostObject> deltas = new List<CostObject>();
-                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, cost.Type));
-                return deltas;
+                return new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
             }
         }
-        public List<CostObject> RemoveCost(TECCost cost)
+        public CostBatch RemoveCost(TECCost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
                 CostSummaryItem item = assocCostDictionary[cost.Guid];
-                CostObject delta = item.RemoveQuantity(1);
+                CostBatch delta = item.RemoveQuantity(1);
                 if (cost.Type == CostType.TEC)
                 {
-                    AssocTECCostTotal += delta.Cost;
-                    AssocTECLaborTotal += delta.Labor;
+                    AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                    AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    AssocElecCostTotal += delta.Cost;
-                    AssocElecLaborTotal += delta.Labor;
+                    AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                    AssocElecLaborTotal += delta.GetCost(CostType.Electrical);
                 }
                 if (item.Quantity < 1)
                 {
@@ -254,9 +249,7 @@ namespace TECUserControlLibrary.ViewModels
                         AssocElecItems.Remove(item);
                     }
                 }
-                List<CostObject> deltas = new List<CostObject>();
-                deltas.Add(delta);
-                return deltas;
+                return delta;
             }
             else
             {

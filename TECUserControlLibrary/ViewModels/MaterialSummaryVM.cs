@@ -142,175 +142,175 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Add/Remove Methods
-        private List<CostObject> addSystem(TECSystem system)
+        private CostBatch addSystem(TECSystem system)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             foreach(TECEquipment equip in system.Equipment)
             {
-                deltas.AddRange(addEquipment(equip));
+                deltas += (addEquipment(equip));
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
-                deltas.AddRange(MiscSummaryVM.AddCost(misc));
+                deltas += (MiscSummaryVM.AddCost(misc));
             }
             foreach(TECCost cost in system.AssociatedCosts)
             {
-                deltas.AddRange(MiscSummaryVM.AddCost(cost));
+                deltas += (MiscSummaryVM.AddCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> addEquipment(TECEquipment equip)
+        private CostBatch addEquipment(TECEquipment equip)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             foreach (TECSubScope ss in equip.SubScope)
             {
-                deltas.AddRange(addSubScope(ss));
+                deltas += (addSubScope(ss));
             }
             foreach(TECCost cost in equip.AssociatedCosts)
             {
-                deltas.AddRange(MiscSummaryVM.AddCost(cost));
+                deltas += (MiscSummaryVM.AddCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> addSubScope(TECSubScope ss)
+        private CostBatch addSubScope(TECSubScope ss)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             foreach (TECDevice dev in ss.Devices)
             {
-                deltas.AddRange(DeviceSummaryVM.AddHardware(dev));
+                deltas += (DeviceSummaryVM.AddHardware(dev));
             }
             foreach(TECCost cost in ss.AssociatedCosts)
             {
-                deltas.AddRange(MiscSummaryVM.AddCost(cost));
+                deltas += (MiscSummaryVM.AddCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> addController(TECController controller)
+        private CostBatch addController(TECController controller)
         {
-            List<CostObject> deltas = new List<CostObject>();
-            deltas.AddRange(ControllerSummaryVM.AddHardware(controller.Type));
+            CostBatch deltas = new CostBatch();
+            deltas += (ControllerSummaryVM.AddHardware(controller.Type));
             foreach(TECCost cost in controller.AssociatedCosts)
             {
-                deltas.AddRange(ControllerSummaryVM.AddCost(cost));
+                deltas += (ControllerSummaryVM.AddCost(cost));
             }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
-                deltas.AddRange(addConnection(connection));
+                deltas += (addConnection(connection));
             }
             return deltas;
         }
-        private List<CostObject> addPanel(TECPanel panel)
+        private CostBatch addPanel(TECPanel panel)
         {
-            List<CostObject> deltas = new List<CostObject>();
-            deltas.AddRange(PanelSummaryVM.AddHardware(panel.Type));
+            CostBatch deltas = new CostBatch();
+            deltas += (PanelSummaryVM.AddHardware(panel.Type));
             foreach(TECCost cost in panel.AssociatedCosts)
             {
-                deltas.AddRange(PanelSummaryVM.AddCost(cost));
+                deltas += (PanelSummaryVM.AddCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> addConnection(TECConnection connection)
+        private CostBatch addConnection(TECConnection connection)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             if (connection is TECNetworkConnection netConnect)
             {
-                deltas.AddRange(WireSummaryVM.AddRun(netConnect.ConnectionType, netConnect.Length));
+                deltas += (WireSummaryVM.AddRun(netConnect.ConnectionType, netConnect.Length));
             }
             else if (connection is TECSubScopeConnection ssConnect)
             {
                 foreach(TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
                 {
-                    deltas.AddRange(WireSummaryVM.AddRun(connectionType, ssConnect.Length));
+                    deltas += (WireSummaryVM.AddRun(connectionType, ssConnect.Length));
                 }
             }
             if (connection.ConduitType != null)
             {
-                deltas.AddRange(ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+                deltas += (ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
             }
             return deltas;
         }
         
-        private List<CostObject> removeSystem(TECSystem system)
+        private CostBatch removeSystem(TECSystem system)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             foreach (TECEquipment equip in system.Equipment)
             {
-                deltas.AddRange(addEquipment(equip));
+                deltas += (addEquipment(equip));
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
-                deltas.AddRange(MiscSummaryVM.RemoveCost(misc));
+                deltas += (MiscSummaryVM.RemoveCost(misc));
             }
             foreach(TECCost cost in system.AssociatedCosts) {
-                deltas.AddRange(MiscSummaryVM.RemoveCost(cost));
+                deltas += (MiscSummaryVM.RemoveCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> removeEquipment(TECEquipment equip)
+        private CostBatch removeEquipment(TECEquipment equip)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             foreach (TECSubScope ss in equip.SubScope)
             {
-                deltas.AddRange(removeSubScope(ss));
+                deltas += (removeSubScope(ss));
             }
             foreach(TECCost cost in equip.AssociatedCosts)
             {
-                deltas.AddRange(MiscSummaryVM.RemoveCost(cost));
+                deltas += (MiscSummaryVM.RemoveCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> removeSubScope(TECSubScope ss)
+        private CostBatch removeSubScope(TECSubScope ss)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             foreach (TECDevice dev in ss.Devices)
             {
-                deltas.AddRange(DeviceSummaryVM.RemoveHardware(dev));
+                deltas += (DeviceSummaryVM.RemoveHardware(dev));
             }
             foreach(TECCost cost in ss.AssociatedCosts)
             {
-                deltas.AddRange(MiscSummaryVM.RemoveCost(cost));
+                deltas += (MiscSummaryVM.RemoveCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> removeController(TECController controller)
+        private CostBatch removeController(TECController controller)
         {
-            List<CostObject> deltas = new List<CostObject>();
-            deltas.AddRange(ControllerSummaryVM.RemoveHardware(controller.Type));
+            CostBatch deltas = new CostBatch();
+            deltas += (ControllerSummaryVM.RemoveHardware(controller.Type));
             foreach(TECCost cost in controller.AssociatedCosts)
             {
-                deltas.AddRange(ControllerSummaryVM.RemoveCost(cost));
+                deltas += (ControllerSummaryVM.RemoveCost(cost));
             }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
-                deltas.AddRange(removeConnection(connection));
+                deltas += (removeConnection(connection));
             }
             return deltas;
         }
-        private List<CostObject> removePanel(TECPanel panel)
+        private CostBatch removePanel(TECPanel panel)
         {
-            List<CostObject> deltas = new List<CostObject>();
-            deltas.AddRange(PanelSummaryVM.RemoveHardware(panel.Type));
+            CostBatch deltas = new CostBatch();
+            deltas += (PanelSummaryVM.RemoveHardware(panel.Type));
             foreach(TECCost cost in panel.AssociatedCosts)
             {
-                deltas.AddRange(PanelSummaryVM.RemoveCost(cost));
+                deltas += (PanelSummaryVM.RemoveCost(cost));
             }
             return deltas;
         }
-        private List<CostObject> removeConnection(TECConnection connection)
+        private CostBatch removeConnection(TECConnection connection)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             if (connection is TECNetworkConnection netConnect)
             {
-                deltas.AddRange(WireSummaryVM.RemoveRun(netConnect.ConnectionType, netConnect.Length));
+                deltas += (WireSummaryVM.RemoveRun(netConnect.ConnectionType, netConnect.Length));
             }
             else if (connection is TECSubScopeConnection ssConnect)
             {
                 foreach(TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
                 {
-                    deltas.AddRange(WireSummaryVM.RemoveRun(connectionType, ssConnect.Length));
+                    deltas += (WireSummaryVM.RemoveRun(connectionType, ssConnect.Length));
                 }
             }
-            deltas.AddRange(ConduitSummaryVM.RemoveRun(connection.ConduitType, connection.ConduitLength));
+            deltas += (ConduitSummaryVM.RemoveRun(connection.ConduitType, connection.ConduitLength));
             return deltas;
         }
         #endregion
@@ -460,25 +460,12 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void updateTotals(List<CostObject> deltas)
+        private void updateTotals(CostBatch deltas)
         {
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    TotalTECCost += delta.Cost;
-                    TotalTECLabor += delta.Labor;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    TotalElecCost += delta.Cost;
-                    TotalTECLabor += delta.Labor;
-                }
-                else
-                {
-                    throw new NullReferenceException("CostType in CostObjet not valid.");
-                }
-            }
+            TotalTECCost += deltas.GetCost(CostType.TEC);
+            TotalTECLabor += deltas.GetLabor(CostType.TEC);
+            TotalElecCost += deltas.GetCost(CostType.Electrical);
+            TotalElecLabor += deltas.GetLabor(CostType.Electrical);
         }
         #endregion
     }

@@ -70,18 +70,18 @@ namespace TECUserControlLibrary.Models
         #endregion
 
         #region Methods
-        public CostObject Increment()
+        public CostBatch Increment()
         {
             Quantity++;
             return updateTotals();
         }
-        public CostObject Decrement()
+        public CostBatch Decrement()
         {
             Quantity--;
             return updateTotals();
         }
 
-        private CostObject updateTotals()
+        private CostBatch updateTotals()
         {
             double newCost = (Hardware.Cost * Hardware.Manufacturer.Multiplier * Quantity);
             double newLabor = (Hardware.Labor * Quantity);
@@ -92,7 +92,7 @@ namespace TECUserControlLibrary.Models
             TotalCost = newCost;
             TotalLabor = newLabor;
 
-            return new CostObject(deltaCost, deltaLabor, CostType.TEC);
+            return new CostBatch(deltaCost, deltaLabor, CostType.TEC);
         }
         #endregion
     }

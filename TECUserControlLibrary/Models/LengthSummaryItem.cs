@@ -66,18 +66,18 @@ namespace TECUserControlLibrary.Models
         #endregion
 
         #region Methods
-        public CostObject AddLength(double length)
+        public CostBatch AddLength(double length)
         {
             Length += length;
             return updateTotals();
         }
-        public CostObject RemoveLength(double length)
+        public CostBatch RemoveLength(double length)
         {
             Length -= length;
             return updateTotals();
         }
 
-        private CostObject updateTotals()
+        private CostBatch updateTotals()
         {
             double newCost = (Material.Cost * Length);
             double newLabor = (Material.Labor * Length);
@@ -88,7 +88,7 @@ namespace TECUserControlLibrary.Models
             TotalCost = newCost;
             TotalLabor = newLabor;
 
-            return new CostObject(deltaCost, deltaLabor, CostType.Electrical);
+            return new CostBatch(deltaCost, deltaLabor, CostType.Electrical);
         }
         #endregion
     }

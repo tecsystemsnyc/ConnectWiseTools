@@ -152,42 +152,41 @@ namespace TECUserControlLibrary.ViewModels
             initialize();
         }
 
-        public List<CostObject> AddCost(TECCost cost)
+        public CostBatch AddCost(TECCost cost)
         {
-            List<CostObject> deltas = new List<CostObject>();
             bool containsItem = costDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
                 CostSummaryItem item = costDictionary[cost.Guid];
                 if (cost is TECMisc misc)
                 {
-                    CostObject delta = item.AddQuantity(misc.Quantity);
+                    CostBatch delta = item.AddQuantity(misc.Quantity);
                     if (cost.Type == CostType.TEC)
                     {
-                        MiscTECCostTotal += delta.Cost;
-                        MiscTECLaborTotal += delta.Labor;
+                        MiscTECCostTotal += delta.GetCost(CostType.TEC);
+                        MiscTECLaborTotal += delta.GetLabor(CostType.TEC);
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        MiscElecCostTotal += delta.Cost;
-                        MiscElecLaborTotal += delta.Labor;
+                        MiscElecCostTotal += delta.GetCost(CostType.Electrical);
+                        MiscElecLaborTotal += delta.GetLabor(CostType.Electrical);
                     }
-                    deltas.Add(delta);
+                    return delta;
                 }
                 else
                 {
-                    CostObject delta = item.AddQuantity(1);
+                    CostBatch delta = item.AddQuantity(1);
                     if (cost.Type == CostType.TEC)
                     {
-                        AssocTECCostTotal += delta.Cost;
-                        AssocTECLaborTotal += delta.Labor;
+                        AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                        AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        AssocElecCostTotal += delta.Cost;
-                        AssocElecLaborTotal += delta.Labor;
+                        AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                        AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
                     }
-                    deltas.Add(delta);
+                    return delta;
                 }
             }
             else
@@ -224,46 +223,43 @@ namespace TECUserControlLibrary.ViewModels
                         AssocElecLaborTotal += item.TotalLabor;
                     }
                 }
-                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, cost.Type));
+                return new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
             }
-            return deltas;
         }
-        public List<CostObject> RemoveCost(TECCost cost)
+        public CostBatch RemoveCost(TECCost cost)
         {
+            CostBatch delta;
             bool containsItem = costDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
                 CostSummaryItem item = costDictionary[cost.Guid];
                 if (cost is TECMisc misc)
                 {
-                    CostObject delta = item.RemoveQuantity(misc.Quantity);
+                    delta = item.RemoveQuantity(misc.Quantity);
                     if (cost.Type == CostType.TEC)
                     {
-                        MiscTECCostTotal += delta.Cost;
-                        MiscTECLaborTotal += delta.Labor;
+                        MiscTECCostTotal += delta.GetCost(CostType.TEC);
+                        MiscTECLaborTotal += delta.GetLabor(CostType.TEC);
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        MiscElecCostTotal += delta.Cost;
-                        MiscElecLaborTotal += delta.Labor;
+                        MiscElecCostTotal += delta.GetCost(CostType.Electrical);
+                        MiscElecLaborTotal += delta.GetLabor(CostType.Electrical);
                     }
-                    deltas.Add(delta);
                 }
                 else
                 {
-                    CostObject delta = item.RemoveQuantity(1);
+                    delta = item.RemoveQuantity(1);
                     if (cost.Type == CostType.TEC)
                     {
-                        AssocTECCostTotal += delta.Cost;
-                        AssocTECLaborTotal += delta.Labor;
+                        AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                        AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        AssocElecCostTotal += delta.Cost;
-                        AssocElecLaborTotal += delta.Cost;
+                        AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                        AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
                     }
-                    deltas.Add(delta);
                 }
                 if (item.Quantity < 1)
                 {
@@ -291,63 +287,59 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                 }
-                return deltas;
+                return delta;
             }
             else
             {
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
         }
-        public List<CostObject> ChangeQuantity(TECCost cost, int deltaQuantity)
+        public CostBatch ChangeQuantity(TECCost cost, int deltaQuantity)
         {
             bool containsItem = costDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
                 CostSummaryItem item = costDictionary[cost.Guid];
                 if (item.Quantity + deltaQuantity < 0)
                 {
                     throw new InvalidOperationException("Removing a larger quantity than exists from CostSummaryItem.");
                 }
-                CostObject delta = item.AddQuantity(deltaQuantity);
+                CostBatch delta = item.AddQuantity(deltaQuantity);
                 if (cost.Type == CostType.TEC)
                 {
-                    AssocTECCostTotal += delta.Cost;
-                    AssocTECLaborTotal += delta.Labor;
+                    AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                    AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    AssocElecCostTotal += delta.Cost;
-                    AssocElecLaborTotal += delta.Labor;
+                    AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                    AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
                 }
-                deltas.Add(delta);
-                return deltas;
+                return delta;
             }
             else
             {
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
         }
-        public List<CostObject> UpdateCost(TECCost cost)
+        public CostBatch UpdateCost(TECCost cost)
         {
             bool containsItem = costDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
                 CostSummaryItem item = costDictionary[cost.Guid];
-                CostObject delta = item.Refresh();
+                CostBatch delta = item.Refresh();
                 if (cost.Type == CostType.TEC)
                 {
-                    AssocTECCostTotal += delta.Cost;
-                    AssocTECLaborTotal += delta.Labor;
+                    AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                    AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    AssocElecCostTotal += delta.Cost;
-                    AssocElecLaborTotal += delta.Labor;
+                    AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                    AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
                 }
-                deltas.Add(delta);
-                return deltas;
+                return delta;
             }
             else
             {

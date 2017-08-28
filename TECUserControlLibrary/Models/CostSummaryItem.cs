@@ -69,22 +69,22 @@ namespace TECUserControlLibrary.Models
             updateTotals();
         }
 
-        public CostObject AddQuantity(int quantity)
+        public CostBatch AddQuantity(int quantity)
         {
             Quantity += quantity;
             return updateTotals();
         }
-        public CostObject RemoveQuantity(int quantity)
+        public CostBatch RemoveQuantity(int quantity)
         {
             Quantity -= quantity;
             return updateTotals();
         }
-        public CostObject Refresh()
+        public CostBatch Refresh()
         {
             return updateTotals();
         }
 
-        private CostObject updateTotals()
+        private CostBatch updateTotals()
         {
             double newCost = (Cost.Cost * Quantity);
             double newLabor = (Cost.Labor * Quantity);
@@ -95,7 +95,7 @@ namespace TECUserControlLibrary.Models
             TotalCost = newCost;
             TotalLabor = newLabor;
 
-            return new CostObject(deltaCost, deltaLabor, Cost.Type);
+            return new CostBatch(deltaCost, deltaLabor, Cost.Type);
         }
     }
 }

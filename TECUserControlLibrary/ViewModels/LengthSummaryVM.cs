@@ -355,23 +355,22 @@ namespace TECUserControlLibrary.ViewModels
         }
         private CostBatch addRatedCost(TECCost cost, double length)
         {
-            List<CostObject> deltas = new List<CostObject>();
             bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
                 RatedCostSummaryItem item = ratedCostDictionary[cost.Guid];
-                CostObject delta = item.AddLength(length);
-                deltas.Add(delta);
+                CostBatch delta = item.AddLength(length);
                 if (cost.Type == CostType.TEC)
                 {
-                    RatedTECCostTotal += delta.Cost;
-                    RatedTECLaborTotal += delta.Labor;
+                    RatedTECCostTotal += delta.GetCost(CostType.TEC);
+                    RatedTECLaborTotal += delta.GetLabor(CostType.TEC);
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    RatedElecCostTotal += delta.Cost;
-                    RatedElecLaborTotal += delta.Labor;
+                    RatedElecCostTotal += delta.GetCost(CostType.Electrical);
+                    RatedElecLaborTotal += delta.GetLabor(CostType.Electrical);
                 }
+                return delta;
             }
             else
             {
@@ -389,28 +388,25 @@ namespace TECUserControlLibrary.ViewModels
                     RatedElecCostTotal += item.TotalCost;
                     RatedElecLaborTotal += item.TotalLabor;
                 }
-                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, cost.Type));
+                return new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
             }
-            return deltas;
         }
         private CostBatch removeRatedCost(TECCost cost, double length)
         {
             bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
                 RatedCostSummaryItem item = ratedCostDictionary[cost.Guid];
-                CostObject delta = item.RemoveLength(length);
-                deltas.Add(delta);
+                CostBatch delta = item.RemoveLength(length);
                 if (cost.Type == CostType.TEC)
                 {
-                    RatedTECCostTotal += delta.Cost;
-                    RatedTECLaborTotal += delta.Labor;
+                    RatedTECCostTotal += delta.GetCost(CostType.TEC);
+                    RatedTECLaborTotal += delta.GetLabor(CostType.TEC);
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    RatedElecCostTotal += delta.Cost;
-                    RatedElecLaborTotal += delta.Labor;
+                    RatedElecCostTotal += delta.GetCost(CostType.Electrical);
+                    RatedElecLaborTotal += delta.GetLabor(CostType.Electrical);
                 }
                 if (item.Length <= 0)
                 {
@@ -424,7 +420,7 @@ namespace TECUserControlLibrary.ViewModels
                         RatedElecItems.Remove(item);
                     }
                 }
-                return deltas;
+                return delta;
             }
             else
             {
