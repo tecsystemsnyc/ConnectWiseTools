@@ -8,7 +8,9 @@ namespace EstimatingLibrary
 {
     public class TECPanelType : TECHardware
     {
-        public TECPanelType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer) {
+        private const CostType COST_TYPE = CostType.TEC;
+
+        public TECPanelType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE) {
             _type = CostType.TEC;
         }
         public TECPanelType(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }

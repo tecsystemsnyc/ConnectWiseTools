@@ -90,7 +90,7 @@ namespace EstimatingLibrary
                 foreach (TECSubScope item in e.NewItems)
                 {
                     pointNumber += item.PointNumber;
-                    costs += item.Costs;
+                    costs += item.CostBatch;
                     NotifyCombinedChanged(Change.Add, "SubScope", this, item);
                     if ((item as TECSubScope).Location == null)
                     {
@@ -107,7 +107,7 @@ namespace EstimatingLibrary
                 foreach (TECSubScope item in e.OldItems)
                 {
                     pointNumber += item.PointNumber;
-                    costs += item.Costs;
+                    costs += item.CostBatch;
                     NotifyCombinedChanged(Change.Remove, "SubScope", this, item);
                 }
                 PointChanged?.Invoke(pointNumber * -1);
@@ -151,7 +151,7 @@ namespace EstimatingLibrary
             CostBatch costs = base.getCosts();
             foreach(TECSubScope subScope in SubScope)
             {
-                costs += subScope.Costs;
+                costs += subScope.CostBatch;
             }
             return costs;
         }

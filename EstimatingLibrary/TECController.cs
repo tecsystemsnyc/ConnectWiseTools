@@ -80,13 +80,6 @@ namespace EstimatingLibrary
             { return getNetworkIO(); }
         }
         public bool IsGlobal;
-        
-        override public CostBatch CostBatch
-        {
-            get { return getCosts(); }
-        }
-
-
         #endregion
 
         #region Constructors
@@ -405,13 +398,10 @@ namespace EstimatingLibrary
         }
 
 
-        private CostBatch getCosts()
+        override protected CostBatch getCosts()
         {
-            CostBatch costs = new CostBatch(Type);
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                costs.AddCost(cost);
-            }
+            CostBatch costs = base.CostBatch;
+            costs += Type.CostBatch;
             foreach (TECConnection connection in ChildrenConnections)
             {
                 costs += connection.CostBatch;

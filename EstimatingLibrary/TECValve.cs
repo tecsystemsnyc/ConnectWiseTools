@@ -10,6 +10,9 @@ namespace EstimatingLibrary
 {
     public class TECValve: TECHardware, ITECConnectable
     {
+        #region Constants
+        private const CostType COST_TYPE = CostType.TEC;
+        #endregion
 
         #region Fields
         private TECDevice _actuator;
@@ -18,6 +21,7 @@ namespace EstimatingLibrary
         private string _style;
 
         #endregion
+
         #region Properties
         public TECDevice Actuator
         {
@@ -70,11 +74,9 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECValve(TECManufacturer manufacturer, TECDevice actuator) : base (Guid.NewGuid(), manufacturer)
+        public TECValve(TECManufacturer manufacturer, TECDevice actuator) : base (Guid.NewGuid(), manufacturer, CostType.TEC)
         {
             _actuator = actuator;
         }
-        
-
     }
 }
