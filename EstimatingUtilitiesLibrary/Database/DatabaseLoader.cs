@@ -1005,9 +1005,9 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECCost getAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[AssociatedCostTable.ID.Name].ToString());
-            var associatedCost = new TECCost(guid);
+            CostType type = UtilitiesMethods.StringToEnum<CostType>(row[AssociatedCostTable.Type.Name].ToString());
+            var associatedCost = new TECCost(guid, type);
             assignValuePropertiesFromTable(associatedCost, new AssociatedCostTable(), row);
-            associatedCost.Type = UtilitiesMethods.StringToEnum(row[AssociatedCostTable.Type.Name].ToString(), CostType.None);
             return associatedCost;
         }
         private static TECDevice getDeviceFromRow(DataRow row)
@@ -1164,9 +1164,9 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECMisc getMiscFromRow(DataRow row)
         {
             Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
-            TECMisc cost = new TECMisc(guid);
+            CostType type = UtilitiesMethods.StringToEnum<CostType>(row[MiscTable.Type.Name].ToString());
+            TECMisc cost = new TECMisc(guid, type);
             assignValuePropertiesFromTable(cost, new MiscTable(), row);
-            cost.Type = UtilitiesMethods.StringToEnum(row[MiscTable.Type.Name].ToString(), CostType.None);
             getScopeChildren(cost);
             return cost;
         }
@@ -1223,13 +1223,13 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECCost getPlaceholderAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ScopeAssociatedCostTable.AssociatedCostID.Name].ToString());
-            TECCost associatedCost = new TECCost(guid);
+            TECCost associatedCost = new TECCost(guid, CostType.TEC);
             return associatedCost;
         }
         private static TECCost getPlaceholderRatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ElectricalMaterialRatedCostTable.CostID.Name].ToString());
-            TECCost associatedCost = new TECCost(guid);
+            TECCost associatedCost = new TECCost(guid, CostType.TEC);
             return associatedCost;
         }
         private static TECLabeled getPlaceholderLocationFromRow(DataRow row)
