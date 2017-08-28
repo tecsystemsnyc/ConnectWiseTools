@@ -10,15 +10,14 @@ namespace EstimatingLibrary
 {
     public enum CostType { TEC, Electrical }
 
-    public class TECCost : TECScope, IDragDropable
+    public class TECCost : TECLabeled, IDragDropable
     { 
         #region Properties
-
         protected double _cost;
         protected double _labor;
         protected CostType _type;
         
-        public double Cost
+        public virtual double Cost
         {
             get { return _cost; }
             set
@@ -28,7 +27,7 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "Cost", this, value, old);
             }
         }
-        public double Labor
+        public virtual double Labor
         {
             get { return _labor; }
             set
@@ -38,7 +37,7 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "Labor", this, value, old);
             }
         }
-        public CostType Type
+        public virtual CostType Type
         {
             get { return _type; }
             set
@@ -67,15 +66,23 @@ namespace EstimatingLibrary
 
         protected void copyPropertiesFromCost(TECCost cost)
         {
-            copyPropertiesFromScope(cost);
+            _label = cost.Label;
             _cost = cost.Cost;
             _labor = cost.Labor;
             _type = cost.Type;
         }
 
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECCost(this);
+        }
+
+        public static TECCost operator *(TECCost left, double right)
+        {
+            TECCost newCost = new TECCost(left);
+            newCost.Cost *= right;
+            newCost.Labor *= right;
+            return newCost;
         }
     }
 }
