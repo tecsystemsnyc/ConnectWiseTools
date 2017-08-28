@@ -9,8 +9,18 @@ namespace EstimatingLibrary
 {
     public abstract class TECHardware : TECCost
     {
+        #region Fields
         private TECManufacturer _manufacturer;
+        #endregion
 
+        #region Constructors
+        public TECHardware(Guid guid, TECManufacturer manufacturer, CostType type) : base(guid, type)
+        {
+            _manufacturer = manufacturer;
+        }
+        #endregion
+
+        #region Properties
         public TECManufacturer Manufacturer
         {
             get { return _manufacturer; }
@@ -19,25 +29,34 @@ namespace EstimatingLibrary
                 var old = Manufacturer;
                 _manufacturer = value;
                 NotifyCombinedChanged(Change.Edit, "Manufacturer", this, value, old);
-                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        public double ExtendedCost
+        public new double Cost
         {
-            get { return Cost * Manufacturer.Multiplier; }
+            get
+            {
+                return Price * Manufacturer.Multiplier;
+            }
         }
-
-        public TECHardware(Guid guid, TECManufacturer manufacturer) : base(guid)
+        public double Price
         {
-            _manufacturer = manufacturer;
+            get
+            {
+                return base.Cost;
+            }
+            set
+            {
+                base.Cost = value;
+            }
         }
-
+        #endregion
+        
+        #region Methods
         protected void copyPropertiesFromHardware(TECHardware hardware)
         {
             copyPropertiesFromCost(hardware);
             _manufacturer = hardware.Manufacturer;
         }
-
-
+        #endregion
     }
 }
