@@ -10,6 +10,8 @@ namespace EstimatingLibrary
 {
     public class TECControllerType : TECHardware
     {
+        private const CostType COST_TYPE = CostType.TEC;
+
         #region Properties
         private ObservableCollection<TECIO> _io;
 
@@ -27,8 +29,8 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECControllerType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer) {
-            _type = CostType.TEC;
+        public TECControllerType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
+        {
             _io = new ObservableCollection<TECIO>();
             IO.CollectionChanged += (sender, args) => IO_CollectionChanged(sender, args, "IO");
         }

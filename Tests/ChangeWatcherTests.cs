@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Tests.CostTestingUtilities;
 
 namespace Tests
 {
@@ -65,22 +66,28 @@ namespace Tests
             bid.Systems.Add(system);
 
             //Assert
-            //Check Raised
-            Assert.IsTrue(changedRaised, "Changed event on the ChangeWatcher wasn't raised.");
-
-            Assert.IsFalse(instanceChangedRaised, "InstanceChanged event on the ChangeWatcher wasn't raised.");
-            Assert.IsFalse(costChangedRaised, "CostChanged event on the ChangeWatcher wasn't raised.");
-            Assert.IsFalse(pointChangedRaised, "PointChanged event on the ChangeWatcher wasn't raised.");
-
-            //Check Event Args
+            checkRaised(false, false, false);
             checkEventArgs(changedArgs, Change.Add, "System", bid, system);
-            
         }
 
         [TestMethod]
         public void AddControllerToBid()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECControllerType controllerType = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController controller = new TECController(controllerType);
+
+            //Act
+            bid.Controllers.Add(controller);
+
+            Total tecTotal = CalculateTotal(controller, CostType.TEC);
+            Total elecTotal = CalculateTotal(controller, CostType.Electrical);
+
+            //Assert
+            checkRaised(true, true, true);
+            checkEventArgs(changedArgs, Change.Add, "Controller", bid, controller);
+            checkEventArgs(instanceChangedArgs, Change.Add, "Controller", bid, controller);
+
         }
 
         [TestMethod]
@@ -120,6 +127,38 @@ namespace Tests
         }
         #endregion
 
+        private void checkRaised(bool instanceChanged, bool costChanged, bool pointChanged)
+        {
+            Assert.IsTrue(changedRaised, "Changed event on the ChangeWatcher wasn't raised.");
+
+            if (instanceChanged)
+            {
+                Assert.IsTrue(instanceChangedRaised, "InstanceChanged event on the ChangeWatcher wasn't raised when it should have been.");
+            }
+            else
+            {
+                Assert.IsFalse(instanceChangedRaised, "InstanceChanged event on the ChangeWatcher was raised when it shouldn't have been.");
+            }
+            
+            if (costChanged)
+            {
+                Assert.IsTrue(costChangedRaised, "CostChanged event on the ChangeWatcher wasn't raised when it should have been.");
+            }
+            else
+            {
+                Assert.IsFalse(costChangedRaised, "CostChanged event on the ChangeWatcher was raised when it shouldn't have been.");
+            }
+            
+            if (pointChanged)
+            {
+                Assert.IsTrue(pointChangedRaised, "PointChanged event on the ChangeWatcher wasn't raised when it should have been.");
+            }
+            else
+            {
+                Assert.IsFalse(pointChangedRaised, "PointChanged event on the ChangeWatcher was raised when it shouldn't have been.");
+            }
+        }
+
         private void checkEventArgs(TECChangedEventArgs args, Change change, string propertyName, TECObject sender, object value, object oldValue = null)
         {
             Assert.AreEqual(args.Change, change, "Change type is wrong.");
@@ -131,6 +170,30 @@ namespace Tests
             {
                 Assert.AreEqual(args.OldValue, oldValue, "OldValue is wrong.");
             }
+        }
+
+        private void checkCostDeltas(Total tecTotal, Total elecTotal)
+        {
+            double totalTECCost = 0;
+            double totalTECLabor = 0;
+            double totalElecCost = 0;
+            double totalElecLabor = 0;
+            foreach(TECCost cost in costDeltas)
+            {
+                if (cost.Type == CostType.TEC)
+                {
+                    totalTECCost += cost.Cost;
+                    totalTECLabor += cost.Labor;
+                } 
+                else if (cost.Type == CostType.Electrical)
+                {
+                    totalElecCost += cost.Cost;
+                    totalElecLabor += cost.Labor;
+                }
+            }
+
+            throw new NotImplementedException();
+            //Assert.AreEqual(tecTotal.Cost, totalTECCost, delta, )
         }
     }
 }

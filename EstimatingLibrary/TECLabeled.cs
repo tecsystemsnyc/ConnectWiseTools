@@ -41,7 +41,5 @@ namespace EstimatingLibrary
             _label = source.Label;
         }
         #endregion //Constructors
-
-
     }
 }

@@ -22,6 +22,13 @@ namespace EstimatingLibrary.Utilities
         {
             typeDictionary.Add(cost.Type, new CostObject(cost));
         }
+        public CostBatch(List<TECCost> costs) : this()
+        {
+            foreach(TECCost cost in costs)
+            {
+                AddCost(cost);
+            }
+        }
 
         public static CostBatch operator +(CostBatch left, CostBatch right)
         {
@@ -56,6 +63,16 @@ namespace EstimatingLibrary.Utilities
                 {
                     newCostBatch.typeDictionary.Add(type.Key, type.Value);
                 }
+            }
+            return newCostBatch;
+        }
+        public static CostBatch operator *(CostBatch left, double right)
+        {
+            CostBatch newCostBatch = new CostBatch();
+            newCostBatch.typeDictionary = left.typeDictionary;
+            foreach(KeyValuePair<CostType, CostObject> type in newCostBatch.typeDictionary)
+            {
+                newCostBatch.typeDictionary[type.Key] = (type.Value * right);
             }
             return newCostBatch;
         }

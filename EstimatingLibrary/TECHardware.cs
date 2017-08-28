@@ -57,6 +57,13 @@ namespace EstimatingLibrary
             copyPropertiesFromCost(hardware);
             _manufacturer = hardware.Manufacturer;
         }
+
+        override protected CostBatch getCosts()
+        {
+            CostBatch costs = base.getCosts();
+            costs += new CostBatch(Cost, Labor, Type);
+            return costs;
+        }
         #endregion
     }
 }

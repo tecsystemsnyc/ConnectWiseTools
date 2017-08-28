@@ -13,13 +13,11 @@ namespace EstimatingLibrary
 {
     public class TECEstimator : TECObject
     {
-
         TECBid bid;
         const double ZERO = 0;
 
         #region Cost Base
-        private TECCost tecCost;
-        private TECCost electricalCost;
+        private CostBatch cost;
         private int pointNumber;
         #endregion
 
@@ -27,7 +25,7 @@ namespace EstimatingLibrary
 
         public double TECFieldHours
         {
-            get { return tecCost.Labor; }
+            get { return cost.GetLabor(CostType.TEC); }
         }
         public double TECFieldLaborCost
         {
@@ -234,9 +232,9 @@ namespace EstimatingLibrary
             watcher.PointChanged += PointChanged;
         }
         
-        private void CostChanged(List<TECCost> changes)
+        private void CostChanged(CostBatch change)
         {
-            addCost(changes);
+            addCost(change);
         }
         
         private void PointChanged(int pointNum)
@@ -246,44 +244,22 @@ namespace EstimatingLibrary
         private void getInitialValues()
         {
             pointNumber = 0;
-            tecCost = new TECCost();
-            electricalCost = new TECCost();
+            costs = new CostBatch();
 
             addPoints(bid.PointNumber);
             addCost(bid.Costs);
         }
         
         #region Update From Changes
-        private void addCost(List<TECCost> costs)
+        private void addCost(CostBatch costsToAdd)
         {
-            bool tecChanged = false;
-            bool electricalChanged = false;
-            foreach(TECCost cost in costs)
-            {
-                if (cost.Type == CostType.TEC)
-                {
-                    tecCost.Cost += cost.Cost;
-                    tecCost.Labor += cost.Labor;
-                    tecChanged = true;
-                }
-                else if (cost.Type == CostType.Electrical) 
-                {
-                    electricalCost.Cost += cost.Cost;
-                    electricalCost.Labor += cost.Labor;
-                    electricalChanged = true;
-                }
-            }
-            if (tecChanged)
-            {
-                raiseMaterial();
-                raiseTECLabor();
-            }
-            if (electricalChanged)
-            {
-                raiseElectricalMaterial();
-                raiseElectricalLabor();
-            }
+            cost += costsToAdd;
+
+            raiseMaterial();
+            raiseTECLabor();
             
+            raiseElectricalMaterial();
+            raiseElectricalLabor();
         }
         private void addPoints(int poitNum)
         {

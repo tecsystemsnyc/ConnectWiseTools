@@ -59,10 +59,10 @@ namespace EstimatingLibrary
             }
         }
 
-        public abstract List<TECCost> Costs { get; }
+        public CostBatch CostBatch { get; }
         #endregion //Properties
 
-        public event Action<List<TECCost>> CostChanged;
+        public event Action<CostBatch> CostChanged;
 
         #region Constructors 
         public TECConnection(Guid guid) : base(guid)
@@ -83,9 +83,11 @@ namespace EstimatingLibrary
         }
         #endregion //Constructors
 
-        public void NotifyCostChanged(List<TECCost> costs)
+        public void NotifyCostChanged(CostBatch costs)
         {
             CostChanged?.Invoke(costs);
         }
+
+        protected abstract CostBatch getCosts();
     }
 }

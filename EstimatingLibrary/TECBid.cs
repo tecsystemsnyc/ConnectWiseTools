@@ -21,7 +21,7 @@ namespace EstimatingLibrary
         private TECParameters _parameters;
         private TECExtraLabor _extraLabor;
 
-        public event Action<List<TECCost>> CostChanged;
+        public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
 
         private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
@@ -216,9 +216,9 @@ namespace EstimatingLibrary
             }
         }
         
-        public List<TECCost> Costs
+        public CostBatch CostBatch
         {
-            get { return costs();  }
+            get { return getCosts();  }
         }
         public int PointNumber
         {
@@ -294,11 +294,11 @@ namespace EstimatingLibrary
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 int pointNumber = 0;
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 foreach (object item in e.NewItems)
                 {
                     if (item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
-                    if (item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
+                    if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
                     NotifyCombinedChanged(Change.Add, collectionName, this, item);
                     if (item is TECSystem)
                     {
@@ -312,11 +312,11 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 int pointNumber = 0;
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 foreach (object item in e.OldItems)
                 {
                     if(item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
-                    if(item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
+                    if(item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
                     NotifyCombinedChanged(Change.Remove, collectionName, this, item);
                     if (item is TECSystem)
                     {
@@ -330,7 +330,7 @@ namespace EstimatingLibrary
                     }
                 }
                 PointChanged?.Invoke(pointNumber);
-                CostChanged?.Invoke(CostHelper.NegativeCosts(costs));
+                CostChanged?.Invoke(costs * -1);
                 
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -365,26 +365,26 @@ namespace EstimatingLibrary
         }
         #endregion
         
-        private List<TECCost> costs()
+        private CostBatch getCosts()
         {
-            List<TECCost> outCosts = new List<TECCost>();
+            CostBatch costs = new CostBatch();
             foreach(TECMisc misc in this.MiscCosts)
             {
-                outCosts.AddRange(misc.Costs);
+                costs += misc.CostBatch;
             }
             foreach(TECSystem system in this.Systems)
             {
-                outCosts.AddRange(system.Costs);
+                costs += system.CostBatch;
             }
             foreach(TECController controller in this.Controllers)
             {
-                outCosts.AddRange(controller.Costs);
+                costs += controller.CostBatch;
             }
             foreach(TECPanel panel in this.Panels)
             {
-                outCosts.AddRange(panel.Costs);
+                costs += panel.CostBatch;
             }
-            return outCosts;
+            return costs;
         }
 
         private int pointNumber()
@@ -476,7 +476,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         #endregion
     }
 }

@@ -33,7 +33,7 @@ namespace EstimatingLibrary.Utilities
         #region Events
         public event Action<TECChangedEventArgs> Changed;
         public event Action<TECChangedEventArgs> InstanceChanged;
-        public event Action<List<TECCost>> CostChanged;
+        public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
         #endregion
 
@@ -427,7 +427,7 @@ namespace EstimatingLibrary.Utilities
                 InstanceChanged?.Invoke(obj);
             }
         }
-        private void handleCostChanged(TECObject sender, List<TECCost> obj)
+        private void handleCostChanged(TECObject sender, CostBatch obj)
         {
             if (isInstance(sender))
             {

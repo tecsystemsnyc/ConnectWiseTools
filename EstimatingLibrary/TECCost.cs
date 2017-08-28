@@ -10,7 +10,7 @@ namespace EstimatingLibrary
 {
     public enum CostType { TEC, Electrical }
 
-    public class TECCost : TECLabeled, IDragDropable
+    public class TECCost : TECScope, IDragDropable
     { 
         #region Properties
         protected double _cost;
@@ -66,7 +66,7 @@ namespace EstimatingLibrary
 
         protected void copyPropertiesFromCost(TECCost cost)
         {
-            _label = cost.Label;
+            copyPropertiesFromScope(cost);
             _cost = cost.Cost;
             _labor = cost.Labor;
             _type = cost.Type;
