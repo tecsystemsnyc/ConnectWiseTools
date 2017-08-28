@@ -24,20 +24,7 @@ namespace Tests
             TECControllerType controllerType = catalogs.ControllerTypes.RandomObject();
 
             //Act
-            List<CostObject> deltas = hardwareVM.AddHardware(controllerType);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch deltas = hardwareVM.AddHardware(controllerType);
 
             Total assocTECTotal = new Total();
             Total assocElecTotal = new Total();
@@ -500,7 +487,7 @@ namespace Tests
             double length = TestHelper.RandomDouble(1, 100);
 
             //Act
-            List<CostObject> deltas = lengthVM.AddRun(elecMat, length);
+            CostBatch deltas = lengthVM.AddRun(elecMat, length);
             CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
             CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
             foreach (CostObject delta in deltas)

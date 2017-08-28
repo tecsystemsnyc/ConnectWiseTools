@@ -87,8 +87,6 @@ namespace EstimatingLibrary
                 return IO;
             }
         }
-
-        public override List<TECCost> Costs { get { return costs(); } }
         #endregion
 
         #region Constructors
@@ -139,51 +137,18 @@ namespace EstimatingLibrary
         #endregion
 
         #region methods
-        private List<TECCost> costs()
+        protected override CostBatch getCosts()
         {
-            var outCosts = new List<TECCost>();
-            TECCost thisCost = new TECCost();
-
+            CostBatch costs = new CostBatch();
             if (ConnectionType != null)
             {
-                thisCost = new TECCost();
-                thisCost.Type = ConnectionType.Type;
-                thisCost.Cost = ConnectionType.Cost * Length;
-                thisCost.Labor = ConnectionType.Labor * Length;
-                outCosts.Add(thisCost);
-                foreach (TECCost cost in ConnectionType.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-                foreach (TECCost cost in ConnectionType.RatedCosts)
-                {
-                    TECCost ratedCost = new TECCost();
-                    ratedCost.Type = cost.Type;
-                    ratedCost.Cost = cost.Cost * Length;
-                    ratedCost.Labor = cost.Labor * Length;
-                    outCosts.Add(ratedCost);
-                }
+                ConnectionType.GetCosts(Length);
             }
             if (ConduitType != null)
             {
-                thisCost = new TECCost();
-                thisCost.Type = ConduitType.Type;
-                thisCost.Cost = ConduitType.Cost * ConduitLength;
-                thisCost.Labor = ConduitType.Labor * ConduitLength;
-                outCosts.Add(thisCost);
-                foreach (TECCost cost in ConduitType.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-                foreach (TECCost cost in ConduitType.RatedCosts)
-                {
-                    TECCost ratedCost = new TECCost();
-                    ratedCost.Cost = cost.Cost * Length;
-                    ratedCost.Labor = cost.Labor * Length;
-                    outCosts.Add(ratedCost);
-                }
+                ConduitType.GetCosts(Length);
             }
-            return outCosts;
+            return costs;
         }
         #endregion 
 

@@ -188,36 +188,35 @@ namespace TECUserControlLibrary.ViewModels
             initialize();
         }
 
-        public List<CostObject> AddRun(TECElectricalMaterial material, double length)
+        public CostBatch AddRun(TECElectricalMaterial material, double length)
         {
-            List<CostObject> deltas = AddLength(material, length);
+            CostBatch deltas = AddLength(material, length);
             foreach (TECCost cost in material.AssociatedCosts)
             {
-                deltas.AddRange(addAssocCost(cost));
+                deltas += addAssocCost(cost);
             }
             return deltas;
         }
-        public List<CostObject> RemoveRun(TECElectricalMaterial material, double length)
+        public CostBatch RemoveRun(TECElectricalMaterial material, double length)
         {
-            List<CostObject> deltas = RemoveLength(material, length);
+            CostBatch deltas = RemoveLength(material, length);
             foreach (TECCost cost in material.AssociatedCosts)
             {
-                deltas.AddRange(removeAssocCost(cost));
+                deltas += removeAssocCost(cost);
             }
             return deltas;
         }
-        public List<CostObject> AddLength(TECElectricalMaterial material, double length)
+        public CostBatch AddLength(TECElectricalMaterial material, double length)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             bool containsItem = lengthDictionary.ContainsKey(material.Guid);
             if (containsItem)
             {
                 LengthSummaryItem item = lengthDictionary[material.Guid];
-                CostObject delta = item.AddLength(length);
-                LengthCostTotal += delta.Cost;
-                LengthLaborTotal += delta.Labor;
-                delta.Type = CostType.Electrical;
-                deltas.Add(delta);
+                CostBatch delta = item.AddLength(length);
+                LengthCostTotal += delta.GetCost(CostType.Electrical);
+                LengthLaborTotal += delta.GetLabor(CostType.Electrical);
+                deltas += delta;
             }
             else
             {
@@ -226,25 +225,25 @@ namespace TECUserControlLibrary.ViewModels
                 LengthSummaryItems.Add(item);
                 LengthCostTotal += item.TotalCost;
                 LengthLaborTotal += item.TotalLabor;
-                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, CostType.Electrical));
+                deltas += new CostBatch(item.TotalCost, item.TotalLabor, CostType.Electrical);
             }
             foreach(TECCost cost in material.RatedCosts)
             {
-                deltas.AddRange(addRatedCost(cost, length));
+                deltas += addRatedCost(cost, length);
             }
             return deltas;
         }
-        public List<CostObject> RemoveLength(TECElectricalMaterial material, double length)
+        public CostBatch RemoveLength(TECElectricalMaterial material, double length)
         {
             bool containsItem = lengthDictionary.ContainsKey(material.Guid);
             if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
+                CostBatch deltas = new CostBatch();
                 LengthSummaryItem item = lengthDictionary[material.Guid];
-                CostObject delta = item.RemoveLength(length);
-                LengthCostTotal += delta.Cost;
-                LengthLaborTotal += delta.Labor;
-                deltas.Add(delta);
+                CostBatch delta = item.RemoveLength(length);
+                LengthCostTotal += delta.GetCost(CostType.Electrical);
+                LengthLaborTotal += delta.GetLabor(CostType.Electrical);
+                deltas += delta;
 
                 if (item.Length <= 0)
                 {
@@ -253,7 +252,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 foreach(TECCost cost in material.RatedCosts)
                 {
-                    deltas.AddRange(removeRatedCost(cost, length));
+                    deltas += removeRatedCost(cost, length);
                 }
                 return deltas;
             }
@@ -287,25 +286,19 @@ namespace TECUserControlLibrary.ViewModels
             RatedElecLaborTotal = 0;
         }
 
-        private List<CostObject> addAssocCost(TECCost cost)
+        private CostBatch addAssocCost(TECCost cost)
         {
-            List<CostObject> deltas = new List<CostObject>();
+            CostBatch deltas = new CostBatch();
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
                 CostSummaryItem item = assocCostDictionary[cost.Guid];
-                CostObject delta = item.AddQuantity(1);
-                deltas.Add(delta);
-                if (cost.Type == CostType.TEC)
-                {
-                    AssocTECCostTotal += delta.Cost;
-                    AssocTECLaborTotal += delta.Labor;
-                }
-                else if (cost.Type == CostType.Electrical)
-                {
-                    AssocElecCostTotal += delta.Cost;
-                    AssocElecLaborTotal += delta.Labor;
-                }
+                CostBatch delta = item.AddQuantity(1);
+                AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
+                AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                deltas += delta;
             }
             else
             {
@@ -323,29 +316,24 @@ namespace TECUserControlLibrary.ViewModels
                     AssocElecCostTotal += item.TotalCost;
                     AssocElecLaborTotal += item.TotalLabor;
                 }
-                deltas.Add(new CostObject(item.TotalCost, item.TotalLabor, cost.Type));
+                deltas += new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
             }
             return deltas;
         }
-        private List<CostObject> removeAssocCost(TECCost cost)
+        private CostBatch removeAssocCost(TECCost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
             {
-                List<CostObject> deltas = new List<CostObject>();
+                CostBatch deltas = new CostBatch();
                 CostSummaryItem item = assocCostDictionary[cost.Guid];
-                CostObject delta = item.RemoveQuantity(1);
-                if (cost.Type == CostType.TEC)
-                {
-                    AssocTECCostTotal += delta.Cost;
-                    AssocTECLaborTotal += delta.Labor;
-                }
-                else if (cost.Type == CostType.Electrical)
-                {
-                    AssocElecCostTotal += delta.Cost;
-                    AssocElecLaborTotal += delta.Labor;
-                }
-                deltas.Add(delta);
+                CostBatch delta = item.RemoveQuantity(1);
+                AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
+                AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                deltas += delta;
+
                 if (item.Quantity < 1)
                 {
                     assocCostDictionary.Remove(cost.Guid);
@@ -365,7 +353,7 @@ namespace TECUserControlLibrary.ViewModels
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
         }
-        private List<CostObject> addRatedCost(TECCost cost, double length)
+        private CostBatch addRatedCost(TECCost cost, double length)
         {
             List<CostObject> deltas = new List<CostObject>();
             bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
@@ -405,7 +393,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private List<CostObject> removeRatedCost(TECCost cost, double length)
+        private CostBatch removeRatedCost(TECCost cost, double length)
         {
             bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)

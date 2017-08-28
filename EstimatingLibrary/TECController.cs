@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECLocated, INotifyCostChanged, IDragDropable
+    public class TECController : TECLocated, IDragDropable
     {
         #region Properties
         //---Stored---
@@ -80,13 +80,6 @@ namespace EstimatingLibrary
             { return getNetworkIO(); }
         }
         public bool IsGlobal;
-        
-        new public List<TECCost> Costs
-        {
-            get { return costs(); }
-        }
-
-
         #endregion
 
         #region Constructors
@@ -405,19 +398,15 @@ namespace EstimatingLibrary
         }
 
 
-        private List<TECCost> costs()
+        override protected CostBatch getCosts()
         {
-            var outCosts = new List<TECCost>();
-            outCosts.Add(this.Type);
-            outCosts.AddRange(this.AssociatedCosts);
+            CostBatch costs = base.CostBatch;
+            costs += Type.CostBatch;
             foreach (TECConnection connection in ChildrenConnections)
             {
-                foreach (TECCost cost in connection.Costs)
-                {
-                    outCosts.Add(cost);
-                }
+                costs += connection.CostBatch;
             }
-            return outCosts;
+            return costs;
         }
         #endregion
     }

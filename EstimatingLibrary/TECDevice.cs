@@ -11,8 +11,11 @@ namespace EstimatingLibrary
 {
     public class TECDevice : TECHardware, IDragDropable, ITECConnectable
     {
+        #region Constants
+        private const CostType COST_TYPE = CostType.TEC;
+        #endregion
 
-        #region fields
+        #region Fields
         private ObservableCollection<TECElectricalMaterial> _connectionTypes;
 
         #endregion
@@ -38,7 +41,7 @@ namespace EstimatingLibrary
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(Guid guid, ObservableCollection<TECElectricalMaterial> connectionTypes, TECManufacturer manufacturer) : base(guid, manufacturer)
+        public TECDevice(Guid guid, ObservableCollection<TECElectricalMaterial> connectionTypes, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
             _cost = 0;
             _connectionTypes = connectionTypes;

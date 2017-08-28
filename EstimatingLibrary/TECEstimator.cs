@@ -13,13 +13,11 @@ namespace EstimatingLibrary
 {
     public class TECEstimator : TECObject
     {
-
         TECBid bid;
         const double ZERO = 0;
 
         #region Cost Base
-        private TECCost tecCost;
-        private TECCost electricalCost;
+        private CostBatch allCosts;
         private int pointNumber;
         #endregion
 
@@ -27,7 +25,7 @@ namespace EstimatingLibrary
 
         public double TECFieldHours
         {
-            get { return tecCost.Labor; }
+            get { return allCosts.GetLabor(CostType.TEC); }
         }
         public double TECFieldLaborCost
         {
@@ -125,7 +123,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return tecCost.Cost;
+                return allCosts.GetCost(CostType.TEC);
             }
         }
         public double TECShipping
@@ -151,7 +149,7 @@ namespace EstimatingLibrary
 
         public double ElectricalLaborHours
         {
-            get { return electricalCost.Labor; }
+            get { return allCosts.GetLabor(CostType.Electrical); }
         }
         public double ElectricalLaborCost
         {
@@ -178,7 +176,7 @@ namespace EstimatingLibrary
         public double ElectricalMaterialCost
         {
             get
-            { return electricalCost.Cost; }
+            { return allCosts.GetCost(CostType.Electrical); }
         }
         public double ElectricalShipping
         {
@@ -234,9 +232,9 @@ namespace EstimatingLibrary
             watcher.PointChanged += PointChanged;
         }
         
-        private void CostChanged(List<TECCost> changes)
+        private void CostChanged(CostBatch change)
         {
-            addCost(changes);
+            addCost(change);
         }
         
         private void PointChanged(int pointNum)
@@ -246,44 +244,22 @@ namespace EstimatingLibrary
         private void getInitialValues()
         {
             pointNumber = 0;
-            tecCost = new TECCost();
-            electricalCost = new TECCost();
+            allCosts = new CostBatch();
 
             addPoints(bid.PointNumber);
-            addCost(bid.Costs);
+            addCost(bid.CostBatch);
         }
         
         #region Update From Changes
-        private void addCost(List<TECCost> costs)
+        private void addCost(CostBatch costsToAdd)
         {
-            bool tecChanged = false;
-            bool electricalChanged = false;
-            foreach(TECCost cost in costs)
-            {
-                if (cost.Type == CostType.TEC)
-                {
-                    tecCost.Cost += cost.Cost;
-                    tecCost.Labor += cost.Labor;
-                    tecChanged = true;
-                }
-                else if (cost.Type == CostType.Electrical) 
-                {
-                    electricalCost.Cost += cost.Cost;
-                    electricalCost.Labor += cost.Labor;
-                    electricalChanged = true;
-                }
-            }
-            if (tecChanged)
-            {
-                raiseMaterial();
-                raiseTECLabor();
-            }
-            if (electricalChanged)
-            {
-                raiseElectricalMaterial();
-                raiseElectricalLabor();
-            }
+            allCosts += costsToAdd;
+
+            raiseMaterial();
+            raiseTECLabor();
             
+            raiseElectricalMaterial();
+            raiseElectricalLabor();
         }
         private void addPoints(int poitNum)
         {
@@ -315,8 +291,8 @@ namespace EstimatingLibrary
         /// </summary>
         private double getMaterialLabor(TECBid bid)
         {
-            double laborHours = tecCost.Labor;
-            double cost = tecCost.Labor * bid.Parameters.CommRate;
+            double laborHours = allCosts.GetLabor(CostType.TEC);
+            double cost = laborHours * bid.Parameters.CommRate;
             return cost;
         }
         /// <summary>
@@ -533,7 +509,7 @@ namespace EstimatingLibrary
             outLabor += getCommTotalHours(bid);
             outLabor += getSoftTotalHours(bid);
             outLabor += getGraphTotalHours(bid);
-            outLabor += tecCost.Labor;
+            outLabor += allCosts.GetLabor(CostType.TEC);
             return outLabor;
         }
         /// <summary>
@@ -556,7 +532,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getElectricalLaborCost(TECBid bid)
         {
-            double electricalHours = electricalCost.Labor;
+            double electricalHours = allCosts.GetLabor(CostType.Electrical);
             double electricalRate = bid.Parameters.ElectricalEffectiveRate;
             double cost = electricalHours * electricalRate;
 
@@ -567,7 +543,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getElectricalSuperLaborHours()
         {
-            return electricalCost.Labor * bid.Parameters.ElectricalSuperRatio;
+            return allCosts.GetLabor(CostType.Electrical) * bid.Parameters.ElectricalSuperRatio;
         }
         /// <summary>
         /// Returns the electrical super labor cost
@@ -583,7 +559,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getTotalElectricalLaborHours()
         {
-            double laborCost = electricalCost.Labor + getElectricalSuperLaborHours();
+            double laborCost = allCosts.GetLabor(CostType.Electrical) + getElectricalSuperLaborHours();
             return laborCost;
         }
         /// <summary>

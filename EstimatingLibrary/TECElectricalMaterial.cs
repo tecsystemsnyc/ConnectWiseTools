@@ -27,10 +27,9 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECElectricalMaterial(Guid guid) : base(guid)
+        public TECElectricalMaterial(Guid guid) : base(guid, CostType.Electrical)
         {
             _ratedCosts = new ObservableCollection<TECCost>();
-            _type = CostType.Electrical;
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
         public TECElectricalMaterial() : this(Guid.NewGuid()) { }
@@ -44,7 +43,21 @@ namespace EstimatingLibrary
             _ratedCosts = ratedCosts;
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
-        
+
+        public CostBatch GetCosts(double length)
+        {
+            CostBatch costBatch = new CostBatch(Cost, Labor, Type);
+            foreach (TECCost ratedCost in RatedCosts)
+            {
+                costBatch.AddCost(ratedCost);
+            }
+            costBatch *= length;
+            foreach (TECCost assocCost in AssociatedCosts)
+            {
+                costBatch.AddCost(assocCost);
+            }
+            return costBatch;
+        }
         private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

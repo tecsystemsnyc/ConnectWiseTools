@@ -39,10 +39,6 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
-        override public List<TECCost> Costs
-        {
-            get { return costs(); }
-        }
         public List<TECPoint> Points
         {
             get { return points(); }
@@ -90,11 +86,11 @@ namespace EstimatingLibrary
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 int pointNumber = 0;
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 foreach (TECSubScope item in e.NewItems)
                 {
                     pointNumber += item.PointNumber;
-                    costs.AddRange(item.Costs);
+                    costs += item.CostBatch;
                     NotifyCombinedChanged(Change.Add, "SubScope", this, item);
                     if ((item as TECSubScope).Location == null)
                     {
@@ -107,15 +103,15 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 int pointNumber = 0;
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 foreach (TECSubScope item in e.OldItems)
                 {
                     pointNumber += item.PointNumber;
-                    costs.AddRange(item.Costs);
+                    costs += item.CostBatch;
                     NotifyCombinedChanged(Change.Remove, "SubScope", this, item);
                 }
                 PointChanged?.Invoke(pointNumber * -1);
-                NotifyCostChanged(CostHelper.NegativeCosts(costs));
+                NotifyCostChanged(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -147,16 +143,14 @@ namespace EstimatingLibrary
             }
             return totalPoints;
         }
-        private List<TECCost> costs()
+        protected override CostBatch getCosts()
         {
-            List<TECCost> outCosts = new List<TECCost>();
-
+            CostBatch costs = base.getCosts();
             foreach(TECSubScope subScope in SubScope)
             {
-                outCosts.AddRange(subScope.Costs);
+                costs += subScope.CostBatch;
             }
-            outCosts.AddRange(this.AssociatedCosts);
-            return outCosts;
+            return costs;
         }
         private List<TECPoint> points()
         {

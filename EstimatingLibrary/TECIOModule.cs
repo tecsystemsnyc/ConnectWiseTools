@@ -9,6 +9,8 @@ namespace EstimatingLibrary
 {
     public class TECIOModule : TECHardware
     {
+        private const CostType COST_TYPE = CostType.TEC;
+
         private int _ioPerModule;
         public int IOPerModule
         {
@@ -21,7 +23,7 @@ namespace EstimatingLibrary
             }
         }
         
-        public TECIOModule(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer)
+        public TECIOModule(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
             _ioPerModule = 0;
         }

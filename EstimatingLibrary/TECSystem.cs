@@ -187,13 +187,6 @@ namespace EstimatingLibrary
             }
         }
 
-        override public List<TECCost> Costs
-        {
-            get
-            {
-                return costs();
-            }
-        }
         public int PointNumber
         {
             get
@@ -291,30 +284,38 @@ namespace EstimatingLibrary
             return totalPoints;
         }
 
-        private List<TECCost> costs()
+        protected override CostBatch getCosts()
         {
-            var outCosts = new List<TECCost>();
-            foreach (TECEquipment item in Equipment)
+            if (Instances.Count > 0)
             {
-                outCosts.AddRange(item.Costs);
-            }
-            foreach (TECController item in Controllers)
-            {
-                outCosts.AddRange(item.Costs);
-            }
-            foreach (TECPanel item in Panels)
-            {
-                outCosts.AddRange(item.Costs);
-            }
-            outCosts.AddRange(AssociatedCosts);
-            foreach (TECMisc item in MiscCosts)
-            {
-                foreach (TECSystem system in Instances)
+                CostBatch costs = new CostBatch();
+                foreach (TECSystem instance in Instances)
                 {
-                    outCosts.AddRange(item.Costs);
+                    costs += instance.CostBatch;
                 }
+                return costs;
             }
-            return outCosts;
+            else
+            {
+                CostBatch costs = base.getCosts();
+                foreach (TECEquipment item in Equipment)
+                {
+                    costs += item.CostBatch;
+                }
+                foreach (TECController item in Controllers)
+                {
+                    costs += item.CostBatch;
+                }
+                foreach (TECPanel item in Panels)
+                {
+                    costs += item.CostBatch;
+                }
+                foreach (TECMisc item in MiscCosts)
+                {
+                    costs += item.CostBatch;
+                }
+                return costs;
+            }
         }
 
 
@@ -356,13 +357,13 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 int pointNum = 0;
                 foreach (object item in e.NewItems)
                 {
                     if (item != null)
                     {
-                        if (item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
+                        if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
                         if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
                         NotifyTECChanged(Change.Add, propertyName, this, item);
                         if (item is TECController controller)
@@ -376,13 +377,13 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 int pointNum = 0;
                 foreach (object item in e.OldItems)
                 {
                     if (item != null)
                     {
-                        if (item is INotifyCostChanged costItem) { costs.AddRange(costItem.Costs); }
+                        if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
                         if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
                         NotifyTECChanged(Change.Remove, propertyName, this, item);
                         if (item is TECSystem system)
@@ -391,7 +392,7 @@ namespace EstimatingLibrary
                         }
                     }
                 }
-                NotifyCostChanged(CostHelper.NegativeCosts(costs));
+                NotifyCostChanged(costs * -1);
                 PointChanged?.Invoke(pointNum * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)

@@ -112,7 +112,7 @@
     <Compile Include="TECIOModule.cs" />
     <Compile Include="TECLocated.cs" />
     <Compile Include="TECControllerType.cs" />
-    <Compile Include="Utilities\CostObject.cs" />
+    <Compile Include="Utilities\CostBatch.cs" />
     <Compile Include="Utilities\ModelLinkingHelper.cs" />
     <Compile Include="TECChangedEventArgs.cs" />
     <Compile Include="TECBid.cs" />

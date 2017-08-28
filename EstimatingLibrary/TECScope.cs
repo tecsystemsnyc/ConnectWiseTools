@@ -21,7 +21,7 @@ namespace EstimatingLibrary
         protected ObservableCollection<TECLabeled> _tags;
         protected ObservableCollection<TECCost> _associatedCosts;
 
-        public event Action<List<TECCost>> CostChanged;
+        public event Action<CostBatch> CostChanged;
 
         public string Name
         {
@@ -70,8 +70,13 @@ namespace EstimatingLibrary
             }
         }
 
-        virtual public List<TECCost> Costs { get { return this.AssociatedCosts.ToList(); } }
-
+        public CostBatch CostBatch
+        {
+            get
+            {
+                return getCosts();
+            }
+        }
         #endregion
 
         #region Constructors
@@ -112,7 +117,7 @@ namespace EstimatingLibrary
                     if(item is TECCost cost) { costs.AddRange(costs); }
                     NotifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
-                NotifyCostChanged(costs);
+                NotifyCostChanged(new CostBatch(costs));
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -122,15 +127,24 @@ namespace EstimatingLibrary
                     if (item is TECCost cost) { costs.AddRange(costs); }
                     NotifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
-                NotifyCostChanged(CostHelper.NegativeCosts(costs));
+                NotifyCostChanged(new CostBatch(costs) * -1);
             }
         }
         
-        public void NotifyCostChanged(List<TECCost> costs)
+        public void NotifyCostChanged(CostBatch costs)
         {
             CostChanged?.Invoke(costs);
         }
 
+        protected virtual CostBatch getCosts()
+        {
+            CostBatch costs = new CostBatch();
+            foreach (TECCost assocCost in AssociatedCosts)
+            {
+                costs.AddCost(assocCost);
+            }
+            return costs;
+        }
         #endregion Methods
     }
 }

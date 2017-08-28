@@ -76,13 +76,6 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
-        override public List<TECCost> Costs
-        {
-            get
-            {
-                return costs();
-            }
-        }
         
         #endregion //Properties
 
@@ -165,23 +158,23 @@ namespace EstimatingLibrary
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 foreach (TECDevice item in e.NewItems)
                 {
                     NotifyCombinedChanged(Change.Add, "Devices", this, item);
-                    costs.AddRange(deviceCost(item));
+                    costs += item.CostBatch;
                 }
                 NotifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                List<TECCost> costs = new List<TECCost>();
+                CostBatch costs = new CostBatch();
                 foreach (TECDevice item in e.OldItems)
                 {
                     NotifyCombinedChanged(Change.Remove, "Devices", this, item);
-                    costs.AddRange(deviceCost(item));
+                    costs += item.CostBatch;
                 }
-                NotifyCostChanged(CostHelper.NegativeCosts(costs));
+                NotifyCostChanged(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -254,31 +247,15 @@ namespace EstimatingLibrary
             _connection = connection;
         }
 
-        private List<TECCost> costs()
+        override protected CostBatch getCosts()
         {
-            var outCosts = new List<TECCost>();
+            CostBatch costs = base.getCosts();
             foreach (TECDevice dev in Devices)
             {
-                outCosts.AddRange(deviceCost(dev));
+                costs += dev.CostBatch;
             }
-            foreach (TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            return outCosts;
+            return costs;
         }
-
-        private List<TECCost> deviceCost(TECDevice device)
-        {
-            var outCosts = new List<TECCost>();
-            outCosts.Add(device);
-            foreach (TECCost cost in device.AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            return outCosts;
-        }
-        
         #endregion
     }
 }
