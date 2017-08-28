@@ -45,21 +45,22 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         public TECScopeManager Load()
         {
-            try
-            {
+            //try
+            //{
                 DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
                 if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
                 {
                     return DatabaseLoader.Load(path);
-                } else
+                }
+                else
                 {
                     return null;
                 }
-            }
-            catch
-            {
-                return null; 
-            }
+            //}
+            //catch
+            //{
+            //    return null; 
+            //}
         }
     }
 }

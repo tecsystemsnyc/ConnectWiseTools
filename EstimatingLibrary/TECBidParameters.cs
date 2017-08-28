@@ -127,19 +127,6 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _pmExtraHours;
-        public double PMExtraHours
-        {
-            get { return _pmExtraHours; }
-            set
-            {
-                var old = PMExtraHours;
-                _pmExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "PMExtraHours", this, value, old);
-
-            }
-        }
-
         private double _pmRate;
         public double PMRate
         {
@@ -166,20 +153,6 @@ namespace EstimatingLibrary
                 _engCoef = value;
                 NotifyCombinedChanged(Change.Edit, "ENGCoef", this, value, old);
 
-
-            }
-        }
-
-        private double _engExtraHours;
-        public double ENGExtraHours
-        {
-            get { return _engExtraHours; }
-            set
-            {
-
-                var old = ENGExtraHours;
-                _engExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "ENGExtraHours", this, value, old);
 
             }
         }
@@ -216,21 +189,6 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _commExtraHours;
-        public double CommExtraHours
-        {
-            get { return _commExtraHours; }
-            set
-            {
-
-                var old = CommExtraHours;
-                _commExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "CommExtraHours", this, value, old);
-
-
-            }
-        }
-
         private double _commRate;
         public double CommRate
         {
@@ -262,20 +220,7 @@ namespace EstimatingLibrary
 
             }
         }
-
-        private double _softExtraHours;
-        public double SoftExtraHours
-        {
-            get { return _softExtraHours; }
-            set
-            {
-                var old = SoftExtraHours;
-                _softExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "SoftExtraHours", this, value, old);
-
-            }
-        }
-
+        
         private double _softRate;
         public double SoftRate
         {
@@ -304,20 +249,7 @@ namespace EstimatingLibrary
 
             }
         }
-
-        private double _graphExtraHours;
-        public double GraphExtraHours
-        {
-            get { return _graphExtraHours; }
-            set
-            {
-                var old = GraphExtraHours;
-                _graphExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "GraphExtraHours", this, value, old);
-
-            }
-        }
-
+        
         private double _graphRate;
         public double GraphRate
         {
@@ -490,23 +422,18 @@ namespace EstimatingLibrary
             _subcontractorEscalation = 0;
 
             _pmCoef = 1.0;
-            _pmExtraHours = 0;
             _pmRate = 0;
 
             _engCoef = 1.0;
-            _engExtraHours = 0;
             _engRate = 0;
 
             _commCoef = 1.0;
-            _commExtraHours = 0;
             _commRate = 0;
 
             _softCoef = 1.0;
-            _softExtraHours = 0;
             _softRate = 0;
 
             _graphCoef = 1.0;
-            _graphExtraHours = 0;
             _graphRate = 0;
 
             _electricalRate = 0;
@@ -532,23 +459,18 @@ namespace EstimatingLibrary
             _subcontractorEscalation = parametersSource.SubcontractorEscalation;
 
             _pmCoef = parametersSource.PMCoef;
-            _pmExtraHours = parametersSource.PMExtraHours;
             _pmRate = parametersSource.PMRate;
 
             _engCoef = parametersSource.ENGCoef;
-            _engExtraHours = parametersSource.ENGExtraHours;
             _engRate = parametersSource.ENGRate;
 
             _commCoef = parametersSource.CommCoef;
-            _commExtraHours = parametersSource.CommExtraHours;
             _commRate = parametersSource.CommRate;
 
             _softCoef = parametersSource.SoftCoef;
-            _softExtraHours = parametersSource.SoftExtraHours;
             _softRate = parametersSource.SoftRate;
 
             _graphCoef = parametersSource.GraphCoef;
-            _graphExtraHours = parametersSource.GraphExtraHours;
             _graphRate = parametersSource.GraphRate;
 
             _electricalRate = parametersSource.ElectricalRate;

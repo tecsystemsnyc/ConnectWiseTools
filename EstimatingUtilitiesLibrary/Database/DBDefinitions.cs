@@ -348,7 +348,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class ConnectionTypeTable : CatalogTableBase
     {
         public static new string TableName = "Connectiontype";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECElectricalMaterial).BaseType, Flavor.Wire);
+        public static FlavoredType ObjectType = new FlavoredType(typeof(TECElectricalMaterial), Flavor.Wire);
         public static Flavor ObjectFlavor = Flavor.Wire;
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.Type.GetProperty("Guid"));
@@ -593,11 +593,10 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Cv = new TableField("Cv", "Real", ObjectType.Type.GetProperty("Cv"));
         public static TableField Size = new TableField("Size", "Real", ObjectType.Type.GetProperty("Size"));
         public static TableField Style = new TableField("Style", "TEXT", ObjectType.Type.GetProperty("Style"));
-
-
+        
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             ID
-            };
+        };
         public static new List<FlavoredType> Types = new List<FlavoredType>()
         {
             ObjectType
@@ -902,10 +901,10 @@ namespace EstimatingUtilitiesLibrary.Database
             ReferenceType
         };
     }
-    internal class ScopeLocationTable : TableBase
+    internal class LoactedLocationTable : TableBase
     {
-        public static new string TableName = "ScopeLocation";
-        public static FlavoredType ObjectType = new FlavoredType(typeof(TECScope), 0);
+        public static new string TableName = "LocatedLocation";
+        public static FlavoredType ObjectType = new FlavoredType(typeof(TECLocated), 0);
         public static FlavoredType ReferenceType = new FlavoredType(typeof(TECLabeled), Flavor.Location);
 
         public static TableField ScopeID = new TableField("ScopeID", "TEXT", ObjectType.Type.GetProperty("Guid"));
@@ -1242,7 +1241,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static List<TableBase> Tables = new List<TableBase>() {
             new MetadataTable(),
             new BidInfoTable(),
-            new ExtraLaborTable(),
+            new ParametersTable(),
             new ExtraLaborTable(),
             new NoteTable(),
             new ExclusionTable(),
@@ -1262,6 +1261,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new NetworkConnectionTable(),
             new IOTable(),
             new IOModuleTable(),
+            new ControllerTypeTable(),
+            new ValveTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -1273,7 +1274,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new SubScopePointTable(),
             new ScopeTagTable(),
             new HardwareManufacturerTable(),
-            new ScopeLocationTable(),
+            new LoactedLocationTable(),
             new ControllerTable(),
             new AssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
@@ -1321,6 +1322,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new IOModuleTable(),
             new IOTable(),
             new ScopeBranchTable(),
+            new ControllerTypeTable(),
+            new ValveTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -1359,6 +1362,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new MetadataTable(),
             new BidInfoTable(),
             new TemplatesInfoTable(),
+            new ParametersTable(),
             new ExtraLaborTable(),
             new NoteTable(),
             new ExclusionTable(),
@@ -1379,7 +1383,9 @@ namespace EstimatingUtilitiesLibrary.Database
             new NetworkConnectionTable(),
             new IOModuleTable(),
             new IOTable(),
-            
+            new ControllerTypeTable(),
+            new ValveTable(),
+
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new AssociatedCostTable(),
@@ -1396,7 +1402,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeTagTable(),
             new HardwareManufacturerTable(),
             new DeviceConnectionTypeTable(),
-            new ScopeLocationTable(),
+            new LoactedLocationTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
             new ControllerControllerTypeTable(),

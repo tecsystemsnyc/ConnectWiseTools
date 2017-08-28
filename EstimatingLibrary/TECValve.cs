@@ -70,11 +70,12 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECValve(TECManufacturer manufacturer, TECDevice actuator) : base (Guid.NewGuid(), manufacturer)
+        public TECValve(TECManufacturer manufacturer, TECDevice actuator) : this (Guid.NewGuid(), manufacturer, actuator) {}
+        public TECValve(Guid guid, TECManufacturer manufacturer, TECDevice actuator) : base(guid, manufacturer)
         {
             _actuator = actuator;
         }
-        
+
 
     }
 }

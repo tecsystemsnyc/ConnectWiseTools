@@ -171,11 +171,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Parameters.PMExtraHours = expectedHours;
+            bid.ExtraLabor.PMExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Parameters.PMExtraHours;
+            double actualHours = actualBid.ExtraLabor.PMExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -216,11 +216,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Parameters.ENGExtraHours = expectedHours;
+            bid.ExtraLabor.ENGExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Parameters.ENGExtraHours;
+            double actualHours = actualBid.ExtraLabor.ENGExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -261,11 +261,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Parameters.CommExtraHours = expectedHours;
+            bid.ExtraLabor.CommExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Parameters.CommExtraHours;
+            double actualHours = actualBid.ExtraLabor.CommExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -306,11 +306,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Parameters.SoftExtraHours = expectedHours;
+            bid.ExtraLabor.SoftExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Parameters.SoftExtraHours;
+            double actualHours = actualBid.ExtraLabor.SoftExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);
@@ -351,11 +351,11 @@ namespace Tests
         {
             //Act
             double expectedHours = 457.69;
-            bid.Parameters.GraphExtraHours = expectedHours;
+            bid.ExtraLabor.GraphExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            double actualHours = actualBid.Parameters.GraphExtraHours;
+            double actualHours = actualBid.ExtraLabor.GraphExtraHours;
 
             //Assert
             Assert.AreEqual(expectedHours, actualHours);

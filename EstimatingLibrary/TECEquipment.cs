@@ -129,14 +129,11 @@ namespace EstimatingLibrary
             {
                 var args = e as TECChangedEventArgs;
                 var location = args.Value as TECLabeled;
-                if(location.Flavor == Flavor.Location)
+                foreach (TECSubScope subScope in this.SubScope)
                 {
-                    foreach (TECSubScope subScope in this.SubScope)
+                    if (subScope.Location == location)
                     {
-                        if (subScope.Location == location)
-                        {
-                            subScope.SetLocationFromParent(this.Location);
-                        }
+                        subScope.SetLocationFromParent(this.Location);
                     }
                 }
             }

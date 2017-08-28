@@ -13,6 +13,7 @@ namespace EstimatingUtilitiesLibrary.Database
             var db = new SQLiteDatabase(path);
             db.NonQueryCommand("BEGIN TRANSACTION");
             createAllBidTables(db);
+            db.Insert(MetadataTable.TableName, new Dictionary<string, string> { { MetadataTable.Version.Name, Properties.Settings.Default.Version.ToString() } });
             db.NonQueryCommand("END TRANSACTION");
             db.Connection.Close();
         }

@@ -48,10 +48,11 @@ namespace Tests
             addToPanelTable();
             addToIOModuleTable();
             addToIOTable();
+            addToControllerTypeTable();
 
             addToBidScopeBranchTable();
             addToBidMiscTable();
-            addToIOModuleManufacturerTable();
+            addToHardwareManufacturerTable();
             addToIOIOModuleTable();
             addToControllerConnectionTable();
             addToScopeBranchHierarchyTable();
@@ -61,11 +62,7 @@ namespace Tests
             addToSubScopeDeviceTable();
             addToSubScopePointTable();
             addToScopeTagTable();
-            addToDeviceManufacturerTable();
             addToDeviceConnectionTypeTable();
-            addToDrawingPageTable();
-            addToPageVisualScopeTable();
-            addToVisualScopeScopeTable();
             addToLocationScopeTable();
             addToScopeAssociatedCostTable();
             addElectricalComponentRatedCostTable();
@@ -81,6 +78,8 @@ namespace Tests
             addToSystemHierarchyTable();
             addToSystemMiscTable();
             addToCharacteristicScopeInstanceScopeTable();
+            addToControllerTypeIOTable();
+            addToControllerControllerTypeTable();
             
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
@@ -114,7 +113,7 @@ namespace Tests
             addToScopeBranchTable();
 
             //AddToControllerIOTable();
-            addToIOModuleManufacturerTable();
+            addToHardwareManufacturerTable();
             addToIOIOModuleTable();
             addToControllerConnectionTable();
             addToSystemEquipmentTable();
@@ -136,7 +135,6 @@ namespace Tests
             addToSubScopePointTable();
             addToSystemScopeBranchTable();
             addToScopeBranchHierarchyTable();
-            addToDeviceManufacturerTable();
             addToDeviceConnectionTypeTable();
 
             SQLiteDB.NonQueryCommand("END TRANSACTION");
@@ -609,48 +607,18 @@ namespace Tests
             values.Add("BACnetIP");
             values.Add("2");
             addDataToTable(new IOTable(), values);
-
-            values = new List<string>();
-            values.Add("fbae3851-3320-4e94-a674-ddec86bc4964");
-            values.Add("BACnetIP");
-            values.Add("2");
-            addDataToTable(new IOTable(), values);
-
-            values = new List<string>();
-            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
-            values.Add("BACnetIP");
-            values.Add("2");
-            addDataToTable(new IOTable(), values);
-
-            values = new List<string>();
-            values.Add("de2d29b7-c63d-4ddf-8b9c-987915e58cd2");
-            values.Add("BACnetIP");
-            values.Add("3");
-            addDataToTable(new IOTable(), values);
-
-            values = new List<string>();
-            values.Add("81827dfc-1375-476f-bfd8-290764403545");
-            values.Add("BACnetIP");
-            values.Add("3");
-            addDataToTable(new IOTable(), values);
-
-            values = new List<string>();
-            values.Add("6afb5c4d-4ee9-4c86-b37a-fa26a7be64b0");
-            values.Add("BACnetIP");
-            values.Add("3");
-            addDataToTable(new IOTable(), values);
-
-            values = new List<string>();
-            values.Add("7cb05a42-07fe-44f6-8f33-df0eab7416a5");
-            values.Add("BACnetIP");
-            values.Add("3");
-            addDataToTable(new IOTable(), values);
-
-            values = new List<string>();
-            values.Add("4ce8ee4b-03f3-4460-9387-b14ec5bdc5db");
-            values.Add("BACnetIP");
-            values.Add("3");
-            addDataToTable(new IOTable(), values);
+            
+        }
+        private static void addToControllerTypeTable()
+        {
+            var values = new List<string>();
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            values.Add("Test Controller Type");
+            values.Add("Test controller type description");
+            values.Add("142");
+            values.Add("12");
+            values.Add("DDC");
+            addDataToTable(new ControllerTypeTable(), values);
         }
         #endregion
 
@@ -668,13 +636,6 @@ namespace Tests
             values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
             addDataToTable(new BidMiscTable(), values);
-        }
-        private static void addToIOModuleManufacturerTable()
-        {
-            List<string> values = new List<string>();
-            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
-            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
-            addDataToTable(new HardwareManufacturerTable(), values);
         }
         private static void addToIOIOModuleTable()
         {
@@ -936,10 +897,25 @@ namespace Tests
             values.Add("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
             addDataToTable(new ScopeTagTable(), values);
         }
-        private static void addToDeviceManufacturerTable()
+        private static void addToHardwareManufacturerTable()
         {
             List<string> values = new List<string>();
             values.Add("95135fdf-7565-4d22-b9e4-1f177febae15");
+            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            addDataToTable(new HardwareManufacturerTable(), values);
+
+            values = new List<string>();
+            values.Add("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
+            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            addDataToTable(new HardwareManufacturerTable(), values);
+
+            values = new List<string>();
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            addDataToTable(new HardwareManufacturerTable(), values);
+
+            values = new List<string>();
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("90cd6eae-f7a3-4296-a9eb-b810a417766d");
             addDataToTable(new HardwareManufacturerTable(), values);
         }
@@ -951,34 +927,22 @@ namespace Tests
             values.Add("2");
             addDataToTable(new DeviceConnectionTypeTable(), values);
         }
-        private static void addToDrawingPageTable()
-        {
-
-        }
-        private static void addToPageVisualScopeTable()
-        {
-
-        }
-        private static void addToVisualScopeScopeTable()
-        {
-
-        }
         private static void addToLocationScopeTable()
         {
             List<string> values = new List<string>();
-            values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
-            addDataToTable(new ScopeLocationTable(), values);
+            values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
+            addDataToTable(new LoactedLocationTable(), values);
 
             values = new List<string>();
-            values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
             values.Add("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
-            addDataToTable(new ScopeLocationTable(), values);
+            values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
+            addDataToTable(new LoactedLocationTable(), values);
 
             values = new List<string>();
-            values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
             values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
-            addDataToTable(new ScopeLocationTable(), values);
+            values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
+            addDataToTable(new LoactedLocationTable(), values);
         }
         private static void addToScopeAssociatedCostTable()
         {
@@ -1462,6 +1426,55 @@ namespace Tests
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
             addDataToTable(new TypicalInstanceTable(), values);
+        }
+        private static void addToControllerTypeIOTable()
+        {
+            var values = new List<string>();
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+            addDataToTable(new ControllerTypeIOTable(), values);
+        }
+        private static void addToControllerControllerTypeTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
+
+            values = new List<string>();
+            values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
+
+            values = new List<string>();
+            values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
+
+            values = new List<string>();
+            values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
+
+            values = new List<string>();
+            values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
+
+            values = new List<string>();
+            values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
+
+            values = new List<string>();
+            values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
+
+            values = new List<string>();
+            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            addDataToTable(new ControllerControllerTypeTable(), values);
         }
         #endregion
     }

@@ -11,6 +11,7 @@ using System.Data;
 using DebugLibrary;
 using EstimatingLibrary.Utilities;
 using System.Globalization;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -110,6 +111,7 @@ namespace EstimatingUtilitiesLibrary.Database
             catalogs.PanelTypes = getPanelTypes();
             catalogs.IOModules = getIOModules();
             catalogs.Tags = getAllTags();
+            catalogs.ControllerTypes = getControllerTypes();
             return catalogs;
         }
         static private ObservableCollection<TECDevice> getAllDevices()
@@ -177,6 +179,28 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return costs;
         }
+        static private ObservableCollection<TECControllerType> getControllerTypes()
+        {
+            ObservableCollection<TECControllerType> controllerTypes = new ObservableCollection<TECControllerType>();
+            string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new ControllerTypeTable()), ControllerTypeTable.TableName);
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
+            foreach (DataRow row in dt.Rows)
+            {
+                controllerTypes.Add(getControllerTypeFromRow(row));
+            }
+
+            return controllerTypes;
+        }
+        static private ObservableCollection<TECValve> getValves()
+        {
+            ObservableCollection<TECValve> valves = new ObservableCollection<TECValve>();
+            string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new ValveTable()), ValveTable.TableName);
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
+
+            foreach (DataRow row in dt.Rows)
+            { valves.Add(getValveFromRow(row)); }
+            return valves;
+        }
         #endregion
         #region System Components
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
@@ -201,7 +225,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 DatabaseHelper.AllFieldsInTableString(new EquipmentTable());
             command += " from (" + EquipmentTable.TableName + " inner join ";
             command += SystemEquipmentTable.TableName + " on ";
-            command += "(TECEquipment.EquipmentID = TECSystemTECEquipment.EquipmentID";
+            command += "(Equipment.ID = SystemEquipment.EquipmentID";
             command += " and " + SystemEquipmentTable.SystemID.Name + " = '";
             command += systemID;
             command += "')) order by " + SystemEquipmentTable.ScopeIndex.Name;
@@ -329,17 +353,13 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return associatedCosts;
         }
-        static private TECLabeled getLocationInScope(Guid ScopeID)
+        static private TECLabeled getLocationInLocated(Guid ScopeID)
         {
             var tables = DatabaseHelper.TableNames(SQLiteDB);
             if (tables.Contains(LocationTable.TableName))
             {
-                //string command = "select * from " + LocationTable.TableName + " where " + LocationTable.LocationID.Name + " in ";
-                //command += "(select " + LocationScopeTable.LocationID.Name + " from " + LocationScopeTable.TableName + " where ";
-                //command += LocationScopeTable.ScopeID.Name + " = '" + ScopeID;
-                //command += "')";
-                string command = "select " + ScopeLocationTable.LocationID.Name + " from " + ScopeLocationTable.TableName + " where ";
-                command += ScopeLocationTable.ScopeID.Name + " = '" + ScopeID;
+                string command = "select " + LoactedLocationTable.LocationID.Name + " from " + LoactedLocationTable.TableName + " where ";
+                command += LoactedLocationTable.ScopeID.Name + " = '" + ScopeID;
                 command += "'";
                 DataTable locationDT = SQLiteDB.GetDataFromCommand(command);
                 if (locationDT.Rows.Count > 0)
@@ -513,8 +533,8 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECSubScope> getSubScopeInEquipment(Guid equipmentID)
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new SubScopeTable()) + " from (TECSubScope inner join " + EquipmentSubScopeTable.TableName + " on ";
-            command += "(TECSubScope.SubScopeID = TECEquipmentTECSubScope.SubScopeID and ";
+            string command = "select " + DatabaseHelper.AllFieldsInTableString(new SubScopeTable()) + " from (SubScope inner join " + EquipmentSubScopeTable.TableName + " on ";
+            command += "(SubScope.ID = EquipmentSubScope.SubScopeID and ";
             command += EquipmentSubScopeTable.EquipmentID.Name + "= '" + equipmentID;
             command += "')) order by " + EquipmentSubScopeTable.ScopeIndex.Name + "";
             DatabaseHelper.Explain(command, SQLiteDB);
@@ -523,15 +543,13 @@ namespace EstimatingUtilitiesLibrary.Database
             { subScope.Add(getSubScopeFromRow(row)); }
             return subScope;
         }
-        static private ObservableCollection<TECDevice> getDevicesInSubScope(Guid subScopeID)
+        static private ObservableCollection<ITECConnectable> getDevicesInSubScope(Guid subScopeID)
         {
-            throw new NotImplementedException();
-            ObservableCollection<TECDevice> devices = new ObservableCollection<TECDevice>();
+            ObservableCollection<ITECConnectable> devices = new ObservableCollection<ITECConnectable>();
 
             string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
                 SubScopeDeviceTable.DeviceID.Name, SubScopeDeviceTable.TableName,
                 SubScopeDeviceTable.SubScopeID.Name, subScopeID, SubScopeDeviceTable.Quantity.Name);
-            DatabaseHelper.Explain(command, SQLiteDB);
             DataTable devicesDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in devicesDT.Rows)
             {
@@ -548,7 +566,7 @@ namespace EstimatingUtilitiesLibrary.Database
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new PointTable()) + " from (" + PointTable.TableName + " inner join " + SubScopePointTable.TableName + " on ";
-            command += "(TECPoint.PointID = TECSubScopeTECPoint.PointID and ";
+            command += "(Point.ID = SubScopePoint.PointID and ";
             command += SubScopePointTable.SubScopeID.Name + " = '" + subScopeID;
             command += "'))";
             DatabaseHelper.Explain(command, SQLiteDB);
@@ -903,6 +921,17 @@ namespace EstimatingUtilitiesLibrary.Database
             else
             { return null; }
         }
+        static private TECDevice getPlaceholderActuator(Guid valveID)
+        {
+            string command = String.Format("select {0} from {1} where {2} = '{3}'",
+                ValveActuatorTable.ActuatorID.Name, ValveActuatorTable.TableName, ValveActuatorTable.ValveID, valveID);
+
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
+            if (dt.Rows.Count > 0)
+            { return getPlaceholderActuatorFromRow(dt.Rows[0]); }
+            else
+            { return null; }
+        }
 
         #endregion //Loading from DB Methods
         
@@ -920,7 +949,7 @@ namespace EstimatingUtilitiesLibrary.Database
             system.Instances = getChildrenSystems(guid);
             system.MiscCosts = getMiscInSystem(guid);
             system.ScopeBranches = getScopeBranchesInSystem(guid);
-            getScopeChildren(system);
+            getLocatedChildren(system);
 
             return system;
         }
@@ -930,7 +959,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid equipmentID = new Guid(row[EquipmentTable.ID.Name].ToString());
             TECEquipment equipmentToAdd = new TECEquipment(equipmentID);
             assignValuePropertiesFromTable(equipmentToAdd, new EquipmentTable(), row);
-            getScopeChildren(equipmentToAdd);
+            getLocatedChildren(equipmentToAdd);
             equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID);
             return equipmentToAdd;
         }
@@ -939,8 +968,9 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid subScopeID = new Guid(row[SubScopeTable.ID.Name].ToString());
             TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
             assignValuePropertiesFromTable(subScopeToAdd, new SubScopeTable(), row);
+            subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
             subScopeToAdd.Points = getPointsInSubScope(subScopeID);
-            getScopeChildren(subScopeToAdd);
+            getLocatedChildren(subScopeToAdd);
             return subScopeToAdd;
         }
         private static TECPoint getPointFromRow(DataRow row)
@@ -948,6 +978,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
             TECPoint pointToAdd = new TECPoint(pointID);
             assignValuePropertiesFromTable(pointToAdd, new PointTable(), row);
+            pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
             return pointToAdd;
         }
         #endregion
@@ -976,6 +1007,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid guid = new Guid(row[AssociatedCostTable.ID.Name].ToString());
             var associatedCost = new TECCost(guid);
             assignValuePropertiesFromTable(associatedCost, new AssociatedCostTable(), row);
+            associatedCost.Type = UtilitiesMethods.StringToEnum(row[AssociatedCostTable.Type.Name].ToString(), CostType.None);
             return associatedCost;
         }
         private static TECDevice getDeviceFromRow(DataRow row)
@@ -1010,29 +1042,41 @@ namespace EstimatingUtilitiesLibrary.Database
             tag.Flavor = Flavor.Tag;
             return tag;
         }
-        /// <summary>
-        /// MUST BE FIXED
-        /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
         private static TECPanelType getPanelTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[PanelTypeTable.ID.Name].ToString());
-            TECPanelType panelType = new TECPanelType(guid, new TECManufacturer());
+            TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
+            TECPanelType panelType = new TECPanelType(guid, manufacturer);
             assignValuePropertiesFromTable(panelType, new PanelTypeTable(), row);
-
             return panelType;
         }
         private static TECIOModule getIOModuleFromRow(DataRow row)
         {
             Guid guid = new Guid(row[IOModuleTable.ID.Name].ToString());
             TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
-
             TECIOModule module = new TECIOModule(guid, manufacturer);
             assignValuePropertiesFromTable(module, new IOModuleTable(), row);
             return module;
         }
-
+        private static TECControllerType getControllerTypeFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ControllerTypeTable.ID.Name].ToString());
+            TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
+            TECControllerType controllerType = new TECControllerType(guid, manufacturer);
+            controllerType.IO = getIOInControllerType(guid);
+            assignValuePropertiesFromTable(controllerType, new ControllerTypeTable(), row);
+            return controllerType;
+        }
+        private static TECValve getValveFromRow(DataRow row)
+        {
+            Guid id = new Guid(row[DeviceTable.ID.Name].ToString());
+            TECManufacturer manufacturer = getPlaceholderManufacturer(id);
+            TECDevice actuator = getPlaceholderActuator(id);
+            TECValve valve = new TECValve(id, manufacturer, actuator);
+            assignValuePropertiesFromTable(valve, new ValveTable(), row);
+            getScopeChildren(valve);
+            return valve;
+        }
         #endregion
         #region Scope Qualifiers
         private static TECScopeBranch getScopeBranchFromRow(DataRow row)
@@ -1053,7 +1097,7 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         private static TECLabeled getExclusionFromRow(DataRow row)
         {
-            Guid exclusionId = new Guid(row["ExclusionID"].ToString());
+            Guid exclusionId = new Guid(row[ExclusionTable.ID.Name].ToString());
             TECLabeled exclusion = new TECLabeled(exclusionId);
             assignValuePropertiesFromTable(exclusion, new ExclusionTable(), row);
             exclusion.Flavor = Flavor.Exclusion;
@@ -1082,6 +1126,7 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(controller, new ControllerTable(), row);
             getScopeChildren(controller);
             controller.ChildrenConnections = getConnectionsInController(controller);
+            controller.NetworkType = UtilitiesMethods.StringToEnum<NetworkType>(row[ControllerTable.Type.Name].ToString(), 0);
             return controller;
         }
         private static TECIO getIOFromRow(DataRow row)
@@ -1107,6 +1152,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid guid = new Guid(row[NetworkConnectionTable.ID.Name].ToString());
             TECNetworkConnection connection = new TECNetworkConnection(guid);
             assignValuePropertiesFromTable(connection, new NetworkConnectionTable(), row);
+            connection.IOType = UtilitiesMethods.StringToEnum<IOType>(row[NetworkConnectionTable.IOType.Name].ToString());
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.ChildrenControllers = getControllersInNetworkConnection(connection.Guid);
             connection.ConnectionType = getConnectionTypeInNetworkConnection(connection.Guid);
@@ -1120,6 +1166,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
             TECMisc cost = new TECMisc(guid);
             assignValuePropertiesFromTable(cost, new MiscTable(), row);
+            cost.Type = UtilitiesMethods.StringToEnum(row[MiscTable.Type.Name].ToString(), CostType.None);
             getScopeChildren(cost);
             return cost;
         }
@@ -1147,7 +1194,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private static void getLocatedChildren(TECLocated located)
         {
-            located.Location = getLocationInScope(located.Guid);
+            located.Location = getLocationInLocated(located.Guid);
+            getScopeChildren(located);
         }
 
         #region Placeholder
@@ -1186,7 +1234,7 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         private static TECLabeled getPlaceholderLocationFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[ScopeLocationTable.LocationID.Name].ToString());
+            Guid guid = new Guid(row[LoactedLocationTable.LocationID.Name].ToString());
             TECLabeled location = new TECLabeled(guid);
             return location;
         }
@@ -1207,7 +1255,7 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         private static TECControllerType getPlaceholderControllerTypeFromRow(DataRow row)
         {
-            Guid guid = new Guid(row[ControllerTypeTable.ID.Name].ToString());
+            Guid guid = new Guid(row[ControllerControllerTypeTable.TypeID.Name].ToString());
             TECControllerType type = new TECControllerType(guid, new TECManufacturer());
             return type;
         }
@@ -1224,6 +1272,16 @@ namespace EstimatingUtilitiesLibrary.Database
             module.Description = "placeholder";
             return module;
         }
+        private static TECDevice getPlaceholderActuatorFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ValveActuatorTable.ActuatorID.Name].ToString());
+            ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECDevice device = new TECDevice(guid, connectionTypes, manufacturer);
+            device.Description = "placeholder";
+            return device;
+        }
+
         private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict)
         {
             Guid key = new Guid(row[TypicalInstanceTable.TypicalID.Name].ToString());
@@ -1257,7 +1315,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TableInfo tableInfo = new TableInfo(table);
             foreach(TableField field in tableInfo.Fields)
             {
-                if(field.Property.DeclaringType == item.GetType() && field.Property.SetMethod != null)
+                if(field.Property.ReflectedType == item.GetType() && field.Property.SetMethod != null)
                 {
                     if(field.Property.PropertyType == typeof(string))
                     {
@@ -1274,10 +1332,6 @@ namespace EstimatingUtilitiesLibrary.Database
                     else if (field.Property.PropertyType == typeof(double))
                     {
                         field.Property.SetValue(item, row[field.Name].ToString().ToDouble(0));
-                    }
-                    else if (field.Property.PropertyType == typeof(Enum))
-                    {
-                        field.Property.SetValue(item, UtilitiesMethods.StringToEnum(row[field.Name].ToString(), 0));
                     }
                 }
             }

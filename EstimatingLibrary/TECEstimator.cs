@@ -391,7 +391,7 @@ namespace EstimatingLibrary
         private double getPMTotalHours(TECBid bid)
         {
             double hours = getPMPointHours(bid);
-            hours += bid.Parameters.PMExtraHours;
+            hours += bid.ExtraLabor.PMExtraHours;
 
             return hours;
         }
@@ -420,7 +420,7 @@ namespace EstimatingLibrary
         private double getENGTotalHours(TECBid bid)
         {
             double hours = getENGPointHours(bid);
-            hours += bid.Parameters.ENGExtraHours;
+            hours += bid.ExtraLabor.ENGExtraHours;
 
             return hours;
         }
@@ -449,7 +449,7 @@ namespace EstimatingLibrary
         private double getCommTotalHours(TECBid bid)
         {
             double hours = getCommPointHours(bid);
-            hours += bid.Parameters.CommExtraHours;
+            hours += bid.ExtraLabor.CommExtraHours;
 
             return hours;
         }
@@ -478,7 +478,7 @@ namespace EstimatingLibrary
         private double getSoftTotalHours(TECBid bid)
         {
             double hours = getSoftPointHours(bid);
-            hours += bid.Parameters.SoftExtraHours;
+            hours += bid.ExtraLabor.SoftExtraHours;
 
             return hours;
         }
@@ -507,7 +507,7 @@ namespace EstimatingLibrary
         private double getGraphTotalHours(TECBid bid)
         {
             double hours = getGraphPointHours(bid);
-            hours += bid.Parameters.GraphExtraHours;
+            hours += bid.ExtraLabor.GraphExtraHours;
 
             return hours;
         }

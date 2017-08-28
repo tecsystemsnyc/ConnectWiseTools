@@ -80,7 +80,7 @@ namespace EstimatingUtilitiesLibrary.Database
             updateToVersion(versionDefinition, db, originalVerion, updateVerison, tableMap);
             migrateFromTempTables(databaseTableList, db);
             removeOldTables(tableNames, db);
-            updateVersionNumber(db);
+            UpdateVersionNumber(db);
 
         }
         private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tableMap)
@@ -116,9 +116,8 @@ namespace EstimatingUtilitiesLibrary.Database
                 db.NonQueryCommand(commandString);
             }
         }
-        private static void updateVersionNumber(SQLiteDatabase db)
+        public static void UpdateVersionNumber(SQLiteDatabase db)
         {
-            var infoBid = DatabaseLoader.GetBidInfo(db);
             string commandString = "update " + MetadataTable.TableName + " set " + MetadataTable.Version.Name + " = '" + Properties.Settings.Default.Version + "' ";
             db.NonQueryCommand(commandString);
         }

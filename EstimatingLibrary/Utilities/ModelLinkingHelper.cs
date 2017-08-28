@@ -232,6 +232,10 @@ namespace EstimatingLibrary.Utilities
             {
                 linkControllerTypeToCatalogs(controllerType, catalogs);
             }
+            foreach(TECValve valve in catalogs.Valves)
+            {
+                linkValveToCatalogs(valve, catalogs);
+            }
         }
 
         private static void linkControllerTypeToCatalogs(TECControllerType controllerType, TECCatalogs catalogs)
@@ -290,9 +294,16 @@ namespace EstimatingLibrary.Utilities
             linkScopeChildrenToCatalogs(dev, catalogs);
         }
 
+        private static void linkValveToCatalogs(TECValve valve, TECCatalogs catalogs)
+        {
+            linkHardwareToManufacturers(valve, catalogs.Manufacturers);
+            linkScopeChildrenToCatalogs(valve, catalogs);
+            linkValveToActuators(valve, catalogs.Devices);
+        }
+
         private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
         {
-            linkHardwareToManufacturers(controller.Type, catalogs.Manufacturers);
+            linkControllerToControllerType(controller, catalogs.ControllerTypes);
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 linkConnectionToCatalogs(connection, catalogs);
@@ -320,6 +331,8 @@ namespace EstimatingLibrary.Utilities
                 linkNetworkConnectionToConnectionType(netConnect, catalogs.ConnectionTypes);
             }
         }
+
+        
         #endregion
 
         private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
@@ -434,6 +447,19 @@ namespace EstimatingLibrary.Utilities
                 if (hardware.Manufacturer.Guid == man.Guid)
                 {
                     hardware.Manufacturer = man;
+                    return;
+                }
+            }
+        }
+
+        private static void linkValveToActuators(TECValve valve, IEnumerable<TECDevice> devices)
+        {
+            foreach (TECDevice device in devices)
+            {
+                if (valve.Actuator.Guid == device.Guid)
+                {
+                    valve.Actuator = device;
+                    return;
                 }
             }
         }
@@ -506,50 +532,55 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
+        private static void linkControllerToControllerType(TECController controller, IEnumerable<TECControllerType> controllerTypes)
+        {
+            foreach (TECControllerType type in controllerTypes)
+            {
+                if (controller.Type.Guid == type.Guid)
+                {
+                    controller.Type = type;
+                    return;
+                }
+            }
+        }
+        
         private static void linkSubScopeToDevices(TECSubScope subScope, IEnumerable<TECDevice> devices, IEnumerable<TECValve> valves)
         {
             ObservableCollection<ITECConnectable> replacements = new ObservableCollection<ITECConnectable>();
             foreach (ITECConnectable item in subScope.Devices)
             {
-                if(item is TECDevice device)
+                bool found = false;
+                foreach (TECDevice catalogDevice in devices)
                 {
-                    bool found = false;
-                    foreach (TECDevice catalogDevice in devices)
+                    if (item.Guid == catalogDevice.Guid)
                     {
-                        if (device.Guid == catalogDevice.Guid)
-                        {
-                            replacements.Add(catalogDevice);
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        throw new Exception("Subscope device not found.");
+                        replacements.Add(catalogDevice);
+                        found = true;
+                        break;
                     }
                 }
-                 else if (item is TECValve valve)
+                if (!found)
                 {
-                    bool found = false;
                     foreach (TECValve catalogValve in valves)
                     {
-                        if (valve.Guid == catalogValve.Guid)
+                        if (item.Guid == catalogValve.Guid)
                         {
                             replacements.Add(catalogValve);
                             found = true;
                             break;
                         }
                     }
-                    if (!found)
-                    {
-                        throw new Exception("Subscope device not found.");
-                    }
                 }
+                if (!found)
+                {
+                    throw new Exception("Subscope device not found.");
+                }
+               
 
             }
             subScope.Devices = replacements;
         }
-
+        
         #region Location Linking
         private static void linkLocation(TECSystem system, ObservableCollection<TECLabeled> locations)
         {
@@ -682,7 +713,7 @@ namespace EstimatingLibrary.Utilities
             Dictionary<Guid, List<Guid>> referenceDict,
             ListDictionary<TECObject> characteristicList)
         {
-            foreach (TECScope item in instances)
+            foreach (TECObject item in instances)
             {
                 if (referenceDict[characteristic.Guid].Contains(item.Guid))
                 {

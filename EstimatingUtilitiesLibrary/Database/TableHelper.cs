@@ -17,6 +17,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 TableInfo info = new TableInfo(table);
                 if(info.Types.Count == items.Count)
                 {
+                    bool allMatch = false;
                     for (int x = 0; x < items.Count; x++)
                     {
                         FlavoredType tableType = info.Types[x];
@@ -24,8 +25,18 @@ namespace EstimatingUtilitiesLibrary.Database
                         if(tableType.Type == itemType.Type &&
                             tableType.Flavor == itemType.Flavor)
                         {
-                            tables.Add(table);
+                            allMatch = true;
                         }
+                        else
+                        {
+                            allMatch = false;
+                            break;
+                        }
+                       
+                    }
+                    if (allMatch)
+                    {
+                        tables.Add(table);
                     }
                 }
             }

@@ -10,5 +10,6 @@ namespace EstimatingLibrary.Interfaces
     public interface ITECConnectable
     {
         ObservableCollection<TECElectricalMaterial> ConnectionTypes { get; }
+        Guid Guid { get; }
     }
 }
