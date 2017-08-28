@@ -88,20 +88,18 @@ namespace Tests
             bid.Controllers.Add(expectedController);
             
             //Misc Cost
-            TECMisc cost = new TECMisc();
+            TECMisc cost = new TECMisc(CostType.TEC);
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
-            cost.Type = CostType.TEC;
 
             bid.MiscCosts.Add(cost);
 
             //Misc wiring
-            TECMisc wiring = new TECMisc();
+            TECMisc wiring = new TECMisc(CostType.Electrical);
             wiring.Name = "Test Wiring";
             wiring.Cost = 69.69;
             wiring.Quantity = 69;
-            wiring.Type = CostType.Electrical;
 
             bid.MiscCosts.Add(wiring);
             
@@ -264,22 +262,20 @@ namespace Tests
             templates.Catalogs.ConduitTypes.Add(otherConduitType);
 
             //Associated Costs
-            TECCost testAssociatedCost = new TECCost();
+            TECCost testAssociatedCost = new TECCost(CostType.Electrical);
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
-            testAssociatedCost.Type = CostType.Electrical;
 
             templates.Catalogs.AssociatedCosts.Add(testAssociatedCost);
 
-            var testCost2 = new TECCost();
+            var testCost2 = new TECCost(CostType.TEC);
             testCost2.Name = "Other Cost";
-            testCost2.Type = CostType.TEC;
             templates.Catalogs.AssociatedCosts.Add(testCost2);
 
             //IO Modules
             TECIOModule testIOModule = new TECIOModule(testMan);
             testIOModule.Name = "Test IO Module";
-            testIOModule.Cost = 42;
+            testIOModule.Price = 42;
             testIOModule.Manufacturer = testMan;
             templates.Catalogs.IOModules.Add(testIOModule);
 
@@ -289,14 +285,14 @@ namespace Tests
             TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
-            testDev.Cost = 20.3;
+            testDev.Price = 20.3;
 
             ObservableCollection<TECElectricalMaterial> contypes3 = new ObservableCollection<TECElectricalMaterial>();
             contypes3.Add(childDevConnType);
             TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, childDevMan);
             childDev.Name = "Child Device";
             childDev.Description = "Child Device Description";
-            childDev.Cost = 54.1;
+            childDev.Price = 54.1;
 
             testDev.Tags.Add(devTag);
             childDev.Tags.Add(devTag);
@@ -369,7 +365,7 @@ namespace Tests
 
             //Controller
             var expectedControllerType = new TECControllerType(testMan);
-            expectedControllerType.Cost = 42.6;
+            expectedControllerType.Price = 42.6;
             TECIO ioToAdd = new TECIO();
             ioToAdd.Type = IOType.AI;
             ioToAdd.Quantity = 5;
@@ -385,26 +381,24 @@ namespace Tests
             templates.ControllerTemplates.Add(expectedController);
 
             //Misc Cost
-            TECMisc cost = new TECMisc();
+            TECMisc cost = new TECMisc(CostType.TEC);
             cost.Name = "Test Cost";
             cost.Cost = 69.69;
             cost.Quantity = 69;
-            cost.Type = CostType.TEC;
 
             templates.MiscCostTemplates.Add(cost);
 
             //Misc wiring
-            TECMisc wiring = new TECMisc();
+            TECMisc wiring = new TECMisc(CostType.Electrical);
             wiring.Name = "Test Wiring";
             wiring.Cost = 69.69;
             wiring.Quantity = 69;
-            wiring.Type = CostType.Electrical;
 
             templates.MiscCostTemplates.Add(wiring);
 
             //Panel Types
             TECPanelType panelType = new TECPanelType(testMan);
-            panelType.Cost = 123.4;
+            panelType.Price = 123.4;
             panelType.Name = "Test Panel Type";
 
             templates.Catalogs.PanelTypes.Add(panelType);
@@ -488,14 +482,14 @@ namespace Tests
             TECCatalogs outCatalogs = new TECCatalogs();
 
             //Associated Costs
-            TECCost elecCost = new TECCost();
+            TECCost elecCost = new TECCost(CostType.Electrical);
             elecCost.Name = "Elec Cost";
             elecCost.Cost = RandomDouble(10, 100);
             elecCost.Labor = RandomDouble(1, 10);
             elecCost.Type = CostType.Electrical;
             outCatalogs.AssociatedCosts.Add(elecCost);
 
-            TECCost tecCost = new TECCost();
+            TECCost tecCost = new TECCost(CostType.TEC);
             tecCost.Name = "TEC Cost";
             tecCost.Cost = RandomDouble(10, 100);
             tecCost.Labor = RandomDouble(1, 10);
@@ -565,7 +559,7 @@ namespace Tests
             TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
-            device1.Cost = RandomInt(10, 100);
+            device1.Price = RandomInt(10, 100);
             device1.Tags.Add(tag1);
             AssignSecondaryProperties(device1, outCatalogs);
 
@@ -574,14 +568,14 @@ namespace Tests
             //IO Modules
             TECIOModule testIOModule = new TECIOModule(manufacturer1);
             testIOModule.Name = "Test IO Module";
-            testIOModule.Cost = RandomInt(10, 100);
+            testIOModule.Price = RandomInt(10, 100);
             testIOModule.Manufacturer = manufacturer1;
             outCatalogs.IOModules.Add(testIOModule);
 
             //Controller Types
             TECControllerType controllerType = new TECControllerType(manufacturer1);
             controllerType.Name = "Test Controller Type";
-            controllerType.Cost = RandomDouble(0, 1000);
+            controllerType.Price = RandomDouble(0, 1000);
             controllerType.Labor = RandomDouble(0, 1000);
             AssignSecondaryProperties(controllerType, outCatalogs);
 
@@ -595,7 +589,7 @@ namespace Tests
 
             //Panel Types
             TECPanelType panelType = new TECPanelType(manufacturer1);
-            panelType.Cost = RandomDouble(0, 1000);
+            panelType.Price = RandomDouble(0, 1000);
             panelType.Labor = RandomDouble(0, 1000);
             panelType.Name = "Test Panel Type";
             AssignSecondaryProperties(panelType, outCatalogs);
@@ -651,7 +645,7 @@ namespace Tests
             }
 
             TECDevice device = new TECDevice(connectionTypes, manufacturer);
-            device.Cost = cost;
+            device.Price = cost;
             device.AssociatedCosts = assCosts;
             device.Tags.Add(catalogs.Tags.RandomObject());
             return device;
@@ -747,18 +741,15 @@ namespace Tests
         }
         public static TECMisc CreateTestMisc(CostType type = 0)
         {
-            TECMisc misc = new TECMisc();
+            if(type != 0)
+            {
+                type = (CostType)RandomInt(0, 2);
+            }
+            TECMisc misc = new TECMisc(type);
             misc.Cost = RandomDouble(0, 1000);
             misc.Labor = RandomDouble(0, 1000);
             misc.Quantity = RandomInt(0, 100);
-            if (type == 0)
-            {
-                misc.Type = (CostType)RandomInt(0, 3);
-            }
-            else
-            {
-                misc.Type = type;
-            }
+           
             return misc;
         }
         
