@@ -305,9 +305,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addAsociatedCostExecute()
         {
-            var associatedCost = new TECCost();
+            var associatedCost = new TECCost(AssociatedCostType);
             associatedCost.Name = AssociatedCostName;
-            associatedCost.Type = AssociatedCostType;
             associatedCost.Cost = AssociatedCostCost;
             associatedCost.Labor = AssociatedCostLabor;
             Templates.Catalogs.AssociatedCosts.Add(associatedCost);
@@ -330,7 +329,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             var panelType = new TECPanelType(PanelTypeManufacturer);
             panelType.Name = PanelTypeName;
-            panelType.Cost = PanelTypeCost;
+            panelType.Price = PanelTypeCost;
             panelType.Labor = PanelTypeLabor;
 
             Templates.Catalogs.PanelTypes.Add(panelType);
@@ -354,7 +353,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             var ioModule = new TECIOModule(IOModuleManufacturer);
             ioModule.Name = IOModuleName;
-            ioModule.Cost = IOModuleCost;
+            ioModule.Price = IOModuleCost;
             ioModule.IOPerModule = IOModuleIOPerModule;
             ioModule.Description = IOModuleDescription;
 

@@ -993,7 +993,7 @@ namespace TECUserControlLibrary.ViewModels
             var newDevice = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
             newDevice.Name = DeviceName;
             newDevice.Description = DeviceDescription;
-            newDevice.Cost = DeviceCost;
+            newDevice.Price = DeviceCost;
             newDevice.Tags = DeviceTags;
             Templates.Catalogs.Devices.Add(newDevice);
             DeviceName = "";

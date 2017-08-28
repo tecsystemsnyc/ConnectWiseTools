@@ -172,9 +172,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addNewExecute()
         {
-            TECMisc newMisc = new TECMisc();
+            TECMisc newMisc = new TECMisc(MiscType);
             newMisc.Name = MiscName;
-            newMisc.Type = MiscType;
             newMisc.Cost = Cost;
             newMisc.Labor = Labor;
 

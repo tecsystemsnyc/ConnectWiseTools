@@ -89,7 +89,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1039,7 +1039,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECSystem system = new TECSystem();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(system);
 
             //Act
@@ -1074,7 +1074,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECSystem typical = new TECSystem();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1112,7 +1112,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECSystem typical = new TECSystem();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             typical.MiscCosts.Add(misc);
 
@@ -1246,7 +1246,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.MiscCosts.Add(misc);
 
             //Act
@@ -2217,7 +2217,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECSystem system = new TECSystem();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(system);
             system.MiscCosts.Add(misc);
 
@@ -2253,7 +2253,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECSystem typical = new TECSystem();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.MiscCosts.Add(misc);
@@ -2291,7 +2291,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECSystem typical = new TECSystem();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             typical.MiscCosts.Add(misc);
             TECSystem instance = typical.AddInstance(bid);
