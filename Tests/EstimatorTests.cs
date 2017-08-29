@@ -91,7 +91,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var type = new TECControllerType(manufacturer);
-            type.Cost = 100;
+            type.Price = 100;
 
             var controller = new TECController(type);
 
@@ -111,7 +111,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var type = new TECControllerType(manufacturer);
-            type.Cost = 100;
+            type.Price = 100;
 
             var controller = new TECController(type);
 
@@ -130,7 +130,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var type = new TECControllerType(manufacturer);
-            type.Cost = 100;
+            type.Price = 100;
 
             var controller = new TECController(type);
 
@@ -154,7 +154,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var type = new TECControllerType(manufacturer);
-            type.Cost = 100;
+            type.Price = 100;
 
             var controller = new TECController(type);
 
@@ -178,7 +178,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var type = new TECControllerType(manufacturer);
-            type.Cost = 100;
+            type.Price = 100;
 
             var controller = new TECController(type);
 
@@ -202,7 +202,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var type = new TECControllerType(manufacturer);
-            type.Cost = 100;
+            type.Price = 100;
 
             var controller = new TECController(type);
 
@@ -227,7 +227,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var panelType = new TECPanelType(manufacturer);
-            panelType.Cost = 50;
+            panelType.Price = 50;
             panelType.Labor = 7;
 
             var panel = new TECPanel(panelType);
@@ -249,7 +249,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var panelType = new TECPanelType(manufacturer);
-            panelType.Cost = 50;
+            panelType.Price = 50;
             panelType.Labor = 7;
 
             var panel = new TECPanel(panelType);
@@ -269,7 +269,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var panelType = new TECPanelType(manufacturer);
-            panelType.Cost = 50;
+            panelType.Price = 50;
             panelType.Labor = 7;
 
             var panel = new TECPanel(panelType);
@@ -296,7 +296,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var panelType = new TECPanelType(manufacturer);
-            panelType.Cost = 50;
+            panelType.Price = 50;
             panelType.Labor = 7;
 
             var panel = new TECPanel(panelType);
@@ -322,7 +322,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var panelType = new TECPanelType(manufacturer);
-            panelType.Cost = 50;
+            panelType.Price = 50;
             panelType.Labor = 7;
 
             var panel = new TECPanel(panelType);
@@ -349,7 +349,7 @@ namespace Tests
 
             var manufacturer = new TECManufacturer();
             var panelType = new TECPanelType(manufacturer);
-            panelType.Cost = 50;
+            panelType.Price = 50;
             panelType.Labor = 7;
 
             var panel = new TECPanel(panelType);
@@ -410,7 +410,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             var connectionType = new TECElectricalMaterial();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             bid.Catalogs.Devices.Add(device);
             connectionType.Cost = 1;
             connectionType.Labor = 1;
@@ -437,7 +437,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             var connectionType = new TECElectricalMaterial();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             bid.Catalogs.Devices.Add(device);
             connectionType.Cost = 1;
             connectionType.Labor = 1;
@@ -466,11 +466,11 @@ namespace Tests
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             
             var system = new TECSystem();
-            var tecMisc = new TECMisc();
+            var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 11;
             tecMisc.Labor = 12;
             tecMisc.Type = CostType.TEC;
-            var electricalMisc = new TECMisc();
+            var electricalMisc = new TECMisc(CostType.TEC);
             electricalMisc.Cost = 13;
             electricalMisc.Labor = 14;
             electricalMisc.Type = CostType.Electrical;
@@ -495,11 +495,11 @@ namespace Tests
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
             var system = new TECSystem();
-            var tecMisc = new TECMisc();
+            var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 11;
             tecMisc.Labor = 12;
             tecMisc.Type = CostType.TEC;
-            var electricalMisc = new TECMisc();
+            var electricalMisc = new TECMisc(CostType.TEC);
             electricalMisc.Cost = 13;
             electricalMisc.Labor = 14;
             electricalMisc.Type = CostType.Electrical;
@@ -525,7 +525,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -569,7 +569,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(50, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(50, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
@@ -583,7 +583,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -642,12 +642,12 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var assCost = new TECCost();
+            var assCost = new TECCost(CostType.TEC);
             assCost.Cost = 1;
             assCost.Labor = 1;
             assCost.Type = CostType.Electrical;
@@ -705,7 +705,7 @@ namespace Tests
             }
 
 
-            //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor + AssCost.Cost/Labor) = 2*(10 * 1 +10 * 1 + 2) + 2 * (5 * 1 + 5 * 1 + 2) = 40 + 10 = 54
+            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor + AssCost.Cost/Labor) = 2*(10 * 1 +10 * 1 + 2) + 2 * (5 * 1 + 5 * 1 + 2) = 40 + 10 = 54
             Assert.AreEqual(54, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(54, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
@@ -720,12 +720,12 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var assCost = new TECCost();
+            var assCost = new TECCost(CostType.TEC);
             assCost.Cost = 1;
             assCost.Labor = 1;
             assCost.Type = CostType.Electrical;
@@ -798,7 +798,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -837,7 +837,7 @@ namespace Tests
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
 
-            //For Both Conduit and Wire: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
             assertNoCostOrLabor(estimate);
@@ -853,7 +853,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -904,12 +904,12 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             
-            var tecMisc = new TECMisc();
+            var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
             tecMisc.Labor = 4321;
             tecMisc.Type = CostType.TEC;
 
-            var eMisc = new TECMisc();
+            var eMisc = new TECMisc(CostType.TEC);
             eMisc.Cost = 5678;
             eMisc.Labor = 8765;
             eMisc.Type = CostType.Electrical;
@@ -930,12 +930,12 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
-            var tecMisc = new TECMisc();
+            var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
             tecMisc.Labor = 4321;
             tecMisc.Type = CostType.TEC;
 
-            var eMisc = new TECMisc();
+            var eMisc = new TECMisc(CostType.TEC);
             eMisc.Cost = 5678;
             eMisc.Labor = 8765;
             eMisc.Type = CostType.Electrical;
@@ -963,12 +963,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecMisc = new TECMisc();
+            var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
             tecMisc.Labor = 4321;
             tecMisc.Type = CostType.TEC;
 
-            var eMisc = new TECMisc();
+            var eMisc = new TECMisc(CostType.TEC);
             eMisc.Cost = 5678;
             eMisc.Labor = 8765;
             eMisc.Type = CostType.Electrical;
@@ -993,12 +993,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecMisc = new TECMisc();
+            var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
             tecMisc.Labor = 4321;
             tecMisc.Type = CostType.TEC;
 
-            var eMisc = new TECMisc();
+            var eMisc = new TECMisc(CostType.TEC);
             eMisc.Cost = 5678;
             eMisc.Labor = 8765;
             eMisc.Type = CostType.Electrical;
@@ -1026,12 +1026,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost();
+            var tecCost = new TECCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost();
+            var eCost = new TECCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1056,12 +1056,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost();
+            var tecCost = new TECCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost();
+            var eCost = new TECCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1091,12 +1091,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost();
+            var tecCost = new TECCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost();
+            var eCost = new TECCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1123,12 +1123,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost();
+            var tecCost = new TECCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost();
+            var eCost = new TECCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1165,7 +1165,7 @@ namespace Tests
             manufacturer.Multiplier = 1;
 
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
-            device.Cost = 100;
+            device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);
@@ -1193,7 +1193,7 @@ namespace Tests
             manufacturer.Multiplier = 1;
 
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
-            device.Cost = 100;
+            device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);
@@ -1223,7 +1223,7 @@ namespace Tests
             manufacturer.Multiplier = 0.5;
 
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
-            device.Cost = 100;
+            device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);
@@ -1251,7 +1251,7 @@ namespace Tests
             manufacturer.Multiplier = 0.5;
 
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
-            device.Cost = 100;
+            device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);
@@ -1417,7 +1417,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
 
@@ -1444,7 +1444,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
 
@@ -1471,7 +1471,7 @@ namespace Tests
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
@@ -1497,7 +1497,7 @@ namespace Tests
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
@@ -1525,7 +1525,7 @@ namespace Tests
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
@@ -1551,7 +1551,7 @@ namespace Tests
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
@@ -1579,7 +1579,7 @@ namespace Tests
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
@@ -1605,7 +1605,7 @@ namespace Tests
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            device.Cost = 10;
+            device.Price = 10;
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
@@ -1637,7 +1637,7 @@ namespace Tests
             system.Controllers.Add(controller);
             bid.Systems.Add(system);
 
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -1664,7 +1664,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            //For Both Conduit and Wire Cost: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(1.5, estimate.ElectricalShipping);
 
             //checkRefresh(bid);
@@ -1690,7 +1690,7 @@ namespace Tests
             system.Controllers.Add(controller);
             bid.Systems.Add(system);
 
-            var ratedCost = new TECCost();
+            var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -1717,7 +1717,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            //For Both Conduit and Wire Cost: 2*(length * type.Cost/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
             Assert.AreEqual(2.5, estimate.ElectricalWarranty);
 
             //checkRefresh(bid);
