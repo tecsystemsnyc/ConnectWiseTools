@@ -360,7 +360,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECMisc edit = new TECMisc();
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -887,7 +887,7 @@ namespace Tests
             var Bid = TestHelper.CreateTestBid();
             var subScope = Bid.RandomSubScope();
             int expected = subScope.AssociatedCosts.Count;
-            TECCost edit = new TECCost();
+            TECCost edit = new TECCost(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1246,7 +1246,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECMisc edit = new TECMisc();
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1794,7 +1794,7 @@ namespace Tests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             var device = Bid.RandomDevice();
-            device.Cost = edit;
+            device.Price = edit;
             testStack.Undo();
             testStack.Redo();
 
