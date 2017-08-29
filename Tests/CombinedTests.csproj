@@ -112,36 +112,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ChangeWatcherTests.cs" />
-    <Compile Include="CostChangedTests.cs" />
-    <Compile Include="CostTestingUtilities.cs" />
     <Compile Include="EstimateBuilderTests.cs" />
-    <Compile Include="EstimatorTests.cs" />
-    <Compile Include="IntegratedSaveLoadTests.cs" />
-    <Compile Include="ItemSummaryVMTests.cs" />
-    <Compile Include="LinkingTests.cs" />
-    <Compile Include="LoadBidTests.cs" />
-    <Compile Include="LoadTemplatesTests.cs" />
-    <Compile Include="ModelTests.cs" />
-    <Compile Include="NetworkVMTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RandomTests.cs" />
-    <Compile Include="SaveNewBidTests.cs" />
-    <Compile Include="SaveAsTemplatesTests.cs" />
-    <Compile Include="SaveBidTests.cs" />
-    <Compile Include="SaveStackTests.cs" />
-    <Compile Include="SaveTemplateTests.cs" />
-    <Compile Include="BidStackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MaterialSummaryVMTests.cs" />
-    <Compile Include="TemplateStackTests.cs" />
-    <Compile Include="TestDBHelper.cs" />
-    <Compile Include="TestHelper.cs" />
-    <Compile Include="ViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EstimateBuilder\EstimateBuilder.csproj">
@@ -163,6 +141,10 @@
     <ProjectReference Include="..\TemplateBuilder\TemplateBuilder.csproj">
       <Project>{1fee567b-7d4f-4c5e-8687-07c649ba6526}</Project>
       <Name>TemplateBuilder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestLibrary\TestLibrary.csproj">
+      <Project>{1a944577-a8a9-4d5e-9394-7c33f306d21e}</Project>
+      <Name>TestLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
