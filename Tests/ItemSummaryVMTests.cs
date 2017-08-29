@@ -24,7 +24,7 @@ namespace Tests
             TECControllerType controllerType = catalogs.ControllerTypes.RandomObject();
 
             //Act
-            CostBatch deltas = hardwareVM.AddHardware(controllerType);
+            CostBatch delta = hardwareVM.AddHardware(controllerType);
 
             Total assocTECTotal = new Total();
             Total assocElecTotal = new Total();
@@ -39,18 +39,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(controllerType.ExtendedCost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(controllerType.Cost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(controllerType.Labor, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
             Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(controllerTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(controllerTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(controllerTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(controllerTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(controllerTypeTotalTEC.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(controllerTypeTotalTEC.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(controllerTypeTotalElec.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(controllerTypeTotalElec.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveControllerTypeFromHardwareVM()
@@ -62,20 +62,7 @@ namespace Tests
 
             //Act
             hardwareVM.AddHardware(controllerType);
-            List<CostObject> deltas = hardwareVM.RemoveHardware(controllerType);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.RemoveHardware(controllerType);
 
             Total controllerTypeTotalTEC = CalculateTotal(controllerType, CostType.TEC);
             Total controllerTypeTotalElec = CalculateTotal(controllerType, CostType.Electrical);
@@ -89,11 +76,11 @@ namespace Tests
             Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(-controllerTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-controllerTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-controllerTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-controllerTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(-controllerTypeTotalTEC.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-controllerTypeTotalTEC.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-controllerTypeTotalElec.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-controllerTypeTotalElec.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddPanelTypeToHardwareVM()
@@ -104,20 +91,7 @@ namespace Tests
             TECPanelType panelType = catalogs.PanelTypes.RandomObject();
 
             //Act
-            List<CostObject> deltas = hardwareVM.AddHardware(panelType);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.AddHardware(panelType);
 
             Total assocTECTotal = new Total();
             Total assocElecTotal = new Total();
@@ -132,18 +106,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(panelType.ExtendedCost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(panelType.Cost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(panelType.Labor, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
             Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(panelTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(panelTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(panelTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(panelTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(panelTypeTotalTEC.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(panelTypeTotalTEC.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(panelTypeTotalElec.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(panelTypeTotalElec.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemovePanelTypeFromHardwareVM()
@@ -155,20 +129,7 @@ namespace Tests
 
             //Act
             hardwareVM.AddHardware(panelType);
-            List<CostObject> deltas = hardwareVM.RemoveHardware(panelType);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.RemoveHardware(panelType);
 
             Total panelTypeTotalTEC = CalculateTotal(panelType, CostType.TEC);
             Total panelTypeTotalElec = CalculateTotal(panelType, CostType.Electrical);
@@ -182,11 +143,11 @@ namespace Tests
             Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(-panelTypeTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-panelTypeTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-panelTypeTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-panelTypeTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(-panelTypeTotalTEC.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-panelTypeTotalTEC.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-panelTypeTotalElec.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-panelTypeTotalElec.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddDeviceToHardwareVM()
@@ -197,20 +158,7 @@ namespace Tests
             TECDevice device = catalogs.Devices.RandomObject();
 
             //Act
-            List<CostObject> deltas = hardwareVM.AddHardware(device);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.AddHardware(device);
 
             Total assocTECTotal = new Total();
             Total assocElecTotal = new Total();
@@ -225,18 +173,18 @@ namespace Tests
 
             //Assert
             //Check hardware properties
-            Assert.AreEqual(device.ExtendedCost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
+            Assert.AreEqual(device.Cost, hardwareVM.HardwareCost, DELTA, "HardwareCost property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(device.Labor, hardwareVM.HardwareLabor, DELTA, "HardwareLabor property in HardwareSummaryVM is wrong.");
             //Check Assoc properties
             Assert.AreEqual(assocTECTotal.Cost, hardwareVM.AssocTECCostTotal, DELTA, "AssocTECCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocTECTotal.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocElecTotal.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(assocElecTotal.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(deviceTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(deviceTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(deviceTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(deviceTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(deviceTotalTEC.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(deviceTotalTEC.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(deviceTotalElec.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(deviceTotalElec.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveDeviceFromHardwareVM()
@@ -248,20 +196,7 @@ namespace Tests
 
             //Act
             hardwareVM.AddHardware(device);
-            List<CostObject> deltas = hardwareVM.RemoveHardware(device);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.RemoveHardware(device);
 
             Total deviceTotalTEC = CalculateTotal(device, CostType.TEC);
             Total deviceTotalElec = CalculateTotal(device, CostType.Electrical);
@@ -275,11 +210,11 @@ namespace Tests
             Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(-deviceTotalTEC.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-deviceTotalTEC.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-deviceTotalElec.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-deviceTotalElec.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(-deviceTotalTEC.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-deviceTotalTEC.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-deviceTotalElec.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-deviceTotalElec.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddTECCostToHardwareVM()
@@ -298,20 +233,7 @@ namespace Tests
             }
 
             //Act
-            List<CostObject> deltas = hardwareVM.AddCost(tecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.AddCost(tecCost);
 
             //Assert
             //Check hardware properties
@@ -322,11 +244,11 @@ namespace Tests
             Assert.AreEqual(tecCost.Labor, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(tecCost.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(tecCost.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveTECCostFromHardwareVM()
@@ -346,20 +268,7 @@ namespace Tests
 
             //Act
             hardwareVM.AddCost(tecCost);
-            List<CostObject> deltas = hardwareVM.RemoveCost(tecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.RemoveCost(tecCost);
 
             //Assert
             //Check hardware properties
@@ -370,11 +279,11 @@ namespace Tests
             Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(-tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(-tecCost.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-tecCost.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElecCostToHardwareVM()
@@ -393,20 +302,7 @@ namespace Tests
             }
 
             //Act
-            List<CostObject> deltas = hardwareVM.AddCost(elecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.AddCost(elecCost);
 
             //Assert
             //Check hardware properties
@@ -417,11 +313,11 @@ namespace Tests
             Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(elecCost.Cost, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(elecCost.Labor, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(0, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(elecCost.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(elecCost.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElecCostFromHardwareVM()
@@ -441,20 +337,7 @@ namespace Tests
 
             //Act
             hardwareVM.AddCost(elecCost);
-            List<CostObject> deltas = hardwareVM.RemoveCost(elecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = hardwareVM.RemoveCost(elecCost);
 
             //Assert
             //Check hardware properties
@@ -465,11 +348,11 @@ namespace Tests
             Assert.AreEqual(0, hardwareVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal property in HardwareSummaryVM is wrong.");
             Assert.AreEqual(0, hardwareVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal property in HardwareSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(0, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-elecCost.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-elecCost.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         #endregion
 
@@ -487,20 +370,7 @@ namespace Tests
             double length = TestHelper.RandomDouble(1, 100);
 
             //Act
-            CostBatch deltas = lengthVM.AddRun(elecMat, length);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = lengthVM.AddRun(elecMat, length);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -542,11 +412,11 @@ namespace Tests
             Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(expectedTECCostDelta, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElectricalMaterialRunFromLengthVM()
@@ -564,20 +434,7 @@ namespace Tests
 
             //Act
             lengthVM.AddLength(elecMat, addLength);
-            List<CostObject> deltas = lengthVM.RemoveLength(elecMat, removeLength);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = lengthVM.RemoveLength(elecMat, removeLength);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -625,11 +482,11 @@ namespace Tests
             Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(expectedTECCostDelta, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElectricalMaterialLengthToLengthVM()
@@ -644,20 +501,7 @@ namespace Tests
             double length = TestHelper.RandomDouble(1, 100);
 
             //Act
-            List<CostObject> deltas = lengthVM.AddRun(elecMat, length);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = lengthVM.AddRun(elecMat, length);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -691,11 +535,11 @@ namespace Tests
             Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(expectedTECCostDelta, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElectricalMaterialLengthFromLengthVM()
@@ -713,20 +557,7 @@ namespace Tests
 
             //Act
             lengthVM.AddLength(elecMat, addLength);
-            List<CostObject> deltas = lengthVM.RemoveRun(elecMat, removeLength);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = lengthVM.RemoveRun(elecMat, removeLength);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -772,11 +603,11 @@ namespace Tests
             Assert.AreEqual(expectedRatedTECTotal.Labor, lengthVM.RatedTECLaborTotal, DELTA, "RatedTECLaborTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Cost, lengthVM.RatedElecCostTotal, DELTA, "RatedElecCostTotal property in LengthSummaryVM is wrong.");
             Assert.AreEqual(expectedRatedElecTotal.Labor, lengthVM.RatedElecLaborTotal, DELTA, "RatedElecLaborTotal property in LengthSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(expectedTECCostDelta, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedTECLaborDelta, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedElecCostDelta, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedElecLaborDelta, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(expectedTECCostDelta, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedTECLaborDelta, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedElecCostDelta, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedElecLaborDelta, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         #endregion
 
@@ -798,20 +629,7 @@ namespace Tests
             }
 
             //Act
-            List<CostObject> deltas = miscVM.AddCost(tecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.AddCost(tecCost);
 
             //Assert
             //Check Misc properties
@@ -824,11 +642,11 @@ namespace Tests
             Assert.AreEqual(tecCost.Labor, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(tecCost.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(tecCost.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveTECCostFromMiscCostsVM()
@@ -848,20 +666,7 @@ namespace Tests
 
             //Act
             miscVM.AddCost(tecCost);
-            List<CostObject> deltas = miscVM.RemoveCost(tecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.RemoveCost(tecCost);
 
             //Assert
             //Check Misc properties
@@ -874,11 +679,11 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(-tecCost.Cost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-tecCost.Labor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(-tecCost.Cost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-tecCost.Labor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElecCostToMiscCostsVM()
@@ -897,20 +702,7 @@ namespace Tests
             }
 
             //Act
-            List<CostObject> deltas = miscVM.AddCost(elecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.AddCost(elecCost);
 
             //Assert
             //Check Misc properties
@@ -923,11 +715,11 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(elecCost.Cost, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(elecCost.Labor, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(0, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(elecCost.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(elecCost.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElecCostFromMiscCostsVM()
@@ -947,20 +739,7 @@ namespace Tests
 
             //Act
             miscVM.AddCost(elecCost);
-            List<CostObject> deltas = miscVM.RemoveCost(elecCost);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.RemoveCost(elecCost);
 
             //Assert
             //Check Misc properties
@@ -973,41 +752,27 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-elecCost.Cost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-elecCost.Labor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(0, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-elecCost.Cost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-elecCost.Labor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddTECMiscToMiscCostsVM()
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc tecMisc = new TECMisc();
+            TECMisc tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = TestHelper.RandomDouble(1, 100);
             tecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            tecMisc.Type = CostType.TEC;
             tecMisc.Quantity = TestHelper.RandomInt(2, 10);
 
             double expectedCost = tecMisc.Cost * tecMisc.Quantity;
             double expectedLabor = tecMisc.Labor * tecMisc.Quantity;
 
             //Act
-            List<CostObject> deltas = miscVM.AddCost(tecMisc);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.AddCost(tecMisc);
 
             //Assert
             //Check Misc properties
@@ -1020,21 +785,20 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(expectedCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(expectedCost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedLabor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveTECMiscFromMiscCostsVM()
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc tecMisc = new TECMisc();
+            TECMisc tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = TestHelper.RandomDouble(1, 100);
             tecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            tecMisc.Type = CostType.TEC;
             tecMisc.Quantity = TestHelper.RandomInt(2, 10);
 
             double expectedCost = tecMisc.Cost * tecMisc.Quantity;
@@ -1042,20 +806,7 @@ namespace Tests
 
             //Act
             miscVM.AddCost(tecMisc);
-            List<CostObject> deltas = miscVM.RemoveCost(tecMisc);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.RemoveCost(tecMisc);
 
             //Assert
             //Check Misc properties
@@ -1068,41 +819,27 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(-expectedCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(-expectedLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(-expectedCost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(-expectedLabor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void AddElecMiscToMiscCostsVM()
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc elecMisc = new TECMisc();
+            TECMisc elecMisc = new TECMisc(CostType.Electrical);
             elecMisc.Cost = TestHelper.RandomDouble(1, 100);
             elecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            elecMisc.Type = CostType.Electrical;
             elecMisc.Quantity = TestHelper.RandomInt(2, 10);
 
             double expectedCost = elecMisc.Cost * elecMisc.Quantity;
             double expectedLabor = elecMisc.Labor * elecMisc.Quantity;
 
             //Act
-            List<CostObject> deltas = miscVM.AddCost(elecMisc);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.AddCost(elecMisc);
 
             //Assert
             //Check Misc properties
@@ -1115,21 +852,20 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(expectedCost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(expectedLabor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(0, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(expectedCost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(expectedLabor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void RemoveElecMiscFromMiscCostsVM()
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc elecMisc = new TECMisc();
+            TECMisc elecMisc = new TECMisc(CostType.TEC);
             elecMisc.Cost = TestHelper.RandomDouble(1, 100);
             elecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            elecMisc.Type = CostType.TEC;
             elecMisc.Quantity = TestHelper.RandomInt(2, 10);
 
             double expectedCost = elecMisc.Cost * elecMisc.Quantity;
@@ -1137,20 +873,7 @@ namespace Tests
 
             //Act
             miscVM.AddCost(elecMisc);
-            List<CostObject> deltas = miscVM.RemoveCost(elecMisc);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.RemoveCost(elecMisc);
 
             //Assert
             //Check Misc properties
@@ -1163,40 +886,26 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(0, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(0, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(-expectedCost, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(-expectedLabor, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(0, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(-expectedCost, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(-expectedLabor, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void ChangeCostQuantityInMiscCostsVM()
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = TestHelper.RandomDouble(1, 100);
             misc.Labor = TestHelper.RandomDouble(1, 100);
-            misc.Type = CostType.TEC;
             misc.Quantity = TestHelper.RandomInt(1, 10);
 
             //Act
             miscVM.AddCost(misc);
             int deltaQuantity = TestHelper.RandomInt(1, 10);
-            List<CostObject> deltas = miscVM.ChangeQuantity(misc, deltaQuantity);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.ChangeQuantity(misc, deltaQuantity);
 
             int finalQuantity = misc.Quantity + deltaQuantity;
             double expectedCost = finalQuantity * misc.Cost;
@@ -1215,21 +924,20 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(expectedDeltaCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedDeltaLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(expectedDeltaCost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedDeltaLabor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         [TestMethod]
         public void UpdateCostInMiscCostsVM()
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc misc = new TECMisc();
+            TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = TestHelper.RandomDouble(1, 100);
             misc.Labor = TestHelper.RandomDouble(1, 100);
-            misc.Type = CostType.TEC;
             misc.Quantity = TestHelper.RandomInt(1, 10);
 
             //Act
@@ -1239,20 +947,7 @@ namespace Tests
             misc.Cost += deltaCost;
             misc.Labor += deltaLabor;
 
-            List<CostObject> deltas = miscVM.UpdateCost(misc);
-            CostObject tecDelta = new CostObject(0, 0, CostType.TEC);
-            CostObject elecDelta = new CostObject(0, 0, CostType.Electrical);
-            foreach (CostObject delta in deltas)
-            {
-                if (delta.Type == CostType.TEC)
-                {
-                    tecDelta += delta;
-                }
-                else if (delta.Type == CostType.Electrical)
-                {
-                    elecDelta += delta;
-                }
-            }
+            CostBatch delta = miscVM.UpdateCost(misc);
 
             double expectedCost = misc.Cost * misc.Quantity;
             double expectedLabor = misc.Labor * misc.Quantity;
@@ -1271,11 +966,11 @@ namespace Tests
             Assert.AreEqual(0, miscVM.AssocTECLaborTotal, DELTA, "AssocTECLaborTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecCostTotal, DELTA, "AssocElecCostTotal in MiscCostsSummaryVM is wrong.");
             Assert.AreEqual(0, miscVM.AssocElecLaborTotal, DELTA, "AssocElecLaborTotal in MiscCostsSummaryVM is wrong.");
-            //Check returned deltas
-            Assert.AreEqual(expectedDeltaCost, tecDelta.Cost, DELTA, "Returned TEC cost delta is wrong.");
-            Assert.AreEqual(expectedDeltaLabor, tecDelta.Labor, DELTA, "Returned TEC labor delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Cost, DELTA, "Returned Elec cost delta is wrong.");
-            Assert.AreEqual(0, elecDelta.Labor, DELTA, "Returned Elec labor delta is wrong.");
+            //Check returned delta
+            Assert.AreEqual(expectedDeltaCost, delta.GetCost(CostType.TEC), DELTA, "Returned TEC cost delta is wrong.");
+            Assert.AreEqual(expectedDeltaLabor, delta.GetLabor(CostType.TEC), DELTA, "Returned TEC labor delta is wrong.");
+            Assert.AreEqual(0, delta.GetCost(CostType.Electrical), DELTA, "Returned Elec cost delta is wrong.");
+            Assert.AreEqual(0, delta.GetLabor(CostType.Electrical), DELTA, "Returned Elec labor delta is wrong.");
         }
         #endregion
     }
