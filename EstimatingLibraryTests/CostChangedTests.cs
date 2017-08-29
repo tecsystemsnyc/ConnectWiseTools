@@ -14,7 +14,7 @@ namespace Tests
     public class CostChangedTests
     {
 
-        List<TECCost> costs;
+        CostBatch costs;
         TECBid bid;
         TECManufacturer manufacturer;
 
@@ -48,10 +48,10 @@ namespace Tests
         {
             bid = new TECBid();
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            costs = new List<TECCost>();
+            costs = new CostBatch();
             watcher.CostChanged += (e) =>
             {
-                costs.AddRange(e);
+                costs += e;
             };
             
         }
@@ -84,10 +84,9 @@ namespace Tests
             TECController controller = new TECController(controllerType);
 
             bid.Controllers.Add(controller);
-
-            Assert.AreEqual(1, costs.Count);
-            Assert.AreEqual(100, cost(costs, CostType.TEC));
-            Assert.AreEqual(0, cost(costs, CostType.Electrical));
+            
+            Assert.AreEqual(100, costs.GetCost(CostType.TEC));
+            Assert.AreEqual(0, costs.GetCost(CostType.Electrical));
         }
 
         [TestMethod]
@@ -98,23 +97,9 @@ namespace Tests
             TECPanel panel = new TECPanel(panelType);
 
             bid.Panels.Add(panel);
-
-            Assert.AreEqual(1, costs.Count);
-            Assert.AreEqual(100, cost(costs, CostType.TEC));
-            Assert.AreEqual(0, cost(costs, CostType.Electrical));
-        }
-
-        private double cost(List<TECCost> costs, CostType type)
-        {
-            double outCost = 0;
-            foreach(TECCost item in costs)
-            {
-                if(item.Type == type)
-                {
-                    outCost += item.Cost;
-                }
-            }
-            return outCost;
+            
+            Assert.AreEqual(100, costs.GetCost(CostType.TEC));
+            Assert.AreEqual(0, costs.GetCost(CostType.Electrical));
         }
     }
 }
