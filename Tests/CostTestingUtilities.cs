@@ -54,7 +54,7 @@ namespace Tests
             Total total = new Total();
             if (type == hardware.Type)
             {
-                total.Cost = hardware.ExtendedCost;
+                total.Cost = hardware.Cost;
                 total.Labor = hardware.Labor;
             }
             total += CalculateTotal(hardware as TECScope, type);
