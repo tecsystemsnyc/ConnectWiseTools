@@ -3,20 +3,19 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
 using System.IO;
-using EstimatingLibrary.Utilities;
-using EstimatingUtilitiesLibrary.Database;
 
 namespace Tests
 {
     /// <summary>
-    /// Summary description for RandomTests
+    /// Summary description for EstimateBuilderTests
     /// </summary>
     [TestClass]
-    public class RandomTests
+    public class EstimateBuilderTests
     {
-        public RandomTests()
+        static EstimateBuilder.MVVM.MainViewModel mainVM;
+
+        public EstimateBuilderTests()
         {
             //
             // TODO: Add constructor logic here
@@ -46,8 +45,11 @@ namespace Tests
         // You can use the following additional attributes as you write your tests:
         //
         // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext)
+        {
+            mainVM = new EstimateBuilder.MVVM.MainViewModel();
+        }
         //
         // Use ClassCleanup to run code after all tests in a class have run
         // [ClassCleanup()]
@@ -63,25 +65,11 @@ namespace Tests
         //
         #endregion
 
-
-        [TestMethod]
-        public void AddSubScopeToLoadedSystem()
-        {
-            Assert.Fail();
-            //TECBid bid = TestHelper.CreateTestBid();
-
-            //var path = Path.GetTempFileName();
-
-            //DatabaseManager manager = new DatabaseManager(path);
-            //manager.New(bid);
-            //bid = manager.Load() as TECBid;
-            //var watcher = new ChangeWatcher(bid);
-
-            //DeltaStacker stack = new DeltaStacker(watcher);
-            //bid.RandomEquipment().SubScope.Add(new TECSubScope());
-            //DatabaseUpdater.Update(path, stack.CleansedStack());
-
-            //bid = DatabaseLoader.Load(path) as TECBid;
-        }
+        //[TestMethod]
+        //public void EstimateBuilderVM()
+        //{
+        //    var testVM = new EstimateBuilder.ViewModel.MainViewModel();
+        //    Assert.IsTrue(true);
+        //}
     }
 }

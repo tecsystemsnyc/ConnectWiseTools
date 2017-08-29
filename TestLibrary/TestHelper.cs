@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Collections;
-using EstimatingUtilitiesLibrary.Database;
 
 namespace Tests
 {
@@ -444,16 +442,6 @@ namespace Tests
             return templates;
         }
 
-        public static TECBid LoadTestBid(string path)
-        {
-            TECBid testBid = DatabaseLoader.Load(path) as TECBid;
-            return testBid;
-        }
-
-        public static TECTemplates LoadTestTemplates(string path)
-        {
-            return DatabaseLoader.Load(path) as TECTemplates;
-        }
 
         public static TECBid CreateEstimatorBid()
         {

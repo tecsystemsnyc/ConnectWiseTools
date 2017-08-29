@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using System.IO;
+using EstimatingUtilitiesLibraryTests;
 
 namespace Tests
 {
@@ -33,11 +34,11 @@ namespace Tests
         {
             path = Path.GetTempFileName();
             TestDBHelper.CreateTestBid(path);
-            bid = TestHelper.LoadTestBid(path);
+            bid = EULTestHelper.LoadTestBid(path);
 
             path = Path.GetTempFileName();
             TestDBHelper.CreateTestTemplates(path);
-            templates = TestHelper.LoadTestTemplates(path);
+            templates = EULTestHelper.LoadTestTemplates(path);
         }
 
         [ClassCleanup]

@@ -80,7 +80,7 @@ namespace Tests
         public void Bid_AddController()
         {
             TECControllerType controllerType = new TECControllerType(manufacturer);
-            controllerType.Cost = 100;
+            controllerType.Price = 100;
             TECController controller = new TECController(controllerType);
 
             bid.Controllers.Add(controller);
@@ -94,7 +94,7 @@ namespace Tests
         public void Bid_AddPanel()
         {
             TECPanelType panelType = new TECPanelType(manufacturer);
-            panelType.Cost = 100;
+            panelType.Price = 100;
             TECPanel panel = new TECPanel(panelType);
 
             bid.Panels.Add(panel);
