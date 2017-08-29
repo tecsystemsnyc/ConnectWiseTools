@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="ChangeWatcherTests.cs" />
     <Compile Include="CostChangedTests.cs" />
-    <Compile Include="CostTestingUtilities.cs" />
     <Compile Include="EstimatorTests.cs" />
     <Compile Include="ModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

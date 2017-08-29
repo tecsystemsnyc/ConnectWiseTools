@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.ViewModels;
+using static Tests.CostTestingUtilities;
 
 namespace Tests
 {
