@@ -171,10 +171,10 @@ namespace EstimatingLibrary
             {
                 var old = Locations;
                 Locations.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Locations");
-                Locations.CollectionChanged -= locations_CollectionChanged;
+                Locations.CollectionChanged -= locationsCollectionChanged;
                 _locations = value;
                 Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
-                Locations.CollectionChanged += locations_CollectionChanged;
+                Locations.CollectionChanged += locationsCollectionChanged;
                 NotifyCombinedChanged(Change.Edit, "Locations", this, value, old);
             }
         }
@@ -260,7 +260,7 @@ namespace EstimatingLibrary
             Notes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Notes");
             Exclusions.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Exclusions");
             Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
-            Locations.CollectionChanged += locations_CollectionChanged;
+            Locations.CollectionChanged += locationsCollectionChanged;
             Controllers.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Controllers");
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
@@ -303,10 +303,20 @@ namespace EstimatingLibrary
             {
                 int pointNumber = 0;
                 CostBatch costs = new CostBatch();
+                bool pointChanged = false;
+                bool costChanged = false;
                 foreach (object item in e.NewItems)
                 {
-                    if (item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
-                    if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
+                    if (item is INotifyPointChanged pointItem)
+                    {
+                        pointNumber += pointItem.PointNumber;
+                        pointChanged = true;
+                    }
+                    if (item is INotifyCostChanged costItem)
+                    {
+                        costs += costItem.CostBatch;
+                        costChanged = true;
+                    }
                     NotifyCombinedChanged(Change.Add, collectionName, this, item);
                     if (item is TECSystem)
                     {
@@ -314,17 +324,27 @@ namespace EstimatingLibrary
                         sys.PropertyChanged += system_PropertyChanged;
                     }
                 }
-                PointChanged?.Invoke(pointNumber);
-                CostChanged?.Invoke(costs);
+                if (pointChanged) PointChanged?.Invoke(pointNumber);
+                if (costChanged) CostChanged?.Invoke(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 int pointNumber = 0;
                 CostBatch costs = new CostBatch();
+                bool pointChanged = false;
+                bool costChanged = false;
                 foreach (object item in e.OldItems)
                 {
-                    if(item is INotifyPointChanged pointItem) { pointNumber += pointItem.PointNumber; }
-                    if(item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
+                    if (item is INotifyPointChanged pointItem)
+                    {
+                        pointNumber += pointItem.PointNumber;
+                        pointChanged = true;
+                    }
+                    if (item is INotifyCostChanged costItem)
+                    {
+                        costs += costItem.CostBatch;
+                        costChanged = true;
+                    }
                     NotifyCombinedChanged(Change.Remove, collectionName, this, item);
                     if (item is TECSystem)
                     {
@@ -337,16 +357,15 @@ namespace EstimatingLibrary
                         (item as TECController).RemoveAllConnections();
                     }
                 }
-                PointChanged?.Invoke(pointNumber);
-                CostChanged?.Invoke(costs * -1);
-                
+                if (pointChanged) PointChanged?.Invoke(pointNumber);
+                if (costChanged) CostChanged?.Invoke(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 NotifyCombinedChanged(Change.Edit, collectionName, this, e.NewItems, e.OldItems);
             }
         }
-        private void locations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void locationsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -356,6 +375,8 @@ namespace EstimatingLibrary
                 }
             }
         }
+
+
         private void system_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "RemovedSubScope")

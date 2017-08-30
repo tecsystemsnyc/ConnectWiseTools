@@ -143,8 +143,8 @@ namespace Tests
             bid.ScopeTree.Add(sb);
 
             //Assert
-            checkRaised(false, false, false);
-            checkChangedArgs(Change.Add, "ScopeTree", bid, sb);
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Add, "ScopeTree", bid, sb);
         }
 
         [TestMethod]
@@ -157,8 +157,8 @@ namespace Tests
             bid.Notes.Add(note);
 
             //Assert
-            checkRaised(false, false, false);
-            checkChangedArgs(Change.Add, "Notes", bid, note);
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Add, "Notes", bid, note);
         }
 
         [TestMethod]
@@ -171,8 +171,8 @@ namespace Tests
             bid.Exclusions.Add(exclusion);
 
             //Assert
-            checkRaised(false, false, false);
-            checkChangedArgs(Change.Add, "Exclusions", bid, exclusion);
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Add, "Exclusions", bid, exclusion);
         }
 
         [TestMethod]
@@ -185,8 +185,8 @@ namespace Tests
             bid.Locations.Add(location);
 
             //Assert
-            checkRaised(false, false, false);
-            checkChangedArgs(Change.Add, "Locations", bid, location);
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Add, "Locations", bid, location);
         }
 
         [TestMethod]
@@ -320,7 +320,57 @@ namespace Tests
             checkChangedArgs(Change.Add, "ScopeBranches", typical, sb);
         }
 
+        [TestMethod]
+        public void AddEquipmentToInstance()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
 
+            resetRaised();
+
+            //Act
+            instance.Equipment.Add(equip);
+
+            //Assert
+            checkRaised(true, true, true);
+            checkInstanceChangedArgs(Change.Add, "Equipment", instance, equip);
+            checkCostDelta(equip.CostBatch);
+            checkPointDelta(equip.PointNumber);
+        }
+
+        [TestMethod]
+        public void AddControllerToInstance()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController controller = new TECController(type);
+
+            resetRaised();
+
+            //Act
+            instance.Controllers.Add(controller);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "Controllers", instance, controller);
+            checkCostDelta(controller.CostBatch);
+        }
+
+        [TestMethod]
         #endregion
 
         #endregion
