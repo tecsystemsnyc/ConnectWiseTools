@@ -621,7 +621,7 @@ namespace Tests
         {
             //Act
             TECSystem expectedSystem = bid.Systems.RandomObject();
-            var expectedMisc = new TECMisc();
+            var expectedMisc = new TECMisc(CostType.Electrical);
             expectedSystem.MiscCosts.Add(expectedMisc);
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -2434,7 +2434,7 @@ namespace Tests
         public void Save_Bid_Add_MiscCost()
         {
             //Act
-            TECMisc expectedCost = new TECMisc();
+            TECMisc expectedCost = new TECMisc(CostType.Electrical);
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -2564,7 +2564,7 @@ namespace Tests
             //Act
             TECPanelType expectedCost = new TECPanelType(bid.Catalogs.Manufacturers.RandomObject());
             expectedCost.Name = "Add cost addition";
-            expectedCost.Cost = 978.3;
+            expectedCost.Price = 978.3;
 
             bid.Catalogs.PanelTypes.Add(expectedCost);
 

@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingUtilitiesLibrary;
+using EstimatingUtilitiesLibraryTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace Tests
         {
             var path = Path.GetTempFileName();
             TestDBHelper.CreateTestBid(path);
-            actualBid = TestHelper.LoadTestBid(path);
+            actualBid = EULTestHelper.LoadTestBid(path);
         }
 
         [TestMethod]

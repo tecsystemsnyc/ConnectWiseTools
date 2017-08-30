@@ -754,7 +754,7 @@ namespace Tests
                 templates.Catalogs.Manufacturers[0]);
             expectedDevice.Name = "New Device";
             expectedDevice.Description = "New Device desc";
-            expectedDevice.Cost = 11.54;
+            expectedDevice.Price = 11.54;
 
             templates.Catalogs.Devices.Add(expectedDevice);
 
@@ -853,7 +853,7 @@ namespace Tests
         {
             //Act
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
-            expectedDevice.Cost = 46.89;
+            expectedDevice.Price = 46.89;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
@@ -1558,7 +1558,7 @@ namespace Tests
         {
             //Act
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
-            TECCost expectedAssociatedCost = new TECCost();
+            TECCost expectedAssociatedCost = new TECCost(CostType.TEC);
             expectedAssociatedCost.Name = "Test Associated Cost";
             expectedAssociatedCost.Cost = 21.34;
 
@@ -1613,7 +1613,7 @@ namespace Tests
         public void Save_Templates_Add_MiscCost()
         {
             //Act
-            TECMisc expectedCost = new TECMisc();
+            TECMisc expectedCost = new TECMisc(CostType.TEC);
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -1638,6 +1638,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
             Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+            Assert.AreEqual(expectedCost.Type, actualCost.Type);
         }
 
         [TestMethod]
@@ -1716,7 +1717,7 @@ namespace Tests
             //Act
             TECPanelType expectedCost = new TECPanelType(templates.Catalogs.Manufacturers.RandomObject());
             expectedCost.Name = "Add cost addition";
-            expectedCost.Cost = 978.3;
+            expectedCost.Price = 978.3;
 
             templates.Catalogs.PanelTypes.Add(expectedCost);
 
@@ -1787,7 +1788,7 @@ namespace Tests
         {
             //Act
             TECPanelType expectedCost = templates.Catalogs.PanelTypes[0];
-            expectedCost.Cost = 489.1238;
+            expectedCost.Price = 489.1238;
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
@@ -1815,7 +1816,7 @@ namespace Tests
             //Act
             TECIOModule expectedModule = new TECIOModule(templates.Catalogs.Manufacturers.RandomObject());
             expectedModule.Name = "Add IO Module";
-            expectedModule.Cost = 978.3;
+            expectedModule.Price = 978.3;
             expectedModule.Manufacturer = templates.Catalogs.Manufacturers[0];
 
             templates.Catalogs.IOModules.Add(expectedModule);
@@ -1887,7 +1888,7 @@ namespace Tests
         {
             //Act
             TECIOModule expectedCost = templates.Catalogs.IOModules[0];
-            expectedCost.Cost = 489.1238;
+            expectedCost.Price = 489.1238;
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             TECTemplates actualTemplates = DatabaseLoader.Load(path) as TECTemplates;

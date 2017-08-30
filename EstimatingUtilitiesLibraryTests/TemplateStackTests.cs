@@ -199,7 +199,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECCost edit = new TECCost();
+            TECCost edit = new TECCost(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -519,7 +519,7 @@ namespace Tests
             var Template = TestHelper.CreateTestTemplates();
             var subScope = Template.SubScopeTemplates.RandomObject();
             int expectedCount = subScope.AssociatedCosts.Count;
-            TECCost edit = new TECCost();
+            TECCost edit = new TECCost(CostType.Electrical);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -585,7 +585,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            device.Cost = edit;
+            device.Price = edit;
             //Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
@@ -755,7 +755,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECMisc edit = new TECMisc();
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -1232,7 +1232,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Cost = edit;
+            ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Price = edit;
             testStack.Undo();
             testStack.Redo();
 
@@ -1372,7 +1372,7 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECMisc edit = new TECMisc();
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);

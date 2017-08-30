@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingUtilitiesLibraryTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace Tests
         {
             string path = Path.GetTempFileName();
             TestDBHelper.CreateTestTemplates(path);
-            actualTemplates = TestHelper.LoadTestTemplates(path);
+            actualTemplates = EULTestHelper.LoadTestTemplates(path);
         }
 
         [TestMethod]
