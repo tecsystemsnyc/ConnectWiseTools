@@ -109,6 +109,7 @@ namespace Tests
             data[BidMiscTable.BidID.Name] = bid.Guid.ToString();
             data[BidMiscTable.MiscID.Name] = misc.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, BidMiscTable.TableName, data));
+
             int expectedCount = expectedItems.Count;
 
 
@@ -151,27 +152,33 @@ namespace Tests
         public void Bid_AddSystem()
         {
             //Arrange
-            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
             TECSystem system = new TECSystem();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[SystemTable.ID.Name] = system.Guid.ToString();
             data[SystemTable.Name.Name] = system.Name.ToString();
             data[SystemTable.Description.Name] = system.Description.ToString();
             data[SystemTable.ProposeEquipment.Name] = system.ProposeEquipment.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
-            UpdateItem expectedItem = new UpdateItem(Change.Add, SystemTable.TableName, data);
+            data = new Dictionary<string, string>();
+            data[BidSystemTable.BidID.Name] = bid.Guid.ToString();
+            data[BidSystemTable.SystemID.Name] = system.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, BidSystemTable.TableName, data));
 
-            int expectedCount = 1;
+            int expectedCount = expectedItems.Count;
             
             bid.Systems.Add(system);
             
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            checkUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -657,7 +664,7 @@ namespace Tests
         public void Bid_AddDeviceToTypicalWith()
         {
             //Arrange
-            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECBid bid = new TECBid();
             TECSystem system = new TECSystem();
             bid.Systems.Add(system);
             TECEquipment equipment = new TECEquipment();
@@ -667,6 +674,7 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
 
             //Act
+            ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher);
             TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             subScope.Devices.Add(device);
@@ -793,7 +801,7 @@ namespace Tests
         public void Bid_AddControllerToTypicalWith()
         {
             //Arrange
-            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECBid bid = new TECBid(); 
             TECSystem typical = new TECSystem();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
@@ -802,6 +810,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
+            ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher);
 
             typical.Controllers.Add(controller);
@@ -1260,6 +1269,7 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[MiscTable.ID.Name] = misc.Guid.ToString();
             data[MiscTable.Name.Name] = misc.Name.ToString();
@@ -1267,15 +1277,20 @@ namespace Tests
             data[MiscTable.Labor.Name] = misc.Labor.ToString();
             data[MiscTable.Type.Name] = misc.Type.ToString();
             data[MiscTable.Quantity.Name] = misc.Quantity.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, MiscTable.TableName, data));
 
-            UpdateItem expectedItem = new UpdateItem(Change.Add, MiscTable.TableName, data);
-            int expectedCount = 1;
+            data = new Dictionary<string, string>();
+            data[BidMiscTable.BidID.Name] = bid.Guid.ToString();
+            data[BidMiscTable.MiscID.Name] = misc.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, BidMiscTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
 
             bid.MiscCosts.Remove(misc);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            checkUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Scope Branch
@@ -1317,21 +1332,30 @@ namespace Tests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
             Dictionary<string, string> data = new Dictionary<string, string>();
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
             data[SystemTable.ID.Name] = system.Guid.ToString();
             data[SystemTable.Name.Name] = system.Name.ToString();
             data[SystemTable.Description.Name] = system.Description.ToString();
             data[SystemTable.ProposeEquipment.Name] = system.ProposeEquipment.ToString();
 
-            UpdateItem expectedItem = new UpdateItem(Change.Add, SystemTable.TableName, data);
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemTable.TableName, data));
 
-            int expectedCount = 1;
+
+            data = new Dictionary<string, string>();
+            data[BidSystemTable.BidID.Name] = bid.Guid.ToString();
+            data[BidSystemTable.SystemID.Name] = system.Guid.ToString();
+
+            expectedItems.Add(new UpdateItem(Change.Remove, BidSystemTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
 
             bid.Systems.Remove(system);
 
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            checkUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]

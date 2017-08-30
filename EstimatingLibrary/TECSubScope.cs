@@ -265,7 +265,6 @@ namespace EstimatingLibrary
                 saveList.Add(item as TECObject);
             }
             saveList.AddRange(this.Points);
-            saveList.Add(this.Connection);
             return saveList;
         }
         #endregion
