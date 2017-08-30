@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECConnection : TECObject, INotifyCostChanged
+    public abstract class TECConnection : TECObject, INotifyCostChanged, ISaveable
     {
         #region Properties
         protected double _length;
@@ -63,6 +63,11 @@ namespace EstimatingLibrary
         {
             get { return getCosts(); }
         }
+
+        public List<TECObject> SaveObjects
+        {
+            get { return saveObjects(); }
+        }
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;
@@ -92,5 +97,11 @@ namespace EstimatingLibrary
         }
 
         protected abstract CostBatch getCosts();
+        protected virtual List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.Add(this.ConduitType);
+            return saveList;
+        }
     }
 }

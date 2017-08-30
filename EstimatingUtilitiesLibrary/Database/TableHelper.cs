@@ -95,9 +95,9 @@ namespace EstimatingUtilitiesLibrary.Database
                 var dataString = objectToDBString(parentField.Property.GetValue(item, null));
                 fieldData.Add(parentField.Name, dataString);
             }
-            if (childField.Property.ReflectedType == item.GetType())
+            if (childField.Property.ReflectedType == child.GetType())
             {
-                var dataString = objectToDBString(childField.Property.GetValue(item, null));
+                var dataString = objectToDBString(childField.Property.GetValue(child, null));
                 fieldData.Add(childField.Name, dataString);
             }
             return fieldData;

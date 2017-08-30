@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECScopeBranch : TECLabeled
+    public class TECScopeBranch : TECLabeled, ISaveable
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
         private ObservableCollection<TECScopeBranch> _branches;
@@ -22,6 +23,11 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "Branches", this, value, old);
                 Branches.CollectionChanged += Branches_CollectionChanged;
             }
+        }
+
+        public List<TECObject> SaveObjects
+        {
+            get { return saveObjects(); }
         }
 
         #endregion //Properites
@@ -62,6 +68,13 @@ namespace EstimatingLibrary
                     NotifyCombinedChanged(Change.Remove, "Branches", this, item);
                 }
             }
+        }
+
+        private List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(this.Branches);
+            return saveList;
         }
 
     }

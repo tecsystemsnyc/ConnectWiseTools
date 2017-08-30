@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -23,15 +24,15 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if(e.Change == Change.Add || e.Change == Change.Remove)
             {
-                stack.AddRange(addRemoveToStack(e.Change, e.Sender as TECObject, e.Value as TECObject));
+                stack.AddRange(addRemoveStack(e.Change, e.Sender as TECObject, e.Value as TECObject));
             }
             else if (e.Change == Change.Edit)
             {
-                stack.AddRange(editToStack(e.Sender as TECObject, e.PropertyName, e.Value));
+                stack.AddRange(editStack(e.Sender as TECObject, e.PropertyName, e.Value));
             }
         }
 
-        private static List<UpdateItem> addRemoveToStack(Change change, TECObject sender, TECObject item)
+        private static List<UpdateItem> addRemoveStack(Change change, TECObject sender, TECObject item)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
@@ -49,18 +50,24 @@ namespace EstimatingUtilitiesLibrary.Database
                     fields.Add(info.Fields[0]);
                     fields.Add(info.Fields[1]);
                     data = TableHelper.PrepareDataForRelationTable(fields, sender, item);
+                    outStack.Add(new UpdateItem(change, info.Name, data));
                 }
                 else if (!info.IsCatalogTable || (info.IsCatalogTable && sender is TECCatalogs))
                 {
                     var fields = info.Fields;
-                    data = TableHelper.PrepareDataForObjectTable(fields, sender);
+                    data = TableHelper.PrepareDataForObjectTable(fields, item);
+                    if(item is ISaveable saveable)
+                    {
+                        outStack.AddRange(childStack(change, saveable));
+                    }
+                    outStack.Add(new UpdateItem(change, info.Name, data));
+
                 }
-                outStack.Add(new UpdateItem(change, info.Name, data));
             }
             return outStack;
         }
 
-        private static List<UpdateItem> editToStack(TECObject sender, string propertyName, object value)
+        private static List<UpdateItem> editStack(TECObject sender, string propertyName, object value)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
@@ -89,7 +96,19 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 throw new Exception("Add and Remove must have an item which is being added to sender.");
             }
-            return addRemoveToStack(Change.Add, sender, item);
+            return addRemoveStack(Change.Add, sender, item);
         }
+
+        private static List<UpdateItem> childStack(Change change, ISaveable item)
+        {
+            List<UpdateItem> outStack = new List<UpdateItem>();
+            foreach(TECObject saveItem in item.SaveObjects)
+            {
+                outStack.AddRange(addRemoveStack(change, item as TECObject, saveItem));
+            }
+
+            return outStack;
+        }
+
     }
 }

@@ -87,6 +87,13 @@ namespace EstimatingLibrary
             }
             return costs;
         }
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.Add(this.SubScope);
+            return saveList;
+        }
         #endregion
     }
 }

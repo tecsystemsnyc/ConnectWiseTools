@@ -93,6 +93,8 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[MiscTable.ID.Name] = misc.Guid.ToString();
             data[MiscTable.Name.Name] = misc.Name.ToString();
@@ -100,15 +102,22 @@ namespace Tests
             data[MiscTable.Labor.Name] = misc.Labor.ToString();
             data[MiscTable.Type.Name] = misc.Type.ToString();
             data[MiscTable.Quantity.Name] = misc.Quantity.ToString();
-            
-            UpdateItem expectedItem = new UpdateItem(Change.Add, MiscTable.TableName,data);
-            int expectedCount = 1;
+
+            expectedItems.Add(new UpdateItem(Change.Add, MiscTable.TableName,data));
+
+            data = new Dictionary<string, string>();
+            data[BidMiscTable.BidID.Name] = bid.Guid.ToString();
+            data[BidMiscTable.MiscID.Name] = misc.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, BidMiscTable.TableName, data));
+            int expectedCount = expectedItems.Count;
+
 
             bid.MiscCosts.Add(misc);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            checkUpdateItems(expectedItems, stack);
+
         }
         #endregion
         #region Scope Branch

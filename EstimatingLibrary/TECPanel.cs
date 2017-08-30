@@ -80,6 +80,15 @@ namespace EstimatingLibrary
             return outPanel;
         }
 
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.Add(this.Type);
+            saveList.AddRange(this.Controllers);
+            return saveList;
+        }
+
         private void controllersCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

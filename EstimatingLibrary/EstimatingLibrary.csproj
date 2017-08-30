@@ -102,6 +102,7 @@
     <Compile Include="Interfaces\INotifyCostChanged.cs" />
     <Compile Include="Interfaces\INotifyTECChanged.cs" />
     <Compile Include="Interfaces\INotifyPointChanged.cs" />
+    <Compile Include="Interfaces\ISaveable.cs" />
     <Compile Include="Interfaces\ITECConnectable.cs" />
     <Compile Include="TECExtraLabor.cs" />
     <Compile Include="TECValve.cs" />

@@ -317,7 +317,18 @@ namespace EstimatingLibrary
                 return costs;
             }
         }
-
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(this.Equipment);
+            saveList.AddRange(this.Panels);
+            saveList.AddRange(this.Controllers);
+            saveList.AddRange(this.Instances);
+            saveList.AddRange(this.MiscCosts);
+            saveList.AddRange(this.ScopeBranches);
+            return saveList;
+        }
 
         private void addTypicalInstance(TECObject typical, TECObject instance)
         {

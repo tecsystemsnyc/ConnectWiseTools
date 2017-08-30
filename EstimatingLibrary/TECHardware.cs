@@ -64,6 +64,13 @@ namespace EstimatingLibrary
             costs += new CostBatch(Cost, Labor, Type);
             return costs;
         }
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.Add(this.Manufacturer);
+            return saveList;
+        }
         #endregion
     }
 }
