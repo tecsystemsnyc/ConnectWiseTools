@@ -22,7 +22,11 @@ namespace EstimatingUtilitiesLibrary.Database
                 {
                     tables.Add(table);
                 }
-                else if (items.Count == 2 && matchesObjectType(items[1], info.Types))
+                else if (items.Count == 2 && matchesObjectType(items[1], info.Types) && !haveSameType(items))
+                {
+                    tables.Add(table);
+                }
+                else if (info.Name == TypicalInstanceTable.TableName && haveSameType(items))
                 {
                     tables.Add(table);
                 }
@@ -58,6 +62,20 @@ namespace EstimatingUtilitiesLibrary.Database
             return (item.GetType() == ft.Type && item.Flavor == ft.Flavor);
         }
 
+        private static bool haveSameType(List<TECObject> items)
+        {
+            Type inital = items[0].GetType();
+            for(int x = 1; x < items.Count; x++)
+            {
+                if(inital != items[x].GetType())
+                {
+                    return false;
+                }
+            }
+            return true;
+
+        }
+
         public static TableField GetField(TableBase table, string propertyName)
         {
             TableInfo info = new TableInfo(table);
@@ -90,12 +108,12 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<string, string> fieldData = new Dictionary<string, string>();
             var parentField = fields[0];
             var childField = fields[1];
-            if (parentField.Property.ReflectedType == item.GetType())
+            if (parentField.Property.DeclaringType.IsInstanceOfType(item))
             {
                 var dataString = objectToDBString(parentField.Property.GetValue(item, null));
                 fieldData.Add(parentField.Name, dataString);
             }
-            if (childField.Property.ReflectedType == child.GetType())
+            if(childField.Property.DeclaringType.IsInstanceOfType(child))
             {
                 var dataString = objectToDBString(childField.Property.GetValue(child, null));
                 fieldData.Add(childField.Name, dataString);

@@ -239,9 +239,9 @@ namespace Tests
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = system.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
+            expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
 
-            int expectedCount = 2;
+            int expectedCount = expectedItems.Count;
 
             system.Equipment.Add(equip);
 
@@ -254,13 +254,14 @@ namespace Tests
         public void Bid_AddEquipmentToTypicalWith()
         {
             //Arrange
-            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECBid bid = new TECBid(); 
             TECSystem typical = new TECSystem();
             TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
+            ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher);
 
             typical.Equipment.Add(equip);
@@ -271,15 +272,25 @@ namespace Tests
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentTable.Name.Name] = instance.Equipment[0].Name.ToString();
+            data[EquipmentTable.Description.Name] = instance.Equipment[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
+            data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = equip.Guid.ToString();
+            data[EquipmentTable.Name.Name] = equip.Name.ToString();
+            data[EquipmentTable.Description.Name] = equip.Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
-            int expectedCount = 3;
+            int expectedCount = expectedItems.Count;
             
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -306,6 +317,12 @@ namespace Tests
             data[TypicalInstanceTable.TypicalID.Name] = equip.Guid.ToString();
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentTable.Name.Name] = instance.Equipment[0].Name.ToString();
+            data[EquipmentTable.Description.Name] = instance.Equipment[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
@@ -1419,7 +1436,7 @@ namespace Tests
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = system.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SystemHierarchyTable.TableName, data));
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemEquipmentTable.TableName, data));
 
             int expectedCount = 2;
 
@@ -1449,11 +1466,11 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = equip.Guid.ToString();
-            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
-            data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SystemEquipmentTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = typical.Guid.ToString();
@@ -1571,16 +1588,16 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = subScope.Guid.ToString();
-            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[SubScopeTable.ID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
-            data[SubScopeTable.Name.Name] = instance.Equipment[0].SubScope[0].Name.ToString();
-            data[SubScopeTable.Description.Name] = instance.Equipment[0].SubScope[0].Description.ToString();
+            data[SubScopeTable.ID.Name] = removed.Guid.ToString();
+            data[SubScopeTable.Name.Name] = removed.Name.ToString();
+            data[SubScopeTable.Description.Name] = removed.Description.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
-            data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = subScope.Guid.ToString();
@@ -1717,17 +1734,17 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = point.Guid.ToString();
-            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[PointTable.ID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
-            data[PointTable.Name.Name] = instance.Equipment[0].SubScope[0].Points[0].Label.ToString();
-            data[PointTable.Type.Name] = instance.Equipment[0].SubScope[0].Points[0].Type.ToString();
-            data[PointTable.Quantity.Name] = instance.Equipment[0].SubScope[0].Points[0].Type.ToString();
+            data[PointTable.ID.Name] = removed.Guid.ToString();
+            data[PointTable.Name.Name] = removed.Label.ToString();
+            data[PointTable.Type.Name] = removed.Type.ToString();
+            data[PointTable.Quantity.Name] = removed.Type.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, PointTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
-            data[SubScopePointTable.PointID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
+            data[SubScopePointTable.PointID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopePointTable.TableName, data));
             data = new Dictionary<string, string>();
             data[PointTable.ID.Name] = point.Guid.ToString();
@@ -2011,21 +2028,21 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = controller.Guid.ToString();
-            data[TypicalInstanceTable.InstanceID.Name] = instance.Controllers[0].Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
+            data[ControllerControllerTypeTable.ControllerID.Name] = removed.Guid.ToString();
             data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerControllerTypeTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
-            data[ControllerTable.Name.Name] = instance.Controllers[0].Name.ToString();
-            data[ControllerTable.Description.Name] = instance.Controllers[0].Description.ToString();
-            data[ControllerTable.Type.Name] = instance.Controllers[0].Type.ToString();
+            data[ControllerTable.ID.Name] = removed.Guid.ToString();
+            data[ControllerTable.Name.Name] = removed.Name.ToString();
+            data[ControllerTable.Description.Name] = removed.Description.ToString();
+            data[ControllerTable.Type.Name] = removed.Type.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = instance.Guid.ToString();
-            data[SystemControllerTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
+            data[SystemControllerTable.ControllerID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SystemControllerTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
@@ -2040,7 +2057,7 @@ namespace Tests
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemControllerTable.ControllerID.Name] = controller.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SystemControllerTable.TableName, data));
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemControllerTable.TableName, data));
             data = new Dictionary<string, string>();
 
             int expectedCount = expectedItems.Count;
@@ -2157,20 +2174,20 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = panel.Guid.ToString();
-            data[TypicalInstanceTable.InstanceID.Name] = instance.Panels[0].Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[PanelPanelTypeTable.PanelID.Name] = instance.Panels[0].Guid.ToString();
+            data[PanelPanelTypeTable.PanelID.Name] = removed.Guid.ToString();
             data[PanelPanelTypeTable.PanelTypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, PanelPanelTypeTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[PanelTable.ID.Name] = instance.Panels[0].Guid.ToString();
-            data[PanelTable.Name.Name] = instance.Panels[0].Name.ToString();
-            data[PanelTable.Description.Name] = instance.Panels[0].Description.ToString();
+            data[PanelTable.ID.Name] = removed.Guid.ToString();
+            data[PanelTable.Name.Name] = removed.Name.ToString();
+            data[PanelTable.Description.Name] = removed.Description.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, PanelTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SystemPanelTable.SystemID.Name] = instance.Guid.ToString();
-            data[SystemPanelTable.PanelID.Name] = instance.Panels[0].Guid.ToString();
+            data[SystemPanelTable.PanelID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SystemPanelTable.TableName, data));
             data = new Dictionary<string, string>();
             data[PanelPanelTypeTable.PanelID.Name] = panel.Guid.ToString();
@@ -2383,9 +2400,9 @@ namespace Tests
 
         public void checkUpdateItem(UpdateItem expectedItem, UpdateItem actualItem)
         {
-            Assert.AreEqual(expectedItem.Change, actualItem.Change);
-            Assert.AreEqual(expectedItem.FieldData.Count, actualItem.FieldData.Count);
-            Assert.AreEqual(expectedItem.Table, actualItem.Table);
+            Assert.AreEqual(expectedItem.Change, actualItem.Change, "Change does not match on UpdateItems");
+            Assert.AreEqual(expectedItem.FieldData.Count, actualItem.FieldData.Count, "FieldData does not match on UpdateItems");
+            Assert.AreEqual(expectedItem.Table, actualItem.Table, "Tables do not match on UpdateItems");
         }
 
         public void checkUpdateItems(List<UpdateItem> expectedItems, DeltaStacker stack)
