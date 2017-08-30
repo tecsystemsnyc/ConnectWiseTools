@@ -38,7 +38,7 @@ namespace EstimatingLibrary.Utilities
         #endregion
 
         #region Enums
-        private enum OccuranceType { None, Typical, Instance };
+        private enum OccuranceType { Typical, Instance };
         #endregion
 
         #region Methods
@@ -63,9 +63,9 @@ namespace EstimatingLibrary.Utilities
         {
             bid.PointChanged += (e) => handlePointChanged(bid, e);
             bid.CostChanged += (e) => handleCostChanged(bid, e);
-            registerTECObject(bid, OccuranceType.None);
-            registerTECObject(bid.ExtraLabor, OccuranceType.None);
-            registerTECObject(bid.Parameters, OccuranceType.None);
+            registerTECObject(bid, OccuranceType.Instance);
+            registerTECObject(bid.ExtraLabor, OccuranceType.Instance);
+            registerTECObject(bid.Parameters, OccuranceType.Instance);
 
             foreach(TECSystem typical in bid.Systems)
             {
@@ -89,15 +89,15 @@ namespace EstimatingLibrary.Utilities
             }
             foreach(TECLabeled note in bid.Notes)
             {
-                registerTECObject(note, OccuranceType.None);
+                registerTECObject(note, OccuranceType.Instance);
             }
             foreach(TECLabeled exclusion in bid.Exclusions)
             {
-                registerTECObject(exclusion, OccuranceType.None);
+                registerTECObject(exclusion, OccuranceType.Instance);
             }
             foreach(TECLabeled location in bid.Locations)
             {
-                registerTECObject(location, OccuranceType.None);
+                registerTECObject(location, OccuranceType.Instance);
             }
         }
 
@@ -200,7 +200,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerScopeBranch(TECScopeBranch branch)
         {
-            registerTECObject(branch, OccuranceType.None);
+            registerTECObject(branch, OccuranceType.Instance);
             foreach(TECScopeBranch subBranch in branch.Branches)
             {
                 registerScopeBranch(subBranch);
@@ -348,12 +348,12 @@ namespace EstimatingLibrary.Utilities
                 {
                     if (parent is TECBid)
                     {
-                        registerTECObject(labelled, OccuranceType.None);
+                        registerTECObject(labelled, OccuranceType.Instance);
                     }
                 }
                 else
                 {
-                    registerTECObject(labelled, OccuranceType.None);
+                    registerTECObject(labelled, OccuranceType.Instance);
                 }
             }
             else if (child is TECDevice)
@@ -399,12 +399,12 @@ namespace EstimatingLibrary.Utilities
                 if (newChild is TECExtraLabor)
                 {
                     unregisterTECObject(oldChild);
-                    registerTECObject(newChild, OccuranceType.None);
+                    registerTECObject(newChild, OccuranceType.Instance);
                 }
                 else if (newChild is TECParameters)
                 {
                     unregisterTECObject(oldChild);
-                    registerTECObject(newChild, OccuranceType.None);
+                    registerTECObject(newChild, OccuranceType.Instance);
                 }
             }
         }
