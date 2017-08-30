@@ -106,6 +106,24 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 outStack.AddRange(addRemoveStack(change, item as TECObject, saveItem));
             }
+            if(item is TECSystem system)
+            {
+                outStack.AddRange(typicalInstanceStack(change, system));
+            }
+
+            return outStack;
+        }
+
+        private static List<UpdateItem> typicalInstanceStack(Change change, TECSystem system)
+        {
+            List<UpdateItem> outStack = new List<UpdateItem>();
+            foreach (KeyValuePair<TECObject, List<TECObject>> pair in system.TypicalInstanceDictionary.GetFullDictionary())
+            {
+                foreach(TECObject item in pair.Value)
+                {
+                    outStack.AddRange(addRemoveStack(change, pair.Key, item));
+                }
+            }
 
             return outStack;
         }
