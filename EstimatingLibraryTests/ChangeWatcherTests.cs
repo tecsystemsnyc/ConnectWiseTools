@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Tests.CostTestingUtilities;
+using static Tests.TestHelper;
 
 namespace Tests
 {
@@ -32,42 +33,55 @@ namespace Tests
             bid = TestHelper.CreateTestBid();
             cw = new ChangeWatcher(bid);
 
-            changedRaised = false;
-            instanceChangedRaised = false;
-            costChangedRaised = false;
-            pointChangedRaised = false;
+            resetRaised();
 
             cw.Changed += (args) =>
             {
                 changedArgs = args;
+                changedRaised = true;
             };
             cw.InstanceChanged += (args) =>
             {
                 instanceChangedArgs = args;
+                instanceChangedRaised = true;
             };
             cw.CostChanged += (costs) =>
             {
                 costDelta = costs;
+                costChangedRaised = true;
             };
             cw.PointChanged += (numPoints) =>
             {
                 pointDelta = numPoints;
+                pointChangedRaised = true;
             };
         }
 
         #region Change Events Tests
+        #region Add Tests
         [TestMethod]
-        public void AddSystemToBid()
+        public void AddTypicalToBid()
         {
             //Arrange
-            TECSystem system = new TECSystem();
+            TECSystem typical = new TECSystem();
+            //Ensure typical has points and cost:
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
 
             //Act
-            bid.Systems.Add(system);
+            bid.Systems.Add(typical);
 
             //Assert
             checkRaised(false, false, false);
-            checkEventArgs(changedArgs, Change.Add, "System", bid, system);
+            checkChangedArgs(Change.Add, "Systems", bid, typical);
         }
 
         [TestMethod]
@@ -80,53 +94,246 @@ namespace Tests
             //Act
             bid.Controllers.Add(controller);
 
-            Total tecTotal = CalculateTotal(controller, CostType.TEC);
-            Total elecTotal = CalculateTotal(controller, CostType.Electrical);
-
             //Assert
-            checkRaised(true, true, true);
-            checkEventArgs(changedArgs, Change.Add, "Controller", bid, controller);
-            checkEventArgs(instanceChangedArgs, Change.Add, "Controller", bid, controller);
-
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "Controllers", bid, controller);
+            checkCostDelta(controller.CostBatch);
         }
 
         [TestMethod]
         public void AddPanelToBid()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECPanelType panelType = bid.Catalogs.PanelTypes.RandomObject();
+            TECPanel panel = new TECPanel(panelType);
+
+            //Act
+            bid.Panels.Add(panel);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "Panels", bid, panel);
+            checkCostDelta(panel.CostBatch);
         }
 
         [TestMethod]
         public void AddMiscToBid()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECMisc misc = new TECMisc(CostType.TEC);
+            misc.Cost = RandomDouble(1, 100);
+            misc.Labor = RandomDouble(1, 100);
+
+            //Act
+            bid.MiscCosts.Add(misc);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "MiscCosts", bid, misc);
+            checkCostDelta(misc.CostBatch);
         }
 
         [TestMethod]
         public void AddScopeBranchToBid()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECScopeBranch sb = new TECScopeBranch();
+
+            //Act
+            bid.ScopeTree.Add(sb);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "ScopeTree", bid, sb);
         }
 
         [TestMethod]
         public void AddNoteToBid()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECLabeled note = new TECLabeled();
+
+            //Act
+            bid.Notes.Add(note);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "Notes", bid, note);
         }
 
         [TestMethod]
         public void AddExclusionToBid()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECLabeled exclusion = new TECLabeled();
+
+            //Act
+            bid.Exclusions.Add(exclusion);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "Exclusions", bid, exclusion);
         }
 
         [TestMethod]
         public void AddLocationToBid()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECLabeled location = new TECLabeled();
+
+            //Act
+            bid.Locations.Add(location);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "Locations", bid, location);
         }
+
+        [TestMethod]
+        public void AddInstanceToTypical()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            //Ensure typical has points and cost:
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
+
+            resetRaised();
+
+            //Act
+            TECSystem instance = typical.AddInstance(bid);
+
+            //Assert
+            checkRaised(true, true, true);
+            checkInstanceChangedArgs(Change.Add, "Instances", typical, instance);
+            checkCostDelta(instance.CostBatch);
+            checkPointDelta(instance.PointNumber);
+        }
+
+        [TestMethod]
+        public void AddEquipmentToTypical()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECEquipment equip = new TECEquipment();
+            //Ensure equip has points and cost:
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+
+            resetRaised();
+
+            //Act
+            typical.Equipment.Add(equip);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "Equipment", typical, equip);
+        }
+
+        [TestMethod]
+        public void AddControllerToTypical()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController controller = new TECController(type);
+
+            resetRaised();
+
+            //Act
+            typical.Controllers.Add(controller);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "Controllers", typical, controller);
+        }
+
+        [TestMethod]
+        public void AddPanelToTypical()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECPanelType type = bid.Catalogs.PanelTypes.RandomObject();
+            TECPanel panel = new TECPanel(type);
+
+            resetRaised();
+
+            //Act
+            typical.Panels.Add(panel);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "Panels", typical, panel);
+        }
+
+        [TestMethod]
+        public void AddMiscCostToTypical()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECMisc misc = new TECMisc(CostType.TEC);
+
+            resetRaised();
+
+            //Act
+            typical.MiscCosts.Add(misc);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "MiscCosts", typical, misc);
+        }
+
+        [TestMethod]
+        public void AddScopeBranchToTypical()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECScopeBranch sb = new TECScopeBranch();
+
+            resetRaised();
+
+            //Act
+            typical.ScopeBranches.Add(sb);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "ScopeBranches", typical, sb);
+        }
+
+
         #endregion
 
+        #endregion
+
+        private void resetRaised()
+        {
+            changedRaised = false;
+            instanceChangedRaised = false;
+            costChangedRaised = false;
+            pointChangedRaised = false;
+        }
+
+        #region Check Methods
         private void checkRaised(bool instanceChanged, bool costChanged, bool pointChanged)
         {
             Assert.IsTrue(changedRaised, "Changed event on the ChangeWatcher wasn't raised.");
@@ -159,41 +366,45 @@ namespace Tests
             }
         }
 
-        private void checkEventArgs(TECChangedEventArgs args, Change change, string propertyName, TECObject sender, object value, object oldValue = null)
+        private void checkChangedArgs(Change change, string propertyName, TECObject sender, object value, object oldValue = null)
         {
-            Assert.AreEqual(args.Change, change, "Change type is wrong.");
-            Assert.AreEqual(args.PropertyName, propertyName, "PropertyName is wrong.");
-            Assert.AreEqual(args.Sender, sender, "Sender is wrong.");
-            Assert.AreEqual(args.Value, value, "Value is wrong.");
+            Assert.AreEqual(changedArgs.Change, change, "Change type is wrong.");
+            Assert.AreEqual(changedArgs.PropertyName, propertyName, "PropertyName is wrong.");
+            Assert.AreEqual(changedArgs.Sender, sender, "Sender is wrong.");
+            Assert.AreEqual(changedArgs.Value, value, "Value is wrong.");
 
             if (oldValue != null)
             {
-                Assert.AreEqual(args.OldValue, oldValue, "OldValue is wrong.");
+                Assert.AreEqual(changedArgs.OldValue, oldValue, "OldValue is wrong.");
+            }
+        }
+        private void checkInstanceChangedArgs(Change change, string propertyName, TECObject sender, object value, object oldValue = null)
+        {
+            checkChangedArgs(change, propertyName, sender, value, oldValue);
+
+            Assert.AreEqual(instanceChangedArgs.Change, change, "Change type is wrong.");
+            Assert.AreEqual(instanceChangedArgs.PropertyName, propertyName, "PropertyName is wrong.");
+            Assert.AreEqual(instanceChangedArgs.Sender, sender, "Sender is wrong.");
+            Assert.AreEqual(instanceChangedArgs.Value, value, "Value is wrong.");
+
+            if (oldValue != null)
+            {
+                Assert.AreEqual(instanceChangedArgs.OldValue, oldValue, "OldValue is wrong.");
             }
         }
 
-        private void checkCostDeltas(Total tecTotal, Total elecTotal)
+        private void checkCostDelta(CostBatch cb)
         {
-            double totalTECCost = 0;
-            double totalTECLabor = 0;
-            double totalElecCost = 0;
-            double totalElecLabor = 0;
-            //foreach(TECCost cost in costDelta)
-            //{
-            //    if (cost.Type == CostType.TEC)
-            //    {
-            //        totalTECCost += cost.Cost;
-            //        totalTECLabor += cost.Labor;
-            //    } 
-            //    else if (cost.Type == CostType.Electrical)
-            //    {
-            //        totalElecCost += cost.Cost;
-            //        totalElecLabor += cost.Labor;
-            //    }
-            //}
-
-            throw new NotImplementedException();
-            //Assert.AreEqual(tecTotal.Cost, totalTECCost, delta, )
+            Assert.AreEqual(cb.GetCost(CostType.TEC), costDelta.GetCost(CostType.TEC), DELTA, "ChangeWatcher TEC Cost delta is wrong.");
+            Assert.AreEqual(cb.GetLabor(CostType.TEC), costDelta.GetLabor(CostType.TEC), DELTA, "ChangeWatcher TEC Labor delta is wrong.");
+            Assert.AreEqual(cb.GetCost(CostType.Electrical), costDelta.GetCost(CostType.Electrical), DELTA, "ChangeWatcher Elec Cost delta is wrong.");
+            Assert.AreEqual(cb.GetLabor(CostType.Electrical), costDelta.GetLabor(CostType.Electrical), DELTA, "ChangeWatcher Elec Labor delta is wrong.");
         }
+
+        private void checkPointDelta(int points)
+        {
+            Assert.AreEqual(points, pointDelta, "ChangeWatcher point delta is wrong.");
+        }
+        #endregion
     }
 }
