@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace EstimatingLibrary
         ModbusTCP,
         ModbusRTU
     }
-    public class TECIO : TECObject
+    public class TECIO : TECObject, ISaveable
     {
         #region Properties
 
@@ -60,6 +61,11 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "IOModule", this, value, old);
                 //NotifyCombinedChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
             }
+        }
+
+        public List<TECObject> SaveObjects
+        {
+            get { return saveObjects(); }
         }
 
         #endregion
@@ -116,6 +122,13 @@ namespace EstimatingLibrary
 
                 default: return "";
             }
+        }
+
+        private List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.Add(this.IOModule);
+            return saveList;
         }
     }
 }

@@ -434,6 +434,29 @@ namespace Tests
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
         }
 
+
+        [TestMethod]
+        public void SaveAs_Bid_Note()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECLabeled expectedNote = new TECLabeled();
+            expectedNote.Label = "test";
+            expectedNote.Flavor = Flavor.Note;
+            bid.Notes.Add(expectedNote);
+
+            path = Path.GetTempFileName();
+
+            //Act
+            DatabaseManager manager = new DatabaseManager(path);
+            manager.New(bid);
+            actualBid = manager.Load() as TECBid;
+
+            TECLabeled actualNote = actualBid.Notes[0];
+
+            //Assert
+            Assert.AreEqual(expectedNote.Label, actualNote.Label);
+        }
         //------------------------------------------------------------
 
         //[TestMethod]
@@ -528,12 +551,6 @@ namespace Tests
         //    Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Guid, actualBranch.Branches[0].Branches[0].Guid);
         //}
 
-        //[TestMethod]
-        //public void SaveAs_Bid_Note()
-        //{
-        //    //Assert
-        //    Assert.AreEqual(expectedNote.Label, actualNote.Label);
-        //}
 
         //[TestMethod]
         //public void SaveAs_Bid_Exclusion()
@@ -563,7 +580,7 @@ namespace Tests
         //    Assert.AreEqual(expectedDevice.Tags[0].Guid, actualDevice.Tags[0].Guid);
         //    Assert.AreEqual(expectedDevice.Tags[0].Label, actualDevice.Tags[0].Label);
         //}
-        
+
         //[TestMethod]
         //public void SaveAs_Bid_Controller()
         //{
@@ -653,7 +670,7 @@ namespace Tests
         //            break;
         //        }
         //    }
-            
+
         //    Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
         //    Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
         //}
@@ -710,14 +727,14 @@ namespace Tests
         //    saveBid.Catalogs = TestHelper.CreateTestCatalogs();
         //    TECSystem system = TestHelper.CreateTestSystem(saveBid.Catalogs);
         //    saveBid.Systems.Add(system);
-            
+
         //    //Act
         //    path = Path.GetTempFileName();
         //    DatabaseManager manager = new DatabaseManager(path);
         //    manager.New(saveBid);
         //    TECBid loadedBid = manager.Load() as TECBid;
         //    TECSystem loadedSystem = loadedBid.Systems[0];
-            
+
         //    Assert.AreEqual(system.Instances.Count, loadedSystem.Instances.Count);
         //    foreach(TECSystem loadedInstance in loadedSystem.Instances)
         //    {
@@ -741,7 +758,7 @@ namespace Tests
         //    TECEstimator estimate = new TECEstimator(saveBid, watcher);
         //    var expectedTotalCost = estimate.TotalCost;
         //    double delta = 0.0001;
-            
+
         //    //Act
         //    path = Path.GetTempFileName();
         //    DatabaseManager manager = new DatabaseManager(path);

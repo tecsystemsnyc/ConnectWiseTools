@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECCatalogs : TECObject
+    public class TECCatalogs : TECObject, ISaveable
     {
         private ObservableCollection<TECElectricalMaterial> _connectionTypes;
         private ObservableCollection<TECElectricalMaterial> _conduitTypes;
@@ -147,6 +148,11 @@ namespace EstimatingLibrary
             }
         }
 
+        public List<TECObject> SaveObjects
+        {
+            get { return saveObjects(); }
+        }
+
         public Action<TECObject> ScopeChildRemoved;
 
         public TECCatalogs() : base(Guid.NewGuid())
@@ -218,6 +224,20 @@ namespace EstimatingLibrary
                 }
             }
         }
-
+        private List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(this.IOModules);
+            saveList.AddRange(this.Devices);
+            saveList.AddRange(this.Valves);
+            saveList.AddRange(this.Manufacturers);
+            saveList.AddRange(this.PanelTypes);
+            saveList.AddRange(this.ControllerTypes);
+            saveList.AddRange(this.ConnectionTypes);
+            saveList.AddRange(this.ConduitTypes);
+            saveList.AddRange(this.AssociatedCosts);
+            saveList.AddRange(this.Tags);
+            return saveList;
+        }
     }
 }

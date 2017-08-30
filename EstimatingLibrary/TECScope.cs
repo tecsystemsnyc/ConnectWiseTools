@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECScope : TECObject, INotifyCostChanged
+    public abstract class TECScope : TECObject, INotifyCostChanged, ISaveable
     {
         #region Properties
 
@@ -75,6 +75,14 @@ namespace EstimatingLibrary
             get
             {
                 return getCosts();
+            }
+        }
+
+        public List<TECObject> SaveObjects
+        {
+            get
+            {
+                return saveObjects();
             }
         }
         #endregion
@@ -144,6 +152,13 @@ namespace EstimatingLibrary
                 costs.AddCost(assocCost);
             }
             return costs;
+        }
+        protected virtual List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(this.Tags);
+            saveList.AddRange(this.AssociatedCosts);
+            return saveList;
         }
         #endregion Methods
     }

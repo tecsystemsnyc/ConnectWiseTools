@@ -58,6 +58,13 @@ namespace EstimatingLibrary
             }
             return costBatch;
         }
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(this.RatedCosts);
+            return saveList;
+        }
         private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

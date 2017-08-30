@@ -558,7 +558,7 @@ namespace EstimatingUtilitiesLibrary.Database
             IOObjectType
         };
     }
-    internal class ControllerTypeTable : TableBase
+    internal class ControllerTypeTable : CatalogTableBase
     {
         public static new string TableName = "ControllerType";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECControllerType), 0);
@@ -579,7 +579,7 @@ namespace EstimatingUtilitiesLibrary.Database
             ObjectType
         };
     }
-    internal class ValveTable : TableBase
+    internal class ValveTable : CatalogTableBase
     {
         public static new string TableName = "Valve";
         public static FlavoredType ObjectType = new FlavoredType(typeof(TECValve), 0);
@@ -1480,11 +1480,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TableField> fields = new List<TableField>();
             List<FlavoredType> types = new List<FlavoredType>();
             var tableType = table.GetType();
-            bool isIndexedRelationTable = false;
-            if (tableType.BaseType == typeof(IndexedRelationTableBase))
-            {
-                isIndexedRelationTable = true;
-            }
+            
 
             bool isCatalogTable = false;
             if (tableType.BaseType == typeof(CatalogTableBase))
@@ -1517,6 +1513,12 @@ namespace EstimatingUtilitiesLibrary.Database
                     fields.Add(v);
                 }
 
+            }
+
+            bool isIndexedRelationTable = false;
+            if (tableType.BaseType == typeof(IndexedRelationTableBase) || types.Count > 1)
+            {
+                isIndexedRelationTable = true;
             }
 
             Name = tableName;

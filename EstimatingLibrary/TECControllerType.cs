@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECControllerType : TECHardware
+    public class TECControllerType : TECHardware, ISaveable
     {
         private const CostType COST_TYPE = CostType.TEC;
 
@@ -27,6 +28,7 @@ namespace EstimatingLibrary
                 IO.CollectionChanged += (sender, args) => IO_CollectionChanged(sender, args, "IO");
             }
         }
+
         #endregion
 
         public TECControllerType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
@@ -96,6 +98,14 @@ namespace EstimatingLibrary
             }
 
             return outNum;
+        }
+
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(this.IO);
+            return saveList;
         }
         #endregion
 

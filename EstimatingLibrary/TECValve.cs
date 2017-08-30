@@ -79,5 +79,12 @@ namespace EstimatingLibrary
         {
             _actuator = actuator;
         }
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.Add(this.Actuator);
+            return saveList;
+        }
     }
 }

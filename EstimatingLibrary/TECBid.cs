@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged
+    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged, ISaveable
     {
         #region Properties
         private string _name;
@@ -227,6 +227,14 @@ namespace EstimatingLibrary
                 return pointNumber();
             }
         }
+
+        public List<TECObject> SaveObjects
+        {
+            get
+            {
+                return saveObjects();
+            }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -385,6 +393,22 @@ namespace EstimatingLibrary
                 costs += panel.CostBatch;
             }
             return costs;
+        }
+        private List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.Add(this.Parameters);
+            saveList.Add(this.Catalogs);
+            saveList.Add(this.ExtraLabor);
+            saveList.AddRange(this.ScopeTree);
+            saveList.AddRange(this.Notes);
+            saveList.AddRange(this.Exclusions);
+            saveList.AddRange(this.Systems);
+            saveList.AddRange(this.Controllers);
+            saveList.AddRange(this.Panels);
+            saveList.AddRange(this.MiscCosts);
+            saveList.AddRange(this.Locations);
+            return saveList;
         }
 
         private int pointNumber()

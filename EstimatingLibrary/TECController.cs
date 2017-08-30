@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECLocated, IDragDropable
+    public class TECController : TECLocated, IDragDropable, ISaveable
     {
         #region Properties
         //---Stored---
@@ -407,6 +407,14 @@ namespace EstimatingLibrary
                 costs += connection.CostBatch;
             }
             return costs;
+        }
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(ChildrenConnections);
+            saveList.Add(this.Type);
+            return saveList;
         }
         #endregion
     }

@@ -256,6 +256,18 @@ namespace EstimatingLibrary
             }
             return costs;
         }
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            foreach(ITECConnectable item in this.Devices)
+            {
+                saveList.Add(item as TECObject);
+            }
+            saveList.AddRange(this.Points);
+            saveList.Add(this.Connection);
+            return saveList;
+        }
         #endregion
     }
 }

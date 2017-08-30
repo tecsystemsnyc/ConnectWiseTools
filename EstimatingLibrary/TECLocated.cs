@@ -44,6 +44,17 @@ namespace EstimatingLibrary
             if (scope.Location != null)
             { _location = scope.Location as TECLabeled; }
         }
+
+        protected override List<TECObject> saveObjects()
+        {
+            List<TECObject> saveList = new List<TECObject>();
+            saveList.AddRange(base.saveObjects());
+            if(this.Location != null)
+            {
+                saveList.Add(this.Location);
+            }
+            return saveList;
+        }
         #endregion
     }
 }
