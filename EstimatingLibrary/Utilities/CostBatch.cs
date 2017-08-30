@@ -69,8 +69,7 @@ namespace EstimatingLibrary.Utilities
         public static CostBatch operator *(CostBatch left, double right)
         {
             CostBatch newCostBatch = new CostBatch();
-            newCostBatch.typeDictionary = left.typeDictionary;
-            foreach(KeyValuePair<CostType, CostObject> type in newCostBatch.typeDictionary)
+            foreach(KeyValuePair<CostType, CostObject> type in left.typeDictionary)
             {
                 newCostBatch.typeDictionary[type.Key] = (type.Value * right);
             }

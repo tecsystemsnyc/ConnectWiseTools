@@ -400,7 +400,7 @@ namespace EstimatingLibrary
 
         override protected CostBatch getCosts()
         {
-            CostBatch costs = base.CostBatch;
+            CostBatch costs = base.getCosts();
             costs += Type.CostBatch;
             foreach (TECConnection connection in ChildrenConnections)
             {

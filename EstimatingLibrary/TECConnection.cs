@@ -59,7 +59,10 @@ namespace EstimatingLibrary
             }
         }
 
-        public CostBatch CostBatch { get; }
+        public CostBatch CostBatch
+        {
+            get { return getCosts(); }
+        }
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;

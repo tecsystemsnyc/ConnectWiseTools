@@ -18,7 +18,7 @@ namespace Tests
 
         private TECChangedEventArgs changedArgs;
         private TECChangedEventArgs instanceChangedArgs;
-        private List<TECCost> costDeltas;
+        private CostBatch costDelta;
         private int pointDelta;
 
         private bool changedRaised;
@@ -47,7 +47,7 @@ namespace Tests
             };
             cw.CostChanged += (costs) =>
             {
-                costDeltas = costs;
+                costDelta = costs;
             };
             cw.PointChanged += (numPoints) =>
             {
@@ -178,19 +178,19 @@ namespace Tests
             double totalTECLabor = 0;
             double totalElecCost = 0;
             double totalElecLabor = 0;
-            foreach(TECCost cost in costDeltas)
-            {
-                if (cost.Type == CostType.TEC)
-                {
-                    totalTECCost += cost.Cost;
-                    totalTECLabor += cost.Labor;
-                } 
-                else if (cost.Type == CostType.Electrical)
-                {
-                    totalElecCost += cost.Cost;
-                    totalElecLabor += cost.Labor;
-                }
-            }
+            //foreach(TECCost cost in costDelta)
+            //{
+            //    if (cost.Type == CostType.TEC)
+            //    {
+            //        totalTECCost += cost.Cost;
+            //        totalTECLabor += cost.Labor;
+            //    } 
+            //    else if (cost.Type == CostType.Electrical)
+            //    {
+            //        totalElecCost += cost.Cost;
+            //        totalElecLabor += cost.Labor;
+            //    }
+            //}
 
             throw new NotImplementedException();
             //Assert.AreEqual(tecTotal.Cost, totalTECCost, delta, )
