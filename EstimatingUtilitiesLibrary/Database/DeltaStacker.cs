@@ -19,6 +19,30 @@ namespace EstimatingUtilitiesLibrary.Database
             changeWatcher.Changed += handleChange;
             stack = new List<UpdateItem>();
         }
+        
+        public static List<UpdateItem> AddStack(TECObject sender, TECObject item)
+        {
+            if (item == null)
+            {
+                throw new Exception("Add and Remove must have an item which is being added to sender.");
+            }
+            return addRemoveStack(Change.Add, sender, item);
+        }
+
+        public static List<UpdateItem> ChildStack(Change change, ISaveable item)
+        {
+            List<UpdateItem> outStack = new List<UpdateItem>();
+            foreach (TECObject saveItem in item.SaveObjects)
+            {
+                outStack.AddRange(addRemoveStack(change, item as TECObject, saveItem));
+            }
+            if (item is TECSystem system)
+            {
+                outStack.AddRange(typicalInstanceStack(change, system));
+            }
+
+            return outStack;
+        }
 
         private void handleChange(TECChangedEventArgs e)
         {
@@ -58,7 +82,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     data = TableHelper.PrepareDataForObjectTable(fields, item);
                     if(item is ISaveable saveable)
                     {
-                        outStack.AddRange(childStack(change, saveable));
+                        outStack.AddRange(ChildStack(change, saveable));
                     }
                     outStack.Add(new UpdateItem(change, info.Name, data));
 
@@ -89,31 +113,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             return stack;
         }
-
-        public static List<UpdateItem> AddStack(TECObject sender, TECObject item)
-        {
-            if(item == null)
-            {
-                throw new Exception("Add and Remove must have an item which is being added to sender.");
-            }
-            return addRemoveStack(Change.Add, sender, item);
-        }
-
-        private static List<UpdateItem> childStack(Change change, ISaveable item)
-        {
-            List<UpdateItem> outStack = new List<UpdateItem>();
-            foreach(TECObject saveItem in item.SaveObjects)
-            {
-                outStack.AddRange(addRemoveStack(change, item as TECObject, saveItem));
-            }
-            if(item is TECSystem system)
-            {
-                outStack.AddRange(typicalInstanceStack(change, system));
-            }
-
-            return outStack;
-        }
-
+        
         private static List<UpdateItem> typicalInstanceStack(Change change, TECSystem system)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();

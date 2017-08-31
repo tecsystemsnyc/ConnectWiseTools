@@ -14,19 +14,20 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TableBase> tables = new List<TableBase>();
             if(items.Count > 2 || items.Count == 0)
             { throw new NotImplementedException(); }
+            bool areSystems = haveSameType(items) && items[0].GetType() == typeof(TECSystem);
 
-            foreach(TableBase table in AllTables.Tables)
+            foreach (TableBase table in AllTables.Tables)
             {
                 TableInfo info = new TableInfo(table);
                 if(matchesAllTypes(items, info.Types))
                 {
                     tables.Add(table);
                 }
-                else if (items.Count == 2 && matchesObjectType(items[1], info.Types) && !haveSameType(items))
+                else if (items.Count == 2 && matchesObjectType(items[1], info.Types) && (!haveSameType(items) || areSystems))
                 {
                     tables.Add(table);
                 }
-                else if (info.Name == TypicalInstanceTable.TableName && haveSameType(items))
+                else if (info.Name == TypicalInstanceTable.TableName && haveSameType(items) && items[0].GetType() != typeof(TECSystem))
                 {
                     tables.Add(table);
                 }

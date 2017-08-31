@@ -1008,10 +1008,6 @@ namespace Tests
             data[SystemPanelTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemPanelTable.PanelID.Name] = panel.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemPanelTable.TableName, data));
-            data = new Dictionary<string, string>();
-            data[SystemHierarchyTable.ParentID.Name] = typical.Guid.ToString();
-            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
             int expectedCount = expectedItems.Count;
 
 
@@ -1448,7 +1444,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Bid_RemoveEquipmentToTypicalWith()
+        public void Bid_RemoveEquipmentFromTypicalWith()
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -2202,10 +2198,6 @@ namespace Tests
             data[SystemPanelTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemPanelTable.PanelID.Name] = panel.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SystemPanelTable.TableName, data));
-            data = new Dictionary<string, string>();
-            data[SystemHierarchyTable.ParentID.Name] = typical.Guid.ToString();
-            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SystemHierarchyTable.TableName, data));
             int expectedCount = expectedItems.Count;
 
 
@@ -2400,9 +2392,9 @@ namespace Tests
 
         public void checkUpdateItem(UpdateItem expectedItem, UpdateItem actualItem)
         {
-            Assert.AreEqual(expectedItem.Change, actualItem.Change, "Change does not match on UpdateItems");
-            Assert.AreEqual(expectedItem.FieldData.Count, actualItem.FieldData.Count, "FieldData does not match on UpdateItems");
             Assert.AreEqual(expectedItem.Table, actualItem.Table, "Tables do not match on UpdateItems");
+            Assert.AreEqual(expectedItem.FieldData.Count, actualItem.FieldData.Count, "FieldData does not match on UpdateItems");
+            Assert.AreEqual(expectedItem.Change, actualItem.Change, "Change does not match on UpdateItems");
         }
 
         public void checkUpdateItems(List<UpdateItem> expectedItems, DeltaStacker stack)
