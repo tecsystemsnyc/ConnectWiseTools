@@ -751,8 +751,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static Type Helpers = typeof(HelperProperties);
 
-        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.Type.GetProperty("Guid"));
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.Type.GetProperty("Guid"));
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.Type.GetProperty("Guid"));
         public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
