@@ -356,6 +356,20 @@ namespace EstimatingLibrary
         {
             NotifyTECChanged(obj.Item1, "TypicalInstanceDictionary", obj.Item2, obj.Item3);
         }
+        private void removeFromDictionary(IEnumerable<TECObject> typicalList, IEnumerable<TECObject> instanceList)
+        {
+            foreach (TECObject typical in typicalList)
+            {
+                foreach (TECObject instance in instanceList)
+                {
+                    if (TypicalInstanceDictionary.GetInstances(typical).Contains(instance))
+                    {
+                        TypicalInstanceDictionary.RemoveItem(typical, instance);
+                    }
+                }
+            }
+        }
+
 
         #region Event Handlers
         private void handleSystemChanged(TECChangedEventArgs args)
@@ -436,6 +450,20 @@ namespace EstimatingLibrary
                     subScope.Connection.ParentController.RemoveSubScope(subScope);
                 }
             }
+            removeFromDictionary(Panels, instance.Panels);
+            removeFromDictionary(Equipment, instance.Equipment);
+            foreach(TECEquipment instanceEquip in instance.Equipment)
+            {
+                removeFromDictionary(AllSubScope(), instanceEquip.SubScope);
+                foreach (TECSubScope instanceSubScope in instanceEquip.SubScope)
+                {
+                    foreach(TECSubScope subScope in AllSubScope())
+                    {
+                        removeFromDictionary(subScope.Points, instanceSubScope.Points);
+                    }
+                }
+            }
+            removeFromDictionary(Controllers, instance.Controllers);
         }
         private void handlePointChanged(TECPoint point, string propertyName)
         {

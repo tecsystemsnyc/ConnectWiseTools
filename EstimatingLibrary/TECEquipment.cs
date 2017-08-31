@@ -166,7 +166,6 @@ namespace EstimatingLibrary
             List<TECObject> saveList = new List<TECObject>();
             saveList.AddRange(base.saveObjects());
             saveList.AddRange(this.SubScope);
-            saveList.AddRange(this.Points);
             return saveList;
         }
         

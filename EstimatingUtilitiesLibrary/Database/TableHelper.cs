@@ -42,8 +42,16 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 for (int x = 0; x < items.Count; x++)
                 {
-                    if(items[x].GetType() != tableTypes[x].Type
-                        || items[x].Flavor != tableTypes[x].Flavor)
+                    bool isTableType;
+                    if (tableTypes[x].Type.IsInterface)
+                    {
+                        isTableType = tableTypes[x].Type.IsInstanceOfType(items[x]);
+                    } else
+                    {
+                        isTableType = tableTypes[x].Type == items[x].GetType();
+                    }
+                    bool isTableFlavor = items[x].Flavor == tableTypes[x].Flavor;
+                    if (!isTableType || !isTableFlavor)
                     {
                         return false;
                     }
@@ -95,7 +103,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<string, string> fieldData = new Dictionary<string, string>();
             foreach(TableField field in fields)
             {
-                if(field.Property.ReflectedType == item.GetType())
+                if(field.Property.DeclaringType.IsInstanceOfType(item))
                 {
                     var dataString = objectToDBString(field.Property.GetValue(item, null));
                     fieldData.Add(field.Name, dataString);
@@ -126,7 +134,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             foreach(TableField field in fields)
             {
-                if(field.Property.ReflectedType == item.GetType() && 
+                if(field.Property.DeclaringType.IsInstanceOfType(item) && 
                     field.Property.Name == propertyName)
                 {
                     Dictionary<string, string> outData = new Dictionary<string, string>();
