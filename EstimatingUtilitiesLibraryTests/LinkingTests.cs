@@ -220,7 +220,7 @@ namespace Tests
         {
             foreach(TECSystem typical in bid.Systems)
             {
-                ListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
+                ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
                 int scopeFound = 0;
                 foreach(TECEquipment equip in typical.Equipment)
                 {
@@ -271,7 +271,7 @@ namespace Tests
         {
             foreach(TECSystem typical in bid.Systems)
             {
-                ListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
+                ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
                 foreach (TECSystem instance in typical.Instances)
                 {
                     int scopeFound = 0;
