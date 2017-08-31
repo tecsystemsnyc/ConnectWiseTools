@@ -118,9 +118,9 @@ namespace EstimatingLibrary.Utilities
         }
 
         //Was LinkCharacteristicInstances()
-        public static void LinkTypicalInstanceDictionary(ListDictionary<TECObject> oldDictionary, TECSystem newTypical)
+        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<TECObject> oldDictionary, TECSystem newTypical)
         {
-            ListDictionary<TECObject> newCharacteristicInstances = new ListDictionary<TECObject>();
+            ObservableListDictionary<TECObject> newCharacteristicInstances = new ObservableListDictionary<TECObject>();
             foreach (TECSystem instance in newTypical.Instances)
             {
                 linkCharacteristicCollections(newTypical.Equipment, instance.Equipment, oldDictionary, newCharacteristicInstances);
@@ -636,8 +636,8 @@ namespace EstimatingLibrary.Utilities
         /// <param name="oldCharacteristicInstances">A previosuly linked scope dictionary, from the original system before copying</param>
         /// <param name="newCharacteristicInstances">The scope dictionary that must be linked</param>
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
-            ListDictionary<TECObject> oldCharacteristicInstances,
-            ListDictionary<TECObject> newCharacteristicInstances)
+            ObservableListDictionary<TECObject> oldCharacteristicInstances,
+            ObservableListDictionary<TECObject> newCharacteristicInstances)
         {
             foreach (var item in oldCharacteristicInstances.GetFullDictionary())
             {
@@ -711,7 +711,7 @@ namespace EstimatingLibrary.Utilities
         /// <param name="characteristicList"></param>
         private static void linkCharacteristicWithInstances(TECObject characteristic, IList instances,
             Dictionary<Guid, List<Guid>> referenceDict,
-            ListDictionary<TECObject> characteristicList)
+            ObservableListDictionary<TECObject> characteristicList)
         {
             foreach (TECObject item in instances)
             {
