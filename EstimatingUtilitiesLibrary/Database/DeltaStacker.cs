@@ -83,7 +83,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return outStack;
         }
 
-        private static List<UpdateItem> tableObjectStack(Change change,List<TableBase> tables, TECObject item)
+        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, TECObject item)
         {
             return tableObjectStack(change, tables, item, null);
         }
@@ -93,7 +93,13 @@ namespace EstimatingUtilitiesLibrary.Database
             foreach (TableBase table in tables)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
-                data = TableHelper.PrepareDataForObjectTable(table.Fields, item);
+                if(table.Types.Count > 1)
+                {
+                    data = TableHelper.PrepareDataForRelationTable(table.Fields, item, child);
+                } else
+                {
+                    data = TableHelper.PrepareDataForObjectTable(table.Fields, item);
+                }
                 outStack.Add(new UpdateItem(change, table.NameString, data));
                 
             }

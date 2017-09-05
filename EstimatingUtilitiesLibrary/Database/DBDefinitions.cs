@@ -326,7 +326,9 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Branches"
+            "Branches",
+            "ScopeBranches",
+            "ScopeTree"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1124,7 +1126,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Branches"
+            "ScopeTree"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1330,7 +1332,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ChildBranches"
+            "Branches"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1447,7 +1449,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Systems"
+            "SubScope"
         };
 
         public override string NameString { get { return TableName; } }
@@ -2051,7 +2053,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Branches"
+            "ScopeBranches"
         };
 
         public override string NameString { get { return TableName; } }
@@ -2084,7 +2086,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "SystemInstances"
+            "Instances"
         };
 
         public override string NameString { get { return TableName; } }
