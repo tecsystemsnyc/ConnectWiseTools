@@ -228,11 +228,19 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECObject> SaveObjects
+        public SaveableMap SaveObjects
         {
             get
             {
                 return saveObjects();
+            }
+        }
+
+        public SaveableMap RelatedObjects
+        {
+            get
+            {
+                return new SaveableMap();
             }
         }
         #endregion //Properties
@@ -415,20 +423,20 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        private List<TECObject> saveObjects()
+        private SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
-            saveList.Add(this.Parameters);
-            saveList.Add(this.Catalogs);
-            saveList.Add(this.ExtraLabor);
-            saveList.AddRange(this.ScopeTree);
-            saveList.AddRange(this.Notes);
-            saveList.AddRange(this.Exclusions);
-            saveList.AddRange(this.Systems);
-            saveList.AddRange(this.Controllers);
-            saveList.AddRange(this.Panels);
-            saveList.AddRange(this.MiscCosts);
-            saveList.AddRange(this.Locations);
+            SaveableMap saveList = new SaveableMap();
+            saveList.Add(this.Parameters, "Parameters");
+            saveList.Add(this.Catalogs, "Catalogs");
+            saveList.Add(this.ExtraLabor, "ExtraLabor");
+            saveList.AddRange(this.ScopeTree, "ScopeTree");
+            saveList.AddRange(this.Notes, "Notes");
+            saveList.AddRange(this.Exclusions, "Exclusions");
+            saveList.AddRange(this.Systems, "Systems");
+            saveList.AddRange(this.Controllers, "Controllers");
+            saveList.AddRange(this.Panels, "Panels");
+            saveList.AddRange(this.MiscCosts, "MiscCosts");
+            saveList.AddRange(this.Locations, "Locations");
             return saveList;
         }
 

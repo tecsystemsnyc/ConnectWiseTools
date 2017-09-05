@@ -76,17 +76,16 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         public static string AllFieldsInTableString(TableBase table)
         {
-            var tableInfo = new TableInfo(table);
             string command = "";
-            for (int x = 0; x < tableInfo.Fields.Count; x++)
+            for (int x = 0; x < table.Fields.Count; x++)
             {
-                if (x != tableInfo.Fields.Count - 1)
+                if (x != table.Fields.Count - 1)
                 {
-                    command += tableInfo.Name + "." + tableInfo.Fields[x].Name + ", ";
+                    command += table.NameString + "." + table.Fields[x].Name + ", ";
                 }
                 else
                 {
-                    command += tableInfo.Name + "." + tableInfo.Fields[x].Name;
+                    command += table.NameString + "." + table.Fields[x].Name;
                 }
             }
             return command;

@@ -58,13 +58,21 @@ namespace EstimatingLibrary
             }
             return costBatch;
         }
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(this.RatedCosts);
+            saveList.AddRange(this.RatedCosts, "RatedCosts");
             return saveList;
         }
+        protected override SaveableMap relatedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.relatedObjects());
+            saveList.AddRange(this.RatedCosts, "RatedCosts");
+            return saveList;
+        }
+
         private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

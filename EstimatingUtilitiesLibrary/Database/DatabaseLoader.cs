@@ -64,7 +64,6 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid();
             bid.Locations = getAllLocations();
-            bid.Catalogs.Tags = getAllTags();
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Controllers = getOrphanControllers();
@@ -1032,14 +1031,12 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid locationID = new Guid(row[LocationTable.ID.Name].ToString());
             var location = new TECLabeled(locationID);
             assignValuePropertiesFromTable(location, new LocationTable(), row);
-            location.Flavor = Flavor.Location;
             return location;
         }
         private static TECLabeled getTagFromRow(DataRow row)
         {
             var tag = new TECLabeled(new Guid(row[TagTable.ID.Name].ToString()));
             assignValuePropertiesFromTable(tag, new TagTable(), row);
-            tag.Flavor = Flavor.Tag;
             return tag;
         }
         private static TECPanelType getPanelTypeFromRow(DataRow row)
@@ -1092,7 +1089,6 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid noteID = new Guid(row[NoteTable.ID.Name].ToString());
             var note = new TECLabeled(noteID);
             assignValuePropertiesFromTable(note, new NoteTable(), row);
-            note.Flavor = Flavor.Note;
             return note;
         }
         private static TECLabeled getExclusionFromRow(DataRow row)
@@ -1100,7 +1096,6 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid exclusionId = new Guid(row[ExclusionTable.ID.Name].ToString());
             TECLabeled exclusion = new TECLabeled(exclusionId);
             assignValuePropertiesFromTable(exclusion, new ExclusionTable(), row);
-            exclusion.Flavor = Flavor.Exclusion;
             return exclusion;
         }
         #endregion
@@ -1312,10 +1307,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private static void assignValuePropertiesFromTable(object item, TableBase table, DataRow row)
         {
-            TableInfo tableInfo = new TableInfo(table);
-            foreach(TableField field in tableInfo.Fields)
+            foreach(TableField field in table.Fields)
             {
-                if(field.Property.ReflectedType == item.GetType() && field.Property.SetMethod != null)
+                if (field.Property.DeclaringType.IsInstanceOfType(item) && field.Property.SetMethod != null)
                 {
                     if(field.Property.PropertyType == typeof(string))
                     {

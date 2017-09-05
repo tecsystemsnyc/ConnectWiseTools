@@ -25,9 +25,13 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECObject> SaveObjects
+        public SaveableMap SaveObjects
         {
             get { return saveObjects(); }
+        }
+        public SaveableMap RelatedObjects
+        {
+            get { return new SaveableMap(); }
         }
 
         #endregion //Properites
@@ -70,10 +74,10 @@ namespace EstimatingLibrary
             }
         }
 
-        private List<TECObject> saveObjects()
+        private SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
-            saveList.AddRange(this.Branches);
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.Branches, "Branches");
             return saveList;
         }
 

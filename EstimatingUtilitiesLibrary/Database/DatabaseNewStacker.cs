@@ -25,15 +25,14 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
-            List<TableBase> tables = TableHelper.GetTables(new List<TECObject> { toSave });
+            List<TableBase> tables = TableHelper.GetTables(new List<TECObject> { toSave }, "");
             foreach (TableBase table in tables)
             {
-                var info = new TableInfo(table);
-                var fields = info.Fields;
+                var fields = table.Fields;
                 var data = TableHelper.PrepareDataForObjectTable(fields, toSave);
                 if (data != null)
                 {
-                    outStack.Add(new UpdateItem(Change.Add, info.Name, data));
+                    outStack.Add(new UpdateItem(Change.Add, table.NameString, data));
                 }
             }
             return outStack;

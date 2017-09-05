@@ -4,30 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Collections;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
     internal class TableHelper
     {
-        public static List<TableBase> GetTables(List<TECObject> items)
+        public static List<TableBase> GetTables(List<TECObject> items, string propertyName)
         {
             List<TableBase> tables = new List<TableBase>();
             if(items.Count > 2 || items.Count == 0)
             { throw new NotImplementedException(); }
-            bool areSystems = haveSameType(items) && items[0].GetType() == typeof(TECSystem);
 
             foreach (TableBase table in AllTables.Tables)
             {
-                TableInfo info = new TableInfo(table);
-                if(matchesAllTypes(items, info.Types))
-                {
-                    tables.Add(table);
-                }
-                else if (items.Count == 2 && matchesObjectType(items[1], info.Types) && (!haveSameType(items) || areSystems))
-                {
-                    tables.Add(table);
-                }
-                else if (info.Name == TypicalInstanceTable.TableName && haveSameType(items) && items[0].GetType() != typeof(TECSystem))
+                if(matchesAllTypes(items, table.Types) && matchesPropertyName(propertyName, table.PropertyNames))
                 {
                     tables.Add(table);
                 }
@@ -35,60 +27,22 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return tables;
         }
-
-        private static bool matchesAllTypes(List<TECObject> items, List<FlavoredType> tableTypes)
+        public static List<TableBase> GetTables(TECObject item)
         {
-            if (items.Count == tableTypes.Count)
+            List<TableBase> tables = new List<TableBase>();
+
+            foreach (TableBase table in AllTables.Tables)
             {
-                for (int x = 0; x < items.Count; x++)
+                if (matchesObjectType(item, table.Types))
                 {
-                    bool isTableType;
-                    if (tableTypes[x].Type.IsInterface)
-                    {
-                        isTableType = tableTypes[x].Type.IsInstanceOfType(items[x]);
-                    } else
-                    {
-                        isTableType = tableTypes[x].Type == items[x].GetType();
-                    }
-                    bool isTableFlavor = items[x].Flavor == tableTypes[x].Flavor;
-                    if (!isTableType || !isTableFlavor)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
-
-        private static bool matchesObjectType(TECObject item, List<FlavoredType> tableTypes)
-        {
-            if(tableTypes.Count != 1)
-            {
-                return false;
-            }
-            FlavoredType ft = tableTypes[0];
-            return (item.GetType() == ft.Type && item.Flavor == ft.Flavor);
-        }
-
-        private static bool haveSameType(List<TECObject> items)
-        {
-            Type inital = items[0].GetType();
-            for(int x = 1; x < items.Count; x++)
-            {
-                if(inital != items[x].GetType())
-                {
-                    return false;
+                    tables.Add(table);
                 }
             }
-            return true;
-
+            return tables;
         }
-
         public static TableField GetField(TableBase table, string propertyName)
         {
-            TableInfo info = new TableInfo(table);
-            foreach(TableField field in info.Fields)
+            foreach(TableField field in table.Fields)
             {
                 if(field.Property.Name == propertyName)
                 {
@@ -111,7 +65,6 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return fieldData;
         }
-
         public static Dictionary<string, string> PrepareDataForRelationTable(List<TableField> fields, object item, object child)
         {
             Dictionary<string, string> fieldData = new Dictionary<string, string>();
@@ -127,9 +80,17 @@ namespace EstimatingUtilitiesLibrary.Database
                 var dataString = objectToDBString(childField.Property.GetValue(child, null));
                 fieldData.Add(childField.Name, dataString);
             }
+            foreach (TableField field in fields)
+            {
+                if (field.Property.ReflectedType == typeof(HelperProperties))
+                {
+                    var dataString = objectToDBString(helperObject(field, item, child));
+                    fieldData.Add(field.Name, dataString);
+                }
+            }
+
             return fieldData;
         }
-
         public static Dictionary<string, string> PrepareDataForEditObject(List<TableField> fields, object item, string propertyName, object value)
         {
             foreach(TableField field in fields)
@@ -143,6 +104,37 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
             }
             return null;
+        }
+
+        private static bool matchesAllTypes(List<TECObject> items, List<Type> tableTypes)
+        {
+            if (items.Count == tableTypes.Count)
+            {
+                for (int x = 0; x < items.Count; x++)
+                {
+                    bool isTableType = tableTypes[x].IsInstanceOfType(items[x]);
+                    
+                    if (!isTableType)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+        private static bool matchesPropertyName(string propertyName, List<string> tablePropertyNames)
+        {
+            return (tablePropertyNames.Contains(propertyName));
+        }
+        private static bool matchesObjectType(TECObject item, List<Type> tableTypes)
+        {
+            if (tableTypes.Count != 1)
+            {
+                return false;
+            }
+            Type tableType= tableTypes[0];
+            return (item.GetType() == tableType);
         }
 
         private static string objectToDBString(Object inObject)
@@ -159,6 +151,39 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return outstring;
         }
+        private static object helperObject(TableField field, object item, object child)
+        {
+            if(field.Property.Name == "Quantity")
+            {
 
+                var childCollection = item.GetType().GetProperty(field.HelperContext).GetValue(item) as IEnumerable;
+                int count = 0;
+                foreach(object thing in childCollection)
+                {
+                    if(thing == child)
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            } else if (field.Property.Name == "Index")
+            {
+                var childCollection = item.GetType().GetProperty(field.HelperContext).GetValue(item) as IEnumerable;
+                int x = 0;
+                foreach(object thing in childCollection)
+                {
+                    if(thing == item)
+                    {
+                        return x;
+                    }
+                    x++;
+                }
+                return 0;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

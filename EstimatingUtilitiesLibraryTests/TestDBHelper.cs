@@ -143,20 +143,19 @@ namespace Tests
         
         private static void addDataToTable(TableBase table, List<string> values)
         {
-            TableInfo info = new TableInfo(table);
             Dictionary<string, string> data = new Dictionary<string, string>();
-            if(info.Fields.Count != values.Count)
+            if(table.Fields.Count != values.Count)
             {
                 throw new Exception("There must be one value per field");
             }
-            for(int x = 0; x < info.Fields.Count; x++)
+            for(int x = 0; x < table.Fields.Count; x++)
             {
-                var field = info.Fields[x];
+                var field = table.Fields[x];
                 var value = values[x];
                 data[field.Name] = value;
             }
 
-            SQLiteDB.Insert(info.Name, data);
+            SQLiteDB.Insert(table.NameString, data);
         }
 
         #region Object Tables

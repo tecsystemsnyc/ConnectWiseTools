@@ -339,16 +339,17 @@ namespace EstimatingLibrary
                 return costs;
             }
         }
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(this.Equipment);
-            saveList.AddRange(this.Panels);
-            saveList.AddRange(this.Controllers);
-            saveList.AddRange(this.Instances);
-            saveList.AddRange(this.MiscCosts);
-            saveList.AddRange(this.ScopeBranches);
+            saveList.AddRange(this.Equipment, "Equipment");
+            saveList.AddRange(this.Panels, "Panels");
+            saveList.AddRange(this.Controllers, "Controllers");
+            saveList.AddRange(this.Instances, "Instances");
+            saveList.AddRange(this.MiscCosts, "MiscCosts");
+            saveList.AddRange(this.ScopeBranches, "ScopeBranches");
+            saveList.Add("TypicalInstances");
             return saveList;
         }
 

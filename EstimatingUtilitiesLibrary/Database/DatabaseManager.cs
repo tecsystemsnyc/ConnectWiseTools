@@ -19,29 +19,29 @@ namespace EstimatingUtilitiesLibrary.Database
         
         public bool Save(List<UpdateItem> updates)
         {
-            try
-            {
+            //try
+            //{
                 DatabaseUpdater.Update(path, updates);
                 return true;
-            }
-            catch
-            {
-                return false;
-            }
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
         }
         public bool New(TECScopeManager scopeManager)
         {
-            try
-            {
+            //try
+            //{
                 DatabaseGenerator.CreateBidDatabase(path);
                 List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
                 DatabaseUpdater.Update(path, newStack);
                 return true;
-            }
-            catch
-            {
-                return false;
-            }
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
         }
         public TECScopeManager Load()
         {

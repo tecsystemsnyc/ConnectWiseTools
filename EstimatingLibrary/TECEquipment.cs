@@ -161,11 +161,11 @@ namespace EstimatingLibrary
             }
             return outPoints;
         }
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(this.SubScope);
+            saveList.AddRange(this.SubScope, "SubScope");
             return saveList;
         }
         

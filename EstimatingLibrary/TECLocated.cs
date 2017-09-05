@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,13 +46,23 @@ namespace EstimatingLibrary
             { _location = scope.Location as TECLabeled; }
         }
 
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
             if(this.Location != null)
             {
-                saveList.Add(this.Location);
+                saveList.Add(this.Location, "Location");
+            }
+            return saveList;
+        }
+        protected override SaveableMap relatedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.relatedObjects());
+            if (this.Location != null)
+            {
+                saveList.Add(this.Location, "Location");
             }
             return saveList;
         }

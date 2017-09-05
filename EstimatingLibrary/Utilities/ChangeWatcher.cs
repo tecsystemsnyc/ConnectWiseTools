@@ -344,13 +344,6 @@ namespace EstimatingLibrary.Utilities
                 {
                     registerScopeBranch(branch);
                 }
-                else if (labelled.Flavor == Flavor.Location)
-                {
-                    if (parent is TECBid)
-                    {
-                        registerTECObject(labelled, OccuranceType.Instance);
-                    }
-                }
                 else
                 {
                     registerTECObject(labelled, OccuranceType.Instance);

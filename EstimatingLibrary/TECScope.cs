@@ -78,11 +78,18 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECObject> SaveObjects
+        public SaveableMap SaveObjects
         {
             get
             {
                 return saveObjects();
+            }
+        }
+        public SaveableMap RelatedObjects
+        {
+            get
+            {
+                return relatedObjects();
             }
         }
         #endregion
@@ -153,12 +160,19 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected virtual List<TECObject> saveObjects()
+        protected virtual SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
-            saveList.AddRange(this.Tags);
-            saveList.AddRange(this.AssociatedCosts);
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.Tags, "Tags");
+            saveList.AddRange(this.AssociatedCosts, "AssociatedCosts");
             return saveList;
+        }
+        protected virtual SaveableMap relatedObjects()
+        {
+            SaveableMap relatedList = new SaveableMap();
+            relatedList.AddRange(this.Tags, "Tags");
+            relatedList.AddRange(this.AssociatedCosts, "AssociatedCosts");
+            return relatedList;
         }
         #endregion Methods
     }

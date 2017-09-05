@@ -408,12 +408,19 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(ChildrenConnections);
-            saveList.Add(this.Type);
+            saveList.AddRange(this.ChildrenConnections, "ChildrenConnections");
+            saveList.Add(this.Type, "Type");
+            return saveList;
+        }
+        protected override SaveableMap relatedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.relatedObjects());
+            saveList.Add(this.Type, "Type");
             return saveList;
         }
         #endregion

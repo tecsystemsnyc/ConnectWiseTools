@@ -71,8 +71,7 @@ namespace EstimatingUtilitiesLibrary.Database
             { throw new ArgumentException("updateDatabase() can't determine db type"); }
             foreach (TableBase table in databaseTableList)
             {
-                TableInfo info = new TableInfo(table);
-                tableMap[info.Name] = DatabaseGenerator.CreateTempTableFromDefinition(table, db);
+                tableMap[table.NameString] = DatabaseGenerator.CreateTempTableFromDefinition(table, db);
             }
             int updateVerison = Properties.Settings.Default.Version;
             DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
@@ -99,8 +98,7 @@ namespace EstimatingUtilitiesLibrary.Database
             string commandString;
             foreach (TableBase table in tables)
             {
-                var tableInfo = new TableInfo(table);
-                string tableName = tableInfo.Name;
+                string tableName = table.NameString;
                 string tempName = "temp_" + tableName;
                 commandString = "insert into '" + tableName + "' select * from '" + tempName + "'";
                 db.NonQueryCommand(commandString);

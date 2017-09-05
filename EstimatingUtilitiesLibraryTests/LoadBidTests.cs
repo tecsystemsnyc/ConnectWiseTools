@@ -623,7 +623,7 @@ namespace Tests
 
             Assert.AreEqual(expectedName, actualDevice.Name, "Device name didn't load properly.");
             Assert.AreEqual(expectedDescription, actualDevice.Description, "Device description didn't load properly.");
-            Assert.AreEqual(expectedCost, actualDevice.Cost, "Device cost didn't load properly.");
+            Assert.AreEqual(expectedCost, actualDevice.Price, "Device cost didn't load properly.");
             Assert.AreEqual(manufacturerGuid, actualDevice.Manufacturer.Guid, "Manufacturer didn't load properly into device.");
 
             Assert.IsTrue(foundConnectionType, "Connection type didn't load properly into device.");
@@ -1198,7 +1198,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
-            Assert.AreEqual(expectedCost, actualController.Type.Cost);
+            Assert.AreEqual(expectedCost, actualController.Type.Price);
             Assert.AreEqual(expectedType, actualController.NetworkType);
             Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
             Assert.IsTrue(hasIO);
@@ -1256,7 +1256,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
-            Assert.AreEqual(expectedCost, actualController.Type.Cost);
+            Assert.AreEqual(expectedCost, actualController.Type.Price);
             Assert.AreEqual(expectedType, actualController.NetworkType);
             Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
             Assert.IsTrue(hasIO, "IO not loaded");
@@ -1317,7 +1317,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
-            Assert.AreEqual(expectedCost, actualController.Type.Cost);
+            Assert.AreEqual(expectedCost, actualController.Type.Price);
             Assert.AreEqual(expectedType, actualController.NetworkType);
             Assert.AreEqual(expectedGlobalStatus, actualController.IsGlobal);
             Assert.IsTrue(hasIO, "IO not loaded");
@@ -1405,7 +1405,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedName, actualType.Name);
-            Assert.AreEqual(expectedCost, actualType.Cost);
+            Assert.AreEqual(expectedCost, actualType.Price);
             Assert.AreEqual(expectedLabor, actualType.Labor);
         }
 
@@ -1524,7 +1524,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedName, actualModule.Name);
             Assert.AreEqual(expectedDescription, actualModule.Description);
-            Assert.AreEqual(expectedCost, actualModule.Cost);
+            Assert.AreEqual(expectedCost, actualModule.Price);
             Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
         }
 

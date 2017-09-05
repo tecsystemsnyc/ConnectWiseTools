@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -150,12 +151,12 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.Add(this.ConnectionType);
-            saveList.AddRange(this.ChildrenControllers);
+            saveList.Add(this.ConnectionType, "ConnectionTypes");
+            saveList.AddRange(this.ChildrenControllers, "ChildrenConnections");
             return saveList;
         }
         #endregion 
