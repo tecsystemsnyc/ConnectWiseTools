@@ -278,7 +278,7 @@ namespace EstimatingLibrary
             {
                 deviceList.Add(item as TECObject);
             }
-            saveList.AddRange(deviceList, "Devices");
+            saveList.AddRange(deviceList.Distinct(), "Devices");
             return saveList;
         }
         #endregion

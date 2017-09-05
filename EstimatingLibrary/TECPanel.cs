@@ -93,6 +93,7 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.relatedObjects());
             saveList.Add(this.Type, "Type");
+            saveList.AddRange(this.Controllers, "Controllers");
             return saveList;
         }
 

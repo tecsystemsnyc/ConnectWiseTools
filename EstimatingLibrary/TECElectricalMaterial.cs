@@ -62,14 +62,14 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(this.RatedCosts, "RatedCosts");
+            saveList.AddRange(this.RatedCosts.Distinct(), "RatedCosts");
             return saveList;
         }
         protected override SaveableMap relatedObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.relatedObjects());
-            saveList.AddRange(this.RatedCosts, "RatedCosts");
+            saveList.AddRange(this.RatedCosts.Distinct(), "RatedCosts");
             return saveList;
         }
 

@@ -164,14 +164,14 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(this.Tags, "Tags");
-            saveList.AddRange(this.AssociatedCosts, "AssociatedCosts");
+            saveList.AddRange(this.AssociatedCosts.Distinct(), "AssociatedCosts");
             return saveList;
         }
         protected virtual SaveableMap relatedObjects()
         {
             SaveableMap relatedList = new SaveableMap();
             relatedList.AddRange(this.Tags, "Tags");
-            relatedList.AddRange(this.AssociatedCosts, "AssociatedCosts");
+            relatedList.AddRange(this.AssociatedCosts.Distinct(), "AssociatedCosts");
             return relatedList;
         }
         #endregion Methods

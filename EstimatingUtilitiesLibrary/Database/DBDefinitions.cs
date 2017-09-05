@@ -220,6 +220,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private List<TableField> fields = new List<TableField>()
         {
+            ID,
             PMExtraHours,
             ENGExtraHours,
             CommExtraHours,
