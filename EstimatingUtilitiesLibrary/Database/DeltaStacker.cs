@@ -54,14 +54,14 @@ namespace EstimatingUtilitiesLibrary.Database
             if(sender is TECSystem system) { outStack.AddRange(typicalInstanceStack(change, system)); }
             if(sender is ISaveable parent && !parent.RelatedObjects.Contains(propertyName) && parent.SaveObjects.Contains(propertyName))
             {
-                tables = TableHelper.GetTables(new List<TECObject>() { item }, propertyName);
+                tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName);
                 outStack.AddRange(tableObjectStack(change, tables, item));
                 if(item is ISaveable saveable)
                 {
                     outStack.AddRange(ChildStack(change, saveable));
                 }
             }
-            tables = TableHelper.GetTables(new List<TECObject>() { sender, item}, propertyName);
+            tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, item}, propertyName);
             outStack.AddRange(tableObjectStack(change, tables, sender, item));
 
             return outStack;
@@ -70,12 +70,12 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
-            List<TableBase> tables = TableHelper.GetTables(sender);
+            List<TableBase> tables = DatabaseHelper.GetTables(sender);
             foreach (TableBase table in tables)
             {
                 var fields = table.Fields;
-                var data = TableHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
-                var keyData = TableHelper.PrimaryKeyData(table, sender);
+                var data = DatabaseHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
+                var keyData = DatabaseHelper.PrimaryKeyData(table, sender);
                 if (data != null)
                 {
                     outStack.Add(new UpdateItem(Change.Edit, table.NameString, data, keyData));
@@ -96,10 +96,10 @@ namespace EstimatingUtilitiesLibrary.Database
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 if(table.Types.Count > 1)
                 {
-                    data = TableHelper.PrepareDataForRelationTable(table.Fields, item, child);
+                    data = DatabaseHelper.PrepareDataForRelationTable(table.Fields, item, child);
                 } else
                 {
-                    data = TableHelper.PrepareDataForObjectTable(table.Fields, item);
+                    data = DatabaseHelper.PrepareDataForObjectTable(table.Fields, item);
                 }
                 outStack.Add(new UpdateItem(change, table.NameString, data));
                 
