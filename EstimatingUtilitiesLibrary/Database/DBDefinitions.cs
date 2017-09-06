@@ -263,7 +263,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ExtraLabor"
+            "Notes"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1103,11 +1103,11 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class BidScopeBranchTable : TableBase
     {
         public static string TableName = "BidScopeBranch";
-        public static Type ObjectType = typeof(TECScopeBranch);
-        public static Type ReferenceType = typeof(TECBid);
+        public static Type ObjectType = typeof(TECBid);
+        public static Type ReferenceType = typeof(TECScopeBranch);
 
-        public static TableField BidID = new TableField("BidID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ScopeBranchID = new TableField("ScopeBranchID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         private List<TableField> primaryKeys = new List<TableField>()
         {

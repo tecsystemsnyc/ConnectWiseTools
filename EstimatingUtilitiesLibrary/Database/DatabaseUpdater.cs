@@ -45,7 +45,11 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         private static void edit(UpdateItem item, SQLiteDatabase db)
         {
-            db.Insert(item.Table, item.FieldData);
+            if(item.PrimaryKey == null)
+            {
+                throw new Exception("Must have primary key for edit.");
+            }
+            db.Update(item.Table, item.PrimaryKey, item.FieldData);
         }
         
     }

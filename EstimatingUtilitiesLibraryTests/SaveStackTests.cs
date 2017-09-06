@@ -135,14 +135,128 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            Dictionary<string, string> data = new Dictionary<string, string>();
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
             data[ScopeBranchTable.ID.Name] = scopeBranch.Guid.ToString();
             data[ScopeBranchTable.Label.Name] = scopeBranch.Label.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ScopeBranchTable.TableName, data));
 
-            UpdateItem expectedItem = new UpdateItem(Change.Add, ScopeBranchTable.TableName, data);
-            int expectedCount = 1;
+            data = new Dictionary<string, string>();
+            data[BidScopeBranchTable.BidID.Name] = bid.Guid.ToString();
+            data[BidScopeBranchTable.ScopeBranchID.Name] = scopeBranch.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, BidScopeBranchTable.TableName, data));
+            int expectedCount = expectedItems.Count;
 
             bid.ScopeTree.Add(scopeBranch);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+        [TestMethod]
+        public void Bid_AddChildBranch()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECScopeBranch parentBranch = new TECScopeBranch();
+            bid.ScopeTree.Add(parentBranch);
+
+            TECScopeBranch scopeBranch = new TECScopeBranch();
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[ScopeBranchTable.ID.Name] = scopeBranch.Guid.ToString();
+            data[ScopeBranchTable.Label.Name] = scopeBranch.Label.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ScopeBranchTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ScopeBranchHierarchyTable.ParentID.Name] = parentBranch.Guid.ToString();
+            data[ScopeBranchHierarchyTable.ChildID.Name] = scopeBranch.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ScopeBranchHierarchyTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            parentBranch.Branches.Add(scopeBranch);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+        #endregion
+        #region Notes and Exclusions
+        [TestMethod]
+        public void Bid_AddNote()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECLabeled note = new TECLabeled();
+            note.Label = "Note";
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[NoteTable.ID.Name] = note.Guid.ToString();
+            data[NoteTable.NoteText.Name] = note.Label.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Add, NoteTable.TableName, data);
+            int expectedCount = 1;
+
+            bid.Notes.Add(note);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+        }
+        [TestMethod]
+        public void Bid_AddExclusion()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECLabeled exclusion = new TECLabeled();
+            exclusion.Label = "Exclusion";
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[ExclusionTable.ID.Name] = exclusion.Guid.ToString();
+            data[ExclusionTable.ExclusionText.Name] = exclusion.Label.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Add, ExclusionTable.TableName, data);
+            int expectedCount = 1;
+
+            bid.Exclusions.Add(exclusion);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+        }
+        #endregion
+        #region Locations
+        [TestMethod]
+        public void Bid_AddLocation()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECLabeled location = new TECLabeled();
+            location.Label = "Location";
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[LocationTable.ID.Name] = location.Guid.ToString();
+            data[LocationTable.Name.Name] = location.Label.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Add, LocationTable.TableName, data);
+            int expectedCount = 1;
+
+            bid.Locations.Add(location);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -1411,14 +1525,128 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            Dictionary<string, string> data = new Dictionary<string, string>();
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
             data[ScopeBranchTable.ID.Name] = scopeBranch.Guid.ToString();
             data[ScopeBranchTable.Label.Name] = scopeBranch.Label.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ScopeBranchTable.TableName, data));
 
-            UpdateItem expectedItem = new UpdateItem(Change.Remove, ScopeBranchTable.TableName, data);
-            int expectedCount = 1;
+            data = new Dictionary<string, string>();
+            data[BidScopeBranchTable.BidID.Name] = bid.Guid.ToString();
+            data[BidScopeBranchTable.ScopeBranchID.Name] = scopeBranch.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, BidScopeBranchTable.TableName, data));
+            int expectedCount = expectedItems.Count;
 
             bid.ScopeTree.Remove(scopeBranch);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+        [TestMethod]
+        public void Bid_RemoveChildBranch()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECScopeBranch scopeBranch = new TECScopeBranch();
+            TECScopeBranch parentBranch = new TECScopeBranch();
+            bid.ScopeTree.Add(parentBranch);
+            parentBranch.Branches.Add(scopeBranch);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+            data = new Dictionary<string, string>();
+            data[ScopeBranchTable.ID.Name] = scopeBranch.Guid.ToString();
+            data[ScopeBranchTable.Label.Name] = scopeBranch.Label.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ScopeBranchTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ScopeBranchHierarchyTable.ParentID.Name] = parentBranch.Guid.ToString();
+            data[ScopeBranchHierarchyTable.ChildID.Name] = scopeBranch.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ScopeBranchHierarchyTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            parentBranch.Branches.Remove(scopeBranch);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+        #endregion
+        #region Notes Exclsuions
+        [TestMethod]
+        public void Bid_RemoveNote()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECLabeled note = new TECLabeled();
+            bid.Notes.Add(note);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[NoteTable.ID.Name] = note.Guid.ToString();
+            data[NoteTable.NoteText.Name] = note.Label.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Remove, NoteTable.TableName, data);
+            int expectedCount = 1;
+
+            bid.Notes.Remove(note);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+        }
+        [TestMethod]
+        public void Bid_RemoveExclusion()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECLabeled exclusion = new TECLabeled();
+            bid.Exclusions.Add(exclusion);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[ExclusionTable.ID.Name] = exclusion.Guid.ToString();
+            data[ExclusionTable.ExclusionText.Name] = exclusion.Label.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Remove, ExclusionTable.TableName, data);
+            int expectedCount = 1;
+
+            bid.Exclusions.Remove(exclusion);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+        }
+        #endregion
+        #region Locations
+        [TestMethod]
+        public void Bid_RemoveLocation()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECLabeled location = new TECLabeled();
+            bid.Locations.Add(location);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[LocationTable.ID.Name] = location.Guid.ToString();
+            data[LocationTable.Name.Name] = location.Label.ToString();
+
+            UpdateItem expectedItem = new UpdateItem(Change.Remove, LocationTable.TableName, data);
+            int expectedCount = 1;
+
+            bid.Locations.Remove(location);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -2588,11 +2816,49 @@ namespace Tests
         #endregion
         #endregion
 
+        #region Edit
+        #region Bid
+        [TestMethod]
+        public void Bid_EditInfo()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            string edit = "edit";
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            Tuple<string, string> keyData = new Tuple<string, string>(BidInfoTable.ID.Name, bid.Guid.ToString());
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[BidInfoTable.Name.Name] = edit;
+            expectedItems.Add(new UpdateItem(Change.Edit, BidInfoTable.TableName, data, keyData));
+            
+            int expectedCount = expectedItems.Count;
+            
+            bid.Name = edit;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+
+        }
+        #endregion
+        #endregion
+
         public void checkUpdateItem(UpdateItem expectedItem, UpdateItem actualItem)
         {
             Assert.AreEqual(expectedItem.Table, actualItem.Table, "Tables do not match on UpdateItems");
             Assert.AreEqual(expectedItem.FieldData.Count, actualItem.FieldData.Count, "FieldData does not match on UpdateItems");
             Assert.AreEqual(expectedItem.Change, actualItem.Change, "Change does not match on UpdateItems");
+            Assert.IsTrue((expectedItem.PrimaryKey == null && actualItem.PrimaryKey == null) || (expectedItem.PrimaryKey != null && actualItem.PrimaryKey != null), "Primary key data asymmetrically added");
+            if(expectedItem.PrimaryKey != null)
+            {
+                Assert.AreEqual(expectedItem.PrimaryKey.Item1, actualItem.PrimaryKey.Item1, "Primary key fields do not match");
+                Assert.AreEqual(expectedItem.PrimaryKey.Item2, actualItem.PrimaryKey.Item2, "Primary key values do not match");
+            }
         }
 
         public void checkUpdateItems(List<UpdateItem> expectedItems, DeltaStacker stack)

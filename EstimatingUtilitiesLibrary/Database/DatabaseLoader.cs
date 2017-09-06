@@ -383,14 +383,11 @@ namespace EstimatingUtilitiesLibrary.Database
             DataRow bidInfoRow = bidInfoDT.Rows[0];
 
             TECBid outBid = new TECBid(new Guid(bidInfoRow[BidInfoTable.ID.Name].ToString()));
-            outBid.Name = bidInfoRow[BidInfoTable.Name.Name].ToString();
-            outBid.BidNumber = bidInfoRow[BidInfoTable.Number.Name].ToString();
+            assignValuePropertiesFromTable(outBid, new BidInfoTable(), bidInfoRow);
 
             string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
             outBid.DueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
-
-            outBid.Salesperson = bidInfoRow[BidInfoTable.Salesperson.Name].ToString();
-            outBid.Estimator = bidInfoRow[BidInfoTable.Estimator.Name].ToString();
+            
 
             return outBid;
         }

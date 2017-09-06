@@ -91,7 +91,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return fieldData;
         }
-        public static Dictionary<string, string> PrepareDataForEditObject(List<TableField> fields, object item, string propertyName, object value)
+        public static Dictionary<string, string> PrepareDataForEditObject(List<TableField> fields, TECObject item, string propertyName, object value)
         {
             foreach(TableField field in fields)
             {
@@ -104,6 +104,23 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
             }
             return null;
+        }
+        public static Tuple<string, string> PrimaryKeyData(TableBase table, TECObject item)
+        {
+            if(table.PrimaryKeys.Count != 1)
+            {
+                throw new Exception("Must have one primary key in table being updated.");
+            }
+            TableField field = table.PrimaryKeys[0];
+            if (field.Property.DeclaringType.IsInstanceOfType(item))
+            {
+                Tuple<string, string> outData = new Tuple<string, string>(field.Name, objectToDBString(item.Guid));
+                return outData;
+            }
+            else
+            {
+                throw new Exception("Item does not match type of key.");
+            }
         }
 
         private static bool matchesAllTypes(List<TECObject> items, List<Type> tableTypes)

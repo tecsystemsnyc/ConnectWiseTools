@@ -75,9 +75,10 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 var fields = table.Fields;
                 var data = TableHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
+                var keyData = TableHelper.PrimaryKeyData(table, sender);
                 if (data != null)
                 {
-                    outStack.Add(new UpdateItem(Change.Edit, table.NameString, data));
+                    outStack.Add(new UpdateItem(Change.Edit, table.NameString, data, keyData));
                 }
             }
             return outStack;

@@ -427,8 +427,7 @@ namespace Tests
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
         }
-
-
+        
         [TestMethod]
         public void SaveAs_Bid_Note()
         {
@@ -450,7 +449,6 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedNote.Label, actualNote.Label);
         }
-        //------------------------------------------------------------
 
         [TestMethod]
         public void SaveAs_Bid_Device()
@@ -543,8 +541,7 @@ namespace Tests
             Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Label, actualBranch.Branches[0].Branches[0].Label);
             Assert.AreEqual(expectedBranch.Branches[0].Branches[0].Guid, actualBranch.Branches[0].Branches[0].Guid);
         }
-
-
+        
         [TestMethod]
         public void SaveAs_Bid_Exclusion()
         {

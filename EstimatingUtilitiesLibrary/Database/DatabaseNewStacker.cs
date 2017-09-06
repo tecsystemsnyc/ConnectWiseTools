@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
-            List<TableBase> tables = TableHelper.GetTables(new List<TECObject> { toSave }, "");
+            List<TableBase> tables = TableHelper.GetTables(toSave);
             foreach (TableBase table in tables)
             {
                 var fields = table.Fields;
