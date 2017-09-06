@@ -181,7 +181,6 @@ namespace Tests
         {
             List<string> values = new List<string>();
             values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
-            values.Add("1.6.0.13");
             addDataToTable(new TemplatesInfoTable(), values);
         }
         private static void addToParametersTable()
@@ -700,8 +699,8 @@ namespace Tests
         private static void addToBidSystemTable()
         {
             List<string> values = new List<string>();
-            values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("0");
             addDataToTable(new BidSystemTable(), values);
         }

@@ -97,7 +97,6 @@ namespace EstimatingUtilitiesLibrary.Database
             scopeManager.Catalogs = getCatalogs();
         }
         
-
         #region Catalogs
         static private TECCatalogs getCatalogs()
         {
@@ -474,11 +473,11 @@ namespace EstimatingUtilitiesLibrary.Database
                 + BidSystemTable.Index.Name;
 
             DataTable systemsDT = SQLiteDB.GetDataFromCommand(command);
-            if (systemsDT.Rows.Count < 1)
-            {
-                command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
-                systemsDT = SQLiteDB.GetDataFromCommand(command);
-            }
+            //if (systemsDT.Rows.Count < 1)
+            //{
+            //    command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
+            //    systemsDT = SQLiteDB.GetDataFromCommand(command);
+            //}
             foreach (DataRow row in systemsDT.Rows)
             { systems.Add(getSystemFromRow(row)); }
             return systems;

@@ -444,7 +444,11 @@ namespace Tests
             manager.New(bid);
             actualBid = manager.Load() as TECBid;
 
-            TECLabeled actualNote = actualBid.Notes[0];
+            TECLabeled actualNote = null;
+            foreach (TECLabeled note in actualBid.Notes.Where(item => item.Guid == expectedNote.Guid))
+            {
+                actualNote = note;
+            }
 
             //Assert
             Assert.AreEqual(expectedNote.Label, actualNote.Label);
@@ -457,7 +461,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             int actualQuantity = 0;
-            foreach (TECDevice device in actualDevices)
+            foreach (ITECConnectable device in actualDevices)
             {
                 if (device.Guid == actualDevice.Guid)
                 {
@@ -465,7 +469,7 @@ namespace Tests
                 }
             }
             int expectedQuantity = 0;
-            foreach (TECDevice device in expectedSubScope.Devices)
+            foreach (ITECConnectable device in expectedSubScope.Devices)
             {
                 if (device.Guid == expectedDevice.Guid)
                 {
@@ -473,7 +477,7 @@ namespace Tests
                 }
             }
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+            Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
 
             foreach (TECElectricalMaterial expectedConnectionType in expectedDevice.ConnectionTypes)
             {

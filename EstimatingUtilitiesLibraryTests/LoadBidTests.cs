@@ -1394,6 +1394,8 @@ namespace Tests
             double expectedCost = 1324;
             double expectedLabor = 4231;
 
+            Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+
             TECPanelType actualType = null;
             foreach (TECPanelType type in actualBid.Catalogs.PanelTypes)
             {
@@ -1407,6 +1409,46 @@ namespace Tests
             Assert.AreEqual(expectedName, actualType.Name);
             Assert.AreEqual(expectedCost, actualType.Price);
             Assert.AreEqual(expectedLabor, actualType.Labor);
+            Assert.AreEqual(manufacturerGuid, actualType.Manufacturer.Guid);
+        }
+    
+        [TestMethod]
+        public void Load_Bid_ControllerType()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("7201ca48-f885-4a87-afa7-61b3e6942697");
+            string expectedName = "Test Controller Type";
+            double expectedCost = 142;
+            double expectedLabor = 12;
+
+            Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+            Guid ioGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
+
+            TECControllerType actualType = null;
+            foreach (TECControllerType type in actualBid.Catalogs.ControllerTypes)
+            {
+                if (type.Guid == expectedGuid)
+                {
+                    actualType = type;
+                }
+            }
+
+            bool foundIO = false;
+            foreach (TECIO io in actualType.IO)
+            {
+                if (io.Guid == ioGuid)
+                {
+                    foundIO = true;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedName, actualType.Name);
+            Assert.AreEqual(expectedCost, actualType.Price);
+            Assert.AreEqual(expectedLabor, actualType.Labor);
+            Assert.AreEqual(manufacturerGuid, actualType.Manufacturer.Guid);
+            Assert.IsTrue(foundIO);
         }
 
         [TestMethod]
@@ -1512,6 +1554,8 @@ namespace Tests
             double expectedCost = 2233;
             double expectedIOPerModule = 10;
 
+            Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
+
             TECIOModule actualModule = null;
             foreach (TECIOModule module in actualBid.Catalogs.IOModules)
             {
@@ -1526,6 +1570,8 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualModule.Description);
             Assert.AreEqual(expectedCost, actualModule.Price);
             Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
+            Assert.AreEqual(manufacturerGuid, actualModule.Manufacturer.Guid);
+
         }
 
         [TestMethod]

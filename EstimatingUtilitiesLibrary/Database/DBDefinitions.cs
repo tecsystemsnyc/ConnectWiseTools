@@ -1346,8 +1346,8 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class BidSystemTable : TableBase
     {
         public static string TableName = "BidSystem";
-        public static Type SystemType = typeof(TECSystem);
         public static Type BidType = typeof(TECBid);
+        public static Type SystemType = typeof(TECSystem);
 
         public static Type Helpers = typeof(HelperProperties);
 
@@ -1357,8 +1357,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
-            SystemID,
-            BidID
+            BidID,
+            SystemID
         };
         private List<Type> types = new List<Type>()
         {
