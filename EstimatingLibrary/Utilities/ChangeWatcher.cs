@@ -22,7 +22,7 @@ namespace EstimatingLibrary.Utilities
         }
         public ChangeWatcher(TECTemplates templates)
         {
-            throw new NotImplementedException();
+            initialize(templates);
         }
         public ChangeWatcher(TECSystem system)
         {
@@ -51,6 +51,11 @@ namespace EstimatingLibrary.Utilities
         {
             occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
             registerBidChanges(bid);
+        }
+        private void initialize(TECTemplates templates)
+        {
+            occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
+            registerTemplateChanges(templates);
         }
         private void initialize(TECSystem system)
         {
@@ -100,6 +105,35 @@ namespace EstimatingLibrary.Utilities
                 registerTECObject(location, OccuranceType.Instance);
             }
         }
+        private void registerTemplateChanges(TECTemplates templates)
+        {
+            registerTECObject(templates, OccuranceType.Instance);
+            registerCatalogs(templates.Catalogs, OccuranceType.Instance);
+            foreach (TECSystem typical in templates.SystemTemplates)
+            {
+                registerSystem(typical, OccuranceType.Instance);
+            }
+            foreach(TECEquipment equipment in templates.EquipmentTemplates)
+            {
+                registerEquipment(equipment, OccuranceType.Instance);
+            }
+            foreach(TECSubScope subScope in templates.SubScopeTemplates)
+            {
+                registerSubScope(subScope, OccuranceType.Instance);
+            }
+            foreach (TECController controller in templates.ControllerTemplates)
+            {
+                registerController(controller, OccuranceType.Instance);
+            }
+            foreach (TECPanel panel in templates.PanelTemplates)
+            {
+                registerTECObject(panel, OccuranceType.Instance);
+            }
+            foreach (TECMisc misc in templates.MiscCostTemplates)
+            {
+                registerTECObject(misc, OccuranceType.Instance);
+            }
+        }
 
         private void registerTECObject(TECObject ob, OccuranceType ot)
         {
@@ -125,6 +159,47 @@ namespace EstimatingLibrary.Utilities
             if (ob is INotifyPointChanged pointOb)
             {
                 pointOb.PointChanged -= (e) => handlePointChanged(ob, e);
+            }
+        }
+
+        private void registerCatalogs(TECCatalogs catalogs, OccuranceType ot)
+        {
+            registerTECObject(catalogs, ot);
+            foreach(TECDevice item in catalogs.Devices)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECElectricalMaterial item in catalogs.ConnectionTypes)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECElectricalMaterial item in catalogs.ConduitTypes)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECControllerType item in catalogs.ControllerTypes)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECIOModule item in catalogs.IOModules)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECPanelType item in catalogs.PanelTypes)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECManufacturer item in catalogs.Manufacturers)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECLabeled item in catalogs.Tags)
+            {
+                registerTECObject(item, ot);
+            }
+            foreach (TECCost item in catalogs.AssociatedCosts)
+            {
+                registerTECObject(item, ot);
             }
         }
 
@@ -344,7 +419,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     registerScopeBranch(branch);
                 }
-                else
+                else if (!(parent is TECScope))
                 {
                     registerTECObject(labelled, OccuranceType.Instance);
                 }
@@ -352,6 +427,10 @@ namespace EstimatingLibrary.Utilities
             else if (child is TECDevice)
             {
                 return;
+            }
+            else if (parent is TECCatalogs)
+            {
+                registerTECObject(child, parentOT);
             }
             else
             {

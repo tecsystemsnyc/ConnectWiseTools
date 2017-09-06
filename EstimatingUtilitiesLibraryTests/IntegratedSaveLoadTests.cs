@@ -997,7 +997,31 @@ namespace Tests
         public void Save_Bid_Remove_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.RandomSubScope();
+            TECSubScope ssToModify = null;
+            bool foundSub = false;
+            foreach(TECSystem system in bid.Systems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope subscope in equipment.SubScope)
+                    {
+                        if(subscope.Devices.Count > 1)
+                        {
+                            foundSub = true;
+                            ssToModify = subscope;
+                            break;
+                        }
+                    }
+                    if (foundSub)
+                    {
+                        break;
+                    }
+                }
+                if (foundSub)
+                {
+                    break;
+                }
+            }
             while (ssToModify.Devices.Count == 0)
             {
                 ssToModify = bid.RandomSubScope();

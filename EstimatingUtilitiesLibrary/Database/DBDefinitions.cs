@@ -572,7 +572,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Manufacturer"
+            "Manufacturers"
         };
 
         public override string NameString { get { return TableName; } }
@@ -748,7 +748,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Connections"
+            "ChildrenConnections"
         };
 
         public override string NameString { get { return TableName; } }
@@ -783,7 +783,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Connections"
+            "ChildrenConnections"
         };
 
         public override string NameString { get { return TableName; } }
@@ -896,7 +896,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Type"
+            "PanelTypes"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1043,7 +1043,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Type"
+            "ControllerTypes"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1265,7 +1265,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Module"
+            "IOModule"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1299,7 +1299,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Connections"
+            "ChildrenConnections"
         };
 
         public override string NameString { get { return TableName; } }

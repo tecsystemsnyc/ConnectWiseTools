@@ -31,6 +31,7 @@ namespace EstimatingUtilitiesLibrary
 
         private void objectChanged(TECChangedEventArgs e)
         {
+            if (!isDoing) { redoStack.Clear(); }
             undoStack.Add(e);
         }
 

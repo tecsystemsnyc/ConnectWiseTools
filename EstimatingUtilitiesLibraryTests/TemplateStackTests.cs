@@ -590,7 +590,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            double actual = device.Cost;
+            double actual = device.Price;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -1237,7 +1237,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            double actual = ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Cost;
+            double actual = ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Price;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }

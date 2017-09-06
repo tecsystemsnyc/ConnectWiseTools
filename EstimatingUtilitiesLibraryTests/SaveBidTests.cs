@@ -987,7 +987,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+            Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
             Assert.AreEqual(expectedDevice.ConnectionTypes.Count, actualDevice.ConnectionTypes.Count);
         }
 
@@ -1943,7 +1943,7 @@ namespace Tests
             Assert.AreEqual(expectedNumLocations, actualNumLocations);
 
             Assert.AreEqual(expectedLocation.Label, actualLocation.Label);
-            Assert.AreEqual(actualLocation, actualSystem.Location);
+            Assert.AreEqual(actualLocation.Guid, actualSystem.Location.Guid);
         }
         #endregion Save Location
 

@@ -51,7 +51,6 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             List<TableBase> tables;
-            if(sender is TECSystem system) { outStack.AddRange(typicalInstanceStack(change, system)); }
             if(sender is ISaveable parent && !parent.RelatedObjects.Contains(propertyName) && parent.SaveObjects.Contains(propertyName))
             {
                 tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName);
@@ -113,7 +112,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 foreach(TECObject item in pair.Value)
                 {
-                    outStack.AddRange(addRemoveStack(change, "TypicalInstance", (TECObject)pair.Key, (TECObject)item));
+                    outStack.AddRange(addRemoveStack(change, "TypicalInstanceDictionary", (TECObject)pair.Key, (TECObject)item));
                 }
             }
 
