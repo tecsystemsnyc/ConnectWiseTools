@@ -18,6 +18,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
+            addToMetadataTable();
             AddToBidInfoTable();
             AddToBidParametersTable();
             AddToLaborConstantsTable();
@@ -96,6 +97,7 @@ namespace EstimatingUtilitiesLibraryTests
             CreateTemplateDB();
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
+            addToMetadataTable();
             AddToTemplatesInfoTable();
             AddToLaborConstantsTable();
             AddToSubcontractorConstantsTable();
@@ -167,6 +169,14 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         #region Object Tables
+        private static void addToMetadataTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("1");
+            AddDataToTable(new MetadataTable(), values);
+        }
+
+
         private static void AddToBidInfoTable()
         {
             List<string> values = new List<string>();

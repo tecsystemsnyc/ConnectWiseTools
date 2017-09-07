@@ -65,8 +65,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = AssociatedCosts;
+                AssociatedCosts.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
                 _associatedCosts = value;
                 NotifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
+                AssociatedCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
             }
         }
 
@@ -104,6 +106,7 @@ namespace EstimatingLibrary
             _tags = new ObservableCollection<TECLabeled>();
             _associatedCosts = new ObservableCollection<TECCost>();
             Tags.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Tags");
+            AssociatedCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
         }
 
         #endregion 

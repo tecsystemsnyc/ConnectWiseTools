@@ -19,7 +19,6 @@ namespace EstimatingUtilitiesLibraryTests
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
-            addToMetadataTable();
             addToBidInfoTable();
             addToParametersTable();
             addToExtraLaborTable();
@@ -91,7 +90,6 @@ namespace EstimatingUtilitiesLibraryTests
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
-            addToMetadataTable();
             addToTemplatesInfoTable();
             addToSystemTable();
             addToEquipmentTable();
@@ -111,8 +109,9 @@ namespace EstimatingUtilitiesLibraryTests
             addToIOModuleTable();
             addToIOTable();
             addToScopeBranchTable();
+            addToControllerTypeTable();
+            addToParametersTable();
 
-            //AddToControllerIOTable();
             addToHardwareManufacturerTable();
             addToIOIOModuleTable();
             addToControllerConnectionTable();
@@ -121,7 +120,6 @@ namespace EstimatingUtilitiesLibraryTests
             addToScopeTagTable();
             addToScopeAssociatedCostTable();
             addElectricalComponentRatedCostTable();
-            //AddToControllerManufacturerTable();
             addToConnectionConduitTypeTable();
             addToSubScopeConnectionChildrenTable();
             addToPanelPanelTypeTable();
@@ -136,6 +134,8 @@ namespace EstimatingUtilitiesLibraryTests
             addToSystemScopeBranchTable();
             addToScopeBranchHierarchyTable();
             addToDeviceConnectionTypeTable();
+            addToControllerTypeIOTable();
+            addToControllerControllerTypeTable();
 
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
@@ -162,7 +162,7 @@ namespace EstimatingUtilitiesLibraryTests
         private static void addToMetadataTable()
         {
             List<string> values = new List<string>();
-            values.Add("1");
+            values.Add("2");
             addDataToTable(new MetadataTable(), values);
         }
         private static void addToBidInfoTable()

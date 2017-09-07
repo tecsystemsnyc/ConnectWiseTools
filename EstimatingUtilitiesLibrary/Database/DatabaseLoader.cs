@@ -88,6 +88,7 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.ControllerTemplates = getOrphanControllers();
             templates.MiscCostTemplates = getMisc();
             templates.PanelTemplates = getOrphanPanels();
+            templates.Parameters = getTemplatesParameters();
             ModelLinkingHelper.LinkTemplates(templates);
             return templates;
         }
@@ -751,6 +752,18 @@ namespace EstimatingUtilitiesLibrary.Database
                 return new TECParameters(bid.Guid);
             }
             return getBidParametersFromRow(DT.Rows[0]);
+        }
+        static private ObservableCollection<TECParameters> getTemplatesParameters()
+        {
+            ObservableCollection<TECParameters> outParameters = new ObservableCollection<TECParameters>();
+            string constsCommand = "select " + DatabaseHelper.AllFieldsInTableString(new ParametersTable()) + " from " + ParametersTable.TableName;
+            
+            DataTable DT = SQLiteDB.GetDataFromCommand(constsCommand);
+            foreach(DataRow row in DT.Rows)
+            {
+                outParameters.Add(getBidParametersFromRow(DT.Rows[0]));
+            }
+            return outParameters;
         }
         static private ObservableCollection<TECMisc> getMisc()
         {

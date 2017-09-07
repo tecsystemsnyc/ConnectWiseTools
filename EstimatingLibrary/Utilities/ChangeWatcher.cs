@@ -133,6 +133,10 @@ namespace EstimatingLibrary.Utilities
             {
                 registerTECObject(misc, OccuranceType.Instance);
             }
+            foreach(TECParameters parameter in templates.Parameters)
+            {
+                registerTECObject(parameter, OccuranceType.Instance);
+            }
         }
 
         private void registerTECObject(TECObject ob, OccuranceType ot)
@@ -429,6 +433,14 @@ namespace EstimatingLibrary.Utilities
                 return;
             }
             else if (parent is TECCatalogs)
+            {
+                registerTECObject(child, parentOT);
+            }
+            else if (parent is TECScope && child is TECCost)
+            {
+                return;
+            }
+            else if (child is TECParameters)
             {
                 registerTECObject(child, parentOT);
             }

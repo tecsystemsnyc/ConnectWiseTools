@@ -764,7 +764,8 @@ namespace Tests
             TECCost edit = Bid.Catalogs.AssociatedCosts.RandomObject();
 
             //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            ChangeWatcher watcher = new ChangeWatcher(Bid);
+            DoStacker testStack = new DoStacker(watcher);
             subScope.AssociatedCosts.Add(edit);
             testStack.Undo();
 

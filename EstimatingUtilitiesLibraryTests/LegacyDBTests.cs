@@ -198,10 +198,8 @@ namespace EstimatingUtilitiesLibraryTests
         {
             Guid expectedParentGuid = new Guid("25e815fa-4ac7-4b69-9640-5ae220f0cd40");
             string expectedParentName = "Bid Scope Branch";
-            string expectedParentDescription = "Bid Scope Branch Description";
             Guid expectedChildGuid = new Guid("81adfc62-20ec-466f-a2a0-430e1223f64f");
             string expectedChildName = "Bid Child Branch";
-            string expectedChildDescription = "Bid Child Branch Description";
 
             TECScopeBranch actualParent = null;
             TECScopeBranch actualChild = null;
@@ -231,10 +229,8 @@ namespace EstimatingUtilitiesLibraryTests
         {
             Guid expectedParentGuid = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
             string expectedParentName = "System Scope Branch";
-            string expectedParentDescription = "System Scope Branch Description";
             Guid expectedChildGuid = new Guid("542802f6-a7b1-4020-9be4-e58225c433a8");
             string expectedChildName = "System Child Branch";
-            string expectedChildDescription = "System Child Branch Description";
 
             TECScopeBranch actualParent = null;
             TECScopeBranch actualChild = null;
@@ -270,8 +266,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             string expectedName = "Typical System";
             string expectedDescription = "Typical System Description";
-            int expectedQuantity = 1;
-            double expectedBP = 100;
             bool expectedProposeEquipment = true;
             int expectedChildren = 1;
 
@@ -344,8 +338,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             string expectedName = "Instance System";
             string expectedDescription = "Instance System Description";
-            int expectedQuantity = 1;
-            double expectedBP = 100;
 
             TECSystem actualSystem = null;
             foreach (TECSystem typical in actualBid.Systems)
@@ -374,8 +366,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
             string expectedName = "Typical Equip";
             string expectedDescription = "Typical Equip Description";
-            int expectedQuantity = 1;
-            double expectedBP = 50;
 
             Guid childSubScope = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
@@ -419,8 +409,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedInstanceGuid = new Guid("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
             string expectedInstanceName = "Instance Equip";
             string expectedInstanceDescription = "Instance Equip Description";
-            int expectedInstanceQuantity = 1;
-            double expectedInstanceBP = 50;
 
             Guid childSubScope = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
 
@@ -468,7 +456,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
             string expectedName = "Typical SS";
             string expectedDescription = "Typical SS Description";
-            int expectedQuantity = 1;
 
             Guid childPoint = new Guid("03a16819-9205-4e65-a16b-96616309f171");
             Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");

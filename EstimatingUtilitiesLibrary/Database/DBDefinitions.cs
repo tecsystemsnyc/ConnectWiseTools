@@ -992,7 +992,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type IOObjectType = typeof(TECIO);
 
         public static TableField ID = new TableField("ID", "TEXT", IOObjectType.GetProperty("Guid"));
-        public static TableField IOType = new TableField("IOType", "TEXT", IOObjectType.GetProperty("Type"));
+        public static TableField IOType = new TableField("Type", "TEXT", IOObjectType.GetProperty("Type"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", IOObjectType.GetProperty("Quantity"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
@@ -2277,7 +2277,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             new MetadataTable(),
             new TemplatesInfoTable(),
-            new ExtraLaborTable(),
+            new ParametersTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),

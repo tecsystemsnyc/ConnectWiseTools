@@ -198,6 +198,7 @@ namespace Tests
 
             //Labor
             //templates.Labor = CreateTestLabor();
+            templates.Parameters.Add(CreateTestParameters(Guid.NewGuid()));
 
             //Tags
             TECLabeled testTag = new TECLabeled();
