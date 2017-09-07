@@ -90,6 +90,22 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return command;
         }
+        public static string FieldsString(List<string> fields)
+        {
+            string command = "";
+            for (int x = 0; x < fields.Count; x++)
+            {
+                if (x != fields.Count - 1)
+                {
+                    command += fields[x] + ", ";
+                }
+                else
+                {
+                    command += fields[x];
+                }
+            }
+            return command;
+        }
 
         public static void CreateBackup(string originalPath)
         {

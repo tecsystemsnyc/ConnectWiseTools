@@ -87,27 +87,16 @@ namespace EstimatingUtilitiesLibrary.Database
             UpdateVersionNumber(db);
 
         }
-        private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tableMap)
+        private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tempMap)
         {
-            string originalTableColumn = tableString(originalVersion);
-            string originalFieldColumn = fieldString(originalVersion);
-            string updateTableColumn = tableString(updateVersion);
-            string updateFieldColumn = fieldString(updateVersion);
-
-            foreach (DataRow row in dataTable.Rows)
+            TableMapList mapList = buildMap(dataTable, originalVersion, updateVersion, tempMap);
+            foreach(TableMap map in mapList)
             {
-                if (tableMap.ContainsKey(row[updateTableColumn].ToString()))
+                if(map.OriginalTableNames.Count == 1)
                 {
-                    string originalTable = row[originalTableColumn].ToString();
-                    string originalField = row[originalFieldColumn].ToString();
-                    string updateTempTable = tableMap[row[updateTableColumn].ToString()];
-                    string updateField = row[updateFieldColumn].ToString();
-
-                    if (row[originalFieldColumn].ToString() != "NONE" || row[updateFieldColumn].ToString() != "NONE")
-                    {
-                        migrateData(originalTable, originalField, updateTempTable, updateField, db);
-                    }
-                }
+                    migrateData(map.OriginalTableNames[0], DatabaseHelper.FieldsString(map.OriginalFields),
+                        map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
+                } 
             }
         }
         static private void migrateFromTempTables(Dictionary<string, string> tableMap, SQLiteDatabase db)
@@ -136,9 +125,9 @@ namespace EstimatingUtilitiesLibrary.Database
             string commandString = "update " + MetadataTable.TableName + " set " + MetadataTable.Version.Name + " = '" + Properties.Settings.Default.Version + "' ";
             db.NonQueryCommand(commandString);
         }
-        private static void migrateData(string originalTable, string originalField, string updateTable, string updateField, SQLiteDatabase db)
+        private static void migrateData(string originalTable, string originalFields, string updateTable, string updateFields, SQLiteDatabase db)
         {
-            string commandString = String.Format("insert into {0} ({1}) select {2} from '{3}'", updateTable, updateField, originalField, originalTable);
+            string commandString = String.Format("insert into {0} ({1}) select {2} from '{3}'", updateTable, updateFields, originalFields, originalTable);
             db.NonQueryCommand(commandString);
         }
         private static string fieldString(int version)
@@ -178,6 +167,16 @@ namespace EstimatingUtilitiesLibrary.Database
                             {
                                 map.OriginalTableNames.Add(originalTable);
                             }
+                            
+                        }
+                        else
+                        {
+                            TableMap map = new TableMap();
+                            map.UpdateTableName = updateTempTable;
+                            map.OriginalFields.Add(originalField);
+                            map.UpdateFields.Add(updateField);
+                            map.OriginalTableNames.Add(originalTable);
+                            mapList.Add(map);
                         }
                     }
                 }
@@ -192,6 +191,7 @@ namespace EstimatingUtilitiesLibrary.Database
             public TableMapList()
             {
                 mapList = new List<TableMap>();
+                dictionary = new Dictionary<string, TableMap>();
             }
             public TableMap this[int index]
             {
@@ -220,12 +220,18 @@ namespace EstimatingUtilitiesLibrary.Database
             }
         }
 
-        private struct TableMap
+        private class TableMap
         {
             public string UpdateTableName;
             public List<string> OriginalTableNames;
             public List<string> UpdateFields;
             public List<string> OriginalFields;
+            public TableMap()
+            {
+                OriginalFields = new List<string>();
+                OriginalTableNames = new List<string>();
+                UpdateFields = new List<string>();
+            }
         }
         #endregion
     }
