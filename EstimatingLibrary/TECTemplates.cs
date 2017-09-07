@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECTemplates : TECScopeManager
+    public class TECTemplates : TECScopeManager, ISaveable
     {
         #region Properties
         private ObservableCollection<TECSystem> _systemTemplates;
@@ -108,6 +109,9 @@ namespace EstimatingLibrary
                 base.Catalogs.ScopeChildRemoved += scopeChildRemoved;
             }
         }
+
+        public SaveableMap SaveObjects { get { return saveObjects(); } }
+        public SaveableMap RelatedObjects { get { return new SaveableMap(); } }
 
         #region Constructors
         public TECTemplates() : this(Guid.NewGuid()) { }
@@ -244,6 +248,18 @@ namespace EstimatingLibrary
             {
                 throw new NotImplementedException("Scope child isn't cost or tag.");
             }
+        }
+        private SaveableMap saveObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.Add(this.Catalogs, "Catalogs");
+            saveList.AddRange(this.SystemTemplates, "SystemTemplates");
+            saveList.AddRange(this.EquipmentTemplates, "EquipmentTemplates");
+            saveList.AddRange(this.SubScopeTemplates, "SubScopeTemplates");
+            saveList.AddRange(this.ControllerTemplates, "ControllerTemplates");
+            saveList.AddRange(this.MiscCostTemplates, "MiscCostTemplates");
+            saveList.AddRange(this.PanelTemplates, "PanelTemplates");
+            return saveList;
         }
 
         #region Collection Changed

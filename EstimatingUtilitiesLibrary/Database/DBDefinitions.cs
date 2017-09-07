@@ -367,7 +367,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<string> propertyNames = new List<string>()
         {
             "Systems",
-            "Instances"
+            "Instances",
+            "SystemTemplates"
         };
 
         public override string NameString { get { return TableName; } }
@@ -401,7 +402,8 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Equipment"
+            "Equipment",
+            "EquipmentTemplates"
         };
 
         public override string NameString { get { return TableName; } }
@@ -435,7 +437,8 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "SubScope"
+            "SubScope",
+            "SubScopeTemplates"
         };
 
         public override string NameString { get { return TableName; } }
@@ -818,7 +821,8 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Controllers"
+            "Controllers",
+            "ControllerTemplates"
         };
 
         public override string NameString { get { return TableName; } }
@@ -859,7 +863,8 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "MiscCosts"
+            "MiscCosts",
+            "MiscCostTemplates"
         };
 
         public override string NameString { get { return TableName; } }
@@ -931,7 +936,8 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "Panels"
+            "Panels",
+            "PanelTemplates"
         };
 
         public override string NameString { get { return TableName; } }

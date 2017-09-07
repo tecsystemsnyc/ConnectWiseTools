@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class SaveAsTemplatesTests
+    public class SaveNewTemplatesTests
     {
         private const bool DEBUG = true;
 
@@ -77,8 +77,6 @@ namespace Tests
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(expectedTemplates);
             actualTemplates = manager.Load() as TECTemplates;
-
-            actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {

@@ -33,10 +33,20 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             //try
             //{
+            if(scopeManager is TECBid)
+            {
                 DatabaseGenerator.CreateBidDatabase(path);
-                List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
-                DatabaseUpdater.Update(path, newStack);
-                return true;
+            } else if (scopeManager is TECTemplates)
+            {
+                DatabaseGenerator.CreateTemplateDatabase(path);
+            }
+            else
+            {
+                throw new Exception("Generator can only reate bid or template DBs");
+            }
+            List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
+            DatabaseUpdater.Update(path, newStack);
+            return true;
             //}
             //catch
             //{

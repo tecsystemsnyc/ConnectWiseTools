@@ -1086,12 +1086,23 @@ namespace Tests
         public void Save_Bid_LowerQuantity_Device()
         {
             //Act
-            TECSubScope ssToModify = bid.RandomSubScope();
-            while (ssToModify.Devices.Count == 0)
+            TECSubScope ssToModify = null;
+            foreach (TECSystem sys in bid.Systems)
             {
-                ssToModify = bid.RandomSubScope();
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Devices.Count > 0)
+                        {
+                            ssToModify = ss;
+                            break;
+                        }
+                    }
+                    if (ssToModify != null) break;
+                }
+                if (ssToModify != null) break;
             }
-
             TECDevice deviceToRemove = (ssToModify.Devices[0] as TECDevice);
 
             int oldNumDevices = 0;
@@ -1142,10 +1153,22 @@ namespace Tests
         public void Save_Bid_Device_Quantity()
         {
             //Act
-            TECSubScope ssToModify = bid.RandomSubScope();
-            while (ssToModify.Devices.Count == 0)
+            TECSubScope ssToModify = null;
+            foreach (TECSystem sys in bid.Systems)
             {
-                ssToModify = bid.RandomSubScope();
+                foreach (TECEquipment equip in sys.Equipment)
+                {
+                    foreach (TECSubScope ss in equip.SubScope)
+                    {
+                        if (ss.Devices.Count > 0)
+                        {
+                            ssToModify = ss;
+                            break;
+                        }
+                    }
+                    if (ssToModify != null) break;
+                }
+                if (ssToModify != null) break;
             }
             TECDevice expectedDevice = (ssToModify.Devices[0] as TECDevice);
 
