@@ -57,7 +57,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TableBase> databaseTableList = new List<TableBase>();
             if (tableNames.Contains(BidInfoTable.TableName) || tableNames.Contains("TECBidInfo"))
             { databaseTableList = AllBidTables.Tables; }
-            else if (tableNames.Contains(TemplatesInfoTable.TableName))
+            else if (tableNames.Contains(TemplatesInfoTable.TableName) || tableNames.Contains("TECTemplatesInfo"))
             { databaseTableList = AllTemplateTables.Tables; }
             else
             { throw new ArgumentException("updateDatabase() can't determine db type"); }
@@ -68,7 +68,7 @@ namespace EstimatingUtilitiesLibrary.Database
             int updateVerison = Properties.Settings.Default.Version;
             DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
             int originalVerion = infoDT.Rows[0][MetadataTable.Version.Name].ToString().ToInt();
-            updateToVersion(versionDefinition, db, originalVerion, updateVerison, tableMap);
+            updateToVersion(versionDefinition, db, originalVerion, updateVerison, tableMap, tableNames);
             removeOldTables(tableNames, db);
             foreach (TableBase table in databaseTableList)
             {
@@ -78,9 +78,9 @@ namespace EstimatingUtilitiesLibrary.Database
             UpdateVersionNumber(db);
 
         }
-        private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tempMap)
+        private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
         {
-            TableMapList mapList = buildMap(dataTable, originalVersion, updateVersion, tempMap);
+            TableMapList mapList = buildMap(dataTable, originalVersion, updateVersion, tempMap, currentTables);
             foreach(TableMap map in mapList)
             {
                 if(map.OriginalTableNames.Count == 1)
@@ -126,7 +126,7 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         static private void removeOldTables(List<string> tableNames, SQLiteDatabase db)
         {
-            foreach(string table in tableNames)
+            foreach(string table in tableNames.Where(table => table != MetadataTable.TableName))
             {
                 string commandString = "drop table '" + table + "'";
                 db.NonQueryCommand(commandString);
@@ -161,7 +161,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 DataTable tableData = db.GetDataFromCommand(command);
                 foreach(DataColumn column in tableData.Columns)
                 {
-                    if (map.OriginalFields.Contains(column.ColumnName))
+                    if (map.TableFieldsDictionary[table].Contains(column.ColumnName))
                     {
                         outTable.Columns.Add(column.ColumnName, column.DataType);
                         rowList.Add(tableData.Rows[0][column]);
@@ -197,7 +197,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return outBool;
         }
 
-        private static TableMapList buildMap(DataTable dt, int originalVersion, int updateVersion, Dictionary<string, string> tempMap)
+        private static TableMapList buildMap(DataTable dt, int originalVersion, int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
         {
             string originalTableColumn = tableString(originalVersion);
             string originalFieldColumn = fieldString(originalVersion);
@@ -207,7 +207,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TableMapList mapList = new TableMapList();
             foreach(DataRow row in dt.Rows)
             {
-                if (tempMap.ContainsKey(row[updateTableColumn].ToString()))
+                if (tempMap.ContainsKey(row[updateTableColumn].ToString()) && currentTables.Contains(row[originalTableColumn]))
                 {
                     string originalTable = row[originalTableColumn].ToString();
                     string originalField = row[originalFieldColumn].ToString();

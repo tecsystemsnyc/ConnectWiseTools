@@ -7,8 +7,7 @@ TECBidInfo,DueDate,BidInfo,DueDate
 TECBidInfo,Salesperson,BidInfo,SalesPerson
 TECBidInfo,Estimator,BidInfo,Estimator
 TECTemplatesInfo,TemplateID,TemplatesInfo,ID
-TECTemplatesInfo,DBVersion,TemplatesInfo,DBVersion
-TECBidParameters,ParametersID,Parameters,ID
+TECBidParameters,ParametersID,NONE,NONE
 TECBidParameters,Escalation,Parameters,Escalation
 TECBidParameters,Overhead,Parameters,Overhead
 TECBidParameters,Profit,Parameters,Profit
@@ -17,7 +16,7 @@ TECBidParameters,SubcontractorEscalation,Parameters,SubcontractorEscalation
 TECBidParameters,IsTaxExempt,Parameters,IsTaxExempt
 TECBidParameters,RequiresBond,Parameters,RequiresBond
 TECBidParameters,RequiresWrapUp,Parameters,RequiresWrapUp
-TECLaborConst,LaborID,NONE,NONE
+TECLaborConst,LaborID,Parameters,ID
 TECLaborConst,PMCoef,Parameters,PMCoef
 TECLaborConst,PMRate,Parameters,PMRate
 TECLaborConst,ENGCoef,Parameters,ENGCoef

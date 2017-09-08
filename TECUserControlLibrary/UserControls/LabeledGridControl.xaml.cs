@@ -49,7 +49,7 @@ namespace TECUserControlLibrary.UserControls
         
         public static readonly DependencyProperty LabelNameProperty =
             DependencyProperty.Register("LabelName", typeof(string),
-              typeof(string), new PropertyMetadata("Label"));
+              typeof(LabeledGridControl), new PropertyMetadata("Label"));
 
         #endregion
 

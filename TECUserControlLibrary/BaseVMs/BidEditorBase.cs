@@ -215,10 +215,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 UtilitiesMethods.UnionizeCatalogs(Bid.Catalogs, Templates.Catalogs);
                 ModelLinkingHelper.LinkBidToCatalogs(Bid);
-                if (isNew)
+                if (isNew && Templates.Parameters.Count > 0)
                 {
-                    throw new NotImplementedException();
-                    //Bid.Parameters.UpdateConstants(Templates.Labor);
+                    Bid.Parameters.UpdateConstants(Templates.Parameters[0]);
                     loadedStackLength = deltaStack.CleansedStack().Count;
                 }
             }
