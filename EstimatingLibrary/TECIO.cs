@@ -63,9 +63,13 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECObject> SaveObjects
+        public SaveableMap SaveObjects
         {
             get { return saveObjects(); }
+        }
+        public SaveableMap RelatedObjects
+        {
+            get { return relatedObjects(); }
         }
 
         #endregion
@@ -124,10 +128,17 @@ namespace EstimatingLibrary
             }
         }
 
-        private List<TECObject> saveObjects()
+        private SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
-            saveList.Add(this.IOModule);
+            SaveableMap saveList = new SaveableMap();
+            saveList.Add(this.IOModule, "IOModule");
+            return saveList;
+        }
+
+        private SaveableMap relatedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.Add(this.IOModule, "IOModule");
             return saveList;
         }
     }

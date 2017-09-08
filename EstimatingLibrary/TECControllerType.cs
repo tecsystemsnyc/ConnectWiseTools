@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECControllerType : TECHardware, ISaveable
+    public class TECControllerType : TECHardware
     {
         private const CostType COST_TYPE = CostType.TEC;
 
@@ -100,11 +100,11 @@ namespace EstimatingLibrary
             return outNum;
         }
 
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(this.IO);
+            saveList.AddRange(this.IO, "IO");
             return saveList;
         }
         #endregion

@@ -382,6 +382,29 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Bid_ControllerTypeLinking()
+        {
+            foreach (TECController controller in bid.Controllers)
+            {
+                Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+            }
+            foreach (TECSystem typical in bid.Systems)
+            {
+                foreach (TECController controller in typical.Controllers)
+                {
+                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                }
+                foreach (TECSystem instance in typical.Instances)
+                {
+                    foreach (TECController controller in instance.Controllers)
+                    {
+                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
         //Checks every device in subscope is in catalogs.
         public void Bid_SubScopeLinking()
         {

@@ -22,6 +22,7 @@ namespace EstimatingUtilitiesLibrary.Database
             var db = new SQLiteDatabase(path);
             db.NonQueryCommand("BEGIN TRANSACTION");
             createAllTemplateTables(db);
+            db.Insert(MetadataTable.TableName, new Dictionary<string, string> { { MetadataTable.Version.Name, Properties.Settings.Default.Version.ToString() } });
             db.NonQueryCommand("END TRANSACTION");
             db.Connection.Close();
         }
@@ -29,10 +30,9 @@ namespace EstimatingUtilitiesLibrary.Database
         #region Generic Create Methods
         public static void CreateTableFromDefinition(TableBase table, SQLiteDatabase db)
         {
-            var tableInfo = new TableInfo(table);
-            string tableName = tableInfo.Name;
-            List<TableField> primaryKey = tableInfo.PrimaryFields;
-            List<TableField> fields = tableInfo.Fields;
+            string tableName = table.NameString;
+            List<TableField> primaryKey = table.PrimaryKeys;
+            List<TableField> fields = table.Fields;
 
             string createString = "CREATE TABLE '" + tableName + "' (";
             foreach (TableField field in fields)
@@ -56,10 +56,9 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         public static string CreateTempTableFromDefinition(TableBase table, SQLiteDatabase db)
         {
-            var tableInfo = new TableInfo(table);
-            string tableName = "temp_" + tableInfo.Name;
-            List<TableField> primaryKey = tableInfo.PrimaryFields;
-            List<TableField> fields = tableInfo.Fields;
+            string tableName = "temp_" + table.NameString;
+            List<TableField> primaryKey = table.PrimaryKeys;
+            List<TableField> fields = table.Fields;
 
             string createString = "CREATE TEMPORARY TABLE '" + tableName + "' (";
             foreach (TableField field in fields)

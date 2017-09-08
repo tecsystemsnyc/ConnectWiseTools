@@ -22,11 +22,7 @@ namespace EstimatingLibrary
             copyPropertiesFromCost(miscSource);
         }
         #endregion
-
-        #region Events
-        public event Action<CostBatch> CostChanged;
-        #endregion
-
+        
         #region Properties
         public override double Cost
         {
@@ -98,7 +94,7 @@ namespace EstimatingLibrary
         private void NotifyMiscChanged(TECMisc newMisc, TECMisc oldMisc)
         {
             CostBatch delta = newMisc.Costs - oldMisc.Costs;
-            CostChanged?.Invoke(delta);
+            NotifyCostChanged(delta);
         }
         #endregion
     }

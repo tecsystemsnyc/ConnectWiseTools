@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECTemplates : TECScopeManager
+    public class TECTemplates : TECScopeManager, ISaveable
     {
         #region Properties
         private ObservableCollection<TECSystem> _systemTemplates;
@@ -18,6 +19,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllerTemplates;
         private ObservableCollection<TECMisc> _miscCostTemplates;
         private ObservableCollection<TECPanel> _panelTemplates;
+        private ObservableCollection<TECParameters> _parameters;
 
         public ObservableCollection<TECSystem> SystemTemplates
         {
@@ -91,6 +93,18 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "PanelTemplates", this, value, old);
             }
         }
+        public ObservableCollection<TECParameters> Parameters
+        {
+            get { return _parameters; }
+            set
+            {
+                var old = Parameters;
+                Parameters.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Parameters");
+                _parameters = value;
+                Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
+                NotifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
+            }
+        }
         #endregion //Properties
 
         //For listening to a catalog changing
@@ -109,6 +123,9 @@ namespace EstimatingLibrary
             }
         }
 
+        public SaveableMap SaveObjects { get { return saveObjects(); } }
+        public SaveableMap RelatedObjects { get { return new SaveableMap(); } }
+
         #region Constructors
         public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
@@ -119,6 +136,7 @@ namespace EstimatingLibrary
             _controllerTemplates = new ObservableCollection<TECController>();
             _miscCostTemplates = new ObservableCollection<TECMisc>();
             _panelTemplates = new ObservableCollection<TECPanel>();
+            _parameters = new ObservableCollection<TECParameters>();
 
             SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
             EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
@@ -126,6 +144,7 @@ namespace EstimatingLibrary
             ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
             MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
             PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
+            Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
 
             Catalogs.ScopeChildRemoved += scopeChildRemoved;
         }
@@ -244,6 +263,19 @@ namespace EstimatingLibrary
             {
                 throw new NotImplementedException("Scope child isn't cost or tag.");
             }
+        }
+        private SaveableMap saveObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.Add(this.Catalogs, "Catalogs");
+            saveList.AddRange(this.SystemTemplates, "SystemTemplates");
+            saveList.AddRange(this.EquipmentTemplates, "EquipmentTemplates");
+            saveList.AddRange(this.SubScopeTemplates, "SubScopeTemplates");
+            saveList.AddRange(this.ControllerTemplates, "ControllerTemplates");
+            saveList.AddRange(this.MiscCostTemplates, "MiscCostTemplates");
+            saveList.AddRange(this.PanelTemplates, "PanelTemplates");
+            saveList.AddRange(this.Parameters, "Parameters");
+            return saveList;
         }
 
         #region Collection Changed

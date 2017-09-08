@@ -78,11 +78,7 @@ namespace Tests
             TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes.RandomObject());
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
-
-            TECIO ioToAdd = new TECIO();
-            ioToAdd.Type = IOType.AI;
-            ioToAdd.Quantity = 5;
-            expectedController.Type.IO.Add(ioToAdd);
+            
             bid.Controllers.Add(expectedController);
             
             //Misc Cost
@@ -131,13 +127,13 @@ namespace Tests
             bid.Systems.Add(system2);
             bid.Systems.Add(system3);
 
-            system1.AddInstance(bid);
-            system2.AddInstance(bid);
-            system3.AddInstance(bid);
+            AssignSecondaryProperties(system1.AddInstance(bid), bid);
+            AssignSecondaryProperties(system2.AddInstance(bid), bid);
+            AssignSecondaryProperties(system3.AddInstance(bid), bid);
 
-            system1.AddInstance(bid);
-            system2.AddInstance(bid);
-            system3.AddInstance(bid);
+            AssignSecondaryProperties(system1.AddInstance(bid), bid);
+            AssignSecondaryProperties(system2.AddInstance(bid), bid);
+            AssignSecondaryProperties(system3.AddInstance(bid), bid);
 
             //Equipment
             var equipment1 = new TECEquipment();
@@ -161,12 +157,14 @@ namespace Tests
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+            subScope1.Location = bid.Locations.RandomObject();
 
             var subScope2 = new TECSubScope();
             AssignSecondaryProperties(subScope2, bid);
             subScope2.Name = "Empty SubScope";
             subScope2.Description = "Description 2";
             subScope2.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
+            subScope2.Location = bid.Locations.RandomObject();
 
             equipment1.SubScope.Add(subScope1);
             equipment2.SubScope.Add(subScope2);
@@ -200,6 +198,7 @@ namespace Tests
 
             //Labor
             //templates.Labor = CreateTestLabor();
+            templates.Parameters.Add(CreateTestParameters(Guid.NewGuid()));
 
             //Tags
             TECLabeled testTag = new TECLabeled();
@@ -441,8 +440,7 @@ namespace Tests
 
             return templates;
         }
-
-
+        
         public static TECBid CreateEstimatorBid()
         {
             TECBid bid = new TECBid();

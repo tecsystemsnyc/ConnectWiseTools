@@ -23,7 +23,7 @@
                   CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Label}" Header="{Binding Data.LabelName, 
-                                    Source={StaticResource proxy}}" Width="*"/>
+                                    Source={StaticResource proxy}}" Width="*"/> 
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

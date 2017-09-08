@@ -67,21 +67,20 @@ namespace Tests
         [TestMethod]
         public void AddSubScopeToLoadedSystem()
         {
-            Assert.Fail();
-            //TECBid bid = TestHelper.CreateTestBid();
+            TECBid bid = TestHelper.CreateTestBid();
 
-            //var path = Path.GetTempFileName();
+            var path = Path.GetTempFileName();
 
-            //DatabaseManager manager = new DatabaseManager(path);
-            //manager.New(bid);
-            //bid = manager.Load() as TECBid;
-            //var watcher = new ChangeWatcher(bid);
+            DatabaseManager manager = new DatabaseManager(path);
+            manager.New(bid);
+            bid = manager.Load() as TECBid;
+            var watcher = new ChangeWatcher(bid);
 
-            //DeltaStacker stack = new DeltaStacker(watcher);
-            //bid.RandomEquipment().SubScope.Add(new TECSubScope());
-            //DatabaseUpdater.Update(path, stack.CleansedStack());
+            DeltaStacker stack = new DeltaStacker(watcher);
+            bid.RandomEquipment().SubScope.Add(new TECSubScope());
+            manager.Save(stack.CleansedStack());
 
-            //bid = DatabaseLoader.Load(path) as TECBid;
+            bid = manager.Load() as TECBid;
         }
     }
 }

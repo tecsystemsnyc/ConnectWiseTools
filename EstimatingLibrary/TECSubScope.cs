@@ -256,15 +256,29 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            foreach(ITECConnectable item in this.Devices)
+            List<TECObject> deviceList = new List<TECObject>();
+            foreach (ITECConnectable item in this.Devices)
             {
-                saveList.Add(item as TECObject);
+                deviceList.Add(item as TECObject);
             }
-            saveList.AddRange(this.Points);
+            saveList.AddRange(deviceList, "Devices");
+            saveList.AddRange(this.Points, "Points");
+            return saveList;
+        }
+        protected override SaveableMap relatedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.relatedObjects());
+            List<TECObject> deviceList = new List<TECObject>();
+            foreach (ITECConnectable item in this.Devices)
+            {
+                deviceList.Add(item as TECObject);
+            }
+            saveList.AddRange(deviceList.Distinct(), "Devices");
             return saveList;
         }
         #endregion

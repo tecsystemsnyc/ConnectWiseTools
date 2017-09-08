@@ -169,6 +169,24 @@ namespace EstimatingUtilitiesLibrary.Database
             }
         }
 
+        public bool Update(string tableName, Tuple<string, string> whereKey, Dictionary<string, string> stringData)
+        {
+            List<string> setStrings = new List<string>();
+            foreach (KeyValuePair<string, string> stringParam in stringData)
+            {
+                setStrings.Add(String.Format("{0} = '{1}'",
+                    stringParam.Key, doubleApostraphes(stringParam.Value)));
+            }
+            string setString = UtilitiesMethods.CommaSeparatedString(setStrings);
+
+            string commandString = String.Format("update {0} set {1} where {2} = '{3}';",
+                tableName, setString, whereKey.Item1, whereKey.Item2);
+
+            SQLiteCommand command = new SQLiteCommand(Connection);
+            command.CommandText = commandString;
+            return (command.ExecuteNonQuery() > 0);
+        }
+
         public void NonQueryCommand(string commandText)
         {
             SQLiteCommand command = new SQLiteCommand(commandText, Connection);

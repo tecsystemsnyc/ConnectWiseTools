@@ -171,84 +171,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-
-        //[TestMethod]
-        //public void Undo_Bid_VisualScope()
-        //{
-        //    //Arrange
-        //    var Bid = TestHelper.CreateTestBid();
-        //    ObservableCollection<TECVisualScope> expected = new ObservableCollection<TECVisualScope>();
-        //    foreach (TECVisualScope item in Bid.Drawings[0].Pages[0].PageScope)
-        //    {
-        //        expected.Add(item);
-        //    }
-        //    TECVisualScope edit = new TECVisualScope(new TECSystem(), 1.0, 1.0);
-
-        //    //Act
-        //    ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-        //    int beforeCount = testStack.UndoCount();
-        //    Bid.Drawings[0].Pages[0].PageScope.Add(edit);
-        //    Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-        //    testStack.Undo();
-
-        //    //assert
-        //    ObservableCollection<TECVisualScope> actual = Bid.Drawings[0].Pages[0].PageScope;
-        //    Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        //}
-
-        [TestMethod]
-        public void Undo_Bid_Catalogs_Devices()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in Bid.Catalogs.Devices)
-            {
-                expected.Add(item);
-            }
-            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
-            types.Add(Bid.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            int beforeCount = testStack.UndoCount();
-            Bid.Catalogs.Devices.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECDevice> actual = Bid.Catalogs.Devices;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
-
-        [TestMethod]
-        public void Undo_Bid_Catalogs_Manufacturers()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECManufacturer> expected = new ObservableCollection<TECManufacturer>();
-            foreach (TECManufacturer item in Bid.Catalogs.Manufacturers)
-            {
-                expected.Add(item);
-            }
-            TECManufacturer edit = new TECManufacturer();
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            int beforeCount = testStack.UndoCount();
-            Bid.Catalogs.Manufacturers.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECManufacturer> actual = Bid.Catalogs.Manufacturers;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Bid_Notes()
         {
@@ -298,31 +221,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Bid_Tags()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
-            foreach (TECLabeled item in Bid.Catalogs.Tags)
-            {
-                expected.Add(item);
-            }
-            TECLabeled edit = new TECLabeled();
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            int beforeCount = testStack.UndoCount();
-            Bid.Catalogs.Tags.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECLabeled> actual = Bid.Catalogs.Tags;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
+        
         
         [TestMethod]
         public void Undo_Bid_Locations()
@@ -374,32 +273,7 @@ namespace Tests
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
-
-        [TestMethod]
-        public void Undo_Bid_PanelType()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECPanelType> expected = new ObservableCollection<TECPanelType>();
-            foreach (TECPanelType item in Bid.Catalogs.PanelTypes)
-            {
-                expected.Add(item);
-            }
-            TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers.RandomObject());
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            int beforeCount = testStack.UndoCount();
-            Bid.Catalogs.PanelTypes.Add(edit);
-            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            ObservableCollection<TECPanelType> actual = Bid.Catalogs.PanelTypes;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
-
-        }
-
+        
         [TestMethod]
         public void Undo_Bid_Panel()
         {
@@ -887,10 +761,11 @@ namespace Tests
             var Bid = TestHelper.CreateTestBid();
             var subScope = Bid.RandomSubScope();
             int expected = subScope.AssociatedCosts.Count;
-            TECCost edit = new TECCost(CostType.TEC);
+            TECCost edit = Bid.Catalogs.AssociatedCosts.RandomObject();
 
             //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            ChangeWatcher watcher = new ChangeWatcher(Bid);
+            DoStacker testStack = new DoStacker(watcher);
             subScope.AssociatedCosts.Add(edit);
             testStack.Undo();
 
@@ -971,33 +846,7 @@ namespace Tests
         }
 
         #endregion
-
-        #region Manufacturer Properties
-
-        [TestMethod]
-        public void Undo_Manufacturer_Name()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            var manufacturer = Bid.Catalogs.Manufacturers.RandomObject();
-            string expected = manufacturer.Label;
-            string edit = "changedName";
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            int beforeCount = testStack.UndoCount();
-            manufacturer.Label = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-            testStack.Undo();
-
-            //assert
-            string actual = manufacturer.Label;
-            Assert.AreEqual(expected, actual, "Not Undone");
-
-        }
-
-        #endregion
-
+        
         #region Cost Properties
         [TestMethod]
         public void Undo_MiscCost_Name()
@@ -1023,24 +872,23 @@ namespace Tests
 
         #region Controller Properties
         [TestMethod]
-        public void Undo_Controller_IOModule()
+        public void Undo_Controller_Type()
         {
-            Assert.Fail();
-            ////Arrange
-            //var Bid = TestHelper.CreateTestBid();
-            //TECIOModule expected = Bid.Controllers[0].IO[0].IOModule;
-            //TECIOModule edit = new TECIOModule();
+            //Arrange
+            var Bid = TestHelper.CreateTestBid();
+            TECControllerType expected = Bid.Controllers[0].Type;
+            TECControllerType edit = Bid.Catalogs.ControllerTypes.RandomObject();
 
-            ////Act
-            //ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            //int beforeCount = testStack.UndoCount();
-            //Bid.Controllers[0].IO[0].IOModule = edit;
-            //Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
-            //testStack.Undo();
+            //Act
+            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
+            Bid.Controllers[0].Type = edit;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
+            testStack.Undo();
 
-            ////assert
-            //TECIOModule actual = Bid.Controllers[0].IO[0].IOModule;
-            //Assert.AreEqual(expected, actual, "Not Undone");
+            //assert
+            TECControllerType actual = Bid.Controllers[0].Type;
+            Assert.AreEqual(expected, actual, "Not Undone");
         }
 
         #endregion
@@ -1261,54 +1109,6 @@ namespace Tests
 
             //assert
             ObservableCollection<TECMisc> actual = Bid.MiscCosts;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Bid_PanelType()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers.RandomObject());
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Catalogs.PanelTypes.Add(edit);
-            var expected = new ObservableCollection<TECPanelType>();
-            foreach (TECPanelType item in Bid.Catalogs.PanelTypes)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECPanelType> actual = Bid.Catalogs.PanelTypes;
-            Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Bid_Tags()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECLabeled edit = new TECLabeled();
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Catalogs.Tags.Add(edit);
-            var expected = new ObservableCollection<TECLabeled>();
-            foreach (TECLabeled item in Bid.Catalogs.Tags)
-            {
-                expected.Add(item);
-            }
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            ObservableCollection<TECLabeled> actual = Bid.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1742,91 +1542,7 @@ namespace Tests
         }
 
         #endregion
-
-        #region Device
-        [TestMethod]
-        public void Redo_Device_Name()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            string edit = "Edit";
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var device = Bid.RandomDevice();
-            device.Name = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            string actual = device.Name;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Device_Description()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            string edit = "Edit";
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var device = Bid.RandomDevice();
-            device.Description = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            string actual = device.Description;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Device_Cost()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            double edit = 123;
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var device = Bid.RandomDevice();
-            device.Price = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            double actual = device.Cost;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
-
-        [TestMethod]
-        public void Redo_Device_Manufacturer()
-        {
-            //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECManufacturer edit = Bid.Catalogs.Manufacturers.RandomObject();
-
-            //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var device = Bid.RandomDevice();
-            device.Manufacturer = edit;
-            testStack.Undo();
-            testStack.Redo();
-
-            //assert
-            TECManufacturer actual = device.Manufacturer;
-            Assert.AreEqual(edit, actual, "Not Redone");
-
-        }
         
-
-        #endregion
-
         #region Point
         [TestMethod]
         public void Redo_Point_Name()

@@ -22,8 +22,18 @@ namespace EstimatingUtilitiesLibrary.Database
 
         static private SQLiteDatabase SQLiteDB;
 
-        public static TECScopeManager Load(string path)
+        static private bool justUpdated;
+        static private TECManufacturer tempManufacturer;
+        static private TECPanelType tempPanelType;
+        static private TECControllerType tempControllerType;
+
+        public static TECScopeManager Load(string path, bool versionUpdated = false)
         {
+            justUpdated = versionUpdated;
+            if (justUpdated)
+            {
+                setupTemps();
+            }
             TECScopeManager workingScopeManager = null;
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
@@ -64,7 +74,6 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid();
             bid.Locations = getAllLocations();
-            bid.Catalogs.Tags = getAllTags();
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
             bid.Controllers = getOrphanControllers();
@@ -89,6 +98,7 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.ControllerTemplates = getOrphanControllers();
             templates.MiscCostTemplates = getMisc();
             templates.PanelTemplates = getOrphanPanels();
+            templates.Parameters = getTemplatesParameters();
             ModelLinkingHelper.LinkTemplates(templates);
             return templates;
         }
@@ -96,9 +106,22 @@ namespace EstimatingUtilitiesLibrary.Database
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();
+            if (justUpdated)
+            {
+                scopeManager.Catalogs.Manufacturers.Add(tempManufacturer);
+                scopeManager.Catalogs.PanelTypes.Add(tempPanelType);
+                scopeManager.Catalogs.ControllerTypes.Add(tempControllerType);
+            }
         }
         
+        static private void setupTemps()
+        {
+            tempManufacturer = new TECManufacturer();
+            tempManufacturer.Label = "TEMPORARY";
 
+            tempControllerType = new TECControllerType(tempManufacturer);
+            tempPanelType = new TECPanelType(tempManufacturer);
+        }
         #region Catalogs
         static private TECCatalogs getCatalogs()
         {
@@ -384,14 +407,11 @@ namespace EstimatingUtilitiesLibrary.Database
             DataRow bidInfoRow = bidInfoDT.Rows[0];
 
             TECBid outBid = new TECBid(new Guid(bidInfoRow[BidInfoTable.ID.Name].ToString()));
-            outBid.Name = bidInfoRow[BidInfoTable.Name.Name].ToString();
-            outBid.BidNumber = bidInfoRow[BidInfoTable.Number.Name].ToString();
+            assignValuePropertiesFromTable(outBid, new BidInfoTable(), bidInfoRow);
 
             string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
             outBid.DueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
-
-            outBid.Salesperson = bidInfoRow[BidInfoTable.Salesperson.Name].ToString();
-            outBid.Estimator = bidInfoRow[BidInfoTable.Estimator.Name].ToString();
+            
 
             return outBid;
         }
@@ -478,11 +498,11 @@ namespace EstimatingUtilitiesLibrary.Database
                 + BidSystemTable.Index.Name;
 
             DataTable systemsDT = SQLiteDB.GetDataFromCommand(command);
-            if (systemsDT.Rows.Count < 1)
-            {
-                command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
-                systemsDT = SQLiteDB.GetDataFromCommand(command);
-            }
+            //if (systemsDT.Rows.Count < 1)
+            //{
+            //    command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from " + SystemTable.TableName;
+            //    systemsDT = SQLiteDB.GetDataFromCommand(command);
+            //}
             foreach (DataRow row in systemsDT.Rows)
             { systems.Add(getSystemFromRow(row)); }
             return systems;
@@ -737,6 +757,10 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPlaceholderControllerTypeFromRow(manTable.Rows[0]); }
+            else if (justUpdated)
+            {
+                return tempControllerType;
+            }
             else
             { return null; }
         }
@@ -756,6 +780,18 @@ namespace EstimatingUtilitiesLibrary.Database
                 return new TECParameters(bid.Guid);
             }
             return getBidParametersFromRow(DT.Rows[0]);
+        }
+        static private ObservableCollection<TECParameters> getTemplatesParameters()
+        {
+            ObservableCollection<TECParameters> outParameters = new ObservableCollection<TECParameters>();
+            string constsCommand = "select " + DatabaseHelper.AllFieldsInTableString(new ParametersTable()) + " from " + ParametersTable.TableName;
+            
+            DataTable DT = SQLiteDB.GetDataFromCommand(constsCommand);
+            foreach(DataRow row in DT.Rows)
+            {
+                outParameters.Add(getBidParametersFromRow(DT.Rows[0]));
+            }
+            return outParameters;
         }
         static private ObservableCollection<TECMisc> getMisc()
         {
@@ -817,6 +853,10 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPanelTypeFromRow(manTable.Rows[0]); }
+            else if (justUpdated)
+            {
+                return tempPanelType;
+            }
             else
             { return null; }
         }
@@ -918,6 +958,10 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPlaceholderManufacturerFromRow(manTable.Rows[0]); }
+            else if (justUpdated)
+            {
+                return tempManufacturer;
+            }
             else
             { return null; }
         }
@@ -1032,14 +1076,12 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid locationID = new Guid(row[LocationTable.ID.Name].ToString());
             var location = new TECLabeled(locationID);
             assignValuePropertiesFromTable(location, new LocationTable(), row);
-            location.Flavor = Flavor.Location;
             return location;
         }
         private static TECLabeled getTagFromRow(DataRow row)
         {
             var tag = new TECLabeled(new Guid(row[TagTable.ID.Name].ToString()));
             assignValuePropertiesFromTable(tag, new TagTable(), row);
-            tag.Flavor = Flavor.Tag;
             return tag;
         }
         private static TECPanelType getPanelTypeFromRow(DataRow row)
@@ -1092,7 +1134,6 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid noteID = new Guid(row[NoteTable.ID.Name].ToString());
             var note = new TECLabeled(noteID);
             assignValuePropertiesFromTable(note, new NoteTable(), row);
-            note.Flavor = Flavor.Note;
             return note;
         }
         private static TECLabeled getExclusionFromRow(DataRow row)
@@ -1100,7 +1141,6 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid exclusionId = new Guid(row[ExclusionTable.ID.Name].ToString());
             TECLabeled exclusion = new TECLabeled(exclusionId);
             assignValuePropertiesFromTable(exclusion, new ExclusionTable(), row);
-            exclusion.Flavor = Flavor.Exclusion;
             return exclusion;
         }
         #endregion
@@ -1312,10 +1352,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private static void assignValuePropertiesFromTable(object item, TableBase table, DataRow row)
         {
-            TableInfo tableInfo = new TableInfo(table);
-            foreach(TableField field in tableInfo.Fields)
+            foreach(TableField field in table.Fields)
             {
-                if(field.Property.ReflectedType == item.GetType() && field.Property.SetMethod != null)
+                if (field.Property.DeclaringType.IsInstanceOfType(item) && field.Property.SetMethod != null)
                 {
                     if(field.Property.PropertyType == typeof(string))
                     {

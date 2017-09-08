@@ -64,9 +64,13 @@ namespace EstimatingLibrary
             get { return getCosts(); }
         }
 
-        public List<TECObject> SaveObjects
+        public SaveableMap SaveObjects
         {
             get { return saveObjects(); }
+        }
+        public SaveableMap RelatedObjects
+        {
+            get { return relatedObjects(); }
         }
         #endregion //Properties
 
@@ -97,11 +101,23 @@ namespace EstimatingLibrary
         }
 
         protected abstract CostBatch getCosts();
-        protected virtual List<TECObject> saveObjects()
+        protected virtual SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
-            saveList.Add(this.ConduitType);
+            SaveableMap saveList = new SaveableMap();
+            if(this.ConduitType != null)
+            {
+                saveList.Add(this.ConduitType, "ConduitType");
+            }
             return saveList;
+        }
+        protected virtual SaveableMap relatedObjects()
+        {
+            SaveableMap relatedList = new SaveableMap();
+            if (this.ConduitType != null)
+            {
+                relatedList.Add(this.ConduitType, "ConduitType");
+            }
+            return relatedList;
         }
     }
 }

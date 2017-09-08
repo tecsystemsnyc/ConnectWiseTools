@@ -65,8 +65,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = AssociatedCosts;
+                AssociatedCosts.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
                 _associatedCosts = value;
                 NotifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
+                AssociatedCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
             }
         }
 
@@ -78,11 +80,18 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECObject> SaveObjects
+        public SaveableMap SaveObjects
         {
             get
             {
                 return saveObjects();
+            }
+        }
+        public SaveableMap RelatedObjects
+        {
+            get
+            {
+                return relatedObjects();
             }
         }
         #endregion
@@ -97,6 +106,7 @@ namespace EstimatingLibrary
             _tags = new ObservableCollection<TECLabeled>();
             _associatedCosts = new ObservableCollection<TECCost>();
             Tags.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Tags");
+            AssociatedCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
         }
 
         #endregion 
@@ -153,12 +163,19 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected virtual List<TECObject> saveObjects()
+        protected virtual SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
-            saveList.AddRange(this.Tags);
-            saveList.AddRange(this.AssociatedCosts);
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.Tags, "Tags");
+            saveList.AddRange(this.AssociatedCosts.Distinct(), "AssociatedCosts");
             return saveList;
+        }
+        protected virtual SaveableMap relatedObjects()
+        {
+            SaveableMap relatedList = new SaveableMap();
+            relatedList.AddRange(this.Tags, "Tags");
+            relatedList.AddRange(this.AssociatedCosts.Distinct(), "AssociatedCosts");
+            return relatedList;
         }
         #endregion Methods
     }

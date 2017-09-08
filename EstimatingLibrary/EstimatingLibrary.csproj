@@ -117,7 +117,7 @@
     <Compile Include="Utilities\ModelLinkingHelper.cs" />
     <Compile Include="TECChangedEventArgs.cs" />
     <Compile Include="TECBid.cs" />
-    <Compile Include="TECBidParameters.cs" />
+    <Compile Include="TECParameters.cs" />
     <Compile Include="TECConnection.cs" />
     <Compile Include="TECElectricalMaterial.cs" />
     <Compile Include="TECController.cs" />

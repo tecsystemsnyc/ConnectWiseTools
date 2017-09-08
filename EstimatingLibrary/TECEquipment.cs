@@ -91,11 +91,11 @@ namespace EstimatingLibrary
                 {
                     pointNumber += item.PointNumber;
                     costs += item.CostBatch;
-                    NotifyCombinedChanged(Change.Add, "SubScope", this, item);
                     if ((item as TECSubScope).Location == null)
                     {
                         (item as TECSubScope).SetLocationFromParent(this.Location);
                     }
+                    NotifyCombinedChanged(Change.Add, "SubScope", this, item);
                 }
                 PointChanged?.Invoke(pointNumber);
                 NotifyCostChanged(costs);
@@ -161,12 +161,11 @@ namespace EstimatingLibrary
             }
             return outPoints;
         }
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(this.SubScope);
-            saveList.AddRange(this.Points);
+            saveList.AddRange(this.SubScope, "SubScope");
             return saveList;
         }
         

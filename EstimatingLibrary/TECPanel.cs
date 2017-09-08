@@ -80,12 +80,20 @@ namespace EstimatingLibrary
             return outPanel;
         }
 
-        protected override List<TECObject> saveObjects()
+        protected override SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
+            SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.Add(this.Type);
-            saveList.AddRange(this.Controllers);
+            saveList.Add(this.Type, "Type");
+            saveList.AddRange(this.Controllers, "Controllers");
+            return saveList;
+        }
+        protected override SaveableMap relatedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.relatedObjects());
+            saveList.Add(this.Type, "Type");
+            saveList.AddRange(this.Controllers, "Controllers");
             return saveList;
         }
 

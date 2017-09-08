@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class SaveAsTemplatesTests
+    public class SaveNewTemplatesTests
     {
         private const bool DEBUG = true;
 
@@ -77,8 +77,6 @@ namespace Tests
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(expectedTemplates);
             actualTemplates = manager.Load() as TECTemplates;
-
-            actualTemplates = DatabaseLoader.Load(path) as TECTemplates;
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {
@@ -192,39 +190,37 @@ namespace Tests
         [TestMethod]
         public void SaveAs_Templates_LaborConstants()
         {
-            throw new NotImplementedException();
-            //TECLabor expectedLabor = expectedTemplates.Labor;
-            //TECLabor actualLabor = actualTemplates.Labor;
+            TECParameters expectedLabor = expectedTemplates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Parameters[0];
 
-            ////Assert
-            //Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
-            //Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
+            //Assert
+            Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
+            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
 
-            //Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
-            //Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
+            Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
+            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
 
-            //Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
-            //Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
+            Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
+            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
 
-            //Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
-            //Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
+            Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
+            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
 
-            //Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
-            //Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
+            Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
+            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
         }
 
         [TestMethod]
         public void SaveAs_Templates_SubcontractLaborConstants()
         {
-            throw new NotImplementedException();
-            //TECLabor expectedLabor = expectedTemplates.Labor;
-            //TECLabor actualLabor = actualTemplates.Labor;
+            TECParameters expectedLabor = expectedTemplates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Parameters[0];
 
-            ////Assert
-            //Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
-            //Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
-            //Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate);
-            //Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate);
+            //Assert
+            Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
+            Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate);
+            Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate);
         }
 
         [TestMethod]

@@ -148,9 +148,13 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECObject> SaveObjects
+        public SaveableMap SaveObjects
         {
             get { return saveObjects(); }
+        }
+        public SaveableMap RelatedObjects
+        {
+            get { return relatedObjects(); }
         }
 
         public Action<TECObject> ScopeChildRemoved;
@@ -224,20 +228,25 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private List<TECObject> saveObjects()
+        private SaveableMap saveObjects()
         {
-            List<TECObject> saveList = new List<TECObject>();
-            saveList.AddRange(this.IOModules);
-            saveList.AddRange(this.Devices);
-            saveList.AddRange(this.Valves);
-            saveList.AddRange(this.Manufacturers);
-            saveList.AddRange(this.PanelTypes);
-            saveList.AddRange(this.ControllerTypes);
-            saveList.AddRange(this.ConnectionTypes);
-            saveList.AddRange(this.ConduitTypes);
-            saveList.AddRange(this.AssociatedCosts);
-            saveList.AddRange(this.Tags);
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.IOModules, "IOModules");
+            saveList.AddRange(this.Devices, "Devices");
+            saveList.AddRange(this.Valves, "Valves");
+            saveList.AddRange(this.Manufacturers, "Manufacturers");
+            saveList.AddRange(this.PanelTypes, "PanelTypes");
+            saveList.AddRange(this.ControllerTypes, "ControllerTypes");
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
+            saveList.AddRange(this.ConduitTypes, "ConduitTypes");
+            saveList.AddRange(this.AssociatedCosts, "AssociatedCosts");
+            saveList.AddRange(this.Tags, "Tags");
             return saveList;
+        }
+        private SaveableMap relatedObjects()
+        {
+            SaveableMap relatedList = new SaveableMap();
+            return relatedList;
         }
     }
 }
