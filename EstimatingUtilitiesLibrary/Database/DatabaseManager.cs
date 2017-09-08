@@ -60,11 +60,11 @@ namespace EstimatingUtilitiesLibrary.Database
                 DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
                 if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
                 {
-                    return DatabaseLoader.Load(path);
+                    return DatabaseLoader.Load(path, true);
                 }
                 else
                 {
-                    return null;
+                    return DatabaseLoader.Load(path);
                 }
             //}
             //catch

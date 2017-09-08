@@ -619,7 +619,7 @@ namespace EstimatingUtilitiesLibrary.Database
     }
     internal class ConnectionTypeTable : TableBase
     {
-        public static string TableName = "Connectiontype";
+        public static string TableName = "ConnectionType";
         public static Type ObjectType = typeof(TECElectricalMaterial);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
@@ -2109,7 +2109,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type MiscType = typeof(TECMisc);
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
-        public static TableField MiscID = new TableField("MIscID", "TEXT", MiscType.GetProperty("Guid"));
+        public static TableField MiscID = new TableField("MiscID", "TEXT", MiscType.GetProperty("Guid"));
         
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,

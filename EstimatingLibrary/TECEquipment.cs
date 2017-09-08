@@ -91,11 +91,11 @@ namespace EstimatingLibrary
                 {
                     pointNumber += item.PointNumber;
                     costs += item.CostBatch;
-                    NotifyCombinedChanged(Change.Add, "SubScope", this, item);
                     if ((item as TECSubScope).Location == null)
                     {
                         (item as TECSubScope).SetLocationFromParent(this.Location);
                     }
+                    NotifyCombinedChanged(Change.Add, "SubScope", this, item);
                 }
                 PointChanged?.Invoke(pointNumber);
                 NotifyCostChanged(costs);

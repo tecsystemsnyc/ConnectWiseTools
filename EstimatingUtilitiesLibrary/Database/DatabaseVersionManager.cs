@@ -17,21 +17,12 @@ namespace EstimatingUtilitiesLibrary.Database
             SQLiteDatabase db = new SQLiteDatabase(path);
             if (!isUpToDate(db))
             {
-                //try
-                //{
-                    updateDatabase(db, versionDefintion);
-                    db.Connection.Close();
-                    return true;
-                //}
-                //catch
-                //{
-                //    db.Connection.Close();
-
-                //    return false;
-                //}
+                updateDatabase(db, versionDefintion);
+                db.Connection.Close();
+                return true;
             }
             db.Connection.Close();
-            return true;
+            return false;
         }
 
         #region Database Version Update Methods
@@ -96,7 +87,28 @@ namespace EstimatingUtilitiesLibrary.Database
                 {
                     migrateData(map.OriginalTableNames[0], DatabaseHelper.FieldsString(map.OriginalFields),
                         map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
-                } 
+                }
+                else if (map.OriginalTableNames.Count > 1)
+                {
+                    if (isSingleRow(map))
+                    {
+                        DataTable dt = combinedTable(map, db);
+                        Tuple<List<string>, List<string>> fieldValues = fieldValuePair(dt, map.OriginalFields);
+                        string insertColumns = DatabaseHelper.FieldsString(map.UpdateFields);
+                        string insertValues = DatabaseHelper.ValuesString(fieldValues.Item2);
+                        string command = String.Format("insert into {0} ({1}) values ({2})", map.UpdateTableName, insertColumns, insertValues);
+                        db.NonQueryCommand(command);
+                    }
+                    else
+                    {
+                        foreach(string table in map.OriginalTableNames)
+                        {
+                            migrateData(table, DatabaseHelper.FieldsString(map.TableFieldsDictionary[table]),
+                            map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
+                        }
+                    }
+                    
+                }
             }
         }
         static private void migrateFromTempTables(Dictionary<string, string> tableMap, SQLiteDatabase db)
@@ -139,6 +151,52 @@ namespace EstimatingUtilitiesLibrary.Database
             return "Table " + version;
         }
 
+        private static DataTable combinedTable(TableMap map, SQLiteDatabase db)
+        {
+            DataTable outTable = new DataTable("Combined Table");
+            List<object> rowList = new List<object>();
+            foreach(string table in map.OriginalTableNames)
+            {
+                string command = String.Format("select * from {0};", table);
+                DataTable tableData = db.GetDataFromCommand(command);
+                foreach(DataColumn column in tableData.Columns)
+                {
+                    if (map.OriginalFields.Contains(column.ColumnName))
+                    {
+                        outTable.Columns.Add(column.ColumnName, column.DataType);
+                        rowList.Add(tableData.Rows[0][column]);
+                    }
+                }
+            }
+            outTable.Rows.Add(rowList.ToArray());
+            return outTable;
+        }
+        private static Tuple<List<string>, List<string>> fieldValuePair(DataTable dt, List<string> fields)
+        {
+            Tuple<List<string>, List<string>> outData = new Tuple<List<string>, List<string>>(new List<string>(), new List<string>());
+            foreach(string field in fields)
+            {
+                outData.Item1.Add(field);
+                outData.Item2.Add(dt.Rows[0][field].ToString());
+            }
+            return outData;
+        }
+        private static bool isSingleRow(TableMap map)
+        {
+            bool outBool = true;
+            foreach (KeyValuePair<string, List<string>> pair in map.TableFieldsDictionary)
+            {
+                if (pair.Value.Count == map.UpdateFields.Count)
+                {
+                    outBool = false;
+                } else
+                {
+                    outBool = true;
+                }
+            }
+            return outBool;
+        }
+
         private static TableMapList buildMap(DataTable dt, int originalVersion, int updateVersion, Dictionary<string, string> tempMap)
         {
             string originalTableColumn = tableString(originalVersion);
@@ -161,21 +219,13 @@ namespace EstimatingUtilitiesLibrary.Database
                         if (mapList.ContainsTable(updateTempTable))
                         {
                             TableMap map = mapList.GetMap(updateTempTable);
-                            map.OriginalFields.Add(originalField);
-                            map.UpdateFields.Add(updateField);
-                            if (!map.OriginalTableNames.Contains(originalTable))
-                            {
-                                map.OriginalTableNames.Add(originalTable);
-                            }
-                            
+                            map.Add(originalTable, originalField, updateField);
+
                         }
                         else
                         {
-                            TableMap map = new TableMap();
-                            map.UpdateTableName = updateTempTable;
-                            map.OriginalFields.Add(originalField);
-                            map.UpdateFields.Add(updateField);
-                            map.OriginalTableNames.Add(originalTable);
+                            TableMap map = new TableMap(updateTempTable);
+                            map.Add(originalTable, originalField, updateField);
                             mapList.Add(map);
                         }
                     }
@@ -183,7 +233,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return mapList;
         }
-
+        
         private class TableMapList : IEnumerable
         {
             List<TableMap> mapList;
@@ -219,18 +269,44 @@ namespace EstimatingUtilitiesLibrary.Database
                 return dictionary[tableName];
             }
         }
-
         private class TableMap
         {
             public string UpdateTableName;
             public List<string> OriginalTableNames;
             public List<string> UpdateFields;
             public List<string> OriginalFields;
-            public TableMap()
+            public Dictionary<string, List<string>> TableFieldsDictionary;
+
+            public TableMap(string updateTable)
             {
+                UpdateTableName = updateTable;
                 OriginalFields = new List<string>();
                 OriginalTableNames = new List<string>();
                 UpdateFields = new List<string>();
+                TableFieldsDictionary = new Dictionary<string, List<string>>();
+            }
+
+            public void Add(string originalTable, string originalField, string updateField)
+            {
+                if (OriginalTableNames.Contains(originalTable))
+                {
+                    if (!UpdateFields.Contains(updateField))
+                    {
+                        UpdateFields.Add(updateField);
+                    }
+                    OriginalFields.Add(originalField);
+                    TableFieldsDictionary[originalTable].Add(originalField);
+                }
+                else
+                {
+                    if (!UpdateFields.Contains(updateField))
+                    {
+                        UpdateFields.Add(updateField);
+                    }
+                    OriginalFields.Add(originalField);
+                    TableFieldsDictionary[originalTable] = new List<string>() { originalField };
+                    OriginalTableNames.Add(originalTable);
+                }
             }
         }
         #endregion

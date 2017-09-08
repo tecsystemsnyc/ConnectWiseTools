@@ -196,8 +196,7 @@ namespace EstimatingLibrary
                 return points();
             }
         }
-
-
+        
         public ObservableListDictionary<TECObject> TypicalInstanceDictionary
         {
             get

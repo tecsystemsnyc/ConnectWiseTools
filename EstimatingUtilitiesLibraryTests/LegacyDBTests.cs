@@ -623,7 +623,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             Assert.AreEqual(expectedName, actualDevice.Name, "Device name didn't load properly.");
             Assert.AreEqual(expectedDescription, actualDevice.Description, "Device description didn't load properly.");
-            Assert.AreEqual(expectedCost, actualDevice.Cost, "Device cost didn't load properly.");
+            Assert.AreEqual(expectedCost, actualDevice.Price, "Device cost didn't load properly.");
             Assert.AreEqual(manufacturerGuid, actualDevice.Manufacturer.Guid, "Manufacturer didn't load properly into device.");
 
             Assert.IsTrue(foundConnectionType, "Connection type didn't load properly into device.");
@@ -1527,108 +1527,10 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedName, actualModule.Name);
             Assert.AreEqual(expectedDescription, actualModule.Description);
-            Assert.AreEqual(expectedCost, actualModule.Cost);
+            Assert.AreEqual(expectedCost, actualModule.Price);
             Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
         }
-
-        [TestMethod]
-        public void Load_Bid_IO()
-        {
-            Assert.Fail();
-            ////Arrange
-            //Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            //IOType expectedType = IOType.BACnetIP;
-            //int expectedLabor = 2;
-
-            //Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
-
-            //TECIO actualIO = null;
-            //foreach (TECController controller in actualBid.Controllers)
-            //{
-            //    foreach (TECIO io in controller.IO)
-            //    {
-            //        if (io.Guid == expectedGuid)
-            //        {
-            //            actualIO = io;
-            //        }
-            //    }
-            //}
-
-            ////Assert
-            //Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
-            //Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
-            //Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
-        }
-
-        [TestMethod]
-        public void Load_Bid_TypicalIO()
-        {
-            Assert.Fail();
-            ////Arrange
-            //Guid expectedGuid = new Guid("fbae3851-3320-4e94-a674-ddec86bc4964");
-            //IOType expectedType = IOType.BACnetIP;
-            //int expectedLabor = 2;
-
-            //Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
-
-            //TECIO actualIO = null;
-            //foreach (TECSystem system in actualBid.Systems)
-            //{
-            //    foreach (TECController controller in system.Controllers)
-            //    {
-            //        foreach (TECIO io in controller.IO)
-            //        {
-            //            if (io.Guid == expectedGuid)
-            //            {
-            //                actualIO = io;
-            //            }
-            //        }
-            //    }
-            //}
-
-            ////Assert
-            //Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
-            //Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
-            //Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
-        }
-
-        [TestMethod]
-        public void Load_Bid_InstanceIO()
-        {
-            Assert.Fail();
-            ////Arrange
-            //Guid expectedGuid = new Guid("434bc312-f933-40c8-b8bd-f4e22f19f606");
-            //IOType expectedType = IOType.BACnetIP;
-            //int expectedLabor = 2;
-
-            //Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
-
-            //TECIO actualIO = null;
-            //foreach (TECSystem typical in actualBid.Systems)
-            //{
-            //    foreach (TECSystem system in typical.SystemInstances)
-            //        foreach (TECController controller in system.Controllers)
-            //        {
-            //            foreach (TECIO io in controller.IO)
-            //            {
-            //                if (io.Guid == expectedGuid)
-            //                {
-            //                    actualIO = io;
-            //                }
-            //            }
-            //        }
-            //}
-
-            ////Assert
-            //Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
-            //Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
-            //Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
-        }
-
-        //----------------------------------------Tests above have new values, below do not-------------------------------------------
-
-
-
+        
         private void testForScopeChildren(TECScope scope)
         {
             testForTag(scope);

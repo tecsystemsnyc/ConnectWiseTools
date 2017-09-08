@@ -106,6 +106,22 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return command;
         }
+        public static string ValuesString(List<string> values)
+        {
+            string command = "";
+            for (int x = 0; x < values.Count; x++)
+            {
+                if (x != values.Count - 1)
+                {
+                    command += "'" + values[x] + "', ";
+                }
+                else
+                {
+                    command += "'" + values[x] + "'";
+                }
+            }
+            return command;
+        }
 
         public static void CreateBackup(string originalPath)
         {

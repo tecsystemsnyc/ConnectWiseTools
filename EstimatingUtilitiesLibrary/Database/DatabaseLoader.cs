@@ -22,8 +22,18 @@ namespace EstimatingUtilitiesLibrary.Database
 
         static private SQLiteDatabase SQLiteDB;
 
-        public static TECScopeManager Load(string path)
+        static private bool justUpdated;
+        static private TECManufacturer tempManufacturer;
+        static private TECPanelType tempPanelType;
+        static private TECControllerType tempControllerType;
+
+        public static TECScopeManager Load(string path, bool versionUpdated = false)
         {
+            justUpdated = versionUpdated;
+            if (justUpdated)
+            {
+                setupTemps();
+            }
             TECScopeManager workingScopeManager = null;
             SQLiteDB = new SQLiteDatabase(path);
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
@@ -96,8 +106,22 @@ namespace EstimatingUtilitiesLibrary.Database
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();
+            if (justUpdated)
+            {
+                scopeManager.Catalogs.Manufacturers.Add(tempManufacturer);
+                scopeManager.Catalogs.PanelTypes.Add(tempPanelType);
+                scopeManager.Catalogs.ControllerTypes.Add(tempControllerType);
+            }
         }
         
+        static private void setupTemps()
+        {
+            tempManufacturer = new TECManufacturer();
+            tempManufacturer.Label = "TEMPORARY";
+
+            tempControllerType = new TECControllerType(tempManufacturer);
+            tempPanelType = new TECPanelType(tempManufacturer);
+        }
         #region Catalogs
         static private TECCatalogs getCatalogs()
         {
@@ -733,6 +757,10 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPlaceholderControllerTypeFromRow(manTable.Rows[0]); }
+            else if (justUpdated)
+            {
+                return tempControllerType;
+            }
             else
             { return null; }
         }
@@ -825,6 +853,10 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPanelTypeFromRow(manTable.Rows[0]); }
+            else if (justUpdated)
+            {
+                return tempPanelType;
+            }
             else
             { return null; }
         }
@@ -926,6 +958,10 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable manTable = SQLiteDB.GetDataFromCommand(command);
             if (manTable.Rows.Count > 0)
             { return getPlaceholderManufacturerFromRow(manTable.Rows[0]); }
+            else if (justUpdated)
+            {
+                return tempManufacturer;
+            }
             else
             { return null; }
         }
