@@ -144,6 +144,9 @@ namespace TECUserControlLibrary.ViewModels
             if (isNew)
             {
                 Bid = new TECBid();
+                watcher = new ChangeWatcher(Bid);
+                doStack = new DoStacker(watcher);
+                deltaStack = new DeltaStacker(watcher);
             }
 
             Templates = new TECTemplates();
