@@ -70,7 +70,7 @@ namespace EstimatingUtilitiesLibrary.Database
             int originalVerion = infoDT.Rows[0][MetadataTable.Version.Name].ToString().ToInt();
             updateToVersion(versionDefinition, db, originalVerion, updateVerison, tableMap, tableNames);
             removeOldTables(tableNames, db);
-            foreach (TableBase table in databaseTableList)
+            foreach (TableBase table in databaseTableList.Where(table => table.NameString != MetadataTable.TableName))
             {
                 DatabaseGenerator.CreateTableFromDefinition(table, db);
             }
