@@ -703,7 +703,28 @@ namespace Tests
         [TestMethod]
         public void AddControllerToNetworkConnection()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController parentController = new TECController(type);
+            bid.Controllers.Add(parentController);
+
+            TECController childController = new TECController(type);
+            bid.Controllers.Add(childController);
+
+            TECController daisyController = new TECController(type);
+
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
+
+            resetRaised();
+
+            //Act
+            parentController.AddController(daisyController, netConnect);
+
+            //Assert
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Add, "ChildrenControllers", netConnect, daisyController);
+            checkCostDelta(netConnect.CostBatch);
         }
         #endregion
 
@@ -752,7 +773,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "Controllers", bid, controller);
-            checkCostDelta(controller.CostBatch);
+            checkCostDelta(controller.CostBatch * -1);
         }
 
         [TestMethod]
@@ -770,7 +791,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "Panels", bid, panel);
-            checkCostDelta(panel.CostBatch);
+            checkCostDelta(panel.CostBatch * -1);
         }
 
         [TestMethod]
@@ -789,7 +810,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "MiscCosts", bid, misc);
-            checkCostDelta(misc.CostBatch);
+            checkCostDelta(misc.CostBatch * -1);
         }
 
         [TestMethod]
@@ -883,8 +904,8 @@ namespace Tests
             //Assert
             checkRaised(true, true, true);
             checkInstanceChangedArgs(Change.Remove, "Instances", typical, instance);
-            checkCostDelta(instance.CostBatch);
-            checkPointDelta(instance.PointNumber);
+            checkCostDelta(instance.CostBatch * -1);
+            checkPointDelta(instance.PointNumber * -1);
         }
 
         [TestMethod]
@@ -1021,8 +1042,8 @@ namespace Tests
             //Assert
             checkRaised(true, true, true);
             checkInstanceChangedArgs(Change.Remove, "Equipment", instance, equip);
-            checkCostDelta(equip.CostBatch);
-            checkPointDelta(equip.PointNumber);
+            checkCostDelta(equip.CostBatch * -1);
+            checkPointDelta(equip.PointNumber * -1);
         }
 
         [TestMethod]
@@ -1044,7 +1065,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "Controllers", instance, controller);
-            checkCostDelta(controller.CostBatch);
+            checkCostDelta(controller.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1066,7 +1087,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "Panels", instance, panel);
-            checkCostDelta(panel.CostBatch);
+            checkCostDelta(panel.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1089,7 +1110,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "MiscCosts", instance, misc);
-            checkCostDelta(misc.CostBatch);
+            checkCostDelta(misc.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1192,8 +1213,8 @@ namespace Tests
             //Assert
             checkRaised(true, true, true);
             checkInstanceChangedArgs(Change.Remove, "SubScope", equip, ss);
-            checkCostDelta(ss.CostBatch);
-            checkPointDelta(ss.PointNumber);
+            checkCostDelta(ss.CostBatch * -1);
+            checkPointDelta(ss.PointNumber * -1);
         }
 
         [TestMethod]
@@ -1219,7 +1240,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "Devices", ss, dev);
-            checkCostDelta(dev.CostBatch);
+            checkCostDelta(dev.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1247,7 +1268,7 @@ namespace Tests
             //Assert
             checkRaised(true, false, true);
             checkInstanceChangedArgs(Change.Remove, "Points", ss, point);
-            checkPointDelta(point.PointNumber);
+            checkPointDelta(point.PointNumber * -1);
         }
 
         [TestMethod]
@@ -1273,7 +1294,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", parentController, netConnect);
-            checkCostDelta(netConnect.CostBatch);
+            checkCostDelta(netConnect.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1303,7 +1324,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", parentController, netConnect);
-            checkCostDelta(netConnect.CostBatch);
+            checkCostDelta(netConnect.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1331,7 +1352,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
-            checkCostDelta(connection.CostBatch);
+            checkCostDelta(connection.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1357,7 +1378,7 @@ namespace Tests
             //Assert
             checkRaised(false, false, false);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
-            checkCostDelta(connection.CostBatch);
+            checkCostDelta(connection.CostBatch * -1);
         }
 
         [TestMethod]
@@ -1385,13 +1406,35 @@ namespace Tests
             //Assert
             checkRaised(true, true, false);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
-            checkCostDelta(connection.CostBatch);
+            checkCostDelta(connection.CostBatch * -1);
         }
 
         [TestMethod]
         public void RemoveControllerFromNetworkConnection()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController parentController = new TECController(type);
+            bid.Controllers.Add(parentController);
+
+            TECController childController = new TECController(type);
+            bid.Controllers.Add(childController);
+
+            TECController daisyController = new TECController(type);
+
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
+            parentController.AddController(daisyController, netConnect);
+
+            resetRaised();
+
+            //Act
+            parentController.RemoveController(daisyController);
+
+            //Assert
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenControllers", netConnect, daisyController);
+            checkCostDelta(netConnect.CostBatch * -1);
         }
         #endregion
 
