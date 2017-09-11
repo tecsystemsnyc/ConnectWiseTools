@@ -262,7 +262,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerSubScopeConnection(TECSubScopeConnection connection)
         {
-            bool connectionIsTypical = isTypical(connection.ParentController, connection);
+            bool connectionIsTypical = isTypical(connection.ParentController);
             registerTECObject(connection, connectionIsTypical);
         }
         private void registerScopeBranch(TECScopeBranch branch)
@@ -364,15 +364,15 @@ namespace EstimatingLibrary.Utilities
             }
             else if (child is TECEquipment equip)
             {
-                registerEquipment(equip, isTypical(parent, child));
+                registerEquipment(equip, isTypical(parent));
             }
             else if (child is TECSubScope ss)
             {
-                registerSubScope(ss, isTypical(parent, child));
+                registerSubScope(ss, isTypical(parent));
             }
             else if (child is TECPoint point)
             {
-                registerTECObject(point, isTypical(parent, child));
+                registerTECObject(point, isTypical(parent));
             }
             else if (child is TECController controller)
             {
@@ -382,12 +382,12 @@ namespace EstimatingLibrary.Utilities
                 }
                 else if (parent is TECSystem)
                 {
-                    registerController(controller, isTypical(parent, child));
+                    registerController(controller, isTypical(parent));
                 }
             }
             else if (child is TECPanel panel)
             {
-                registerTECObject(panel, isTypical(parent, child));
+                registerTECObject(panel, isTypical(parent));
             }
             else if (child is TECConnection connection && parent is TECController)
             {
@@ -402,7 +402,7 @@ namespace EstimatingLibrary.Utilities
             }
             else if (child is TECMisc misc)
             {
-                registerTECObject(misc, isTypical(parent, child));
+                registerTECObject(misc, isTypical(parent));
             }
             else if (child is TECLabeled labelled)
             {
@@ -493,7 +493,7 @@ namespace EstimatingLibrary.Utilities
                     InstanceChanged?.Invoke(obj);
                 }
             }
-            else if (obj.PropertyName != "TypicalInstanceDictionary" && obj.Value is TECObject tecObj && !isTypical(obj.Sender, tecObj))
+            else if (obj.PropertyName != "TypicalInstanceDictionary" && obj.Value is TECObject tecObj && !isTypical(obj.Sender))
             {
                 InstanceChanged?.Invoke(obj);
             }
@@ -514,16 +514,9 @@ namespace EstimatingLibrary.Utilities
         }
         #endregion
 
-        private bool isTypical(TECObject child, TECObject parent = null)
+        private bool isTypical(TECObject obj)
         {
-            if (parent != null)
-            {
-                return (typicalList.Contains(parent) || typicalList.Contains(child));
-            }
-            else
-            {
-                return (typicalList.Contains(child));
-            }
+            return typicalList.Contains(obj);
         }
         private bool ssConnectIsInstance(TECSubScopeConnection ssConnect)
         {
