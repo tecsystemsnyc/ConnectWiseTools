@@ -1,6 +1,7 @@
 ﻿using DebugLibrary;
 using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -489,6 +490,26 @@ namespace EstimatingLibrary.Utilities
                 {
                     unregisterTECObject(oldChild);
                     registerTECObject(newChild, OccuranceType.Instance);
+                }
+            }
+            else if (newChild is IEnumerable list)
+            {
+                foreach(var item in list)
+                {
+                    if (item is TECObject obj)
+                    {
+                        registerTECObject(obj, occuranceDictionary[parent]);
+                    }
+                }
+                if (oldChild is IEnumerable oldList)
+                {
+                    foreach(var item in oldList)
+                    {
+                        if (item is TECObject obj)
+                        {
+                            unregisterTECObject(obj);
+                        }
+                    }
                 }
             }
         }
