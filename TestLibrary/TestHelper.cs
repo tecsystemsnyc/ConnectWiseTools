@@ -109,40 +109,35 @@ namespace Tests
             
             //Systems
             var system1 = CreateTestSystem(bid.Catalogs);
-            AssignSecondaryProperties(system1, bid);
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
             
             var system2 = CreateTestSystem(bid.Catalogs);
-            AssignSecondaryProperties(system2, bid);
             system2.Name = "System 2";
             system2.Description = "Description 2";
 
             var system3 = CreateTestSystem(bid.Catalogs);
-            AssignSecondaryProperties(system3, bid);
             system3.Name = "System 3";
-            system3.Description = "No Location";
+            system3.Description = "";
 
             bid.Systems.Add(system1);
             bid.Systems.Add(system2);
             bid.Systems.Add(system3);
 
-            AssignSecondaryProperties(system1.AddInstance(bid), bid);
-            AssignSecondaryProperties(system2.AddInstance(bid), bid);
-            AssignSecondaryProperties(system3.AddInstance(bid), bid);
+            system1.AddInstance(bid);
+            system2.AddInstance(bid);
+            system3.AddInstance(bid);
 
-            AssignSecondaryProperties(system1.AddInstance(bid), bid);
-            AssignSecondaryProperties(system2.AddInstance(bid), bid);
-            AssignSecondaryProperties(system3.AddInstance(bid), bid);
+            system1.AddInstance(bid);
+            system2.AddInstance(bid);
+            system3.AddInstance(bid);
 
             //Equipment
             var equipment1 = new TECEquipment();
-            AssignSecondaryProperties(equipment1, bid);
             equipment1.Name = "Equipment 1";
             equipment1.Description = "Description 1";
 
             var equipment2 = new TECEquipment();
-            AssignSecondaryProperties(equipment2, bid);
             equipment2.Name = "Equipment 2";
             equipment2.Description = "Description 2";
 
@@ -151,20 +146,16 @@ namespace Tests
 
             //SubScope
             var subScope1 = new TECSubScope();
-            AssignSecondaryProperties(subScope1, bid);
             subScope1.Name = "SubScope 1";
             subScope1.Description = "Description 1";
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
             subScope1.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
-            subScope1.Location = bid.Locations.RandomObject();
 
             var subScope2 = new TECSubScope();
-            AssignSecondaryProperties(subScope2, bid);
             subScope2.Name = "Empty SubScope";
             subScope2.Description = "Description 2";
             subScope2.AssociatedCosts.Add(bid.Catalogs.AssociatedCosts.RandomObject());
-            subScope2.Location = bid.Locations.RandomObject();
 
             equipment1.SubScope.Add(subScope1);
             equipment2.SubScope.Add(subScope2);
@@ -181,6 +172,14 @@ namespace Tests
             TECConnection testConnection = expectedController.AddSubScope(subScope1);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
             testConnection.Length = 42;
+
+            AssignAllSecondaryProperties(bid);
+
+            TECSystem noLocation = new TECSystem();
+            noLocation.Name = "No Location";
+            noLocation.Equipment.Add(new TECEquipment());
+            noLocation.Equipment[0].SubScope.Add(new TECSubScope());
+            bid.Systems.Add(noLocation);
 
             return bid;
         }
@@ -965,6 +964,34 @@ namespace Tests
                     }
                 }
                 if (tecAdded && elecAdded) break;
+            }
+        }
+
+        public static void AssignAllSecondaryProperties(TECBid bid)
+        {
+            foreach(TECSystem system in bid.Systems)
+            {
+                AssignSecondaryProperties(system, bid);
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    AssignSecondaryProperties(equipment, bid);
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        AssignSecondaryProperties(subScope, bid);
+                    }
+                }
+                foreach(TECSystem instance in system.Instances)
+                {
+                    AssignSecondaryProperties(instance, bid);
+                    foreach (TECEquipment equipment in instance.Equipment)
+                    {
+                        AssignSecondaryProperties(equipment, bid);
+                        foreach (TECSubScope subScope in equipment.SubScope)
+                        {
+                            AssignSecondaryProperties(subScope, bid);
+                        }
+                    }
+                }
             }
         }
 

@@ -17,6 +17,8 @@ namespace Tests
     [TestClass]
     public class SaveNewBidTests
     {
+        public static double DELTA = 0.0001;
+
         private const bool DEBUG = true;
 
         static TECBid expectedBid;
@@ -238,14 +240,14 @@ namespace Tests
             //Act
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(bid);
-            actualBid = manager.Load() as TECBid;
+            TECBid loadedBid = manager.Load() as TECBid;
 
             //Assert
-            Assert.AreEqual(bid.Name, actualBid.Name);
-            Assert.AreEqual(bid.BidNumber, actualBid.BidNumber);
-            Assert.AreEqual(bid.DueDate, actualBid.DueDate);
-            Assert.AreEqual(bid.Salesperson, actualBid.Salesperson);
-            Assert.AreEqual(bid.Estimator, actualBid.Estimator);
+            Assert.AreEqual(bid.Name, loadedBid.Name);
+            Assert.AreEqual(bid.BidNumber, loadedBid.BidNumber);
+            Assert.AreEqual(bid.DueDate, loadedBid.DueDate);
+            Assert.AreEqual(bid.Salesperson, loadedBid.Salesperson);
+            Assert.AreEqual(bid.Estimator, loadedBid.Estimator);
         }
 
         [TestMethod]
@@ -277,34 +279,34 @@ namespace Tests
             //Act
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(bid);
-            actualBid = manager.Load() as TECBid;
+            TECBid loadedBid = manager.Load() as TECBid;
 
             //Assert
-            Assert.AreEqual(bid.Parameters.IsTaxExempt, actualBid.Parameters.IsTaxExempt);
+            Assert.AreEqual(bid.Parameters.IsTaxExempt, loadedBid.Parameters.IsTaxExempt);
             
-            Assert.AreEqual(bid.Parameters.PMCoef, actualBid.Parameters.PMCoef);
-            Assert.AreEqual(bid.Parameters.PMRate, actualBid.Parameters.PMRate);
+            Assert.AreEqual(bid.Parameters.PMCoef, loadedBid.Parameters.PMCoef);
+            Assert.AreEqual(bid.Parameters.PMRate, loadedBid.Parameters.PMRate);
 
-            Assert.AreEqual(bid.Parameters.ENGCoef, actualBid.Parameters.ENGCoef);
-            Assert.AreEqual(bid.Parameters.ENGRate, actualBid.Parameters.ENGRate);
+            Assert.AreEqual(bid.Parameters.ENGCoef, loadedBid.Parameters.ENGCoef);
+            Assert.AreEqual(bid.Parameters.ENGRate, loadedBid.Parameters.ENGRate);
 
-            Assert.AreEqual(bid.Parameters.CommCoef, actualBid.Parameters.CommCoef);
-            Assert.AreEqual(bid.Parameters.CommRate, actualBid.Parameters.CommRate);
+            Assert.AreEqual(bid.Parameters.CommCoef, loadedBid.Parameters.CommCoef);
+            Assert.AreEqual(bid.Parameters.CommRate, loadedBid.Parameters.CommRate);
 
-            Assert.AreEqual(bid.Parameters.SoftCoef, actualBid.Parameters.SoftCoef);
-            Assert.AreEqual(bid.Parameters.SoftRate, actualBid.Parameters.SoftRate);
+            Assert.AreEqual(bid.Parameters.SoftCoef, loadedBid.Parameters.SoftCoef);
+            Assert.AreEqual(bid.Parameters.SoftRate, loadedBid.Parameters.SoftRate);
 
-            Assert.AreEqual(bid.Parameters.GraphCoef, actualBid.Parameters.GraphCoef);
-            Assert.AreEqual(bid.Parameters.GraphRate, actualBid.Parameters.GraphRate);
+            Assert.AreEqual(bid.Parameters.GraphCoef, loadedBid.Parameters.GraphCoef);
+            Assert.AreEqual(bid.Parameters.GraphRate, loadedBid.Parameters.GraphRate);
 
             //Assert
-            Assert.AreEqual(bid.Parameters.ElectricalRate, actualBid.Parameters.ElectricalRate);
-            Assert.AreEqual(bid.Parameters.ElectricalNonUnionRate, actualBid.Parameters.ElectricalNonUnionRate);
-            Assert.AreEqual(bid.Parameters.ElectricalSuperRate, actualBid.Parameters.ElectricalSuperRate);
-            Assert.AreEqual(bid.Parameters.ElectricalSuperNonUnionRate, actualBid.Parameters.ElectricalSuperNonUnionRate);
+            Assert.AreEqual(bid.Parameters.ElectricalRate, loadedBid.Parameters.ElectricalRate);
+            Assert.AreEqual(bid.Parameters.ElectricalNonUnionRate, loadedBid.Parameters.ElectricalNonUnionRate);
+            Assert.AreEqual(bid.Parameters.ElectricalSuperRate, loadedBid.Parameters.ElectricalSuperRate);
+            Assert.AreEqual(bid.Parameters.ElectricalSuperNonUnionRate, loadedBid.Parameters.ElectricalSuperNonUnionRate);
 
-            Assert.AreEqual(bid.Parameters.ElectricalIsOnOvertime, actualBid.Parameters.ElectricalIsOnOvertime);
-            Assert.AreEqual(bid.Parameters.ElectricalIsUnion, actualBid.Parameters.ElectricalIsUnion);
+            Assert.AreEqual(bid.Parameters.ElectricalIsOnOvertime, loadedBid.Parameters.ElectricalIsOnOvertime);
+            Assert.AreEqual(bid.Parameters.ElectricalIsUnion, loadedBid.Parameters.ElectricalIsUnion);
         }
         
         [TestMethod]
@@ -323,14 +325,14 @@ namespace Tests
             //Act
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(bid);
-            actualBid = manager.Load() as TECBid;
+            TECBid loadedBid = manager.Load() as TECBid;
 
             //Assert
-            Assert.AreEqual(bid.ExtraLabor.PMExtraHours, actualBid.ExtraLabor.PMExtraHours);
-            Assert.AreEqual(bid.ExtraLabor.ENGExtraHours, actualBid.ExtraLabor.ENGExtraHours);
-            Assert.AreEqual(bid.ExtraLabor.CommExtraHours, actualBid.ExtraLabor.CommExtraHours);
-            Assert.AreEqual(bid.ExtraLabor.SoftExtraHours, actualBid.ExtraLabor.SoftExtraHours);
-            Assert.AreEqual(bid.ExtraLabor.GraphExtraHours, actualBid.ExtraLabor.GraphExtraHours);
+            Assert.AreEqual(bid.ExtraLabor.PMExtraHours, loadedBid.ExtraLabor.PMExtraHours);
+            Assert.AreEqual(bid.ExtraLabor.ENGExtraHours, loadedBid.ExtraLabor.ENGExtraHours);
+            Assert.AreEqual(bid.ExtraLabor.CommExtraHours, loadedBid.ExtraLabor.CommExtraHours);
+            Assert.AreEqual(bid.ExtraLabor.SoftExtraHours, loadedBid.ExtraLabor.SoftExtraHours);
+            Assert.AreEqual(bid.ExtraLabor.GraphExtraHours, loadedBid.ExtraLabor.GraphExtraHours);
         }
         
         [TestMethod]
@@ -348,10 +350,10 @@ namespace Tests
             //Act
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(bid);
-            actualBid = manager.Load() as TECBid;
+            TECBid loadedBid = manager.Load() as TECBid;
 
             TECSystem actualSystem = null;
-            foreach(TECSystem system in actualBid.Systems)
+            foreach(TECSystem system in loadedBid.Systems)
             {
                 if(system.Guid == expectedSystem.Guid)
                 {
@@ -390,9 +392,9 @@ namespace Tests
             //Act
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(bid);
-            actualBid = manager.Load() as TECBid;
+            TECBid loadedBid = manager.Load() as TECBid;
 
-            TECEquipment actualEquipment = TestHelper.FindObjectInSystems(actualBid.Systems, expectedEquipment) as TECEquipment;
+            TECEquipment actualEquipment = TestHelper.FindObjectInSystems(loadedBid.Systems, expectedEquipment) as TECEquipment;
 
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
@@ -418,9 +420,9 @@ namespace Tests
             //Act
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(bid);
-            actualBid = manager.Load() as TECBid;
+            TECBid loadedBid = manager.Load() as TECBid;
 
-            TECSubScope actualSubScope = TestHelper.FindObjectInSystems(actualBid.Systems, expectedSubScope) as TECSubScope;
+            TECSubScope actualSubScope = TestHelper.FindObjectInSystems(loadedBid.Systems, expectedSubScope) as TECSubScope;
 
 
             //Assert
@@ -442,10 +444,10 @@ namespace Tests
             //Act
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(bid);
-            actualBid = manager.Load() as TECBid;
+            TECBid loadedBid = manager.Load() as TECBid;
 
             TECLabeled actualNote = null;
-            foreach (TECLabeled note in actualBid.Notes.Where(item => item.Guid == expectedNote.Guid))
+            foreach (TECLabeled note in loadedBid.Notes.Where(item => item.Guid == expectedNote.Guid))
             {
                 actualNote = note;
             }
@@ -536,6 +538,7 @@ namespace Tests
         public void SaveAs_Bid_ScopeBranch()
         {
             //Assert
+            Assert.AreEqual(expectedBid.ScopeTree.Count, actualBid.ScopeTree.Count);
             Assert.AreEqual(expectedBranch.Label, actualBranch.Label);
             Assert.AreEqual(expectedBranch.Guid, actualBranch.Guid);
 
@@ -674,12 +677,63 @@ namespace Tests
         public void SaveAs_Bid_PanelType()
         {
             //Arrange
-            TECPanelType expectedCost = expectedBid.Catalogs.PanelTypes[0];
-            TECPanelType actualCost = expectedBid.Catalogs.PanelTypes[0];
+            TECPanelType expectedCost = expectedBid.Catalogs.PanelTypes.RandomObject();
+            TECPanelType actualCost = null;
+            foreach(TECPanelType type in actualBid.Catalogs.PanelTypes)
+            {
+                if(type.Guid == expectedCost.Guid)
+                {
+                    actualCost = type;
+                    break;
+                }
+            }
 
-            Assert.AreEqual(expectedCost.Guid, expectedBid.Catalogs.PanelTypes[0].Guid);
-            Assert.AreEqual(expectedCost.Name, expectedBid.Catalogs.PanelTypes[0].Name);
-            Assert.AreEqual(expectedCost.Cost, expectedBid.Catalogs.PanelTypes[0].Cost);
+            Assert.AreEqual(expectedCost.Guid, actualCost.Guid);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Price, actualCost.Price, DELTA);
+            Assert.AreEqual(expectedCost.Manufacturer.Guid, actualCost.Manufacturer.Guid);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_ControllerType()
+        {
+            //Arrange
+            TECControllerType expectedCost = expectedBid.Catalogs.ControllerTypes.RandomObject();
+            TECControllerType actualCost = null;
+            foreach (TECControllerType type in actualBid.Catalogs.ControllerTypes)
+            {
+                if (type.Guid == expectedCost.Guid)
+                {
+                    actualCost = type;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedCost.Guid, actualCost.Guid);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Price, actualCost.Price, DELTA);
+            Assert.AreEqual(expectedCost.Manufacturer.Guid, actualCost.Manufacturer.Guid);
+        }
+
+        [TestMethod]
+        public void SaveAs_Bid_IOMOdule()
+        {
+            //Arrange
+            TECIOModule expectedCost = expectedBid.Catalogs.IOModules.RandomObject();
+            TECIOModule actualCost = null;
+            foreach (TECIOModule type in actualBid.Catalogs.IOModules)
+            {
+                if (type.Guid == expectedCost.Guid)
+                {
+                    actualCost = type;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedCost.Guid, actualCost.Guid);
+            Assert.AreEqual(expectedCost.Name, actualCost.Name);
+            Assert.AreEqual(expectedCost.Price, actualCost.Price, DELTA);
+            Assert.AreEqual(expectedCost.Manufacturer.Guid, actualCost.Manufacturer.Guid);
         }
 
         [TestMethod]
@@ -716,7 +770,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Bid_ControlledScopeInstances()
+        public void SaveAs_Bid_SystemInstances()
         {
             TECBid saveBid = new TECBid();
             saveBid.Catalogs = TestHelper.CreateTestCatalogs();

@@ -1625,8 +1625,8 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField LocationID = new TableField("LocationID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
-            LocationID,
-            ScopeID
+            ScopeID,
+            LocationID
             };
         private List<Type> types = new List<Type>()
         {
@@ -1772,7 +1772,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
-            ConnectionID
+            ConnectionID,
+            TypeID
         };
         private List<Type> types = new List<Type>()
         {

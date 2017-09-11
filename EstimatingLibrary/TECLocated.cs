@@ -20,9 +20,7 @@ namespace EstimatingLibrary
             {
                 var old = Location;
                 _location = value;
-                NotifyCombinedChanged(Change.Edit, "Location", this, value, old);
-                
-                //NotifyCombinedChanged(Change.Edit, "ObjectPropertyChanged", temp, oldNew, typeof(TECScope), typeof(TECLabeled));
+                NotifyCombinedChanged(Change.Edit, "Location", this, Location, old);
             }
         }
         #endregion
@@ -32,11 +30,7 @@ namespace EstimatingLibrary
         #region Methods
         public void SetLocationFromParent(TECLabeled location)
         {
-            var old = Location;
-            _location = location;
-            RaisePropertyChanged("Location");
-            NotifyCombinedChanged(Change.Edit, "Location", this, location, old);
-
+            Location = location;
         }
 
         protected void copyPropertiesFromLocated(TECLocated scope)

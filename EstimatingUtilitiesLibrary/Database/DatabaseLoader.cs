@@ -412,7 +412,6 @@ namespace EstimatingUtilitiesLibrary.Database
             string dueDateString = bidInfoRow[BidInfoTable.DueDate.Name].ToString();
             outBid.DueDate = DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture);
             
-
             return outBid;
         }
         public static TECTemplates GetTemplatesInfo(SQLiteDatabase db)
@@ -450,7 +449,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName;
             command += " where " + ScopeBranchTable.ID.Name;
-            command += " in (select " + ScopeBranchTable.ID.Name;
+            command += " in (select " + BidScopeBranchTable.ScopeBranchID.Name;
             command += " from " + BidScopeBranchTable.TableName + " where " + BidScopeBranchTable.ScopeBranchID.Name + " not in ";
             command += "(select " + ScopeBranchHierarchyTable.ChildID.Name + " from " + ScopeBranchHierarchyTable.TableName + "))";
 

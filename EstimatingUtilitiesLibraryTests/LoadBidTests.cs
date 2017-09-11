@@ -221,6 +221,7 @@ namespace Tests
                 }
             }
 
+            Assert.AreEqual(1, actualBid.ScopeTree.Count);
             Assert.AreEqual(expectedParentName, actualParent.Label, "Parent scope branch name didn't load properly.");
             Assert.AreEqual(expectedChildName, actualChild.Label, "Child scope branch name didn't load properly.");
         }

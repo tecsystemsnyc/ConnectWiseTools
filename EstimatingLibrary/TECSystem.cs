@@ -369,8 +369,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-
+        
         #region Event Handlers
         private void handleSystemChanged(TECChangedEventArgs args)
         {

@@ -1095,7 +1095,8 @@ namespace Tests
 
             foreach (TECDevice dev in ssToModify.Devices)
             {
-                if (dev.Guid == deviceToRemove.Guid) oldNumDevices++;
+                if (dev.Guid == deviceToRemove.Guid)
+                    oldNumDevices++;
             }
 
             ssToModify.Devices.Remove(deviceToRemove);
@@ -1130,8 +1131,15 @@ namespace Tests
             }
             if (!devFound) Assert.Fail();
 
+            int numDevices = 0;
+            foreach (TECDevice dev in modifiedSubScope.Devices)
+            {
+                if (dev.Guid == deviceToRemove.Guid)
+                    numDevices++;
+            }
+
             Assert.AreEqual(bid.Catalogs.Devices.Count(), actualBid.Catalogs.Devices.Count());
-            Assert.AreEqual((oldNumDevices - 1), modifiedSubScope.Devices.Count);
+            Assert.AreEqual((oldNumDevices - 1), numDevices);
         }
 
         #region Edit Device
@@ -1165,7 +1173,7 @@ namespace Tests
                 if (dev.Guid == expectedDevice.Guid) expectedNumDevices++;
             }
 
-            ssToModify.Devices.Add(new TECDevice(expectedDevice));
+            ssToModify.Devices.Add(expectedDevice);
             expectedNumDevices++;
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1824,7 +1832,7 @@ namespace Tests
             TECSystem sysToModify = null;
             foreach (TECSystem sys in bid.Systems)
             {
-                if (sys.Description == "No Location")
+                if (sys.Location == null)
                 {
                     sysToModify = sys;
                     break;

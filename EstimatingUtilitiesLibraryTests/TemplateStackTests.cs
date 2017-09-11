@@ -580,7 +580,7 @@ namespace Tests
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
             var device = Template.Catalogs.Devices.RandomObject();
-            double expected = device.Cost;
+            double expected = device.Price;
             double edit = 123;
 
             //Act
