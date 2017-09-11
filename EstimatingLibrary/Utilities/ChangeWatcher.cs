@@ -7,7 +7,7 @@ namespace EstimatingLibrary.Utilities
     public class ChangeWatcher
     {
         #region Fields
-        private Dictionary<TECObject, OccuranceType> occuranceDictionary;
+        private List<TECObject> typicalList;
         #endregion
 
         #region Constructors
@@ -32,10 +32,6 @@ namespace EstimatingLibrary.Utilities
         public event Action<int> PointChanged;
         #endregion
 
-        #region Enums
-        private enum OccuranceType { Typical, Instance };
-        #endregion
-
         #region Methods
         public void Refresh(TECBid bid)
         {
@@ -44,18 +40,18 @@ namespace EstimatingLibrary.Utilities
 
         private void initialize(TECBid bid)
         {
-            occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
+            typicalList = new List<TECObject>();
             registerBidChanges(bid);
         }
         private void initialize(TECTemplates templates)
         {
-            occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
+            typicalList = new List<TECObject>();
             registerTemplateChanges(templates);
         }
         private void initialize(TECSystem system)
         {
-            occuranceDictionary = new Dictionary<TECObject, OccuranceType>();
-            registerSystem(system, OccuranceType.Typical);
+            typicalList = new List<TECObject>();
+            registerSystem(system, true);
         }
 
         #region Registration
@@ -63,25 +59,25 @@ namespace EstimatingLibrary.Utilities
         {
             bid.PointChanged += (e) => handlePointChanged(bid, e);
             bid.CostChanged += (e) => handleCostChanged(bid, e);
-            registerTECObject(bid, OccuranceType.Instance);
-            registerTECObject(bid.ExtraLabor, OccuranceType.Instance);
-            registerTECObject(bid.Parameters, OccuranceType.Instance);
+            registerTECObject(bid);
+            registerTECObject(bid.ExtraLabor);
+            registerTECObject(bid.Parameters);
 
             foreach (TECSystem typical in bid.Systems)
             {
-                registerSystem(typical, OccuranceType.Typical);
+                registerSystem(typical, true);
             }
             foreach (TECController controller in bid.Controllers)
             {
-                registerController(controller, OccuranceType.Instance);
+                registerController(controller, false);
             }
             foreach (TECPanel panel in bid.Panels)
             {
-                registerTECObject(panel, OccuranceType.Instance);
+                registerTECObject(panel);
             }
             foreach (TECMisc misc in bid.MiscCosts)
             {
-                registerTECObject(misc, OccuranceType.Instance);
+                registerTECObject(misc);
             }
             foreach (TECScopeBranch branch in bid.ScopeTree)
             {
@@ -89,54 +85,57 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECLabeled note in bid.Notes)
             {
-                registerTECObject(note, OccuranceType.Instance);
+                registerTECObject(note);
             }
             foreach (TECLabeled exclusion in bid.Exclusions)
             {
-                registerTECObject(exclusion, OccuranceType.Instance);
+                registerTECObject(exclusion);
             }
             foreach (TECLabeled location in bid.Locations)
             {
-                registerTECObject(location, OccuranceType.Instance);
+                registerTECObject(location);
             }
         }
         private void registerTemplateChanges(TECTemplates templates)
         {
-            registerTECObject(templates, OccuranceType.Instance);
-            registerCatalogs(templates.Catalogs, OccuranceType.Instance);
-            foreach (TECSystem typical in templates.SystemTemplates)
+            registerTECObject(templates);
+            registerCatalogs(templates.Catalogs);
+            foreach (TECSystem system in templates.SystemTemplates)
             {
-                registerSystem(typical, OccuranceType.Instance);
+                registerSystem(system, false);
             }
             foreach (TECEquipment equipment in templates.EquipmentTemplates)
             {
-                registerEquipment(equipment, OccuranceType.Instance);
+                registerEquipment(equipment, false);
             }
             foreach (TECSubScope subScope in templates.SubScopeTemplates)
             {
-                registerSubScope(subScope, OccuranceType.Instance);
+                registerSubScope(subScope, false);
             }
             foreach (TECController controller in templates.ControllerTemplates)
             {
-                registerController(controller, OccuranceType.Instance);
+                registerController(controller, false);
             }
             foreach (TECPanel panel in templates.PanelTemplates)
             {
-                registerTECObject(panel, OccuranceType.Instance);
+                registerTECObject(panel);
             }
             foreach (TECMisc misc in templates.MiscCostTemplates)
             {
-                registerTECObject(misc, OccuranceType.Instance);
+                registerTECObject(misc);
             }
             foreach (TECParameters parameter in templates.Parameters)
             {
-                registerTECObject(parameter, OccuranceType.Instance);
+                registerTECObject(parameter);
             }
         }
 
-        private void registerTECObject(TECObject ob, OccuranceType ot)
+        private void registerTECObject(TECObject ob, bool isTypical = false)
         {
-            occuranceDictionary.Add(ob, ot);
+            if (isTypical)
+            {
+                typicalList.Add(ob);
+            }
             ob.TECChanged += handleTECChanged;
             if (ob is INotifyCostChanged costOb)
             {
@@ -149,7 +148,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void unregisterTECObject(TECObject ob)
         {
-            occuranceDictionary.Remove(ob);
+            typicalList.Remove(ob);
             ob.TECChanged -= handleTECChanged;
             if (ob is INotifyCostChanged costOb)
             {
@@ -161,95 +160,95 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private void registerCatalogs(TECCatalogs catalogs, OccuranceType ot)
+        private void registerCatalogs(TECCatalogs catalogs)
         {
-            registerTECObject(catalogs, ot);
+            registerTECObject(catalogs);
             foreach (TECDevice item in catalogs.Devices)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECElectricalMaterial item in catalogs.ConnectionTypes)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECElectricalMaterial item in catalogs.ConduitTypes)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECControllerType item in catalogs.ControllerTypes)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECIOModule item in catalogs.IOModules)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECPanelType item in catalogs.PanelTypes)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECManufacturer item in catalogs.Manufacturers)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECLabeled item in catalogs.Tags)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
             foreach (TECCost item in catalogs.AssociatedCosts)
             {
-                registerTECObject(item, ot);
+                registerTECObject(item);
             }
         }
 
-        private void registerSystem(TECSystem sys, OccuranceType ot)
+        private void registerSystem(TECSystem sys, bool isTypical)
         {
-            registerTECObject(sys, ot);
+            registerTECObject(sys, isTypical);
             foreach (TECSystem instance in sys.Instances)
             {
-                registerSystem(instance, OccuranceType.Instance);
+                registerSystem(instance, false);
             }
             foreach (TECEquipment equip in sys.Equipment)
             {
-                registerEquipment(equip, ot);
+                registerEquipment(equip, isTypical);
             }
             foreach (TECController controller in sys.Controllers)
             {
-                registerController(controller, ot);
+                registerController(controller, isTypical);
             }
             foreach (TECPanel panel in sys.Panels)
             {
-                registerTECObject(panel, ot);
+                registerTECObject(panel, isTypical);
             }
             foreach (TECMisc misc in sys.MiscCosts)
             {
-                registerTECObject(misc, ot);
+                registerTECObject(misc, isTypical);
             }
         }
-        private void registerEquipment(TECEquipment equip, OccuranceType ot)
+        private void registerEquipment(TECEquipment equip, bool isTypical)
         {
-            registerTECObject(equip, ot);
+            registerTECObject(equip, isTypical);
             foreach (TECSubScope ss in equip.SubScope)
             {
-                registerSubScope(ss, ot);
+                registerSubScope(ss, isTypical);
             }
         }
-        private void registerSubScope(TECSubScope ss, OccuranceType ot)
+        private void registerSubScope(TECSubScope ss, bool isTypical)
         {
-            registerTECObject(ss, ot);
+            registerTECObject(ss, isTypical);
             foreach (TECPoint point in ss.Points)
             {
-                registerTECObject(point, ot);
+                registerTECObject(point, isTypical);
             }
         }
-        private void registerController(TECController controller, OccuranceType ot)
+        private void registerController(TECController controller, bool isTypical)
         {
-            registerTECObject(controller, ot);
+            registerTECObject(controller, isTypical);
             foreach (TECConnection connection in controller.ChildrenConnections)
             {
                 if (connection is TECNetworkConnection)
                 {
-                    registerTECObject(connection, ot);
+                    registerTECObject(connection, isTypical);
                 }
                 else if (connection is TECSubScopeConnection ssConnect)
                 {
@@ -263,18 +262,12 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerSubScopeConnection(TECSubScopeConnection connection)
         {
-            if (isInstance(connection.ParentController) && isInstance(connection.SubScope))
-            {
-                registerTECObject(connection, OccuranceType.Instance);
-            }
-            else
-            {
-                registerTECObject(connection, OccuranceType.Typical);
-            }
+            bool connectionIsTypical = isTypical(connection.ParentController, connection);
+            registerTECObject(connection, connectionIsTypical);
         }
         private void registerScopeBranch(TECScopeBranch branch)
         {
-            registerTECObject(branch, OccuranceType.Instance);
+            registerTECObject(branch);
             foreach (TECScopeBranch subBranch in branch.Branches)
             {
                 registerScopeBranch(subBranch);
@@ -358,50 +351,49 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerAdd(TECObject parent, TECObject child)
         {
-            OccuranceType parentOT = occuranceDictionary[parent];
             if (child is TECSystem sys)
             {
                 if (parent is TECBid)
                 {
-                    registerSystem(sys, OccuranceType.Typical);
+                    registerSystem(sys, true);
                 }
                 else if (parent is TECSystem)
                 {
-                    registerSystem(sys, OccuranceType.Instance);
+                    registerSystem(sys, false);
                 }
             }
             else if (child is TECEquipment equip)
             {
-                registerEquipment(equip, parentOT);
+                registerEquipment(equip, isTypical(parent, child));
             }
             else if (child is TECSubScope ss)
             {
-                registerSubScope(ss, parentOT);
+                registerSubScope(ss, isTypical(parent, child));
             }
             else if (child is TECPoint point)
             {
-                registerTECObject(point, parentOT);
+                registerTECObject(point, isTypical(parent, child));
             }
             else if (child is TECController controller)
             {
                 if (parent is TECBid)
                 {
-                    registerController(controller, OccuranceType.Instance);
+                    registerController(controller, false);
                 }
                 else if (parent is TECSystem)
                 {
-                    registerController(controller, parentOT);
+                    registerController(controller, isTypical(parent, child));
                 }
             }
             else if (child is TECPanel panel)
             {
-                registerTECObject(panel, parentOT);
+                registerTECObject(panel, isTypical(parent, child));
             }
             else if (child is TECConnection connection && parent is TECController)
             {
                 if (connection is TECNetworkConnection netConnect)
                 {
-                    registerTECObject(netConnect, parentOT);
+                    registerTECObject(netConnect);
                 }
                 else if (connection is TECSubScopeConnection ssConnect)
                 {
@@ -410,7 +402,7 @@ namespace EstimatingLibrary.Utilities
             }
             else if (child is TECMisc misc)
             {
-                registerTECObject(misc, parentOT);
+                registerTECObject(misc, isTypical(parent, child));
             }
             else if (child is TECLabeled labelled)
             {
@@ -420,7 +412,7 @@ namespace EstimatingLibrary.Utilities
                 }
                 else if (!(parent is TECScope))
                 {
-                    registerTECObject(labelled, OccuranceType.Instance);
+                    registerTECObject(labelled);
                 }
             }
             else if (child is TECDevice)
@@ -429,7 +421,7 @@ namespace EstimatingLibrary.Utilities
             }
             else if (parent is TECCatalogs)
             {
-                registerTECObject(child, parentOT);
+                registerTECObject(child);
             }
             else if (parent is TECScope && child is TECCost)
             {
@@ -437,7 +429,7 @@ namespace EstimatingLibrary.Utilities
             }
             else if (child is TECParameters)
             {
-                registerTECObject(child, parentOT);
+                registerTECObject(child);
             }
             else
             {
@@ -478,12 +470,12 @@ namespace EstimatingLibrary.Utilities
                 if (newChild is TECExtraLabor)
                 {
                     unregisterTECObject(oldChild);
-                    registerTECObject(newChild, OccuranceType.Instance);
+                    registerTECObject(newChild);
                 }
                 else if (newChild is TECParameters)
                 {
                     unregisterTECObject(oldChild);
-                    registerTECObject(newChild, OccuranceType.Instance);
+                    registerTECObject(newChild);
                 }
             }
         }
@@ -501,46 +493,41 @@ namespace EstimatingLibrary.Utilities
                     InstanceChanged?.Invoke(obj);
                 }
             }
-            else if (isInstance(obj.Sender, obj.PropertyName))
+            else if (obj.PropertyName != "TypicalInstanceDictionary" && obj.Value is TECObject tecObj && !isTypical(obj.Sender, tecObj))
             {
                 InstanceChanged?.Invoke(obj);
             }
         }
         private void handleCostChanged(TECObject sender, CostBatch obj)
         {
-            if (isInstance(sender))
+            if (!isTypical(sender))
             {
                 CostChanged?.Invoke(obj);
             }
         }
         private void handlePointChanged(TECObject sender, int num)
         {
-            if (isInstance(sender))
+            if (!isTypical(sender))
             {
                 PointChanged?.Invoke(num);
             }
         }
         #endregion
 
-        private bool isInstance(TECObject ob, string propertyName = null)
+        private bool isTypical(TECObject child, TECObject parent = null)
         {
-            if (propertyName == "TypicalInstanceDictionary")
+            if (parent != null)
             {
-                return false;
-            }
-            if (occuranceDictionary.ContainsKey(ob))
-            {
-                OccuranceType ot = occuranceDictionary[ob];
-                return (ot == OccuranceType.Instance);
+                return (typicalList.Contains(parent) || typicalList.Contains(child));
             }
             else
             {
-                throw new NullReferenceException("Occurance dictionary doesn't contain TECObject.");
+                return (typicalList.Contains(child));
             }
         }
         private bool ssConnectIsInstance(TECSubScopeConnection ssConnect)
         {
-            return (isInstance(ssConnect.ParentController) && isInstance(ssConnect.SubScope));
+            return (!isTypical(ssConnect.ParentController) && !isTypical(ssConnect.SubScope));
         }
         #endregion
     }
