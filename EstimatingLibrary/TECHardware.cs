@@ -27,9 +27,12 @@ namespace EstimatingLibrary
             get { return _manufacturer; }
             set
             {
-                var old = Manufacturer;
-                _manufacturer = value;
-                NotifyCombinedChanged(Change.Edit, "Manufacturer", this, value, old);
+                if(_manufacturer != value)
+                {
+                    var old = Manufacturer;
+                    _manufacturer = value;
+                    NotifyCombinedChanged(Change.Edit, "Manufacturer", this, value, old);
+                }
             }
         }
         public new double Cost

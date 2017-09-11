@@ -96,7 +96,6 @@ namespace EstimatingLibrary.Utilities
                 }
                 linkSubScopeConnections(sys.Controllers, allSysSubScope);
                 linkPanelsToControllers(sys.Panels, sys.Controllers);
-                sys.RefreshRegistration();
 
             }
             foreach (TECEquipment equip in templates.EquipmentTemplates)

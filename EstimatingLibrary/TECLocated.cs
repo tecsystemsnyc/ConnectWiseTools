@@ -18,9 +18,12 @@ namespace EstimatingLibrary
             get { return _location; }
             set
             {
-                var old = Location;
-                _location = value;
-                NotifyCombinedChanged(Change.Edit, "Location", this, Location, old);
+                if(_location != value)
+                {
+                    var old = Location;
+                    _location = value;
+                    NotifyCombinedChanged(Change.Edit, "Location", this, Location, old);
+                }
             }
         }
         #endregion

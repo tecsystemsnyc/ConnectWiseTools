@@ -159,7 +159,5 @@ namespace EstimatingUtilitiesLibrary.Database
                 stack.AddRange(editStack(e.Sender as TECObject, e.PropertyName, e.Value, e.OldValue));
             }
         }
-
-
     }
 }
