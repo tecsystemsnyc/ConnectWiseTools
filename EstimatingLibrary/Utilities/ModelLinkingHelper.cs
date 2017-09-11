@@ -54,6 +54,7 @@ namespace EstimatingLibrary.Utilities
                 linkPanelsToControllers(sys.Panels, sys.Controllers);
 
                 createScopeDictionary(sys, guidDictionary);
+
             }
 
             foreach (TECController controller in bid.Controllers)
@@ -71,6 +72,10 @@ namespace EstimatingLibrary.Utilities
             linkNetworkConnections(allControllers);
             linkSubScopeConnections(allControllers, allSubScope);
             linkPanelsToControllers(bid.Panels, bid.Controllers);
+            foreach(TECSystem system in bid.Systems)
+            {
+                system.RefreshRegistration();
+            }
         }
 
         public static void LinkTemplates(TECTemplates templates)
@@ -91,6 +96,8 @@ namespace EstimatingLibrary.Utilities
                 }
                 linkSubScopeConnections(sys.Controllers, allSysSubScope);
                 linkPanelsToControllers(sys.Panels, sys.Controllers);
+                sys.RefreshRegistration();
+
             }
             foreach (TECEquipment equip in templates.EquipmentTemplates)
             {
@@ -115,6 +122,7 @@ namespace EstimatingLibrary.Utilities
             linkSystemToCatalogs(system, scopeManager.Catalogs);
             linkSubScopeConnections(system.Controllers, new ObservableCollection<TECSubScope>(system.AllSubScope()), guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
+            system.RefreshRegistration();
         }
 
         //Was LinkCharacteristicInstances()
