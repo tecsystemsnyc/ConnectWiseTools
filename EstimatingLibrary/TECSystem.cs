@@ -20,10 +20,11 @@ namespace EstimatingLibrary
         private ObservableCollection<TECPanel> _panels;
         private ObservableCollection<TECMisc> _miscCosts;
         private ObservableCollection<TECScopeBranch> _scopeBranches;
-        
         private bool _proposeEquipment;
 
         private ObservableListDictionary<TECObject> _typicalInstanceDictionary;
+
+        private ChangeWatcher watcher;
         #endregion
 
         #region Constructors
@@ -48,7 +49,8 @@ namespace EstimatingLibrary
             _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
 
-            new ChangeWatcher(this).Changed += handleSystemChanged;
+            watcher = new ChangeWatcher(this);
+            watcher.Changed += handleSystemChanged;
 
         }
 
@@ -273,6 +275,11 @@ namespace EstimatingLibrary
                 }
             }
             return (newSystem);
+        }
+        internal void RefreshRegistration()
+        {
+            watcher = new ChangeWatcher(this);
+            watcher.Changed += handleSystemChanged;
         }
 
         public object DragDropCopy(TECScopeManager scopeManager)
