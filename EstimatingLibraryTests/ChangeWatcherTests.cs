@@ -596,7 +596,29 @@ namespace Tests
         [TestMethod]
         public void AddNetworkConnectionToInstanceController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController parentController = new TECController(type);
+            bid.Controllers.Add(parentController);
+
+            TECSystem system = new TECSystem();
+            bid.Systems.Add(system);
+
+            TECController childController = new TECController(type);
+            system.Controllers.Add(childController);
+
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            
+            resetRaised();
+
+            //Act
+            TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
+            netConnect.Length = 10;
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", parentController, netConnect);
+            checkCostDelta(netConnect.CostBatch);
         }
 
         [TestMethod]
@@ -1196,7 +1218,31 @@ namespace Tests
         [TestMethod]
         public void RemoveNetworkConnectionFromInstanceController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController parentController = new TECController(type);
+            bid.Controllers.Add(parentController);
+            
+            TECSystem system = new TECSystem();
+            bid.Systems.Add(system);
+
+            TECController childController = new TECController(type);
+            system.Controllers.Add(childController);
+
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+
+            TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
+            netConnect.Length = 10;
+
+            resetRaised();
+
+            //Act
+            parentController.RemoveController(childController);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", parentController, netConnect);
+            checkCostDelta(netConnect.CostBatch);
         }
 
         [TestMethod]
