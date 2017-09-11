@@ -72,35 +72,35 @@ namespace EstimatingLibrary.Utilities
             registerTECObject(bid.ExtraLabor, OccuranceType.Instance);
             registerTECObject(bid.Parameters, OccuranceType.Instance);
 
-            foreach(TECSystem typical in bid.Systems)
+            foreach (TECSystem typical in bid.Systems)
             {
                 registerSystem(typical, OccuranceType.Typical);
             }
-            foreach(TECController controller in bid.Controllers)
+            foreach (TECController controller in bid.Controllers)
             {
                 registerController(controller, OccuranceType.Instance);
             }
-            foreach(TECPanel panel in bid.Panels)
+            foreach (TECPanel panel in bid.Panels)
             {
                 registerTECObject(panel, OccuranceType.Instance);
             }
-            foreach(TECMisc misc in bid.MiscCosts)
+            foreach (TECMisc misc in bid.MiscCosts)
             {
                 registerTECObject(misc, OccuranceType.Instance);
             }
-            foreach(TECScopeBranch branch in bid.ScopeTree)
+            foreach (TECScopeBranch branch in bid.ScopeTree)
             {
                 registerScopeBranch(branch);
             }
-            foreach(TECLabeled note in bid.Notes)
+            foreach (TECLabeled note in bid.Notes)
             {
                 registerTECObject(note, OccuranceType.Instance);
             }
-            foreach(TECLabeled exclusion in bid.Exclusions)
+            foreach (TECLabeled exclusion in bid.Exclusions)
             {
                 registerTECObject(exclusion, OccuranceType.Instance);
             }
-            foreach(TECLabeled location in bid.Locations)
+            foreach (TECLabeled location in bid.Locations)
             {
                 registerTECObject(location, OccuranceType.Instance);
             }
@@ -113,11 +113,11 @@ namespace EstimatingLibrary.Utilities
             {
                 registerSystem(typical, OccuranceType.Instance);
             }
-            foreach(TECEquipment equipment in templates.EquipmentTemplates)
+            foreach (TECEquipment equipment in templates.EquipmentTemplates)
             {
                 registerEquipment(equipment, OccuranceType.Instance);
             }
-            foreach(TECSubScope subScope in templates.SubScopeTemplates)
+            foreach (TECSubScope subScope in templates.SubScopeTemplates)
             {
                 registerSubScope(subScope, OccuranceType.Instance);
             }
@@ -133,7 +133,7 @@ namespace EstimatingLibrary.Utilities
             {
                 registerTECObject(misc, OccuranceType.Instance);
             }
-            foreach(TECParameters parameter in templates.Parameters)
+            foreach (TECParameters parameter in templates.Parameters)
             {
                 registerTECObject(parameter, OccuranceType.Instance);
             }
@@ -169,7 +169,7 @@ namespace EstimatingLibrary.Utilities
         private void registerCatalogs(TECCatalogs catalogs, OccuranceType ot)
         {
             registerTECObject(catalogs, ot);
-            foreach(TECDevice item in catalogs.Devices)
+            foreach (TECDevice item in catalogs.Devices)
             {
                 registerTECObject(item, ot);
             }
@@ -210,23 +210,23 @@ namespace EstimatingLibrary.Utilities
         private void registerSystem(TECSystem sys, OccuranceType ot)
         {
             registerTECObject(sys, ot);
-            foreach(TECSystem instance in sys.Instances)
+            foreach (TECSystem instance in sys.Instances)
             {
                 registerSystem(instance, OccuranceType.Instance);
             }
-            foreach(TECEquipment equip in sys.Equipment)
+            foreach (TECEquipment equip in sys.Equipment)
             {
                 registerEquipment(equip, ot);
             }
-            foreach(TECController controller in sys.Controllers)
+            foreach (TECController controller in sys.Controllers)
             {
                 registerController(controller, ot);
             }
-            foreach(TECPanel panel in sys.Panels)
+            foreach (TECPanel panel in sys.Panels)
             {
                 registerTECObject(panel, ot);
             }
-            foreach(TECMisc misc in sys.MiscCosts)
+            foreach (TECMisc misc in sys.MiscCosts)
             {
                 registerTECObject(misc, ot);
             }
@@ -234,7 +234,7 @@ namespace EstimatingLibrary.Utilities
         private void registerEquipment(TECEquipment equip, OccuranceType ot)
         {
             registerTECObject(equip, ot);
-            foreach(TECSubScope ss in equip.SubScope)
+            foreach (TECSubScope ss in equip.SubScope)
             {
                 registerSubScope(ss, ot);
             }
@@ -242,7 +242,7 @@ namespace EstimatingLibrary.Utilities
         private void registerSubScope(TECSubScope ss, OccuranceType ot)
         {
             registerTECObject(ss, ot);
-            foreach(TECPoint point in ss.Points)
+            foreach (TECPoint point in ss.Points)
             {
                 registerTECObject(point, ot);
             }
@@ -250,7 +250,7 @@ namespace EstimatingLibrary.Utilities
         private void registerController(TECController controller, OccuranceType ot)
         {
             registerTECObject(controller, ot);
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach (TECConnection connection in controller.ChildrenConnections)
             {
                 if (connection is TECNetworkConnection)
                 {
@@ -280,7 +280,7 @@ namespace EstimatingLibrary.Utilities
         private void registerScopeBranch(TECScopeBranch branch)
         {
             registerTECObject(branch, OccuranceType.Instance);
-            foreach(TECScopeBranch subBranch in branch.Branches)
+            foreach (TECScopeBranch subBranch in branch.Branches)
             {
                 registerScopeBranch(subBranch);
             }
@@ -289,23 +289,23 @@ namespace EstimatingLibrary.Utilities
         private void unregisterSystem(TECSystem sys)
         {
             unregisterTECObject(sys);
-            foreach(TECSystem instance in sys.Instances)
+            foreach (TECSystem instance in sys.Instances)
             {
                 unregisterSystem(instance);
             }
-            foreach(TECEquipment equip in sys.Equipment)
+            foreach (TECEquipment equip in sys.Equipment)
             {
                 unregisterEquipment(equip);
             }
-            foreach(TECController controller in sys.Controllers)
+            foreach (TECController controller in sys.Controllers)
             {
                 unregisterController(controller);
             }
-            foreach(TECPanel panel in sys.Panels)
+            foreach (TECPanel panel in sys.Panels)
             {
                 unregisterTECObject(panel);
             }
-            foreach(TECMisc misc in sys.MiscCosts)
+            foreach (TECMisc misc in sys.MiscCosts)
             {
                 unregisterTECObject(misc);
             }
@@ -313,7 +313,7 @@ namespace EstimatingLibrary.Utilities
         private void unregisterEquipment(TECEquipment equip)
         {
             unregisterTECObject(equip);
-            foreach(TECSubScope ss in equip.SubScope)
+            foreach (TECSubScope ss in equip.SubScope)
             {
                 unregisterSubScope(ss);
             }
@@ -321,7 +321,7 @@ namespace EstimatingLibrary.Utilities
         private void unregisterSubScope(TECSubScope ss)
         {
             unregisterTECObject(ss);
-            foreach(TECPoint point in ss.Points)
+            foreach (TECPoint point in ss.Points)
             {
                 unregisterTECObject(point);
             }
@@ -329,7 +329,7 @@ namespace EstimatingLibrary.Utilities
         private void unregisterController(TECController controller)
         {
             unregisterTECObject(controller);
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach (TECConnection connection in controller.ChildrenConnections)
             {
                 unregisterTECObject(connection);
             }
@@ -337,7 +337,7 @@ namespace EstimatingLibrary.Utilities
         private void unregisterScopeBranch(TECScopeBranch branch)
         {
             unregisterTECObject(branch);
-            foreach(TECScopeBranch subBranch in branch.Branches)
+            foreach (TECScopeBranch subBranch in branch.Branches)
             {
                 unregisterTECObject(subBranch);
             }
@@ -526,10 +526,10 @@ namespace EstimatingLibrary.Utilities
             }
         }
         #endregion
-        
+
         private bool isInstance(TECObject ob, string propertyName = null)
         {
-            if(propertyName == "TypicalInstanceDictionary")
+            if (propertyName == "TypicalInstanceDictionary")
             {
                 return false;
             }
