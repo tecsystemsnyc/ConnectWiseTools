@@ -76,6 +76,8 @@ namespace Tests
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
 
+            resetRaised();
+
             //Act
             bid.Systems.Add(typical);
 
@@ -513,6 +515,112 @@ namespace Tests
             checkInstanceChangedArgs(Change.Add, "SubScope", equip, ss);
             checkCostDelta(ss.CostBatch);
             checkPointDelta(ss.PointNumber);
+        }
+
+        [TestMethod]
+        public void AddDeviceToInstanceSubScope()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            equip.SubScope.Add(ss);
+            instance.Equipment.Add(equip);
+
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+
+            resetRaised();
+
+            //Act
+            ss.Devices.Add(dev);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "Devices", ss, dev);
+            checkCostDelta(dev.CostBatch);
+        }
+
+        [TestMethod]
+        public void AddPointToInstanceSubScope()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            equip.SubScope.Add(ss);
+            instance.Equipment.Add(equip);
+
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+
+            resetRaised();
+
+            //Act
+            ss.Points.Add(point);
+
+            //Assert
+            checkRaised(true, false, true);
+            checkInstanceChangedArgs(Change.Add, "Points", ss, point);
+            checkPointDelta(point.PointNumber);
+        }
+
+        [TestMethod]
+        public void AddNetworkConnectionToBidController()
+        {
+            //Arrange
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController parentController = new TECController(type);
+            bid.Controllers.Add(parentController);
+
+            TECController childController = new TECController(type);
+            bid.Controllers.Add(childController);
+
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+
+            resetRaised();
+
+            //Act
+            TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", parentController, netConnect);
+            checkCostDelta(netConnect.CostBatch);
+        }
+
+        [TestMethod]
+        public void AddNetworkConnectionToInstanceController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddSubScopeConenctionToBidController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddSubScopeConnectionToTypicalController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddSubScopeConnectionToInstanceController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddControllerToNetworkConnection()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

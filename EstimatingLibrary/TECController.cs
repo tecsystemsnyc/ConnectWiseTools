@@ -30,7 +30,7 @@ namespace EstimatingLibrary
             {
                 var old = ParentConnection;
                 _parentConnection = value;
-                NotifyCombinedChanged(Change.Edit, "ParentConnection", this, value, old);
+                RaisePropertyChanged("ParentConnection");
                 RaisePropertyChanged("NetworkIO");
             }
         }
