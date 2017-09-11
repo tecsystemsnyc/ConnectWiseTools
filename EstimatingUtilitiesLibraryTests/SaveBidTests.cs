@@ -1917,8 +1917,25 @@ namespace Tests
                     break;
                 }
             }
-            TECEquipment actualEquip = actualSys.Equipment[0];
-            TECSubScope actualSS = actualEquip.SubScope[0];
+            TECEquipment actualEquip = null;
+            foreach(TECEquipment equipment in actualSys.Equipment)
+            {
+                if(equipment.Guid == expectedEquip.Guid)
+                {
+                    actualEquip = equipment;
+                    break;
+                }
+            }
+
+            TECSubScope actualSS = null;
+            foreach (TECSubScope subScope in actualEquip.SubScope)
+            {
+                if (subScope.Guid == expectedSS.Guid)
+                {
+                    actualSS = subScope;
+                    break;
+                }
+            }
 
             //Assert
             Assert.AreEqual(expectedNumLocations, actualNumLocations);
