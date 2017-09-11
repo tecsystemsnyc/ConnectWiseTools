@@ -624,6 +624,606 @@ namespace Tests
         }
         #endregion
 
+        #region Remove Tests
+        [TestMethod]
+        public void RemoveTypicalFromBid()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            //Ensure typical has points and cost:
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
+
+            resetRaised();
+
+            //Act
+            bid.Systems.Remove(typical);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Systems", bid, typical);
+        }
+
+        [TestMethod]
+        public void RemoveControllerFormBid()
+        {
+            //Arrange
+            TECControllerType controllerType = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController controller = new TECController(controllerType);
+            bid.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            bid.Controllers.Remove(controller);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "Controllers", bid, controller);
+            checkCostDelta(controller.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemovePanelFromBid()
+        {
+            //Arrange
+            TECPanelType panelType = bid.Catalogs.PanelTypes.RandomObject();
+            TECPanel panel = new TECPanel(panelType);
+            bid.Panels.Add(panel);
+
+            resetRaised();
+            //Act
+            bid.Panels.Remove(panel);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "Panels", bid, panel);
+            checkCostDelta(panel.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemoveMiscFromBid()
+        {
+            //Arrange
+            TECMisc misc = new TECMisc(CostType.TEC);
+            misc.Cost = RandomDouble(1, 100);
+            misc.Labor = RandomDouble(1, 100);
+            bid.MiscCosts.Add(misc);
+
+            resetRaised();
+            //Act
+            bid.MiscCosts.Remove(misc);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "MiscCosts", bid, misc);
+            checkCostDelta(misc.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemoveScopeBranchFromBid()
+        {
+            //Arrange
+            TECScopeBranch sb = new TECScopeBranch();
+            bid.ScopeTree.Add(sb);
+
+            resetRaised();
+            //Act
+            bid.ScopeTree.Remove(sb);
+
+            //Assert
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Remove, "ScopeTree", bid, sb);
+        }
+
+        [TestMethod]
+        public void RemoveNoteFromBid()
+        {
+            //Arrange
+            TECLabeled note = new TECLabeled();
+            bid.Notes.Add(note);
+
+            resetRaised();
+            //Act
+            bid.Notes.Remove(note);
+
+            //Assert
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Remove, "Notes", bid, note);
+        }
+
+        [TestMethod]
+        public void RemoevExclusionFromBid()
+        {
+            //Arrange
+            TECLabeled exclusion = new TECLabeled();
+            bid.Exclusions.Add(exclusion);
+
+            resetRaised();
+            //Act
+            bid.Exclusions.Remove(exclusion);
+
+            //Assert
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Remove, "Exclusions", bid, exclusion);
+        }
+
+        [TestMethod]
+        public void RemoveLocationFromBid()
+        {
+            //Arrange
+            TECLabeled location = new TECLabeled();
+            bid.Locations.Add(location);
+
+            resetRaised();
+            //Act
+            bid.Locations.Add(location);
+
+            //Assert
+            checkRaised(true, false, false);
+            checkInstanceChangedArgs(Change.Remove, "Locations", bid, location);
+        }
+
+        [TestMethod]
+        public void RemoveInstanceFromTypicalSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            //Ensure typical has points and cost:
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+
+            resetRaised();
+
+            //Act
+            typical.Instances.Remove(instance);
+
+            //Assert
+            checkRaised(true, true, true);
+            checkInstanceChangedArgs(Change.Remove, "Instances", typical, instance);
+            checkCostDelta(instance.CostBatch);
+            checkPointDelta(instance.PointNumber);
+        }
+
+        [TestMethod]
+        public void RemoveEquipmentFromTypicalSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECEquipment equip = new TECEquipment();
+            //Ensure equip has points and cost:
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+
+            resetRaised();
+
+            //Act
+            typical.Equipment.Remove(equip);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Equipment", typical, equip);
+        }
+
+        [TestMethod]
+        public void RemoveControllerFromTypicalSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController controller = new TECController(type);
+            typical.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            typical.Controllers.Remove(controller);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Controllers", typical, controller);
+        }
+
+        [TestMethod]
+        public void RemovePanelFromTypicalSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECPanelType type = bid.Catalogs.PanelTypes.RandomObject();
+            TECPanel panel = new TECPanel(type);
+            typical.Panels.Add(panel);
+
+            resetRaised();
+
+            //Act
+            typical.Panels.Remove(panel);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Panels", typical, panel);
+        }
+
+        [TestMethod]
+        public void RemoveMiscCostFromTypicalSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECMisc misc = new TECMisc(CostType.TEC);
+            misc.Cost = RandomDouble(1, 100);
+            misc.Labor = RandomDouble(1, 100);
+            typical.MiscCosts.Add(misc);
+
+            resetRaised();
+
+            //Act
+            typical.MiscCosts.Remove(misc);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "MiscCosts", typical, misc);
+        }
+
+        [TestMethod]
+        public void RemoveScopeBranchFromTypicalSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECScopeBranch sb = new TECScopeBranch();
+            typical.ScopeBranches.Add(sb);
+
+            resetRaised();
+
+            //Act
+            typical.ScopeBranches.Remove(sb);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "ScopeBranches", typical, sb);
+        }
+
+        [TestMethod]
+        public void RemoveEquipmentFromInstanceSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            instance.Equipment.Add(equip);
+
+            resetRaised();
+
+            //Act
+            instance.Equipment.Remove(equip);
+
+            //Assert
+            checkRaised(true, true, true);
+            checkInstanceChangedArgs(Change.Remove, "Equipment", instance, equip);
+            checkCostDelta(equip.CostBatch);
+            checkPointDelta(equip.PointNumber);
+        }
+
+        [TestMethod]
+        public void RemoveControllerFromInstanceSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController controller = new TECController(type);
+            instance.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            instance.Controllers.Remove(controller);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "Controllers", instance, controller);
+            checkCostDelta(controller.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemovePanelFromInstanceSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECPanelType panelType = bid.Catalogs.PanelTypes.RandomObject();
+            TECPanel panel = new TECPanel(panelType);
+            instance.Panels.Add(panel);
+
+            resetRaised();
+
+            //Act
+            instance.Panels.Remove(panel);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "Panels", instance, panel);
+            checkCostDelta(panel.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemoveMiscCostFromInstanceSystem()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECMisc misc = new TECMisc(CostType.TEC);
+            misc.Cost = RandomDouble(1, 100);
+            misc.Labor = RandomDouble(1, 100);
+            instance.MiscCosts.Add(misc);
+
+            resetRaised();
+
+            //Act
+            instance.MiscCosts.Remove(misc);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "MiscCosts", instance, misc);
+            checkCostDelta(misc.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemoveSubScopeFromTypicalEquipment()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            TECEquipment equip = new TECEquipment();
+            typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.BI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            equip.SubScope.Add(ss);
+
+            resetRaised();
+
+            //Act
+            equip.SubScope.Remove(ss);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "SubScope", equip, ss);
+        }
+
+        [TestMethod]
+        public void RemoveDeviceFromTypicalSubScope()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+
+            resetRaised();
+
+            //Act
+            ss.Devices.Remove(dev);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Devices", ss, dev);
+        }
+
+        [TestMethod]
+        public void RemovePointFromTypicalSubScope()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+
+            resetRaised();
+
+            //Act
+            ss.Points.Remove(point);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Points", ss, point);
+        }
+
+        [TestMethod]
+        public void RemoveSubScopeFromInstanceEquipment()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            instance.Equipment.Add(equip);
+
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+            equip.SubScope.Add(ss);
+
+            resetRaised();
+
+            //Act
+            equip.SubScope.Remove(ss);
+
+            //Assert
+            checkRaised(true, true, true);
+            checkInstanceChangedArgs(Change.Remove, "SubScope", equip, ss);
+            checkCostDelta(ss.CostBatch);
+            checkPointDelta(ss.PointNumber);
+        }
+
+        [TestMethod]
+        public void RemoveDeviceFromInstanceSubScope()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            equip.SubScope.Add(ss);
+            instance.Equipment.Add(equip);
+
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+
+            resetRaised();
+
+            //Act
+            ss.Devices.Remove(dev);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "Devices", ss, dev);
+            checkCostDelta(dev.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemovePointFromInstanceSubScope()
+        {
+            //Arrange
+            TECSystem typical = new TECSystem();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            equip.SubScope.Add(ss);
+            instance.Equipment.Add(equip);
+
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+
+            resetRaised();
+
+            //Act
+            ss.Points.Remove(point);
+
+            //Assert
+            checkRaised(true, false, true);
+            checkInstanceChangedArgs(Change.Remove, "Points", ss, point);
+            checkPointDelta(point.PointNumber);
+        }
+
+        [TestMethod]
+        public void RemoveNetworkConnectionFromBidController()
+        {
+            //Arrange
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
+            TECController parentController = new TECController(type);
+            bid.Controllers.Add(parentController);
+
+            TECController childController = new TECController(type);
+            bid.Controllers.Add(childController);
+
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+
+            TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
+
+            resetRaised();
+
+            //Act
+            parentController.RemoveController(childController);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", parentController, netConnect);
+            checkCostDelta(netConnect.CostBatch);
+        }
+
+        [TestMethod]
+        public void RemoveNetworkConnectionFromInstanceController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveSubScopeConenctionFromBidController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveSubScopeConnectionFromTypicalController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveSubScopeConnectionFromInstanceController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveControllerFromNetworkConnection()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #endregion
 
         private void resetRaised()
