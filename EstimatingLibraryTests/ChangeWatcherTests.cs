@@ -1021,7 +1021,7 @@ namespace Tests
             //Assert
             checkRaised(true, true, true);
             checkInstanceChangedArgs(Change.Remove, "Equipment", instance, equip);
-            checkCostDelta(equip.CostBatch);
+            checkCostDelta(equip.CostBatch * -1);
             checkPointDelta(equip.PointNumber);
         }
 
