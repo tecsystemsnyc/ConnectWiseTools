@@ -1005,7 +1005,7 @@ namespace Tests
                 {
                     foreach(TECSubScope subscope in equipment.SubScope)
                     {
-                        if(subscope.Devices.Count > 1)
+                        if(subscope.Devices.Count > 0)
                         {
                             foundSub = true;
                             ssToModify = subscope;
@@ -1021,10 +1021,6 @@ namespace Tests
                 {
                     break;
                 }
-            }
-            while (ssToModify.Devices.Count == 0)
-            {
-                ssToModify = bid.RandomSubScope();
             }
 
             int oldNumDevices = ssToModify.Devices.Count();
@@ -1179,7 +1175,7 @@ namespace Tests
                 if (dev.Guid == expectedDevice.Guid) expectedNumDevices++;
             }
 
-            ssToModify.Devices.Add(new TECDevice(expectedDevice));
+            ssToModify.Devices.Add(expectedDevice);
             expectedNumDevices++;
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
