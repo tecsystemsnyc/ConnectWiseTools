@@ -81,7 +81,7 @@ namespace Tests
             var estimate = new TECEstimator(bid, watcher);
             double expetcedPrice = estimate.TotalPrice;
 
-            //checkRefresh(bid);
+            checkRefresh(estimate);
         }
 
         [TestMethod]

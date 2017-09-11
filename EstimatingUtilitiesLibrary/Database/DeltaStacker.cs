@@ -65,22 +65,40 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return outStack;
         }
-        private static List<UpdateItem> editStack(TECObject sender, string propertyName, object value)
+        private static List<UpdateItem> editStack(TECObject sender, string propertyName, object value, object oldValue)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
-            List<TableBase> tables = DatabaseHelper.GetTables(sender);
-            foreach (TableBase table in tables)
+            if(!(value is TECObject) && !(oldValue is TECObject))
             {
-                var fields = table.Fields;
-                var data = DatabaseHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
-                var keyData = DatabaseHelper.PrimaryKeyData(table, sender);
-                if (data != null)
+                List<TableBase> tables = DatabaseHelper.GetTables(sender);
+                foreach (TableBase table in tables)
                 {
-                    outStack.Add(new UpdateItem(Change.Edit, table.NameString, data, keyData));
+                    var fields = table.Fields;
+                    var data = DatabaseHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
+                    var keyData = DatabaseHelper.PrimaryKeyData(table, sender);
+                    if (data != null)
+                    {
+                        outStack.Add(new UpdateItem(Change.Edit, table.NameString, data, keyData));
+                    }
                 }
+                return outStack;
             }
-            return outStack;
+            else
+            {
+                if(value != null)
+                {
+                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, value as TECObject }, propertyName);
+                    outStack.AddRange(tableObjectStack(Change.Add, tables, sender, value as TECObject));
+                }
+                if (oldValue != null)
+                {
+                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, oldValue as TECObject }, propertyName);
+                    outStack.AddRange(tableObjectStack(Change.Remove, tables, sender, oldValue as TECObject));
+                }
+                return outStack;
+            }
+            
         }
 
         private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, TECObject item)
@@ -92,13 +110,24 @@ namespace EstimatingUtilitiesLibrary.Database
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (TableBase table in tables)
             {
+                List<TableField> fields = new List<TableField>();
+                if(change == Change.Remove)
+                {
+                    fields = table.PrimaryKeys;
+                }
+                else
+                {
+                    fields = table.Fields;
+                }
+
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 if(table.Types.Count > 1)
                 {
-                    data = DatabaseHelper.PrepareDataForRelationTable(table.Fields, item, child);
-                } else
+                    data = DatabaseHelper.PrepareDataForRelationTable(fields, item, child);
+                }
+                else
                 {
-                    data = DatabaseHelper.PrepareDataForObjectTable(table.Fields, item);
+                    data = DatabaseHelper.PrepareDataForObjectTable(fields, item);
                 }
                 outStack.Add(new UpdateItem(change, table.NameString, data));
                 
@@ -127,7 +156,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             else if (e.Change == Change.Edit)
             {
-                stack.AddRange(editStack(e.Sender as TECObject, e.PropertyName, e.Value));
+                stack.AddRange(editStack(e.Sender as TECObject, e.PropertyName, e.Value, e.OldValue));
             }
         }
 
