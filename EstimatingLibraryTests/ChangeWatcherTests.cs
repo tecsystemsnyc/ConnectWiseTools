@@ -624,19 +624,80 @@ namespace Tests
         [TestMethod]
         public void AddSubScopeConenctionToBidController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECSystem system = new TECSystem();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+            TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
+            checkCostDelta(connection.CostBatch);
         }
 
         [TestMethod]
         public void AddSubScopeConnectionToTypicalController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECSystem system = new TECSystem();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+           
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            system.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
+            checkCostDelta(connection.CostBatch);
         }
 
         [TestMethod]
         public void AddSubScopeConnectionToInstanceController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECSystem system = new TECSystem();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            system.Controllers.Add(controller);
+            bid.Systems.Add(system);
+            TECSystem instance = system.AddInstance(bid);
+            TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
+            TECController instanceController = instance.Controllers[0];
+
+            resetRaised();
+
+            //Act
+            TECSubScopeConnection connection = instanceController.AddSubScope(instanceSubScope);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
+            checkCostDelta(connection.CostBatch);
         }
 
         [TestMethod]
@@ -1248,19 +1309,83 @@ namespace Tests
         [TestMethod]
         public void RemoveSubScopeConenctionFromBidController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECSystem system = new TECSystem();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+            TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope);
+            connection.Length = 10;
+            resetRaised();
+
+            //Act
+            controller.RemoveSubScope(instanceSubScope);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
+            checkCostDelta(connection.CostBatch);
         }
 
         [TestMethod]
         public void RemoveSubScopeConnectionFromTypicalController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECSystem system = new TECSystem();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            system.Controllers.Add(controller);
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            connection.Length = 10;
+            resetRaised();
+
+            //Act
+            controller.RemoveSubScope(subScope);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
+            checkCostDelta(connection.CostBatch);
         }
 
         [TestMethod]
         public void RemoveSubScopeConnectionFromInstanceController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECSystem system = new TECSystem();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            system.Controllers.Add(controller);
+            bid.Systems.Add(system);
+            TECSystem instance = system.AddInstance(bid);
+            TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
+            TECController instanceController = instance.Controllers[0];
+            TECSubScopeConnection connection = instanceController.AddSubScope(instanceSubScope);
+            connection.Length = 10;
+            resetRaised();
+
+            //Act
+            instanceController.RemoveSubScope(instanceSubScope);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
+            checkCostDelta(connection.CostBatch);
         }
 
         [TestMethod]
