@@ -86,26 +86,26 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Bid_AddControlledScope()
+        public void Bid_TypicalSystem()
         {
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECTypical controlledScope = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
-            bid.Systems.Add(controlledScope);
+            TECTypical typical = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            bid.Systems.Add(typical);
             
             //Assert.AreEqual(quantity, bid.Systems.Count);
             //Assert.AreEqual(quantity, bid.Controllers.Count);
             //Assert.AreEqual(quantity, bid.Panels.Count);
 
-            foreach(TECPanel scopePanel in controlledScope.Panels)
+            foreach(TECPanel scopePanel in typical.Panels)
             {
                 foreach(TECPanel bidPanel in bid.Panels)
                 {
                     Assert.AreEqual(scopePanel.Controllers.Count, bidPanel.Controllers.Count);
                 }
             }
-            foreach (TECController scopeController in controlledScope.Controllers)
+            foreach (TECController scopeController in typical.Controllers)
             {
                 foreach (TECController bidController in bid.Controllers)
                 {
