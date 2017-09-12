@@ -15,8 +15,6 @@ namespace EstimatingLibrary
     {
         #region Fields
         private ObservableCollection<TECSystem> _instances;
-        private ObservableCollection<TECScopeBranch> _scopeBranches;
-        private bool _proposeEquipment;
 
         private ObservableListDictionary<TECObject> _typicalInstanceDictionary;
 
@@ -26,26 +24,20 @@ namespace EstimatingLibrary
         #region Constructors
         public TECTypical(Guid guid) : base(guid)
         {
-
-            _proposeEquipment = false;
-
             _instances = new ObservableCollection<TECSystem>();
-            _scopeBranches = new ObservableCollection<TECScopeBranch>();
 
             TypicalInstanceDictionary = new ObservableListDictionary<TECObject>();
 
             _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
-            _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
 
             watcher = new ChangeWatcher(this);
             watcher.Changed += handleSystemChanged;
-
         }
 
         public TECTypical() : this(Guid.NewGuid()) { }
 
         public TECTypical(TECTypical source, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this()
+            ObservableListDictionary<TECObject> characteristicReference = null) : base(source, guidDictionary, characteristicReference)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = source.Guid; }
@@ -58,12 +50,17 @@ namespace EstimatingLibrary
                 }
                 Equipment.Add(toAdd);
             }
-            foreach (TECScopeBranch branch in source._scopeBranches)
+        }
+
+        public TECTypical(TECSystem system, Dictionary<Guid, Guid> guidDictionary = null) : base(system, guidDictionary)
+        {
+            if (guidDictionary != null)
+            { guidDictionary[_guid] = system.Guid; }
+            foreach (TECEquipment equipment in system.Equipment)
             {
-                var toAdd = new TECScopeBranch(branch);
-                _scopeBranches.Add(toAdd);
+                var toAdd = new TECEquipment(equipment, guidDictionary);
+                Equipment.Add(toAdd);
             }
-            this.copyPropertiesFromLocated(source);
         }
         #endregion
 
@@ -81,29 +78,6 @@ namespace EstimatingLibrary
             }
         }
         
-        public ObservableCollection<TECScopeBranch> ScopeBranches
-        {
-            get { return _scopeBranches; }
-            set
-            {
-                var old = _scopeBranches;
-                _scopeBranches.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
-                _scopeBranches = value;
-                NotifyTECChanged(Change.Edit, "ScopeBranches", this, value, old);
-                _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
-            }
-        }
-
-        public bool ProposeEquipment
-        {
-            get { return _proposeEquipment; }
-            set
-            {
-                var old = ProposeEquipment;
-                _proposeEquipment = value;
-                NotifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
-            }
-        }
         
         public ObservableListDictionary<TECObject> TypicalInstanceDictionary
         {
