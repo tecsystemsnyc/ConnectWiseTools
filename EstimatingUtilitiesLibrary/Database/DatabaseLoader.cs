@@ -481,9 +481,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return childBranches;
         }
-        static private ObservableCollection<TECSystem> getAllSystemsInBid()
+        static private ObservableCollection<TECTypical> getAllSystemsInBid()
         {
-            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
+            ObservableCollection<TECTypical> systems = new ObservableCollection<TECTypical>();
 
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new SystemTable()) + " from ("
                 + SystemTable.TableName
@@ -503,7 +503,7 @@ namespace EstimatingUtilitiesLibrary.Database
             //    systemsDT = SQLiteDB.GetDataFromCommand(command);
             //}
             foreach (DataRow row in systemsDT.Rows)
-            { systems.Add(getSystemFromRow(row)); }
+            { systems.Add(getTypicalFromRow(row)); }
             return systems;
         }
 
@@ -977,9 +977,25 @@ namespace EstimatingUtilitiesLibrary.Database
         }
 
         #endregion //Loading from DB Methods
-        
+
         #region Row to Object Methods
         #region Base Scope
+        private static TECSystem getTypicalFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
+            TECTypical system = new TECTypical(guid);
+
+            assignValuePropertiesFromTable(system, new SystemTable(), row);
+            system.Controllers = getControllersInSystem(guid);
+            system.Equipment = getEquipmentInSystem(guid);
+            system.Panels = getPanelsInSystem(guid);
+            system.Instances = getChildrenSystems(guid);
+            system.MiscCosts = getMiscInSystem(guid);
+            system.ScopeBranches = getScopeBranchesInSystem(guid);
+            getLocatedChildren(system);
+
+            return system;
+        }
         private static TECSystem getSystemFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
@@ -989,7 +1005,6 @@ namespace EstimatingUtilitiesLibrary.Database
             system.Controllers = getControllersInSystem(guid);
             system.Equipment = getEquipmentInSystem(guid);
             system.Panels = getPanelsInSystem(guid);
-            system.Instances = getChildrenSystems(guid);
             system.MiscCosts = getMiscInSystem(guid);
             system.ScopeBranches = getScopeBranchesInSystem(guid);
             getLocatedChildren(system);

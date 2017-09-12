@@ -307,6 +307,7 @@ namespace EstimatingLibrary
                 NotifyTECChanged(Change.Edit, propertyName, this, sender);
             }
         }
+
         private void handleInstanceRemoved(TECSystem instance)
         {
             foreach (TECSubScope subScope in instance.AllSubScope())
@@ -366,13 +367,10 @@ namespace EstimatingLibrary
                 }
             }
         }
+
         private void handleAdd(TECObject value, TECObject sender)
         {
-            if (sender is TECTypical)
-            {
-                return;
-            }
-            if (value is TECController && sender is TECSystem)
+            if (value is TECController && sender is TECTypical)
             {
                 var characteristicController = value as TECController;
                 foreach (TECSystem system in Instances)
@@ -383,7 +381,7 @@ namespace EstimatingLibrary
                     system.Controllers.Add(controllerToAdd);
                 }
             }
-            else if (value is TECPanel && sender is TECSystem)
+            else if (value is TECPanel && sender is TECTypical)
             {
                 var characteristicPanel = value as TECPanel;
                 foreach (TECSystem system in Instances)
@@ -393,7 +391,7 @@ namespace EstimatingLibrary
                     system.Panels.Add(panelToAdd);
                 }
             }
-            else if (value is TECEquipment && sender is TECSystem)
+            else if (value is TECEquipment && sender is TECTypical)
             {
                 var characteristicEquipment = value as TECEquipment;
                 foreach (TECSystem system in Instances)
@@ -548,11 +546,7 @@ namespace EstimatingLibrary
         }
         private void handleRemove(TECObject value, TECObject sender)
         {
-            if (sender is TECTypical)
-            {
-                return;
-            }
-            if (value is TECController && sender is TECSystem)
+            if (value is TECController && sender is TECTypical)
             {
                 var characteristicController = value as TECController;
                 foreach (TECSystem system in Instances)
@@ -572,7 +566,7 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECPanel && sender is TECSystem)
+            else if (value is TECPanel && sender is TECTypical)
             {
                 var characteristicPanel = value as TECPanel;
                 foreach (TECSystem system in Instances)
@@ -592,7 +586,7 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECEquipment && sender is TECSystem)
+            else if (value is TECEquipment && sender is TECTypical)
             {
                 var characteristicEquipment = value as TECEquipment;
                 foreach (TECSystem system in Instances)
@@ -772,6 +766,7 @@ namespace EstimatingLibrary
                 }
             }
         }
+
         private void handleSystemSubScopeRemoval(TECSystem system)
         {
             foreach (TECEquipment equipment in system.Equipment)

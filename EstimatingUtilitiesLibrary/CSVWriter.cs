@@ -52,7 +52,7 @@ namespace EstimatingUtilitiesLibrary
         public void BidPointsToCSV(TECBid bid)
         {
             StreamWriter writer = new StreamWriter(Path);
-            foreach (TECSystem system in bid.Systems)
+            foreach (TECTypical system in bid.Systems)
             {
                 if (system.Equipment.Count > 0)
                 {
