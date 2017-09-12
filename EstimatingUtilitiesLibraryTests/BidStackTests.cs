@@ -157,7 +157,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECSystem edit = new TECSystem();
+            TECTypical edit = new TECTypical();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -167,7 +167,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSystem> actual = Bid.Systems;
+            ObservableCollection<TECTypical> actual = Bid.Systems;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1022,7 +1022,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECSystem edit = new TECSystem();
+            TECTypical edit = new TECTypical();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1036,7 +1036,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECSystem> actual = Bid.Systems;
+            ObservableCollection<TECTypical> actual = Bid.Systems;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1363,7 +1363,7 @@ namespace Tests
             TECLabeled edit = new TECLabeled();
             edit.Label = "Floor 42";
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             Bid.Systems.Add(system);
 
             //Act
