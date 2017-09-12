@@ -38,7 +38,7 @@ namespace Tests
             Total totalTEC = CalculateTotal(cost, CostType.TEC);
             Total totalElec = CalculateTotal(cost, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
 
@@ -75,7 +75,7 @@ namespace Tests
             Total totalTEC = CalculateTotal(cost, CostType.TEC);
             Total totalElec = CalculateTotal(cost, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
 
@@ -154,7 +154,7 @@ namespace Tests
             Total totalTEC = CalculateTotal(misc, CostType.TEC);
             Total totalElec = CalculateTotal(misc, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
 
@@ -183,7 +183,7 @@ namespace Tests
             Total totalTEC = CalculateTotal(misc, CostType.TEC);
             Total totalElec = CalculateTotal(misc, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
 
@@ -265,7 +265,7 @@ namespace Tests
             Total totalTEC = CalculateTotal(device, CostType.TEC);
             Total totalElec = CalculateTotal(device, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECEquipment typEquip = new TECEquipment();
@@ -302,7 +302,7 @@ namespace Tests
             Total totalTEC = CalculateTotal(subscope, CostType.TEC);
             Total totalElec = CalculateTotal(subscope, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECEquipment typEquip = new TECEquipment();
@@ -336,7 +336,7 @@ namespace Tests
             Total totalTEC = CalculateTotal(equipment, CostType.TEC);
             Total totalElec = CalculateTotal(equipment, CostType.Electrical);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.AddInstance(bid);
@@ -394,7 +394,7 @@ namespace Tests
             TECController controller = new TECController(controllerType);
             bid.Controllers.Add(controller);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECEquipment typEquip = new TECEquipment();
@@ -655,7 +655,7 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECEquipment typEquip = new TECEquipment();
@@ -700,7 +700,7 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECEquipment typEquip = new TECEquipment();
@@ -742,7 +742,7 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECEquipment equip = TestHelper.CreateTestEquipment(bid.Catalogs);
@@ -819,7 +819,7 @@ namespace Tests
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECEquipment typEquip = new TECEquipment();
@@ -870,7 +870,7 @@ namespace Tests
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
 
-            TECSystem typical = new TECSystem();
+            TECTypical typical = new TECTypical();
 
             TECEquipment equip = new TECEquipment();
             typical.Equipment.Add(equip);
