@@ -452,6 +452,8 @@ namespace Tests
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
+
             TECDevice dev = bid.Catalogs.Devices.RandomObject();
 
             resetRaised();
@@ -724,7 +726,6 @@ namespace Tests
             //Assert
             checkRaised(true, false, false);
             checkInstanceChangedArgs(Change.Add, "ChildrenControllers", netConnect, daisyController);
-            checkCostDelta(netConnect.CostBatch);
         }
         #endregion
 

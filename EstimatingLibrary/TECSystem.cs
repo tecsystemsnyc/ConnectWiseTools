@@ -262,7 +262,10 @@ namespace EstimatingLibrary
                     }
                 }
                 NotifyCostChanged(costs);
-                PointChanged?.Invoke(pointNum);
+                if (pointNum != 0)
+                {
+                    PointChanged?.Invoke(pointNum);
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
