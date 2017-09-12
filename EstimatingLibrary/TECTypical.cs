@@ -37,7 +37,7 @@ namespace EstimatingLibrary
         public TECTypical() : this(Guid.NewGuid()) { }
 
         public TECTypical(TECTypical source, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : base(source, guidDictionary, characteristicReference)
+            ObservableListDictionary<TECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = source.Guid; }
@@ -50,9 +50,38 @@ namespace EstimatingLibrary
                 }
                 Equipment.Add(toAdd);
             }
+            foreach (TECController controller in source.Controllers)
+            {
+                var toAdd = new TECController(controller, guidDictionary);
+                if (characteristicReference != null)
+                {
+                    characteristicReference.AddItem(controller, toAdd);
+                }
+                Controllers.Add(toAdd);
+            }
+            foreach (TECPanel panel in source.Panels)
+            {
+                var toAdd = new TECPanel(panel, guidDictionary);
+                if (characteristicReference != null)
+                {
+                    characteristicReference.AddItem(panel, toAdd);
+                }
+                Panels.Add(toAdd);
+            }
+            foreach (TECMisc misc in source.MiscCosts)
+            {
+                var toAdd = new TECMisc(misc);
+                MiscCosts.Add(toAdd);
+            }
+            foreach (TECScopeBranch branch in source.ScopeBranches)
+            {
+                var toAdd = new TECScopeBranch(branch);
+                ScopeBranches.Add(toAdd);
+            }
+            this.copyPropertiesFromLocated(source);
         }
 
-        public TECTypical(TECSystem system, Dictionary<Guid, Guid> guidDictionary = null) : base(system, guidDictionary)
+        public TECTypical(TECSystem system, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = system.Guid; }
@@ -61,6 +90,27 @@ namespace EstimatingLibrary
                 var toAdd = new TECEquipment(equipment, guidDictionary);
                 Equipment.Add(toAdd);
             }
+            foreach (TECController controller in system.Controllers)
+            {
+                var toAdd = new TECController(controller, guidDictionary);
+                Controllers.Add(toAdd);
+            }
+            foreach (TECPanel panel in system.Panels)
+            {
+                var toAdd = new TECPanel(panel, guidDictionary);
+                Panels.Add(toAdd);
+            }
+            foreach (TECMisc misc in system.MiscCosts)
+            {
+                var toAdd = new TECMisc(misc);
+                MiscCosts.Add(toAdd);
+            }
+            foreach (TECScopeBranch branch in system.ScopeBranches)
+            {
+                var toAdd = new TECScopeBranch(branch);
+                ScopeBranches.Add(toAdd);
+            }
+            this.copyPropertiesFromLocated(system);
         }
         #endregion
 
@@ -496,7 +546,7 @@ namespace EstimatingLibrary
             else if (value is TECCost && sender is TECScope && !(value is TECMisc)
                 && !(value is TECController) && !(value is TECDevice))
             {
-                if (sender is TECSystem)
+                if (sender is TECTypical)
                 {
                     foreach (TECSystem system in Instances)
                     {
@@ -719,7 +769,7 @@ namespace EstimatingLibrary
             else if (value is TECCost && sender is TECScope && !(value is TECMisc)
                 && !(value is TECController) && !(value is TECDevice))
             {
-                if (sender is TECSystem)
+                if (sender is TECTypical)
                 {
                     foreach (TECSystem system in Instances)
                     {
