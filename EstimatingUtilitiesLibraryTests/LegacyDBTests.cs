@@ -273,8 +273,8 @@ namespace EstimatingUtilitiesLibraryTests
             Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
             Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
 
-            TECSystem actualSystem = null;
-            foreach (TECSystem system in actualBid.Systems)
+            TECTypical actualSystem = null;
+            foreach (TECTypical system in actualBid.Systems)
             {
                 if (system.Guid == expectedGuid)
                 {
@@ -340,7 +340,7 @@ namespace EstimatingUtilitiesLibraryTests
             string expectedDescription = "Instance System Description";
 
             TECSystem actualSystem = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -413,7 +413,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid childSubScope = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
 
             TECEquipment actualEquipment = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -523,14 +523,13 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
             string expectedName = "Instance SS";
             string expectedDescription = "Instance SS Description";
-            int expectedQuantity = 1;
 
             Guid childPoint = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
             Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
             Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
 
             TECSubScope actualSubScope = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -676,7 +675,7 @@ namespace EstimatingUtilitiesLibraryTests
             PointTypes expectedType = PointTypes.AI;
 
             TECPoint actualPoint = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -923,7 +922,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
 
             TECSubScopeConnection actualConnection = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -1060,7 +1059,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedChildControllerGuid = new Guid("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
 
             TECNetworkConnection actualNetConnect = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -1160,7 +1159,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             string expectedName = "Bid Controller";
             string expectedDescription = "Bid Controller Description";
-            double expectedCost = 1812;
+            //double expectedCost = 1812;
             NetworkType expectedType = NetworkType.Server;
             bool expectedGlobalStatus = true;
 
@@ -1215,7 +1214,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
             string expectedName = "Typical Controller";
             string expectedDescription = "Typical Controller Description";
-            double expectedCost = 1776;
+            //double expectedCost = 1776;
             NetworkType expectedType = 0;
             bool expectedGlobalStatus = false;
 
@@ -1273,12 +1272,12 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
             string expectedName = "Instance Controller";
             string expectedDescription = "Instance Controller Description";
-            double expectedCost = 1776;
+            //double expectedCost = 1776;
             NetworkType expectedType = NetworkType.DDC;
             bool expectedGlobalStatus = false;
 
             TECController actualController = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -1444,7 +1443,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
             string expectedName = "Typical Panel";
             string expectedDescription = "Typical Panel Description";
-            int expectedQuantity = 1;
+            //int expectedQuantity = 1;
 
             Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
 
@@ -1476,12 +1475,12 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
             string expectedName = "Instance Panel";
             string expectedDescription = "Instance Panel Description";
-            int expectedQuantity = 1;
+            //int expectedQuantity = 1;
 
             Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
 
             TECPanel actualPanel = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {

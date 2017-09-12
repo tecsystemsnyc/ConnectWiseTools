@@ -40,7 +40,6 @@ namespace Tests
         static string path;
 
         static TECBid actualBid;
-        static TECParameters actualParameters;
         static TECExtraLabor actualLabor;
         static TECSystem actualSystem;
         static TECSystem actualSystem1;
@@ -341,7 +340,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem expectedSystem = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical expectedSystem = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(expectedSystem);
             expectedSystem.AddInstance(bid);
 
@@ -352,8 +351,8 @@ namespace Tests
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
-            TECSystem actualSystem = null;
-            foreach(TECSystem system in loadedBid.Systems)
+            TECTypical actualSystem = null;
+            foreach(TECTypical system in loadedBid.Systems)
             {
                 if(system.Guid == expectedSystem.Guid)
                 {
@@ -382,7 +381,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem system = new TECSystem();
+            TECTypical system = new TECTypical();
             TECEquipment expectedEquipment = TestHelper.CreateTestEquipment(bid.Catalogs);
             system.Equipment.Add(expectedEquipment);
             bid.Systems.Add(system);
@@ -407,7 +406,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem system = new TECSystem();
+            TECTypical system = new TECTypical();
             TECEquipment expectedEquipment = new TECEquipment();
             TECSubScope expectedSubScope = TestHelper.CreateTestSubScope(bid.Catalogs);
             expectedEquipment.SubScope.Add(expectedSubScope);
@@ -774,7 +773,7 @@ namespace Tests
         {
             TECBid saveBid = new TECBid();
             saveBid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem system = TestHelper.CreateTestSystem(saveBid.Catalogs);
+            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(saveBid.Catalogs));
             saveBid.Systems.Add(system);
 
             //Act
@@ -782,7 +781,7 @@ namespace Tests
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(saveBid);
             TECBid loadedBid = manager.Load() as TECBid;
-            TECSystem loadedSystem = loadedBid.Systems[0];
+            TECTypical loadedSystem = loadedBid.Systems[0];
 
             Assert.AreEqual(system.Instances.Count, loadedSystem.Instances.Count);
             foreach (TECSystem loadedInstance in loadedSystem.Instances)

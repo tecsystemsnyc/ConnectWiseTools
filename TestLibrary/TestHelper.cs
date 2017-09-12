@@ -856,9 +856,9 @@ namespace Tests
             return equipment;
         }
 
-        public static TECObject FindObjectInSystems(ObservableCollection<TECSystem> systems, TECObject reference)
+        public static TECObject FindObjectInSystems(ObservableCollection<TECTypical> systems, TECObject reference)
         {
-            foreach(TECSystem system in systems)
+            foreach(TECTypical system in systems)
             {
                 if(system.Guid == reference.Guid)
                 { return system; }

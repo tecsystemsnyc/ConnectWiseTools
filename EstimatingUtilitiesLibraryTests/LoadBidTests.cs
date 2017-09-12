@@ -236,7 +236,7 @@ namespace Tests
 
             TECScopeBranch actualParent = null;
             TECScopeBranch actualChild = null;
-            foreach(TECSystem typical in actualBid.Systems)
+            foreach(TECTypical typical in actualBid.Systems)
             {
                 foreach(TECScopeBranch branch in typical.ScopeBranches)
                 {
@@ -275,8 +275,8 @@ namespace Tests
             Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
             Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
 
-            TECSystem actualSystem = null;
-            foreach(TECSystem system in actualBid.Systems)
+            TECTypical actualSystem = null;
+            foreach(TECTypical system in actualBid.Systems)
             {
                 if(system.Guid == expectedGuid)
                 {
@@ -342,7 +342,7 @@ namespace Tests
             string expectedDescription = "Instance System Description";
 
             TECSystem actualSystem = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach(TECSystem instance in typical.Instances)
                 {
@@ -372,7 +372,7 @@ namespace Tests
             Guid childSubScope = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
             TECEquipment actualEquipment = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach(TECEquipment equip in typical.Equipment)
                 {
@@ -415,7 +415,7 @@ namespace Tests
             Guid childSubScope = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
 
             TECEquipment actualEquipment = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -531,7 +531,7 @@ namespace Tests
             Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
 
             TECSubScope actualSubScope = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -642,7 +642,7 @@ namespace Tests
             PointTypes expectedType = PointTypes.AI;
 
             TECPoint actualPoint = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECEquipment equip in typical.Equipment)
                 {
@@ -677,7 +677,7 @@ namespace Tests
             PointTypes expectedType = PointTypes.AI;
 
             TECPoint actualPoint = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -885,7 +885,7 @@ namespace Tests
             Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
             TECSubScopeConnection actualSSConnect = null;
-            foreach(TECSystem typical in actualBid.Systems)
+            foreach(TECTypical typical in actualBid.Systems)
             {
                 foreach(TECController controller in typical.Controllers)
                 {
@@ -923,7 +923,7 @@ namespace Tests
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
 
             TECSubScopeConnection actualConnection = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -1060,7 +1060,7 @@ namespace Tests
             Guid expectedChildControllerGuid = new Guid("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
 
             TECNetworkConnection actualNetConnect = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach(TECSystem instance in typical.Instances)
                 {
@@ -1278,7 +1278,7 @@ namespace Tests
             bool expectedGlobalStatus = false;
 
             TECController actualController = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -1521,7 +1521,7 @@ namespace Tests
             Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
 
             TECPanel actualPanel = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -1645,7 +1645,7 @@ namespace Tests
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
 
             TECIO actualIO = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                     foreach (TECController controller in system.Controllers)

@@ -117,7 +117,7 @@ namespace Tests
         [TestMethod]
         public void Bid_ScopeChildrenLinking()
         {
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
                 checkScopeChildrenCatalogLinks(typical, bid.Catalogs);
                 checkScopeLocationLinks(typical, bid);
@@ -218,7 +218,7 @@ namespace Tests
         [TestMethod]
         public void TypicalDictionaryLinking()
         {
-            foreach(TECSystem typical in bid.Systems)
+            foreach(TECTypical typical in bid.Systems)
             {
                 ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
                 int scopeFound = 0;
@@ -269,7 +269,7 @@ namespace Tests
         [TestMethod]
         public void InstanceDictionaryLinking()
         {
-            foreach(TECSystem typical in bid.Systems)
+            foreach(TECTypical typical in bid.Systems)
             {
                 ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
                 foreach (TECSystem instance in typical.Instances)
@@ -325,7 +325,7 @@ namespace Tests
         //Checks controller manufacturer is in catalogs.
         public void Bid_ControllerLinking()
         {
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -357,7 +357,7 @@ namespace Tests
                 }
                 Assert.IsTrue(bid.Catalogs.PanelTypes.Contains(panel.Type));
             }
-            foreach(TECSystem typical in bid.Systems)
+            foreach(TECTypical typical in bid.Systems)
             {
                 foreach(TECPanel panel in typical.Panels)
                 {
@@ -388,7 +388,7 @@ namespace Tests
             {
                 Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
             }
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
@@ -408,7 +408,7 @@ namespace Tests
         //Checks every device in subscope is in catalogs.
         public void Bid_SubScopeLinking()
         {
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -515,7 +515,7 @@ namespace Tests
         //Checks every conduit type in connection is in catalogs.
         public void Bid_ConnectionLinking()
         {
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -558,7 +558,7 @@ namespace Tests
                     }
                 }
             }
-            foreach(TECSystem typical in bid.Systems)
+            foreach(TECTypical typical in bid.Systems)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
@@ -636,7 +636,7 @@ namespace Tests
         public void NetworkConnectionLinking()
         {
             List<TECController> allControllers = new List<TECController>();
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
