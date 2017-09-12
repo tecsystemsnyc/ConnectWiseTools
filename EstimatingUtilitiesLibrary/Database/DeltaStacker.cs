@@ -39,7 +39,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 outStack.AddRange(addRemoveStack(change, saveItem.Item1, item as TECObject, saveItem.Item2));
             }
-            if (item is TECSystem system)
+            if (item is TECTypical system)
             {
                 outStack.AddRange(typicalInstanceStack(change, system));
             }
@@ -134,7 +134,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return outStack;
         }
-        private static List<UpdateItem> typicalInstanceStack(Change change, TECSystem system)
+        private static List<UpdateItem> typicalInstanceStack(Change change, TECTypical system)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (KeyValuePair<TECObject, List<TECObject>> pair in system.TypicalInstanceDictionary.GetFullDictionary())

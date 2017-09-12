@@ -980,7 +980,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         #region Row to Object Methods
         #region Base Scope
-        private static TECSystem getTypicalFromRow(DataRow row)
+        private static TECTypical getTypicalFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
             TECTypical system = new TECTypical(guid);

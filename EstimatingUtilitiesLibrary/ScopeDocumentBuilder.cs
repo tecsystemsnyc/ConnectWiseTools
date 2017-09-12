@@ -208,7 +208,7 @@ namespace EstimatingUtilitiesLibrary
         {
             Paragraph paragraph = new Paragraph();
             int sysNum = 1;
-            foreach (TECSystem system in bid.Systems)
+            foreach (TECTypical system in bid.Systems)
             {
                  paragraph = document.LastSection.AddParagraph();
                 paragraph.AddTab();

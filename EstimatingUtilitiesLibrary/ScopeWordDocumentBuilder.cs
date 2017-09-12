@@ -13320,7 +13320,7 @@ namespace EstimatingUtilitiesLibrary
             
         }
 
-        private void addSystemList(ObservableCollection<TECSystem> systems, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
+        private void addSystemList(ObservableCollection<TECTypical> systems, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
         {
             foreach(TECSystem scope in systems)
             {
@@ -13364,11 +13364,11 @@ namespace EstimatingUtilitiesLibrary
             runProperties51.Append((FontSize)fontSize.CloneNode(true));
             Text text34 = new Text();
             text34.Text = scope.Name;
-            if(scope is TECSystem)
+            if(scope is TECTypical typical)
             {
-                if((scope as TECSystem).Instances.Count > 1)
+                if(typical.Instances.Count > 1)
                 {
-                    text34.Text += ": (Qty. " + (scope as TECSystem).Instances.Count + ")";
+                    text34.Text += ": (Qty. " + typical.Instances.Count + ")";
                 }
             }
 

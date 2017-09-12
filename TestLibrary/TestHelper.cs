@@ -108,15 +108,15 @@ namespace Tests
             bid.Panels.Add(panel);
             
             //Systems
-            var system1 = CreateTestSystem(bid.Catalogs);
+            var system1 = new TECTypical(CreateTestSystem(bid.Catalogs));
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
             
-            var system2 = CreateTestSystem(bid.Catalogs);
+            var system2 = new TECTypical(CreateTestSystem(bid.Catalogs));
             system2.Name = "System 2";
             system2.Description = "Description 2";
 
-            var system3 = CreateTestSystem(bid.Catalogs);
+            var system3 = new TECTypical(CreateTestSystem(bid.Catalogs));
             system3.Name = "System 3";
             system3.Description = "";
 
@@ -175,7 +175,7 @@ namespace Tests
 
             AssignAllSecondaryProperties(bid);
 
-            TECSystem noLocation = new TECSystem();
+            TECTypical noLocation = new TECTypical();
             noLocation.Name = "No Location";
             noLocation.Equipment.Add(new TECEquipment());
             noLocation.Equipment[0].SubScope.Add(new TECSubScope());
@@ -449,7 +449,7 @@ namespace Tests
             subScope.Devices.Add(bid.Catalogs.Devices[0]);
             TECEquipment equipment = new TECEquipment();
             equipment.SubScope.Add(subScope);
-            TECSystem system = new TECSystem();
+            TECTypical system = new TECTypical();
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
@@ -969,7 +969,7 @@ namespace Tests
 
         public static void AssignAllSecondaryProperties(TECBid bid)
         {
-            foreach(TECSystem system in bid.Systems)
+            foreach(TECTypical system in bid.Systems)
             {
                 AssignSecondaryProperties(system, bid);
                 foreach(TECEquipment equipment in system.Equipment)
@@ -1010,7 +1010,7 @@ namespace Tests
 
         public static bool IsInBid(TECSubScope subScope, TECBid bid)
         {
-            foreach(TECSystem typical in bid.Systems)
+            foreach(TECTypical typical in bid.Systems)
             {
                 if (typical.AllSubScope().Contains(subScope))
                 {
