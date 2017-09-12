@@ -19,9 +19,9 @@ namespace EstimatingLibrary.Utilities
         {
             initialize(templates);
         }
-        public ChangeWatcher(TECSystem system)
+        public ChangeWatcher(TECTypical typical)
         {
-            initialize(system);
+            initialize(typical);
         }
         #endregion
 
@@ -48,10 +48,10 @@ namespace EstimatingLibrary.Utilities
             typicalList = new List<TECObject>();
             registerTemplateChanges(templates);
         }
-        private void initialize(TECSystem system)
+        private void initialize(TECTypical typical)
         {
             typicalList = new List<TECObject>();
-            registerSystem(system, true);
+            registerSystem(typical);
         }
 
         #region Registration
@@ -63,9 +63,9 @@ namespace EstimatingLibrary.Utilities
             registerTECObject(bid.ExtraLabor);
             registerTECObject(bid.Parameters);
 
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
-                registerSystem(typical, true);
+                registerTypical(typical);
             }
             foreach (TECController controller in bid.Controllers)
             {
@@ -102,7 +102,7 @@ namespace EstimatingLibrary.Utilities
             registerCatalogs(templates.Catalogs);
             foreach (TECSystem system in templates.SystemTemplates)
             {
-                registerSystem(system, false);
+                registerSystem(system);
             }
             foreach (TECEquipment equipment in templates.EquipmentTemplates)
             {
@@ -201,13 +201,22 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private void registerSystem(TECSystem sys, bool isTypical)
+        private void registerTypical(TECTypical typ)
         {
-            registerTECObject(sys, isTypical);
-            foreach (TECSystem instance in sys.Instances)
+            registerSystem(typ);
+            foreach (TECSystem instance in typ.Instances)
             {
-                registerSystem(instance, false);
+                registerSystem(instance);
             }
+            foreach (TECScopeBranch branch in typ.ScopeBranches)
+            {
+
+            }
+        }
+        private void registerSystem(TECSystem sys)
+        {
+            bool isTypical = (sys is TECTypical);
+            registerTECObject(sys, isTypical);
             foreach (TECEquipment equip in sys.Equipment)
             {
                 registerEquipment(equip, isTypical);
@@ -274,13 +283,17 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private void unregisterSystem(TECSystem sys)
+        private void unregisterTypical(TECTypical typ)
         {
-            unregisterTECObject(sys);
-            foreach (TECSystem instance in sys.Instances)
+            unregisterSystem(typ);
+            foreach (TECSystem instance in typ.Instances)
             {
                 unregisterSystem(instance);
             }
+        }
+        private void unregisterSystem(TECSystem sys)
+        {
+            unregisterTECObject(sys);
             foreach (TECEquipment equip in sys.Equipment)
             {
                 unregisterEquipment(equip);
@@ -351,16 +364,13 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerAdd(TECObject parent, TECObject child)
         {
-            if (child is TECSystem sys)
+            if (child is TECTypical typ)
             {
-                if (parent is TECBid)
-                {
-                    registerSystem(sys, true);
-                }
-                else if (parent is TECSystem)
-                {
-                    registerSystem(sys, false);
-                }
+                registerTypical(typ);
+            }
+            else if (child is TECSystem sys)
+            {
+                registerSystem(sys);
             }
             else if (child is TECEquipment equip)
             {
