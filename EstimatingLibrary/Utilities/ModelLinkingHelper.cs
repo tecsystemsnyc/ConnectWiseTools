@@ -20,13 +20,13 @@ namespace EstimatingLibrary.Utilities
 
             linkCatalogs(bid.Catalogs);
 
-            foreach (TECSystem sys in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
-                foreach (TECController controller in sys.Controllers)
+                foreach (TECController controller in typical.Controllers)
                 {
                     allControllers.Add(controller);
                 }
-                foreach (TECSystem instance in sys.Instances)
+                foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
@@ -41,7 +41,7 @@ namespace EstimatingLibrary.Utilities
                     }
                     linkPanelsToControllers(instance.Panels, instance.Controllers);
                 }
-                foreach (TECEquipment equip in sys.Equipment)
+                foreach (TECEquipment equip in typical.Equipment)
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
@@ -49,11 +49,11 @@ namespace EstimatingLibrary.Utilities
                     }
                 }
 
-                linkSystemToCatalogs(sys, bid.Catalogs);
-                linkLocation(sys, bid.Locations);
-                linkPanelsToControllers(sys.Panels, sys.Controllers);
+                linkSystemToCatalogs(typical, bid.Catalogs);
+                linkLocation(typical, bid.Locations);
+                linkPanelsToControllers(typical.Panels, typical.Controllers);
 
-                createScopeDictionary(sys, guidDictionary);
+                createScopeDictionary(typical, guidDictionary);
 
             }
 
@@ -72,7 +72,7 @@ namespace EstimatingLibrary.Utilities
             linkNetworkConnections(allControllers);
             linkSubScopeConnections(allControllers, allSubScope);
             linkPanelsToControllers(bid.Panels, bid.Controllers);
-            foreach(TECSystem system in bid.Systems)
+            foreach(TECTypical system in bid.Systems)
             {
                 system.RefreshRegistration();
             }
@@ -121,11 +121,14 @@ namespace EstimatingLibrary.Utilities
             linkSystemToCatalogs(system, scopeManager.Catalogs);
             linkSubScopeConnections(system.Controllers, new ObservableCollection<TECSubScope>(system.AllSubScope()), guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
-            system.RefreshRegistration();
+            if(system is TECTypical typical)
+            {
+                typical.RefreshRegistration();
+            }
         }
 
         //Was LinkCharacteristicInstances()
-        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<TECObject> oldDictionary, TECSystem newTypical)
+        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<TECObject> oldDictionary, TECTypical newTypical)
         {
             ObservableListDictionary<TECObject> newCharacteristicInstances = new ObservableListDictionary<TECObject>();
             foreach (TECSystem instance in newTypical.Instances)
@@ -156,9 +159,12 @@ namespace EstimatingLibrary.Utilities
         {
             linkScopeChildrenToCatalogs(scope, bid.Catalogs);
             linkLocation(scope, bid.Locations);
-            foreach (TECSystem instance in scope.Instances)
+            if(scope is TECTypical typical)
             {
-                LinkScopeItem(instance, bid);
+                foreach (TECSystem instance in typical.Instances)
+                {
+                    LinkScopeItem(instance, bid);
+                }
             }
             foreach (TECEquipment equip in scope.Equipment)
             {
@@ -261,10 +267,14 @@ namespace EstimatingLibrary.Utilities
             //Should assume linking a typical system with potential instances, controllers and panels.
 
             linkScopeChildrenToCatalogs(system, catalogs);
-            foreach(TECSystem instance in system.Instances)
+            if(system is TECTypical typical)
             {
-                linkSystemToCatalogs(instance, catalogs);
+                foreach (TECSystem instance in typical.Instances)
+                {
+                    linkSystemToCatalogs(instance, catalogs);
+                }
             }
+            
             foreach(TECController controller in system.Controllers)
             {
                 linkControllerToCatalogs(controller, catalogs);
@@ -592,10 +602,14 @@ namespace EstimatingLibrary.Utilities
         private static void linkLocation(TECSystem system, ObservableCollection<TECLabeled> locations)
         {
             linkLocation(system as TECLocated, locations);
-            foreach (TECSystem instance in system.Instances)
+            if(system is TECTypical typical)
             {
-                linkLocation(instance, locations);
+                foreach (TECSystem instance in typical.Instances)
+                {
+                    linkLocation(instance, locations);
+                }
             }
+            
             foreach (TECEquipment equip in system.Equipment)
             {
                 linkLocation(equip, locations);
@@ -673,7 +687,7 @@ namespace EstimatingLibrary.Utilities
         /// </summary>
         /// <param name="typical">The typical system</param>
         /// <param name="guidDictionary">The dictionary of typical to instances guids loaded</param>
-        private static void createScopeDictionary(TECSystem typical, Dictionary<Guid, List<Guid>> guidDictionary)
+        private static void createScopeDictionary(TECTypical typical, Dictionary<Guid, List<Guid>> guidDictionary)
         {
             if(guidDictionary.Count == 0)
             {
