@@ -452,6 +452,8 @@ namespace Tests
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
+
             TECDevice dev = bid.Catalogs.Devices.RandomObject();
 
             resetRaised();
