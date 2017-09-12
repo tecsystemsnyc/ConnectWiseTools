@@ -86,26 +86,26 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Bid_AddControlledScope()
+        public void Bid_TypicalSystem()
         {
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECSystem controlledScope = TestHelper.CreateTestSystem(bid.Catalogs);
-            bid.Systems.Add(controlledScope);
+            TECTypical typical = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            bid.Systems.Add(typical);
             
             //Assert.AreEqual(quantity, bid.Systems.Count);
             //Assert.AreEqual(quantity, bid.Controllers.Count);
             //Assert.AreEqual(quantity, bid.Panels.Count);
 
-            foreach(TECPanel scopePanel in controlledScope.Panels)
+            foreach(TECPanel scopePanel in typical.Panels)
             {
                 foreach(TECPanel bidPanel in bid.Panels)
                 {
                     Assert.AreEqual(scopePanel.Controllers.Count, bidPanel.Controllers.Count);
                 }
             }
-            foreach (TECController scopeController in controlledScope.Controllers)
+            foreach (TECController scopeController in typical.Controllers)
             {
                 foreach (TECController bidController in bid.Controllers)
                 {
@@ -124,7 +124,7 @@ namespace Tests
             TECBid bid = new TECBid();
             int qty = 3;
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(system);
 
             for (int x = 0; x < qty; x++)
@@ -148,7 +148,7 @@ namespace Tests
             TECBid bid = new TECBid();
             int qty = 3;
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(system);
             for (int x = 0; x < qty; x++)
             {
@@ -175,7 +175,7 @@ namespace Tests
             var bidController = new TECController(new TECControllerType(new TECManufacturer()));
             bid.Controllers.Add(bidController);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             system.Equipment.Add(equipment);
