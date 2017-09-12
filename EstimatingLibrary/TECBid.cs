@@ -25,7 +25,7 @@ namespace EstimatingLibrary
         public event Action<int> PointChanged;
 
         private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
-        private ObservableCollection<TECSystem> _systems { get; set; }
+        private ObservableCollection<TECTypical> _systems { get; set; }
         private ObservableCollection<TECLabeled> _notes { get; set; }
         private ObservableCollection<TECLabeled> _exclusions { get; set; }
         private ObservableCollection<TECLabeled> _locations { get; set; }
@@ -127,7 +127,7 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "ScopeTree", this, value, old);
             }
         }
-        public ObservableCollection<TECSystem> Systems
+        public ObservableCollection<TECTypical> Systems
         {
             get { return _systems; }
             set
@@ -253,7 +253,7 @@ namespace EstimatingLibrary
             _salesperson = "";
             _estimator = "";
             _scopeTree = new ObservableCollection<TECScopeBranch>();
-            _systems = new ObservableCollection<TECSystem>();
+            _systems = new ObservableCollection<TECTypical>();
             _notes = new ObservableCollection<TECLabeled>();
             _exclusions = new ObservableCollection<TECLabeled>();
             _locations = new ObservableCollection<TECLabeled>();
@@ -504,7 +504,7 @@ namespace EstimatingLibrary
         
         private void removeLocationFromScope(TECLabeled location)
         {
-            foreach(TECSystem typical in this.Systems)
+            foreach(TECTypical typical in this.Systems)
             {
                 if (typical.Location == location) typical.Location = null;
                 foreach(TECSystem instance in typical.Instances)

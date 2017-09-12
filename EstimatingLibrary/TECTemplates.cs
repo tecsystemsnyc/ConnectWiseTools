@@ -13,7 +13,7 @@ namespace EstimatingLibrary
     public class TECTemplates : TECScopeManager, ISaveable
     {
         #region Properties
-        private ObservableCollection<TECSystem> _systemTemplates;
+        private ObservableCollection<TECTypical> _systemTemplates;
         private ObservableCollection<TECEquipment> _equipmentTemplates;
         private ObservableCollection<TECSubScope> _subScopeTemplates;
         private ObservableCollection<TECController> _controllerTemplates;
@@ -21,7 +21,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECPanel> _panelTemplates;
         private ObservableCollection<TECParameters> _parameters;
 
-        public ObservableCollection<TECSystem> SystemTemplates
+        public ObservableCollection<TECTypical> SystemTemplates
         {
             get { return _systemTemplates; }
             set
@@ -130,7 +130,7 @@ namespace EstimatingLibrary
         public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
         {
-            _systemTemplates = new ObservableCollection<TECSystem>();
+            _systemTemplates = new ObservableCollection<TECTypical>();
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
             _controllerTemplates = new ObservableCollection<TECController>();
@@ -150,8 +150,8 @@ namespace EstimatingLibrary
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
-            foreach (TECSystem system in templatesSource.SystemTemplates)
-            { SystemTemplates.Add(new TECSystem(system)); }
+            foreach (TECTypical system in templatesSource.SystemTemplates)
+            { SystemTemplates.Add(new TECTypical(system)); }
             foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
             { EquipmentTemplates.Add(new TECEquipment(equip)); }
             foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
@@ -201,7 +201,7 @@ namespace EstimatingLibrary
             {
                 removeChildFromScope(dev, child);
             }
-            foreach (TECSystem sys in SystemTemplates)
+            foreach (TECTypical sys in SystemTemplates)
             {
                 removeChildFromScope(sys, child);
                 foreach(TECEquipment equip in sys.Equipment)
