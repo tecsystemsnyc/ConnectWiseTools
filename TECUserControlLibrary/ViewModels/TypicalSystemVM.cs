@@ -88,8 +88,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECSystem> _scopeSource;
-        public ObservableCollection<TECSystem> ScopeSource
+        private ObservableCollection<TECTypical> _scopeSource;
+        public ObservableCollection<TECTypical> ScopeSource
         {
             get { return _scopeSource; }
             set
@@ -161,26 +161,20 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Constructors
-        public TypicalSystemVM(TECScopeManager scopeManager)
+        public TypicalSystemVM(TECBid bid)
         {
-            if(scopeManager is TECBid)
+            if(bid is TECBid)
             {
-                _bid = scopeManager as TECBid;
+                _bid = bid as TECBid;
                 _scopeSource = Bid.Systems;
                 InstanceVisibility = Visibility.Visible;
-            }
-            else
-            {
-                _templates = scopeManager as TECTemplates;
-                _scopeSource = Templates.SystemTemplates;
-                InstanceVisibility = Visibility.Collapsed;
             }
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
             DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControlledScopeCanExecute);
             _selectedSystem = null;
             DebugVisibility = Visibility.Collapsed;
             
-            setupVMs(scopeManager);
+            setupVMs(bid);
         }
 
         #endregion

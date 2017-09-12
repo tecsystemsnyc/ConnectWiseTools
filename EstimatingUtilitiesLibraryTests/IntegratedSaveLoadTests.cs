@@ -455,7 +455,7 @@ namespace Tests
         public void Save_Bid_Add_System()
         {
             //Act
-            TECSystem expectedSystem = new TECSystem();
+            TECTypical expectedSystem = new TECTypical();
             expectedSystem.Name = "New system";
             expectedSystem.Description = "New system desc";
 
@@ -485,7 +485,7 @@ namespace Tests
         public void Save_Bid_Add_System_Instance()
         {
             //Act
-            TECSystem typical = bid.Systems.RandomObject();
+            TECTypical typical = bid.Systems.RandomObject();
 
             TECSystem expectedSystem = typical.AddInstance(bid);
 
@@ -494,7 +494,7 @@ namespace Tests
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualBid.Systems)
+            foreach (TECTypical system in actualBid.Systems)
             {
                 foreach (TECSystem instance in system.Instances)
                 {
@@ -516,7 +516,7 @@ namespace Tests
         public void Save_Bid_Add_System_Instance_Edit()
         {
             //Act
-            TECSystem typical = bid.Systems.RandomObject();
+            TECTypical typical = bid.Systems.RandomObject();
 
             typical.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
             TECSystem expectedSystem = typical.AddInstance(bid);
@@ -526,7 +526,7 @@ namespace Tests
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualBid.Systems)
+            foreach (TECTypical system in actualBid.Systems)
             {
                 foreach (TECSystem instance in system.Instances)
                 {
@@ -549,7 +549,7 @@ namespace Tests
         {
             //Act
             int oldNumSystems = bid.Systems.Count;
-            TECSystem systemToRemove = bid.Systems[0];
+            TECTypical systemToRemove = bid.Systems[0];
 
             bid.Systems.Remove(systemToRemove);
 

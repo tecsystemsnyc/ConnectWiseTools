@@ -159,12 +159,12 @@ namespace Tests
             Assert.AreEqual(expectedDescription, actualSystem.Description);
             Assert.AreEqual(expectedProposeEquipment, actualSystem.ProposeEquipment);
 
-            foreach (TECSystem instance in actualSystem.Instances)
-            {
-                Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
-                Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
-                Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
-            }
+            //foreach (TECSystem instance in actualSystem.Instances)
+            //{
+            //    Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
+            //    Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
+            //    Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
+            //}
 
             Assert.IsTrue(foundEquip, "Equipment not loaded properly into system.");
             Assert.IsTrue(foundControl, "Controller not loaded properly into system.");

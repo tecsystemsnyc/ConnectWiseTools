@@ -96,7 +96,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 sortController(control);
             }
-            foreach (TECSystem typical in bid.Systems)
+            foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
