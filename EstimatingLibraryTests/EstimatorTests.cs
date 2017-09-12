@@ -134,7 +134,7 @@ namespace Tests
 
             var controller = new TECController(type);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.AddInstance(bid);
@@ -158,7 +158,7 @@ namespace Tests
 
             var controller = new TECController(type);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.AddInstance(bid);
@@ -182,7 +182,7 @@ namespace Tests
 
             var controller = new TECController(type);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.Controllers.Add(controller);
@@ -206,7 +206,7 @@ namespace Tests
 
             var controller = new TECController(type);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.Controllers.Add(controller);
@@ -274,7 +274,7 @@ namespace Tests
 
             var panel = new TECPanel(panelType);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.AddInstance(bid);
@@ -301,7 +301,7 @@ namespace Tests
 
             var panel = new TECPanel(panelType);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.AddInstance(bid);
@@ -327,7 +327,7 @@ namespace Tests
 
             var panel = new TECPanel(panelType);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.Panels.Add(panel);
@@ -354,7 +354,7 @@ namespace Tests
 
             var panel = new TECPanel(panelType);
 
-            var typical = new TECSystem();
+            var typical = new TECTypical();
             bid.Systems.Add(typical);
 
             typical.Panels.Add(panel);
@@ -373,7 +373,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            var system = TestHelper.CreateTestSystem(bid.Catalogs);
+            var system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(system);
 
             Assert.AreEqual(0, estimate.TECMaterialCost, "Material cost not added");
@@ -389,7 +389,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            var system = TestHelper.CreateTestSystem(bid.Catalogs);
+            var system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(system);
 
             system.AddInstance(bid);
@@ -415,7 +415,7 @@ namespace Tests
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
@@ -442,7 +442,7 @@ namespace Tests
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
@@ -465,7 +465,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             
-            var system = new TECSystem();
+            var system = new TECTypical();
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 11;
             tecMisc.Labor = 12;
@@ -494,7 +494,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 11;
             tecMisc.Labor = 12;
@@ -547,7 +547,7 @@ namespace Tests
             bid.Catalogs.Manufacturers.Add(manufacturer);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             
@@ -605,7 +605,7 @@ namespace Tests
             bid.Catalogs.Manufacturers.Add(manufacturer);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -671,7 +671,7 @@ namespace Tests
             bid.Catalogs.Manufacturers.Add(manufacturer);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             
@@ -749,7 +749,7 @@ namespace Tests
             conduitType.AssociatedCosts.Add(assCost);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -820,7 +820,7 @@ namespace Tests
             bid.Catalogs.Manufacturers.Add(manufacturer);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -875,7 +875,7 @@ namespace Tests
             bid.Catalogs.Manufacturers.Add(manufacturer);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -958,7 +958,7 @@ namespace Tests
         public void Estimate_AddMiscCostFromSystem()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AddInstance(bid);
@@ -988,7 +988,7 @@ namespace Tests
         public void Estimate_RemoveMiscCostFromSystem()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AddInstance(bid);
@@ -1021,7 +1021,7 @@ namespace Tests
         public void Estimate_AddAssCostToSystem()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AddInstance(bid);
@@ -1051,7 +1051,7 @@ namespace Tests
         public void Estimate_RemoveAssCostRemoveSystem()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AddInstance(bid);
@@ -1084,7 +1084,7 @@ namespace Tests
         public void Estimate_AddAssCostFromEquipemnt()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
@@ -1116,7 +1116,7 @@ namespace Tests
         public void Estimate_RemoveAssCostFromEquipemnt()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
@@ -1151,7 +1151,7 @@ namespace Tests
         public void Estimate_AddDeviceToSubScope()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -1179,7 +1179,7 @@ namespace Tests
         public void Estimate_RemoveDeviceToSubScope()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -1209,7 +1209,7 @@ namespace Tests
         public void Estimate_AddDeviceWithMultiplierToSubScope()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -1237,7 +1237,7 @@ namespace Tests
         public void Estimate_RemoveDeviceWithMultiplierToSubScope()
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -1336,7 +1336,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
@@ -1370,7 +1370,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
@@ -1409,7 +1409,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
 
             var equipment = new TECEquipment();
@@ -1436,7 +1436,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
 
             var equipment = new TECEquipment();
@@ -1465,7 +1465,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
 
@@ -1491,7 +1491,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
 
@@ -1519,7 +1519,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
 
@@ -1545,7 +1545,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
 
@@ -1573,7 +1573,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
 
@@ -1599,7 +1599,7 @@ namespace Tests
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            var system = new TECSystem();
+            var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
 
@@ -1622,7 +1622,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -1675,7 +1675,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
 
@@ -1735,7 +1735,7 @@ namespace Tests
             TECController controller = new TECController(type);
             bid.Controllers.Add(controller);
 
-            TECSystem typical = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical typical = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1757,7 +1757,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             bid.Parameters = parameters;
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             var point = new TECPoint();
