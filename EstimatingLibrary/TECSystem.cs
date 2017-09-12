@@ -18,20 +18,26 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllers;
         private ObservableCollection<TECPanel> _panels;
         private ObservableCollection<TECMisc> _miscCosts;
+        private ObservableCollection<TECScopeBranch> _scopeBranches;
+
+        private bool _proposeEquipment;
         #endregion
 
         #region Constructors
         public TECSystem(Guid guid) : base(guid)
         {
+            _proposeEquipment = false;
             _equipment = new ObservableCollection<TECEquipment>();
             _controllers = new ObservableCollection<TECController>();
             _panels = new ObservableCollection<TECPanel>();
             _miscCosts = new ObservableCollection<TECMisc>();
+            _scopeBranches = new ObservableCollection<TECScopeBranch>();
 
             _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
             _controllers.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Controllers");
             _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
             _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
+            _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
         }
 
         public TECSystem() : this(Guid.NewGuid()) { }
@@ -72,6 +78,11 @@ namespace EstimatingLibrary
             {
                 var toAdd = new TECMisc(misc);
                 _miscCosts.Add(toAdd);
+            }
+            foreach (TECScopeBranch branch in source._scopeBranches)
+            {
+                var toAdd = new TECScopeBranch(branch);
+                _scopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
         }
@@ -130,7 +141,29 @@ namespace EstimatingLibrary
                 _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             }
         }
+        public ObservableCollection<TECScopeBranch> ScopeBranches
+        {
+            get { return _scopeBranches; }
+            set
+            {
+                var old = _scopeBranches;
+                _scopeBranches.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
+                _scopeBranches = value;
+                NotifyTECChanged(Change.Edit, "ScopeBranches", this, value, old);
+                _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
+            }
+        }
 
+        public bool ProposeEquipment
+        {
+            get { return _proposeEquipment; }
+            set
+            {
+                var old = ProposeEquipment;
+                _proposeEquipment = value;
+                NotifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
+            }
+        }
         public int PointNumber
         {
             get
