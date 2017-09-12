@@ -91,7 +91,7 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECSystem controlledScope = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical controlledScope = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(controlledScope);
             
             //Assert.AreEqual(quantity, bid.Systems.Count);
@@ -124,7 +124,7 @@ namespace Tests
             TECBid bid = new TECBid();
             int qty = 3;
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(system);
 
             for (int x = 0; x < qty; x++)
@@ -148,7 +148,7 @@ namespace Tests
             TECBid bid = new TECBid();
             int qty = 3;
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECSystem system = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(system);
             for (int x = 0; x < qty; x++)
             {
@@ -175,7 +175,7 @@ namespace Tests
             var bidController = new TECController(new TECControllerType(new TECManufacturer()));
             bid.Controllers.Add(bidController);
 
-            var system = new TECSystem();
+            var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             system.Equipment.Add(equipment);
