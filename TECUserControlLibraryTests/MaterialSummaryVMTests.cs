@@ -361,7 +361,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECSystem typical = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical typical = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             TestHelper.AssignSecondaryProperties(typical, bid.Catalogs);
             bid.Systems.Add(typical);
 

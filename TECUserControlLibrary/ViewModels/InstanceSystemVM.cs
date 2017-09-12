@@ -136,7 +136,7 @@ namespace TECUserControlLibrary.ViewModels
             if (scopeManager is TECBid)
             {
                 _bid = scopeManager as TECBid;
-                _scopeSource = Bid.Systems;
+                _scopeSource = new ObservableCollection<TECSystem>();
             }
             else
             {
@@ -156,7 +156,7 @@ namespace TECUserControlLibrary.ViewModels
             if (scopeManager is TECBid)
             {
                 Bid = scopeManager as TECBid;
-                ScopeSource = Bid.Systems;
+                ScopeSource = new ObservableCollection<TECSystem>();
             }
             else
             {
@@ -234,7 +234,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (Bid != null)
                 {
                     ModelLinkingHelper.LinkSystem(controlledScopeToAdd, Bid, guidDictionary);
-                    Bid.Systems.Add(controlledScopeToAdd);
+                    throw new NotImplementedException();
+                    //Bid.Systems.Add(controlledScopeToAdd);
                 }
                 else if (Templates != null)
                 {

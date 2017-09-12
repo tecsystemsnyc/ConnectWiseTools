@@ -55,7 +55,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private TECBid _bid;
 
-        public TECSystem SelectedSystem
+        public TECTypical SelectedSystem
         {
             get
             {
@@ -68,7 +68,7 @@ namespace TECUserControlLibrary.ViewModels
                 TabIndex = EditIndex.System;
             }
         }
-        private TECSystem _selectedSystem;
+        private TECTypical _selectedSystem;
 
         public TECEquipment SelectedEquipment
         {
@@ -806,9 +806,9 @@ namespace TECUserControlLibrary.ViewModels
         #region Events
         public void updateSelection(object selection)
         {
-            if (selection is TECSystem)
+            if (selection is TECTypical typical)
             {
-                SelectedSystem = selection as TECSystem;
+                SelectedSystem = typical;
             }
             else if (selection is TECEquipment)
             {

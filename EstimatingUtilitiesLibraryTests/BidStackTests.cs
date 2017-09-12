@@ -1025,10 +1025,11 @@ namespace Tests
             TECTypical edit = new TECTypical();
 
             //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            ChangeWatcher watcher = new ChangeWatcher(Bid);
+            DoStacker testStack = new DoStacker(watcher);
             Bid.Systems.Add(edit);
-            var expected = new ObservableCollection<TECSystem>();
-            foreach (TECSystem item in Bid.Systems)
+            var expected = new ObservableCollection<TECTypical>();
+            foreach (TECTypical item in Bid.Systems)
             {
                 expected.Add(item);
             }
@@ -1367,7 +1368,8 @@ namespace Tests
             Bid.Systems.Add(system);
 
             //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            ChangeWatcher watcher = new ChangeWatcher(Bid);
+            DoStacker testStack = new DoStacker(watcher);
             system.Location = edit;
             testStack.Undo();
             testStack.Redo();
