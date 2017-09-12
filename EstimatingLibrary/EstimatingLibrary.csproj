@@ -105,6 +105,7 @@
     <Compile Include="Interfaces\ISaveable.cs" />
     <Compile Include="Interfaces\ITECConnectable.cs" />
     <Compile Include="TECExtraLabor.cs" />
+    <Compile Include="TECTypical.cs" />
     <Compile Include="TECValve.cs" />
     <Compile Include="Utilities\ObservableListDictionary.cs" />
     <Compile Include="TECCatalogs.cs" />

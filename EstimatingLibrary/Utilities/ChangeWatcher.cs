@@ -493,9 +493,26 @@ namespace EstimatingLibrary.Utilities
                     InstanceChanged?.Invoke(obj);
                 }
             }
-            else if (obj.PropertyName != "TypicalInstanceDictionary" && obj.Value is TECObject tecObj && !isTypical(obj.Sender))
+            else if (obj.PropertyName != "TypicalInstanceDictionary")
             {
-                InstanceChanged?.Invoke(obj);
+                if (obj.Value is TECSystem system)
+                {
+                    if (!isTypical(system))
+                    {
+                        InstanceChanged?.Invoke(obj);
+                    } 
+                }
+                else if (obj.Sender is TECSystem || obj.Sender is TECEquipment || obj.Sender is TECSubScope)
+                {
+                    if (!isTypical(obj.Sender))
+                    {
+                        InstanceChanged?.Invoke(obj);
+                    }
+                }
+                else
+                {
+                    InstanceChanged?.Invoke(obj);
+                }
             }
         }
         private void handleCostChanged(TECObject sender, CostBatch obj)
