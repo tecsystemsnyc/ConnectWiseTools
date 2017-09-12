@@ -25,8 +25,8 @@ namespace TECUserControlLibrary.ViewModels
     public class TypicalSystemVM : ViewModelBase, IDropTarget
     {
         #region Properties
-        private TECSystem _selectedSystem;
-        public TECSystem SelectedSystem
+        private TECTypical _selectedSystem;
+        public TECTypical SelectedSystem
         {
             get { return _selectedSystem; }
             set
@@ -180,18 +180,11 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Methods
-        public void Refresh(TECScopeManager scopeManager)
+        public void Refresh(TECBid bid)
         {
-            if(scopeManager is TECBid)
-            {
-                Bid = scopeManager as TECBid;
-                ScopeSource = Bid.Systems;
-            } else
-            {
-                Templates = scopeManager as TECTemplates;
-                ScopeSource = Templates.SystemTemplates;
-            }
-            ComponentVM.Refresh(scopeManager);
+            Bid = bid;
+            ScopeSource = Bid.Systems;
+            ComponentVM.Refresh(bid);
         }
         private void setupVMs(TECScopeManager scopeManager)
         {
@@ -271,7 +264,7 @@ namespace TECUserControlLibrary.ViewModels
             if (dropInfo.Data is TECSystem)
             {
                 Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-                var controlledScopeToAdd = new TECSystem(dropInfo.Data as TECSystem, guidDictionary);
+                var controlledScopeToAdd = new TECTypical(dropInfo.Data as TECSystem, guidDictionary);
                 if(Bid != null)
                 {
                     ModelLinkingHelper.LinkSystem(controlledScopeToAdd, Bid, guidDictionary);
