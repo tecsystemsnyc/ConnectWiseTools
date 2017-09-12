@@ -447,7 +447,7 @@ namespace Tests
                     cost = randomCost;
                 }
             }
-            var system = new TECSystem();
+            TECTypical system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AssociatedCosts.Add(cost);
@@ -490,7 +490,7 @@ namespace Tests
                     cost = randomCost;
                 }
             }
-            var system = new TECSystem();
+            TECTypical system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
             system.AssociatedCosts.Add(cost);
@@ -781,7 +781,7 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECSystem typical = TestHelper.CreateTestSystem(bid.Catalogs);
+            TECTypical typical = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
             bid.Systems.Add(typical);
 
             TECSystem instance = typical.AddInstance(bid);
