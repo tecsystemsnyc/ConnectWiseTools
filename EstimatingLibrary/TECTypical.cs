@@ -368,12 +368,9 @@ namespace EstimatingLibrary
         }
         private void handleAdd(TECObject value, TECObject sender)
         {
-            if (sender is TECSystem)
+            if (sender is TECTypical)
             {
-                if ((sender as TECSystem).Instances.Count == 0)
-                {
-                    return;
-                }
+                return;
             }
             if (value is TECController && sender is TECSystem)
             {
@@ -551,12 +548,9 @@ namespace EstimatingLibrary
         }
         private void handleRemove(TECObject value, TECObject sender)
         {
-            if (sender is TECSystem)
+            if (sender is TECTypical)
             {
-                if ((sender as TECSystem).Instances.Count == 0)
-                {
-                    return;
-                }
+                return;
             }
             if (value is TECController && sender is TECSystem)
             {
