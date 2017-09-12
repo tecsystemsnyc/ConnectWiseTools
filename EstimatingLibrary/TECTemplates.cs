@@ -150,8 +150,8 @@ namespace EstimatingLibrary
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
-            foreach (TECSystem system in templatesSource.SystemTemplates)
-            { SystemTemplates.Add(new TECSystem(system)); }
+            foreach (TECTypical system in templatesSource.SystemTemplates)
+            { SystemTemplates.Add(new TECTypical(system)); }
             foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
             { EquipmentTemplates.Add(new TECEquipment(equip)); }
             foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
