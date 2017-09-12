@@ -724,7 +724,6 @@ namespace Tests
             //Assert
             checkRaised(true, false, false);
             checkInstanceChangedArgs(Change.Add, "ChildrenControllers", netConnect, daisyController);
-            checkCostDelta(new CostBatch());
         }
         #endregion
 
