@@ -180,8 +180,6 @@ namespace EstimatingLibrary
             }
             ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
 
-            Instances.Add(newSystem);   //Moved to before linking subscope to controllers because the changewatcher needs to know if a subscope is typical or instance.
-
             //Link subscope to controllers.
             var newSubScope = newSystem.AllSubScope();
             foreach (TECSubScope subScope in AllSubScope())
@@ -201,6 +199,9 @@ namespace EstimatingLibrary
                     }
                 }
             }
+
+            Instances.Add(newSystem);
+
             return (newSystem);
         }
         internal void RefreshRegistration()
@@ -326,11 +327,11 @@ namespace EstimatingLibrary
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
                         }
-                        NotifyTECChanged(Change.Remove, propertyName, this, item);
                         if (item is TECSystem system)
                         {
                             handleInstanceRemoved(system);
                         }
+                        NotifyTECChanged(Change.Remove, propertyName, this, item);
                     }
                 }
                 if (raiseEvents)
