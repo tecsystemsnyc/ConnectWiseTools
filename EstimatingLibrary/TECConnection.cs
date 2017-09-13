@@ -25,8 +25,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = Length;
+                var originalCost = this.CostBatch;
                 _length = value;
                 NotifyCombinedChanged(Change.Edit, "Length", this, value, old);
+                NotifyCostChanged(CostBatch - originalCost);
             }
         }
         public double ConduitLength
@@ -35,8 +37,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = ConduitLength;
+                var originalCost = this.CostBatch;
                 _conduitLength = value;
                 NotifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
+                NotifyCostChanged(CostBatch - originalCost);
             }
         }
         public TECController ParentController
@@ -54,8 +58,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = ConduitType;
+                var originalCost = this.CostBatch;
                 _conduitType = value;
                 NotifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
+                NotifyCostChanged(CostBatch - originalCost);
             }
         }
 

@@ -30,8 +30,10 @@ namespace EstimatingLibrary
                 if(_manufacturer != value)
                 {
                     var old = Manufacturer;
+                    var originalCost = CostBatch;
                     _manufacturer = value;
                     NotifyCombinedChanged(Change.Edit, "Manufacturer", this, value, old);
+                    NotifyCostChanged(CostBatch - originalCost);
                 }
             }
         }

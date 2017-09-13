@@ -55,7 +55,7 @@ namespace EstimatingLibrary
                 var old = Type;
                 _type = value;
                 NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
-                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
+                NotifyCostChanged(value.CostBatch - old.CostBatch);
             }
         }
         public NetworkType NetworkType
