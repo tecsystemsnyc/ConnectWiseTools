@@ -701,7 +701,6 @@ namespace Tests
             //Assert
             checkRaised(false, false, false);
             checkChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
-            checkCostDelta(connection.CostBatch);
         }
 
         [TestMethod]
