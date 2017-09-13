@@ -1480,7 +1480,7 @@ namespace Tests
             bid.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", bid, edited, original);
         }
 
@@ -1501,7 +1501,7 @@ namespace Tests
             controller.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", controller, edited, original);
         }
 
@@ -1522,7 +1522,7 @@ namespace Tests
             controller.Type = edited;
 
             //Assert
-            checkRaised(false, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Type", controller, edited, original);
         }
 
@@ -1546,7 +1546,7 @@ namespace Tests
             connection.Length= 12;
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Length", connection, edited, original);
         }
 
@@ -1570,7 +1570,7 @@ namespace Tests
             connection.ConnectionType = edited;
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "ConnectionType", connection, edited, original);
         }
 
@@ -1594,7 +1594,7 @@ namespace Tests
             connection.ConduitType = edited;
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "ConduitType", connection, edited, original);
         }
 
@@ -1615,7 +1615,7 @@ namespace Tests
             panel.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", panel, edited, original);
         }
 
@@ -1636,7 +1636,7 @@ namespace Tests
             panel.Type = edited;
 
             //Assert
-            checkRaised(false, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Type", panel, edited, original);
         }
 
@@ -1657,7 +1657,7 @@ namespace Tests
             misc.Quantity = edited;
 
             //Assert
-            checkRaised(false, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Quantity", misc, edited, original);
         }
 
@@ -1678,7 +1678,7 @@ namespace Tests
             branch.Label = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", branch, edited, original);
         }
 
@@ -1697,7 +1697,7 @@ namespace Tests
             bid.Parameters = edited;
 
             //Assert
-            checkRaised(false, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Parameters", branch, edited, original);
         }
 
@@ -1716,7 +1716,7 @@ namespace Tests
             bid.ExtraLabor = edited;
 
             //Assert
-            checkRaised(false, true, false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "ExtraLabor", branch, edited, original);
         }
 
@@ -1737,7 +1737,7 @@ namespace Tests
             typical.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", typical, edited, original);
         }
 
@@ -1760,7 +1760,7 @@ namespace Tests
             controller.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", controller, edited, original);
         }
 
@@ -1783,7 +1783,7 @@ namespace Tests
             panel.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", panel, edited, original);
         }
 
@@ -1806,7 +1806,7 @@ namespace Tests
             misc.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", misc, edited, original);
         }
 
@@ -1829,7 +1829,7 @@ namespace Tests
             branch.Label = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", branch, edited, original);
         }
 
@@ -1852,7 +1852,7 @@ namespace Tests
             equipment.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", equipment, edited, original);
         }
 
@@ -1877,7 +1877,7 @@ namespace Tests
             subScope.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", subScope, edited, original);
         }
 
@@ -1904,7 +1904,7 @@ namespace Tests
             point.Label = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", point, edited, original);
         }
 
@@ -1926,7 +1926,7 @@ namespace Tests
             system.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", system, edited, original);
         }
 
@@ -1950,7 +1950,7 @@ namespace Tests
             system.Location = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Location", system, edited, original);
         }
 
@@ -1975,7 +1975,7 @@ namespace Tests
             systemController.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemController, edited, original);
         }
 
@@ -2000,7 +2000,7 @@ namespace Tests
             systemPanel.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemPanel, edited, original);
         }
 
@@ -2025,7 +2025,7 @@ namespace Tests
             systemMisc.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemMisc, edited, original);
         }
 
@@ -2050,7 +2050,7 @@ namespace Tests
             systemScopeBranch.Label = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", systemScopeBranch, edited, original);
         }
 
@@ -2075,7 +2075,7 @@ namespace Tests
             systemEquipment.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemEquipment, edited, original);
         }
 
@@ -2102,7 +2102,7 @@ namespace Tests
             systemSubScope.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemSubScope, edited, original);
         }
 
@@ -2131,7 +2131,7 @@ namespace Tests
             point.Label = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", point, edited, original);
         }
 
@@ -2152,7 +2152,7 @@ namespace Tests
             device.Manufacturer = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Manufacturer", device, edited, original);
         }
 
@@ -2173,7 +2173,7 @@ namespace Tests
             valve.Actuator = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Actuator", valve, edited, original);
         }
 
@@ -2193,7 +2193,7 @@ namespace Tests
             material.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", material, edited, original);
         }
 
@@ -2213,7 +2213,7 @@ namespace Tests
             material.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", material, edited, original);
         }
 
@@ -2233,7 +2233,7 @@ namespace Tests
             cost.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", cost, edited, original);
         }
 
@@ -2253,7 +2253,7 @@ namespace Tests
             panelType.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", panelType, edited, original);
         }
 
@@ -2273,7 +2273,7 @@ namespace Tests
             controllerType.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", controllerType, edited, original);
         }
 
@@ -2293,7 +2293,7 @@ namespace Tests
             ioModule.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", ioModule, edited, original);
         }
 
@@ -2313,7 +2313,7 @@ namespace Tests
             device.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", device, edited, original);
         }
 
@@ -2333,7 +2333,7 @@ namespace Tests
             valve.Name = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Name", valve, edited, original);
         }
 
@@ -2353,7 +2353,7 @@ namespace Tests
             manufacturer.Label= edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", manufacturer, edited, original);
         }
 
@@ -2373,7 +2373,7 @@ namespace Tests
             tag.Label = edited;
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", tag, edited, original);
         }
 
