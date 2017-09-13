@@ -208,10 +208,6 @@ namespace EstimatingLibrary.Utilities
             {
                 registerSystem(instance);
             }
-            foreach (TECScopeBranch branch in typ.ScopeBranches)
-            {
-
-            }
         }
         private void registerSystem(TECSystem sys)
         {
@@ -232,6 +228,10 @@ namespace EstimatingLibrary.Utilities
             foreach (TECMisc misc in sys.MiscCosts)
             {
                 registerTECObject(misc, isTypical);
+            }
+            foreach (TECScopeBranch branch in sys.ScopeBranches)
+            {
+                registerScopeBranch(branch);
             }
         }
         private void registerEquipment(TECEquipment equip, bool isTypical)
@@ -309,6 +309,10 @@ namespace EstimatingLibrary.Utilities
             foreach (TECMisc misc in sys.MiscCosts)
             {
                 unregisterTECObject(misc);
+            }
+            foreach (TECScopeBranch branch in sys.ScopeBranches)
+            {
+                unregisterScopeBranch(branch);
             }
         }
         private void unregisterEquipment(TECEquipment equip)
@@ -505,21 +509,11 @@ namespace EstimatingLibrary.Utilities
             }
             else if (obj.PropertyName != "TypicalInstanceDictionary")
             {
-                if (obj.Value is TECSystem system)
+                if (obj.Value is TECObject tecObj && !isTypical(tecObj))
                 {
-                    if (!isTypical(system))
-                    {
-                        InstanceChanged?.Invoke(obj);
-                    } 
+                    InstanceChanged?.Invoke(obj);
                 }
-                else if (obj.Sender is TECSystem || obj.Sender is TECEquipment || obj.Sender is TECSubScope)
-                {
-                    if (!isTypical(obj.Sender))
-                    {
-                        InstanceChanged?.Invoke(obj);
-                    }
-                }
-                else
+                else if (!(obj.Value is TECObject))
                 {
                     InstanceChanged?.Invoke(obj);
                 }

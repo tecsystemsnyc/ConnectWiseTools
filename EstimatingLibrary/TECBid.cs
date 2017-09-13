@@ -326,10 +326,12 @@ namespace EstimatingLibrary
                         costChanged = true;
                     }
                     NotifyCombinedChanged(Change.Add, collectionName, this, item);
-                    if (item is TECSystem)
+                    if (item is TECTypical)
                     {
                         var sys = item as TECSystem;
                         sys.PropertyChanged += system_PropertyChanged;
+                        costChanged = false;
+                        pointChanged = false;
                     }
                 }
                 if (pointChanged) PointChanged?.Invoke(pointNumber);
@@ -354,11 +356,16 @@ namespace EstimatingLibrary
                         costChanged = true;
                     }
                     NotifyCombinedChanged(Change.Remove, collectionName, this, item);
-                    if (item is TECSystem)
+                    if (item is TECTypical typ)
                     {
                         var sys = item as TECSystem;
                         sys.PropertyChanged -= system_PropertyChanged;
                         handleSystemSubScopeRemoval(item as TECSystem);
+                        if (typ.Instances.Count == 0)
+                        {
+                            costChanged = false;
+                            pointChanged = false;
+                        }
                     }
                     else if (item is TECController)
                     {
