@@ -198,6 +198,7 @@ namespace Tests
             //Labor
             //templates.Labor = CreateTestLabor();
             templates.Parameters.Add(CreateTestParameters(Guid.NewGuid()));
+            templates.Catalogs = CreateTestCatalogs();
 
             //Tags
             TECLabeled testTag = new TECLabeled();
@@ -580,6 +581,14 @@ namespace Tests
             AssignSecondaryProperties(panelType, outCatalogs);
 
             outCatalogs.PanelTypes.Add(panelType);
+
+            //Valves
+            TECDevice actuator = new TECDevice(new ObservableCollection<TECElectricalMaterial>() { connectionType1 },
+                manufacturer1);
+            actuator.Name = "actuator";
+            outCatalogs.Devices.Add(actuator);
+            TECValve valve = new TECValve(manufacturer1, actuator);
+            outCatalogs.Valves.Add(valve);
 
             return outCatalogs;
         }

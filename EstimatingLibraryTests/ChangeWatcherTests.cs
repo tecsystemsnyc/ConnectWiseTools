@@ -17,6 +17,9 @@ namespace Tests
         private TECBid bid;
         private ChangeWatcher cw;
 
+        private TECTemplates templates;
+        private ChangeWatcher tcw;
+
         private TECChangedEventArgs changedArgs;
         private TECChangedEventArgs instanceChangedArgs;
         private CostBatch costDelta;
@@ -32,6 +35,9 @@ namespace Tests
         {
             bid = TestHelper.CreateTestBid();
             cw = new ChangeWatcher(bid);
+            
+            templates = TestHelper.CreateTestTemplates();
+            tcw = new ChangeWatcher(templates);
 
             resetRaised();
 
@@ -55,6 +61,28 @@ namespace Tests
                 pointDelta = numPoints;
                 pointChangedRaised = true;
             };
+            
+            tcw.Changed += (args) =>
+            {
+                changedArgs = args;
+                changedRaised = true;
+            };
+            tcw.InstanceChanged += (args) =>
+            {
+                instanceChangedArgs = args;
+                instanceChangedRaised = true;
+            };
+            tcw.CostChanged += (costs) =>
+            {
+                costDelta = costs;
+                costChangedRaised = true;
+            };
+            tcw.PointChanged += (numPoints) =>
+            {
+                pointDelta = numPoints;
+                pointChangedRaised = true;
+            };
+
         }
 
         #region Change Events Tests
@@ -1437,6 +1465,918 @@ namespace Tests
             checkInstanceChangedArgs(Change.Remove, "ChildrenControllers", netConnect, daisyController);
             checkCostDelta(netConnect.CostBatch * -1);
         }
+        #endregion
+
+        #region Edit Tests
+        [TestMethod]
+        public void EditBid()
+        {
+            //Arrange
+            var original = bid.Name;
+            var edited = "edit";
+            resetRaised();
+
+            //Act
+            bid.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", bid, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidController()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            controller.Name = original;
+            bid.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            controller.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", controller, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidControllerType()
+        {
+            //Arrange
+            var original = bid.Catalogs.ControllerTypes.RandomObject();
+            var edited = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            bid.Catalogs.ControllerTypes.Add(edited);
+
+            resetRaised();
+
+            //Act
+            controller.Type = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Type", controller, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidNetworkConnection()
+        {
+            //Arrange
+            var original = 10;
+            var edited = 12;
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes.RandomObject());
+            connection.Length = original;
+
+            resetRaised();
+
+            //Act
+            connection.Length= 12;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Length", connection, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidNetworkConnectionConnectionType()
+        {
+            //Arrange
+            var original = bid.Catalogs.ConnectionTypes.RandomObject();
+            var edited = new TECElectricalMaterial();
+            bid.Catalogs.ConnectionTypes.Add(edited);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+            TECNetworkConnection connection = controller.AddController(child, original);
+
+            resetRaised();
+
+            //Act
+            connection.ConnectionType = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "ConnectionType", connection, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidNetworkConnectionConduitType()
+        {
+            //Arrange
+            var original = bid.Catalogs.ConduitTypes.RandomObject();
+            var edited = new TECElectricalMaterial();
+            bid.Catalogs.ConduitTypes.Add(edited);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes.RandomObject());
+            connection.ConduitType = original;
+            resetRaised();
+
+            //Act
+            connection.ConduitType = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "ConduitType", connection, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidPanel()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            panel.Name = original;
+            bid.Panels.Add(panel);
+
+            resetRaised();
+
+            //Act
+            panel.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", panel, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidPanelType()
+        {
+            //Arrange
+            var original = bid.Catalogs.PanelTypes.RandomObject();
+            var edited = new TECPanelType(bid.Catalogs.Manufacturers.RandomObject());
+
+            TECPanel panel= new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            bid.Panels.Add(panel);
+            bid.Catalogs.PanelTypes.Add(edited);
+
+            resetRaised();
+
+            //Act
+            panel.Type = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Type", panel, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidMisc()
+        {
+            //Arrange
+            var original = 2;
+            var edited = 3;
+
+            TECMisc misc = new TECMisc(CostType.TEC);
+            misc.Quantity = original;
+            bid.MiscCosts.Add(misc);
+
+            resetRaised();
+
+            //Act
+            misc.Quantity = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Quantity", misc, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidScopeBranch()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECScopeBranch branch = new TECScopeBranch();
+            branch.Label = original;
+            bid.ScopeTree.Add(branch);
+
+            resetRaised();
+
+            //Act
+            branch.Label = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Label", branch, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidParamters()
+        {
+            //Arrange
+            var original = bid.Parameters;
+            var edited = new TECParameters(bid.Guid);
+
+            TECParameters branch = new TECParameters(bid.Guid);
+
+            resetRaised();
+
+            //Act
+            bid.Parameters = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Parameters", branch, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidExtraLabor()
+        {
+            //Arrange
+            var original = bid.ExtraLabor;
+            var edited = new TECExtraLabor(bid.Guid);
+
+            TECExtraLabor branch = new TECExtraLabor(bid.Guid);
+
+            resetRaised();
+
+            //Act
+            bid.ExtraLabor = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkChangedArgs(Change.Edit, "ExtraLabor", branch, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypical()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            typical.Name = original;
+            bid.Systems.Add(typical);
+
+            resetRaised();
+
+            //Act
+            typical.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", typical, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypicalController()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            controller.Name = original;
+            typical.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            controller.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", controller, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypicalPanel()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            panel.Name = original;
+            typical.Panels.Add(panel);
+
+            resetRaised();
+
+            //Act
+            panel.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", panel, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypicalMisc()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECMisc misc = new TECMisc(CostType.TEC);
+            misc.Name = original;
+            typical.MiscCosts.Add(misc);
+
+            resetRaised();
+
+            //Act
+            misc.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", misc, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypicalScopeBranch()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECScopeBranch branch = new TECScopeBranch();
+            branch.Label = original;
+            typical.ScopeBranches.Add(branch);
+
+            resetRaised();
+
+            //Act
+            branch.Label = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Label", branch, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypicalEquipment()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equipment = new TECEquipment();
+            equipment.Name = original;
+            typical.Equipment.Add(equipment);
+
+            resetRaised();
+
+            //Act
+            equipment.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", equipment, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypicalSubScope()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equipment = new TECEquipment();
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope();
+            subScope.Name = original;
+            equipment.SubScope.Add(subScope);
+
+            resetRaised();
+
+            //Act
+            subScope.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", subScope, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTypicalPoint()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equipment = new TECEquipment();
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            TECPoint point = new TECPoint();
+            subScope.Points.Add(point);
+            point.Label = original;
+
+            resetRaised();
+
+            //Act
+            point.Label = edited;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Label", point, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystem()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECSystem system = typical.AddInstance(bid);
+            system.Name = original;
+
+            resetRaised();
+
+            //Act
+            system.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", system, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemLocation()
+        {
+            //Arrange
+            var original = bid.Locations.RandomObject();
+            var edited = new TECLabeled();
+            edited.Label = "edit";
+            bid.Locations.Add(edited);
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECSystem system = typical.AddInstance(bid);
+            system.Location = original;
+
+            resetRaised();
+
+            //Act
+            system.Location = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Location", system, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemController()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            typical.Controllers.Add(controller);
+            TECSystem system = typical.AddInstance(bid);
+            TECController systemController = system.Controllers[0];
+            systemController.Name = original;
+
+            resetRaised();
+
+            //Act
+            systemController.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", systemController, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemPanel()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            typical.Panels.Add(panel);
+            TECSystem system = typical.AddInstance(bid);
+            TECPanel systemPanel = system.Panels[0];
+            systemPanel.Name = original;
+
+            resetRaised();
+
+            //Act
+            systemPanel.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", systemPanel, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemMisc()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECMisc misc = new TECMisc(CostType.TEC);
+            typical.MiscCosts.Add(misc);
+            TECSystem system = typical.AddInstance(bid);
+            TECMisc systemMisc = system.MiscCosts[0];
+            systemMisc.Name = original;
+
+            resetRaised();
+
+            //Act
+            systemMisc.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", systemMisc, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemScopeBranch()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECScopeBranch branch = new TECScopeBranch();
+            typical.ScopeBranches.Add(branch);
+            TECSystem system = typical.AddInstance(bid);
+            TECScopeBranch systemScopeBranch = system.ScopeBranches[0];
+            systemScopeBranch.Label = original;
+
+            resetRaised();
+
+            //Act
+            systemScopeBranch.Label = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Label", systemScopeBranch, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemEquipment()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equipment = new TECEquipment();
+            typical.Equipment.Add(equipment);
+            TECSystem system = typical.AddInstance(bid);
+            TECEquipment systemEquipment = system.Equipment[0];
+            systemEquipment.Name = original;
+
+            resetRaised();
+
+            //Act
+            systemEquipment.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", systemEquipment, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemSubScope()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equipment = new TECEquipment();
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            TECSystem system = typical.AddInstance(bid);
+            TECSubScope systemSubScope = system.Equipment[0].SubScope[0];
+            systemSubScope.Name = original;
+
+            resetRaised();
+
+            //Act
+            systemSubScope.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", systemSubScope, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemPoint()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equipment = new TECEquipment();
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            TECPoint point = new TECPoint();
+            subScope.Points.Add(point);
+            TECSystem system = typical.AddInstance(bid);
+            TECPoint systemPoint = system.Equipment[0].SubScope[0].Points[0];
+            systemPoint.Label = original;
+
+            resetRaised();
+
+            //Act
+            point.Label = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Label", point, edited, original);
+        }
+
+        [TestMethod]
+        public void EditHardwareManufacturer()
+        {
+            //Arrange
+            TECDevice device = templates.Catalogs.Devices.RandomObject();
+
+            var original = device.Manufacturer;
+            var edited = new TECManufacturer();
+            edited.Label = "edit";
+            templates.Catalogs.Manufacturers.Add(edited);
+            
+            resetRaised();
+
+            //Act
+            device.Manufacturer = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Manufacturer", device, edited, original);
+        }
+
+        [TestMethod]
+        public void EditValveActuator()
+        {
+            //Arrange
+            TECValve valve = templates.Catalogs.Valves.RandomObject();
+
+            var original = valve.Actuator;
+            var edited = new TECDevice(templates.Catalogs.Devices.RandomObject());
+            edited.Name = "edit";
+            templates.Catalogs.Devices.Add(edited);
+
+            resetRaised();
+
+            //Act
+            valve.Actuator = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Actuator", valve, edited, original);
+        }
+
+        [TestMethod]
+        public void EditConnectionType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECElectricalMaterial material = templates.Catalogs.ConnectionTypes.RandomObject();
+            material.Name = original;
+
+            resetRaised();
+
+            //Act
+            material.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", material, edited, original);
+        }
+
+        [TestMethod]
+        public void EditConduitType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECElectricalMaterial material = templates.Catalogs.ConduitTypes.RandomObject();
+            material.Name = original;
+
+            resetRaised();
+
+            //Act
+            material.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", material, edited, original);
+        }
+
+        [TestMethod]
+        public void EditAssociatedCost()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECCost cost = templates.Catalogs.AssociatedCosts.RandomObject();
+            cost.Name = original;
+
+            resetRaised();
+
+            //Act
+            cost.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", cost, edited, original);
+        }
+
+        [TestMethod]
+        public void EditPanelType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECPanelType panelType = templates.Catalogs.PanelTypes.RandomObject();
+            panelType.Name = original;
+
+            resetRaised();
+
+            //Act
+            panelType.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", panelType, edited, original);
+        }
+
+        [TestMethod]
+        public void EditControllerType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECControllerType controllerType = templates.Catalogs.ControllerTypes.RandomObject();
+            controllerType.Name = original;
+
+            resetRaised();
+
+            //Act
+            controllerType.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", controllerType, edited, original);
+        }
+
+        [TestMethod]
+        public void EditIOModule()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECIOModule ioModule = templates.Catalogs.IOModules.RandomObject();
+            ioModule.Name = original;
+
+            resetRaised();
+
+            //Act
+            ioModule.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", ioModule, edited, original);
+        }
+
+        [TestMethod]
+        public void EditDevice()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECDevice device = templates.Catalogs.Devices.RandomObject();
+            device.Name = original;
+
+            resetRaised();
+
+            //Act
+            device.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", device, edited, original);
+        }
+
+        [TestMethod]
+        public void EditValve()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECValve valve = templates.Catalogs.Valves.RandomObject();
+            valve.Name = original;
+
+            resetRaised();
+
+            //Act
+            valve.Name = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Name", valve, edited, original);
+        }
+
+        [TestMethod]
+        public void EditManufacturer()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECManufacturer manufacturer = templates.Catalogs.Manufacturers.RandomObject();
+            manufacturer.Label = original;
+
+            resetRaised();
+
+            //Act
+            manufacturer.Label= edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Label", manufacturer, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTags()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECLabeled tag = templates.Catalogs.Tags.RandomObject();
+            tag.Label = original;
+
+            resetRaised();
+
+            //Act
+            tag.Label = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Label", tag, edited, original);
+        }
+
         #endregion
 
         #endregion
