@@ -782,8 +782,8 @@ namespace Tests
             bid.Systems.Remove(typical);
 
             //Assert
-            checkRaised(true, false, false);
-            checkInstanceChangedArgs(Change.Remove, "Systems", bid, typical);
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Systems", bid, typical);
         }
 
         [TestMethod]
