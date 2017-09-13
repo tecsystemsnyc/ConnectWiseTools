@@ -898,8 +898,9 @@ namespace Tests
             bid.Locations.Add(location);
 
             resetRaised();
+
             //Act
-            bid.Locations.Add(location);
+            bid.Locations.Remove(location);
 
             //Assert
             checkRaised(true, false, false);
@@ -1542,7 +1543,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            connection.Length= 12;
+            connection.Length = 12;
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
@@ -1688,16 +1689,14 @@ namespace Tests
             var original = bid.Parameters;
             var edited = new TECParameters(bid.Guid);
 
-            TECParameters branch = new TECParameters(bid.Guid);
-
             resetRaised();
 
             //Act
             bid.Parameters = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
-            checkChangedArgs(Change.Edit, "Parameters", branch, edited, original);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "Parameters", bid, edited, original);
         }
 
         [TestMethod]
