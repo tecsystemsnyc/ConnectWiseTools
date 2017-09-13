@@ -391,8 +391,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-
+        
         private void system_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "RemovedSubScope")

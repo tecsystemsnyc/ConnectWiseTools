@@ -72,7 +72,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public CostBatch CostBatch
+        public virtual CostBatch CostBatch
         {
             get
             {
