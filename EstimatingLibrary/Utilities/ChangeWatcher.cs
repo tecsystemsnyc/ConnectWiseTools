@@ -8,6 +8,7 @@ namespace EstimatingLibrary.Utilities
     {
         #region Fields
         private List<TECObject> typicalList;
+        private List<TECObject> toRemove;
         #endregion
 
         #region Constructors
@@ -41,16 +42,19 @@ namespace EstimatingLibrary.Utilities
         private void initialize(TECBid bid)
         {
             typicalList = new List<TECObject>();
+            toRemove = new List<TECObject>();
             registerBidChanges(bid);
         }
         private void initialize(TECTemplates templates)
         {
             typicalList = new List<TECObject>();
+            toRemove = new List<TECObject>();
             registerTemplateChanges(templates);
         }
         private void initialize(TECTypical typical)
         {
             typicalList = new List<TECObject>();
+            toRemove = new List<TECObject>();
             registerSystem(typical);
         }
 
@@ -148,7 +152,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void unregisterTECObject(TECObject ob)
         {
-            typicalList.Remove(ob);
+            toRemove.Add(ob);
             ob.TECChanged -= handleTECChanged;
             if (ob is INotifyCostChanged costOb)
             {
@@ -529,6 +533,12 @@ namespace EstimatingLibrary.Utilities
                     InstanceChanged?.Invoke(obj);
                 }
             }
+
+            foreach(TECObject ob in toRemove)
+            {
+                typicalList.Remove(ob);
+            }
+            toRemove = new List<TECObject>();
         }
         private void handleCostChanged(TECObject sender, CostBatch obj)
         {
