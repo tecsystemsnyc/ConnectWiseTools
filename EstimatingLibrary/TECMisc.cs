@@ -76,7 +76,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public CostBatch Costs
+        public override CostBatch CostBatch
         {
             get
             {
@@ -93,7 +93,7 @@ namespace EstimatingLibrary
 
         private void NotifyMiscChanged(TECMisc newMisc, TECMisc oldMisc)
         {
-            CostBatch delta = newMisc.Costs - oldMisc.Costs;
+            CostBatch delta = newMisc.CostBatch - oldMisc.CostBatch;
             NotifyCostChanged(delta);
         }
         #endregion
