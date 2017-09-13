@@ -782,8 +782,8 @@ namespace Tests
             bid.Systems.Remove(typical);
 
             //Assert
-            checkRaised(true, false, false);
-            checkInstanceChangedArgs(Change.Remove, "Systems", bid, typical);
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "Systems", bid, typical);
         }
 
         [TestMethod]
@@ -1201,6 +1201,7 @@ namespace Tests
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
             TECPoint point = new TECPoint();
             point.Type = PointTypes.AI;
             point.Quantity = 2;
