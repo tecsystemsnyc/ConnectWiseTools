@@ -1924,7 +1924,7 @@ namespace Tests
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
-            checkChangedArgs(Change.Edit, "Name", system, edited, original);
+            checkInstanceChangedArgs(Change.Edit, "Name", system, edited, original);
         }
 
         [TestMethod]

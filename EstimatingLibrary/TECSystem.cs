@@ -253,7 +253,10 @@ namespace EstimatingLibrary
                     if (item != null)
                     {
                         if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
-                        if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
+                        if (item is INotifyPointChanged pointItem)
+                        {
+                            pointNum += pointItem.PointNumber;
+                        }
                         NotifyTECChanged(Change.Add, propertyName, this, item);
                         if (item is TECController controller)
                         {
@@ -281,7 +284,10 @@ namespace EstimatingLibrary
                     }
                 }
                 NotifyCostChanged(costs * -1);
-                PointChanged?.Invoke(pointNum * -1);
+                if (pointNum != 0)
+                {
+                    PointChanged?.Invoke(pointNum * -1);
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
