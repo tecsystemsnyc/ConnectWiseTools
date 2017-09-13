@@ -503,6 +503,7 @@ namespace Tests
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
+            bid.Systems.Add(typical);
             TECPoint point = new TECPoint();
             point.Type = PointTypes.AI;
             point.Quantity = 2;

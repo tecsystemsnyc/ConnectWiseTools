@@ -511,7 +511,10 @@ namespace EstimatingLibrary.Utilities
             {
                 if (!(obj.Value is TECObject))
                 {
-                    InstanceChanged?.Invoke(obj);
+                    if (!(isTypical(obj.Sender)))
+                    {
+                        InstanceChanged?.Invoke(obj);
+                    }
                 }
                 else if (obj.Sender is TECBid || obj.Sender is TECTypical)
                 {
