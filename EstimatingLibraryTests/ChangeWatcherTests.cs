@@ -1406,8 +1406,7 @@ namespace Tests
 
             //Assert
             checkRaised(false, false, false);
-            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
-            checkCostDelta(connection.CostBatch * -1);
+            checkChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
         }
 
         [TestMethod]
@@ -1434,7 +1433,7 @@ namespace Tests
 
             //Assert
             checkRaised(true, true, false);
-            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", instanceController, connection);
             checkCostDelta(connection.CostBatch * -1);
         }
 
