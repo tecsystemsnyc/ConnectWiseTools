@@ -759,18 +759,18 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var subScope = Bid.RandomSubScope();
-            int expected = subScope.AssociatedCosts.Count;
+            TECSubScope testSubScope = Bid.Systems[0].Equipment[0].SubScope.RandomObject();
+            int expected = testSubScope.AssociatedCosts.Count;
             TECCost edit = Bid.Catalogs.AssociatedCosts.RandomObject();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid);
             DoStacker testStack = new DoStacker(watcher);
-            subScope.AssociatedCosts.Add(edit);
+            testSubScope.AssociatedCosts.Add(edit);
             testStack.Undo();
 
             //assert
-            int actual = subScope.AssociatedCosts.Count;
+            int actual = testSubScope.AssociatedCosts.Count;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
