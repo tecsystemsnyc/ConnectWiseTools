@@ -1433,7 +1433,7 @@ namespace Tests
 
             //Assert
             checkRaised(true, true, false);
-            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
+            checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", instanceController, connection);
             checkCostDelta(connection.CostBatch * -1);
         }
 
