@@ -61,11 +61,10 @@ namespace EstimatingLibrary
             {
                 var old = _style;
                 _style = value;
-                NotifyCombinedChanged(Change.Edit, "Style", this, _size, old);
+                NotifyCombinedChanged(Change.Edit, "Style", this, _style, old);
             }
         }
-
-
+        
         public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get
@@ -78,6 +77,9 @@ namespace EstimatingLibrary
         public TECValve(TECManufacturer manufacturer, TECDevice actuator) : this (Guid.NewGuid(), manufacturer, actuator) {}
         public TECValve(Guid guid, TECManufacturer manufacturer, TECDevice actuator) : base(guid, manufacturer, COST_TYPE)
         {
+            _style = "";
+            _size = 0;
+            _cv = 0;
             _actuator = actuator;
         }
         protected override SaveableMap saveObjects()
