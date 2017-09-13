@@ -125,6 +125,10 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                    if (item is TECConnection connect)
+                    {
+                        NotifyCostChanged(connect.CostBatch);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -132,6 +136,10 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    if (item is TECConnection connect)
+                    {
+                        NotifyCostChanged(connect.CostBatch * -1);
+                    }
                 }
             }
             if (sender == ChildrenConnections)
