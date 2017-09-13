@@ -699,7 +699,7 @@ namespace Tests
 
             //Assert
             checkRaised(false, false, false);
-            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
+            checkChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
             checkCostDelta(connection.CostBatch);
         }
 
