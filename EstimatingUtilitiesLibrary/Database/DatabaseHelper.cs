@@ -294,7 +294,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 return false;
             }
             Type tableType = tableTypes[0];
-            return (item.GetType() == tableType);
+            return (item.GetType() == tableType || item.GetType().BaseType == tableType);
         }
 
         private static string objectToDBString(Object inObject)
