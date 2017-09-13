@@ -153,6 +153,7 @@ namespace Tests
             TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = RandomDouble(1, 100);
             misc.Labor = RandomDouble(1, 100);
+            misc.Quantity = RandomInt(2, 10);
 
             //Act
             bid.MiscCosts.Add(misc);
