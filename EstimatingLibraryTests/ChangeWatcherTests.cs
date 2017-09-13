@@ -1709,8 +1709,6 @@ namespace Tests
             var original = bid.ExtraLabor;
             var edited = new TECExtraLabor(bid.Guid);
 
-            TECExtraLabor branch = new TECExtraLabor(bid.Guid);
-
             resetRaised();
 
             //Act
@@ -1718,7 +1716,7 @@ namespace Tests
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
-            checkChangedArgs(Change.Edit, "ExtraLabor", branch, edited, original);
+            checkChangedArgs(Change.Edit, "ExtraLabor", bid, edited, original);
         }
 
         [TestMethod]
