@@ -81,7 +81,7 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECScopeBranch branch in bid.ScopeTree)
             {
-                registerScopeBranch(branch);
+                registerScopeBranch(branch, false);
             }
             foreach (TECLabeled note in bid.Notes)
             {
@@ -231,7 +231,7 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (TECScopeBranch branch in sys.ScopeBranches)
             {
-                registerScopeBranch(branch);
+                registerScopeBranch(branch, isTypical);
             }
         }
         private void registerEquipment(TECEquipment equip, bool isTypical)
@@ -274,12 +274,12 @@ namespace EstimatingLibrary.Utilities
             bool connectionIsTypical = isTypical(connection.ParentController);
             registerTECObject(connection, connectionIsTypical);
         }
-        private void registerScopeBranch(TECScopeBranch branch)
+        private void registerScopeBranch(TECScopeBranch branch, bool isTypical)
         {
-            registerTECObject(branch);
+            registerTECObject(branch, isTypical);
             foreach (TECScopeBranch subBranch in branch.Branches)
             {
-                registerScopeBranch(subBranch);
+                registerScopeBranch(subBranch, isTypical);
             }
         }
 
@@ -422,7 +422,7 @@ namespace EstimatingLibrary.Utilities
             {
                 if (labelled is TECScopeBranch branch)
                 {
-                    registerScopeBranch(branch);
+                    registerScopeBranch(branch, parent is TECTypical);
                 }
                 else if (!(parent is TECScope))
                 {
