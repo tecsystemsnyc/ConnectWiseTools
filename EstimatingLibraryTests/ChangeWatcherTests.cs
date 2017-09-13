@@ -17,6 +17,9 @@ namespace Tests
         private TECBid bid;
         private ChangeWatcher cw;
 
+        private TECTemplates templates;
+        private ChangeWatcher tcw;
+
         private TECChangedEventArgs changedArgs;
         private TECChangedEventArgs instanceChangedArgs;
         private CostBatch costDelta;
@@ -32,6 +35,9 @@ namespace Tests
         {
             bid = TestHelper.CreateTestBid();
             cw = new ChangeWatcher(bid);
+            
+            templates = TestHelper.CreateTestTemplates();
+            tcw = new ChangeWatcher(templates);
 
             resetRaised();
 
@@ -55,6 +61,28 @@ namespace Tests
                 pointDelta = numPoints;
                 pointChangedRaised = true;
             };
+            
+            tcw.Changed += (args) =>
+            {
+                changedArgs = args;
+                changedRaised = true;
+            };
+            tcw.InstanceChanged += (args) =>
+            {
+                instanceChangedArgs = args;
+                instanceChangedRaised = true;
+            };
+            tcw.CostChanged += (costs) =>
+            {
+                costDelta = costs;
+                costChangedRaised = true;
+            };
+            tcw.PointChanged += (numPoints) =>
+            {
+                pointDelta = numPoints;
+                pointChangedRaised = true;
+            };
+
         }
 
         #region Change Events Tests
@@ -1499,6 +1527,78 @@ namespace Tests
         }
 
         [TestMethod]
+        public void EditBidNetworkConnection()
+        {
+            //Arrange
+            var original = 10;
+            var edited = 12;
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes.RandomObject());
+            connection.Length = original;
+
+            resetRaised();
+
+            //Act
+            connection.Length= 12;
+
+            //Assert
+            checkRaised(true, true, false);
+            checkChangedArgs(Change.Edit, "Length", connection, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidNetworkConnectionConnectionType()
+        {
+            //Arrange
+            var original = bid.Catalogs.ConnectionTypes.RandomObject();
+            var edited = new TECElectricalMaterial();
+            bid.Catalogs.ConnectionTypes.Add(edited);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+            TECNetworkConnection connection = controller.AddController(child, original);
+
+            resetRaised();
+
+            //Act
+            connection.ConnectionType = edited;
+
+            //Assert
+            checkRaised(true, true, false);
+            checkChangedArgs(Change.Edit, "ConnectionType", connection, edited, original);
+        }
+
+        [TestMethod]
+        public void EditBidNetworkConnectionConduitType()
+        {
+            //Arrange
+            var original = bid.Catalogs.ConduitTypes.RandomObject();
+            var edited = new TECElectricalMaterial();
+            bid.Catalogs.ConduitTypes.Add(edited);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes.RandomObject());
+            connection.ConduitType = original;
+            resetRaised();
+
+            //Act
+            connection.ConduitType = edited;
+
+            //Assert
+            checkRaised(true, true, false);
+            checkChangedArgs(Change.Edit, "ConduitType", connection, edited, original);
+        }
+
+        [TestMethod]
         public void EditBidPanel()
         {
             //Arrange
@@ -1816,9 +1916,9 @@ namespace Tests
             var edited = "edit";
 
             TECTypical typical = new TECTypical();
-            typical.Name = original;
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
+            system.Name = original;
 
             resetRaised();
 
@@ -1827,7 +1927,31 @@ namespace Tests
 
             //Assert
             checkRaised(false, false, false);
-            checkChangedArgs(Change.Edit, "Name", typical, edited, original);
+            checkChangedArgs(Change.Edit, "Name", system, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemLocation()
+        {
+            //Arrange
+            var original = bid.Locations.RandomObject();
+            var edited = new TECLabeled();
+            edited.Label = "edit";
+            bid.Locations.Add(edited);
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECSystem system = typical.AddInstance(bid);
+            system.Location = original;
+
+            resetRaised();
+
+            //Act
+            system.Location = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Location", system, edited, original);
         }
 
         [TestMethod]
@@ -2010,6 +2134,249 @@ namespace Tests
             checkRaised(false, false, false);
             checkChangedArgs(Change.Edit, "Label", point, edited, original);
         }
+
+        [TestMethod]
+        public void EditHardwareManufacturer()
+        {
+            //Arrange
+            TECDevice device = templates.Catalogs.Devices.RandomObject();
+
+            var original = device.Manufacturer;
+            var edited = new TECManufacturer();
+            edited.Label = "edit";
+            templates.Catalogs.Manufacturers.Add(edited);
+            
+            resetRaised();
+
+            //Act
+            device.Manufacturer = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Manufacturer", device, edited, original);
+        }
+
+        [TestMethod]
+        public void EditValveActuator()
+        {
+            //Arrange
+            TECValve valve = templates.Catalogs.Valves.RandomObject();
+
+            var original = valve.Actuator;
+            var edited = new TECDevice(templates.Catalogs.Devices.RandomObject());
+            edited.Name = "edit";
+            templates.Catalogs.Devices.Add(edited);
+
+            resetRaised();
+
+            //Act
+            valve.Actuator = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Actuator", valve, edited, original);
+        }
+
+        [TestMethod]
+        public void EditConnectionType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECElectricalMaterial material = templates.Catalogs.ConnectionTypes.RandomObject();
+            material.Name = original;
+
+            resetRaised();
+
+            //Act
+            material.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", material, edited, original);
+        }
+
+        [TestMethod]
+        public void EditConduitType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECElectricalMaterial material = templates.Catalogs.ConduitTypes.RandomObject();
+            material.Name = original;
+
+            resetRaised();
+
+            //Act
+            material.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", material, edited, original);
+        }
+
+        [TestMethod]
+        public void EditAssociatedCost()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECCost cost = templates.Catalogs.AssociatedCosts.RandomObject();
+            cost.Name = original;
+
+            resetRaised();
+
+            //Act
+            cost.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", cost, edited, original);
+        }
+
+        [TestMethod]
+        public void EditPanelType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECPanelType panelType = templates.Catalogs.PanelTypes.RandomObject();
+            panelType.Name = original;
+
+            resetRaised();
+
+            //Act
+            panelType.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", panelType, edited, original);
+        }
+
+        [TestMethod]
+        public void EditControllerType()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECControllerType controllerType = templates.Catalogs.ControllerTypes.RandomObject();
+            controllerType.Name = original;
+
+            resetRaised();
+
+            //Act
+            controllerType.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", controllerType, edited, original);
+        }
+
+        [TestMethod]
+        public void EditIOModule()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECIOModule ioModule = templates.Catalogs.IOModules.RandomObject();
+            ioModule.Name = original;
+
+            resetRaised();
+
+            //Act
+            ioModule.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", ioModule, edited, original);
+        }
+
+        [TestMethod]
+        public void EditDevice()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECDevice device = templates.Catalogs.Devices.RandomObject();
+            device.Name = original;
+
+            resetRaised();
+
+            //Act
+            device.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", device, edited, original);
+        }
+
+        [TestMethod]
+        public void EditValve()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECValve valve = templates.Catalogs.Valves.RandomObject();
+            valve.Name = original;
+
+            resetRaised();
+
+            //Act
+            valve.Name = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Name", valve, edited, original);
+        }
+
+        [TestMethod]
+        public void EditManufacturer()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECManufacturer manufacturer = templates.Catalogs.Manufacturers.RandomObject();
+            manufacturer.Label = original;
+
+            resetRaised();
+
+            //Act
+            manufacturer.Label= edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Label", manufacturer, edited, original);
+        }
+
+        [TestMethod]
+        public void EditTags()
+        {
+            //Arrange
+            var original = "original";
+            var edited = "edit";
+
+            TECLabeled tag = templates.Catalogs.Tags.RandomObject();
+            tag.Label = original;
+
+            resetRaised();
+
+            //Act
+            tag.Label = edited;
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Edit, "Label", tag, edited, original);
+        }
+
         #endregion
 
         #endregion
