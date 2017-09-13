@@ -644,7 +644,6 @@ namespace Tests
 
             //Act
             TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
-            netConnect.Length = 10;
 
             //Assert
             checkRaised(true, true, false);
@@ -727,7 +726,7 @@ namespace Tests
 
             //Assert
             checkRaised(true, true, false);
-            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
+            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", instanceController, connection);
             checkCostDelta(connection.CostBatch);
         }
 
