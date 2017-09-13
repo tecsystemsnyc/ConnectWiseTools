@@ -143,8 +143,9 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 int pointNumber = 0;
-                foreach (object item in e.OldItems)
+                foreach (TECPoint item in e.OldItems)
                 {
+                    pointNumber += item.PointNumber;
                     NotifyCombinedChanged(Change.Remove, "Points", this, item);
                 }
                 PointChanged?.Invoke(pointNumber * -1);
