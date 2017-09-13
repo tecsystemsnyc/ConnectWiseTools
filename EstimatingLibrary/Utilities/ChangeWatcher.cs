@@ -61,8 +61,6 @@ namespace EstimatingLibrary.Utilities
         #region Registration
         private void registerBidChanges(TECBid bid)
         {
-            bid.PointChanged += (e) => handlePointChanged(bid, e);
-            bid.CostChanged += (e) => handleCostChanged(bid, e);
             registerTECObject(bid);
             registerTECObject(bid.ExtraLabor);
             registerTECObject(bid.Parameters);
