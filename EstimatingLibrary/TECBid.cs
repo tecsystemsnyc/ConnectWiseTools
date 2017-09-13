@@ -111,6 +111,7 @@ namespace EstimatingLibrary
                 var old = ExtraLabor;
                 _extraLabor = value;
                 NotifyCombinedChanged(Change.Edit, "ExtraLabor", this, value, old);
+                CostChanged?.Invoke(value.CostBatch - old.CostBatch);
             }
 
         }

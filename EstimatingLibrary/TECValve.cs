@@ -31,6 +31,7 @@ namespace EstimatingLibrary
                 var old = Actuator;
                 _actuator = value;
                 NotifyCombinedChanged(Change.Edit, "Actuator", this, _actuator, old);
+                NotifyCostChanged(value.CostBatch - old.CostBatch);
             }
         }
         public double Cv

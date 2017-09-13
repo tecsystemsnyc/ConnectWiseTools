@@ -1,12 +1,14 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
-    public class TECExtraLabor : TECObject
+    public class TECExtraLabor : TECObject, INotifyCostChanged
     {
         #region Labor
         #region PM
@@ -19,7 +21,7 @@ namespace EstimatingLibrary
                 var old = PMExtraHours;
                 _pmExtraHours = value;
                 NotifyCombinedChanged(Change.Edit, "PMExtraHours", this, value, old);
-
+                CostChanged?.Invoke(new CostBatch(0, value - old, CostType.TEC));
             }
         }
 
@@ -36,7 +38,7 @@ namespace EstimatingLibrary
                 var old = ENGExtraHours;
                 _engExtraHours = value;
                 NotifyCombinedChanged(Change.Edit, "ENGExtraHours", this, value, old);
-
+                CostChanged?.Invoke(new CostBatch(0, value - old, CostType.TEC));
             }
         }
         #endregion ENG
@@ -52,7 +54,7 @@ namespace EstimatingLibrary
                 var old = CommExtraHours;
                 _commExtraHours = value;
                 NotifyCombinedChanged(Change.Edit, "CommExtraHours", this, value, old);
-
+                CostChanged?.Invoke(new CostBatch(0, value - old, CostType.TEC));
 
             }
         }
@@ -68,7 +70,7 @@ namespace EstimatingLibrary
                 var old = SoftExtraHours;
                 _softExtraHours = value;
                 NotifyCombinedChanged(Change.Edit, "SoftExtraHours", this, value, old);
-
+                CostChanged?.Invoke(new CostBatch(0, value - old, CostType.TEC));
             }
         }
 
@@ -76,6 +78,7 @@ namespace EstimatingLibrary
 
         #region Graph
         private double _graphExtraHours;
+        
         public double GraphExtraHours
         {
             get { return _graphExtraHours; }
@@ -84,11 +87,27 @@ namespace EstimatingLibrary
                 var old = GraphExtraHours;
                 _graphExtraHours = value;
                 NotifyCombinedChanged(Change.Edit, "GraphExtraHours", this, value, old);
-
+                CostChanged?.Invoke(new CostBatch(0, value - old, CostType.TEC));
             }
         }
+
+
         #endregion Graph
-        
+        public event Action<CostBatch> CostChanged;
+
+        public CostBatch CostBatch
+        {
+            get { return getCosts(); }
+        }
+        private CostBatch getCosts()
+        {
+            double totalhours = PMExtraHours +
+                ENGExtraHours +
+                CommExtraHours +
+                SoftExtraHours +
+                GraphExtraHours;
+            return new CostBatch(0, totalhours, CostType.TEC);
+        }
 
         #endregion
         public TECExtraLabor(Guid guid) : base(guid)

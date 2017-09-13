@@ -36,9 +36,11 @@ namespace EstimatingLibrary
             set
             {
                 var old = ConnectionType;
+                var originalCost = this.CostBatch;
                 _connectionType = value;
                 NotifyCombinedChanged(Change.Edit, "ConnectionType", this, value, old);
-                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
+                NotifyCostChanged(CostBatch - originalCost);
+
             }
         }
         public IOType IOType
