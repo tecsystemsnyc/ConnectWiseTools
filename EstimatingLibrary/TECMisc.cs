@@ -15,8 +15,11 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
+        public TECMisc(Guid guid, CostType type) : base(guid, type)
+        {
+            _quantity = 1;
+        }
         public TECMisc(CostType type) : this(Guid.NewGuid(), type) { }
-        public TECMisc(Guid guid, CostType type) : base(guid, type) { }
         public TECMisc(TECMisc miscSource) : this(miscSource.Type)
         {
             copyPropertiesFromCost(miscSource);

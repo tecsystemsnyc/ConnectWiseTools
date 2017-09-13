@@ -907,17 +907,15 @@ namespace Tests
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
             tecMisc.Labor = 4321;
-            tecMisc.Type = CostType.TEC;
 
-            var eMisc = new TECMisc(CostType.TEC);
+            var eMisc = new TECMisc(CostType.Electrical);
             eMisc.Cost = 5678;
             eMisc.Labor = 8765;
-            eMisc.Type = CostType.Electrical;
 
             bid.MiscCosts.Add(tecMisc);
             bid.MiscCosts.Add(eMisc);
 
-            Assert.AreEqual(1234, estimate.TECMaterialCost, "Material cost not added");
+            Assert.AreEqual(1234, estimate.TECMaterialCost, "Material cost incorrect");
             Assert.AreEqual(5678, estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(4321, estimate.TECLaborHours, "Labor hours not added");
             Assert.AreEqual(8765, estimate.ElectricalLaborHours, "Electrical labor hours not added");
