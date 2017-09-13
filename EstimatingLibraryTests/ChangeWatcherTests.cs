@@ -2425,14 +2425,14 @@ namespace Tests
 
         private void checkChangedArgs(Change change, string propertyName, TECObject sender, object value, object oldValue = null)
         {
-            Assert.AreEqual(changedArgs.Change, change, "Change type is wrong.");
-            Assert.AreEqual(changedArgs.PropertyName, propertyName, "PropertyName is wrong.");
-            Assert.AreEqual(changedArgs.Sender, sender, "Sender is wrong.");
-            Assert.AreEqual(changedArgs.Value, value, "Value is wrong.");
+            Assert.AreEqual(change, changedArgs.Change, "Change type is wrong.");
+            Assert.AreEqual(propertyName, changedArgs.PropertyName, "PropertyName is wrong.");
+            Assert.AreEqual(sender, changedArgs.Sender, "Sender is wrong.");
+            Assert.AreEqual(value, changedArgs.Value, "Value is wrong.");
 
             if (oldValue != null)
             {
-                Assert.AreEqual(changedArgs.OldValue, oldValue, "OldValue is wrong.");
+                Assert.AreEqual(oldValue, changedArgs.OldValue, "OldValue is wrong.");
             }
         }
         private void checkInstanceChangedArgs(Change change, string propertyName, TECObject sender, object value, object oldValue = null)
