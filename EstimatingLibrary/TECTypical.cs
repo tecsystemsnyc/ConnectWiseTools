@@ -127,8 +127,7 @@ namespace EstimatingLibrary
                 _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
             }
         }
-        
-        
+
         public ObservableListDictionary<TECObject> TypicalInstanceDictionary
         {
             get
@@ -148,8 +147,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        
         #endregion
 
         #region Methods
@@ -284,18 +281,23 @@ namespace EstimatingLibrary
                 handleSubScopeConnectionChanged(args.Sender as TECSubScope);
             }
         }
-        private void handleCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        protected override void handleCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 CostBatch costs = new CostBatch();
                 int pointNum = 0;
+                bool raiseEvents = false;
                 foreach (object item in e.NewItems)
                 {
                     if (item != null)
                     {
-                        if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
-                        if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
+                        if (item is TECSystem sys)
+                        {
+                            costs += sys.CostBatch;
+                            pointNum += sys.PointNumber;
+                            raiseEvents = true;
+                        }
                         NotifyTECChanged(Change.Add, propertyName, this, item);
                         if (item is TECController controller)
                         {
@@ -303,19 +305,27 @@ namespace EstimatingLibrary
                         }
                     }
                 }
-                NotifyCostChanged(costs);
-                invokePointChanged(pointNum);
+                if (raiseEvents)
+                {
+                    NotifyCostChanged(costs);
+                    invokePointChanged(pointNum);
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 CostBatch costs = new CostBatch();
                 int pointNum = 0;
+                bool raiseEvents = false;
                 foreach (object item in e.OldItems)
                 {
                     if (item != null)
                     {
-                        if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
-                        if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
+                        if (item is TECSystem sys)
+                        {
+                            costs += sys.CostBatch;
+                            pointNum += sys.PointNumber;
+                            raiseEvents = true;
+                        }
                         NotifyTECChanged(Change.Remove, propertyName, this, item);
                         if (item is TECSystem system)
                         {
@@ -323,8 +333,11 @@ namespace EstimatingLibrary
                         }
                     }
                 }
-                NotifyCostChanged(costs * -1);
-                invokePointChanged(-pointNum);
+                if (raiseEvents)
+                {
+                    NotifyCostChanged(costs * -1);
+                    invokePointChanged(-pointNum);
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {

@@ -509,11 +509,19 @@ namespace EstimatingLibrary.Utilities
             }
             else if (obj.PropertyName != "TypicalInstanceDictionary")
             {
-                if (obj.Value is TECObject tecObj && !isTypical(tecObj))
+                if (!(obj.Value is TECObject))
                 {
                     InstanceChanged?.Invoke(obj);
                 }
-                else if (!(obj.Value is TECObject))
+                else if (obj.Sender is TECBid || obj.Sender is TECTypical)
+                {
+                    TECObject value = obj.Value as TECObject;
+                    if (!isTypical(value))
+                    {
+                        InstanceChanged?.Invoke(obj);
+                    }
+                }
+                else if (!isTypical(obj.Sender))
                 {
                     InstanceChanged?.Invoke(obj);
                 }
@@ -521,14 +529,14 @@ namespace EstimatingLibrary.Utilities
         }
         private void handleCostChanged(TECObject sender, CostBatch obj)
         {
-            if (!isTypical(sender))
+            if ((sender is TECTypical) || !isTypical(sender))
             {
                 CostChanged?.Invoke(obj);
             }
         }
         private void handlePointChanged(TECObject sender, int num)
         {
-            if (!isTypical(sender))
+            if ((sender is TECTypical) || !isTypical(sender))
             {
                 PointChanged?.Invoke(num);
             }
