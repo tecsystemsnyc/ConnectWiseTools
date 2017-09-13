@@ -1530,8 +1530,8 @@ namespace Tests
         public void EditBidNetworkConnection()
         {
             //Arrange
-            double original = 10;
-            double edited = 12;
+            Double original = 10;
+            Double edited = 12;
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
