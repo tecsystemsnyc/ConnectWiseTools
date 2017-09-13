@@ -473,6 +473,37 @@ namespace Tests
         }
 
         [TestMethod]
+        public void AddAssociatedCostToTypicalSubScope()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equip = new TECEquipment();
+            typical.Equipment.Add(equip);
+
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+
+            equip.SubScope.Add(ss);
+            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+
+            resetRaised();
+
+            //Act
+
+            ss.AssociatedCosts.Add(assCost);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkInstanceChangedArgs(Change.Add, "AssociatedCosts", ss, assCost);
+        }
+
+        [TestMethod]
         public void AddDeviceToTypicalSubScope()
         {
             //Arrange
@@ -547,6 +578,39 @@ namespace Tests
             checkInstanceChangedArgs(Change.Add, "SubScope", equip, ss);
             checkCostDelta(ss.CostBatch);
             checkPointDelta(ss.PointNumber);
+        }
+
+        [TestMethod]
+        public void AddAssociatedCostToInstanceSubScope()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            instance.Equipment.Add(equip);
+
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+
+            equip.SubScope.Add(ss);
+            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+
+            resetRaised();
+
+            //Act
+
+            ss.AssociatedCosts.Add(assCost);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Add, "AssociatedCosts", ss, assCost);
+            checkCostDelta(assCost.CostBatch);
         }
 
         [TestMethod]
@@ -1171,6 +1235,38 @@ namespace Tests
         }
 
         [TestMethod]
+        public void RemoveAssociatedCostToTypicalSubScope()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equip = new TECEquipment();
+            typical.Equipment.Add(equip);
+
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+
+            equip.SubScope.Add(ss);
+            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+            ss.AssociatedCosts.Add(assCost);
+
+            resetRaised();
+
+            //Act
+
+            ss.AssociatedCosts.Remove(assCost);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkInstanceChangedArgs(Change.Remove, "AssociatedCosts", ss, assCost);
+        }
+
+        [TestMethod]
         public void RemoveDeviceFromTypicalSubScope()
         {
             //Arrange
@@ -1246,6 +1342,40 @@ namespace Tests
             checkInstanceChangedArgs(Change.Remove, "SubScope", equip, ss);
             checkCostDelta(ss.CostBatch * -1);
             checkPointDelta(ss.PointNumber * -1);
+        }
+
+        [TestMethod]
+        public void RemoveAssociatedCostToInstanceSubScope()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+            TECEquipment equip = new TECEquipment();
+            instance.Equipment.Add(equip);
+
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            TECPoint point = new TECPoint();
+            point.Type = PointTypes.AI;
+            point.Quantity = 2;
+            ss.Points.Add(point);
+
+            equip.SubScope.Add(ss);
+            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+            ss.AssociatedCosts.Add(assCost);
+
+            resetRaised();
+
+            //Act
+
+            ss.AssociatedCosts.Remove(assCost);
+
+            //Assert
+            checkRaised(true, true, false);
+            checkInstanceChangedArgs(Change.Remove, "AssociatedCosts", ss, assCost);
+            checkCostDelta(assCost.CostBatch * -1);
         }
 
         [TestMethod]

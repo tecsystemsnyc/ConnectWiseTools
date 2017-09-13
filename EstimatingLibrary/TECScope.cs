@@ -132,7 +132,7 @@ namespace EstimatingLibrary
                 List<TECCost> costs = new List<TECCost>();
                 foreach (object item in e.NewItems)
                 {
-                    if(item is TECCost cost) { costs.AddRange(costs); }
+                    if(item is TECCost cost) { costs.Add(cost); }
                     NotifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
                 NotifyCostChanged(new CostBatch(costs));
@@ -142,7 +142,7 @@ namespace EstimatingLibrary
                 List<TECCost> costs = new List<TECCost>();
                 foreach (object item in e.OldItems)
                 {
-                    if (item is TECCost cost) { costs.AddRange(costs); }
+                    if (item is TECCost cost) { costs.Add(cost); }
                     NotifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
                 NotifyCostChanged(new CostBatch(costs) * -1);
