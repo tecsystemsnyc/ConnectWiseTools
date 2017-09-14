@@ -41,14 +41,15 @@ namespace EstimatingLibrary
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(Guid guid, ObservableCollection<TECElectricalMaterial> connectionTypes, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
+        public TECDevice(Guid guid,
+            ObservableCollection<TECElectricalMaterial> connectionTypes,
+            TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
-            _cost = 0;
             _connectionTypes = connectionTypes;
-            _type = CostType.TEC;
             ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
-        public TECDevice(ObservableCollection<TECElectricalMaterial> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
+        public TECDevice(ObservableCollection<TECElectricalMaterial> connectionTypes,
+            TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
 
         //Copy Constructor
         public TECDevice(TECDevice deviceSource)
