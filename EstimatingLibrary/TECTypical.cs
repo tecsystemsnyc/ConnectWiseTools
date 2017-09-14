@@ -396,6 +396,8 @@ namespace EstimatingLibrary
                 }
             }
             removeFromDictionary(Controllers, instance.Controllers);
+            removeFromDictionary(MiscCosts, instance.MiscCosts);
+            removeFromDictionary(ScopeBranches, instance.ScopeBranches);
         }
         private void handlePointChanged(TECPoint point, string propertyName)
         {
