@@ -336,6 +336,26 @@ namespace Tests
         }
 
         [TestMethod]
+        public void AddAssociatedcCostToTypicalSystem()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECCost assCost = new TECCost(CostType.TEC);
+            assCost.Cost = RandomDouble(1, 100);
+            assCost.Labor = RandomDouble(1, 100);
+
+            resetRaised();
+
+            //Act
+            typical.AssociatedCosts.Add(assCost);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "AssociatedCosts", typical, assCost);
+        }
+
+        [TestMethod]
         public void AddScopeBranchToTypicalSystem()
         {
             //Arrange
@@ -1091,6 +1111,27 @@ namespace Tests
             //Assert
             checkRaised(false, false, false);
             checkChangedArgs(Change.Remove, "MiscCosts", typical, misc);
+        }
+
+        [TestMethod]
+        public void RemoveAssociatedCostFromTypicalSystem()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECCost cost = new TECCost(CostType.TEC);
+            cost.Cost = RandomDouble(1, 100);
+            cost.Labor = RandomDouble(1, 100);
+            typical.AssociatedCosts.Add(cost);
+
+            resetRaised();
+
+            //Act
+            typical.AssociatedCosts.Remove(cost);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "ASsociatedCosts", typical, cost);
         }
 
         [TestMethod]

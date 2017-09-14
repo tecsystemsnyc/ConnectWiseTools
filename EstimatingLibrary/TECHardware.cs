@@ -66,7 +66,7 @@ namespace EstimatingLibrary
 
         override protected CostBatch getCosts()
         {
-            CostBatch costs = base.getCosts();
+            CostBatch costs = base.getCosts() - new CostBatch(base.Cost, base.Labor, base.Type);
             costs += new CostBatch(Cost, Labor, Type);
             return costs;
         }

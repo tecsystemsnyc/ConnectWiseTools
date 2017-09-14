@@ -1018,7 +1018,9 @@ namespace Tests
         [TestMethod]
         public void Estimate_AddAssCostToSystem()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
             var system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);
@@ -1027,12 +1029,10 @@ namespace Tests
             var tecCost = new TECCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
-            tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost(CostType.TEC);
+            var eCost = new TECCost(CostType.Electrical);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
-            eCost.Type = CostType.Electrical;
 
             system.AssociatedCosts.Add(tecCost);
             system.AssociatedCosts.Add(eCost);
