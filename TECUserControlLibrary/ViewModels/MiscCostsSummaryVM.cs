@@ -92,10 +92,10 @@ namespace TECUserControlLibrary.ViewModels
         }
         public double MiscElecCostTotal
         {
-            get { return _miscTECCostTotal; }
+            get { return _miscElecCostTotal; }
             private set
             {
-                _miscTECCostTotal = value;
+                _miscElecCostTotal = value;
                 RaisePropertyChanged("MiscElecCostTotal");
             }
         }
@@ -119,10 +119,10 @@ namespace TECUserControlLibrary.ViewModels
         }
         public double AssocTECLaborTotal
         {
-            get { return _assocElecLaborTotal; }
+            get { return _assocTECLaborTotal; }
             private set
             {
-                _assocElecLaborTotal = value;
+                _assocTECLaborTotal = value;
                 RaisePropertyChanged("AssocTECLaborTotal");
             }
         }
