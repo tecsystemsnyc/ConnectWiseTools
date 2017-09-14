@@ -327,10 +327,9 @@ namespace EstimatingLibrary
                         costChanged = true;
                     }
                     NotifyCombinedChanged(Change.Add, collectionName, this, item);
-                    if (item is TECTypical)
+                    if (item is TECTypical typical)
                     {
-                        var sys = item as TECSystem;
-                        sys.PropertyChanged += system_PropertyChanged;
+                        typical.PropertyChanged += system_PropertyChanged;
                         costChanged = false;
                         pointChanged = false;
                     }

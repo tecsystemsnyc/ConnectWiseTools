@@ -119,11 +119,11 @@ namespace EstimatingLibrary
             var tags = new ObservableCollection<TECLabeled>();
             foreach (TECLabeled tag in scope.Tags)
             { tags.Add(tag as TECLabeled); }
-            _tags = tags;
+            Tags = tags;
             var associatedCosts = new ObservableCollection<TECCost>();
             foreach (TECCost cost in scope.AssociatedCosts)
             { associatedCosts.Add(cost as TECCost); }
-            _associatedCosts = associatedCosts;
+            AssociatedCosts = associatedCosts;
         }
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {

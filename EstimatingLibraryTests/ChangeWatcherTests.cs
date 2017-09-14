@@ -2510,29 +2510,7 @@ namespace Tests
         #endregion
 
         #endregion
-
-        [TestMethod]
-        public void Undo_Bid_SubScope_AssociatedCost()
-        {
-            //Arrange
-            //var Bid = TestHelper.CreateTestBid();
-            TECSubScope testSubScope = bid.Systems[0].Equipment[0].SubScope.RandomObject();
-            int expected = testSubScope.AssociatedCosts.Count;
-            TECCost edit = bid.Catalogs.AssociatedCosts.RandomObject();
-            resetRaised();
-            //Act
-            //ChangeWatcher watcher = new ChangeWatcher(Bid);
-            //DoStacker testStack = new DoStacker(watcher);
-            testSubScope.AssociatedCosts.Add(edit);
-            //testStack.Undo();
-
-            //assert
-            //int actual = testSubScope.AssociatedCosts.Count;
-            //Assert.AreEqual(expected, actual, "Not Undone");
-            checkRaised(false, false, false);
-            checkChangedArgs(Change.Add, "AssociatedCosts", testSubScope, edit);
-        }
-
+        
         private void resetRaised()
         {
             changedRaised = false;
