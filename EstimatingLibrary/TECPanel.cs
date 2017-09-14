@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, INotifyCostChanged, IDragDropable
+    public class TECPanel : TECLocated, IDragDropable
     {
         #region Properties
         private TECPanelType _type;
@@ -38,21 +38,7 @@ namespace EstimatingLibrary
                 Controllers.CollectionChanged += controllersCollectionChanged;
             }
         }
-
-        new public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
-            }
-        }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            outCosts.Add(Type);
-            outCosts.AddRange(AssociatedCosts);
-            return outCosts;
-        }
+        
         #endregion
 
         public TECPanel(Guid guid, TECPanelType type) : base(guid)
@@ -80,6 +66,12 @@ namespace EstimatingLibrary
             return outPanel;
         }
 
+        override protected CostBatch getCosts()
+        {
+            CostBatch costs = base.getCosts();
+            costs += Type.CostBatch;
+            return costs;
+        }
         protected override SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();
