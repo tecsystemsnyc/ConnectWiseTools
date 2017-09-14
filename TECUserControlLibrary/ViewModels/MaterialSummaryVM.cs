@@ -42,7 +42,7 @@ namespace TECUserControlLibrary.ViewModels
             get { return _totalTECLabor; }
             private set
             {
-                _totalTECCost = value;
+                _totalTECLabor = value;
                 RaisePropertyChanged("TotalTECLabor");
             }
         }

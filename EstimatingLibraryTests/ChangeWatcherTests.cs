@@ -2080,6 +2080,69 @@ namespace Tests
         }
 
         [TestMethod]
+        public void EditTypicalSubScopeConnectionInBidController()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+
+            bid.Systems.Add(typical);
+            TECConnection connection = controller.AddSubScope(ss);
+            connection.Length = RandomDouble(1, 100);
+            connection.ConduitLength = RandomDouble(1, 100);
+
+            resetRaised();
+
+            //Act
+            connection.ConduitType = conduitType;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "ConduitType", connection, conduitType, null);
+        }
+
+        [TestMethod]
+        public void EditTypicalSubScopeConnectionInTypicalController()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
+            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            ss.Devices.Add(dev);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            typical.Controllers.Add(controller);
+
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+
+            bid.Systems.Add(typical);
+            TECConnection connection = controller.AddSubScope(ss);
+            connection.Length = RandomDouble(1, 100);
+            connection.ConduitLength = RandomDouble(1, 100);
+
+            resetRaised();
+
+            //Act
+            connection.ConduitType = conduitType;
+
+            //Assert
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkChangedArgs(Change.Edit, "ConduitType", connection, conduitType, null);
+        }
+
+        [TestMethod]
         public void EditSystem()
         {
             //Arrange
@@ -2304,6 +2367,18 @@ namespace Tests
             //Assert
             checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
             checkChangedArgs(Change.Edit, "Label", systemPoint, edited, original);
+        }
+
+        [TestMethod]
+        public void EditSystemSubScopeConnectionInBidController()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void EditSystemSubScopeConnectionInSystemController()
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]

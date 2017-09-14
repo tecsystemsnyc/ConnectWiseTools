@@ -433,8 +433,8 @@ namespace Tests
             double length = addLength - removeLength;
 
             //Act
-            lengthVM.AddLength(elecMat, addLength);
-            CostBatch delta = lengthVM.RemoveLength(elecMat, removeLength);
+            lengthVM.AddRun(elecMat, addLength);
+            CostBatch delta = lengthVM.RemoveRun(elecMat, removeLength);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -448,8 +448,6 @@ namespace Tests
                 removedAssocTECTotal += CalculateTotal(cost, CostType.TEC);
                 removedAssocElecTotal += CalculateTotal(cost, CostType.Electrical);
             }
-            removedAssocTECTotal *= 1;
-            removedAssocElecTotal *= 1;
 
             Total ratedTECTotal = new Total();
             Total ratedElecTotal = new Total();
@@ -461,7 +459,7 @@ namespace Tests
             Total expectedRatedTECTotal = ratedTECTotal * length;
             Total expectedRatedElecTotal = ratedElecTotal * length;
             Total removedRatedTECTotal = ratedTECTotal * removeLength;
-            Total removedRatedElecTotal = ratedTECTotal * removeLength;
+            Total removedRatedElecTotal = ratedElecTotal * removeLength;
 
             double expectedTECCostDelta = (-removedAssocTECTotal.Cost + -removedRatedTECTotal.Cost);
             double expectedTECLaborDelta = (-removedAssocTECTotal.Labor + -removedRatedTECTotal.Labor);
@@ -556,7 +554,7 @@ namespace Tests
             double length = addLength - removeLength;
 
             //Act
-            lengthVM.AddLength(elecMat, addLength);
+            lengthVM.AddRun(elecMat, addLength);
             CostBatch delta = lengthVM.RemoveLength(elecMat, removeLength);
 
             double expectedLengthCost = elecMat.Cost * length;
@@ -582,7 +580,7 @@ namespace Tests
             Total expectedRatedTECTotal = ratedTECTotal * length;
             Total expectedRatedElecTotal = ratedElecTotal * length;
             Total removedRatedTECTotal = ratedTECTotal * removeLength;
-            Total removedRatedElecTotal = ratedTECTotal * removeLength;
+            Total removedRatedElecTotal = ratedElecTotal * removeLength;
 
             double expectedTECCostDelta = (-removedRatedTECTotal.Cost);
             double expectedTECLaborDelta = (-removedRatedTECTotal.Labor);
@@ -863,7 +861,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc elecMisc = new TECMisc(CostType.TEC);
+            TECMisc elecMisc = new TECMisc(CostType.Electrical);
             elecMisc.Cost = TestHelper.RandomDouble(1, 100);
             elecMisc.Labor = TestHelper.RandomDouble(1, 100);
             elecMisc.Quantity = TestHelper.RandomInt(2, 10);
