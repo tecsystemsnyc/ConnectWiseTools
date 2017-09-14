@@ -2328,7 +2328,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
     internal static class AllTables
     {
-        public static List<object> Tables = new List<object>()
+        public static List<TableBase> Tables = new List<TableBase>()
         {
             new MetadataTable(),
             new BidInfoTable(),

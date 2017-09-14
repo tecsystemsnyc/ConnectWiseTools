@@ -12,6 +12,7 @@ namespace EstimatingLibrary
     {
         #region Fields
         private TECManufacturer _manufacturer;
+        private double _price;
         #endregion
 
         #region Constructors
@@ -37,7 +38,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        public new double Cost
+        public override double Cost
         {
             get
             {
@@ -46,13 +47,13 @@ namespace EstimatingLibrary
         }
         public double Price
         {
-            get
-            {
-                return base.Cost;
-            }
+            get { return _price; }
             set
             {
-                base.Cost = value;
+                var old = Price;
+                _price = value;
+                NotifyCombinedChanged(Change.Edit, "Price", this, value, old);
+                NotifyCostChanged(new CostBatch(value - old, 0, Type));
             }
         }
         #endregion

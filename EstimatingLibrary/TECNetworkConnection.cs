@@ -145,11 +145,11 @@ namespace EstimatingLibrary
             CostBatch costs = new CostBatch();
             if (ConnectionType != null)
             {
-                ConnectionType.GetCosts(Length);
+                costs += ConnectionType.GetCosts(Length);
             }
             if (ConduitType != null)
             {
-                ConduitType.GetCosts(Length);
+                costs += ConduitType.GetCosts(Length);
             }
             return costs;
         }

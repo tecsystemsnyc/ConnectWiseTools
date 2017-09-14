@@ -13,9 +13,15 @@ namespace EstimatingUtilitiesLibrary.Database
     public class DeltaStacker
     {
         private List<UpdateItem> stack;
+        private static DBType dbType;
 
-        public DeltaStacker(ChangeWatcher changeWatcher)
+        public DeltaStacker(ChangeWatcher changeWatcher, bool isTemplate = false)
         {
+            dbType = DBType.Bid;
+            if (isTemplate)
+            {
+                dbType = DBType.Templates;
+            }
             changeWatcher.Changed += handleChange;
             stack = new List<UpdateItem>();
         }
@@ -53,7 +59,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TableBase> tables;
             if(sender is ISaveable parent && !parent.RelatedObjects.Contains(propertyName) && parent.SaveObjects.Contains(propertyName))
             {
-                tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName);
+                tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, dbType);
                 outStack.AddRange(tableObjectStack(change, tables, item));
                 if(item is ISaveable saveable)
                 {
@@ -71,7 +77,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             if(!(value is TECObject) && !(oldValue is TECObject))
             {
-                List<TableBase> tables = DatabaseHelper.GetTables(sender);
+                List<TableBase> tables = DatabaseHelper.GetTables(sender, dbType);
                 foreach (TableBase table in tables)
                 {
                     var fields = table.Fields;
