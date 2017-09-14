@@ -367,6 +367,7 @@ namespace Tests
             ioToAdd.Type = IOType.AI;
             ioToAdd.Quantity = 5;
             expectedControllerType.IO.Add(ioToAdd);
+            templates.Catalogs.ControllerTypes.Add(expectedControllerType);
 
             TECController expectedController = new TECController(expectedControllerType);
             expectedController.Name = "Test Controller";

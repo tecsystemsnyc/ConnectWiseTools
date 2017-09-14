@@ -150,6 +150,8 @@ namespace EstimatingLibrary.Utilities
                 }
                 linkCharacteristicCollections(newTypical.Controllers, instance.Controllers, oldDictionary, newCharacteristicInstances);
                 linkCharacteristicCollections(newTypical.Panels, instance.Panels, oldDictionary, newCharacteristicInstances);
+                linkCharacteristicCollections(newTypical.MiscCosts, instance.MiscCosts, oldDictionary, newCharacteristicInstances);
+                linkCharacteristicCollections(newTypical.ScopeBranches, instance.ScopeBranches, oldDictionary, newCharacteristicInstances);
             }
             newTypical.TypicalInstanceDictionary = newCharacteristicInstances;
         }
