@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECLocated, IDragDropable, ISaveable
+    public class TECController : TECLocated, IDragDropable
     {
         #region Properties
         //---Stored---
