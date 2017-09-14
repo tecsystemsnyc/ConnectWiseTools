@@ -501,7 +501,7 @@ namespace Tests
             double length = TestHelper.RandomDouble(1, 100);
 
             //Act
-            CostBatch delta = lengthVM.AddRun(elecMat, length);
+            CostBatch delta = lengthVM.AddLength(elecMat, length);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -557,7 +557,7 @@ namespace Tests
 
             //Act
             lengthVM.AddLength(elecMat, addLength);
-            CostBatch delta = lengthVM.RemoveRun(elecMat, removeLength);
+            CostBatch delta = lengthVM.RemoveLength(elecMat, removeLength);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
