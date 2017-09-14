@@ -17,6 +17,7 @@ namespace Tests
     public class SaveTemplateTests
     {
         static bool DEBUG = true;
+        static double DELTA = 0.0001;
 
         TECTemplates templates;
         DeltaStacker testStack;
@@ -41,7 +42,7 @@ namespace Tests
             path = Path.GetTempFileName();
             templates = TestHelper.CreateTestTemplates();
             ChangeWatcher watcher = new ChangeWatcher(templates);
-            testStack = new DeltaStacker(watcher);
+            testStack = new DeltaStacker(watcher, true);
             DatabaseManager manager = new DatabaseManager(path);
             manager.New(templates);
         }
@@ -723,7 +724,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedNumCosts, actualSubScope.AssociatedCosts.Count);
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost, DELTA);
 
         }
         #endregion Save SubScope
@@ -761,7 +762,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
-            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost, DELTA);
             Assert.AreEqual(expectedDevice.ConnectionTypes[0].Name, actualDevice.ConnectionTypes[0].Name);
         }
 
@@ -1364,11 +1365,11 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
-            Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost, DELTA);
             Assert.AreEqual((oldNumConnectionTypes + 1), actualTemplates.Catalogs.ConnectionTypes.Count);
             Assert.AreEqual(expectedCostCount, actualConnectionType.AssociatedCosts.Count);
             Assert.AreEqual(expectedRatedCount, actualConnectionType.RatedCosts.Count);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost, DELTA);
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
 
         }
@@ -1890,7 +1891,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost, DELTA);
         }
 
         #endregion

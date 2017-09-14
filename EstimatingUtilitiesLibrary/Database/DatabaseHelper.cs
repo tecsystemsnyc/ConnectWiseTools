@@ -19,9 +19,10 @@ using EstimatingLibrary.Utilities;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
+    public enum DBType { Bid = 1, Templates }
+
     internal static class DatabaseHelper
     {
-        public enum DBType { Bid, Templates }
 
         public static List<string> TableNames(SQLiteDatabase db)
         {
@@ -154,13 +155,23 @@ namespace EstimatingUtilitiesLibrary.Database
             DebugHandler.LogDebugMessage("Finished backup. Backup path: " + backupPath);
         }
 
-        public static List<TableBase> GetTables(List<TECObject> items, string propertyName)
+        public static List<TableBase> GetTables(List<TECObject> items, string propertyName, DBType type = 0)
         {
             List<TableBase> tables = new List<TableBase>();
             if (items.Count > 2 || items.Count == 0)
             { throw new NotImplementedException(); }
 
-            foreach (TableBase table in AllTables.Tables)
+            List<TableBase> allTables = AllTables.Tables;
+            if (type == DBType.Bid)
+            {
+                allTables = AllBidTables.Tables;
+            }
+            else if (type == DBType.Templates)
+            {
+                allTables = AllTemplateTables.Tables;
+            }
+
+            foreach (TableBase table in allTables)
             {
                 if (matchesAllTypes(items, table.Types) && matchesPropertyName(propertyName, table.PropertyNames))
                 {
@@ -170,11 +181,20 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return tables;
         }
-        public static List<TableBase> GetTables(TECObject item)
+        public static List<TableBase> GetTables(TECObject item, DBType type = 0)
         {
             List<TableBase> tables = new List<TableBase>();
+            List<TableBase> allTables = AllTables.Tables;
+            if (type == DBType.Bid)
+            {
+                allTables = AllBidTables.Tables;
+            }
+            else if (type == DBType.Templates)
+            {
+                allTables = AllTemplateTables.Tables;
+            }
 
-            foreach (TableBase table in AllTables.Tables)
+            foreach (TableBase table in allTables)
             {
                 if (matchesObjectType(item, table.Types))
                 {

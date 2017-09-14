@@ -637,7 +637,9 @@ namespace Tests
         [TestMethod]
         public void Estimate_AddSubScopeConnectionInSystem()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
@@ -1618,7 +1620,9 @@ namespace Tests
         [TestMethod]
         public void Estimate_ElectricalShipping()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
