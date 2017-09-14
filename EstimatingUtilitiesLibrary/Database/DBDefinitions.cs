@@ -1249,15 +1249,15 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class IOIOModuleTable : TableBase
     {
         public static string TableName = "IOModuleIO";
-        public static Type ObjectType = typeof(TECIOModule);
-        public static Type ReferenceType = typeof(TECIO);
+        public static Type ObjectType = typeof(TECIO);
+        public static Type ReferenceType = typeof(TECIOModule);
 
-        public static TableField ModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ModuleID = new TableField("IOModuleID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
-            ModuleID,
-            IOID
+            IOID,
+            ModuleID
         };
         private List<Type> types = new List<Type>()
         {
@@ -1266,8 +1266,8 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<TableField> fields = new List<TableField>()
         {
-            ModuleID,
-            IOID
+            IOID,
+            ModuleID
         };
         private List<string> propertyNames = new List<string>()
         {

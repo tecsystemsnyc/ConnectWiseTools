@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Tests.CostTestingUtilities;
 
 namespace Tests
 {
@@ -301,7 +302,7 @@ namespace Tests
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
-            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
+            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost, DELTA);
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
@@ -333,7 +334,7 @@ namespace Tests
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
-            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
+            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost, DELTA);
             Assert.AreEqual(expectedChildDevice.ConnectionTypes[0].Guid, actualChildDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
@@ -355,13 +356,13 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
-            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost, DELTA);
             Assert.AreEqual(expectedDevice.ConnectionTypes[0].Guid, actualDevice.ConnectionTypes[0].Guid);
             Assert.AreEqual(expectedDevice.Tags[0].Label, actualDevice.Tags[0].Label);
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, actualDevice.Manufacturer.Guid);
 
             Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
-            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
+            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier, DELTA);
         }
 
         [TestMethod]
@@ -369,7 +370,7 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedManufacturer.Label, actualManufacturer.Label);
-            Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier);
+            Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier, DELTA);
         }
 
         [TestMethod]
@@ -407,7 +408,7 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedAssociatedCost.Name, actualAssociatedCost.Name);
-            Assert.AreEqual(expectedAssociatedCost.Cost, actualAssociatedCost.Cost);
+            Assert.AreEqual(expectedAssociatedCost.Cost, actualAssociatedCost.Cost, DELTA);
         }
 
         [TestMethod]
@@ -415,7 +416,7 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
-            Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost);
+            Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost, DELTA);
             Assert.AreEqual(expectedConnectionType.Labor, actualConnectionType.Labor);
             Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
@@ -425,7 +426,7 @@ namespace Tests
         {
             //Assert
             Assert.AreEqual(expectedConduitType.Name, actualConduitType.Name);
-            Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost);
+            Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost, DELTA);
             Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
             Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
@@ -449,7 +450,7 @@ namespace Tests
             TECMisc actualCost = actualTemplates.MiscCostTemplates[0];
 
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost, DELTA);
             Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
         }
 
@@ -461,7 +462,7 @@ namespace Tests
             TECPanelType actualPanelType = actualTemplates.Catalogs.PanelTypes[0];
 
             Assert.AreEqual(expectedPanelType.Name, actualPanelType.Name);
-            Assert.AreEqual(expectedPanelType.Cost, actualPanelType.Cost);
+            Assert.AreEqual(expectedPanelType.Cost, actualPanelType.Cost, DELTA);
         }
 
         [TestMethod]
@@ -472,7 +473,7 @@ namespace Tests
             TECIOModule actualIOModule = actualTemplates.Catalogs.IOModules[0];
 
             Assert.AreEqual(expectedIOModule.Name, actualIOModule.Name);
-            Assert.AreEqual(expectedIOModule.Cost, actualIOModule.Cost);
+            Assert.AreEqual(expectedIOModule.Cost, actualIOModule.Cost, DELTA);
         }
     }
 }
