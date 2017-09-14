@@ -900,7 +900,7 @@ namespace Tests
             TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = TestHelper.RandomDouble(1, 100);
             misc.Labor = TestHelper.RandomDouble(1, 100);
-            misc.Quantity = TestHelper.RandomInt(1, 10);
+            misc.Quantity = TestHelper.RandomInt(2, 10);
 
             //Act
             miscVM.AddCost(misc);

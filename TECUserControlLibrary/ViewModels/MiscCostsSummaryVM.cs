@@ -305,15 +305,31 @@ namespace TECUserControlLibrary.ViewModels
                     throw new InvalidOperationException("Removing a larger quantity than exists from CostSummaryItem.");
                 }
                 CostBatch delta = item.AddQuantity(deltaQuantity);
-                if (cost.Type == CostType.TEC)
+                if (cost is TECMisc)
                 {
-                    AssocTECCostTotal += delta.GetCost(CostType.TEC);
-                    AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
+                    if (cost.Type == CostType.TEC)
+                    {
+                        MiscTECCostTotal += delta.GetCost(CostType.TEC);
+                        MiscTECLaborTotal += delta.GetLabor(CostType.TEC);
+                    }
+                    else if (cost.Type == CostType.Electrical)
+                    {
+                        MiscElecCostTotal += delta.GetCost(CostType.Electrical);
+                        MiscElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                    }
                 }
-                else if (cost.Type == CostType.Electrical)
+                else
                 {
-                    AssocElecCostTotal += delta.GetCost(CostType.Electrical);
-                    AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                    if (cost.Type == CostType.TEC)
+                    {
+                        AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                        AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
+                    }
+                    else if (cost.Type == CostType.Electrical)
+                    {
+                        AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                        AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                    }
                 }
                 return delta;
             }
