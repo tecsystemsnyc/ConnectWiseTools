@@ -83,7 +83,7 @@ namespace TECUserControlLibrary.Models
 
         private CostBatch updateTotals()
         {
-            double newCost = (Hardware.Cost * Hardware.Manufacturer.Multiplier * Quantity);
+            double newCost = (Hardware.Cost * Quantity);
             double newLabor = (Hardware.Labor * Quantity);
 
             double deltaCost = newCost - TotalCost;

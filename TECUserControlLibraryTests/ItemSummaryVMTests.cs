@@ -501,7 +501,7 @@ namespace Tests
             double length = TestHelper.RandomDouble(1, 100);
 
             //Act
-            CostBatch delta = lengthVM.AddRun(elecMat, length);
+            CostBatch delta = lengthVM.AddLength(elecMat, length);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -557,7 +557,7 @@ namespace Tests
 
             //Act
             lengthVM.AddLength(elecMat, addLength);
-            CostBatch delta = lengthVM.RemoveRun(elecMat, removeLength);
+            CostBatch delta = lengthVM.RemoveLength(elecMat, removeLength);
 
             double expectedLengthCost = elecMat.Cost * length;
             double expectedLengthLabor = elecMat.Labor * length;
@@ -900,7 +900,7 @@ namespace Tests
             TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = TestHelper.RandomDouble(1, 100);
             misc.Labor = TestHelper.RandomDouble(1, 100);
-            misc.Quantity = TestHelper.RandomInt(1, 10);
+            misc.Quantity = TestHelper.RandomInt(2, 10);
 
             //Act
             miscVM.AddCost(misc);

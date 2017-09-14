@@ -149,7 +149,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach (TECCost cost in hardware.AssociatedCosts)
             {
-                deltas.AddCost(cost);
+                deltas += AddCost(cost);
             }
             return deltas;
         }
@@ -172,7 +172,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 foreach (TECCost cost in hardware.AssociatedCosts)
                 {
-                    deltas.RemoveCost(cost);
+                    deltas += RemoveCost(cost);
                 }
                 return deltas;
             }

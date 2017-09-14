@@ -92,10 +92,10 @@ namespace TECUserControlLibrary.ViewModels
         }
         public double MiscElecCostTotal
         {
-            get { return _miscTECCostTotal; }
+            get { return _miscElecCostTotal; }
             private set
             {
-                _miscTECCostTotal = value;
+                _miscElecCostTotal = value;
                 RaisePropertyChanged("MiscElecCostTotal");
             }
         }
@@ -119,10 +119,10 @@ namespace TECUserControlLibrary.ViewModels
         }
         public double AssocTECLaborTotal
         {
-            get { return _assocElecLaborTotal; }
+            get { return _assocTECLaborTotal; }
             private set
             {
-                _assocElecLaborTotal = value;
+                _assocTECLaborTotal = value;
                 RaisePropertyChanged("AssocTECLaborTotal");
             }
         }
@@ -305,15 +305,31 @@ namespace TECUserControlLibrary.ViewModels
                     throw new InvalidOperationException("Removing a larger quantity than exists from CostSummaryItem.");
                 }
                 CostBatch delta = item.AddQuantity(deltaQuantity);
-                if (cost.Type == CostType.TEC)
+                if (cost is TECMisc)
                 {
-                    AssocTECCostTotal += delta.GetCost(CostType.TEC);
-                    AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
+                    if (cost.Type == CostType.TEC)
+                    {
+                        MiscTECCostTotal += delta.GetCost(CostType.TEC);
+                        MiscTECLaborTotal += delta.GetLabor(CostType.TEC);
+                    }
+                    else if (cost.Type == CostType.Electrical)
+                    {
+                        MiscElecCostTotal += delta.GetCost(CostType.Electrical);
+                        MiscElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                    }
                 }
-                else if (cost.Type == CostType.Electrical)
+                else
                 {
-                    AssocElecCostTotal += delta.GetCost(CostType.Electrical);
-                    AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                    if (cost.Type == CostType.TEC)
+                    {
+                        AssocTECCostTotal += delta.GetCost(CostType.TEC);
+                        AssocTECLaborTotal += delta.GetLabor(CostType.TEC);
+                    }
+                    else if (cost.Type == CostType.Electrical)
+                    {
+                        AssocElecCostTotal += delta.GetCost(CostType.Electrical);
+                        AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                    }
                 }
                 return delta;
             }
