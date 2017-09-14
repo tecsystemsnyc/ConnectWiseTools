@@ -53,10 +53,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = Tags;
-                Tags.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Tags");
+                Tags.CollectionChanged -= (sender, args) => scopeCollectionChanged(sender, args, "Tags");
                 _tags = value;
                 NotifyCombinedChanged(Change.Edit, "Tags", this, value, old);
-                Tags.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Tags");
+                Tags.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "Tags");
             }
         }
         public ObservableCollection<TECCost> AssociatedCosts
@@ -65,10 +65,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = AssociatedCosts;
-                AssociatedCosts.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
+                AssociatedCosts.CollectionChanged -= (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
                 _associatedCosts = value;
                 NotifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
-                AssociatedCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
+                AssociatedCosts.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
             }
         }
 
@@ -91,6 +91,7 @@ namespace EstimatingLibrary
         {
             get
             {
+                SaveableMap map = relatedObjects();
                 return relatedObjects();
             }
         }
@@ -105,8 +106,8 @@ namespace EstimatingLibrary
 
             _tags = new ObservableCollection<TECLabeled>();
             _associatedCosts = new ObservableCollection<TECCost>();
-            Tags.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Tags");
-            AssociatedCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "AssociatedCosts");
+            Tags.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "Tags");
+            AssociatedCosts.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
         }
 
         #endregion 
@@ -125,7 +126,8 @@ namespace EstimatingLibrary
             { associatedCosts.Add(cost as TECCost); }
             AssociatedCosts = associatedCosts;
         }
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        protected virtual void scopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+            //Is virtual so that it can be overridden in TECTypical
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {

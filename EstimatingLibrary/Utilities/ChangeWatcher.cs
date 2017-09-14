@@ -515,17 +515,27 @@ namespace EstimatingLibrary.Utilities
             }
             else if (obj.PropertyName != "TypicalInstanceDictionary")
             {
-                if (!(obj.Value is TECObject))
+                if (!(obj.Value is TECObject value))
                 {
                     if (!(isTypical(obj.Sender)))
                     {
                         InstanceChanged?.Invoke(obj);
                     }
                 }
-                else if (obj.Sender is TECBid || obj.Sender is TECTypical)
+                //If the sender is TECBid or TECTypical, check isTypical on value instead of sender.
+                else if (obj.Sender is TECBid)
                 {
-                    TECObject value = obj.Value as TECObject;
                     if (!isTypical(value))
+                    {
+                        InstanceChanged?.Invoke(obj);
+                    }
+                }
+                //If the sender is TECTypical, check that the value isn't a "catalog" object.
+                else if (obj.Sender is TECTypical typ)
+                {
+                    string propName = obj.PropertyName;
+                    SaveableMap map = typ.RelatedObjects;
+                    if (!typ.RelatedObjects.Contains(propName) && !(isTypical(value)))
                     {
                         InstanceChanged?.Invoke(obj);
                     }

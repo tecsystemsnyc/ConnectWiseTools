@@ -63,14 +63,26 @@ namespace EstimatingLibrary.Interfaces
         }
         public void AddRange(SaveableMap map)
         {
-            foreach(Tuple<string, TECObject> item in map.ChildList())
+            foreach(KeyValuePair<string, List<TECObject>> pair in map.nameDictionary)
             {
-                if (!PropertyNames.Contains(item.Item1))
+                if (nameDictionary.ContainsKey(pair.Key))
                 {
-                    PropertyNames.Add(item.Item1);
+                    nameDictionary[pair.Key].AddRange(pair.Value);
+                    Objects.AddRange(pair.Value);
                 }
-                addToDictionary(item.Item1, item.Item2);
-                Objects.Add(item.Item2);
+                else
+                {
+                    nameDictionary[pair.Key] = pair.Value;
+                    Objects.AddRange(pair.Value);
+                    PropertyNames.Add(pair.Key);
+                }
+            }
+            foreach(string name in map.PropertyNames)
+            {
+                if (!PropertyNames.Contains(name))
+                {
+                    PropertyNames.Add(name);
+                }
             }
         }
         public List<Tuple<string, TECObject>> ChildList()

@@ -338,10 +338,7 @@ namespace EstimatingLibrary
                             costs += sys.CostBatch;
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
-                        }
-                        if (item is TECSystem system)
-                        {
-                            handleInstanceRemoved(system);
+                            handleInstanceRemoved(sys);
                         }
                         NotifyTECChanged(Change.Remove, propertyName, this, item);
                     }
@@ -355,6 +352,24 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 NotifyTECChanged(Change.Edit, propertyName, this, sender);
+            }
+        }
+        protected override void scopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+            //Is overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                }
             }
         }
 

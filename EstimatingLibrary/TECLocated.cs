@@ -56,7 +56,8 @@ namespace EstimatingLibrary
         protected override SaveableMap relatedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.relatedObjects());
+            SaveableMap baseMap = base.relatedObjects();
+            saveList.AddRange(baseMap);
             if (this.Location != null)
             {
                 saveList.Add(this.Location, "Location");

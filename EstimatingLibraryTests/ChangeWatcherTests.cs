@@ -336,7 +336,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddAssociatedcCostToTypicalSystem()
+        public void AddAssociatedCostToTypicalSystem()
         {
             //Arrange
             TECTypical typical = new TECTypical();
@@ -1131,7 +1131,7 @@ namespace Tests
 
             //Assert
             checkRaised(false, false, false);
-            checkChangedArgs(Change.Remove, "ASsociatedCosts", typical, cost);
+            checkChangedArgs(Change.Remove, "AssociatedCosts", typical, cost);
         }
 
         [TestMethod]
