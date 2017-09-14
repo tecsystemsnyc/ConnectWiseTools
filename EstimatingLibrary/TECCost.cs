@@ -51,11 +51,7 @@ namespace EstimatingLibrary
                 NotifyCostChanged(new CostBatch(Cost, Labor, value));
             }
         }
-
-        public override CostBatch CostBatch
-        {
-            get { return base.CostBatch + new CostBatch(this); }
-        }
+        
         #endregion
 
         #region Constructors
@@ -72,6 +68,11 @@ namespace EstimatingLibrary
 
         public TECCost(CostType type) : this(Guid.NewGuid(), type) { }
         #endregion
+
+        protected override CostBatch getCosts()
+        {
+            return base.getCosts() + new CostBatch(this);
+        }
 
         protected void copyPropertiesFromCost(TECCost cost)
         {
