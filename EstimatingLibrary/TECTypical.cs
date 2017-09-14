@@ -174,6 +174,18 @@ namespace EstimatingLibrary
                 _typicalInstanceDictionary.AddItem(panel, toAdd);
                 newSystem.Panels.Add(toAdd);
             }
+            foreach (TECMisc misc in MiscCosts)
+            {
+                var toAdd = new TECMisc(misc);
+                _typicalInstanceDictionary.AddItem(misc, toAdd);
+                newSystem.MiscCosts.Add(toAdd);
+            }
+            foreach (TECScopeBranch branch in ScopeBranches)
+            {
+                var toAdd = new TECScopeBranch(branch);
+                _typicalInstanceDictionary.AddItem(branch, toAdd);
+                newSystem.ScopeBranches.Add(toAdd);
+            }
             foreach (TECCost cost in AssociatedCosts)
             {
                 newSystem.AssociatedCosts.Add(cost);
@@ -439,6 +451,24 @@ namespace EstimatingLibrary
                     system.Equipment.Add(equipmentToAdd);
                 }
             }
+            else if (value is TECMisc misc && sender is TECTypical)
+            {
+                foreach (TECSystem system in Instances)
+                {
+                    var miscToAdd = new TECMisc(misc);
+                    _typicalInstanceDictionary.AddItem(misc, miscToAdd);
+                    system.MiscCosts.Add(miscToAdd);
+                }
+            }
+            else if (value is TECScopeBranch branch && sender is TECTypical)
+            {
+                foreach (TECSystem system in Instances)
+                {
+                    var branchToAdd = new TECScopeBranch(branch);
+                    _typicalInstanceDictionary.AddItem(branch, branchToAdd);
+                    system.ScopeBranches.Add(branchToAdd);
+                }
+            }
             else if (value is TECSubScope && sender is TECEquipment)
             {
                 var characteristicEquipment = sender as TECEquipment;
@@ -641,6 +671,44 @@ namespace EstimatingLibrary
                     foreach (TECEquipment equipment in equipmentToRemove)
                     {
                         system.Equipment.Remove(equipment);
+                    }
+                }
+            }
+            else if (value is TECMisc misc && sender is TECTypical)
+            {
+                foreach (TECSystem system in Instances)
+                {
+                    var miscToRemove = new List<TECMisc>();
+                    foreach (TECMisc instanceMisc in system.MiscCosts)
+                    {
+                        if (TypicalInstanceDictionary.GetInstances(misc).Contains(instanceMisc))
+                        {
+                            miscToRemove.Add(instanceMisc);
+                            _typicalInstanceDictionary.RemoveItem(misc, instanceMisc);
+                        }
+                    }
+                    foreach (TECMisc instanceMisc in miscToRemove)
+                    {
+                        system.MiscCosts.Remove(instanceMisc);
+                    }
+                }
+            }
+            else if (value is TECScopeBranch branch && sender is TECTypical)
+            {
+                foreach (TECSystem system in Instances)
+                {
+                    var branchesToRemove = new List<TECScopeBranch>();
+                    foreach (TECScopeBranch instanceBranch in system.ScopeBranches)
+                    {
+                        if (TypicalInstanceDictionary.GetInstances(branch).Contains(instanceBranch))
+                        {
+                            branchesToRemove.Add(instanceBranch);
+                            _typicalInstanceDictionary.RemoveItem(branch, instanceBranch);
+                        }
+                    }
+                    foreach (TECScopeBranch instanceBranch in branchesToRemove)
+                    {
+                        system.ScopeBranches.Remove(instanceBranch);
                     }
                 }
             }

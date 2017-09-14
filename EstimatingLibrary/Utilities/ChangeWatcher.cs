@@ -201,6 +201,10 @@ namespace EstimatingLibrary.Utilities
             {
                 registerTECObject(item);
             }
+            foreach(TECValve item in catalogs.Valves)
+            {
+                registerTECObject(item);
+            }
         }
 
         private void registerTypical(TECTypical typ)

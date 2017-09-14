@@ -2258,11 +2258,11 @@ namespace Tests
             resetRaised();
 
             //Act
-            point.Label = edited;
+            systemPoint.Label = edited;
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
-            checkChangedArgs(Change.Edit, "Label", point, edited, original);
+            checkChangedArgs(Change.Edit, "Label", systemPoint, edited, original);
         }
 
         [TestMethod]
@@ -2282,7 +2282,7 @@ namespace Tests
             device.Manufacturer = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Manufacturer", device, edited, original);
         }
 
@@ -2303,7 +2303,7 @@ namespace Tests
             valve.Actuator = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Actuator", valve, edited, original);
         }
 
