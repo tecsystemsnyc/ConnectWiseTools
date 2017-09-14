@@ -235,7 +235,7 @@ namespace TECUserControlLibrary.ViewModels
                 else if (cost.Type == CostType.Electrical)
                 {
                     AssocElecCostTotal += delta.GetCost(CostType.Electrical);
-                    AssocElecLaborTotal += delta.GetCost(CostType.Electrical);
+                    AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
                 }
                 if (item.Quantity < 1)
                 {
