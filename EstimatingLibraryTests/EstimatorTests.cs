@@ -561,7 +561,7 @@ namespace Tests
             
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -619,7 +619,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -688,7 +688,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
             
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -767,7 +767,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -785,7 +785,7 @@ namespace Tests
                 }
             }
 
-            controller.RemoveSubScope(subScope);
+            controller.RemoveSubScope(subScope, true);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -835,7 +835,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -889,12 +889,12 @@ namespace Tests
             equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
             
-            controller.RemoveSubScope(subScope);
+            controller.RemoveSubScope(subScope, true);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -1659,7 +1659,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1712,7 +1712,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1743,7 +1743,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             TECSubScope subScope = typical.Equipment[0].SubScope[0];
-            TECSubScopeConnection ssConnect = controller.AddSubScope(subScope);
+            TECSubScopeConnection ssConnect = controller.AddSubScope(subScope, true);
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);
