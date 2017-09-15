@@ -396,8 +396,7 @@ namespace EstimatingLibrary
 
             return outIO;
         }
-
-
+        
         override protected CostBatch getCosts()
         {
             CostBatch costs = base.getCosts();

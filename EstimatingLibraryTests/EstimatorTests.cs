@@ -840,7 +840,7 @@ namespace Tests
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
 
-            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
+            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 60
             Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
             assertNoCostOrLabor(estimate);
@@ -1733,16 +1733,19 @@ namespace Tests
             ChangeWatcher watcher = new ChangeWatcher(bid);
             TECEstimator estimate = new TECEstimator(bid, watcher);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECControllerType type= bid.Catalogs.ControllerTypes[0];
+            TECControllerType type = new TECControllerType(new TECManufacturer());
 
             TECController controller = new TECController(type);
             bid.Controllers.Add(controller);
 
-            TECTypical typical = TestHelper.CreateTestTypical(bid.Catalogs);
+            TECTypical typical = new TECTypical();
+            TECEquipment equipment = new TECEquipment();
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            TECSubScope subScope = typical.Equipment[0].SubScope[0];
             TECSubScopeConnection ssConnect = controller.AddSubScope(subScope, true);
             ssConnect.Length = 50;
 
