@@ -18,6 +18,7 @@ namespace EstimatingLibrary
         #region Constructors
         public TECHardware(Guid guid, TECManufacturer manufacturer, CostType type) : base(guid, type)
         {
+            _price = 0;
             _manufacturer = manufacturer;
         }
         #endregion
@@ -63,14 +64,9 @@ namespace EstimatingLibrary
         {
             copyPropertiesFromCost(hardware);
             _manufacturer = hardware.Manufacturer;
+            _price = hardware.Price;
         }
-
-        override protected CostBatch getCosts()
-        {
-            CostBatch costs = base.getCosts() - new CostBatch(Price, Labor, Type);
-            costs += new CostBatch(Cost, Labor, Type);
-            return costs;
-        }
+        
         protected override SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();

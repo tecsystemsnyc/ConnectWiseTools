@@ -95,9 +95,8 @@ namespace EstimatingLibrary
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
-            foreach (TECDevice device in sourceSubScope.Devices)
-            { _devices.Add(new TECDevice(device)); }
-            var subWatch = System.Diagnostics.Stopwatch.StartNew();
+            foreach (ITECConnectable device in sourceSubScope.Devices)
+            { _devices.Add(device); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
                 var toAdd = new TECPoint(point);
@@ -160,10 +159,13 @@ namespace EstimatingLibrary
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 CostBatch costs = new CostBatch();
-                foreach (TECDevice item in e.NewItems)
+                foreach (ITECConnectable item in e.NewItems)
                 {
                     NotifyCombinedChanged(Change.Add, "Devices", this, item);
-                    costs += item.CostBatch;
+                    if(item is INotifyCostChanged costly)
+                    {
+                        costs += costly.CostBatch;
+                    }
                 }
                 NotifyCostChanged(costs);
             }
@@ -173,7 +175,10 @@ namespace EstimatingLibrary
                 foreach (TECDevice item in e.OldItems)
                 {
                     NotifyCombinedChanged(Change.Remove, "Devices", this, item);
-                    costs += item.CostBatch;
+                    if (item is INotifyCostChanged costly)
+                    {
+                        costs += costly.CostBatch;
+                    }
                 }
                 NotifyCostChanged(costs * -1);
             }
