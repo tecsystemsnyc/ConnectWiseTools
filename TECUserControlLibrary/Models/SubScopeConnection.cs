@@ -9,6 +9,8 @@ namespace TECUserControlLibrary.Models
 {
     public class SubScopeConnection : TECObject
     {
+        private bool isTypical;
+
         private TECSubScope _subScope;
         public TECSubScope SubScope
         {
@@ -68,8 +70,9 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public SubScopeConnection(TECSubScope subscope) : base(Guid.NewGuid())
+        public SubScopeConnection(TECSubScope subscope, bool ssIsTypical) : base(Guid.NewGuid())
         {
+            isTypical = ssIsTypical;
             _subScope = subscope;
             SubScope.PropertyChanged += SubScope_PropertyChanged;
             _controller = null;
@@ -106,11 +109,11 @@ namespace TECUserControlLibrary.Models
         {
             if (Controller != null)
             {
-                Controller.RemoveSubScope(SubScope);
+                Controller.RemoveSubScope(SubScope, isTypical);
             }
             if (controller != null)
             {
-                controller.AddSubScope(SubScope);
+                controller.AddSubScope(SubScope, isTypical);
                 SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
             

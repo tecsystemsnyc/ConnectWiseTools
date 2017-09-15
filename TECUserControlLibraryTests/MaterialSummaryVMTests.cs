@@ -412,7 +412,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.AddSubScope(typSS);
+            TECConnection connection = controller.AddSubScope(typSS, true);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
@@ -828,7 +828,7 @@ namespace Tests
             TECSubScope ss = new TECSubScope();
             typEquip.SubScope.Add(ss);
 
-            TECConnection connection = controller.AddSubScope(ss);
+            TECConnection connection = controller.AddSubScope(ss, true);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
@@ -847,7 +847,7 @@ namespace Tests
             Total totalElec = CalculateTotal(connection, CostType.Electrical);
 
             //Act
-            controller.RemoveSubScope(ss);
+            controller.RemoveSubScope(ss, true);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
@@ -886,7 +886,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.AddSubScope(ss);
+            TECConnection connection = controller.AddSubScope(ss, true);
             connection.Length = 100;
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
