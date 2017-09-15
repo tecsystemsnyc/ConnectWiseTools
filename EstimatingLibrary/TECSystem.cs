@@ -194,7 +194,7 @@ namespace EstimatingLibrary
             }
             return outSubScope;
         }
-        protected int points()
+        protected virtual int points()
         {
             var totalPoints = 0;
             foreach (TECEquipment equipment in Equipment)

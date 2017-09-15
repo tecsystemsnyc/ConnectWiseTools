@@ -1192,7 +1192,7 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SubScopeConnectionTable.ID.Name].ToString());
-            TECSubScopeConnection connection = new TECSubScopeConnection(guid);
+            TECSubScopeConnection connection = new TECSubScopeConnection(guid, true);
             assignValuePropertiesFromTable(connection, new SubScopeConnectionTable(), row);
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid);
