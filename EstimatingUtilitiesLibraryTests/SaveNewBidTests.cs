@@ -94,7 +94,15 @@ namespace Tests
             }
             expectedEquipment = expectedBid.RandomEquipment();
             expectedSubScope = expectedBid.RandomSubScope();
-            expectedDevice = expectedBid.Catalogs.Devices.RandomObject();
+            expectedDevice = null;
+            foreach(TECDevice device in expectedBid.Catalogs.Devices)
+            {
+                if(device.Tags.Count != 0)
+                {
+                    expectedDevice = device;
+                    break;
+                }
+            }
 
             expectedManufacturer = expectedBid.Catalogs.Manufacturers.RandomObject();
             expectedPoint = expectedBid.RandomPoint();

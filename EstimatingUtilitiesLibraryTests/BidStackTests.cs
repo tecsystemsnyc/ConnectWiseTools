@@ -540,7 +540,14 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var system = Bid.Systems.RandomObject();
+            TECTypical system = null;
+            foreach(TECTypical item in Bid.Systems)
+            {
+                if(item.Location != null)
+                {
+                    system = item;
+                }
+            }
             Guid expected = new Guid(system.Location.Guid.ToString());
             TECLabeled edit = new TECLabeled();
             edit.Label = "Floor 42";

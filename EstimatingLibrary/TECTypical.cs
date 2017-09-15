@@ -203,7 +203,7 @@ namespace EstimatingLibrary
                     {
                         if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
                         {
-                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance);
+                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance, false);
                             instanceSSConnect.Length = subScope.Connection.Length;
                             instanceSSConnect.ConduitLength = subScope.Connection.ConduitLength;
                             instanceSSConnect.ConduitType = subScope.Connection.ConduitType;
@@ -374,7 +374,7 @@ namespace EstimatingLibrary
             {
                 if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
                 {
-                    subScope.Connection.ParentController.RemoveSubScope(subScope);
+                    subScope.Connection.ParentController.RemoveSubScope(subScope, false);
                 }
             }
             removeFromDictionary(Panels, instance.Panels);
@@ -417,14 +417,14 @@ namespace EstimatingLibrary
                         {
                             break;
                         }
-                        instance.Connection.ParentController.RemoveSubScope(instance);
+                        instance.Connection.ParentController.RemoveSubScope(instance, false);
                     }
                 }
                 else if (subScope.Connection.ParentController.IsGlobal)
                 {
                     foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
                     {
-                        subScope.Connection.ParentController.AddSubScope(instance);
+                        subScope.Connection.ParentController.AddSubScope(instance, false);
                     }
                 }
             }
@@ -546,7 +546,7 @@ namespace EstimatingLibrary
                         {
                             if (characteristicController.IsGlobal)
                             {
-                                var connection = characteristicController.AddSubScope(subScopeToConnect);
+                                var connection = characteristicController.AddSubScope(subScopeToConnect, false);
                                 connection.Length = characteristicConnection.Length;
                                 connection.ConduitLength = characteristicConnection.ConduitLength;
                                 connection.ConduitType = characteristicConnection.ConduitType;
@@ -557,7 +557,7 @@ namespace EstimatingLibrary
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
-                                        var connection = controller.AddSubScope(subScopeToConnect);
+                                        var connection = controller.AddSubScope(subScopeToConnect, false);
                                         connection.Length = characteristicConnection.Length;
                                         connection.ConduitLength = characteristicConnection.ConduitLength;
                                         connection.ConduitType = characteristicConnection.ConduitType;
@@ -809,7 +809,7 @@ namespace EstimatingLibrary
                         {
                             if (characteristicController.IsGlobal)
                             {
-                                characteristicController.RemoveSubScope(subScopeToRemove);
+                                characteristicController.RemoveSubScope(subScopeToRemove, false);
                             }
                             else
                             {
@@ -817,7 +817,7 @@ namespace EstimatingLibrary
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
-                                        controller.RemoveSubScope(subScopeToRemove);
+                                        controller.RemoveSubScope(subScopeToRemove, false);
                                     }
                                 }
                             }
@@ -913,7 +913,7 @@ namespace EstimatingLibrary
                 }
                 foreach (TECSubScope sub in subScopeToRemove)
                 {
-                    controller.RemoveSubScope(sub);
+                    controller.RemoveSubScope(sub, true);
                 }
             }
         }
