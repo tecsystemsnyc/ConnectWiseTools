@@ -140,7 +140,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!currentSubScope.Contains(connection.SubScope) && connection.Controller != null)
                     {
-                        connection.Controller.RemoveSubScope(connection.SubScope, IsTypical);
+                        connection.Controller.RemoveSubScope(connection.SubScope);
                     }
                 }
             }

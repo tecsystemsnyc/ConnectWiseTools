@@ -112,7 +112,7 @@ namespace TECUserControlLibrary.Models
         {
             if (Controller != null)
             {
-                Controller.RemoveSubScope(SubScope, IsTypical);
+                Controller.RemoveSubScope(SubScope);
             }
             if (controller != null)
             {
