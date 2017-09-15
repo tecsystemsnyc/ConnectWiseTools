@@ -295,38 +295,6 @@ namespace EstimatingLibrary
                 NotifyTECChanged(Change.Edit, propertyName, this, sender);
             }
         }
-        private void handleSystemSubScopeRemoval(TECSystem system)
-        {
-            foreach (TECEquipment equipment in system.Equipment)
-            {
-                handleEquipmentSubScopeRemoval(equipment);
-            }
-        }
-        private void handleEquipmentSubScopeRemoval(TECEquipment equipment)
-        {
-            foreach (TECSubScope subScope in equipment.SubScope)
-            {
-                handleSubScopeRemovalInConnections(subScope);
-            }
-        }
-        private void handleSubScopeRemovalInConnections(TECSubScope subScope)
-        {
-            foreach (TECController controller in Controllers)
-            {
-                ObservableCollection<TECSubScope> subScopeToRemove = new ObservableCollection<TECSubScope>();
-                foreach (TECSubScopeConnection connection in controller.ChildrenConnections)
-                {
-                    if (connection.SubScope == subScope)
-                    {
-                        subScopeToRemove.Add(subScope as TECSubScope);
-                    }
-                }
-                foreach (TECSubScope sub in subScopeToRemove)
-                {
-                    controller.RemoveSubScope(sub);
-                }
-            }
-        }
         #endregion
         #endregion
     }
