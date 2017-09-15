@@ -757,7 +757,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope);
+            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope, false);
 
             //Assert
             checkRaised(true, true, false);
@@ -782,7 +782,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            TECSubScopeConnection connection = controller.AddSubScope(subScope, true);
 
             //Assert
             checkRaised(false, false, false);
@@ -806,7 +806,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            TECSubScopeConnection connection = controller.AddSubScope(subScope, true);
 
             //Assert
             checkRaised(false, false, false);
@@ -832,7 +832,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECSubScopeConnection connection = instanceController.AddSubScope(instanceSubScope);
+            TECSubScopeConnection connection = instanceController.AddSubScope(instanceSubScope, false);
 
             //Assert
             checkRaised(true, true, false);
@@ -1571,12 +1571,12 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
-            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope);
+            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope, false);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(instanceSubScope);
+            controller.RemoveSubScope(instanceSubScope, false);
 
             //Assert
             checkRaised(true, true, false);
@@ -1597,12 +1597,12 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             system.Controllers.Add(controller);
-            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            TECSubScopeConnection connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(subScope);
+            controller.RemoveSubScope(subScope, true);
 
             //Assert
             checkRaised(false, false, false);
@@ -1622,12 +1622,12 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
-            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            TECSubScopeConnection connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(subScope);
+            controller.RemoveSubScope(subScope, true);
 
             //Assert
             checkRaised(false, false, false);
@@ -1649,12 +1649,12 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
             TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
             TECController instanceController = instance.Controllers[0];
-            TECSubScopeConnection connection = instanceController.AddSubScope(instanceSubScope);
+            TECSubScopeConnection connection = instanceController.AddSubScope(instanceSubScope, false);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            instanceController.RemoveSubScope(instanceSubScope);
+            instanceController.RemoveSubScope(instanceSubScope, false);
 
             //Assert
             checkRaised(true, true, false);
@@ -2145,7 +2145,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
 
             bid.Systems.Add(typical);
-            TECConnection connection = controller.AddSubScope(ss);
+            TECConnection connection = controller.AddSubScope(ss, true);
             connection.Length = RandomDouble(1, 100);
             connection.ConduitLength = RandomDouble(1, 100);
 
@@ -2176,7 +2176,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
 
             bid.Systems.Add(typical);
-            TECConnection connection = controller.AddSubScope(ss);
+            TECConnection connection = controller.AddSubScope(ss, true);
             connection.Length = RandomDouble(1, 100);
             connection.ConduitLength = RandomDouble(1, 100);
 
@@ -2433,7 +2433,7 @@ namespace Tests
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             bid.Controllers.Add(controller);
 
-            controller.AddSubScope(typSS);
+            controller.AddSubScope(typSS, true);
 
             TECSystem instance = typical.AddInstance(bid);
             TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
@@ -2469,7 +2469,7 @@ namespace Tests
             TECController typController = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             typical.Controllers.Add(typController);
 
-            typController.AddSubScope(typSS);
+            typController.AddSubScope(typSS, true);
 
             TECSystem instance = typical.AddInstance(bid);
             TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
