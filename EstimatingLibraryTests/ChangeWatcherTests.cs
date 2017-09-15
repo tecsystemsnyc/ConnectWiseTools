@@ -2371,13 +2371,73 @@ namespace Tests
         [TestMethod]
         public void EditSystemSubScopeConnectionInBidController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTypical typical = new TECTypical();
+            TECEquipment typEquip = new TECEquipment();
+            TECSubScope typSS = new TECSubScope();
+            TECDevice typDev = bid.Catalogs.Devices.RandomObject();
+            typSS.Devices.Add(typDev);
+            typEquip.SubScope.Add(typSS);
+            typical.Equipment.Add(typEquip);
+            bid.Systems.Add(typical);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+
+            controller.AddSubScope(typSS);
+
+            TECSystem instance = typical.AddInstance(bid);
+            TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
+            ssConnect.Length = RandomDouble(1, 100);
+            ssConnect.ConduitLength = RandomDouble(1, 100);
+
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+
+            resetRaised();
+
+            //Act
+            ssConnect.ConduitType = conduitType;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkInstanceChangedArgs(Change.Edit, "ConduitType", ssConnect, conduitType, null);
+            checkCostDelta(conduitType.GetCosts(ssConnect.ConduitLength));
         }
 
         [TestMethod]
         public void EditSystemSubScopeConnectionInSystemController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTypical typical = new TECTypical();
+            TECEquipment typEquip = new TECEquipment();
+            TECSubScope typSS = new TECSubScope();
+            TECDevice typDev = bid.Catalogs.Devices.RandomObject();
+            typSS.Devices.Add(typDev);
+            typEquip.SubScope.Add(typSS);
+            typical.Equipment.Add(typEquip);
+            bid.Systems.Add(typical);
+
+            TECController typController = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            typical.Controllers.Add(typController);
+
+            typController.AddSubScope(typSS);
+
+            TECSystem instance = typical.AddInstance(bid);
+            TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
+            ssConnect.Length = RandomDouble(1, 100);
+            ssConnect.ConduitLength = RandomDouble(1, 100);
+
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+
+            resetRaised();
+
+            //Act
+            ssConnect.ConduitType = conduitType;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkInstanceChangedArgs(Change.Edit, "ConduitType", ssConnect, conduitType, null);
+            checkCostDelta(conduitType.GetCosts(ssConnect.ConduitLength));
         }
 
         [TestMethod]
