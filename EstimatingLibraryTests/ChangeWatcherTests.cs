@@ -790,6 +790,30 @@ namespace Tests
         }
 
         [TestMethod]
+        public void AddBidSubScopeConnectionToTypicalController()
+        {
+            //Arrange
+            TECTypical system = new TECTypical();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
+
+            resetRaised();
+
+            //Act
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
+        }
+
+        [TestMethod]
         public void AddSubScopeConnectionToInstanceController()
         {
             //Arrange
@@ -1573,6 +1597,31 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
             system.Controllers.Add(controller);
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            connection.Length = 10;
+            resetRaised();
+
+            //Act
+            controller.RemoveSubScope(subScope);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
+        }
+
+        [TestMethod]
+        public void RemoveBidSubScopeConnectionFromTypicalController()
+        {
+            //Arrange
+            TECTypical system = new TECTypical();
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            bid.Systems.Add(system);
+
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            bid.Controllers.Add(controller);
             TECSubScopeConnection connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             resetRaised();
