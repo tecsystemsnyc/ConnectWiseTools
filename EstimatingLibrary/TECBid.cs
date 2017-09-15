@@ -503,7 +503,7 @@ namespace EstimatingLibrary
                 }
                 foreach (TECSubScope sub in subScopeToRemove)
                 {
-                    controller.RemoveSubScope(sub);
+                    controller.RemoveSubScope(sub, false);
                 }
             }
         }
