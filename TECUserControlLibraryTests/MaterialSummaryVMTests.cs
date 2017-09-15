@@ -847,7 +847,7 @@ namespace Tests
             Total totalElec = CalculateTotal(connection, CostType.Electrical);
 
             //Act
-            controller.RemoveSubScope(ss, true);
+            controller.RemoveSubScope(ss);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
