@@ -1633,12 +1633,11 @@ namespace Tests
             resetRaised();
 
             //Act
-            parentController.RemoveController(daisyController);
+            netConnect.ChildrenControllers.Remove(daisyController);
 
             //Assert
             checkRaised(true, false, false);
             checkInstanceChangedArgs(Change.Remove, "ChildrenControllers", netConnect, daisyController);
-            checkCostDelta(netConnect.CostBatch * -1);
         }
         #endregion
 
