@@ -739,7 +739,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddSubScopeConnectionToBidController()
+        public void AddInstanceSubScopeConnectionToBidController()
         {
             //Arrange
             TECTypical system = new TECTypical();
@@ -766,7 +766,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddSubScopeConnectionToTypicalController()
+        public void AddTypicalSubScopeConnectionToTypicalController()
         {
             //Arrange
             TECTypical system = new TECTypical();
@@ -790,7 +790,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddBidSubScopeConnectionToTypicalController()
+        public void AddTypicalSubScopeConnectionToBidController()
         {
             //Arrange
             TECTypical system = new TECTypical();
@@ -814,7 +814,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddSubScopeConnectionToInstanceController()
+        public void AddInstanceSubScopeConnectionToInstanceController()
         {
             //Arrange
             TECTypical system = new TECTypical();

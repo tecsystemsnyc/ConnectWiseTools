@@ -125,10 +125,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     NotifyCombinedChanged(Change.Add, propertyName, this, item);
-                    if (item is TECConnection connect)
-                    {
-                        NotifyCostChanged(connect.CostBatch);
-                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -136,10 +132,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     NotifyCombinedChanged(Change.Remove, propertyName, this, item);
-                    if (item is TECConnection connect)
-                    {
-                        NotifyCostChanged(connect.CostBatch * -1);
-                    }
                 }
             }
             if (sender == ChildrenConnections)
@@ -226,12 +218,12 @@ namespace EstimatingLibrary
                 return null;
             }
         }
-        public TECSubScopeConnection AddSubScope(TECSubScope subScope)
+        public TECSubScopeConnection AddSubScope(TECSubScope subScope, bool isTypical)
         {
             TECSubScopeConnection connection = new TECSubScopeConnection();
             connection.ParentController = this;
             connection.SubScope = subScope;
-            ChildrenConnections.Add(connection);
+            addChildConnection(connection, isTypical);
             subScope.Connection = connection;
             return connection;
         }
@@ -266,7 +258,7 @@ namespace EstimatingLibrary
                 throw new ArgumentOutOfRangeException("Passed controller does not exist in any connection in controller.");
             }
         }
-        public void RemoveSubScope(TECSubScope subScope)
+        public void RemoveSubScope(TECSubScope subScope, bool isTypical)
         {
             TECSubScopeConnection connectionToRemove = null;
             foreach (TECConnection connection in ChildrenConnections)
@@ -282,7 +274,7 @@ namespace EstimatingLibrary
             }
             if (connectionToRemove != null)
             {
-                ChildrenConnections.Remove(connectionToRemove);
+                removeChildConnection(connectionToRemove, isTypical);
                 subScope.Connection = null;
                 connectionToRemove.SubScope = null;
                 connectionToRemove.ParentController = null;
@@ -430,6 +422,23 @@ namespace EstimatingLibrary
             saveList.AddRange(base.relatedObjects());
             saveList.Add(this.Type, "Type");
             return saveList;
+        }
+
+        private void addChildConnection(TECConnection connection, bool isTypical)
+        {
+            ChildrenConnections.Add(connection);
+            if (!isTypical)
+            {
+                NotifyCostChanged(connection.CostBatch);
+            }
+        }
+        private void removeChildConnection(TECConnection connection, bool isTypical)
+        {
+            ChildrenConnections.Remove(connection);
+            if (!isTypical)
+            {
+                NotifyCostChanged(connection.CostBatch * -1);
+            }
         }
         #endregion
     }
