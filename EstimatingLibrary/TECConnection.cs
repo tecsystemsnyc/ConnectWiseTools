@@ -37,10 +37,11 @@ namespace EstimatingLibrary
             set
             {
                 var old = ConduitLength;
-                var originalCost = this.CostBatch;
                 _conduitLength = value;
                 NotifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
-                NotifyCostChanged(CostBatch - originalCost);
+                CostBatch previous = ConduitType != null ? ConduitType.GetCosts(old) : new CostBatch();
+                CostBatch current = ConduitType != null ? ConduitType.GetCosts(value) : new CostBatch();
+                NotifyCostChanged(current - previous);
             }
         }
         public TECController ParentController
@@ -58,10 +59,11 @@ namespace EstimatingLibrary
             set
             {
                 var old = ConduitType;
-                var originalCost = this.CostBatch;
                 _conduitType = value;
                 NotifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
-                NotifyCostChanged(CostBatch - originalCost);
+                CostBatch previous = old != null ? old.GetCosts(ConduitLength) : new CostBatch();
+                CostBatch current = value != null ? value.GetCosts(ConduitLength) : new CostBatch();
+                NotifyCostChanged(current - previous);
             }
         }
 

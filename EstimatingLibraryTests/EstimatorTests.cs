@@ -571,9 +571,9 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
-            Assert.AreEqual(50, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
-            Assert.AreEqual(50, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 20 = 60
+            Assert.AreEqual(60, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(60, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
             //checkRefresh(bid);
         }
@@ -646,15 +646,13 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
-            ratedCost.Type = CostType.Electrical;
 
-            var assCost = new TECCost(CostType.TEC);
+            var assCost = new TECCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
-            assCost.Type = CostType.Electrical;
 
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
@@ -694,8 +692,9 @@ namespace Tests
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
+            
 
-            foreach(TECSystem instance in system.Instances)
+            foreach (TECSystem instance in system.Instances)
             {
                 foreach(TECController instanceController in instance.Controllers)
                 {
@@ -710,8 +709,8 @@ namespace Tests
 
 
             //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor + AssCost.Cost/Labor) = 2*(10 * 1 +10 * 1 + 2) + 2 * (5 * 1 + 5 * 1 + 2) = 40 + 10 = 54
-            Assert.AreEqual(54, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
-            Assert.AreEqual(54, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+            Assert.AreEqual(64, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(64, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
             //checkRefresh(bid);
         }
@@ -1668,8 +1667,8 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
-            Assert.AreEqual(1.5, estimate.ElectricalShipping);
+            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 60
+            Assert.AreEqual(1.8, estimate.ElectricalShipping, CostTestingUtilities.DELTA);
 
             //checkRefresh(bid);
         }
@@ -1721,8 +1720,8 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 50
-            Assert.AreEqual(2.5, estimate.ElectricalWarranty);
+            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 20 = 60
+            Assert.AreEqual(3, estimate.ElectricalWarranty);
 
             //checkRefresh(bid);
         }
