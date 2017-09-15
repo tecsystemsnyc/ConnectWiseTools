@@ -277,7 +277,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerSubScopeConnection(TECSubScopeConnection connection)
         {
-            bool connectionIsTypical = isTypical(connection.ParentController);
+            bool connectionIsTypical = isTypical(connection.ParentController) || isTypical(connection.SubScope);
             registerTECObject(connection, connectionIsTypical);
         }
         private void registerScopeBranch(TECScopeBranch branch, bool isTypical)

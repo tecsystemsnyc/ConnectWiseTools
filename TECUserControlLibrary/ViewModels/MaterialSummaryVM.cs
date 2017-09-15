@@ -97,20 +97,20 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
-                    addSystem(instance);
+                    updateTotals(addSystem(instance));
                 }
             }
             foreach(TECController controller in bid.Controllers)
             {
-                addController(controller);
+                updateTotals(addController(controller));
             }
             foreach(TECPanel panel in bid.Panels)
             {
-                addPanel(panel);
+                updateTotals(addPanel(panel));
             }
             foreach(TECMisc misc in bid.MiscCosts)
             {
-                MiscSummaryVM.AddCost(misc);
+                updateTotals(MiscSummaryVM.AddCost(misc));
             }
         }
 
