@@ -209,7 +209,7 @@ namespace EstimatingLibrary
                 netConnect.ChildrenControllers.Add(controller);
                 netConnect.IOType = ioType;
                 netConnect.ConnectionType = connectionType;
-                ChildrenConnections.Add(netConnect);
+                addChildConnection(netConnect, false);
                 controller.ParentConnection = netConnect;
                 return netConnect;
             }
@@ -251,7 +251,7 @@ namespace EstimatingLibrary
             }
             if (connectionToRemove != null)
             {
-                ChildrenConnections.Remove(connectionToRemove);
+                removeChildConnection(connectionToRemove, false);
             }
             if (!exists)
             {
