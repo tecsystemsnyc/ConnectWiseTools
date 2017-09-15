@@ -86,6 +86,39 @@ namespace Tests
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
             checkUpdateItems(expectedItems, stack);
         }
+
+        [TestMethod]
+        public void Bid_AddControllerToPanel()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECPanelType type = new TECPanelType(new TECManufacturer());
+            TECPanel panel = new TECPanel(type);
+            bid.Panels.Add(panel);
+
+            TECControllerType controllerType = new TECControllerType(new TECManufacturer());
+            TECController controller = new TECController(controllerType);
+            bid.Controllers.Add(controller);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[PanelControllerTable.PanelID.Name] = panel.Guid.ToString();
+            data[PanelControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, PanelControllerTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            panel.Controllers.Add(controller);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
         #endregion
         #region Misc
         [TestMethod]
@@ -1151,6 +1184,41 @@ namespace Tests
         }
 
         [TestMethod]
+        public void Bid_AddControllerToPanelInTypicalWithout()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
+            TECPanel panel = new TECPanel(type);
+            bid.Systems.Add(system);
+
+            system.Panels.Add(panel);
+
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECControllerType ControllerType = new TECControllerType(manufacturer);
+            TECController controller = new TECController(ControllerType);
+            system.Controllers.Add(controller);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data;
+            data = new Dictionary<string, string>();
+            data[PanelControllerTable.PanelID.Name] = panel.Guid.ToString();
+            data[PanelControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, PanelControllerTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            panel.Controllers.Add(controller);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
         public void Bid_AddPanelToTypicalWith()
         {
             //Arrange
@@ -1505,6 +1573,40 @@ namespace Tests
             int expectedCount = expectedItems.Count;
 
             bid.Panels.Remove(panel);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveControllerFromPanel()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECPanelType type = new TECPanelType(new TECManufacturer());
+            TECPanel panel = new TECPanel(type);
+            bid.Panels.Add(panel);
+
+            TECControllerType controllerType = new TECControllerType(new TECManufacturer());
+            TECController controller = new TECController(controllerType);
+            bid.Controllers.Add(controller);
+            panel.Controllers.Add(controller);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[PanelControllerTable.PanelID.Name] = panel.Guid.ToString();
+            data[PanelControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, PanelControllerTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            panel.Controllers.Remove(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -2479,6 +2581,42 @@ namespace Tests
             int expectedCount = expectedItems.Count;
 
             system.Panels.Remove(panel);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveControllerFromPanelInTypicalWithout()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            TECPanelType type = new TECPanelType(new TECManufacturer());
+            TECPanel panel = new TECPanel(type);
+            bid.Systems.Add(system);
+
+            system.Panels.Add(panel);
+
+            TECManufacturer manufacturer = new TECManufacturer();
+            TECControllerType ControllerType = new TECControllerType(manufacturer);
+            TECController controller = new TECController(ControllerType);
+            system.Controllers.Add(controller);
+            panel.Controllers.Add(controller);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data;
+            data = new Dictionary<string, string>();
+            data[PanelControllerTable.PanelID.Name] = panel.Guid.ToString();
+            data[PanelControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, PanelControllerTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            panel.Controllers.Remove(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
