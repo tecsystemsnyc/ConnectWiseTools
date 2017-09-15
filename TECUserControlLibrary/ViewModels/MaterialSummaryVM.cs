@@ -102,7 +102,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(TECController controller in bid.Controllers)
             {
-                updateTotals(addController(controller));
+                updateTotals(addController(controller, bid));
             }
             foreach(TECPanel panel in bid.Panels)
             {
@@ -142,12 +142,16 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Add/Remove Methods
-        private CostBatch addSystem(TECSystem system)
+        private CostBatch addSystem(TECSystem system, TECBid bid = null)
         {
             CostBatch deltas = new CostBatch();
             foreach(TECEquipment equip in system.Equipment)
             {
                 deltas += (addEquipment(equip));
+            }
+            foreach(TECController controller in system.Controllers)
+            {
+                deltas += addController(controller, bid);
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
@@ -185,7 +189,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch addController(TECController controller)
+        private CostBatch addController(TECController controller, TECBid bid = null)
         {
             CostBatch deltas = new CostBatch();
             deltas += (ControllerSummaryVM.AddHardware(controller.Type));
@@ -195,7 +199,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
-                deltas += (addConnection(connection));
+                deltas += (addConnection(connection, bid));
             }
             return deltas;
         }
@@ -209,23 +213,35 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch addConnection(TECConnection connection)
+        private CostBatch addConnection(TECConnection connection, TECBid bid = null)
         {
             CostBatch deltas = new CostBatch();
             if (connection is TECNetworkConnection netConnect)
             {
                 deltas += (WireSummaryVM.AddRun(netConnect.ConnectionType, netConnect.Length));
+                if (connection.ConduitType != null)
+                {
+                    deltas += (ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+                }
             }
             else if (connection is TECSubScopeConnection ssConnect)
             {
-                foreach(TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
+                bool connectionIsInstance = true;
+                if (bid != null)
                 {
-                    deltas += (WireSummaryVM.AddRun(connectionType, ssConnect.Length));
+                    connectionIsInstance = ssConnectIsInstance(ssConnect, bid);
                 }
-            }
-            if (connection.ConduitType != null)
-            {
-                deltas += (ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+                if (connectionIsInstance)
+                {
+                    foreach (TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
+                    {
+                        deltas += (WireSummaryVM.AddRun(connectionType, ssConnect.Length));
+                    }
+                    if (connection.ConduitType != null)
+                    {
+                        deltas += (ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+                    }
+                }
             }
             return deltas;
         }
@@ -235,7 +251,11 @@ namespace TECUserControlLibrary.ViewModels
             CostBatch deltas = new CostBatch();
             foreach (TECEquipment equip in system.Equipment)
             {
-                deltas += (addEquipment(equip));
+                deltas += removeEquipment(equip);
+            }
+            foreach (TECController controller in system.Controllers)
+            {
+                deltas += removeController(controller);
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
@@ -466,6 +486,39 @@ namespace TECUserControlLibrary.ViewModels
             TotalTECLabor += deltas.GetLabor(CostType.TEC);
             TotalElecCost += deltas.GetCost(CostType.Electrical);
             TotalElecLabor += deltas.GetLabor(CostType.Electrical);
+        }
+
+        private bool ssConnectIsInstance(TECSubScopeConnection ssConnect, TECBid bid)
+        {
+            return (controllerIsInstance(ssConnect.ParentController, bid) && subScopeIsInstance(ssConnect.SubScope, bid));
+        }
+        private bool controllerIsInstance(TECController controller, TECBid bid)
+        {
+            List<TECController> instanceControllers = new List<TECController>();
+            instanceControllers.AddRange(bid.Controllers);
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem sys in typ.Instances)
+                {
+                    instanceControllers.AddRange(sys.Controllers);
+                }
+            }
+            return (instanceControllers.Contains(controller));
+        }
+        private bool subScopeIsInstance(TECSubScope ss, TECBid bid)
+        {
+            List<TECSubScope> instanceSubScope = new List<TECSubScope>();
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem sys in typ.Instances)
+                {
+                    foreach(TECEquipment equip in sys.Equipment)
+                    {
+                        instanceSubScope.AddRange(equip.SubScope);
+                    }
+                }
+            }
+            return (instanceSubScope.Contains(ss));
         }
         #endregion
     }
