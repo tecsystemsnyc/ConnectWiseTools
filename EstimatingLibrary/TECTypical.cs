@@ -265,7 +265,17 @@ namespace EstimatingLibrary
                 }
             }
         }
-        
+
+        protected override int points()
+        {
+            int pointNum = 0;
+            foreach(TECSystem instance in Instances)
+            {
+                pointNum += instance.PointNumber;
+            }
+            return pointNum;
+        }
+
         #region Event Handlers
         private void handleSystemChanged(TECChangedEventArgs args)
         {

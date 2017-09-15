@@ -451,14 +451,7 @@ namespace EstimatingLibrary
             int totalPoints = 0;
             foreach (TECSystem sys in Systems)
             {
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    foreach (TECSubScope sub in equip.SubScope)
-                    {
-                        foreach (TECPoint point in sub.Points)
-                        { totalPoints += point.Quantity; }
-                    }
-                }
+                totalPoints += sys.PointNumber;
             }
             return totalPoints;
         }
