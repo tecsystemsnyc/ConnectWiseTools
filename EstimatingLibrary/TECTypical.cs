@@ -243,12 +243,7 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.AddRange(this.Equipment, "Equipment");
-            saveList.AddRange(this.Panels, "Panels");
-            saveList.AddRange(this.Controllers, "Controllers");
             saveList.AddRange(this.Instances, "Instances");
-            saveList.AddRange(this.MiscCosts, "MiscCosts");
-            saveList.AddRange(this.ScopeBranches, "ScopeBranches");
             saveList.Add("TypicalInstances");
             return saveList;
         }

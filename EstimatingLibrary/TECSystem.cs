@@ -233,6 +233,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Panels, "Panels");
             saveList.AddRange(this.Controllers, "Controllers");
             saveList.AddRange(this.MiscCosts, "MiscCosts");
+            saveList.AddRange(this.ScopeBranches, "ScopeBranches");
             return saveList;
         }
 

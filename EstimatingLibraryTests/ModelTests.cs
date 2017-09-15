@@ -91,7 +91,7 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECTypical typical = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            TECTypical typical = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(typical);
             
             //Assert.AreEqual(quantity, bid.Systems.Count);
@@ -124,7 +124,7 @@ namespace Tests
             TECBid bid = new TECBid();
             int qty = 3;
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            TECTypical system = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(system);
 
             for (int x = 0; x < qty; x++)
@@ -148,7 +148,7 @@ namespace Tests
             TECBid bid = new TECBid();
             int qty = 3;
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            TECTypical system = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(system);
             for (int x = 0; x < qty; x++)
             {

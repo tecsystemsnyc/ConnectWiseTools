@@ -340,7 +340,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECTypical expectedSystem = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            TECTypical expectedSystem = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(expectedSystem);
             expectedSystem.AddInstance(bid);
 
@@ -370,8 +370,9 @@ namespace Tests
             Assert.AreEqual(expectedSystem.Panels.Count, actualSystem.Panels.Count);
             Assert.AreEqual(expectedSystem.ScopeBranches.Count, actualSystem.ScopeBranches.Count);
             Assert.AreEqual(expectedSystem.AssociatedCosts.Count, actualSystem.AssociatedCosts.Count);
-            Assert.AreEqual(expectedSystem.TypicalInstanceDictionary.GetFullDictionary().Count, actualSystem.TypicalInstanceDictionary.GetFullDictionary().Count);
             Assert.AreEqual(expectedSystem.MiscCosts.Count, actualSystem.MiscCosts.Count);
+            Assert.AreEqual(expectedSystem.TypicalInstanceDictionary.GetFullDictionary().Count, actualSystem.TypicalInstanceDictionary.GetFullDictionary().Count);
+
         }
 
         [TestMethod]
@@ -773,7 +774,7 @@ namespace Tests
         {
             TECBid saveBid = new TECBid();
             saveBid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECTypical system = new TECTypical(TestHelper.CreateTestSystem(saveBid.Catalogs));
+            TECTypical system = TestHelper.CreateTestTypical(saveBid.Catalogs);
             saveBid.Systems.Add(system);
 
             //Act

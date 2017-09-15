@@ -108,15 +108,15 @@ namespace Tests
             bid.Panels.Add(panel);
             
             //Systems
-            var system1 = new TECTypical(CreateTestSystem(bid.Catalogs));
+            var system1 = CreateTestTypical(bid.Catalogs);
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
             
-            var system2 = new TECTypical(CreateTestSystem(bid.Catalogs));
+            var system2 = CreateTestTypical(bid.Catalogs);
             system2.Name = "System 2";
             system2.Description = "Description 2";
 
-            var system3 = new TECTypical(CreateTestSystem(bid.Catalogs));
+            var system3 = CreateTestTypical(bid.Catalogs);
             system3.Name = "System 3";
             system3.Description = "";
 
@@ -594,9 +594,9 @@ namespace Tests
             return outCatalogs;
         }
 
-        public static TECSystem CreateTestSystem(TECCatalogs catalogs)
+        public static TECTypical CreateTestTypical(TECCatalogs catalogs)
         {
-            TECSystem outScope = new TECSystem();
+            TECTypical outScope = new TECTypical();
             outScope.Tags.Add(catalogs.Tags.RandomObject());
             outScope.ProposeEquipment = true;
             var panel = CreateTestPanel(catalogs);

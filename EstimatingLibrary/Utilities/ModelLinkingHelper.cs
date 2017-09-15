@@ -723,6 +723,14 @@ namespace EstimatingLibrary.Utilities
                 {
                     linkCharacteristicWithInstances(panel, instance.Panels, guidDictionary, typical.TypicalInstanceDictionary);
                 }
+                foreach(TECMisc misc in typical.MiscCosts)
+                {
+                    linkCharacteristicWithInstances(misc, instance.MiscCosts, guidDictionary, typical.TypicalInstanceDictionary);
+                }
+                foreach(TECScopeBranch branch in typical.ScopeBranches)
+                {
+                    linkCharacteristicWithInstances(branch, instance.ScopeBranches, guidDictionary, typical.TypicalInstanceDictionary);
+                }
             }
         }
         /// <summary>

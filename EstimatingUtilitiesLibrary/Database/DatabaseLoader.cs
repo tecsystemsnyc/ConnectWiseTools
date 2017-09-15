@@ -233,7 +233,6 @@ namespace EstimatingUtilitiesLibrary.Database
             command += "(select " + SystemPanelTable.PanelID.Name + " from " + SystemPanelTable.TableName + " where ";
             command += SystemPanelTable.SystemID.Name + " = '" + guid;
             command += "')";
-            DatabaseHelper.Explain(command, SQLiteDB);
             DataTable dt = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
             { panels.Add(getPanelFromRow(row)); }
@@ -306,7 +305,6 @@ namespace EstimatingUtilitiesLibrary.Database
             command += "(select " + SystemScopeBranchTable.BranchID.Name + " from " + SystemScopeBranchTable.TableName + " where ";
             command += SystemScopeBranchTable.SystemID.Name + " = '" + guid;
             command += "')";
-            DatabaseHelper.Explain(command, SQLiteDB);
             DataTable branchDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in branchDT.Rows)
             { branches.Add(getScopeBranchFromRow(row)); }
@@ -862,14 +860,13 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECController> getControllersInPanel(Guid guid)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ID.Name + " in ";
-            command += "(select " + PanelControllerTable.ControllerID.Name + " from " + PanelControllerTable.TableName + " where ";
-            command += PanelControllerTable.PanelID.Name + " = '" + guid;
-            command += "')";
+            string command = String.Format("select {0} from {1} where {2} = '{3}'",
+                PanelControllerTable.ControllerID.Name, PanelControllerTable.TableName,
+                PanelControllerTable.PanelID.Name, guid);
 
             DataTable controllerDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
-            { controllers.Add(getControllerFromRow(row)); }
+            { controllers.Add(getPlaceholderPanelControllerFromRow(row)); }
 
             return controllers;
         }
@@ -1266,6 +1263,13 @@ namespace EstimatingUtilitiesLibrary.Database
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
+            return controller;
+        }
+
+        private static TECController getPlaceholderPanelControllerFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[PanelControllerTable.ControllerID.Name].ToString());
+            TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()));
             return controller;
         }
         private static TECLabeled getPlaceholderTagFromRow(DataRow row)

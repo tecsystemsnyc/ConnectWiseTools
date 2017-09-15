@@ -373,7 +373,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            var system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            var system = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(system);
 
             Assert.AreEqual(0, estimate.TECMaterialCost, "Material cost not added");
@@ -389,7 +389,7 @@ namespace Tests
         {
             var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            var system = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            var system = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(system);
 
             system.AddInstance(bid);
@@ -1737,7 +1737,7 @@ namespace Tests
             TECController controller = new TECController(type);
             bid.Controllers.Add(controller);
 
-            TECTypical typical = new TECTypical(TestHelper.CreateTestSystem(bid.Catalogs));
+            TECTypical typical = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
