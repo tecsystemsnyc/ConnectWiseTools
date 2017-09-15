@@ -209,7 +209,7 @@ namespace EstimatingLibrary
                 netConnect.ChildrenControllers.Add(controller);
                 netConnect.IOType = ioType;
                 netConnect.ConnectionType = connectionType;
-                addChildConnection(netConnect, false);
+                addChildConnection(netConnect);
                 controller.ParentConnection = netConnect;
                 return netConnect;
             }
@@ -220,10 +220,10 @@ namespace EstimatingLibrary
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope, bool isTypical)
         {
-            TECSubScopeConnection connection = new TECSubScopeConnection();
+            TECSubScopeConnection connection = new TECSubScopeConnection(isTypical);
             connection.ParentController = this;
             connection.SubScope = subScope;
-            addChildConnection(connection, isTypical);
+            addChildConnection(connection);
             subScope.Connection = connection;
             return connection;
         }
@@ -251,14 +251,14 @@ namespace EstimatingLibrary
             }
             if (connectionToRemove != null)
             {
-                removeChildConnection(connectionToRemove, false);
+                removeChildConnection(connectionToRemove);
             }
             if (!exists)
             {
                 throw new ArgumentOutOfRangeException("Passed controller does not exist in any connection in controller.");
             }
         }
-        public void RemoveSubScope(TECSubScope subScope, bool isTypical)
+        public void RemoveSubScope(TECSubScope subScope)
         {
             TECSubScopeConnection connectionToRemove = null;
             foreach (TECConnection connection in ChildrenConnections)
@@ -274,7 +274,7 @@ namespace EstimatingLibrary
             }
             if (connectionToRemove != null)
             {
-                removeChildConnection(connectionToRemove, isTypical);
+                removeChildConnection(connectionToRemove);
                 subScope.Connection = null;
                 connectionToRemove.SubScope = null;
                 connectionToRemove.ParentController = null;
@@ -401,7 +401,8 @@ namespace EstimatingLibrary
         {
             CostBatch costs = base.getCosts();
             costs += Type.CostBatch;
-            foreach (TECConnection connection in ChildrenConnections)
+            foreach (TECConnection connection in 
+                ChildrenConnections.Where(connection => connection is TECSubScopeConnection ssconn && !ssconn.IsTypical))
             {
                 costs += connection.CostBatch;
             }
@@ -423,18 +424,20 @@ namespace EstimatingLibrary
             return saveList;
         }
 
-        private void addChildConnection(TECConnection connection, bool isTypical)
+        private void addChildConnection(TECConnection connection)
         {
             ChildrenConnections.Add(connection);
-            if (!isTypical)
+            if ((connection is TECSubScopeConnection ssConnect && ssConnect.IsTypical )
+                || connection is TECNetworkConnection)
             {
                 NotifyCostChanged(connection.CostBatch);
             }
         }
-        private void removeChildConnection(TECConnection connection, bool isTypical)
+        private void removeChildConnection(TECConnection connection)
         {
             ChildrenConnections.Remove(connection);
-            if (!isTypical)
+            if ((connection is TECSubScopeConnection ssConnect && ssConnect.IsTypical)
+                || connection is TECNetworkConnection)
             {
                 NotifyCostChanged(connection.CostBatch * -1);
             }

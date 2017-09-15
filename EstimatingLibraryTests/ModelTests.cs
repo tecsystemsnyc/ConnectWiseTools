@@ -79,7 +79,7 @@ namespace Tests
             TECSubScope subScope = new TECSubScope();
 
             controller.AddSubScope(subScope, false);
-            controller.RemoveSubScope(subScope, false);
+            controller.RemoveSubScope(subScope);
 
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
             Assert.AreEqual(null, subScope.Connection, "Connection not removed from subscope");

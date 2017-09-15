@@ -415,7 +415,7 @@ namespace EstimatingLibrary
             {
                 costs += misc.CostBatch;
             }
-            foreach(TECSystem system in this.Systems)
+            foreach(TECTypical system in this.Systems)
             {
                 costs += system.CostBatch;
             }
@@ -496,7 +496,7 @@ namespace EstimatingLibrary
                 }
                 foreach (TECSubScope sub in subScopeToRemove)
                 {
-                    controller.RemoveSubScope(sub, false);
+                    controller.RemoveSubScope(sub);
                 }
             }
         }

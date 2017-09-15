@@ -1576,7 +1576,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(instanceSubScope, false);
+            controller.RemoveSubScope(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false);
@@ -1602,7 +1602,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(subScope, true);
+            controller.RemoveSubScope(subScope);
 
             //Assert
             checkRaised(false, false, false);
@@ -1627,7 +1627,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(subScope, true);
+            controller.RemoveSubScope(subScope);
 
             //Assert
             checkRaised(false, false, false);
@@ -1654,7 +1654,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            instanceController.RemoveSubScope(instanceSubScope, false);
+            instanceController.RemoveSubScope(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false);

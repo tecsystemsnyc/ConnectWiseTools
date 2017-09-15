@@ -384,7 +384,7 @@ namespace EstimatingLibrary
             {
                 if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
                 {
-                    subScope.Connection.ParentController.RemoveSubScope(subScope, false);
+                    subScope.Connection.ParentController.RemoveSubScope(subScope);
                 }
             }
             removeFromDictionary(Panels, instance.Panels);
@@ -427,7 +427,7 @@ namespace EstimatingLibrary
                         {
                             break;
                         }
-                        instance.Connection.ParentController.RemoveSubScope(instance, false);
+                        instance.Connection.ParentController.RemoveSubScope(instance);
                     }
                 }
                 else if (subScope.Connection.ParentController.IsGlobal)
@@ -819,7 +819,7 @@ namespace EstimatingLibrary
                         {
                             if (characteristicController.IsGlobal)
                             {
-                                characteristicController.RemoveSubScope(subScopeToRemove, false);
+                                characteristicController.RemoveSubScope(subScopeToRemove);
                             }
                             else
                             {
@@ -827,7 +827,7 @@ namespace EstimatingLibrary
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
-                                        controller.RemoveSubScope(subScopeToRemove, false);
+                                        controller.RemoveSubScope(subScopeToRemove);
                                     }
                                 }
                             }
@@ -923,7 +923,7 @@ namespace EstimatingLibrary
                 }
                 foreach (TECSubScope sub in subScopeToRemove)
                 {
-                    controller.RemoveSubScope(sub, true);
+                    controller.RemoveSubScope(sub);
                 }
             }
         }

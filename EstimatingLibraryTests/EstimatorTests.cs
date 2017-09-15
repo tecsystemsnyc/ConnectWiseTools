@@ -785,7 +785,7 @@ namespace Tests
                 }
             }
 
-            controller.RemoveSubScope(subScope, true);
+            controller.RemoveSubScope(subScope);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -894,7 +894,7 @@ namespace Tests
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
             
-            controller.RemoveSubScope(subScope, true);
+            controller.RemoveSubScope(subScope);
 
             //Assert
             assertNoCostOrLabor(estimate);

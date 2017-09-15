@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, INotifyCostChanged, IDragDropable
+    public class TECMisc : TECCost, IDragDropable
     {
         #region Fields
         private int _quantity;
@@ -78,14 +78,7 @@ namespace EstimatingLibrary
                 NotifyMiscChanged(this, oldMisc);
             }
         }
-
-        public override CostBatch CostBatch
-        {
-            get
-            {
-                return new CostBatch(this * Quantity);
-            }
-        }
+        
         #endregion
 
         #region Methods
@@ -98,6 +91,11 @@ namespace EstimatingLibrary
         {
             CostBatch delta = newMisc.CostBatch - oldMisc.CostBatch;
             NotifyCostChanged(delta);
+        }
+
+        protected override CostBatch getCosts()
+        {
+            return base.getCosts() * Quantity;
         }
         #endregion
     }
