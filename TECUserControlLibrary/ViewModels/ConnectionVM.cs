@@ -97,14 +97,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public bool ControllerSelectionReadOnly { get; private set; }
+        public bool IsTypical { get; private set; }
         
         /// <summary>
         /// Initializes a new instance of the ConnectionVM class.
         /// </summary>
         public ConnectionVM(TECScopeManager scopeManager, bool isTypical = true)
         {
-            ControllerSelectionReadOnly = !isTypical;
+            IsTypical = isTypical;
             _scopeManager = scopeManager;
             _selectedSystem = null;
             setupCatalogCollections();
@@ -140,7 +140,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (!currentSubScope.Contains(connection.SubScope) && connection.Controller != null)
                     {
-                        connection.Controller.RemoveSubScope(connection.SubScope);
+                        connection.Controller.RemoveSubScope(connection.SubScope, IsTypical);
                     }
                 }
             }
@@ -190,7 +190,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
-                        var subConnectionToAdd = new SubScopeConnection(subScope);
+                        var subConnectionToAdd = new SubScopeConnection(subScope, IsTypical);
 
                         subConnectionToAdd.ParentEquipment = equipment;
 
