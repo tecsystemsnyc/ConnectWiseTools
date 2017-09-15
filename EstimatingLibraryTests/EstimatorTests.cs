@@ -521,7 +521,9 @@ namespace Tests
         [TestMethod]
         public void Estimate_AddInstanceSystemWithSubScopeConnection()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
@@ -1764,6 +1766,7 @@ namespace Tests
             var subScope = new TECSubScope();
             var point = new TECPoint();
             point.Type = PointTypes.AI;
+            point.Quantity = 1;
 
             subScope.Points.Add(point);
             equipment.SubScope.Add(subScope);
