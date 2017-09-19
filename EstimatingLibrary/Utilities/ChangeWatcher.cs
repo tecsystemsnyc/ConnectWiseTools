@@ -61,15 +61,18 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerChange(TECChangedEventArgs args)
         {
-            if(args.Change == Change.Add && args.Value is TECObject tObj)
+            if(args.PropertyName != "TypicalInstanceDictionary")
             {
-                register(tObj);
-            }
-            else if (args.Change == Change.Edit && args.Sender is ISaveable saveable)
-            {
-                if (!saveable.RelatedObjects.Contains(args.PropertyName) && args.Value is TECObject tValue)
+                if (args.Change == Change.Add && args.Value is TECObject tObj)
                 {
-                    register(tValue);
+                    register(tObj);
+                }
+                else if (args.Change == Change.Edit && args.Sender is ISaveable saveable)
+                {
+                    if (!saveable.RelatedObjects.Contains(args.PropertyName) && args.Value is TECObject tValue)
+                    {
+                        register(tValue);
+                    }
                 }
             }
         }
