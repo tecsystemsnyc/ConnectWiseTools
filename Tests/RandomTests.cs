@@ -77,7 +77,7 @@ namespace Tests
             var watcher = new ChangeWatcher(bid);
 
             DeltaStacker stack = new DeltaStacker(watcher);
-            bid.RandomEquipment().SubScope.Add(new TECSubScope());
+            bid.Systems[0].Equipment[0].SubScope.Add(new TECSubScope(true));
             manager.Save(stack.CleansedStack());
 
             bid = manager.Load() as TECBid;
