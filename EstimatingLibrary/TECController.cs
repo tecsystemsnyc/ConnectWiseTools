@@ -98,7 +98,7 @@ namespace EstimatingLibrary
         }
 
         public TECController(TECControllerType type, bool isTypical, bool isGlobal = true) : this(Guid.NewGuid(), type, isTypical, isGlobal) { }
-        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Type, controllerSource.IsTypical)
+        public TECController(TECController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Type, isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
@@ -107,14 +107,14 @@ namespace EstimatingLibrary
             {
                 if (connection is TECSubScopeConnection)
                 {
-                    TECSubScopeConnection connectionToAdd = new TECSubScopeConnection(connection as TECSubScopeConnection, guidDictionary);
+                    TECSubScopeConnection connectionToAdd = new TECSubScopeConnection(connection as TECSubScopeConnection, isTypical, guidDictionary);
                     connectionToAdd.ParentController = this;
                     _childrenConnections.Add(connectionToAdd);
                 }
                 else if (connection is TECNetworkConnection)
                 {
 
-                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, guidDictionary);
+                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, isTypical, guidDictionary);
                     connectionToAdd.ParentController = this;
                     _childrenConnections.Add(connectionToAdd);
                 }
@@ -370,7 +370,7 @@ namespace EstimatingLibrary
         #region Methods
         public Object DragDropCopy(TECScopeManager scopeManager)
         {
-            var outController = new TECController(this);
+            var outController = new TECController(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }

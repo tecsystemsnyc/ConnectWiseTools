@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECScopeBranch : TECLabeled, ISaveable
+    public class TECScopeBranch : TECLabeled, ISaveable, ITypicalable
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
         private ObservableCollection<TECScopeBranch> _branches;
@@ -34,23 +34,25 @@ namespace EstimatingLibrary
             get { return new SaveableMap(); }
         }
 
+        public bool IsTypical { get; private set; }
         #endregion //Properites
 
         #region Constructors
-        public TECScopeBranch(Guid guid) : base(guid)
+        public TECScopeBranch(Guid guid, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
             _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
 
-        public TECScopeBranch() : this(Guid.NewGuid()) { }
+        public TECScopeBranch(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
-        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this()
+        public TECScopeBranch(TECScopeBranch scopeBranchSource, bool isTypical) : this(isTypical)
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
-                Branches.Add(new TECScopeBranch(branch));
+                Branches.Add(new TECScopeBranch(branch, isTypical));
             }
             _label = scopeBranchSource.Label;
         }

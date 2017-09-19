@@ -51,19 +51,19 @@ namespace EstimatingLibrary
             Controllers.CollectionChanged += controllersCollectionChanged;
         }
         public TECPanel(TECPanelType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
-        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type, panel.IsTypical)
+        public TECPanel(TECPanel panel, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type, isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }
             copyPropertiesFromScope(panel);
             foreach (TECController controller in panel.Controllers)
             {
-                _controllers.Add(new TECController(controller, guidDictionary));
+                _controllers.Add(new TECController(controller, isTypical, guidDictionary));
             }
         }
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            var outPanel = new TECPanel(this);
+            var outPanel = new TECPanel(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }

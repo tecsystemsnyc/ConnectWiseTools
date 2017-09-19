@@ -92,8 +92,8 @@ namespace EstimatingLibrary
         public TECSubScope(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this(sourceSubScope.IsTypical)
+        public TECSubScope(TECSubScope sourceSubScope, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
@@ -101,7 +101,7 @@ namespace EstimatingLibrary
             { _devices.Add(device); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
-                var toAdd = new TECPoint(point);
+                var toAdd = new TECPoint(point, isTypical);
                 characteristicReference?.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
@@ -194,7 +194,7 @@ namespace EstimatingLibrary
         #region Methods
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECSubScope outScope = new TECSubScope(this);
+            TECSubScope outScope = new TECSubScope(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }

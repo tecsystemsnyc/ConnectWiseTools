@@ -39,11 +39,11 @@ namespace Tests
 
             
             //Scope Branches
-            var branch1 = new TECScopeBranch();
+            var branch1 = new TECScopeBranch(false);
             branch1.Label = "Branch 1";
-            var branch2 = new TECScopeBranch();
+            var branch2 = new TECScopeBranch(false);
             branch2.Label = "Branch 2";
-            var branch3 = new TECScopeBranch();
+            var branch3 = new TECScopeBranch(false);
             branch3.Label = "Branch 3";
 
             bid.ScopeTree.Add(branch1);
@@ -577,7 +577,7 @@ namespace Tests
             ConnectEquipmentToController(equipment, controller);
             panel.Controllers.Add(controller);
 
-            var scopeBranch = new TECScopeBranch();
+            var scopeBranch = new TECScopeBranch(true);
             outScope.ScopeBranches.Add(scopeBranch);
 
             var tecMisc = CreateTestMisc(CostType.TEC, true);

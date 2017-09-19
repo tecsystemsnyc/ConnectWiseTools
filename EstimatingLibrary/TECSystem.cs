@@ -44,14 +44,14 @@ namespace EstimatingLibrary
 
         public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
-        public TECSystem(TECSystem source, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this(source.IsTypical)
+        public TECSystem(TECSystem source, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = source.Guid; }
             foreach (TECEquipment equipment in source.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, guidDictionary, characteristicReference);
+                var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(equipment, toAdd);
@@ -60,7 +60,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source._controllers)
             {
-                var toAdd = new TECController(controller, guidDictionary);
+                var toAdd = new TECController(controller, isTypical, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);
@@ -69,7 +69,7 @@ namespace EstimatingLibrary
             }
             foreach (TECPanel panel in source._panels)
             {
-                var toAdd = new TECPanel(panel, guidDictionary);
+                var toAdd = new TECPanel(panel, isTypical, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(panel, toAdd);
@@ -78,12 +78,12 @@ namespace EstimatingLibrary
             }
             foreach (TECMisc misc in source.MiscCosts)
             {
-                var toAdd = new TECMisc(misc);
+                var toAdd = new TECMisc(misc, isTypical);
                 _miscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in source._scopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch);
+                var toAdd = new TECScopeBranch(branch, IsTypical);
                 _scopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
@@ -183,7 +183,7 @@ namespace EstimatingLibrary
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            TECSystem outSystem = new TECSystem(this, guidDictionary);
+            TECSystem outSystem = new TECSystem(this, this.IsTypical, guidDictionary);
             ModelLinkingHelper.LinkSystem(outSystem, scopeManager, guidDictionary);
             return outSystem;
         }

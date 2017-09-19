@@ -55,14 +55,14 @@ namespace EstimatingLibrary
         public TECEquipment(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this(equipmentSource.IsTypical)
+        public TECEquipment(TECEquipment equipmentSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
-                var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
+                var toAdd = new TECSubScope(subScope, isTypical, guidDictionary, characteristicReference);
                 characteristicReference?.AddItem(subScope,toAdd);
                 SubScope.Add(toAdd);
             }
@@ -75,7 +75,7 @@ namespace EstimatingLibrary
 
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECEquipment outEquip = new TECEquipment(this);
+            TECEquipment outEquip = new TECEquipment(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
             return outEquip;
         }

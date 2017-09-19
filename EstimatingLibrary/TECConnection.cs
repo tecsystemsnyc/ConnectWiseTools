@@ -89,11 +89,12 @@ namespace EstimatingLibrary
         #region Constructors 
         public TECConnection(Guid guid, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
             _length = 0;
             _conduitLength = 0;
         }
         public TECConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
-        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this(connectionSource.IsTypical)
+        public TECConnection(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }

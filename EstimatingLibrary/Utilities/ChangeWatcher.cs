@@ -65,13 +65,28 @@ namespace EstimatingLibrary.Utilities
         {
             registerChange(obj);
             Changed?.Invoke(obj);
-            bool senderTypical = obj.Sender is ITypicalable sTyp && sTyp.IsTypical;
-            bool valueTypical = obj.Value is ITypicalable vTyp && vTyp.IsTypical;
-            if(!senderTypical && !valueTypical)
+
+            if (obj.Value is ITypicalable valueTyp)
             {
-                InstanceChanged?.Invoke(obj);
+                if (!valueTyp.IsTypical)
+                {
+                    InstanceChanged?.Invoke(obj);
+                }
             }
-            
+            else
+            {
+                if (obj.Sender is ITypicalable senderTyp)
+                {
+                    if (!senderTyp.IsTypical)
+                    {
+                        InstanceChanged?.Invoke(obj);
+                    }
+                }
+                else
+                {
+                    InstanceChanged?.Invoke(obj);
+                }
+            }
         }
         private void handleCostChanged(TECObject sender, CostBatch obj)
         {

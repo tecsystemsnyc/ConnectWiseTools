@@ -281,9 +281,9 @@ namespace EstimatingLibrary
         {
             foreach (string item in Defaults.Scope)
             {
-                var branchToAdd = new TECScopeBranch();
+                var branchToAdd = new TECScopeBranch(false);
                 branchToAdd.Label = item;
-                ScopeTree.Add(new TECScopeBranch(branchToAdd));
+                ScopeTree.Add(new TECScopeBranch(branchToAdd, false));
             }
             foreach (string item in Defaults.Exclusions)
             {

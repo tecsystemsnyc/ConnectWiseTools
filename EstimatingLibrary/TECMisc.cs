@@ -21,7 +21,7 @@ namespace EstimatingLibrary
             _quantity = 1;
         }
         public TECMisc(CostType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
-        public TECMisc(TECMisc miscSource) : this(miscSource.Type, miscSource.IsTypical)
+        public TECMisc(TECMisc miscSource, bool isTypical) : this(miscSource.Type, isTypical)
         {
             copyPropertiesFromCost(miscSource);
         }
@@ -36,7 +36,7 @@ namespace EstimatingLibrary
             }
             set
             {
-                var old = new TECMisc(this);
+                var old = new TECMisc(this, this.IsTypical);
                 base.Cost = value;
                 NotifyMiscChanged(this, old);
             }
@@ -49,7 +49,7 @@ namespace EstimatingLibrary
             }
             set
             {
-                var old = new TECMisc(this);
+                var old = new TECMisc(this, this.IsTypical);
                 base.Labor = value;
                 NotifyMiscChanged(this, old);
             }
@@ -62,7 +62,7 @@ namespace EstimatingLibrary
             }
             set
             {
-                var old = new TECMisc(this);
+                var old = new TECMisc(this, this.IsTypical);
                 base.Type = value;
                 NotifyMiscChanged(this, old);
             }
@@ -86,7 +86,7 @@ namespace EstimatingLibrary
         #region Methods
         public override object DragDropCopy(TECScopeManager scopeManager)
         {
-            return new TECMisc(this);
+            return new TECMisc(this, this.IsTypical);
         }
 
         private void NotifyMiscChanged(TECMisc newMisc, TECMisc oldMisc)

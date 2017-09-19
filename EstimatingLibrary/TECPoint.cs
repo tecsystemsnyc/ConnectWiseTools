@@ -75,7 +75,7 @@ namespace EstimatingLibrary
         public TECPoint(Guid guid, bool isTypical) : base(guid) { IsTypical = isTypical; }
         public TECPoint(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
-        public TECPoint(TECPoint pointSource) : this(pointSource.IsTypical)
+        public TECPoint(TECPoint pointSource, bool isTypical) : this(isTypical)
         {
             _type = pointSource.Type;
             _label = pointSource.Label;
