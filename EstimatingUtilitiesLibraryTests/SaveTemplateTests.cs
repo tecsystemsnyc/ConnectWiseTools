@@ -291,7 +291,7 @@ namespace Tests
         public void Save_Templates_Add_System()
         {
             //Act
-            TECSystem expectedSystem = new TECSystem();
+            TECSystem expectedSystem = new TECSystem(false);
             expectedSystem.Name = "New system";
             expectedSystem.Description = "New system desc";
 
@@ -397,7 +397,7 @@ namespace Tests
         public void Save_Templates_Add_Equipment()
         {
             //Act
-            TECEquipment expectedEquipment = new TECEquipment();
+            TECEquipment expectedEquipment = new TECEquipment(false);
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Equipment desc";
 
@@ -451,7 +451,7 @@ namespace Tests
         public void Save_Templates_Add_Equipment_InSystem()
         {
             //Act
-            TECEquipment expectedEquipment = new TECEquipment();
+            TECEquipment expectedEquipment = new TECEquipment(false);
             expectedEquipment.Name = "New System Equipment";
             expectedEquipment.Description = "System equipment description";
 
@@ -592,7 +592,7 @@ namespace Tests
         public void Save_Templates_Add_SubScope()
         {
             //Act
-            TECSubScope expectedSubScope = new TECSubScope();
+            TECSubScope expectedSubScope = new TECSubScope(false);
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New SubScope desc";
 
@@ -932,7 +932,7 @@ namespace Tests
         public void Save_Templates_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid(), templates.Catalogs.ControllerTypes[0]);
+            TECController expectedController = new TECController(Guid.NewGuid(), templates.Catalogs.ControllerTypes[0], false);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
 
@@ -962,7 +962,7 @@ namespace Tests
         {
             //Act
             int oldNumControllers = templates.ControllerTemplates.Count;
-            TECController controllerToRemove = templates.ControllerTemplates.RandomObject();
+            TECController controllerToRemove = templates.ControllerTemplates[0];
 
             templates.ControllerTemplates.Remove(controllerToRemove);
 
@@ -1331,7 +1331,7 @@ namespace Tests
 
             templates.Catalogs.ConnectionTypes.Add(expectedConnectionType);
 
-            TECCost expectedCost = templates.Catalogs.AssociatedCosts.RandomObject();
+            TECCost expectedCost = templates.Catalogs.AssociatedCosts[0];
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
             int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
@@ -1378,7 +1378,7 @@ namespace Tests
         {
             //Act
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
-            TECElectricalMaterial expectedConnectionType = templates.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial expectedConnectionType = templates.Catalogs.ConnectionTypes[0];
 
             TECCost expectedRated = null;
             foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
@@ -1495,7 +1495,7 @@ namespace Tests
         {
             //Act
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
-            TECElectricalMaterial expectedConduitType = templates.Catalogs.ConduitTypes.RandomObject();
+            TECElectricalMaterial expectedConduitType = templates.Catalogs.ConduitTypes[0];
             
             TECCost expectedRated = null;
             foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
@@ -1600,7 +1600,7 @@ namespace Tests
         public void Save_Templates_Add_MiscCost()
         {
             //Act
-            TECMisc expectedCost = new TECMisc(CostType.TEC);
+            TECMisc expectedCost = new TECMisc(CostType.TEC, false);
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -1702,7 +1702,7 @@ namespace Tests
         public void Save_Templates_Add_PanelType()
         {
             //Act
-            TECPanelType expectedCost = new TECPanelType(templates.Catalogs.Manufacturers.RandomObject());
+            TECPanelType expectedCost = new TECPanelType(templates.Catalogs.Manufacturers[0]);
             expectedCost.Name = "Add cost addition";
             expectedCost.Price = 978.3;
 
@@ -1801,7 +1801,7 @@ namespace Tests
         public void Save_Templates_Add_IOModule()
         {
             //Act
-            TECIOModule expectedModule = new TECIOModule(templates.Catalogs.Manufacturers.RandomObject());
+            TECIOModule expectedModule = new TECIOModule(templates.Catalogs.Manufacturers[0]);
             expectedModule.Name = "Add IO Module";
             expectedModule.Price = 978.3;
             expectedModule.Manufacturer = templates.Catalogs.Manufacturers[0];
@@ -1901,7 +1901,7 @@ namespace Tests
         public void Save_Templates_Add_Panel()
         {
             //Act
-            TECPanel expectedPanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
+            TECPanel expectedPanel = new TECPanel(templates.Catalogs.PanelTypes[0], false);
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
             templates.PanelTemplates.Add(expectedPanel);
@@ -1975,24 +1975,24 @@ namespace Tests
         public void Save_Templates_Add_ControlledScope()
         {
             //Act
-            TECSystem expectedScope = new TECSystem();
+            TECSystem expectedScope = new TECSystem(false);
             expectedScope.Name = "New controlled scope";
             expectedScope.Description = "New controlled scope desc";
             templates.SystemTemplates.Add(expectedScope);
 
-            var scopeEquipment = new TECEquipment();
+            var scopeEquipment = new TECEquipment(false);
             scopeEquipment.Name = "Test Scope System";
             scopeEquipment.Description = "Test scope system description";
-            scopeEquipment.SubScope.Add(new TECSubScope());
+            scopeEquipment.SubScope.Add(new TECSubScope(false));
 
             expectedScope.Equipment.Add(scopeEquipment);
 
-            var scopeController = new TECController(templates.Catalogs.ControllerTypes[0]);
+            var scopeController = new TECController(templates.Catalogs.ControllerTypes[0], false);
             scopeController.Name = "Test Scope Controller";
             expectedScope.Controllers.Add(scopeController);
             scopeController.AddSubScope(scopeEquipment.SubScope[0], false);
 
-            var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
+            var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0], false);
             scopePanel.Name = "Test Scope Name";
             expectedScope.Panels.Add(scopePanel);
 
