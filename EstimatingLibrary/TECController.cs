@@ -434,8 +434,7 @@ namespace EstimatingLibrary
         private void addChildConnection(TECConnection connection)
         {
             ChildrenConnections.Add(connection);
-            if ((connection is TECSubScopeConnection ssConnect && ssConnect.IsTypical )
-                || connection is TECNetworkConnection)
+            if (!connection.IsTypical && !this.IsTypical)
             {
                 notifyCostChanged(connection.CostBatch);
             }
@@ -443,8 +442,7 @@ namespace EstimatingLibrary
         private void removeChildConnection(TECConnection connection)
         {
             ChildrenConnections.Remove(connection);
-            if ((connection is TECSubScopeConnection ssConnect && ssConnect.IsTypical)
-                || connection is TECNetworkConnection)
+            if (!connection.IsTypical && !this.IsTypical)
             {
                 notifyCostChanged(connection.CostBatch * -1);
             }
