@@ -64,8 +64,8 @@ namespace Tests
         [TestMethod]
         public void ControllerInPanel_AddPanel()
         {
-            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()));
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()));
+            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), false);
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
 
             ControllerInPanel controllerInPanel = new ControllerInPanel(controller, null);
 
@@ -77,8 +77,8 @@ namespace Tests
         [TestMethod]
         public void ControllerInPanel_RemovePanel()
         {
-            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()));
-            TECController controller = new TECController(new TECControllerType( new TECManufacturer()));
+            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), false);
+            TECController controller = new TECController(new TECControllerType( new TECManufacturer()), false);
 
             ControllerInPanel controllerInPanel = new ControllerInPanel(controller, panel);
 
@@ -92,8 +92,8 @@ namespace Tests
         [TestMethod]
         public void SubScopeConnection_AddConnection()
         {
-            TECSubScope subScope = new TECSubScope();
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()));
+            TECSubScope subScope = new TECSubScope(false);
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
 
             SubScopeConnection subScopeConnection = new SubScopeConnection(subScope, true);
             subScopeConnection.Controller = controller;
@@ -105,8 +105,8 @@ namespace Tests
         [TestMethod]
         public void SubScopeConnection_RemoveConnection()
         {
-            TECSubScope subScope = new TECSubScope();
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()));
+            TECSubScope subScope = new TECSubScope(false);
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             controller.AddSubScope(subScope, true);
 
             SubScopeConnection subScopeConnection = new SubScopeConnection(subScope, true);

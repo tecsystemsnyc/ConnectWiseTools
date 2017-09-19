@@ -21,20 +21,20 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController server = new TECController(controllerType);
+            TECController server = new TECController(controllerType, false);
             bid.Controllers.Add(server);
 
-            TECController panel = new TECController(controllerType);
+            TECController panel = new TECController(controllerType, false);
             bid.Controllers.Add(panel);
 
-            TECController unitary = new TECController(controllerType);
+            TECController unitary = new TECController(controllerType, false);
             bid.Controllers.Add(unitary);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -76,20 +76,20 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController server = new TECController(controllerType);
+            TECController server = new TECController(controllerType, false);
             bid.Controllers.Add(server);
 
-            TECController panel = new TECController(controllerType);
+            TECController panel = new TECController(controllerType, false);
             bid.Controllers.Add(panel);
 
-            TECController unitary = new TECController(controllerType);
+            TECController unitary = new TECController(controllerType, false);
             bid.Controllers.Add(unitary);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -131,20 +131,20 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController server = new TECController(controllerType);
+            TECController server = new TECController(controllerType, false);
             bid.Controllers.Add(server);
 
-            TECController panel = new TECController(controllerType);
+            TECController panel = new TECController(controllerType, false);
             bid.Controllers.Add(panel);
 
-            TECController unitary = new TECController(controllerType);
+            TECController unitary = new TECController(controllerType, false);
             bid.Controllers.Add(unitary);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -186,20 +186,20 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController server = new TECController(controllerType);
+            TECController server = new TECController(controllerType, false);
             bid.Controllers.Add(server);
 
-            TECController panel = new TECController(controllerType);
+            TECController panel = new TECController(controllerType, false);
             bid.Controllers.Add(panel);
 
-            TECController unitary = new TECController(controllerType);
+            TECController unitary = new TECController(controllerType, false);
             bid.Controllers.Add(unitary);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -241,20 +241,20 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController server = new TECController(controllerType);
+            TECController server = new TECController(controllerType, false);
             bid.Controllers.Add(server);
 
-            TECController panel = new TECController(controllerType);
+            TECController panel = new TECController(controllerType, false);
             bid.Controllers.Add(panel);
 
-            TECController unitary = new TECController(controllerType);
+            TECController unitary = new TECController(controllerType, false);
             bid.Controllers.Add(unitary);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -296,20 +296,20 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController server = new TECController(controllerType);
+            TECController server = new TECController(controllerType, false);
             bid.Controllers.Add(server);
 
-            TECController panel = new TECController(controllerType);
+            TECController panel = new TECController(controllerType, false);
             bid.Controllers.Add(panel);
 
-            TECController unitary = new TECController(controllerType);
+            TECController unitary = new TECController(controllerType, false);
             bid.Controllers.Add(unitary);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -353,26 +353,26 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController server = new TECController(controllerType);
+            TECController server = new TECController(controllerType, false);
             server.NetworkType = EstimatingLibrary.NetworkType.Server;
             bid.Controllers.Add(server);
 
-            TECController ddc = new TECController(controllerType);
+            TECController ddc = new TECController(controllerType, false);
             ddc.NetworkType = EstimatingLibrary.NetworkType.DDC;
             bid.Controllers.Add(ddc);
 
-            TECController unitary = new TECController(controllerType);
+            TECController unitary = new TECController(controllerType, false);
             unitary.NetworkType = EstimatingLibrary.NetworkType.Unitary;
             bid.Controllers.Add(unitary);
 
-            TECController child = new TECController(controllerType);
+            TECController child = new TECController(controllerType, false);
             child.NetworkType = EstimatingLibrary.NetworkType.Unitary;
             bid.Controllers.Add(child);
 
@@ -400,29 +400,29 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType bacnetType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType bacnetType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO bacnetIP = new TECIO();
             bacnetIP.Type = IOType.BACnetIP;
             bacnetIP.Quantity = 100;
             bacnetType.IO.Add(bacnetIP);
             bid.Catalogs.ControllerTypes.Add(bacnetType);
 
-            TECControllerType lonType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType lonType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO lon = new TECIO();
             lon.Type = IOType.LonWorks;
             lon.Quantity = 100;
             lonType.IO.Add(lon);
             bid.Catalogs.ControllerTypes.Add(lonType);
 
-            TECController bacnetController = new TECController(bacnetType);
+            TECController bacnetController = new TECController(bacnetType, false);
             bacnetController.NetworkType = EstimatingLibrary.NetworkType.Server;
             bid.Controllers.Add(bacnetController);
 
-            TECController lonController = new TECController(lonType);
+            TECController lonController = new TECController(lonType, false);
             lonController.NetworkType = EstimatingLibrary.NetworkType.Server;
             bid.Controllers.Add(lonController);
 
-            TECController childController = new TECController(bacnetType);
+            TECController childController = new TECController(bacnetType, false);
             bid.Controllers.Add(childController);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -448,21 +448,21 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 1;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController parentController = new TECController(controllerType);
+            TECController parentController = new TECController(controllerType, false);
             parentController.NetworkType = EstimatingLibrary.NetworkType.Server;
             bid.Controllers.Add(parentController);
 
-            TECController adoptedChildController = new TECController(controllerType);
+            TECController adoptedChildController = new TECController(controllerType, false);
             bid.Controllers.Add(adoptedChildController);
 
-            TECController orphanChildController = new TECController(controllerType);
+            TECController orphanChildController = new TECController(controllerType, false);
             bid.Controllers.Add(orphanChildController);
 
             NetworkVM netVM = new NetworkVM(bid);
@@ -497,22 +497,22 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             TECIO io = new TECIO();
             io.Type = IOType.BACnetIP;
             io.Quantity = 100;
             controllerType.IO.Add(io);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
-            TECController grandparent = new TECController(controllerType);
+            TECController grandparent = new TECController(controllerType, false);
             grandparent.NetworkType = EstimatingLibrary.NetworkType.DDC;
             bid.Controllers.Add(grandparent);
 
-            TECController parent = new TECController(controllerType);
+            TECController parent = new TECController(controllerType, false);
             parent.NetworkType = EstimatingLibrary.NetworkType.DDC;
             bid.Controllers.Add(parent);
 
-            TECController child = new TECController(controllerType);
+            TECController child = new TECController(controllerType, false);
             child.NetworkType = EstimatingLibrary.NetworkType.DDC;
             bid.Controllers.Add(child);
 

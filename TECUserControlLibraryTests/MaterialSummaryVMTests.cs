@@ -28,7 +28,7 @@ namespace Tests
             TECCost cost = null;
             while(cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts.RandomObject();
+                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
                 if (randomCost.Type == CostType.TEC)
                 {
                     cost = randomCost;
@@ -65,7 +65,7 @@ namespace Tests
             TECCost cost = null;
             while (cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts.RandomObject();
+                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
                 if (randomCost.Type == CostType.Electrical)
                 {
                     cost = randomCost;
@@ -99,7 +99,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC);
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC, false);
 
             Total totalTEC = CalculateTotal(misc, CostType.TEC);
             Total totalElec = CalculateTotal(misc, CostType.Electrical);
@@ -124,7 +124,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical);
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical, false);
 
             Total totalTEC = CalculateTotal(misc, CostType.TEC);
             Total totalElec = CalculateTotal(misc, CostType.Electrical);
@@ -149,7 +149,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC);
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC, true);
 
             Total totalTEC = CalculateTotal(misc, CostType.TEC);
             Total totalElec = CalculateTotal(misc, CostType.Electrical);
@@ -178,7 +178,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical);
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical, true);
 
             Total totalTEC = CalculateTotal(misc, CostType.TEC);
             Total totalElec = CalculateTotal(misc, CostType.Electrical);
@@ -207,7 +207,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECPanel panel = TestHelper.CreateTestPanel(bid.Catalogs);
+            TECPanel panel = TestHelper.CreateTestPanel(false, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(panel, bid.Catalogs);
 
             Total totalTEC = CalculateTotal(panel, CostType.TEC);
@@ -233,7 +233,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECController controller = TestHelper.CreateTestController(bid.Catalogs);
+            TECController controller = TestHelper.CreateTestController(false, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(controller, bid.Catalogs);
 
             Total totalTEC = CalculateTotal(controller, CostType.TEC);
@@ -268,10 +268,10 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
+            TECEquipment typEquip = new TECEquipment(true);
             typical.Equipment.Add(typEquip);
 
-            TECSubScope typSS = new TECSubScope();
+            TECSubScope typSS = new TECSubScope(true);
             typEquip.SubScope.Add(typSS);
 
             typical.AddInstance(bid);
@@ -296,7 +296,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECSubScope subscope = TestHelper.CreateTestSubScope(bid.Catalogs);
+            TECSubScope subscope = TestHelper.CreateTestSubScope(true, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(subscope, bid.Catalogs);
 
             Total totalTEC = CalculateTotal(subscope, CostType.TEC);
@@ -305,7 +305,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
+            TECEquipment typEquip = new TECEquipment(true);
             typical.Equipment.Add(typEquip);
 
             typical.AddInstance(bid);
@@ -330,7 +330,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECEquipment equipment = TestHelper.CreateTestEquipment(bid.Catalogs);
+            TECEquipment equipment = TestHelper.CreateTestEquipment(true, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(equipment, bid.Catalogs);
 
             Total totalTEC = CalculateTotal(equipment, CostType.TEC);
@@ -389,23 +389,23 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.ControllerTypes.Add(controllerType);
-            TECController controller = new TECController(controllerType);
+            TECController controller = new TECController(controllerType, false);
             bid.Controllers.Add(controller);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
+            TECEquipment typEquip = new TECEquipment(true);
             typical.Equipment.Add(typEquip);
 
-            TECSubScope typSS = new TECSubScope();
+            TECSubScope typSS = new TECSubScope(true);
             typEquip.SubScope.Add(typSS);
 
             ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
-            connectionTypes.Add(bid.Catalogs.ConnectionTypes.RandomObject());
-            TECDevice dev = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers.RandomObject());
+            connectionTypes.Add(bid.Catalogs.ConnectionTypes[0]);
+            TECDevice dev = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(dev);
             typSS.Devices.Add(dev);
 
@@ -415,7 +415,7 @@ namespace Tests
             TECConnection connection = controller.AddSubScope(typSS, true);
             connection.Length = 50;
             connection.ConduitLength = 50;
-            connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             typical.AddInstance(bid);
 
@@ -441,7 +441,7 @@ namespace Tests
             TECCost cost = null;
             while (cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts.RandomObject();
+                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
                 if (randomCost.Type == CostType.TEC)
                 {
                     cost = randomCost;
@@ -484,7 +484,7 @@ namespace Tests
             TECCost cost = null;
             while (cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts.RandomObject();
+                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
                 if (randomCost.Type == CostType.Electrical)
                 {
                     cost = randomCost;
@@ -524,7 +524,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateTestBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC);
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.TEC, false);
             bid.MiscCosts.Add(misc);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
@@ -556,7 +556,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateTestBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical);
+            TECMisc misc = TestHelper.CreateTestMisc(CostType.Electrical, false);
             bid.MiscCosts.Add(misc);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
@@ -588,7 +588,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateTestBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECPanel panel = TestHelper.CreateTestPanel(bid.Catalogs);
+            TECPanel panel = TestHelper.CreateTestPanel(false, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(panel, bid.Catalogs);
             bid.Panels.Add(panel);
 
@@ -621,7 +621,7 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateTestBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECController controller = TestHelper.CreateTestController(bid.Catalogs);
+            TECController controller = TestHelper.CreateTestController(false, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(controller, bid.Catalogs);
             bid.Controllers.Add(controller);
 
@@ -658,13 +658,13 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
+            TECEquipment typEquip = new TECEquipment(true);
             typical.Equipment.Add(typEquip);
 
-            TECSubScope typSS = new TECSubScope();
+            TECSubScope typSS = new TECSubScope(true);
             typEquip.SubScope.Add(typSS);
 
-            TECDevice device = bid.Catalogs.Devices.RandomObject();
+            TECDevice device = bid.Catalogs.Devices[0];
             TestHelper.AssignSecondaryProperties(device, bid.Catalogs);
             typSS.Devices.Add(device);
 
@@ -703,10 +703,10 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
+            TECEquipment typEquip = new TECEquipment(true);
             typical.Equipment.Add(typEquip);
 
-            TECSubScope subScope = TestHelper.CreateTestSubScope(bid.Catalogs);
+            TECSubScope subScope = TestHelper.CreateTestSubScope(true, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(subScope, bid.Catalogs);
             typEquip.SubScope.Add(subScope);
 
@@ -745,7 +745,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECEquipment equip = TestHelper.CreateTestEquipment(bid.Catalogs);
+            TECEquipment equip = TestHelper.CreateTestEquipment(true, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(equip, bid.Catalogs);
             typical.Equipment.Add(equip);
 
@@ -816,22 +816,22 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECEquipment typEquip = new TECEquipment();
+            TECEquipment typEquip = new TECEquipment(true);
             typical.Equipment.Add(typEquip);
 
-            TECSubScope ss = new TECSubScope();
+            TECSubScope ss = new TECSubScope(true);
             typEquip.SubScope.Add(ss);
 
             TECConnection connection = controller.AddSubScope(ss, true);
             connection.Length = 50;
             connection.ConduitLength = 50;
-            connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             typical.AddInstance(bid);
 
@@ -867,18 +867,18 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
 
             TECTypical typical = new TECTypical();
 
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             typical.Equipment.Add(equip);
 
-            TECSubScope ss = new TECSubScope();
+            TECSubScope ss = new TECSubScope(true);
             equip.SubScope.Add(ss);
 
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
 
             bid.Systems.Add(typical);
@@ -889,7 +889,7 @@ namespace Tests
             TECConnection connection = controller.AddSubScope(ss, true);
             connection.Length = 100;
             connection.ConduitLength = 100;
-            connection.ConduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             Assert.AreEqual(0, matVM.TotalTECCost, "Typical connection added to tec cost.");
             Assert.AreEqual(0, matVM.TotalTECLabor, "Typical connection added to tec labor.");
