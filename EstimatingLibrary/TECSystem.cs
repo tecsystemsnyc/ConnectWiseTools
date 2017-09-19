@@ -258,6 +258,16 @@ namespace EstimatingLibrary
             }
         }
 
+        protected void invokeCostChanged(CostBatch costs)
+        {
+            base.notifyCostChanged(costs);
+        }
+        protected void invokePointChanged(int pointNum)
+        {
+            PointChanged?.Invoke(pointNum);
+        }
+
+
         #region Event Handlers
         protected virtual void handleCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {

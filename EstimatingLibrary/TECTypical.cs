@@ -326,8 +326,8 @@ namespace EstimatingLibrary
                 }
                 if (raiseEvents)
                 {
-                    notifyCostChanged(costs);
-                    notifyPointChanged(pointNum);
+                    invokeCostChanged(costs);
+                    invokePointChanged(pointNum);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -351,8 +351,8 @@ namespace EstimatingLibrary
                 }
                 if (raiseEvents)
                 {
-                    notifyCostChanged(costs * -1);
-                    notifyPointChanged(-pointNum);
+                    invokeCostChanged(costs * -1);
+                    invokePointChanged(-pointNum);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
