@@ -26,13 +26,15 @@ namespace Tests
             ChangeWatcher cw = new ChangeWatcher(bid);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
             TECCost cost = null;
+            int x = 0;
             while(cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
+                TECCost randomCost = bid.Catalogs.AssociatedCosts[x];
                 if (randomCost.Type == CostType.TEC)
                 {
                     cost = randomCost;
                 }
+                x++;
             }
 
             Total totalTEC = CalculateTotal(cost, CostType.TEC);
@@ -439,13 +441,15 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
             TECCost cost = null;
+            int x = 0;
             while (cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
+                TECCost randomCost = bid.Catalogs.AssociatedCosts[x];
                 if (randomCost.Type == CostType.TEC)
                 {
                     cost = randomCost;
                 }
+                x++;
             }
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
