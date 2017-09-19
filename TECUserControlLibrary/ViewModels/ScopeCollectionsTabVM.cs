@@ -1019,7 +1019,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddControllerExecute()
         {
-            var newController = new TECController(ControllerType);
+            var newController = new TECController(ControllerType, false);
             newController.Name = ControllerName;
             newController.Description = ControllerDescription;
             newController.Tags = ControllerTags;
@@ -1128,7 +1128,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void AddPanelExecute()
         {
-            var panel = new TECPanel(SelectedPanelType);
+            var panel = new TECPanel(SelectedPanelType, false);
             panel.Name = PanelName;
             panel.Description = PanelDescription;
             panel.Tags = PanelTags;
@@ -1195,7 +1195,7 @@ namespace TECUserControlLibrary.ViewModels
             MiscCostsCollection = new ObservableCollection<TECMisc>();
             MiscWiringCollection = new ObservableCollection<TECMisc>();
 
-            TECSystem blankScope = new TECSystem();
+            TECSystem blankScope = new TECSystem(false);
             blankScope.Name = "Blank";
             blankScope.Description = "Drag in for a new Controlled Scope";
             SystemItemsCollection.Add(blankScope);

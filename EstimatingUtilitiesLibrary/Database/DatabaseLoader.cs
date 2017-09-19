@@ -96,7 +96,7 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.EquipmentTemplates = getOrphanEquipment();
             templates.SubScopeTemplates = getOrphanSubScope();
             templates.ControllerTemplates = getOrphanControllers();
-            templates.MiscCostTemplates = getMisc();
+            templates.MiscCostTemplates = getAllMisc();
             templates.PanelTemplates = getOrphanPanels();
             templates.Parameters = getTemplatesParameters();
             ModelLinkingHelper.LinkTemplates(templates);
@@ -226,7 +226,7 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         #endregion
         #region System Components
-        static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid)
+        static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new PanelTable()) + " from " + PanelTable.TableName + " where " + PanelTable.ID.Name + " in ";
@@ -235,11 +235,11 @@ namespace EstimatingUtilitiesLibrary.Database
             command += "')";
             DataTable dt = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
-            { panels.Add(getPanelFromRow(row)); }
+            { panels.Add(getPanelFromRow(row, isTypical)); }
 
             return panels;
         }
-        static private ObservableCollection<TECEquipment> getEquipmentInSystem(Guid systemID)
+        static private ObservableCollection<TECEquipment> getEquipmentInSystem(Guid systemID, bool isTypical)
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
 
@@ -258,7 +258,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             DataTable equipmentDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in equipmentDT.Rows)
-            { equipment.Add(getEquipmentFromRow(row)); }
+            { equipment.Add(getEquipmentFromRow(row, isTypical)); }
             return equipment;
         }
         static private ObservableCollection<TECSystem> getChildrenSystems(Guid parentID)
@@ -280,7 +280,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return children;
         }
-        static private ObservableCollection<TECController> getControllersInSystem(Guid guid)
+        static private ObservableCollection<TECController> getControllersInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ID.Name + " in ";
@@ -291,7 +291,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable controllerDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
             {
-                var controller = getControllerFromRow(row);
+                var controller = getControllerFromRow(row, isTypical);
                 controller.IsGlobal = false;
                 controllers.Add(controller);
             }
@@ -321,7 +321,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return outDict;
         }
-        static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid)
+        static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new MiscTable()) + " from " + MiscTable.TableName + " where " + MiscTable.ID.Name + " in ";
@@ -332,7 +332,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable miscDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
-                misc.Add(getMiscFromRow(row));
+                misc.Add(getMiscFromRow(row, isTypical));
             }
 
             return misc;
@@ -516,7 +516,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             DataTable equipmentDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in equipmentDT.Rows)
-            { equipment.Add(getEquipmentFromRow(row)); }
+            { equipment.Add(getEquipmentFromRow(row, false)); }
 
             return equipment;
         }
@@ -528,7 +528,7 @@ namespace EstimatingUtilitiesLibrary.Database
             command += "(select " + EquipmentSubScopeTable.SubScopeID.Name + " from " + EquipmentSubScopeTable.TableName + ")";
             DataTable subScopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in subScopeDT.Rows)
-            { subScope.Add(getSubScopeFromRow(row)); }
+            { subScope.Add(getSubScopeFromRow(row, false)); }
             return subScope;
         }
         static private ObservableCollection<TECLabeled> getAllLocations()
@@ -547,7 +547,7 @@ namespace EstimatingUtilitiesLibrary.Database
             { associatedCosts.Add(getAssociatedCostFromRow(row)); }
             return associatedCosts;
         }
-        static private ObservableCollection<TECSubScope> getSubScopeInEquipment(Guid equipmentID)
+        static private ObservableCollection<TECSubScope> getSubScopeInEquipment(Guid equipmentID, bool isTypical)
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new SubScopeTable()) + " from (SubScope inner join " + EquipmentSubScopeTable.TableName + " on ";
@@ -557,7 +557,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DatabaseHelper.Explain(command, SQLiteDB);
             DataTable subScopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in subScopeDT.Rows)
-            { subScope.Add(getSubScopeFromRow(row)); }
+            { subScope.Add(getSubScopeFromRow(row, isTypical)); }
             return subScope;
         }
         static private ObservableCollection<ITECConnectable> getDevicesInSubScope(Guid subScopeID)
@@ -578,7 +578,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return devices;
         }
-        static private ObservableCollection<TECPoint> getPointsInSubScope(Guid subScopeID)
+        static private ObservableCollection<TECPoint> getPointsInSubScope(Guid subScopeID, bool isTypical)
         {
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
 
@@ -589,7 +589,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DatabaseHelper.Explain(command, SQLiteDB);
             DataTable pointsDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in pointsDT.Rows)
-            { points.Add(getPointFromRow(row)); }
+            { points.Add(getPointFromRow(row, isTypical)); }
 
             return points;
         }
@@ -677,7 +677,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable controllersDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllersDT.Rows)
             {
-                var controller = getControllerFromRow(row);
+                var controller = getControllerFromRow(row, false);
                 controller.IsGlobal = true;
                 controllers.Add(controller);
             }
@@ -707,7 +707,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return ioModules;
         }
 
-        static private TECSubScope getSubScopeInSubScopeConnection(Guid connectionID)
+        static private TECSubScope getSubScopeInSubScopeConnection(Guid connectionID, bool isTypical)
         {
             TECSubScope outScope = null;
 
@@ -722,12 +722,12 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable scopeDT = SQLiteDB.GetDataFromCommand(command);
             if (scopeDT.Rows.Count > 0)
             {
-                return getSubScopeConnectionChildPlaceholderFromRow(scopeDT.Rows[0]);
+                return getSubScopeConnectionChildPlaceholderFromRow(scopeDT.Rows[0], isTypical);
             }
 
             return outScope;
         }
-        static private ObservableCollection<TECController> getControllersInNetworkConnection(Guid connectionID)
+        static private ObservableCollection<TECController> getControllersInNetworkConnection(Guid connectionID, bool isTypical)
         {
             var outScope = new ObservableCollection<TECController>();
 
@@ -738,7 +738,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             DataTable scopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
-            { outScope.Add(getControllerPlaceholderFromRow(row)); }
+            { outScope.Add(getControllerPlaceholderFromRow(row, isTypical)); }
 
             return outScope;
         }
@@ -790,14 +790,14 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return outParameters;
         }
-        static private ObservableCollection<TECMisc> getMisc()
+        static private ObservableCollection<TECMisc> getAllMisc()
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
 
             DataTable miscDT = SQLiteDB.GetDataFromTable(MiscTable.TableName);
             foreach (DataRow row in miscDT.Rows)
             {
-                misc.Add(getMiscFromRow(row));
+                misc.Add(getMiscFromRow(row, false));
             }
 
             return misc;
@@ -815,7 +815,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable panelsDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in panelsDT.Rows)
             {
-                panels.Add(getPanelFromRow(row));
+                panels.Add(getPanelFromRow(row, false));
             }
 
             return panels;
@@ -857,7 +857,7 @@ namespace EstimatingUtilitiesLibrary.Database
             else
             { return null; }
         }
-        static private ObservableCollection<TECController> getControllersInPanel(Guid guid)
+        static private ObservableCollection<TECController> getControllersInPanel(Guid guid, bool isTypical)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
             string command = String.Format("select {0} from {1} where {2} = '{3}'",
@@ -866,12 +866,12 @@ namespace EstimatingUtilitiesLibrary.Database
 
             DataTable controllerDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllerDT.Rows)
-            { controllers.Add(getPlaceholderPanelControllerFromRow(row)); }
+            { controllers.Add(getPlaceholderPanelControllerFromRow(row, isTypical)); }
 
             return controllers;
         }
 
-        static private ObservableCollection<TECConnection> getConnectionsInController(TECController controller)
+        static private ObservableCollection<TECConnection> getConnectionsInController(TECController controller, bool isTypical)
         {
             var tables = DatabaseHelper.TableNames(SQLiteDB);
             ObservableCollection<TECConnection> outScope = new ObservableCollection<TECConnection>();
@@ -888,7 +888,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 scopeDT = SQLiteDB.GetDataFromCommand(command);
                 foreach (DataRow row in scopeDT.Rows)
                 {
-                    var networkConnection = getNetworkConnectionFromRow(row);
+                    var networkConnection = getNetworkConnectionFromRow(row, isTypical);
                     networkConnection.ParentController = controller;
 
                     outScope.Add(networkConnection);
@@ -903,7 +903,7 @@ namespace EstimatingUtilitiesLibrary.Database
             scopeDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in scopeDT.Rows)
             {
-                var subScopeConnection = getSubScopeConnectionFromRow(row);
+                var subScopeConnection = getSubScopeConnectionFromRow(row, isTypical);
                 subScopeConnection.ParentController = controller;
                 outScope.Add(subScopeConnection);
             }
@@ -938,7 +938,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable miscDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in miscDT.Rows)
             {
-                misc.Add(getMiscFromRow(row));
+                misc.Add(getMiscFromRow(row, false));
             }
 
             return misc;
@@ -983,11 +983,11 @@ namespace EstimatingUtilitiesLibrary.Database
             TECTypical system = new TECTypical(guid);
 
             assignValuePropertiesFromTable(system, new SystemTable(), row);
-            system.Controllers = getControllersInSystem(guid);
-            system.Equipment = getEquipmentInSystem(guid);
-            system.Panels = getPanelsInSystem(guid);
+            system.Controllers = getControllersInSystem(guid, true);
+            system.Equipment = getEquipmentInSystem(guid, true);
+            system.Panels = getPanelsInSystem(guid, true);
             system.Instances = getChildrenSystems(guid);
-            system.MiscCosts = getMiscInSystem(guid);
+            system.MiscCosts = getMiscInSystem(guid, true);
             system.ScopeBranches = getScopeBranchesInSystem(guid);
             getLocatedChildren(system);
 
@@ -996,42 +996,42 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECSystem getSystemFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
-            TECSystem system = new TECSystem(guid);
+            TECSystem system = new TECSystem(guid, false);
 
             assignValuePropertiesFromTable(system, new SystemTable(), row);
-            system.Controllers = getControllersInSystem(guid);
-            system.Equipment = getEquipmentInSystem(guid);
-            system.Panels = getPanelsInSystem(guid);
-            system.MiscCosts = getMiscInSystem(guid);
+            system.Controllers = getControllersInSystem(guid, false);
+            system.Equipment = getEquipmentInSystem(guid, false);
+            system.Panels = getPanelsInSystem(guid, false);
+            system.MiscCosts = getMiscInSystem(guid, false);
             system.ScopeBranches = getScopeBranchesInSystem(guid);
             getLocatedChildren(system);
 
             return system;
         }
 
-        private static TECEquipment getEquipmentFromRow(DataRow row)
+        private static TECEquipment getEquipmentFromRow(DataRow row, bool isTypical)
         {
             Guid equipmentID = new Guid(row[EquipmentTable.ID.Name].ToString());
-            TECEquipment equipmentToAdd = new TECEquipment(equipmentID);
+            TECEquipment equipmentToAdd = new TECEquipment(equipmentID, isTypical);
             assignValuePropertiesFromTable(equipmentToAdd, new EquipmentTable(), row);
             getLocatedChildren(equipmentToAdd);
-            equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID);
+            equipmentToAdd.SubScope = getSubScopeInEquipment(equipmentID, isTypical);
             return equipmentToAdd;
         }
-        private static TECSubScope getSubScopeFromRow(DataRow row)
+        private static TECSubScope getSubScopeFromRow(DataRow row, bool isTypical)
         {
             Guid subScopeID = new Guid(row[SubScopeTable.ID.Name].ToString());
-            TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
+            TECSubScope subScopeToAdd = new TECSubScope(subScopeID, isTypical);
             assignValuePropertiesFromTable(subScopeToAdd, new SubScopeTable(), row);
             subScopeToAdd.Devices = getDevicesInSubScope(subScopeID);
-            subScopeToAdd.Points = getPointsInSubScope(subScopeID);
+            subScopeToAdd.Points = getPointsInSubScope(subScopeID, isTypical);
             getLocatedChildren(subScopeToAdd);
             return subScopeToAdd;
         }
-        private static TECPoint getPointFromRow(DataRow row)
+        private static TECPoint getPointFromRow(DataRow row, bool isTypical)
         {
             Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
-            TECPoint pointToAdd = new TECPoint(pointID);
+            TECPoint pointToAdd = new TECPoint(pointID, isTypical);
             assignValuePropertiesFromTable(pointToAdd, new PointTable(), row);
             pointToAdd.Type = TECPoint.convertStringToType(row[PointTable.Type.Name].ToString());
             return pointToAdd;
@@ -1157,26 +1157,26 @@ namespace EstimatingUtilitiesLibrary.Database
         #endregion
         
         #region Control Scope
-        private static TECPanel getPanelFromRow(DataRow row)
+        private static TECPanel getPanelFromRow(DataRow row, bool isTypical)
         {
             Guid guid = new Guid(row[PanelTable.ID.Name].ToString());
             TECPanelType type = getPanelTypeInPanel(guid);
-            TECPanel panel = new TECPanel(guid, type);
+            TECPanel panel = new TECPanel(guid, type, isTypical);
 
             assignValuePropertiesFromTable(panel, new PanelTable(), row);
-            panel.Controllers = getControllersInPanel(guid);
+            panel.Controllers = getControllersInPanel(guid, isTypical);
             getScopeChildren(panel);
 
             return panel;
         }
-        private static TECController getControllerFromRow(DataRow row)
+        private static TECController getControllerFromRow(DataRow row, bool isTypical)
         {
             Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
-            TECController controller = new TECController(guid, getTypeInController(guid));
+            TECController controller = new TECController(guid, getTypeInController(guid), isTypical);
 
             assignValuePropertiesFromTable(controller, new ControllerTable(), row);
             getScopeChildren(controller);
-            controller.ChildrenConnections = getConnectionsInController(controller);
+            controller.ChildrenConnections = getConnectionsInController(controller, isTypical);
             controller.NetworkType = UtilitiesMethods.StringToEnum<NetworkType>(row[ControllerTable.Type.Name].ToString(), 0);
             return controller;
         }
@@ -1189,34 +1189,34 @@ namespace EstimatingUtilitiesLibrary.Database
             io.IOModule = getModuleInIO(guid);
             return io;
         }
-        private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row)
+        private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row, bool isTypical)
         {
             Guid guid = new Guid(row[SubScopeConnectionTable.ID.Name].ToString());
-            TECSubScopeConnection connection = new TECSubScopeConnection(guid, true);
+            TECSubScopeConnection connection = new TECSubScopeConnection(guid, isTypical);
             assignValuePropertiesFromTable(connection, new SubScopeConnectionTable(), row);
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
-            connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid);
+            connection.SubScope = getSubScopeInSubScopeConnection(connection.Guid, isTypical);
             return connection;
         }
-        private static TECNetworkConnection getNetworkConnectionFromRow(DataRow row)
+        private static TECNetworkConnection getNetworkConnectionFromRow(DataRow row, bool isTypical)
         {
             Guid guid = new Guid(row[NetworkConnectionTable.ID.Name].ToString());
-            TECNetworkConnection connection = new TECNetworkConnection(guid);
+            TECNetworkConnection connection = new TECNetworkConnection(guid, isTypical);
             assignValuePropertiesFromTable(connection, new NetworkConnectionTable(), row);
             connection.IOType = UtilitiesMethods.StringToEnum<IOType>(row[NetworkConnectionTable.IOType.Name].ToString());
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
-            connection.ChildrenControllers = getControllersInNetworkConnection(connection.Guid);
+            connection.ChildrenControllers = getControllersInNetworkConnection(connection.Guid, isTypical);
             connection.ConnectionType = getConnectionTypeInNetworkConnection(connection.Guid);
             return connection;
         }
         #endregion
 
         #region Misc
-        private static TECMisc getMiscFromRow(DataRow row)
+        private static TECMisc getMiscFromRow(DataRow row, bool isTypical)
         {
             Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
             CostType type = UtilitiesMethods.StringToEnum<CostType>(row[MiscTable.Type.Name].ToString());
-            TECMisc cost = new TECMisc(guid, type);
+            TECMisc cost = new TECMisc(guid, type, isTypical);
             assignValuePropertiesFromTable(cost, new MiscTable(), row);
             getScopeChildren(cost);
             return cost;
@@ -1250,26 +1250,26 @@ namespace EstimatingUtilitiesLibrary.Database
         }
 
         #region Placeholder
-        private static TECSubScope getSubScopeConnectionChildPlaceholderFromRow(DataRow row)
+        private static TECSubScope getSubScopeConnectionChildPlaceholderFromRow(DataRow row, bool isTypical)
         {
             Guid subScopeID = new Guid(row[SubScopeConnectionChildrenTable.ChildID.Name].ToString());
-            TECSubScope subScopeToAdd = new TECSubScope(subScopeID);
+            TECSubScope subScopeToAdd = new TECSubScope(subScopeID, isTypical);
             return subScopeToAdd;
         }
-        private static TECController getControllerPlaceholderFromRow(DataRow row)
+        private static TECController getControllerPlaceholderFromRow(DataRow row, bool isTypical)
         {
             Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
-            TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()));
+            TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()), isTypical);
 
             controller.Name = row[ControllerTable.Name.Name].ToString();
             controller.Description = row[ControllerTable.Description.Name].ToString();
             return controller;
         }
 
-        private static TECController getPlaceholderPanelControllerFromRow(DataRow row)
+        private static TECController getPlaceholderPanelControllerFromRow(DataRow row, bool isTypical)
         {
             Guid guid = new Guid(row[PanelControllerTable.ControllerID.Name].ToString());
-            TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()));
+            TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()), isTypical);
             return controller;
         }
         private static TECLabeled getPlaceholderTagFromRow(DataRow row)

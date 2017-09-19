@@ -153,7 +153,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddConnectionExecute(TECController controller)
         {
-            TECNetworkConnection newConnection = new TECNetworkConnection();
+            TECNetworkConnection newConnection = new TECNetworkConnection(controller.IsTypical);
             newConnection.IOType = SelectedIO;
             newConnection.ConnectionType = SelectedWire;
             newConnection.ParentController = controller;

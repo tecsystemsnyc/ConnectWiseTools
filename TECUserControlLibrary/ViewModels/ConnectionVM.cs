@@ -163,7 +163,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllerSelections = new ObservableCollection<TECController>();
             if (SelectedSystem != null )
             {
-                var noneController = new TECController(new TECControllerType(new TECManufacturer()));
+                var noneController = new TECController(new TECControllerType(new TECManufacturer()), false);
                 noneController.Name = "None";
                 NoneController = noneController;
                 ControllerSelections.Add(NoneController);
