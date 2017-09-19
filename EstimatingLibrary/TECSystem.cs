@@ -103,7 +103,7 @@ namespace EstimatingLibrary
                 var old = _equipment;
                 _equipment.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Equipment");
                 _equipment = value;
-                NotifyTECChanged(Change.Edit, "Equipment", this, value, old);
+                notifyTECChanged(Change.Edit, "Equipment", this, value, old);
                 _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
             }
         }
@@ -115,7 +115,7 @@ namespace EstimatingLibrary
                 var old = _controllers;
                 _controllers.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Controllers");
                 _controllers = value;
-                NotifyTECChanged(Change.Edit, "Controllers", this, value, old);
+                notifyTECChanged(Change.Edit, "Controllers", this, value, old);
                 _controllers.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Controllers");
             }
         }
@@ -127,7 +127,7 @@ namespace EstimatingLibrary
                 var old = _panels;
                 _panels.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Panels");
                 _panels = value;
-                NotifyTECChanged(Change.Edit, "Panels", this, value, old);
+                notifyTECChanged(Change.Edit, "Panels", this, value, old);
                 _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
             }
         }
@@ -139,7 +139,7 @@ namespace EstimatingLibrary
                 var old = _miscCosts;
                 _miscCosts.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
                 _miscCosts = value;
-                NotifyTECChanged(Change.Edit, "MiscCosts", this, value, old);
+                notifyTECChanged(Change.Edit, "MiscCosts", this, value, old);
                 _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             }
         }
@@ -151,7 +151,7 @@ namespace EstimatingLibrary
                 var old = _scopeBranches;
                 _scopeBranches.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
                 _scopeBranches = value;
-                NotifyTECChanged(Change.Edit, "ScopeBranches", this, value, old);
+                notifyTECChanged(Change.Edit, "ScopeBranches", this, value, old);
                 _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
             }
         }
@@ -163,7 +163,7 @@ namespace EstimatingLibrary
             {
                 var old = ProposeEquipment;
                 _proposeEquipment = value;
-                NotifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
+                notifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
             }
         }
         public bool IsTypical
@@ -243,9 +243,12 @@ namespace EstimatingLibrary
             return saveList;
         }
 
-        protected void invokePointChanged(int pointNum)
+        protected void notifyPointChanged(int pointNum)
         {
-            PointChanged?.Invoke(pointNum);
+            if (!IsTypical)
+            {
+                PointChanged?.Invoke(pointNum);
+            }
         }
 
         #region Event Handlers
@@ -264,17 +267,17 @@ namespace EstimatingLibrary
                         {
                             pointNum += pointItem.PointNumber;
                         }
-                        NotifyTECChanged(Change.Add, propertyName, this, item);
+                        notifyTECChanged(Change.Add, propertyName, this, item);
                         if (item is TECController controller)
                         {
                             controller.IsGlobal = false;
                         }
                     }
                 }
-                NotifyCostChanged(costs);
+                notifyCostChanged(costs);
                 if (pointNum != 0)
                 {
-                    PointChanged?.Invoke(pointNum);
+                    notifyPointChanged(pointNum);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -287,18 +290,18 @@ namespace EstimatingLibrary
                     {
                         if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
                         if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
-                        NotifyTECChanged(Change.Remove, propertyName, this, item);
+                        notifyTECChanged(Change.Remove, propertyName, this, item);
                     }
                 }
-                NotifyCostChanged(costs * -1);
+                notifyCostChanged(costs * -1);
                 if (pointNum != 0)
                 {
-                    PointChanged?.Invoke(pointNum * -1);
+                    notifyPointChanged(pointNum * -1);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyTECChanged(Change.Edit, propertyName, this, sender);
+                notifyTECChanged(Change.Edit, propertyName, this, sender);
             }
         }
         #endregion

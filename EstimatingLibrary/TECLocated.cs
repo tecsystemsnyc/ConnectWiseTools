@@ -22,7 +22,7 @@ namespace EstimatingLibrary
                 {
                     var old = Location;
                     _location = value;
-                    NotifyCombinedChanged(Change.Edit, "Location", this, Location, old);
+                    notifyCombinedChanged(Change.Edit, "Location", this, Location, old);
                 }
             }
         }

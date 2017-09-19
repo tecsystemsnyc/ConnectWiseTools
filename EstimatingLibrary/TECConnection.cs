@@ -27,8 +27,8 @@ namespace EstimatingLibrary
                 var old = Length;
                 var originalCost = this.CostBatch;
                 _length = value;
-                NotifyCombinedChanged(Change.Edit, "Length", this, value, old);
-                NotifyCostChanged(CostBatch - originalCost);
+                notifyCombinedChanged(Change.Edit, "Length", this, value, old);
+                notifyCostChanged(CostBatch - originalCost);
             }
         }
         public double ConduitLength
@@ -38,10 +38,10 @@ namespace EstimatingLibrary
             {
                 var old = ConduitLength;
                 _conduitLength = value;
-                NotifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
                 CostBatch previous = ConduitType != null ? ConduitType.GetCosts(old) : new CostBatch();
                 CostBatch current = ConduitType != null ? ConduitType.GetCosts(value) : new CostBatch();
-                NotifyCostChanged(current - previous);
+                notifyCostChanged(current - previous);
             }
         }
         public TECController ParentController
@@ -50,7 +50,7 @@ namespace EstimatingLibrary
             set
             {
                 _parentController = value;
-                RaisePropertyChanged("ParentController");
+                raisePropertyChanged("ParentController");
             }
         }
         public TECElectricalMaterial ConduitType
@@ -60,10 +60,10 @@ namespace EstimatingLibrary
             {
                 var old = ConduitType;
                 _conduitType = value;
-                NotifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
                 CostBatch previous = old != null ? old.GetCosts(ConduitLength) : new CostBatch();
                 CostBatch current = value != null ? value.GetCosts(ConduitLength) : new CostBatch();
-                NotifyCostChanged(current - previous);
+                notifyCostChanged(current - previous);
             }
         }
 
@@ -105,7 +105,7 @@ namespace EstimatingLibrary
         }
         #endregion //Constructors
 
-        public void NotifyCostChanged(CostBatch costs)
+        public void notifyCostChanged(CostBatch costs)
         {
             CostChanged?.Invoke(costs);
         }

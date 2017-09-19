@@ -75,7 +75,7 @@ namespace EstimatingLibrary
                 var oldMisc = this;
                 var old = Quantity;
                 _quantity = value;
-                NotifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
                 NotifyMiscChanged(this, oldMisc);
             }
         }
@@ -92,7 +92,7 @@ namespace EstimatingLibrary
         private void NotifyMiscChanged(TECMisc newMisc, TECMisc oldMisc)
         {
             CostBatch delta = newMisc.CostBatch - oldMisc.CostBatch;
-            NotifyCostChanged(delta);
+            notifyCostChanged(delta);
         }
 
         protected override CostBatch getCosts()

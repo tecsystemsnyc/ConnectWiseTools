@@ -19,7 +19,7 @@ namespace EstimatingLibrary
             {
                 var old =  IOPerModule;
                 _ioPerModule = value;
-                NotifyCombinedChanged(Change.Edit, "IOPerModule", this, value, old);
+                notifyCombinedChanged(Change.Edit, "IOPerModule", this, value, old);
             }
         }
         

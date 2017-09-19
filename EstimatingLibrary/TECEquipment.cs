@@ -28,7 +28,7 @@ namespace EstimatingLibrary
                 }
                 _subScope = value;
                 SubScope.CollectionChanged += SubScope_CollectionChanged;
-                NotifyCombinedChanged(Change.Edit, "SubScope", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SubScope", this, value, old);
             }
         }
         
@@ -38,10 +38,6 @@ namespace EstimatingLibrary
             {
                 return getPointNumber();
             }
-        }
-        public List<TECPoint> Points
-        {
-            get { return points(); }
         }
 
         public bool IsTypical { get; private set; }
@@ -98,10 +94,10 @@ namespace EstimatingLibrary
                     {
                         (item as TECSubScope).SetLocationFromParent(this.Location);
                     }
-                    NotifyCombinedChanged(Change.Add, "SubScope", this, item);
+                    notifyCombinedChanged(Change.Add, "SubScope", this, item);
                 }
-                PointChanged?.Invoke(pointNumber);
-                NotifyCostChanged(costs);
+                notifyPointChanged(pointNumber);
+                notifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -111,14 +107,14 @@ namespace EstimatingLibrary
                 {
                     pointNumber += item.PointNumber;
                     costs += item.CostBatch;
-                    NotifyCombinedChanged(Change.Remove, "SubScope", this, item);
+                    notifyCombinedChanged(Change.Remove, "SubScope", this, item);
                 }
                 PointChanged?.Invoke(pointNumber * -1);
-                NotifyCostChanged(costs * -1);
+                notifyCostChanged(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyCombinedChanged(Change.Edit, "SubScope", this, sender);
+                notifyCombinedChanged(Change.Edit, "SubScope", this, sender);
             }
         }
         
@@ -155,15 +151,6 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        private List<TECPoint> points()
-        {
-            List<TECPoint> outPoints = new List<TECPoint>();
-            foreach(TECSubScope subScope in this.SubScope)
-            {
-                outPoints.AddRange(subScope.Points);
-            }
-            return outPoints;
-        }
         protected override SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();
@@ -172,11 +159,13 @@ namespace EstimatingLibrary
             return saveList;
         }
         
-        public void NotifyPointChanged(List<TECPoint> points)
+        private void notifyPointChanged(int numPoints)
         {
-            throw new NotImplementedException();
+            if (!IsTypical)
+            {
+                PointChanged?.Invoke(numPoints);
+            }
         }
         #endregion
-
     }
 }

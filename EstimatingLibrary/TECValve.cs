@@ -30,8 +30,8 @@ namespace EstimatingLibrary
             {
                 var old = Actuator;
                 _actuator = value;
-                NotifyCombinedChanged(Change.Edit, "Actuator", this, _actuator, old);
-                NotifyCostChanged(value.CostBatch - old.CostBatch);
+                notifyCombinedChanged(Change.Edit, "Actuator", this, _actuator, old);
+                notifyCostChanged(value.CostBatch - old.CostBatch);
             }
         }
         public double Cv
@@ -41,7 +41,7 @@ namespace EstimatingLibrary
             {
                 var old = _cv;
                 _cv = value;
-                NotifyCombinedChanged(Change.Edit, "Cv", this, _cv, old);
+                notifyCombinedChanged(Change.Edit, "Cv", this, _cv, old);
             }
         }
         public double Size
@@ -51,7 +51,7 @@ namespace EstimatingLibrary
             {
                 var old = _size;
                 _size = value;
-                NotifyCombinedChanged(Change.Edit, "Size", this, _size, old);
+                notifyCombinedChanged(Change.Edit, "Size", this, _size, old);
             }
         }
         public string Style
@@ -61,7 +61,7 @@ namespace EstimatingLibrary
             {
                 var old = _style;
                 _style = value;
-                NotifyCombinedChanged(Change.Edit, "Style", this, _style, old);
+                notifyCombinedChanged(Change.Edit, "Style", this, _style, old);
             }
         }
         

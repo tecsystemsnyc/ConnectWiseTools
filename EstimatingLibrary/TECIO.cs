@@ -34,7 +34,7 @@ namespace EstimatingLibrary
             {
                 var old = Type;
                 _type = value;
-                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
             }
         }
 
@@ -46,7 +46,7 @@ namespace EstimatingLibrary
             {
                 var old = Quantity;
                 _quantity = value;
-                NotifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
             }
         }
 
@@ -58,8 +58,8 @@ namespace EstimatingLibrary
             {
                 var old = IOModule;
                 _ioModule = value;
-                NotifyCombinedChanged(Change.Edit, "IOModule", this, value, old);
-                //NotifyCombinedChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
+                notifyCombinedChanged(Change.Edit, "IOModule", this, value, old);
+                //notifyCombinedChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
             }
         }
 

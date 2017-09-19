@@ -30,8 +30,8 @@ namespace EstimatingLibrary
             {
                 var old = Name;
                 _name = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyCombinedChanged(Change.Edit, "Name", this, value, old);
+                // Call raisePropertyChanged whenever the property is updated
+                notifyCombinedChanged(Change.Edit, "Name", this, value, old);
             }
         }
         public string Description
@@ -41,8 +41,8 @@ namespace EstimatingLibrary
             {
                 var old = Description;
                 _description = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyCombinedChanged(Change.Edit, "Description", this, value, old);
+                // Call raisePropertyChanged whenever the property is updated
+                notifyCombinedChanged(Change.Edit, "Description", this, value, old);
 
             }
         }
@@ -55,7 +55,7 @@ namespace EstimatingLibrary
                 var old = Tags;
                 Tags.CollectionChanged -= (sender, args) => scopeCollectionChanged(sender, args, "Tags");
                 _tags = value;
-                NotifyCombinedChanged(Change.Edit, "Tags", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Tags", this, value, old);
                 Tags.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "Tags");
             }
         }
@@ -67,7 +67,7 @@ namespace EstimatingLibrary
                 var old = AssociatedCosts;
                 AssociatedCosts.CollectionChanged -= (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
                 _associatedCosts = value;
-                NotifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
+                notifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
                 AssociatedCosts.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
             }
         }
@@ -135,9 +135,9 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     if(item is TECCost cost) { costs.Add(cost); }
-                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
-                NotifyCostChanged(new CostBatch(costs));
+                notifyCostChanged(new CostBatch(costs));
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -145,15 +145,18 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     if (item is TECCost cost) { costs.Add(cost); }
-                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
-                NotifyCostChanged(new CostBatch(costs) * -1);
+                notifyCostChanged(new CostBatch(costs) * -1);
             }
         }
         
-        public void NotifyCostChanged(CostBatch costs)
+        protected void notifyCostChanged(CostBatch costs)
         {
-            CostChanged?.Invoke(costs);
+            if (!(this is ITypicalable typ && typ.IsTypical))
+            {
+                CostChanged?.Invoke(costs);
+            }
         }
 
         protected virtual CostBatch getCosts()

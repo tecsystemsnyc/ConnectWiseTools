@@ -28,7 +28,7 @@ namespace EstimatingLibrary
             {
                 var old = Escalation;
                 _escalation = value;
-                NotifyCombinedChanged(Change.Edit, "Escalation", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Escalation", this, value, old);
             }
         }
         public double Overhead
@@ -38,7 +38,7 @@ namespace EstimatingLibrary
             {
                 var old = Overhead;
                 _overhead = value;
-                NotifyCombinedChanged(Change.Edit, "Overhead", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Overhead", this, value, old);
             }
         }
         public double Profit
@@ -48,7 +48,7 @@ namespace EstimatingLibrary
             {
                 var old = Profit;
                 _profit = value;
-                NotifyCombinedChanged(Change.Edit, "Profit", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Profit", this, value, old);
             }
         }
         public double SubcontractorMarkup
@@ -58,7 +58,7 @@ namespace EstimatingLibrary
             {
                 var old = SubcontractorMarkup;
                 _subcontractorMarkup = value;
-                NotifyCombinedChanged(Change.Edit, "SubcontractorMarkup", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SubcontractorMarkup", this, value, old);
             }
         }
         public double SubcontractorEscalation
@@ -68,7 +68,7 @@ namespace EstimatingLibrary
             {
                 var old = SubcontractorEscalation;
                 _subcontractorEscalation = value;
-                NotifyCombinedChanged(Change.Edit, "SubcontractorEscalation", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SubcontractorEscalation", this, value, old);
             }
         }
 
@@ -79,7 +79,7 @@ namespace EstimatingLibrary
             {
                 var old = IsTaxExempt;
                 _isTaxExempt = value;
-                NotifyCombinedChanged(Change.Edit, "IsTaxExempt", this, value, old);
+                notifyCombinedChanged(Change.Edit, "IsTaxExempt", this, value, old);
             }
         }
         public bool RequiresBond
@@ -89,7 +89,7 @@ namespace EstimatingLibrary
             {
                 var old = RequiresBond;
                 _requiresBond = value;
-                NotifyCombinedChanged(Change.Edit, "RequiresBond", this, value, old);
+                notifyCombinedChanged(Change.Edit, "RequiresBond", this, value, old);
             }
         }
         public bool RequiresWrapUp
@@ -99,7 +99,7 @@ namespace EstimatingLibrary
             {
                 var old = RequiresWrapUp;
                 _requiresWrapUp = value;
-                NotifyCombinedChanged(Change.Edit, "RequiresWrapUp", this, value, old);
+                notifyCombinedChanged(Change.Edit, "RequiresWrapUp", this, value, old);
             }
         }
         public bool HasBMS
@@ -109,7 +109,7 @@ namespace EstimatingLibrary
             {
                 var old = HasBMS;
                 _hasBMS = value;
-                NotifyCombinedChanged(Change.Edit, "HasBMS", this, value, old);
+                notifyCombinedChanged(Change.Edit, "HasBMS", this, value, old);
             }
         }
         #endregion
@@ -123,7 +123,7 @@ namespace EstimatingLibrary
             {
                 var old = PMCoef;
                 _pmCoef = value;
-                NotifyCombinedChanged(Change.Edit, "PMCoef", this, value, old);
+                notifyCombinedChanged(Change.Edit, "PMCoef", this, value, old);
             }
         }
 
@@ -135,7 +135,7 @@ namespace EstimatingLibrary
             {
                 var old = PMRate;
                 _pmRate = value;
-                NotifyCombinedChanged(Change.Edit, "PMRate", this, value, old);
+                notifyCombinedChanged(Change.Edit, "PMRate", this, value, old);
 
             }
         }
@@ -151,7 +151,7 @@ namespace EstimatingLibrary
             {
                 var old = ENGCoef;
                 _engCoef = value;
-                NotifyCombinedChanged(Change.Edit, "ENGCoef", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ENGCoef", this, value, old);
 
 
             }
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
 
                 var old = ENGRate;
                 _engRate = value;
-                NotifyCombinedChanged(Change.Edit, "ENGRate", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ENGRate", this, value, old);
 
 
             }
@@ -183,7 +183,7 @@ namespace EstimatingLibrary
 
                 var old = CommCoef;
                 _commCoef = value;
-                NotifyCombinedChanged(Change.Edit, "CommCoef", this, value, old);
+                notifyCombinedChanged(Change.Edit, "CommCoef", this, value, old);
 
 
             }
@@ -198,7 +198,7 @@ namespace EstimatingLibrary
 
                 var old = CommRate;
                 _commRate = value;
-                NotifyCombinedChanged(Change.Edit, "CommRate", this, value, old);
+                notifyCombinedChanged(Change.Edit, "CommRate", this, value, old);
 
 
             }
@@ -215,7 +215,7 @@ namespace EstimatingLibrary
 
                 var old = SoftCoef;
                 _softCoef = value;
-                NotifyCombinedChanged(Change.Edit, "SoftCoef", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SoftCoef", this, value, old);
 
 
             }
@@ -229,7 +229,7 @@ namespace EstimatingLibrary
             {
                 var old = SoftRate;
                 _softRate = value;
-                NotifyCombinedChanged(Change.Edit, "SoftRate", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SoftRate", this, value, old);
 
             }
         }
@@ -245,7 +245,7 @@ namespace EstimatingLibrary
             {
                 var old = GraphCoef;
                 _graphCoef = value;
-                NotifyCombinedChanged(Change.Edit, "GraphCoef", this, value, old);
+                notifyCombinedChanged(Change.Edit, "GraphCoef", this, value, old);
 
             }
         }
@@ -258,7 +258,7 @@ namespace EstimatingLibrary
             {
                 var old = GraphRate;
                 _graphRate = value;
-                NotifyCombinedChanged(Change.Edit, "GraphRate", this, value, old);
+                notifyCombinedChanged(Change.Edit, "GraphRate", this, value, old);
 
             }
         }
@@ -273,8 +273,8 @@ namespace EstimatingLibrary
             {
                 var old = ElectricalRate;
                 _electricalRate = value;
-                NotifyCombinedChanged(Change.Edit, "ElectricalRate", this, value, old);
-                RaisePropertyChanged("ElectricalEffectiveRate");
+                notifyCombinedChanged(Change.Edit, "ElectricalRate", this, value, old);
+                raisePropertyChanged("ElectricalEffectiveRate");
             }
         }
 
@@ -286,8 +286,8 @@ namespace EstimatingLibrary
             {
                 var old = ElectricalNonUnionRate;
                 _electricalNonUnionRate = value;
-                NotifyCombinedChanged(Change.Edit, "ElectricalNonUnionRate", this, value, old);
-                RaisePropertyChanged("ElectricalEffectiveRate");
+                notifyCombinedChanged(Change.Edit, "ElectricalNonUnionRate", this, value, old);
+                raisePropertyChanged("ElectricalEffectiveRate");
             }
         }
 
@@ -324,8 +324,8 @@ namespace EstimatingLibrary
             {
                 var old = ElectricalSuperRate;
                 _electricalSuperRate = value;
-                NotifyCombinedChanged(Change.Edit, "ElectricalSuperRate", this, value, old);
-                RaisePropertyChanged("ElectricalSuperEffectiveRate");
+                notifyCombinedChanged(Change.Edit, "ElectricalSuperRate", this, value, old);
+                raisePropertyChanged("ElectricalSuperEffectiveRate");
             }
         }
 
@@ -337,8 +337,8 @@ namespace EstimatingLibrary
             {
                 var old = ElectricalSuperNonUnionRate;
                 _electricalSuperNonUnionRate = value;
-                NotifyCombinedChanged(Change.Edit, "ElectricalSuperNonUnionRate", this, value, old);
-                RaisePropertyChanged("ElectricalSuperEffectiveRate");
+                notifyCombinedChanged(Change.Edit, "ElectricalSuperNonUnionRate", this, value, old);
+                raisePropertyChanged("ElectricalSuperEffectiveRate");
             }
         }
 
@@ -375,7 +375,7 @@ namespace EstimatingLibrary
             {
                 var old = ElectricalIsOnOvertime;
                 _electricalIsOnOvertime = value;
-                NotifyCombinedChanged(Change.Edit, "ElectricalIsOnOvertime", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ElectricalIsOnOvertime", this, value, old);
                 raiseEffectiveRateChanged();
             }
         }
@@ -388,7 +388,7 @@ namespace EstimatingLibrary
             {
                 var old = ElectricalIsUnion;
                 _electricalIsUnion = value;
-                NotifyCombinedChanged(Change.Edit, "ElectricalIsUnion", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ElectricalIsUnion", this, value, old);
                 raiseEffectiveRateChanged();
             }
         }
@@ -401,7 +401,7 @@ namespace EstimatingLibrary
             {
                 var old = ElectricalSuperRatio;
                 _electricalSuperRatio = value;
-                NotifyCombinedChanged(Change.Edit, "ElectricalSuperRatio", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ElectricalSuperRatio", this, value, old);
             }
         }
 
@@ -510,8 +510,8 @@ namespace EstimatingLibrary
 
         private void raiseEffectiveRateChanged()
         {
-            RaisePropertyChanged("ElectricalEffectiveRate");
-            RaisePropertyChanged("ElectricalSuperEffectiveRate");
+            raisePropertyChanged("ElectricalEffectiveRate");
+            raisePropertyChanged("ElectricalSuperEffectiveRate");
         }
     }
 }

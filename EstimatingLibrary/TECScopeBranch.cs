@@ -20,7 +20,7 @@ namespace EstimatingLibrary
             {
                 var old = Branches;
                 _branches = value;
-                NotifyCombinedChanged(Change.Edit, "Branches", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Branches", this, value, old);
                 Branches.CollectionChanged += Branches_CollectionChanged;
             }
         }
@@ -62,14 +62,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, "Branches", this, item);
+                    notifyCombinedChanged(Change.Add, "Branches", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, "Branches", this, item);
+                    notifyCombinedChanged(Change.Remove, "Branches", this, item);
                 }
             }
         }

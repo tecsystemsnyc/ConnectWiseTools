@@ -27,8 +27,8 @@ namespace EstimatingLibrary
             {
                 var old = Type;
                 _type = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                // Call raisePropertyChanged whenever the property is updated
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
             }
         }
         public int Quantity
@@ -39,7 +39,7 @@ namespace EstimatingLibrary
                 var old = Quantity;
                 PointChanged?.Invoke(old - value);
                 _quantity = value;
-                NotifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
 
             }
         }
@@ -110,9 +110,12 @@ namespace EstimatingLibrary
             }
         }
 
-        public void NotifyPointChanged(List<TECPoint> points)
+        public void notifyPointChanged(int numPoints)
         {
-            throw new NotImplementedException();
+            if (!IsTypical)
+            {
+                PointChanged?.Invoke(numPoints);
+            }
         }
         #endregion //Conversion Methods
         #endregion

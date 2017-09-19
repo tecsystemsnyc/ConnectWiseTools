@@ -20,7 +20,7 @@ namespace EstimatingLibrary
             {
                 var old = PMExtraHours;
                 _pmExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "PMExtraHours", this, value, old);
+                notifyCombinedChanged(Change.Edit, "PMExtraHours", this, value, old);
                 CostChanged?.Invoke(new CostBatch());
             }
         }
@@ -37,7 +37,7 @@ namespace EstimatingLibrary
 
                 var old = ENGExtraHours;
                 _engExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "ENGExtraHours", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ENGExtraHours", this, value, old);
                 CostChanged?.Invoke(new CostBatch());
             }
         }
@@ -53,7 +53,7 @@ namespace EstimatingLibrary
 
                 var old = CommExtraHours;
                 _commExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "CommExtraHours", this, value, old);
+                notifyCombinedChanged(Change.Edit, "CommExtraHours", this, value, old);
                 CostChanged?.Invoke(new CostBatch());
 
             }
@@ -69,7 +69,7 @@ namespace EstimatingLibrary
             {
                 var old = SoftExtraHours;
                 _softExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "SoftExtraHours", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SoftExtraHours", this, value, old);
                 CostChanged?.Invoke(new CostBatch());
             }
         }
@@ -86,7 +86,7 @@ namespace EstimatingLibrary
             {
                 var old = GraphExtraHours;
                 _graphExtraHours = value;
-                NotifyCombinedChanged(Change.Edit, "GraphExtraHours", this, value, old);
+                notifyCombinedChanged(Change.Edit, "GraphExtraHours", this, value, old);
                 CostChanged?.Invoke(new CostBatch());
             }
         }

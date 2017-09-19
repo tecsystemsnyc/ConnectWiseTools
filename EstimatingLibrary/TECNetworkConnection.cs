@@ -26,8 +26,8 @@ namespace EstimatingLibrary
                 ChildrenControllers.CollectionChanged -= ChildrenControllers_CollectionChanged;
                 _childrenControllers = value;
                 ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
-                NotifyCombinedChanged(Change.Edit, "ChildrenControllers", this, value, old);
-                RaisePropertyChanged("PossibleIO");
+                notifyCombinedChanged(Change.Edit, "ChildrenControllers", this, value, old);
+                raisePropertyChanged("PossibleIO");
             }
         }
         public TECElectricalMaterial ConnectionType
@@ -38,8 +38,8 @@ namespace EstimatingLibrary
                 var old = ConnectionType;
                 var originalCost = this.CostBatch;
                 _connectionType = value;
-                NotifyCombinedChanged(Change.Edit, "ConnectionType", this, value, old);
-                NotifyCostChanged(CostBatch - originalCost);
+                notifyCombinedChanged(Change.Edit, "ConnectionType", this, value, old);
+                notifyCostChanged(CostBatch - originalCost);
 
             }
         }
@@ -50,8 +50,8 @@ namespace EstimatingLibrary
             {
                 var old = IOType;
                 _ioType = value;
-                NotifyCombinedChanged(Change.Edit, "IOType", this, value, old);
-                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
+                notifyCombinedChanged(Change.Edit, "IOType", this, value, old);
+                //notifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
         
@@ -123,16 +123,16 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, "ChildrenControllers", this, item);
-                    RaisePropertyChanged("PossibleIO");
+                    notifyCombinedChanged(Change.Add, "ChildrenControllers", this, item);
+                    raisePropertyChanged("PossibleIO");
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, "ChildrenControllers", this, item);
-                    RaisePropertyChanged("PossibleIO");
+                    notifyCombinedChanged(Change.Remove, "ChildrenControllers", this, item);
+                    raisePropertyChanged("PossibleIO");
                 }
             }
         }
