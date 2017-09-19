@@ -63,8 +63,8 @@ namespace Tests
         [TestMethod]
         public void Controller_AddSubScope()
         {
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()));
-            TECSubScope subScope = new TECSubScope();
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
+            TECSubScope subScope = new TECSubScope(false);
 
             controller.AddSubScope(subScope, false);
 
@@ -75,8 +75,8 @@ namespace Tests
         [TestMethod]
         public void Controller_RemoveSubScope()
         {
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()));
-            TECSubScope subScope = new TECSubScope();
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
+            TECSubScope subScope = new TECSubScope(false);
 
             controller.AddSubScope(subScope, false);
             controller.RemoveSubScope(subScope);
@@ -155,9 +155,9 @@ namespace Tests
                 system.AddInstance(bid);
             }
 
-            system.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
-            system.Controllers.Add(TestHelper.CreateTestController(bid.Catalogs));
-            system.Panels.Add(TestHelper.CreateTestPanel(bid.Catalogs));
+            system.Equipment.Add(TestHelper.CreateTestEquipment(true, bid.Catalogs));
+            system.Controllers.Add(TestHelper.CreateTestController(true, bid.Catalogs));
+            system.Panels.Add(TestHelper.CreateTestPanel(true, bid.Catalogs));
 
             foreach (TECSystem instance in system.Instances)
             {
@@ -172,12 +172,12 @@ namespace Tests
         public void System_RemoveSystemInstanceWithBidConnection()
         {
             var bid = new TECBid();
-            var bidController = new TECController(new TECControllerType(new TECManufacturer()));
+            var bidController = new TECController(new TECControllerType(new TECManufacturer()), false);
             bid.Controllers.Add(bidController);
 
             var system = new TECTypical();
-            var equipment = new TECEquipment();
-            var subScope = new TECSubScope();
+            var equipment = new TECEquipment(true);
+            var subScope = new TECSubScope(true);
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
             bidController.AddSubScope(subScope, true);
