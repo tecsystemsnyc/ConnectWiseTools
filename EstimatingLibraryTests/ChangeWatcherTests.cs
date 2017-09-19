@@ -168,7 +168,7 @@ namespace Tests
         public void AddScopeBranchToBid()
         {
             //Arrange
-            TECScopeBranch sb = new TECScopeBranch();
+            TECScopeBranch sb = new TECScopeBranch(false);
 
             //Act
             bid.ScopeTree.Add(sb);
@@ -362,7 +362,7 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECScopeBranch sb = new TECScopeBranch();
+            TECScopeBranch sb = new TECScopeBranch(true);
 
             resetRaised();
 
@@ -958,7 +958,7 @@ namespace Tests
         public void RemoveScopeBranchFromBid()
         {
             //Arrange
-            TECScopeBranch sb = new TECScopeBranch();
+            TECScopeBranch sb = new TECScopeBranch(false);
             bid.ScopeTree.Add(sb);
 
             resetRaised();
@@ -1168,7 +1168,7 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECScopeBranch sb = new TECScopeBranch();
+            TECScopeBranch sb = new TECScopeBranch(true);
             typical.ScopeBranches.Add(sb);
 
             resetRaised();
@@ -1896,7 +1896,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECScopeBranch branch = new TECScopeBranch();
+            TECScopeBranch branch = new TECScopeBranch(false);
             branch.Label = original;
             bid.ScopeTree.Add(branch);
 
@@ -2043,7 +2043,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECScopeBranch branch = new TECScopeBranch();
+            TECScopeBranch branch = new TECScopeBranch(true);
             branch.Label = original;
             typical.ScopeBranches.Add(branch);
 
@@ -2325,7 +2325,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECScopeBranch branch = new TECScopeBranch();
+            TECScopeBranch branch = new TECScopeBranch(true);
             typical.ScopeBranches.Add(branch);
             TECSystem system = typical.AddInstance(bid);
             TECScopeBranch systemScopeBranch = system.ScopeBranches[0];

@@ -43,7 +43,7 @@ namespace EstimatingLibrary
             { guidDictionary[_guid] = source.Guid; }
             foreach (TECEquipment equipment in source.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, guidDictionary, characteristicReference);
+                var toAdd = new TECEquipment(equipment, true, guidDictionary, characteristicReference);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(equipment, toAdd);
@@ -52,7 +52,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source.Controllers)
             {
-                var toAdd = new TECController(controller, guidDictionary);
+                var toAdd = new TECController(controller, true, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);
@@ -61,7 +61,7 @@ namespace EstimatingLibrary
             }
             foreach (TECPanel panel in source.Panels)
             {
-                var toAdd = new TECPanel(panel, guidDictionary);
+                var toAdd = new TECPanel(panel, true, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(panel, toAdd);
@@ -70,12 +70,12 @@ namespace EstimatingLibrary
             }
             foreach (TECMisc misc in source.MiscCosts)
             {
-                var toAdd = new TECMisc(misc);
+                var toAdd = new TECMisc(misc, true);
                 MiscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in source.ScopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch);
+                var toAdd = new TECScopeBranch(branch, true);
                 ScopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
@@ -87,27 +87,27 @@ namespace EstimatingLibrary
             { guidDictionary[_guid] = system.Guid; }
             foreach (TECEquipment equipment in system.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, guidDictionary);
+                var toAdd = new TECEquipment(equipment, true, guidDictionary);
                 Equipment.Add(toAdd);
             }
             foreach (TECController controller in system.Controllers)
             {
-                var toAdd = new TECController(controller, guidDictionary);
+                var toAdd = new TECController(controller, true, guidDictionary);
                 Controllers.Add(toAdd);
             }
             foreach (TECPanel panel in system.Panels)
             {
-                var toAdd = new TECPanel(panel, guidDictionary);
+                var toAdd = new TECPanel(panel, true, guidDictionary);
                 Panels.Add(toAdd);
             }
             foreach (TECMisc misc in system.MiscCosts)
             {
-                var toAdd = new TECMisc(misc);
+                var toAdd = new TECMisc(misc, true);
                 MiscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in system.ScopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch);
+                var toAdd = new TECScopeBranch(branch, true);
                 ScopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(system);
@@ -158,31 +158,31 @@ namespace EstimatingLibrary
             newSystem.Description = Description;
             foreach (TECEquipment equipment in Equipment)
             {
-                var toAdd = new TECEquipment(equipment, guidDictionary, TypicalInstanceDictionary);
+                var toAdd = new TECEquipment(equipment, false, guidDictionary, TypicalInstanceDictionary);
                 _typicalInstanceDictionary.AddItem(equipment, toAdd);
                 newSystem.Equipment.Add(toAdd);
             }
             foreach (TECController controller in Controllers)
             {
-                var toAdd = new TECController(controller, guidDictionary);
+                var toAdd = new TECController(controller, false, guidDictionary);
                 _typicalInstanceDictionary.AddItem(controller, toAdd);
                 newSystem.Controllers.Add(toAdd);
             }
             foreach (TECPanel panel in Panels)
             {
-                var toAdd = new TECPanel(panel, guidDictionary);
+                var toAdd = new TECPanel(panel, false, guidDictionary);
                 _typicalInstanceDictionary.AddItem(panel, toAdd);
                 newSystem.Panels.Add(toAdd);
             }
             foreach (TECMisc misc in MiscCosts)
             {
-                var toAdd = new TECMisc(misc);
+                var toAdd = new TECMisc(misc, false);
                 _typicalInstanceDictionary.AddItem(misc, toAdd);
                 newSystem.MiscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in ScopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch);
+                var toAdd = new TECScopeBranch(branch, false);
                 _typicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
@@ -447,7 +447,7 @@ namespace EstimatingLibrary
                 var characteristicController = value as TECController;
                 foreach (TECSystem system in Instances)
                 {
-                    var controllerToAdd = new TECController(characteristicController);
+                    var controllerToAdd = new TECController(characteristicController, false);
                     controllerToAdd.IsGlobal = false;
                     _typicalInstanceDictionary.AddItem(characteristicController, controllerToAdd);
                     system.Controllers.Add(controllerToAdd);
@@ -458,7 +458,7 @@ namespace EstimatingLibrary
                 var characteristicPanel = value as TECPanel;
                 foreach (TECSystem system in Instances)
                 {
-                    var panelToAdd = new TECPanel(characteristicPanel);
+                    var panelToAdd = new TECPanel(characteristicPanel, false);
                     _typicalInstanceDictionary.AddItem(characteristicPanel, panelToAdd);
                     system.Panels.Add(panelToAdd);
                 }
@@ -468,7 +468,7 @@ namespace EstimatingLibrary
                 var characteristicEquipment = value as TECEquipment;
                 foreach (TECSystem system in Instances)
                 {
-                    var equipmentToAdd = new TECEquipment(characteristicEquipment, characteristicReference: TypicalInstanceDictionary);
+                    var equipmentToAdd = new TECEquipment(characteristicEquipment, false, characteristicReference: TypicalInstanceDictionary);
                     _typicalInstanceDictionary.AddItem(characteristicEquipment, equipmentToAdd);
                     system.Equipment.Add(equipmentToAdd);
                 }
@@ -477,7 +477,7 @@ namespace EstimatingLibrary
             {
                 foreach (TECSystem system in Instances)
                 {
-                    var miscToAdd = new TECMisc(misc);
+                    var miscToAdd = new TECMisc(misc, false);
                     _typicalInstanceDictionary.AddItem(misc, miscToAdd);
                     system.MiscCosts.Add(miscToAdd);
                 }
@@ -486,7 +486,7 @@ namespace EstimatingLibrary
             {
                 foreach (TECSystem system in Instances)
                 {
-                    var branchToAdd = new TECScopeBranch(branch);
+                    var branchToAdd = new TECScopeBranch(branch, false);
                     _typicalInstanceDictionary.AddItem(branch, branchToAdd);
                     system.ScopeBranches.Add(branchToAdd);
                 }
@@ -499,7 +499,7 @@ namespace EstimatingLibrary
                 {
                     foreach (TECEquipment equipment in TypicalInstanceDictionary.GetInstances(characteristicEquipment))
                     {
-                        var subScopeToAdd = new TECSubScope(characteristicSubScope, characteristicReference: TypicalInstanceDictionary);
+                        var subScopeToAdd = new TECSubScope(characteristicSubScope, false, characteristicReference: TypicalInstanceDictionary);
                         _typicalInstanceDictionary.AddItem(characteristicSubScope, subScopeToAdd);
                         equipment.SubScope.Add(subScopeToAdd);
                     }
@@ -525,7 +525,7 @@ namespace EstimatingLibrary
                 {
                     foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
-                        var pointToAdd = new TECPoint(characteristicPoint);
+                        var pointToAdd = new TECPoint(characteristicPoint, false);
                         _typicalInstanceDictionary.AddItem(characteristicPoint, pointToAdd);
                         subScope.Points.Add(pointToAdd);
                     }

@@ -65,10 +65,10 @@ namespace EstimatingLibrary
         #region Constructors
         public TECSubScopeConnection(Guid guid, bool isTypical) : base(guid, isTypical) { }
         public TECSubScopeConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
-        public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
+        public TECSubScopeConnection(TECSubScopeConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
         {
             if (connectionSource._subScope != null)
-            { _subScope = new TECSubScope(connectionSource.SubScope, guidDictionary); }
+            { _subScope = new TECSubScope(connectionSource.SubScope, isTypical, guidDictionary); }
         }
         #endregion Constructors
 

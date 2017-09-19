@@ -99,12 +99,12 @@ namespace EstimatingLibrary
             ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
         }
         public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
-        public TECNetworkConnection(TECNetworkConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
+        public TECNetworkConnection(TECNetworkConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
         {
             _childrenControllers = new ObservableCollection<TECController>();
             foreach (TECController controller in connectionSource.ChildrenControllers)
             {
-                _childrenControllers.Add(new TECController(controller, guidDictionary));
+                _childrenControllers.Add(new TECController(controller, isTypical, guidDictionary));
             }
 
             if (connectionSource.ConnectionType != null)
