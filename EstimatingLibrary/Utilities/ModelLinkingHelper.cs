@@ -407,7 +407,8 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope, Dictionary<Guid, Guid> guidDictionary = null)
+        private static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope,
+            Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECSubScope subScope in subscope)
             {

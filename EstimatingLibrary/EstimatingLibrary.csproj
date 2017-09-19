@@ -104,6 +104,7 @@
     <Compile Include="Interfaces\INotifyPointChanged.cs" />
     <Compile Include="Interfaces\ISaveable.cs" />
     <Compile Include="Interfaces\ITECConnectable.cs" />
+    <Compile Include="Interfaces\ITypicalable.cs" />
     <Compile Include="TECExtraLabor.cs" />
     <Compile Include="TECTypical.cs" />
     <Compile Include="TECValve.cs" />
