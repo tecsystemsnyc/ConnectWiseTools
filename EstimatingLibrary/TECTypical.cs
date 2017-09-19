@@ -289,9 +289,9 @@ namespace EstimatingLibrary
                 {
                     handleRemove(args.Value as TECObject, args.Sender);
                 }
-                else if (args.Value is TECPoint && args.OldValue is TECPoint)
+                else if (args.Sender is TECPoint)
                 {
-                    handlePointChanged(args.Value as TECPoint, args.PropertyName);
+                    handlePointChanged(args.Sender as TECPoint, args.PropertyName);
                 }
             }
             else if (args.PropertyName == "Connection" && args.Sender is TECSubScope)
