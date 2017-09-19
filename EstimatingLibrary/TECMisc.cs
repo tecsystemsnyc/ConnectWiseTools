@@ -8,19 +8,20 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, IDragDropable
+    public class TECMisc : TECCost, IDragDropable, ITypicalable
     {
         #region Fields
         private int _quantity;
         #endregion
 
         #region Constructors
-        public TECMisc(Guid guid, CostType type) : base(guid, type)
+        public TECMisc(Guid guid, CostType type, bool isTypical) : base(guid, type)
         {
+            IsTypical = isTypical;
             _quantity = 1;
         }
-        public TECMisc(CostType type) : this(Guid.NewGuid(), type) { }
-        public TECMisc(TECMisc miscSource) : this(miscSource.Type)
+        public TECMisc(CostType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
+        public TECMisc(TECMisc miscSource) : this(miscSource.Type, miscSource.IsTypical)
         {
             copyPropertiesFromCost(miscSource);
         }
@@ -79,6 +80,7 @@ namespace EstimatingLibrary
             }
         }
         
+        public bool IsTypical { get; private set; }
         #endregion
 
         #region Methods

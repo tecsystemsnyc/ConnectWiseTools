@@ -9,7 +9,7 @@ using EstimatingLibrary.Utilities;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyPointChanged, IDragDropable
+    public class TECEquipment : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
@@ -43,21 +43,24 @@ namespace EstimatingLibrary
         {
             get { return points(); }
         }
+
+        public bool IsTypical { get; private set; }
         #endregion //Properties
 
         #region Constructors
-        public TECEquipment(Guid guid) : base(guid)
+        public TECEquipment(Guid guid, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
             _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
             base.PropertyChanged += TECEquipment_PropertyChanged;
         }
 
-        public TECEquipment() : this(Guid.NewGuid()) { }
+        public TECEquipment(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
         public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this()
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(equipmentSource.IsTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }

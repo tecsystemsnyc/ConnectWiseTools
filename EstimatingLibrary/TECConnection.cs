@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECConnection : TECObject, INotifyCostChanged, ISaveable
+    public abstract class TECConnection : TECObject, INotifyCostChanged, ISaveable, ITypicalable
     {
         #region Properties
         protected double _length;
@@ -80,18 +80,20 @@ namespace EstimatingLibrary
         {
             get { return relatedObjects(); }
         }
+
+        public bool IsTypical { get; private set; }
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;
 
         #region Constructors 
-        public TECConnection(Guid guid) : base(guid)
+        public TECConnection(Guid guid, bool isTypical) : base(guid)
         {
             _length = 0;
             _conduitLength = 0;
         }
-        public TECConnection() : this(Guid.NewGuid()) { }
-        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this(connectionSource.IsTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }

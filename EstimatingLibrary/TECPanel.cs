@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, IDragDropable
+    public class TECPanel : TECLocated, IDragDropable, ITypicalable
     {
         #region Properties
         private TECPanelType _type;
@@ -39,17 +39,19 @@ namespace EstimatingLibrary
             }
         }
         
+        public bool IsTypical { get; private set; }
         #endregion
 
-        public TECPanel(Guid guid, TECPanelType type) : base(guid)
+        public TECPanel(Guid guid, TECPanelType type, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
             _type = type;
             Controllers.CollectionChanged += controllersCollectionChanged;
         }
-        public TECPanel(TECPanelType type) : this(Guid.NewGuid(), type) { }
-        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type)
+        public TECPanel(TECPanelType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
+        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type, panel.IsTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }

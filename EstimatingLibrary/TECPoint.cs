@@ -12,7 +12,7 @@ namespace EstimatingLibrary
 
     public enum PointTypes { AI = 1, AO, BI, BO, Serial };
 
-    public class TECPoint : TECLabeled, INotifyPointChanged
+    public class TECPoint : TECLabeled, INotifyPointChanged, ITypicalable
     {
         #region Properties
         private PointTypes _type;
@@ -68,13 +68,14 @@ namespace EstimatingLibrary
             }
         }
         
+        public bool IsTypical { get; private set; }
         #endregion //Properties
 
         #region Constructors
-        public TECPoint(Guid guid) : base(guid) { }
-        public TECPoint() : this(Guid.NewGuid()) { }
+        public TECPoint(Guid guid, bool isTypical) : base(guid) { IsTypical = isTypical; }
+        public TECPoint(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
-        public TECPoint(TECPoint pointSource) : this()
+        public TECPoint(TECPoint pointSource) : this(pointSource.IsTypical)
         {
             _type = pointSource.Type;
             _label = pointSource.Label;

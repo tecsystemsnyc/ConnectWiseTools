@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
     {
         #region Properties
         private ObservableCollection<ITECConnectable> _devices;
@@ -77,21 +77,23 @@ namespace EstimatingLibrary
             }
         }
         
+        public bool IsTypical { get; private set; }
         #endregion //Properties
 
         #region Constructors
-        public TECSubScope(Guid guid) : base(guid)
+        public TECSubScope(Guid guid, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
             _devices = new ObservableCollection<ITECConnectable>();
             _points = new ObservableCollection<TECPoint>();
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
         }
-        public TECSubScope() : this(Guid.NewGuid()) { }
+        public TECSubScope(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
         public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this()
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(sourceSubScope.IsTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
