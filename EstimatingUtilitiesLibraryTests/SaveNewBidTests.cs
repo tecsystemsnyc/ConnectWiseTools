@@ -92,8 +92,8 @@ namespace Tests
                     break;
                 }
             }
-            expectedEquipment = expectedBid.RandomEquipment();
-            expectedSubScope = expectedBid.RandomSubScope();
+            expectedEquipment = expectedBid.Systems[0].Equipment[0];
+            expectedSubScope = expectedBid.Systems[0].Equipment[0].SubScope[0];
             expectedDevice = null;
             foreach(TECDevice device in expectedBid.Catalogs.Devices)
             {
@@ -104,8 +104,8 @@ namespace Tests
                 }
             }
 
-            expectedManufacturer = expectedBid.Catalogs.Manufacturers.RandomObject();
-            expectedPoint = expectedBid.RandomPoint();
+            expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
+            expectedPoint = expectedBid.Systems[0].Equipment[0].SubScope[0].Points[0];
 
             expectedBranch = null;
             foreach (TECScopeBranch branch in expectedBid.ScopeTree)
@@ -117,15 +117,15 @@ namespace Tests
                 }
             }
 
-            expectedNote = expectedBid.Notes.RandomObject();
-            expectedExclusion = expectedBid.Exclusions.RandomObject();
-            expectedTag = expectedBid.Catalogs.Tags.RandomObject();
+            expectedNote = expectedBid.Notes[0];
+            expectedExclusion = expectedBid.Exclusions[0];
+            expectedTag = expectedBid.Catalogs.Tags[0];
 
             //expectedDrawing = expectedBid.Drawings[0];
             //expectedPage = expectedDrawing.Pages[0];
             //expectedVisualScope = expectedPage.PageScope[0];
 
-            expectedController = expectedBid.Controllers.RandomObject();
+            expectedController = expectedBid.Controllers[0];
 
             path = Path.GetTempFileName();
 
@@ -391,7 +391,7 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
             TECTypical system = new TECTypical();
-            TECEquipment expectedEquipment = TestHelper.CreateTestEquipment(bid.Catalogs);
+            TECEquipment expectedEquipment = TestHelper.CreateTestEquipment(true, bid.Catalogs);
             system.Equipment.Add(expectedEquipment);
             bid.Systems.Add(system);
 
@@ -416,8 +416,8 @@ namespace Tests
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
             TECTypical system = new TECTypical();
-            TECEquipment expectedEquipment = new TECEquipment();
-            TECSubScope expectedSubScope = TestHelper.CreateTestSubScope(bid.Catalogs);
+            TECEquipment expectedEquipment = new TECEquipment(true);
+            TECSubScope expectedSubScope = TestHelper.CreateTestSubScope(true, bid.Catalogs);
             expectedEquipment.SubScope.Add(expectedSubScope);
             system.Equipment.Add(expectedEquipment);
 
@@ -666,7 +666,7 @@ namespace Tests
         public void SaveAs_Bid_Panel()
         {
             //Arrange
-            TECPanel expectedPanel = expectedBid.Panels.RandomObject();
+            TECPanel expectedPanel = expectedBid.Panels[0];
             TECPanel actualPanel = null;
             foreach (TECPanel panel in actualBid.Panels)
             {
@@ -685,7 +685,7 @@ namespace Tests
         public void SaveAs_Bid_PanelType()
         {
             //Arrange
-            TECPanelType expectedCost = expectedBid.Catalogs.PanelTypes.RandomObject();
+            TECPanelType expectedCost = expectedBid.Catalogs.PanelTypes[0];
             TECPanelType actualCost = null;
             foreach(TECPanelType type in actualBid.Catalogs.PanelTypes)
             {
@@ -706,7 +706,7 @@ namespace Tests
         public void SaveAs_Bid_ControllerType()
         {
             //Arrange
-            TECControllerType expectedCost = expectedBid.Catalogs.ControllerTypes.RandomObject();
+            TECControllerType expectedCost = expectedBid.Catalogs.ControllerTypes[0];
             TECControllerType actualCost = null;
             foreach (TECControllerType type in actualBid.Catalogs.ControllerTypes)
             {
@@ -727,7 +727,7 @@ namespace Tests
         public void SaveAs_Bid_IOMOdule()
         {
             //Arrange
-            TECIOModule expectedCost = expectedBid.Catalogs.IOModules.RandomObject();
+            TECIOModule expectedCost = expectedBid.Catalogs.IOModules[0];
             TECIOModule actualCost = null;
             foreach (TECIOModule type in actualBid.Catalogs.IOModules)
             {

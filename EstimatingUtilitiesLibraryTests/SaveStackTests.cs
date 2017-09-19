@@ -22,7 +22,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, false);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -59,7 +59,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, false);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -93,11 +93,11 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, false);
             bid.Panels.Add(panel);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECController(controllerType);
+            TECController controller = new TECController(controllerType, false);
             bid.Controllers.Add(controller);
 
             //Act
@@ -126,7 +126,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -374,7 +374,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             bid.Systems.Add(system);
 
             //Act
@@ -410,7 +410,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); 
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -460,7 +460,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             bid.Systems.Add(typical);
             typical.Equipment.Add(equip);
 
@@ -514,14 +514,14 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
             Dictionary<string, string>  data = new Dictionary<string, string>();
@@ -550,13 +550,13 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
             TECSystem instance = system.AddInstance(bid);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -601,9 +601,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -667,16 +667,16 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -706,15 +706,15 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -757,11 +757,11 @@ namespace Tests
             TECBid bid = new TECBid(); 
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
 
             //Act
@@ -842,9 +842,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -872,9 +872,9 @@ namespace Tests
             TECBid bid = new TECBid();
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
@@ -912,9 +912,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
@@ -991,7 +991,7 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, true);
             bid.Systems.Add(system);
 
             //Act
@@ -1031,7 +1031,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1095,7 +1095,7 @@ namespace Tests
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
 
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, true);
             bid.Systems.Add(typical);
             typical.Controllers.Add(controller);
 
@@ -1152,7 +1152,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(system);
 
             //Act
@@ -1190,14 +1190,14 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(system);
 
             system.Panels.Add(panel);
 
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
-            TECController controller = new TECController(ControllerType);
+            TECController controller = new TECController(ControllerType, true);
             system.Controllers.Add(controller);
 
             //Act
@@ -1225,7 +1225,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1281,7 +1281,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
 
@@ -1336,7 +1336,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             bid.Systems.Add(system);
 
             //Act
@@ -1371,7 +1371,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1427,7 +1427,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             bid.Systems.Add(typical);
             typical.MiscCosts.Add(misc);
 
@@ -1518,7 +1518,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, false);
             bid.Controllers.Add(controller);
 
             //Act
@@ -1552,7 +1552,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, false);
             bid.Panels.Add(panel);
 
             //Act
@@ -1585,11 +1585,11 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, false);
             bid.Panels.Add(panel);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECController(controllerType);
+            TECController controller = new TECController(controllerType, false);
             bid.Controllers.Add(controller);
             panel.Controllers.Add(controller);
 
@@ -1619,7 +1619,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
             bid.MiscCosts.Add(misc);
 
             //Act
@@ -1848,7 +1848,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             bid.Systems.Add(system);
             system.Equipment.Add(equip);
 
@@ -1881,7 +1881,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Equipment.Add(equip);
@@ -1926,7 +1926,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             bid.Systems.Add(typical);
             typical.Equipment.Add(equip);
             TECSystem instance = typical.AddInstance(bid);
@@ -1979,9 +1979,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -2012,10 +2012,10 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
             TECSystem instance = system.AddInstance(bid);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -2057,9 +2057,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
@@ -2117,11 +2117,11 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
 
             //Act
@@ -2152,12 +2152,12 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
 
             //Act
@@ -2199,11 +2199,11 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
             TECSystem instance = system.AddInstance(bid);
             
@@ -2275,9 +2275,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             subScope.Devices.Add(device);
@@ -2304,9 +2304,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
             TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
@@ -2341,9 +2341,9 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
@@ -2410,7 +2410,7 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, true);
             bid.Systems.Add(system);
             system.Controllers.Add(controller);
 
@@ -2449,7 +2449,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Controllers.Add(controller);
@@ -2505,7 +2505,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type);
+            TECController controller = new TECController(type, true);
             bid.Systems.Add(typical);
             typical.Controllers.Add(controller);
             TECSystem instance = typical.AddInstance(bid);
@@ -2557,7 +2557,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(system);
             system.Panels.Add(panel);
 
@@ -2594,14 +2594,14 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(system);
 
             system.Panels.Add(panel);
 
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
-            TECController controller = new TECController(ControllerType);
+            TECController controller = new TECController(ControllerType, true);
             system.Controllers.Add(controller);
             panel.Controllers.Add(controller);
 
@@ -2630,7 +2630,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Panels.Add(panel);
@@ -2684,7 +2684,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type);
+            TECPanel panel = new TECPanel(type, true);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
             TECSystem instance = typical.AddInstance(bid);
@@ -2734,7 +2734,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             bid.Systems.Add(system);
             system.MiscCosts.Add(misc);
 
@@ -2765,7 +2765,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.MiscCosts.Add(misc);
@@ -2812,7 +2812,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             bid.Systems.Add(typical);
             typical.MiscCosts.Add(misc);
             TECSystem instance = typical.AddInstance(bid);

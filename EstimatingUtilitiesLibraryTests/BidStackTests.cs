@@ -259,7 +259,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECMisc edit = new TECMisc(CostType.TEC);
+            TECMisc edit = new TECMisc(CostType.TEC, false);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -284,7 +284,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECPanel edit = new TECPanel(Bid.Catalogs.PanelTypes[0]);
+            TECPanel edit = new TECPanel(Bid.Catalogs.PanelTypes[0], false);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -469,7 +469,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var system = Bid.Systems.RandomObject();
+            var system = Bid.Systems[0];
             string expected = system.Name;
             string edit = "Edit";
 
@@ -491,7 +491,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var system = Bid.Systems.RandomObject();
+            var system = Bid.Systems[0];
             string expected = system.Description;
             string edit = "Edit";
             
@@ -514,13 +514,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var system = Bid.Systems.RandomObject();
+            var system = Bid.Systems[0];
             ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in system.Equipment)
             {
                 expected.Add(item);
             }
-            TECEquipment edit = new TECEquipment();
+            TECEquipment edit = new TECEquipment(true);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -574,7 +574,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var equipment = Bid.RandomEquipment();
+            var equipment = Bid.Systems[0].Equipment[0];
             string expected = equipment.Name;
             string edit = "Edit";
 
@@ -596,7 +596,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var equipment = Bid.RandomEquipment();
+            var equipment = Bid.Systems[0].Equipment[0];
             string expected = equipment.Description;
             string edit = "Edit";
 
@@ -618,13 +618,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var equipment = Bid.RandomEquipment();
+            var equipment = Bid.Systems[0].Equipment[0];
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in equipment.SubScope)
             {
                 expected.Add(item);
             }
-            TECSubScope edit = new TECSubScope();
+            TECSubScope edit = new TECSubScope(true);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -648,7 +648,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var subScope = Bid.RandomSubScope();
+            var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
             string expected = subScope.Name;
             string edit = "Edit";
 
@@ -670,7 +670,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var subScope = Bid.RandomSubScope();
+            var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
             string expected = subScope.Description;
             string edit = "Edit";
 
@@ -693,13 +693,13 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var subScope = Bid.RandomSubScope();
+            var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
             ObservableCollection<TECPoint> expected = new ObservableCollection<TECPoint>();
             foreach (TECPoint item in subScope.Points)
             {
                 expected.Add(item);
             }
-            TECPoint edit = new TECPoint();
+            TECPoint edit = new TECPoint(true);
             edit.Type = PointTypes.AI;
 
             //Act
@@ -720,15 +720,15 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var subScope = Bid.RandomSubScope();
+            var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
             ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
             foreach (TECDevice item in subScope.Devices)
             {
                 expected.Add(item);
             }
             ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
-            types.Add(Bid.Catalogs.ConnectionTypes.RandomObject());
-            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers.RandomObject());
+            types.Add(Bid.Catalogs.ConnectionTypes[0]);
+            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -766,9 +766,9 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECSubScope testSubScope = Bid.Systems[0].Equipment[0].SubScope.RandomObject();
+            TECSubScope testSubScope = Bid.Systems[0].Equipment[0].SubScope[0];
             int expected = testSubScope.AssociatedCosts.Count;
-            TECCost edit = Bid.Catalogs.AssociatedCosts.RandomObject();
+            TECCost edit = Bid.Catalogs.AssociatedCosts[0];
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid);
@@ -791,7 +791,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var point = Bid.RandomPoint();
+            var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             string expected = point.Label;
             string edit = "Edit";
 
@@ -813,7 +813,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var point = Bid.RandomPoint();
+            var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             int expected = point.Quantity;
             int edit = 3;
 
@@ -835,7 +835,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            var point = Bid.RandomPoint();
+            var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             string expected = point.Type.ToString();
             PointTypes edit = PointTypes.AO;
 
@@ -884,7 +884,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECControllerType expected = Bid.Controllers[0].Type;
-            TECControllerType edit = Bid.Catalogs.ControllerTypes.RandomObject();
+            TECControllerType edit = Bid.Catalogs.ControllerTypes[0];
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1102,7 +1102,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECMisc edit = new TECMisc(CostType.TEC);
+            TECMisc edit = new TECMisc(CostType.TEC, false);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1307,7 +1307,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var system = Bid.Systems.RandomObject();
+            var system = Bid.Systems[0];
             system.Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1327,7 +1327,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var system = Bid.Systems.RandomObject();
+            var system = Bid.Systems[0];
             system.Description = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1343,11 +1343,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECEquipment edit = new TECEquipment();
+            TECEquipment edit = new TECEquipment(true);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var system = Bid.Systems.RandomObject();
+            var system = Bid.Systems[0];
             system.Equipment.Add(edit);
             var expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in system.Equipment)
@@ -1399,7 +1399,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var equipment = Bid.RandomEquipment();
+            var equipment = Bid.Systems[0].Equipment[0];
             equipment.Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1419,7 +1419,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var equipment = Bid.RandomEquipment();
+            var equipment = Bid.Systems[0].Equipment[0];
             equipment.Description = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1435,11 +1435,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECSubScope edit = new TECSubScope();
+            TECSubScope edit = new TECSubScope(true);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var equipment = Bid.RandomEquipment();
+            var equipment = Bid.Systems[0].Equipment[0];
             equipment.SubScope.Add(edit);
             var expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in equipment.SubScope)
@@ -1466,7 +1466,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var subscope = Bid.RandomSubScope();
+            var subscope = Bid.Systems[0].Equipment[0].SubScope[0];
             subscope.Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1486,7 +1486,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var subscope = Bid.RandomSubScope();
+            var subscope = Bid.Systems[0].Equipment[0].SubScope[0];
             subscope.Description = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1502,12 +1502,12 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECPoint edit = new TECPoint();
+            TECPoint edit = new TECPoint(true);
             edit.Type = PointTypes.AI;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var subscope = Bid.RandomSubScope();
+            var subscope = Bid.Systems[0].Equipment[0].SubScope[0];
             subscope.Points.Add(edit);
             var expected = new ObservableCollection<TECPoint>();
             foreach (TECPoint item in subscope.Points)
@@ -1534,7 +1534,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var subscope = Bid.RandomSubScope();
+            var subscope = Bid.Systems[0].Equipment[0].SubScope[0];
             subscope.Devices.Add(edit);
             var expected = new ObservableCollection<TECDevice>();
             foreach (TECDevice item in subscope.Devices)
@@ -1562,7 +1562,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var point = Bid.RandomPoint();
+            var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             point.Label = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1583,7 +1583,7 @@ namespace Tests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            var point = Bid.RandomPoint();
+            var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             point.Quantity = edit;
 
             testStack.Undo();
@@ -1604,7 +1604,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var point = Bid.RandomPoint();
+            var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             point.Type = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1627,7 +1627,7 @@ namespace Tests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var panel = Bid.Panels.RandomObject();
+            var panel = Bid.Panels[0];
             panel.Name = edit;
             testStack.Undo();
             testStack.Redo();
@@ -1643,11 +1643,11 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers.RandomObject());
+            TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var panel = Bid.Panels.RandomObject();
+            var panel = Bid.Panels[0];
             panel.Type = edit;
             testStack.Undo();
             testStack.Redo();

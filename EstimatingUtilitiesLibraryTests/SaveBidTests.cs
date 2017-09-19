@@ -484,7 +484,7 @@ namespace Tests
         public void Save_Bid_Add_System_Instance()
         {
             //Act
-            TECTypical typical = bid.Systems.RandomObject();
+            TECTypical typical = bid.Systems[0];
 
             TECSystem expectedSystem = typical.AddInstance(bid);
            
@@ -515,9 +515,9 @@ namespace Tests
         public void Save_Bid_Add_System_Instance_Edit()
         {
             //Act
-            TECTypical typical = bid.Systems.RandomObject();
+            TECTypical typical = bid.Systems[0];
 
-            typical.Equipment.Add(TestHelper.CreateTestEquipment(bid.Catalogs));
+            typical.Equipment.Add(TestHelper.CreateTestEquipment(true, bid.Catalogs));
             TECSystem expectedSystem = typical.AddInstance(bid);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -620,8 +620,8 @@ namespace Tests
         public void Save_Bid_System_Misc()
         {
             //Act
-            TECSystem expectedSystem = bid.Systems.RandomObject();
-            var expectedMisc = new TECMisc(CostType.Electrical);
+            TECSystem expectedSystem = bid.Systems[0];
+            var expectedMisc = new TECMisc(CostType.Electrical, true);
             expectedSystem.MiscCosts.Add(expectedMisc);
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -657,7 +657,7 @@ namespace Tests
         public void Save_Bid_Add_Equipment()
         {
             //Act
-            TECEquipment expectedEquipment = new TECEquipment();
+            TECEquipment expectedEquipment = new TECEquipment(true);
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Description";
 
@@ -730,7 +730,7 @@ namespace Tests
         public void Save_Bid_Equipment_Name()
         {
             //Act
-            TECEquipment expectedEquip = bid.RandomEquipment();
+            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.Name = "Save Equip Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -758,7 +758,7 @@ namespace Tests
         public void Save_Bid_Equipment_Description()
         {
             //Act
-            TECEquipment expectedEquip = bid.RandomEquipment();
+            TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.Description = "Save Equip Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -791,11 +791,11 @@ namespace Tests
         public void Save_Bid_Add_SubScope()
         {
             //Act
-            TECSubScope expectedSubScope = new TECSubScope();
+            TECSubScope expectedSubScope = new TECSubScope(true);
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
 
-            bid.RandomEquipment().SubScope.Add(expectedSubScope);
+            bid.Systems[0].Equipment[0].SubScope.Add(expectedSubScope);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -828,7 +828,7 @@ namespace Tests
         public void Save_Bid_Remove_SubScope()
         {
             //Act
-            TECEquipment equipToModify = bid.RandomEquipment();
+            TECEquipment equipToModify = bid.Systems[0].Equipment[0];
             int oldNumSubScope = equipToModify.SubScope.Count();
             TECSubScope subScopeToRemove = equipToModify.SubScope[0];
 
@@ -866,7 +866,7 @@ namespace Tests
         public void Save_Bid_SubScope_Name()
         {
             //Act
-            TECSubScope expectedSubScope = bid.RandomSubScope();
+            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
             expectedSubScope.Name = "Save SubScope Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -898,7 +898,7 @@ namespace Tests
         public void Save_Bid_SubScope_Description()
         {
             //Act
-            TECSubScope expectedSubScope = bid.RandomSubScope();
+            TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
             expectedSubScope.Description = "Save SubScope Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -935,9 +935,9 @@ namespace Tests
         public void Save_Bid_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = bid.Catalogs.Devices.RandomObject();
+            TECDevice expectedDevice = bid.Catalogs.Devices[0];
             
-            TECSubScope subScopeToModify = bid.RandomSubScope();
+            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
             //Makes a copy, as devices can only be added via drag drop.
             subScopeToModify.Devices = new ObservableCollection<ITECConnectable>();
@@ -1231,12 +1231,12 @@ namespace Tests
         public void Save_Bid_Add_Point()
         {
             //Act
-            TECPoint expectedPoint = new TECPoint();
+            TECPoint expectedPoint = new TECPoint(true);
             expectedPoint.Type = PointTypes.Serial;
             expectedPoint.Label = "New Point";
             expectedPoint.Quantity = 84300;
 
-            TECSubScope subScopeToModify = bid.RandomSubScope();
+            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
             subScopeToModify.Points.Add(expectedPoint);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1278,7 +1278,7 @@ namespace Tests
         public void Save_Bid_Remove_Point()
         {
             //Act
-            TECSubScope ssToModify = bid.RandomSubScope();
+            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
             int oldNumPoints = ssToModify.Points.Count();
             TECPoint pointToRemove = ssToModify.Points[0];
             ssToModify.Points.Remove(pointToRemove);
@@ -1319,7 +1319,7 @@ namespace Tests
         public void Save_Bid_Point_Name()
         {
             //Act
-            TECPoint expectedPoint = bid.RandomPoint();
+            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             expectedPoint.Label = "Point name save test";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1355,7 +1355,7 @@ namespace Tests
         public void Save_Bid_Point_Quantity()
         {
             //Act
-            TECPoint expectedPoint = bid.RandomPoint();
+            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             expectedPoint.Quantity = 7463;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1391,7 +1391,7 @@ namespace Tests
         public void Save_Bid_Point_Type()
         {
             //Act
-            TECPoint expectedPoint = bid.RandomPoint();
+            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             expectedPoint.Type = PointTypes.BI;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1429,7 +1429,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSystem()
         {
-            TECSystem systemToEdit = bid.Systems.RandomObject();
+            TECSystem systemToEdit = bid.Systems[0];
             TECLabeled tagToAdd = null;
             foreach(TECLabeled tag in bid.Catalogs.Tags)
             {
@@ -1466,7 +1466,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToEquipment()
         {
-            TECEquipment equipmentToEdit = bid.RandomEquipment();
+            TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
             TECLabeled tagToAdd = null;
             foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
@@ -1511,7 +1511,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSubScope()
         {
-            TECSubScope subScopeToEdit = bid.RandomSubScope();
+            TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
             TECLabeled tagToAdd = null;
             foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
@@ -1557,7 +1557,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
-            TECController ControllerToEdit = bid.Controllers.RandomObject();
+            TECController ControllerToEdit = bid.Controllers[0];
             TECLabeled tagToAdd = null;
             foreach (TECLabeled tag in bid.Catalogs.Tags)
             {
@@ -1630,7 +1630,7 @@ namespace Tests
             //Act
             TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Label = "New Child";
-            TECScopeBranch branchToModify = bid.ScopeTree.RandomObject();
+            TECScopeBranch branchToModify = bid.ScopeTree[0];
             branchToModify.Branches.Add(expectedBranch);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1666,7 +1666,7 @@ namespace Tests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch branchToRemove = bid.ScopeTree.RandomObject();
+            TECScopeBranch branchToRemove = bid.ScopeTree[0];
             bid.ScopeTree.Remove(branchToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1698,7 +1698,7 @@ namespace Tests
             }
 
             int oldNumBranches = branchToModify.Branches.Count();
-            TECScopeBranch branchToRemove = branchToModify.Branches.RandomObject();
+            TECScopeBranch branchToRemove = branchToModify.Branches[0];
             branchToModify.Branches.Remove(branchToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1727,7 +1727,7 @@ namespace Tests
         [TestMethod]
         public void Save_Bid_Branch_Name()
         {
-            TECScopeBranch expectedBranch = bid.ScopeTree.RandomObject();
+            TECScopeBranch expectedBranch = bid.ScopeTree[0];
             expectedBranch.Label = "Test Branch Save";
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1782,7 +1782,7 @@ namespace Tests
         {
             //Act
             int oldNumLocations = bid.Locations.Count;
-            TECLabeled locationToRemove = bid.Locations.RandomObject();
+            TECLabeled locationToRemove = bid.Locations[0];
             bid.Locations.Remove(locationToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1802,7 +1802,7 @@ namespace Tests
         public void Save_Bid_Edit_Location_Name()
         {
             //Act
-            TECLabeled expectedLocation = bid.Locations.RandomObject();
+            TECLabeled expectedLocation = bid.Locations[0];
             expectedLocation.Label = "Location Name Save";
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1827,7 +1827,7 @@ namespace Tests
         public void Save_Bid_Add_Location_ToScope()
         {
             //Act
-            TECLabeled expectedLocation = bid.Locations.RandomObject();
+            TECLabeled expectedLocation = bid.Locations[0];
 
             TECSystem sysToModify = null;
             foreach (TECSystem sys in bid.Systems)
@@ -2281,7 +2281,7 @@ namespace Tests
         public void Save_Bid_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0]);
+            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
 
@@ -2494,7 +2494,7 @@ namespace Tests
         public void Save_Bid_Add_MiscCost()
         {
             //Act
-            TECMisc expectedCost = new TECMisc(CostType.Electrical);
+            TECMisc expectedCost = new TECMisc(CostType.Electrical, false);
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -2622,7 +2622,7 @@ namespace Tests
         public void Save_Bid_Add_PanelType()
         {
             //Act
-            TECPanelType expectedCost = new TECPanelType(bid.Catalogs.Manufacturers.RandomObject());
+            TECPanelType expectedCost = new TECPanelType(bid.Catalogs.Manufacturers[0]);
             expectedCost.Name = "Add cost addition";
             expectedCost.Price = 978.3;
 
@@ -2654,7 +2654,7 @@ namespace Tests
         public void Save_Bid_Add_Panel()
         {
             //Act
-            TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
+            TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0], false);
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
             bid.Panels.Add(expectedPanel);
