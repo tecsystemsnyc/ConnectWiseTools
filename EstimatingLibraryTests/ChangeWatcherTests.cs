@@ -93,13 +93,13 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             //Ensure typical has points and cost:
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
@@ -118,8 +118,8 @@ namespace Tests
         public void AddControllerToBid()
         {
             //Arrange
-            TECControllerType controllerType = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController controller = new TECController(controllerType);
+            TECControllerType controllerType = bid.Catalogs.ControllerTypes[0];
+            TECController controller = new TECController(controllerType, false);
 
             //Act
             bid.Controllers.Add(controller);
@@ -134,8 +134,8 @@ namespace Tests
         public void AddPanelToBid()
         {
             //Arrange
-            TECPanelType panelType = bid.Catalogs.PanelTypes.RandomObject();
-            TECPanel panel = new TECPanel(panelType);
+            TECPanelType panelType = bid.Catalogs.PanelTypes[0];
+            TECPanel panel = new TECPanel(panelType, false);
 
             //Act
             bid.Panels.Add(panel);
@@ -150,10 +150,10 @@ namespace Tests
         public void AddMiscToBid()
         {
             //Arrange
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = RandomDouble(1, 100);
-            misc.Labor = RandomDouble(1, 100);
-            misc.Quantity = RandomInt(2, 10);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
+            misc.Cost = 165.46;
+            misc.Labor = 25.11;
+            misc.Quantity = 3;
 
             //Act
             bid.MiscCosts.Add(misc);
@@ -226,13 +226,13 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             //Ensure typical has points and cost:
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
@@ -256,14 +256,14 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             //Ensure equip has points and cost:
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECSubScope ss = new TECSubScope(true);
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
 
@@ -283,8 +283,8 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController controller = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController controller = new TECController(type, true);
 
             resetRaised();
 
@@ -302,8 +302,8 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECPanelType type = bid.Catalogs.PanelTypes.RandomObject();
-            TECPanel panel = new TECPanel(type);
+            TECPanelType type = bid.Catalogs.PanelTypes[0];
+            TECPanel panel = new TECPanel(type, true);
 
             resetRaised();
 
@@ -321,9 +321,10 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = RandomDouble(1, 100);
-            misc.Labor = RandomDouble(1, 100);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
+            misc.Cost = 46.49;
+            misc.Labor = 97.4;
+            misc.Quantity = 3;
 
             resetRaised();
 
@@ -342,8 +343,8 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECCost assCost = new TECCost(CostType.TEC);
-            assCost.Cost = RandomDouble(1, 100);
-            assCost.Labor = RandomDouble(1, 100);
+            assCost.Cost = 79.23;
+            assCost.Labor = 84.69;
 
             resetRaised();
 
@@ -380,13 +381,13 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECEquipment equip = new TECEquipment(false);
+            TECSubScope ss = new TECSubScope(false);
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
 
@@ -409,8 +410,8 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController controller = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController controller = new TECController(type, false);
 
             resetRaised();
 
@@ -430,8 +431,8 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECPanelType panelType = bid.Catalogs.PanelTypes.RandomObject();
-            TECPanel panel = new TECPanel(panelType);
+            TECPanelType panelType = bid.Catalogs.PanelTypes[0];
+            TECPanel panel = new TECPanel(panelType, false);
 
             resetRaised();
 
@@ -451,9 +452,10 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = RandomDouble(1, 100);
-            misc.Labor = RandomDouble(1, 100);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
+            misc.Cost = 97.43;
+            misc.Labor = 46.15;
+            misc.Quantity = 8;
 
             resetRaised();
 
@@ -471,13 +473,13 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.BI;
             point.Quantity = 2;
             ss.Points.Add(point);
@@ -497,19 +499,19 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             typical.Equipment.Add(equip);
 
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
             bid.Systems.Add(typical);
 
             resetRaised();
@@ -530,13 +532,13 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
 
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
 
             resetRaised();
 
@@ -553,12 +555,12 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
 
@@ -579,13 +581,13 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(false);
             instance.Equipment.Add(equip);
 
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(false);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
@@ -609,19 +611,19 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(false);
             instance.Equipment.Add(equip);
 
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(false);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
 
             resetRaised();
 
@@ -642,12 +644,12 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(false);
+            TECSubScope ss = new TECSubScope(false);
             equip.SubScope.Add(ss);
             instance.Equipment.Add(equip);
 
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
 
             resetRaised();
 
@@ -667,12 +669,12 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(false);
+            TECSubScope ss = new TECSubScope(false);
             equip.SubScope.Add(ss);
             instance.Equipment.Add(equip);
 
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
 
@@ -691,14 +693,14 @@ namespace Tests
         public void AddNetworkConnectionToBidController()
         {
             //Arrange
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController parentController = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController parentController = new TECController(type, false);
             bid.Controllers.Add(parentController);
 
-            TECController childController = new TECController(type);
+            TECController childController = new TECController(type, false);
             bid.Controllers.Add(childController);
 
-            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
 
             resetRaised();
 
@@ -715,17 +717,17 @@ namespace Tests
         public void AddNetworkConnectionToInstanceController()
         {
             //Arrange
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController parentController = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController parentController = new TECController(type, false);
             bid.Controllers.Add(parentController);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECController childController = new TECController(type);
+            TECController childController = new TECController(type, false);
             typical.Controllers.Add(childController);
 
-            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
             
             resetRaised();
 
@@ -743,15 +745,15 @@ namespace Tests
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
             system.AddInstance(bid);
             TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
 
             resetRaised();
@@ -770,13 +772,13 @@ namespace Tests
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
            
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             system.Controllers.Add(controller);
 
             resetRaised();
@@ -794,13 +796,13 @@ namespace Tests
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
 
             resetRaised();
@@ -818,11 +820,11 @@ namespace Tests
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             system.Controllers.Add(controller);
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
@@ -844,16 +846,16 @@ namespace Tests
         public void AddControllerToNetworkConnection()
         {
             //Arrange
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController parentController = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController parentController = new TECController(type, false);
             bid.Controllers.Add(parentController);
 
-            TECController childController = new TECController(type);
+            TECController childController = new TECController(type, false);
             bid.Controllers.Add(childController);
 
-            TECController daisyController = new TECController(type);
+            TECController daisyController = new TECController(type, false);
 
-            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
             TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
 
             resetRaised();
@@ -874,13 +876,13 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             //Ensure typical has points and cost:
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
@@ -900,8 +902,8 @@ namespace Tests
         public void RemoveControllerFormBid()
         {
             //Arrange
-            TECControllerType controllerType = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController controller = new TECController(controllerType);
+            TECControllerType controllerType = bid.Catalogs.ControllerTypes[0];
+            TECController controller = new TECController(controllerType, false);
             bid.Controllers.Add(controller);
 
             resetRaised();
@@ -919,8 +921,8 @@ namespace Tests
         public void RemovePanelFromBid()
         {
             //Arrange
-            TECPanelType panelType = bid.Catalogs.PanelTypes.RandomObject();
-            TECPanel panel = new TECPanel(panelType);
+            TECPanelType panelType = bid.Catalogs.PanelTypes[0];
+            TECPanel panel = new TECPanel(panelType, false);
             bid.Panels.Add(panel);
 
             resetRaised();
@@ -937,9 +939,10 @@ namespace Tests
         public void RemoveMiscFromBid()
         {
             //Arrange
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = RandomDouble(1, 100);
-            misc.Labor = RandomDouble(1, 100);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
+            misc.Cost = 48.63;
+            misc.Labor = 964.45;
+            misc.Quantity = 6;
             bid.MiscCosts.Add(misc);
 
             resetRaised();
@@ -1023,13 +1026,13 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             //Ensure typical has points and cost:
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
@@ -1054,14 +1057,14 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             //Ensure equip has points and cost:
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECSubScope ss = new TECSubScope(true);
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
@@ -1082,8 +1085,8 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController controller = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController controller = new TECController(type, true);
             typical.Controllers.Add(controller);
 
             resetRaised();
@@ -1102,8 +1105,8 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECPanelType type = bid.Catalogs.PanelTypes.RandomObject();
-            TECPanel panel = new TECPanel(type);
+            TECPanelType type = bid.Catalogs.PanelTypes[0];
+            TECPanel panel = new TECPanel(type, true);
             typical.Panels.Add(panel);
 
             resetRaised();
@@ -1122,9 +1125,11 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = RandomDouble(1, 100);
-            misc.Labor = RandomDouble(1, 100);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
+            misc.Cost = 64.19;
+            misc.Labor = 74.85;
+            misc.Quantity = 7;
+
             typical.MiscCosts.Add(misc);
 
             resetRaised();
@@ -1144,8 +1149,8 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECCost cost = new TECCost(CostType.TEC);
-            cost.Cost = RandomDouble(1, 100);
-            cost.Labor = RandomDouble(1, 100);
+            cost.Cost = 15.45;
+            cost.Labor = 67.41;
             typical.AssociatedCosts.Add(cost);
 
             resetRaised();
@@ -1184,13 +1189,13 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECPoint point = new TECPoint();
+            TECEquipment equip = new TECEquipment(false);
+            TECSubScope ss = new TECSubScope(false);
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             instance.Equipment.Add(equip);
@@ -1214,8 +1219,8 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController controller = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController controller = new TECController(type, false);
             instance.Controllers.Add(controller);
 
             resetRaised();
@@ -1236,8 +1241,8 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECPanelType panelType = bid.Catalogs.PanelTypes.RandomObject();
-            TECPanel panel = new TECPanel(panelType);
+            TECPanelType panelType = bid.Catalogs.PanelTypes[0];
+            TECPanel panel = new TECPanel(panelType, false);
             instance.Panels.Add(panel);
 
             resetRaised();
@@ -1258,9 +1263,10 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = RandomDouble(1, 100);
-            misc.Labor = RandomDouble(1, 100);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
+            misc.Cost = 31.11;
+            misc.Labor = 49.73;
+            misc.Quantity = 5;
             instance.MiscCosts.Add(misc);
 
             resetRaised();
@@ -1279,13 +1285,13 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.BI;
             point.Quantity = 2;
             ss.Points.Add(point);
@@ -1307,19 +1313,19 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(true);
             typical.Equipment.Add(equip);
 
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
             ss.AssociatedCosts.Add(assCost);
 
             resetRaised();
@@ -1338,12 +1344,12 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
 
             resetRaised();
@@ -1361,12 +1367,12 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
@@ -1388,13 +1394,13 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(false);
             instance.Equipment.Add(equip);
 
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(false);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
@@ -1413,25 +1419,25 @@ namespace Tests
         }
 
         [TestMethod]
-        public void RemoveAssociatedCostToInstanceSubScope()
+        public void RemoveAssociatedCostFromInstanceSubScope()
         {
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
+            TECEquipment equip = new TECEquipment(false);
             instance.Equipment.Add(equip);
 
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECSubScope ss = new TECSubScope(false);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts.RandomObject();
+            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
             ss.AssociatedCosts.Add(assCost);
 
             resetRaised();
@@ -1453,12 +1459,12 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(false);
+            TECSubScope ss = new TECSubScope(false);
             equip.SubScope.Add(ss);
             instance.Equipment.Add(equip);
 
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
 
             resetRaised();
@@ -1479,12 +1485,12 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
+            TECEquipment equip = new TECEquipment(false);
+            TECSubScope ss = new TECSubScope(false);
             equip.SubScope.Add(ss);
             instance.Equipment.Add(equip);
 
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(false);
             point.Type = PointTypes.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
@@ -1504,14 +1510,14 @@ namespace Tests
         public void RemoveNetworkConnectionFromBidController()
         {
             //Arrange
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController parentController = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController parentController = new TECController(type, false);
             bid.Controllers.Add(parentController);
 
-            TECController childController = new TECController(type);
+            TECController childController = new TECController(type, false);
             bid.Controllers.Add(childController);
 
-            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
 
             TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
 
@@ -1530,17 +1536,17 @@ namespace Tests
         public void RemoveNetworkConnectionFromInstanceController()
         {
             //Arrange
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController parentController = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController parentController = new TECController(type, false);
             bid.Controllers.Add(parentController);
             
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
 
-            TECController childController = new TECController(type);
+            TECController childController = new TECController(type, false);
             system.Controllers.Add(childController);
 
-            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
 
             TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
             netConnect.Length = 10;
@@ -1557,19 +1563,19 @@ namespace Tests
         }
 
         [TestMethod]
-        public void RemoveSubScopeConenctionFromBidController()
+        public void RemoveSubScopeConnectionFromBidController()
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
             system.AddInstance(bid);
             TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
             TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope, false);
             connection.Length = 10;
@@ -1589,13 +1595,13 @@ namespace Tests
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             system.Controllers.Add(controller);
             TECSubScopeConnection connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
@@ -1614,13 +1620,13 @@ namespace Tests
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
             TECSubScopeConnection connection = controller.AddSubScope(subScope, true);
             connection.Length = 10;
@@ -1639,11 +1645,11 @@ namespace Tests
         {
             //Arrange
             TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment(true);
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             system.Controllers.Add(controller);
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
@@ -1666,16 +1672,16 @@ namespace Tests
         public void RemoveControllerFromNetworkConnection()
         {
             //Arrange
-            TECControllerType type = bid.Catalogs.ControllerTypes.RandomObject();
-            TECController parentController = new TECController(type);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController parentController = new TECController(type, false);
             bid.Controllers.Add(parentController);
 
-            TECController childController = new TECController(type);
+            TECController childController = new TECController(type, false);
             bid.Controllers.Add(childController);
 
-            TECController daisyController = new TECController(type);
+            TECController daisyController = new TECController(type, false);
 
-            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
             TECNetworkConnection netConnect = parentController.AddController(childController, connectionType);
             parentController.AddController(daisyController, netConnect);
 
@@ -1714,7 +1720,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             controller.Name = original;
             bid.Controllers.Add(controller);
 
@@ -1732,10 +1738,10 @@ namespace Tests
         public void EditBidControllerType()
         {
             //Arrange
-            var original = bid.Catalogs.ControllerTypes.RandomObject();
-            var edited = new TECControllerType(bid.Catalogs.Manufacturers.RandomObject());
+            var original = bid.Catalogs.ControllerTypes[0];
+            var edited = new TECControllerType(bid.Catalogs.Manufacturers[0]);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
             bid.Catalogs.ControllerTypes.Add(edited);
 
@@ -1756,11 +1762,11 @@ namespace Tests
             Double original = 10;
             Double edited = 12;
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
-            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
             bid.Controllers.Add(child);
-            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes.RandomObject());
+            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes[0]);
             connection.Length = original;
 
             resetRaised();
@@ -1777,12 +1783,12 @@ namespace Tests
         public void EditBidNetworkConnectionConnectionType()
         {
             //Arrange
-            var original = bid.Catalogs.ConnectionTypes.RandomObject();
+            var original = bid.Catalogs.ConnectionTypes[0];
             var edited = new TECElectricalMaterial();
             bid.Catalogs.ConnectionTypes.Add(edited);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
-            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
             bid.Controllers.Add(child);
             TECNetworkConnection connection = controller.AddController(child, original);
@@ -1801,15 +1807,15 @@ namespace Tests
         public void EditBidNetworkConnectionConduitType()
         {
             //Arrange
-            var original = bid.Catalogs.ConduitTypes.RandomObject();
+            var original = bid.Catalogs.ConduitTypes[0];
             var edited = new TECElectricalMaterial();
             bid.Catalogs.ConduitTypes.Add(edited);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
-            TECController child = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
             bid.Controllers.Add(child);
-            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes.RandomObject());
+            TECNetworkConnection connection = controller.AddController(child, bid.Catalogs.ConnectionTypes[0]);
             connection.ConduitType = original;
             resetRaised();
 
@@ -1828,7 +1834,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes[0], false);
             panel.Name = original;
             bid.Panels.Add(panel);
 
@@ -1846,10 +1852,10 @@ namespace Tests
         public void EditBidPanelType()
         {
             //Arrange
-            var original = bid.Catalogs.PanelTypes.RandomObject();
-            var edited = new TECPanelType(bid.Catalogs.Manufacturers.RandomObject());
+            var original = bid.Catalogs.PanelTypes[0];
+            var edited = new TECPanelType(bid.Catalogs.Manufacturers[0]);
 
-            TECPanel panel= new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            TECPanel panel= new TECPanel(bid.Catalogs.PanelTypes[0], false);
             bid.Panels.Add(panel);
             bid.Catalogs.PanelTypes.Add(edited);
 
@@ -1870,7 +1876,7 @@ namespace Tests
             var original = 2;
             var edited = 3;
 
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
             misc.Quantity = original;
             bid.MiscCosts.Add(misc);
 
@@ -1969,7 +1975,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             controller.Name = original;
             typical.Controllers.Add(controller);
 
@@ -1992,7 +1998,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes[0], true);
             panel.Name = original;
             typical.Panels.Add(panel);
 
@@ -2015,7 +2021,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             misc.Name = original;
             typical.MiscCosts.Add(misc);
 
@@ -2061,7 +2067,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             equipment.Name = original;
             typical.Equipment.Add(equipment);
 
@@ -2084,9 +2090,9 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             subScope.Name = original;
             equipment.SubScope.Add(subScope);
 
@@ -2109,11 +2115,11 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
             point.Label = original;
 
@@ -2132,22 +2138,22 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
 
-            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
             TECConnection connection = controller.AddSubScope(ss, true);
-            connection.Length = RandomDouble(1, 100);
-            connection.ConduitLength = RandomDouble(1, 100);
+            connection.Length = 16.46;
+            connection.ConduitLength = 81.64;
 
             resetRaised();
 
@@ -2164,21 +2170,21 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.RandomObject();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.Controllers.Add(controller);
 
-            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
             TECConnection connection = controller.AddSubScope(ss, true);
-            connection.Length = RandomDouble(1, 100);
-            connection.ConduitLength = RandomDouble(1, 100);
+            connection.Length = 16.43;
+            connection.ConduitLength = 74.13;
 
             resetRaised();
 
@@ -2216,7 +2222,7 @@ namespace Tests
         public void EditSystemLocation()
         {
             //Arrange
-            var original = bid.Locations.RandomObject();
+            var original = bid.Locations[0];
             var edited = new TECLabeled();
             edited.Label = "edit";
             bid.Locations.Add(edited);
@@ -2245,7 +2251,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.Controllers.Add(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController systemController = system.Controllers[0];
@@ -2270,7 +2276,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes.RandomObject());
+            TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes[0], true);
             typical.Panels.Add(panel);
             TECSystem system = typical.AddInstance(bid);
             TECPanel systemPanel = system.Panels[0];
@@ -2295,7 +2301,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECMisc misc = new TECMisc(CostType.TEC);
+            TECMisc misc = new TECMisc(CostType.TEC, true);
             typical.MiscCosts.Add(misc);
             TECSystem system = typical.AddInstance(bid);
             TECMisc systemMisc = system.MiscCosts[0];
@@ -2345,7 +2351,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSystem system = typical.AddInstance(bid);
             TECEquipment systemEquipment = system.Equipment[0];
@@ -2370,9 +2376,9 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem system = typical.AddInstance(bid);
             TECSubScope systemSubScope = system.Equipment[0].SubScope[0];
@@ -2397,11 +2403,11 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECEquipment equipment = new TECEquipment();
+            TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope();
+            TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint();
+            TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
             TECSystem system = typical.AddInstance(bid);
             TECPoint systemPoint = system.Equipment[0].SubScope[0].Points[0];
@@ -2422,25 +2428,25 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment typEquip = new TECEquipment();
-            TECSubScope typSS = new TECSubScope();
-            TECDevice typDev = bid.Catalogs.Devices.RandomObject();
+            TECEquipment typEquip = new TECEquipment(true);
+            TECSubScope typSS = new TECSubScope(true);
+            TECDevice typDev = bid.Catalogs.Devices[0];
             typSS.Devices.Add(typDev);
             typEquip.SubScope.Add(typSS);
             typical.Equipment.Add(typEquip);
             bid.Systems.Add(typical);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
 
             controller.AddSubScope(typSS, true);
 
             TECSystem instance = typical.AddInstance(bid);
             TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
-            ssConnect.Length = RandomDouble(1, 100);
-            ssConnect.ConduitLength = RandomDouble(1, 100);
+            ssConnect.Length = 461.31;
+            ssConnect.ConduitLength = 734.16;
 
-            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             resetRaised();
 
@@ -2458,25 +2464,25 @@ namespace Tests
         {
             //Arrange
             TECTypical typical = new TECTypical();
-            TECEquipment typEquip = new TECEquipment();
-            TECSubScope typSS = new TECSubScope();
-            TECDevice typDev = bid.Catalogs.Devices.RandomObject();
+            TECEquipment typEquip = new TECEquipment(true);
+            TECSubScope typSS = new TECSubScope(true);
+            TECDevice typDev = bid.Catalogs.Devices[0];
             typSS.Devices.Add(typDev);
             typEquip.SubScope.Add(typSS);
             typical.Equipment.Add(typEquip);
             bid.Systems.Add(typical);
 
-            TECController typController = new TECController(bid.Catalogs.ControllerTypes.RandomObject());
+            TECController typController = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.Controllers.Add(typController);
 
             typController.AddSubScope(typSS, true);
 
             TECSystem instance = typical.AddInstance(bid);
             TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
-            ssConnect.Length = RandomDouble(1, 100);
-            ssConnect.ConduitLength = RandomDouble(1, 100);
+            ssConnect.Length = 134.12;
+            ssConnect.ConduitLength = 91.15;
 
-            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes.RandomObject();
+            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             resetRaised();
 
@@ -2493,7 +2499,7 @@ namespace Tests
         public void EditHardwareManufacturer()
         {
             //Arrange
-            TECDevice device = templates.Catalogs.Devices.RandomObject();
+            TECDevice device = templates.Catalogs.Devices[0];
 
             var original = device.Manufacturer;
             var edited = new TECManufacturer();
@@ -2514,10 +2520,10 @@ namespace Tests
         public void EditValveActuator()
         {
             //Arrange
-            TECValve valve = templates.Catalogs.Valves.RandomObject();
+            TECValve valve = templates.Catalogs.Valves[0];
 
             var original = valve.Actuator;
-            var edited = new TECDevice(templates.Catalogs.Devices.RandomObject());
+            var edited = new TECDevice(templates.Catalogs.Devices[0]);
             edited.Name = "edit";
             templates.Catalogs.Devices.Add(edited);
 
@@ -2538,7 +2544,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECElectricalMaterial material = templates.Catalogs.ConnectionTypes.RandomObject();
+            TECElectricalMaterial material = templates.Catalogs.ConnectionTypes[0];
             material.Name = original;
 
             resetRaised();
@@ -2558,7 +2564,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECElectricalMaterial material = templates.Catalogs.ConduitTypes.RandomObject();
+            TECElectricalMaterial material = templates.Catalogs.ConduitTypes[0];
             material.Name = original;
 
             resetRaised();
@@ -2578,7 +2584,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECCost cost = templates.Catalogs.AssociatedCosts.RandomObject();
+            TECCost cost = templates.Catalogs.AssociatedCosts[0];
             cost.Name = original;
 
             resetRaised();
@@ -2598,7 +2604,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECPanelType panelType = templates.Catalogs.PanelTypes.RandomObject();
+            TECPanelType panelType = templates.Catalogs.PanelTypes[0];
             panelType.Name = original;
 
             resetRaised();
@@ -2618,7 +2624,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECControllerType controllerType = templates.Catalogs.ControllerTypes.RandomObject();
+            TECControllerType controllerType = templates.Catalogs.ControllerTypes[0];
             controllerType.Name = original;
 
             resetRaised();
@@ -2638,7 +2644,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECIOModule ioModule = templates.Catalogs.IOModules.RandomObject();
+            TECIOModule ioModule = templates.Catalogs.IOModules[0];
             ioModule.Name = original;
 
             resetRaised();
@@ -2658,7 +2664,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECDevice device = templates.Catalogs.Devices.RandomObject();
+            TECDevice device = templates.Catalogs.Devices[0];
             device.Name = original;
 
             resetRaised();
@@ -2678,7 +2684,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECValve valve = templates.Catalogs.Valves.RandomObject();
+            TECValve valve = templates.Catalogs.Valves[0];
             valve.Name = original;
 
             resetRaised();
@@ -2698,7 +2704,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECManufacturer manufacturer = templates.Catalogs.Manufacturers.RandomObject();
+            TECManufacturer manufacturer = templates.Catalogs.Manufacturers[0];
             manufacturer.Label = original;
 
             resetRaised();
@@ -2718,7 +2724,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECLabeled tag = templates.Catalogs.Tags.RandomObject();
+            TECLabeled tag = templates.Catalogs.Tags[0];
             tag.Label = original;
 
             resetRaised();
