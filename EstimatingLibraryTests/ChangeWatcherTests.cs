@@ -2439,16 +2439,16 @@ namespace Tests
             subScope.Points.Add(point);
             TECSystem system = typical.AddInstance(bid);
             TECPoint systemPoint = system.Equipment[0].SubScope[0].Points[0];
-            systemPoint.Quantity = original;
+            point.Quantity = original;
 
             resetRaised();
 
             //Act
-            systemPoint.Quantity = edited;
+            point.Quantity = edited;
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: false, pointChanged: true);
-            checkChangedArgs(Change.Edit, "Quantity", systemPoint, edited, original);
+            checkChangedArgs(Change.Edit, "Quantity", point, edited, original);
         }
 
         [TestMethod]
