@@ -283,8 +283,6 @@ namespace EstimatingLibrary
             {
                 removeChildConnection(connectionToRemove);
                 subScope.Connection = null;
-                connectionToRemove.SubScope = null;
-                connectionToRemove.ParentController = null;
             }
             else
             {
