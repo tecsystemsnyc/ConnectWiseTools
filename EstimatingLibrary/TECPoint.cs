@@ -37,7 +37,10 @@ namespace EstimatingLibrary
             set
             {
                 var old = Quantity;
-                PointChanged?.Invoke(old - value);
+                if (!IsTypical)
+                {
+                    PointChanged?.Invoke(old - value);
+                }
                 _quantity = value;
                 notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
 
