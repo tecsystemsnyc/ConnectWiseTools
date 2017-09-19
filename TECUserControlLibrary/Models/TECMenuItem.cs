@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _name = value;
-                RaisePropertyChanged("Name");
+                raisePropertyChanged("Name");
             }
         }
         public SolidColorBrush TextBrush { get; set; }

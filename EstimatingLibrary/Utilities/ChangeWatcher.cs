@@ -32,6 +32,21 @@ namespace EstimatingLibrary.Utilities
         }
 
         #region Registration
+        public void register(TECObject item)
+        {
+            registerTECObject(item);
+            if (item is ISaveable saveable)
+            {
+                foreach (Tuple<string, TECObject> child in saveable.SaveObjects.ChildList())
+                {
+                    if (!saveable.RelatedObjects.Contains(child.Item1))
+                    {
+                        register(child.Item2);
+                    }
+                }
+            }
+        }
+        
         private void registerTECObject(TECObject ob)
         {
             ob.TECChanged += handleTECChanged;
@@ -98,20 +113,6 @@ namespace EstimatingLibrary.Utilities
         }
         #endregion
         
-        public void register(TECObject item)
-        {
-            registerTECObject(item);
-            if(item is ISaveable saveable)
-            {
-                foreach (Tuple<string, TECObject> child in saveable.SaveObjects.ChildList())
-                {
-                    if (!saveable.RelatedObjects.Contains(child.Item1))
-                    {
-                        register(child.Item2);
-                    }
-                }
-            }
-        }
         #endregion
     }
 }

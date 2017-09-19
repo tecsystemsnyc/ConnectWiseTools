@@ -107,7 +107,7 @@ namespace Tests
         {
             TECSubScope subScope = new TECSubScope(false);
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
-            controller.AddSubScope(subScope, true);
+            controller.AddSubScope(subScope);
 
             SubScopeConnection subScopeConnection = new SubScopeConnection(subScope, true);
             subScopeConnection.Controller = null;

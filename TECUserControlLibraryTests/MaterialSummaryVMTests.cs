@@ -414,7 +414,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.AddSubScope(typSS, true);
+            TECConnection connection = controller.AddSubScope(typSS);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -832,7 +832,7 @@ namespace Tests
             TECSubScope ss = new TECSubScope(true);
             typEquip.SubScope.Add(ss);
 
-            TECConnection connection = controller.AddSubScope(ss, true);
+            TECConnection connection = controller.AddSubScope(ss);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -890,7 +890,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.AddSubScope(ss, true);
+            TECConnection connection = controller.AddSubScope(ss);
             connection.Length = 100;
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];

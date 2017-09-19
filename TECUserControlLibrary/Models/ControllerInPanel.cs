@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.Models
                 {
                     handlePanelSelection(_panel, value);
                     _panel = value;
-                    RaisePropertyChanged("Panel");
+                    raisePropertyChanged("Panel");
                 }
             }
         }
@@ -31,7 +31,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _controller = value;
-                RaisePropertyChanged("Controller");
+                raisePropertyChanged("Controller");
             }
         }
 
@@ -57,7 +57,7 @@ namespace TECUserControlLibrary.Models
         public void UpdatePanel(TECPanel panel)
         {
             _panel = panel;
-            RaisePropertyChanged("Panel");
+            raisePropertyChanged("Panel");
         }
         
     }

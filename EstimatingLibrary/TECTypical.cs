@@ -299,7 +299,8 @@ namespace EstimatingLibrary
                 handleSubScopeConnectionChanged(args.Sender as TECSubScope);
             }
         }
-        protected override void handleCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        protected override void handleCollectionChanged(object sender,
+            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -359,7 +360,8 @@ namespace EstimatingLibrary
                 notifyTECChanged(Change.Edit, propertyName, this, sender);
             }
         }
-        protected override void scopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        protected override void scopeCollectionChanged(object sender,
+            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
             //Is overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
