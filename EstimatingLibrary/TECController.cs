@@ -224,9 +224,10 @@ namespace EstimatingLibrary
                 return null;
             }
         }
-        public TECSubScopeConnection AddSubScope(TECSubScope subScope, bool isTypical)
+        public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
-            TECSubScopeConnection connection = new TECSubScopeConnection(isTypical);
+            bool connectionIsTypical = (this.IsTypical || subScope.IsTypical);
+            TECSubScopeConnection connection = new TECSubScopeConnection(connectionIsTypical);
             connection.ParentController = this;
             connection.SubScope = subScope;
             addChildConnection(connection);

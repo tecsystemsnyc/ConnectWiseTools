@@ -561,7 +561,7 @@ namespace Tests
             
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -619,7 +619,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -688,7 +688,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
             
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -767,7 +767,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -835,7 +835,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -889,7 +889,7 @@ namespace Tests
             equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1653,7 +1653,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1706,7 +1706,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope, true);
+            var connection = controller.AddSubScope(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1740,7 +1740,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            TECSubScopeConnection ssConnect = controller.AddSubScope(subScope, true);
+            TECSubScopeConnection ssConnect = controller.AddSubScope(subScope);
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);

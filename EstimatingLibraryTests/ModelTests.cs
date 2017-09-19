@@ -66,7 +66,7 @@ namespace Tests
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
 
-            controller.AddSubScope(subScope, false);
+            controller.AddSubScope(subScope);
 
             Assert.AreEqual(1, controller.ChildrenConnections.Count, "Connection not added to controller");
             Assert.AreNotEqual(null, subScope.Connection, "Connection not added to subscope");
@@ -78,7 +78,7 @@ namespace Tests
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
 
-            controller.AddSubScope(subScope, false);
+            controller.AddSubScope(subScope);
             controller.RemoveSubScope(subScope);
 
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
@@ -180,7 +180,7 @@ namespace Tests
             var subScope = new TECSubScope(true);
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
-            bidController.AddSubScope(subScope, true);
+            bidController.AddSubScope(subScope);
             var instance = system.AddInstance(bid);
             
             Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");

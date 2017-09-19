@@ -107,7 +107,10 @@ namespace EstimatingLibrary
 
         public void notifyCostChanged(CostBatch costs)
         {
-            CostChanged?.Invoke(costs);
+            if (!IsTypical)
+            {
+                CostChanged?.Invoke(costs);
+            }
         }
 
         protected abstract CostBatch getCosts();

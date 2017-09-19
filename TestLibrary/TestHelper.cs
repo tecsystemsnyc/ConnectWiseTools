@@ -157,7 +157,7 @@ namespace Tests
             subScope1.Points.Add(point1);
 
             //Connections
-            TECConnection testConnection = expectedController.AddSubScope(subScope1, false);
+            TECConnection testConnection = expectedController.AddSubScope(subScope1);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -574,7 +574,7 @@ namespace Tests
             var controller = CreateTestController(true, catalogs);
             outScope.Controllers.Add(controller);
 
-            ConnectEquipmentToController(equipment, controller, true);
+            ConnectEquipmentToController(equipment, controller);
             panel.Controllers.Add(controller);
 
             var scopeBranch = new TECScopeBranch();
@@ -710,11 +710,11 @@ namespace Tests
             return misc;
         }
         
-        public static void ConnectEquipmentToController(TECEquipment equipment, TECController controller, bool isTypical)
+        public static void ConnectEquipmentToController(TECEquipment equipment, TECController controller)
         {
             foreach(TECSubScope subscope in equipment.SubScope)
             {
-                controller.AddSubScope(subscope, isTypical);
+                controller.AddSubScope(subscope);
             }
         }
 

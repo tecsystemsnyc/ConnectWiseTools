@@ -203,7 +203,7 @@ namespace EstimatingLibrary
                     {
                         if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
                         {
-                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance, false);
+                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance);
                             instanceSSConnect.Length = subScope.Connection.Length;
                             instanceSSConnect.ConduitLength = subScope.Connection.ConduitLength;
                             instanceSSConnect.ConduitType = subScope.Connection.ConduitType;
@@ -434,7 +434,7 @@ namespace EstimatingLibrary
                 {
                     foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
                     {
-                        subScope.Connection.ParentController.AddSubScope(instance, false);
+                        subScope.Connection.ParentController.AddSubScope(instance);
                     }
                 }
             }
@@ -556,7 +556,7 @@ namespace EstimatingLibrary
                         {
                             if (characteristicController.IsGlobal)
                             {
-                                var connection = characteristicController.AddSubScope(subScopeToConnect, false);
+                                var connection = characteristicController.AddSubScope(subScopeToConnect);
                                 connection.Length = characteristicConnection.Length;
                                 connection.ConduitLength = characteristicConnection.ConduitLength;
                                 connection.ConduitType = characteristicConnection.ConduitType;
@@ -567,7 +567,7 @@ namespace EstimatingLibrary
                                 {
                                     if (system.Controllers.Contains(controller))
                                     {
-                                        var connection = controller.AddSubScope(subScopeToConnect, false);
+                                        var connection = controller.AddSubScope(subScopeToConnect);
                                         connection.Length = characteristicConnection.Length;
                                         connection.ConduitLength = characteristicConnection.ConduitLength;
                                         connection.ConduitType = characteristicConnection.ConduitType;
