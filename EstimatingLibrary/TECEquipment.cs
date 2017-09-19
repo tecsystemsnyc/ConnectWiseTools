@@ -158,7 +158,14 @@ namespace EstimatingLibrary
             saveList.AddRange(this.SubScope, "SubScope");
             return saveList;
         }
-        
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
+
         private void notifyPointChanged(int numPoints)
         {
             if (!IsTypical)

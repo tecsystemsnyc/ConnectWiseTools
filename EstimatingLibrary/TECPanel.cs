@@ -90,6 +90,13 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Controllers, "Controllers");
             return saveList;
         }
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
 
         private void controllersCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

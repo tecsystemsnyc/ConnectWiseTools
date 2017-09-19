@@ -151,12 +151,9 @@ namespace EstimatingLibrary
             }
         }
         
-        protected void notifyCostChanged(CostBatch costs)
+        protected virtual void notifyCostChanged(CostBatch costs)
         {
-            if (!(this is ITypicalable typ && typ.IsTypical))
-            {
-                CostChanged?.Invoke(costs);
-            }
+            CostChanged?.Invoke(costs);
         }
 
         protected virtual CostBatch getCosts()

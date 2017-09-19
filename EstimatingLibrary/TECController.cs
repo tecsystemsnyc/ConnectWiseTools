@@ -428,6 +428,13 @@ namespace EstimatingLibrary
             saveList.Add(this.Type, "Type");
             return saveList;
         }
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
 
         private void addChildConnection(TECConnection connection)
         {
