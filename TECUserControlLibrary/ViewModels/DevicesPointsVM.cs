@@ -129,7 +129,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddPointExecute()
         {
-            TECPoint newPoint = new TECPoint();
+            TECPoint newPoint = new TECPoint(SelectedSubScope.IsTypical);
             newPoint.Label = PointName;
             newPoint.Type = PointType;
             newPoint.Quantity = PointQuantity;
