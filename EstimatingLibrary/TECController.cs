@@ -283,8 +283,6 @@ namespace EstimatingLibrary
             {
                 removeChildConnection(connectionToRemove);
                 subScope.Connection = null;
-                connectionToRemove.SubScope = null;
-                connectionToRemove.ParentController = null;
             }
             else
             {
@@ -429,6 +427,13 @@ namespace EstimatingLibrary
             saveList.AddRange(base.relatedObjects());
             saveList.Add(this.Type, "Type");
             return saveList;
+        }
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
         }
 
         private void addChildConnection(TECConnection connection)

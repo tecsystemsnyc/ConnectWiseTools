@@ -250,6 +250,13 @@ namespace EstimatingLibrary
                 PointChanged?.Invoke(pointNum);
             }
         }
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
 
         #region Event Handlers
         protected virtual void handleCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)

@@ -99,6 +99,14 @@ namespace EstimatingLibrary
         {
             return base.getCosts() * Quantity;
         }
+
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
         #endregion
     }
 }
