@@ -21,7 +21,7 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECControllerType controllerType = catalogs.ControllerTypes.RandomObject();
+            TECControllerType controllerType = catalogs.ControllerTypes[0];
 
             //Act
             CostBatch delta = hardwareVM.AddHardware(controllerType);
@@ -58,7 +58,7 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECControllerType controllerType = catalogs.ControllerTypes.RandomObject();
+            TECControllerType controllerType = catalogs.ControllerTypes[0];
 
             //Act
             hardwareVM.AddHardware(controllerType);
@@ -88,7 +88,7 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECPanelType panelType = catalogs.PanelTypes.RandomObject();
+            TECPanelType panelType = catalogs.PanelTypes[0];
 
             //Act
             CostBatch delta = hardwareVM.AddHardware(panelType);
@@ -125,7 +125,7 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECPanelType panelType = catalogs.PanelTypes.RandomObject();
+            TECPanelType panelType = catalogs.PanelTypes[0];
 
             //Act
             hardwareVM.AddHardware(panelType);
@@ -155,7 +155,7 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECDevice device = catalogs.Devices.RandomObject();
+            TECDevice device = catalogs.Devices[0];
 
             //Act
             CostBatch delta = hardwareVM.AddHardware(device);
@@ -192,7 +192,7 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECDevice device = catalogs.Devices.RandomObject();
+            TECDevice device = catalogs.Devices[0];
 
             //Act
             hardwareVM.AddHardware(device);
@@ -366,8 +366,8 @@ namespace Tests
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
-            TECElectricalMaterial elecMat = elecMats.RandomObject();
-            double length = TestHelper.RandomDouble(1, 100);
+            TECElectricalMaterial elecMat = elecMats[0];
+            double length = 123.8;
 
             //Act
             CostBatch delta = lengthVM.AddRun(elecMat, length);
@@ -427,9 +427,9 @@ namespace Tests
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
-            TECElectricalMaterial elecMat = elecMats.RandomObject();
-            double addLength = TestHelper.RandomDouble(1, 100);
-            double removeLength = TestHelper.RandomDouble(1, addLength);
+            TECElectricalMaterial elecMat = elecMats[0];
+            double addLength = 736;
+            double removeLength = 23.4;
             double length = addLength - removeLength;
 
             //Act
@@ -495,8 +495,8 @@ namespace Tests
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
-            TECElectricalMaterial elecMat = elecMats.RandomObject();
-            double length = TestHelper.RandomDouble(1, 100);
+            TECElectricalMaterial elecMat = elecMats[0];
+            double length = 435.2;
 
             //Act
             CostBatch delta = lengthVM.AddLength(elecMat, length);
@@ -548,9 +548,9 @@ namespace Tests
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
-            TECElectricalMaterial elecMat = elecMats.RandomObject();
-            double addLength = TestHelper.RandomDouble(1, 100);
-            double removeLength = TestHelper.RandomDouble(1, addLength);
+            TECElectricalMaterial elecMat = elecMats[0];
+            double addLength = 543.6;
+            double removeLength = 23.4;
             double length = addLength - removeLength;
 
             //Act
@@ -761,10 +761,10 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc tecMisc = new TECMisc(CostType.TEC);
-            tecMisc.Cost = TestHelper.RandomDouble(1, 100);
-            tecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            tecMisc.Quantity = TestHelper.RandomInt(2, 10);
+            TECMisc tecMisc = new TECMisc(CostType.TEC, false);
+            tecMisc.Cost = 542.7;
+            tecMisc.Labor = 467.4;
+            tecMisc.Quantity = 3;
 
             double expectedCost = tecMisc.Cost * tecMisc.Quantity;
             double expectedLabor = tecMisc.Labor * tecMisc.Quantity;
@@ -794,10 +794,10 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc tecMisc = new TECMisc(CostType.TEC);
-            tecMisc.Cost = TestHelper.RandomDouble(1, 100);
-            tecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            tecMisc.Quantity = TestHelper.RandomInt(2, 10);
+            TECMisc tecMisc = new TECMisc(CostType.TEC, false);
+            tecMisc.Cost = 5478.124;
+            tecMisc.Labor = 14.6;
+            tecMisc.Quantity = 3;
 
             double expectedCost = tecMisc.Cost * tecMisc.Quantity;
             double expectedLabor = tecMisc.Labor * tecMisc.Quantity;
@@ -828,10 +828,10 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc elecMisc = new TECMisc(CostType.Electrical);
-            elecMisc.Cost = TestHelper.RandomDouble(1, 100);
-            elecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            elecMisc.Quantity = TestHelper.RandomInt(2, 10);
+            TECMisc elecMisc = new TECMisc(CostType.Electrical, false);
+            elecMisc.Cost = 129.3;
+            elecMisc.Labor = 12.3;
+            elecMisc.Quantity = 3;
 
             double expectedCost = elecMisc.Cost * elecMisc.Quantity;
             double expectedLabor = elecMisc.Labor * elecMisc.Quantity;
@@ -861,10 +861,10 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc elecMisc = new TECMisc(CostType.Electrical);
-            elecMisc.Cost = TestHelper.RandomDouble(1, 100);
-            elecMisc.Labor = TestHelper.RandomDouble(1, 100);
-            elecMisc.Quantity = TestHelper.RandomInt(2, 10);
+            TECMisc elecMisc = new TECMisc(CostType.Electrical, false);
+            elecMisc.Cost = 395.4;
+            elecMisc.Labor = 843.45;
+            elecMisc.Quantity = 3;
 
             double expectedCost = elecMisc.Cost * elecMisc.Quantity;
             double expectedLabor = elecMisc.Labor * elecMisc.Quantity;
@@ -895,14 +895,14 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = TestHelper.RandomDouble(1, 100);
-            misc.Labor = TestHelper.RandomDouble(1, 100);
-            misc.Quantity = TestHelper.RandomInt(2, 10);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
+            misc.Cost = 942.2;
+            misc.Labor = 375.23;
+            misc.Quantity = 3;
 
             //Act
             miscVM.AddCost(misc);
-            int deltaQuantity = TestHelper.RandomInt(1, 10);
+            int deltaQuantity = 2;
             CostBatch delta = miscVM.ChangeQuantity(misc, deltaQuantity);
 
             int finalQuantity = misc.Quantity + deltaQuantity;
@@ -933,15 +933,15 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc misc = new TECMisc(CostType.TEC);
-            misc.Cost = TestHelper.RandomDouble(1, 100);
-            misc.Labor = TestHelper.RandomDouble(1, 100);
-            misc.Quantity = TestHelper.RandomInt(1, 10);
+            TECMisc misc = new TECMisc(CostType.TEC, false);
+            misc.Cost = 129.3;
+            misc.Labor = 532.54;
+            misc.Quantity = 3;
 
             //Act
             miscVM.AddCost(misc);
-            double deltaCost = TestHelper.RandomDouble(1, 100);
-            double deltaLabor = TestHelper.RandomDouble(1, 100);
+            double deltaCost = 121;
+            double deltaLabor = 45.6;
             misc.Cost += deltaCost;
             misc.Labor += deltaLabor;
 
