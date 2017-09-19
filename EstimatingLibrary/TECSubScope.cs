@@ -139,7 +139,7 @@ namespace EstimatingLibrary
                     pointNumber += item.PointNumber;
                     notifyCombinedChanged(Change.Add, "Points", this, item);
                 }
-                PointChanged?.Invoke(pointNumber);
+                notifyPointChanged(pointNumber);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -149,7 +149,7 @@ namespace EstimatingLibrary
                     pointNumber += item.PointNumber;
                     notifyCombinedChanged(Change.Remove, "Points", this, item);
                 }
-                PointChanged?.Invoke(pointNumber * -1);
+                notifyPointChanged(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -294,6 +294,13 @@ namespace EstimatingLibrary
             if (!IsTypical)
             {
                 base.notifyCostChanged(costs);
+            }
+        }
+        private void notifyPointChanged(int numPoints)
+        {
+            if (!IsTypical)
+            {
+                PointChanged?.Invoke(numPoints);
             }
         }
         #endregion
