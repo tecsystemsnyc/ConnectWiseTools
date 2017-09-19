@@ -24,8 +24,10 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECSystem(Guid guid) : base(guid)
+        public TECSystem(Guid guid, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
+
             _proposeEquipment = false;
             _equipment = new ObservableCollection<TECEquipment>();
             _controllers = new ObservableCollection<TECController>();
@@ -40,10 +42,10 @@ namespace EstimatingLibrary
             _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
         }
 
-        public TECSystem() : this(Guid.NewGuid()) { }
+        public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         public TECSystem(TECSystem source, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this()
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(source.IsTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = source.Guid; }
@@ -163,6 +165,10 @@ namespace EstimatingLibrary
                 _proposeEquipment = value;
                 NotifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
             }
+        }
+        public bool IsTypical
+        {
+            get; private set;
         }
         public int PointNumber
         {

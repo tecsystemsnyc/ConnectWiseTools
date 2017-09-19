@@ -22,7 +22,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECTypical(Guid guid) : base(guid)
+        public TECTypical(Guid guid) : base(guid, true)
         {
             _instances = new ObservableCollection<TECSystem>();
 
@@ -153,7 +153,7 @@ namespace EstimatingLibrary
         public TECSystem AddInstance(TECBid bid)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            var newSystem = new TECSystem();
+            var newSystem = new TECSystem(false);
             newSystem.Name = Name;
             newSystem.Description = Description;
             foreach (TECEquipment equipment in Equipment)

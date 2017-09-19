@@ -68,6 +68,11 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "NetworkType", this, value, old);
             }
         }
+
+        public bool IsTypical
+        {
+            get; private set;
+        }
         
         //---Derived---
         public ObservableCollection<IOType> AvailableIO
@@ -83,16 +88,17 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECController(Guid guid, TECControllerType type, bool isGlobal = true) : base(guid)
+        public TECController(Guid guid, TECControllerType type, bool isTypical, bool isGlobal = true) : base(guid)
         {
+            IsTypical = isTypical;
             IsGlobal = isGlobal;
             _type = type;
             _childrenConnections = new ObservableCollection<TECConnection>();
             ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
         }
 
-        public TECController(TECControllerType type, bool isGlobal = true) : this(Guid.NewGuid(), type, isGlobal) { }
-        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Type)
+        public TECController(TECControllerType type, bool isTypical, bool isGlobal = true) : this(Guid.NewGuid(), type, isTypical, isGlobal) { }
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Type, controllerSource.IsTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
@@ -114,7 +120,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-
         #endregion
 
         #region Event Handlers
