@@ -25,10 +25,6 @@ namespace EstimatingLibrary
                 NotifyCombinedChanged(Change.Edit, "SubScope", this, value, old);
             }
         }
-        public bool IsTypical
-        {
-            get; private set;
-        }
 
         //---Derived---
         public ObservableCollection<TECElectricalMaterial> ConnectionTypes
@@ -67,14 +63,10 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECSubScopeConnection(Guid guid, bool isTypical) : base(guid)
-        {
-            IsTypical = isTypical;
-        }
+        public TECSubScopeConnection(Guid guid, bool isTypical) : base(guid, isTypical) { }
         public TECSubScopeConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
-            IsTypical = connectionSource.IsTypical;
             if (connectionSource._subScope != null)
             { _subScope = new TECSubScope(connectionSource.SubScope, guidDictionary); }
         }

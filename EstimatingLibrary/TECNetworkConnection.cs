@@ -93,12 +93,12 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECNetworkConnection(Guid guid) : base(guid)
+        public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
         {
             _childrenControllers = new ObservableCollection<TECController>();
             ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
         }
-        public TECNetworkConnection() : this(Guid.NewGuid()) { }
+        public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
         public TECNetworkConnection(TECNetworkConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
         {
             _childrenControllers = new ObservableCollection<TECController>();

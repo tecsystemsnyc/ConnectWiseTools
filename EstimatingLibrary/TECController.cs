@@ -209,7 +209,8 @@ namespace EstimatingLibrary
                     throw new ArgumentException("Controller and parent do not have a matching IOType.");
                 }
 
-                TECNetworkConnection netConnect = new TECNetworkConnection();
+                bool connectionIsTypical = this.IsTypical || controller.IsTypical;
+                TECNetworkConnection netConnect = new TECNetworkConnection(connectionIsTypical);
                 netConnect.ParentController = this;
                 netConnect.ChildrenControllers.Add(controller);
                 netConnect.IOType = ioType;
