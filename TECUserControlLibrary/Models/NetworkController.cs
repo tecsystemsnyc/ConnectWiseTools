@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 Controller.SetParentController(value, defaultWireType);
-                RaisePropertyChanged("ParentController");
+                raisePropertyChanged("ParentController");
                 RefreshIsConnected();
             }
         }
@@ -31,7 +31,7 @@ namespace TECUserControlLibrary.Models
             private set
             {
                 _possibleParents = value;
-                RaisePropertyChanged("PossibleParents");
+                raisePropertyChanged("PossibleParents");
             }
         }
         
@@ -55,7 +55,7 @@ namespace TECUserControlLibrary.Models
                     {
                         Controller.NetworkType = NetworkType.DDC;
                     }
-                    RaisePropertyChanged("IsServer");
+                    raisePropertyChanged("IsServer");
                     RefreshIsConnected();
                 }
             }
@@ -79,7 +79,7 @@ namespace TECUserControlLibrary.Models
                 if (Controller.ParentConnection != null)
                 {
                     Controller.ParentConnection.ConnectionType = value;
-                    RaisePropertyChanged("WireType");
+                    raisePropertyChanged("WireType");
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace TECUserControlLibrary.Models
                 if (Controller.ParentConnection != null)
                 {
                     Controller.ParentConnection.ConduitType = value;
-                    RaisePropertyChanged("ConduitType");
+                    raisePropertyChanged("ConduitType");
                 }
             }
         }
@@ -125,7 +125,7 @@ namespace TECUserControlLibrary.Models
                 if (Controller.ParentConnection != null)
                 {
                     Controller.ParentConnection.Length = value;
-                    RaisePropertyChanged("WireLength");
+                    raisePropertyChanged("WireLength");
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace TECUserControlLibrary.Models
                 if (Controller.ParentConnection != null)
                 {
                     Controller.ParentConnection.ConduitLength = value;
-                    RaisePropertyChanged("ConduitLength");
+                    raisePropertyChanged("ConduitLength");
                 }
             }
         }
@@ -160,7 +160,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _isConnected = value;
-                RaisePropertyChanged("IsConnected");
+                raisePropertyChanged("IsConnected");
             }
         }
 
@@ -279,7 +279,7 @@ namespace TECUserControlLibrary.Models
                     {
                         oldParent.PropertyChanged -= ParentConnection_PropertyChanged;
                     }
-                    RaisePropertyChanged("ParentController");
+                    raisePropertyChanged("ParentController");
                     RefreshIsConnected();
                     if (newParent != null)
                     {
@@ -292,11 +292,11 @@ namespace TECUserControlLibrary.Models
         {
             if (e.PropertyName == "Length")
             {
-                RaisePropertyChanged("WireLength");
+                raisePropertyChanged("WireLength");
             }
             else if (e.PropertyName == "ConduitLength")
             {
-                RaisePropertyChanged("ConduitLength");
+                raisePropertyChanged("ConduitLength");
             }
         }
         #endregion

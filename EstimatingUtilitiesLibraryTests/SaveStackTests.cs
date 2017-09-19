@@ -164,7 +164,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch scopeBranch = new TECScopeBranch();
+            TECScopeBranch scopeBranch = new TECScopeBranch(false);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -194,10 +194,10 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch parentBranch = new TECScopeBranch();
+            TECScopeBranch parentBranch = new TECScopeBranch(false);
             bid.ScopeTree.Add(parentBranch);
 
-            TECScopeBranch scopeBranch = new TECScopeBranch();
+            TECScopeBranch scopeBranch = new TECScopeBranch(false);
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -1481,7 +1481,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECScopeBranch scopeBranch = new TECScopeBranch();
+            TECScopeBranch scopeBranch = new TECScopeBranch(true);
             bid.Systems.Add(system);
 
             //Act
@@ -1649,7 +1649,7 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch scopeBranch = new TECScopeBranch();
+            TECScopeBranch scopeBranch = new TECScopeBranch(false);
             bid.ScopeTree.Add(scopeBranch);
 
             //Act
@@ -1679,8 +1679,8 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch scopeBranch = new TECScopeBranch();
-            TECScopeBranch parentBranch = new TECScopeBranch();
+            TECScopeBranch scopeBranch = new TECScopeBranch(false);
+            TECScopeBranch parentBranch = new TECScopeBranch(false);
             bid.ScopeTree.Add(parentBranch);
             parentBranch.Branches.Add(scopeBranch);
 
@@ -2860,7 +2860,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECScopeBranch scopeBranch = new TECScopeBranch();
+            TECScopeBranch scopeBranch = new TECScopeBranch(false);
             bid.Systems.Add(system);
             system.ScopeBranches.Add(scopeBranch);
 

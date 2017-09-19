@@ -39,7 +39,7 @@ namespace TECUserControlLibrary.Models
             private set
             {
                 _length = value;
-                RaisePropertyChanged("Length");
+                raisePropertyChanged("Length");
             }
         }
 
@@ -49,7 +49,7 @@ namespace TECUserControlLibrary.Models
             private set
             {
                 _totalCost = value;
-                RaisePropertyChanged("TotalCost");
+                raisePropertyChanged("TotalCost");
             }
         }
         public double TotalLabor
@@ -58,7 +58,7 @@ namespace TECUserControlLibrary.Models
             private set
             {
                 _totalLabor = value;
-                RaisePropertyChanged("TotalLabor");
+                raisePropertyChanged("TotalLabor");
             }
         }
         #endregion

@@ -1990,7 +1990,7 @@ namespace Tests
             var scopeController = new TECController(templates.Catalogs.ControllerTypes[0], false);
             scopeController.Name = "Test Scope Controller";
             expectedScope.Controllers.Add(scopeController);
-            scopeController.AddSubScope(scopeEquipment.SubScope[0], false);
+            scopeController.AddSubScope(scopeEquipment.SubScope[0]);
 
             var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0], false);
             scopePanel.Name = "Test Scope Name";

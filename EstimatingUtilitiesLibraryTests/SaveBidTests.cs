@@ -1601,7 +1601,7 @@ namespace Tests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch expectedBranch = new TECScopeBranch();
+            TECScopeBranch expectedBranch = new TECScopeBranch(false);
             expectedBranch.Label = "New Branch";
             bid.ScopeTree.Add(expectedBranch);
 
@@ -1628,7 +1628,7 @@ namespace Tests
         public void Save_Bid_Add_Branch_InBranch()
         {
             //Act
-            TECScopeBranch expectedBranch = new TECScopeBranch();
+            TECScopeBranch expectedBranch = new TECScopeBranch(false);
             expectedBranch.Label = "New Child";
             TECScopeBranch branchToModify = bid.ScopeTree[0];
             branchToModify.Branches.Add(expectedBranch);

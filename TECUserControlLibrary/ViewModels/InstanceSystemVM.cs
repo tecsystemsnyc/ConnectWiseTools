@@ -230,7 +230,7 @@ namespace TECUserControlLibrary.ViewModels
             if (dropInfo.Data is TECSystem)
             {
                 Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-                var controlledScopeToAdd = new TECSystem(dropInfo.Data as TECSystem, guidDictionary);
+                var controlledScopeToAdd = new TECSystem(dropInfo.Data as TECSystem, false, guidDictionary);
                 if (Bid != null)
                 {
                     ModelLinkingHelper.LinkSystem(controlledScopeToAdd, Bid, guidDictionary);

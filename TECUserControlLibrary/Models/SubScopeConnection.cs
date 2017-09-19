@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _subScope = value;
-                RaisePropertyChanged("Subscope");
+                raisePropertyChanged("Subscope");
             }
         }
 
@@ -35,7 +35,7 @@ namespace TECUserControlLibrary.Models
                 {
                     handleControllerSelection(value);
                     _controller = value;
-                    RaisePropertyChanged("Controller");
+                    raisePropertyChanged("Controller");
                 }
                 
             }
@@ -48,7 +48,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _parentEquipment = value;
-                RaisePropertyChanged("ParentEquipment");
+                raisePropertyChanged("ParentEquipment");
             }
         }
 
@@ -68,7 +68,7 @@ namespace TECUserControlLibrary.Models
             set
             {
                 handleConduitSelection(value);
-                RaisePropertyChanged("ConduitType");
+                raisePropertyChanged("ConduitType");
 
             }
         }
@@ -95,7 +95,7 @@ namespace TECUserControlLibrary.Models
                     SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
                     _controller = SubScope.Connection.ParentController;
                 }
-                RaisePropertyChanged("Controller");
+                raisePropertyChanged("Controller");
             }
         }
 
@@ -104,7 +104,7 @@ namespace TECUserControlLibrary.Models
             if(e.PropertyName == "ParentController")
             {
                 _controller = (sender as TECSubScopeConnection).ParentController;
-                RaisePropertyChanged("Controller");
+                raisePropertyChanged("Controller");
             }
         }
 
@@ -116,7 +116,7 @@ namespace TECUserControlLibrary.Models
             }
             if (controller != null)
             {
-                controller.AddSubScope(SubScope, IsTypical);
+                controller.AddSubScope(SubScope);
                 SubScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
             

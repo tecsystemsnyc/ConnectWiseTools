@@ -298,7 +298,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return controllers;
         }
-        static private ObservableCollection<TECScopeBranch> getScopeBranchesInSystem(Guid guid)
+        static private ObservableCollection<TECScopeBranch> getScopeBranchesInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECScopeBranch> branches = new ObservableCollection<TECScopeBranch>();
             string command = "select " + DatabaseHelper.AllFieldsInTableString(new ScopeBranchTable()) + " from " + ScopeBranchTable.TableName + " where " + ScopeBranchTable.ID.Name + " in ";
@@ -307,7 +307,7 @@ namespace EstimatingUtilitiesLibrary.Database
             command += "')";
             DataTable branchDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in branchDT.Rows)
-            { branches.Add(getScopeBranchFromRow(row)); }
+            { branches.Add(getScopeBranchFromRow(row, isTypical)); }
 
             return branches;
         }
@@ -455,12 +455,12 @@ namespace EstimatingUtilitiesLibrary.Database
 
             foreach (DataRow row in mainBranchDT.Rows)
             {
-                mainBranches.Add(getScopeBranchFromRow(row));
+                mainBranches.Add(getScopeBranchFromRow(row, false));
             }
 
             return mainBranches;
         }
-        static private ObservableCollection<TECScopeBranch> getChildBranchesInBranch(Guid parentID)
+        static private ObservableCollection<TECScopeBranch> getChildBranchesInBranch(Guid parentID, bool isTypical)
         {
             ObservableCollection<TECScopeBranch> childBranches = new ObservableCollection<TECScopeBranch>();
 
@@ -474,7 +474,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable childBranchDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in childBranchDT.Rows)
             {
-                childBranches.Add(getScopeBranchFromRow(row));
+                childBranches.Add(getScopeBranchFromRow(row, isTypical));
             }
 
             return childBranches;
@@ -988,7 +988,7 @@ namespace EstimatingUtilitiesLibrary.Database
             system.Panels = getPanelsInSystem(guid, true);
             system.Instances = getChildrenSystems(guid);
             system.MiscCosts = getMiscInSystem(guid, true);
-            system.ScopeBranches = getScopeBranchesInSystem(guid);
+            system.ScopeBranches = getScopeBranchesInSystem(guid, true);
             getLocatedChildren(system);
 
             return system;
@@ -1003,7 +1003,7 @@ namespace EstimatingUtilitiesLibrary.Database
             system.Equipment = getEquipmentInSystem(guid, false);
             system.Panels = getPanelsInSystem(guid, false);
             system.MiscCosts = getMiscInSystem(guid, false);
-            system.ScopeBranches = getScopeBranchesInSystem(guid);
+            system.ScopeBranches = getScopeBranchesInSystem(guid, false);
             getLocatedChildren(system);
 
             return system;
@@ -1132,12 +1132,12 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         #endregion
         #region Scope Qualifiers
-        private static TECScopeBranch getScopeBranchFromRow(DataRow row)
+        private static TECScopeBranch getScopeBranchFromRow(DataRow row, bool isTypical)
         {
             Guid scopeBranchID = new Guid(row[ScopeBranchTable.ID.Name].ToString());
-            TECScopeBranch branch = new TECScopeBranch(scopeBranchID);
+            TECScopeBranch branch = new TECScopeBranch(scopeBranchID, isTypical);
             assignValuePropertiesFromTable(branch, new ScopeBranchTable(), row);
-            branch.Branches = getChildBranchesInBranch(scopeBranchID);
+            branch.Branches = getChildBranchesInBranch(scopeBranchID, isTypical);
             return branch;
         }
         private static TECLabeled getNoteFromRow(DataRow row)

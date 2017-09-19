@@ -132,7 +132,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECScopeBranch edit = new TECScopeBranch();
+            TECScopeBranch edit = new TECScopeBranch(false);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1005,7 +1005,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECScopeBranch edit = new TECScopeBranch();
+            TECScopeBranch edit = new TECScopeBranch(false);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
