@@ -2423,6 +2423,35 @@ namespace Tests
         }
 
         [TestMethod]
+        public void EditSystemPointQuantity()
+        {
+            //Arrange
+            var original = 2;
+            var edited = 3;
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECPoint point = new TECPoint(true);
+            subScope.Points.Add(point);
+            TECSystem system = typical.AddInstance(bid);
+            TECPoint systemPoint = system.Equipment[0].SubScope[0].Points[0];
+            systemPoint.Quantity = original;
+
+            resetRaised();
+
+            //Act
+            systemPoint.Quantity = edited;
+
+            //Assert
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: true);
+            checkChangedArgs(Change.Edit, "Quantity", systemPoint, edited, original);
+        }
+
+        [TestMethod]
         public void EditSystemSubScopeConnectionInBidController()
         {
             //Arrange
