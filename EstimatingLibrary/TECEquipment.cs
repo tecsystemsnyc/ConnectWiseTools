@@ -109,7 +109,7 @@ namespace EstimatingLibrary
                     costs += item.CostBatch;
                     notifyCombinedChanged(Change.Remove, "SubScope", this, item);
                 }
-                PointChanged?.Invoke(pointNumber * -1);
+                notifyPointChanged(pointNumber * -1);
                 notifyCostChanged(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
