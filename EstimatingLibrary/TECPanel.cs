@@ -20,8 +20,8 @@ namespace EstimatingLibrary
             {
                 var old= Type;
                 _type = value;
-                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
-                NotifyCostChanged(value.CostBatch - old.CostBatch);
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                notifyCostChanged(value.CostBatch - old.CostBatch);
             }
         }
 
@@ -34,7 +34,7 @@ namespace EstimatingLibrary
                 var old = Controllers;
                 _controllers = value;
                 Controllers.CollectionChanged -= controllersCollectionChanged;
-                NotifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
                 Controllers.CollectionChanged += controllersCollectionChanged;
             }
         }
@@ -67,7 +67,7 @@ namespace EstimatingLibrary
             ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }
-
+        
         override protected CostBatch getCosts()
         {
             CostBatch costs = base.getCosts();
@@ -97,14 +97,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, "Controllers", this, item);
+                    notifyCombinedChanged(Change.Add, "Controllers", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, "Controllers", this, item);
+                    notifyCombinedChanged(Change.Remove, "Controllers", this, item);
                 }
             }
         }

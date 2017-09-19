@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface INotifyTECChanged
+    public interface InotifyTECChanged
     {
         event Action<TECChangedEventArgs> TECChanged;
     }

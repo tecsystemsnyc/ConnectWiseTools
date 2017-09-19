@@ -30,7 +30,7 @@ namespace EstimatingLibrary
                 SystemTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
                 _systemTemplates = value;
                 SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
-                NotifyCombinedChanged(Change.Edit, "SystemTemplates", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SystemTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECEquipment> EquipmentTemplates
@@ -42,7 +42,7 @@ namespace EstimatingLibrary
                 EquipmentTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
                 _equipmentTemplates = value;
                 EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
-                NotifyCombinedChanged(Change.Edit, "EquipmentTemplates", this, value, old);
+                notifyCombinedChanged(Change.Edit, "EquipmentTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECSubScope> SubScopeTemplates
@@ -54,7 +54,7 @@ namespace EstimatingLibrary
                 SubScopeTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
                 _subScopeTemplates = value;
                 SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
-                NotifyCombinedChanged(Change.Edit, "SubScopeTemplates", this, value, old);
+                notifyCombinedChanged(Change.Edit, "SubScopeTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECController> ControllerTemplates
@@ -66,7 +66,7 @@ namespace EstimatingLibrary
                 ControllerTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
                 _controllerTemplates = value;
                 ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
-                NotifyCombinedChanged(Change.Edit, "ControllerTemplates", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ControllerTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECMisc> MiscCostTemplates
@@ -78,7 +78,7 @@ namespace EstimatingLibrary
                 MiscCostTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
                 _miscCostTemplates = value;
                 MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
-                NotifyCombinedChanged(Change.Edit, "MiscCostTemplates", this, value, old);
+                notifyCombinedChanged(Change.Edit, "MiscCostTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECPanel> PanelTemplates
@@ -90,7 +90,7 @@ namespace EstimatingLibrary
                 PanelTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
                 _panelTemplates = value;
                 PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
-                NotifyCombinedChanged(Change.Edit, "PanelTemplates", this, value, old);
+                notifyCombinedChanged(Change.Edit, "PanelTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECParameters> Parameters
@@ -102,7 +102,7 @@ namespace EstimatingLibrary
                 Parameters.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Parameters");
                 _parameters = value;
                 Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
-                NotifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
             }
         }
         #endregion //Properties
@@ -273,19 +273,19 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyCombinedChanged(Change.Edit, propertyName, this, sender);
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender);
             }
         }
         #endregion

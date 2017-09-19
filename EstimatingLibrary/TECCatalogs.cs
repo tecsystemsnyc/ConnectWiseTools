@@ -31,7 +31,7 @@ namespace EstimatingLibrary
                 IOModules.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "IOModules");
                 _ioModules = value;
                 IOModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
-                NotifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
+                notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
             }
         }
         public ObservableCollection<TECDevice> Devices
@@ -43,7 +43,7 @@ namespace EstimatingLibrary
                 Devices.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Devices");
                 _devices = value;
                 Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
-                NotifyCombinedChanged(Change.Edit, "Devices", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
             }
         }
         public ObservableCollection<TECValve> Valves
@@ -55,7 +55,7 @@ namespace EstimatingLibrary
                 Valves.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Valves");
                 _valves = value;
                 Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
-                NotifyCombinedChanged(Change.Edit, "Valves", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Valves", this, value, old);
             }
         }
         public ObservableCollection<TECManufacturer> Manufacturers
@@ -67,7 +67,7 @@ namespace EstimatingLibrary
                 Manufacturers.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Manufacturers");
                 _manufacturers = value;
                 Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
-                NotifyCombinedChanged(Change.Edit, "Manufacturers", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Manufacturers", this, value, old);
             }
         }
         public ObservableCollection<TECPanelType> PanelTypes
@@ -79,7 +79,7 @@ namespace EstimatingLibrary
                 PanelTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "PanelTypes");
                 _panelTypes = value;
                 PanelTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "PanelTypes");
-                NotifyCombinedChanged(Change.Edit, "PanelTypes", this, value, old);
+                notifyCombinedChanged(Change.Edit, "PanelTypes", this, value, old);
             }
         }
         public ObservableCollection<TECControllerType> ControllerTypes
@@ -92,7 +92,7 @@ namespace EstimatingLibrary
                 PanelTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
                 _controllerTypes = value;
                 ControllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
-                NotifyCombinedChanged(Change.Edit, "ControllerTypes", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ControllerTypes", this, value, old);
             }
         }
         public ObservableCollection<TECElectricalMaterial> ConnectionTypes
@@ -104,7 +104,7 @@ namespace EstimatingLibrary
                 ConnectionTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
                 _connectionTypes = value;
                 ConnectionTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
-                NotifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
             }
         }
         public ObservableCollection<TECElectricalMaterial> ConduitTypes
@@ -116,7 +116,7 @@ namespace EstimatingLibrary
                 ConduitTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
                 _conduitTypes = value;
                 ConduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
-                NotifyCombinedChanged(Change.Edit, "ConduitTypes", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ConduitTypes", this, value, old);
             }
         }
         public ObservableCollection<TECCost> AssociatedCosts
@@ -130,7 +130,7 @@ namespace EstimatingLibrary
                 _associatedCosts = value;
                 AssociatedCosts.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
                 AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
-                NotifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
+                notifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
             }
         }
         public ObservableCollection<TECLabeled> Tags
@@ -144,7 +144,7 @@ namespace EstimatingLibrary
                 _tags = value;
                 Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
                 Tags.CollectionChanged += ScopeChildren_CollectionChanged;
-                NotifyCombinedChanged(Change.Edit, "Tags", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Tags", this, value, old);
             }
         }
 
@@ -202,14 +202,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)

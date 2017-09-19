@@ -11,7 +11,7 @@ namespace EstimatingLibrary
 {
     public enum Change { Add, Remove, Edit }
 
-    public abstract class TECObject : INotifyPropertyChanged, INotifyTECChanged
+    public abstract class TECObject : INotifyPropertyChanged, InotifyTECChanged
     {
         #region Properties
         protected Guid _guid;
@@ -27,14 +27,14 @@ namespace EstimatingLibrary
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action<TECChangedEventArgs> TECChanged;
 
-        protected void NotifyTECChanged(Change change, string propertyName, TECObject sender,
+        protected void notifyTECChanged(Change change, string propertyName, TECObject sender,
             object value, object oldValue = null)
         {
             TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);
             TECChanged?.Invoke(args);
         }
 
-        protected void NotifyCombinedChanged(Change change, string propertyName, TECObject sender,
+        protected void notifyCombinedChanged(Change change, string propertyName, TECObject sender,
             object value, object oldValue = null)
         {
             TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);
@@ -42,7 +42,7 @@ namespace EstimatingLibrary
             TECChanged?.Invoke(args);
         }
 
-        protected void RaisePropertyChanged(string name)
+        protected void raisePropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

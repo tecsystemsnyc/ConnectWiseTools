@@ -34,8 +34,8 @@ namespace EstimatingLibrary
                 {
                     ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
-                NotifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
-                //NotifyCombinedChanged("ChildChanged", (object)this, (object)value);
+                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
+                //notifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
         #endregion//Properties
@@ -78,14 +78,14 @@ namespace EstimatingLibrary
             {
                 foreach (TECElectricalMaterial type in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, propertyName, this, type);
+                    notifyCombinedChanged(Change.Add, propertyName, this, type);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECElectricalMaterial type in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, propertyName, this, type);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, type);
                 }
             }
         }

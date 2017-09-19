@@ -22,7 +22,7 @@ namespace EstimatingLibrary
                 RatedCosts.CollectionChanged -= (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
                 _ratedCosts = value;
                 RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
-                NotifyCombinedChanged(Change.Edit, "RatedCosts", this, value, old);
+                notifyCombinedChanged(Change.Edit, "RatedCosts", this, value, old);
             }
         }
         #endregion
@@ -79,14 +79,14 @@ namespace EstimatingLibrary
             {
                 foreach (TECCost item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECCost item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
         }

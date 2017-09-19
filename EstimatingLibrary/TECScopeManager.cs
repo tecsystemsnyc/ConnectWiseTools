@@ -19,7 +19,7 @@ namespace EstimatingLibrary
             {
                 var old = Catalogs;
                 _catalogs = value;
-                NotifyCombinedChanged(Change.Edit, "Catalogs", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Catalogs", this, value, old);
             }
         }
 

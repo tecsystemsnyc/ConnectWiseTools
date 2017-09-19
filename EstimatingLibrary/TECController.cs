@@ -30,8 +30,8 @@ namespace EstimatingLibrary
             {
                 var old = ParentConnection;
                 _parentConnection = value;
-                RaisePropertyChanged("ParentConnection");
-                RaisePropertyChanged("NetworkIO");
+                raisePropertyChanged("ParentConnection");
+                raisePropertyChanged("NetworkIO");
             }
         }
         public ObservableCollection<TECConnection> ChildrenConnections
@@ -43,8 +43,8 @@ namespace EstimatingLibrary
                 ChildrenConnections.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
                 _childrenConnections = value;
                 ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
-                NotifyCombinedChanged(Change.Edit, "ChildrenConnections", this, value, old);
-                RaisePropertyChanged("ChildNetworkConnections");
+                notifyCombinedChanged(Change.Edit, "ChildrenConnections", this, value, old);
+                raisePropertyChanged("ChildNetworkConnections");
             }
         }
         public TECControllerType Type
@@ -54,8 +54,8 @@ namespace EstimatingLibrary
             {
                 var old = Type;
                 _type = value;
-                NotifyCombinedChanged(Change.Edit, "Type", this, value, old);
-                NotifyCostChanged(value.CostBatch - old.CostBatch);
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                notifyCostChanged(value.CostBatch - old.CostBatch);
             }
         }
         public NetworkType NetworkType
@@ -65,7 +65,7 @@ namespace EstimatingLibrary
             {
                 var old = NetworkType;
                 _networkType = value;
-                NotifyCombinedChanged(Change.Edit, "NetworkType", this, value, old);
+                notifyCombinedChanged(Change.Edit, "NetworkType", this, value, old);
             }
         }
 
@@ -129,19 +129,19 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
             if (sender == ChildrenConnections)
             {
-                RaisePropertyChanged("ChildNetworkConnections");
+                raisePropertyChanged("ChildNetworkConnections");
             }
         }
         #endregion
@@ -436,7 +436,7 @@ namespace EstimatingLibrary
             if ((connection is TECSubScopeConnection ssConnect && ssConnect.IsTypical )
                 || connection is TECNetworkConnection)
             {
-                NotifyCostChanged(connection.CostBatch);
+                notifyCostChanged(connection.CostBatch);
             }
         }
         private void removeChildConnection(TECConnection connection)
@@ -445,7 +445,7 @@ namespace EstimatingLibrary
             if ((connection is TECSubScopeConnection ssConnect && ssConnect.IsTypical)
                 || connection is TECNetworkConnection)
             {
-                NotifyCostChanged(connection.CostBatch * -1);
+                notifyCostChanged(connection.CostBatch * -1);
             }
         }
         #endregion

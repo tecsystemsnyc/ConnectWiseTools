@@ -123,7 +123,7 @@ namespace EstimatingLibrary
                 var old = _instances;
                 _instances.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Instances");
                 _instances = value;
-                NotifyTECChanged(Change.Edit, "Instances", this, value, old);
+                notifyTECChanged(Change.Edit, "Instances", this, value, old);
                 _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
             }
         }
@@ -250,7 +250,7 @@ namespace EstimatingLibrary
 
         private void typicalInstanceDictionary_CollectionChanged(Tuple<Change, TECObject, TECObject> obj)
         {
-            NotifyTECChanged(obj.Item1, "TypicalInstanceDictionary", obj.Item2, obj.Item3);
+            notifyTECChanged(obj.Item1, "TypicalInstanceDictionary", obj.Item2, obj.Item3);
         }
         private void removeFromDictionary(IEnumerable<TECObject> typicalList, IEnumerable<TECObject> instanceList)
         {
@@ -316,7 +316,7 @@ namespace EstimatingLibrary
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
                         }
-                        NotifyTECChanged(Change.Add, propertyName, this, item);
+                        notifyTECChanged(Change.Add, propertyName, this, item);
                         if (item is TECController controller)
                         {
                             controller.IsGlobal = false;
@@ -325,8 +325,8 @@ namespace EstimatingLibrary
                 }
                 if (raiseEvents)
                 {
-                    NotifyCostChanged(costs);
-                    invokePointChanged(pointNum);
+                    notifyCostChanged(costs);
+                    notifyPointChanged(pointNum);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -345,18 +345,18 @@ namespace EstimatingLibrary
                             raiseEvents = true;
                             handleInstanceRemoved(sys);
                         }
-                        NotifyTECChanged(Change.Remove, propertyName, this, item);
+                        notifyTECChanged(Change.Remove, propertyName, this, item);
                     }
                 }
                 if (raiseEvents)
                 {
-                    NotifyCostChanged(costs * -1);
-                    invokePointChanged(-pointNum);
+                    notifyCostChanged(costs * -1);
+                    notifyPointChanged(-pointNum);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyTECChanged(Change.Edit, propertyName, this, sender);
+                notifyTECChanged(Change.Edit, propertyName, this, sender);
             }
         }
         protected override void scopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
@@ -366,14 +366,14 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
         }

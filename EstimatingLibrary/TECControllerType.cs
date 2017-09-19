@@ -24,7 +24,7 @@ namespace EstimatingLibrary
                 var old = IO;
                 IO.CollectionChanged -= (sender, args) => IO_CollectionChanged(sender, args, "IO");
                 _io = value;
-                NotifyCombinedChanged(Change.Edit,"IO", this, value, old);
+                notifyCombinedChanged(Change.Edit,"IO", this, value, old);
                 IO.CollectionChanged += (sender, args) => IO_CollectionChanged(sender, args, "IO");
             }
         }
@@ -56,7 +56,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyCombinedChanged(Change.Add, propertyName, this, item);
+                        notifyCombinedChanged(Change.Add, propertyName, this, item);
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace EstimatingLibrary
                 {
                     if (item is TECIO)
                     {
-                        NotifyCombinedChanged(Change.Remove, propertyName, this, item);
+                        notifyCombinedChanged(Change.Remove, propertyName, this, item);
                     }
                 }
             }

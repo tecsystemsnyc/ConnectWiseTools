@@ -673,133 +673,133 @@ namespace EstimatingLibrary
         #region Raise Properties
         private void raiseFromPoints()
         {
-            RaisePropertyChanged("TotalPointNumber");
+            raisePropertyChanged("TotalPointNumber");
             raiseTECLabor();
         }
         private void raiseElectricalMaterial()
         {
-            RaisePropertyChanged("ElectricalMaterialCost");
-            RaisePropertyChanged("ElectricalShipping");
-            RaisePropertyChanged("ElectricalWarranty");
+            raisePropertyChanged("ElectricalMaterialCost");
+            raisePropertyChanged("ElectricalShipping");
+            raisePropertyChanged("ElectricalWarranty");
             raiseSubcontractorTotals();
         }
         private void raiseMaterial()
         {
-            RaisePropertyChanged("TECMaterialCost");
-            RaisePropertyChanged("TECShipping");
-            RaisePropertyChanged("TECWarranty");
-            RaisePropertyChanged("Tax");
+            raisePropertyChanged("TECMaterialCost");
+            raisePropertyChanged("TECShipping");
+            raisePropertyChanged("TECWarranty");
+            raisePropertyChanged("Tax");
             raiseTECTotals();
         }
         private void raiseTECLabor()
         {
-            RaisePropertyChanged("TECFieldHours");
-            RaisePropertyChanged("TECFieldLaborCost");
+            raisePropertyChanged("TECFieldHours");
+            raisePropertyChanged("TECFieldLaborCost");
 
-            RaisePropertyChanged("PMPointLaborHours");
-            RaisePropertyChanged("PMLaborHours");
-            RaisePropertyChanged("PMLaborCost");
+            raisePropertyChanged("PMPointLaborHours");
+            raisePropertyChanged("PMLaborHours");
+            raisePropertyChanged("PMLaborCost");
 
-            RaisePropertyChanged("ENGPointLaborHours");
-            RaisePropertyChanged("ENGLaborHours");
-            RaisePropertyChanged("ENGLaborCost");
+            raisePropertyChanged("ENGPointLaborHours");
+            raisePropertyChanged("ENGLaborHours");
+            raisePropertyChanged("ENGLaborCost");
 
-            RaisePropertyChanged("SoftPointLaborHours");
-            RaisePropertyChanged("SoftLaborHours");
-            RaisePropertyChanged("SoftLaborCost");
+            raisePropertyChanged("SoftPointLaborHours");
+            raisePropertyChanged("SoftLaborHours");
+            raisePropertyChanged("SoftLaborCost");
 
-            RaisePropertyChanged("CommPointLaborHours");
-            RaisePropertyChanged("CommLaborHours");
-            RaisePropertyChanged("CommLaborCost");
+            raisePropertyChanged("CommPointLaborHours");
+            raisePropertyChanged("CommLaborHours");
+            raisePropertyChanged("CommLaborCost");
 
-            RaisePropertyChanged("GraphPointLaborHours");
-            RaisePropertyChanged("GraphLaborHours");
-            RaisePropertyChanged("GraphLaborCost");
+            raisePropertyChanged("GraphPointLaborHours");
+            raisePropertyChanged("GraphLaborHours");
+            raisePropertyChanged("GraphLaborCost");
 
-            RaisePropertyChanged("TECLaborHours");
-            RaisePropertyChanged("TECLaborCost");
+            raisePropertyChanged("TECLaborHours");
+            raisePropertyChanged("TECLaborCost");
             raiseTECTotals();
             raiseLabor();
         }
         private void raiseElectricalLabor()
         {
-            RaisePropertyChanged("ElectricalLaborHours");
-            RaisePropertyChanged("ElectricalLaborCost");
-            RaisePropertyChanged("ElectricalSuperLaborHours");
-            RaisePropertyChanged("ElectricalSuperLaborCost");
+            raisePropertyChanged("ElectricalLaborHours");
+            raisePropertyChanged("ElectricalLaborCost");
+            raisePropertyChanged("ElectricalSuperLaborHours");
+            raisePropertyChanged("ElectricalSuperLaborCost");
             raiseSubcontractorLabor();
             raiseLabor();
         }
         private void raiseSubcontractorLabor()
         {
-            RaisePropertyChanged("SubcontractorLaborHours");
-            RaisePropertyChanged("SubcontractorLaborCost");
+            raisePropertyChanged("SubcontractorLaborHours");
+            raisePropertyChanged("SubcontractorLaborCost");
             raiseSubcontractorTotals();
             raiseLabor();
         }
         private void raiseTECTotals()
         {
-            RaisePropertyChanged("TECSubtotal");
+            raisePropertyChanged("TECSubtotal");
             raiseTotals();
         }
         private void raiseSubcontractorTotals()
         {
-            RaisePropertyChanged("SubcontractorSubtotal");
+            raisePropertyChanged("SubcontractorSubtotal");
             raiseTotals();
         }
         private void raiseLabor()
         {
-            RaisePropertyChanged("TotalLaborCost");
+            raisePropertyChanged("TotalLaborCost");
         }
         private void raiseTotals()
         {
-            RaisePropertyChanged("TotalCost");
-            RaisePropertyChanged("TotalPrice");
-            RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("Margin");
+            raisePropertyChanged("TotalCost");
+            raisePropertyChanged("TotalPrice");
+            raisePropertyChanged("PricePerPoint");
+            raisePropertyChanged("Margin");
         }
         private void raiseAll()
         {
-            RaisePropertyChanged("TotalPointNumber");
-            RaisePropertyChanged("ElectricalMaterialCost");
-            RaisePropertyChanged("MaterialCost");
-            RaisePropertyChanged("Tax");
-            RaisePropertyChanged("PMPointLaborHours");
-            RaisePropertyChanged("PMLaborHours");
-            RaisePropertyChanged("PMLaborCost");
+            raisePropertyChanged("TotalPointNumber");
+            raisePropertyChanged("ElectricalMaterialCost");
+            raisePropertyChanged("MaterialCost");
+            raisePropertyChanged("Tax");
+            raisePropertyChanged("PMPointLaborHours");
+            raisePropertyChanged("PMLaborHours");
+            raisePropertyChanged("PMLaborCost");
 
-            RaisePropertyChanged("ENGPointLaborHours");
-            RaisePropertyChanged("ENGLaborHours");
-            RaisePropertyChanged("ENGLaborCost");
+            raisePropertyChanged("ENGPointLaborHours");
+            raisePropertyChanged("ENGLaborHours");
+            raisePropertyChanged("ENGLaborCost");
 
-            RaisePropertyChanged("SoftPointLaborHours");
-            RaisePropertyChanged("SoftLaborHours");
-            RaisePropertyChanged("SoftLaborCost");
+            raisePropertyChanged("SoftPointLaborHours");
+            raisePropertyChanged("SoftLaborHours");
+            raisePropertyChanged("SoftLaborCost");
 
-            RaisePropertyChanged("CommPointLaborHours");
-            RaisePropertyChanged("CommLaborHours");
-            RaisePropertyChanged("CommLaborCost");
+            raisePropertyChanged("CommPointLaborHours");
+            raisePropertyChanged("CommLaborHours");
+            raisePropertyChanged("CommLaborCost");
 
-            RaisePropertyChanged("GraphPointLaborHours");
-            RaisePropertyChanged("GraphLaborHours");
-            RaisePropertyChanged("GraphLaborCost");
+            raisePropertyChanged("GraphPointLaborHours");
+            raisePropertyChanged("GraphLaborHours");
+            raisePropertyChanged("GraphLaborCost");
 
-            RaisePropertyChanged("TECLaborHours");
-            RaisePropertyChanged("TECLaborCost");
-            RaisePropertyChanged("TECSubtotal");
-            RaisePropertyChanged("ElectricalLaborHours");
-            RaisePropertyChanged("ElectricalLaborCost");
-            RaisePropertyChanged("ElectricalSuperLaborHours");
-            RaisePropertyChanged("ElectricalSuperLaborCost");
-            RaisePropertyChanged("SubcontractorLaborHours");
-            RaisePropertyChanged("SubcontractorLaborCost");
-            RaisePropertyChanged("TECSubtotal");
-            RaisePropertyChanged("SubcontractorSubtotal");
-            RaisePropertyChanged("TotalLaborCost");
-            RaisePropertyChanged("TotalCost");
-            RaisePropertyChanged("TotalPrice");
-            RaisePropertyChanged("PricePerPoint");
-            RaisePropertyChanged("Margin");
+            raisePropertyChanged("TECLaborHours");
+            raisePropertyChanged("TECLaborCost");
+            raisePropertyChanged("TECSubtotal");
+            raisePropertyChanged("ElectricalLaborHours");
+            raisePropertyChanged("ElectricalLaborCost");
+            raisePropertyChanged("ElectricalSuperLaborHours");
+            raisePropertyChanged("ElectricalSuperLaborCost");
+            raisePropertyChanged("SubcontractorLaborHours");
+            raisePropertyChanged("SubcontractorLaborCost");
+            raisePropertyChanged("TECSubtotal");
+            raisePropertyChanged("SubcontractorSubtotal");
+            raisePropertyChanged("TotalLaborCost");
+            raisePropertyChanged("TotalCost");
+            raisePropertyChanged("TotalPrice");
+            raisePropertyChanged("PricePerPoint");
+            raisePropertyChanged("Margin");
         }
         #endregion
         

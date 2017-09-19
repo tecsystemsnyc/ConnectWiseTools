@@ -34,8 +34,8 @@ namespace EstimatingLibrary
                     var old = Manufacturer;
                     var originalCost = CostBatch;
                     _manufacturer = value;
-                    NotifyCombinedChanged(Change.Edit, "Manufacturer", this, value, old);
-                    NotifyCostChanged(CostBatch - originalCost);
+                    notifyCombinedChanged(Change.Edit, "Manufacturer", this, value, old);
+                    notifyCostChanged(CostBatch - originalCost);
                 }
             }
         }
@@ -53,8 +53,8 @@ namespace EstimatingLibrary
             {
                 var old = Price;
                 _price = value;
-                NotifyCombinedChanged(Change.Edit, "Price", this, value, old);
-                NotifyCostChanged(new CostBatch(value - old, 0, Type));
+                notifyCombinedChanged(Change.Edit, "Price", this, value, old);
+                notifyCostChanged(new CostBatch(value - old, 0, Type));
             }
         }
         #endregion

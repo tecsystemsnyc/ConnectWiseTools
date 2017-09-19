@@ -42,8 +42,8 @@ namespace EstimatingLibrary
                 {
                     var old = _name;
                     _name = value;
-                    // Call RaisePropertyChanged whenever the property is updated
-                    NotifyCombinedChanged(Change.Edit, "Name", this, value, old);
+                    // Call raisePropertyChanged whenever the property is updated
+                    notifyCombinedChanged(Change.Edit, "Name", this, value, old);
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace EstimatingLibrary
             {
                 var old = BidNumber;
                 _bidNumber = value;
-                NotifyCombinedChanged(Change.Edit, "BidNumber", this, value, old);
+                notifyCombinedChanged(Change.Edit, "BidNumber", this, value, old);
             }
         }
         public DateTime DueDate
@@ -64,8 +64,8 @@ namespace EstimatingLibrary
             {
                 var old = DueDate;
                 _dueDate = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyCombinedChanged(Change.Edit, "DueDate", this, value, old);
+                // Call raisePropertyChanged whenever the property is updated
+                notifyCombinedChanged(Change.Edit, "DueDate", this, value, old);
             }
         }
         public string DueDateString
@@ -79,7 +79,7 @@ namespace EstimatingLibrary
             {
                 var old = Salesperson;
                 _salesperson = value;
-                NotifyCombinedChanged(Change.Edit, "Salesperson", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Salesperson", this, value, old);
             }
         }
         public string Estimator
@@ -89,7 +89,7 @@ namespace EstimatingLibrary
             {
                 var old = Estimator;
                 _estimator = value;
-                NotifyCombinedChanged(Change.Edit, "Estimator", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Estimator", this, value, old);
             }
         }
 
@@ -100,7 +100,7 @@ namespace EstimatingLibrary
             {
                 var old = Parameters;
                 _parameters = value;
-                NotifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
             }
         }
         public TECExtraLabor ExtraLabor
@@ -110,7 +110,7 @@ namespace EstimatingLibrary
             {
                 var old = ExtraLabor;
                 _extraLabor = value;
-                NotifyCombinedChanged(Change.Edit, "ExtraLabor", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ExtraLabor", this, value, old);
                 CostChanged?.Invoke(value.CostBatch - old.CostBatch);
             }
 
@@ -125,7 +125,7 @@ namespace EstimatingLibrary
                 ScopeTree.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ScopeTree");
                 _scopeTree = value;
                 ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
-                NotifyCombinedChanged(Change.Edit, "ScopeTree", this, value, old);
+                notifyCombinedChanged(Change.Edit, "ScopeTree", this, value, old);
             }
         }
         public ObservableCollection<TECTypical> Systems
@@ -138,7 +138,7 @@ namespace EstimatingLibrary
                 _systems = value;
                 registerSystems();
                 Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
-                NotifyCombinedChanged(Change.Edit, "Systems", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Systems", this, value, old);
             }
         }
         public ObservableCollection<TECLabeled> Notes
@@ -150,7 +150,7 @@ namespace EstimatingLibrary
                 Notes.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Notes");
                 _notes = value;
                 Notes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Notes");
-                NotifyCombinedChanged(Change.Edit, "Notes", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Notes", this, value, old);
             }
         }
         public ObservableCollection<TECLabeled> Exclusions
@@ -162,7 +162,7 @@ namespace EstimatingLibrary
                 Exclusions.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Exclusions");
                 _exclusions = value;
                 Exclusions.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Exclusions");
-                NotifyCombinedChanged(Change.Edit, "Exclusions", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Exclusions", this, value, old);
             }
         }
         public ObservableCollection<TECLabeled> Locations
@@ -176,7 +176,7 @@ namespace EstimatingLibrary
                 _locations = value;
                 Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
                 Locations.CollectionChanged += locationsCollectionChanged;
-                NotifyCombinedChanged(Change.Edit, "Locations", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Locations", this, value, old);
             }
         }
         
@@ -189,7 +189,7 @@ namespace EstimatingLibrary
                 Controllers.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Controllers");
                 _controllers = value;
                 Controllers.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Controllers");
-                NotifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
             }
         }
         public ObservableCollection<TECMisc> MiscCosts
@@ -201,7 +201,7 @@ namespace EstimatingLibrary
                 MiscCosts.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "MiscCosts");
                 _miscCosts = value;
                 MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
-                NotifyCombinedChanged(Change.Edit, "MiscCosts", this, value, old);
+                notifyCombinedChanged(Change.Edit, "MiscCosts", this, value, old);
             }
         }
         public ObservableCollection<TECPanel> Panels
@@ -213,7 +213,7 @@ namespace EstimatingLibrary
                 Panels.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Panels");
                 _panels = value;
                 Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
-                NotifyCombinedChanged(Change.Edit, "Panels", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Panels", this, value, old);
             }
         }
         
@@ -326,7 +326,7 @@ namespace EstimatingLibrary
                         costs += costItem.CostBatch;
                         costChanged = true;
                     }
-                    NotifyCombinedChanged(Change.Add, collectionName, this, item);
+                    notifyCombinedChanged(Change.Add, collectionName, this, item);
                     if (item is TECTypical typical)
                     {
                         typical.PropertyChanged += system_PropertyChanged;
@@ -355,7 +355,7 @@ namespace EstimatingLibrary
                         costs += costItem.CostBatch;
                         costChanged = true;
                     }
-                    NotifyCombinedChanged(Change.Remove, collectionName, this, item);
+                    notifyCombinedChanged(Change.Remove, collectionName, this, item);
                     if (item is TECTypical typ)
                     {
                         var sys = item as TECSystem;
@@ -377,7 +377,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyCombinedChanged(Change.Edit, collectionName, this, e.NewItems, e.OldItems);
+                notifyCombinedChanged(Change.Edit, collectionName, this, e.NewItems, e.OldItems);
             }
         }
         private void locationsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

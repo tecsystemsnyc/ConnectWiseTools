@@ -28,7 +28,7 @@ namespace EstimatingLibrary
                 }
                 var old = Devices;
                 _devices = value;
-                NotifyCombinedChanged(Change.Edit, "Devices", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
                 Devices.CollectionChanged += Devices_CollectionChanged;
             }
         }
@@ -44,7 +44,7 @@ namespace EstimatingLibrary
                 var old = Points;
                 _points = value;
                 Points.CollectionChanged += PointsCollectionChanged;
-                NotifyCombinedChanged(Change.Edit, "Points", this, value, old);
+                notifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
         public TECSubScopeConnection Connection
@@ -53,7 +53,7 @@ namespace EstimatingLibrary
             set
             {
                 _connection = value;
-                RaisePropertyChanged("Connection");
+                raisePropertyChanged("Connection");
             }
         }
         
@@ -137,7 +137,7 @@ namespace EstimatingLibrary
                 foreach (TECPoint item in e.NewItems)
                 {
                     pointNumber += item.PointNumber;
-                    NotifyCombinedChanged(Change.Add, "Points", this, item);
+                    notifyCombinedChanged(Change.Add, "Points", this, item);
                 }
                 PointChanged?.Invoke(pointNumber);
             }
@@ -147,13 +147,13 @@ namespace EstimatingLibrary
                 foreach (TECPoint item in e.OldItems)
                 {
                     pointNumber += item.PointNumber;
-                    NotifyCombinedChanged(Change.Remove, "Points", this, item);
+                    notifyCombinedChanged(Change.Remove, "Points", this, item);
                 }
                 PointChanged?.Invoke(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyCombinedChanged(Change.Edit, "Points", this, sender);
+                notifyCombinedChanged(Change.Edit, "Points", this, sender);
             }
         }
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -163,30 +163,30 @@ namespace EstimatingLibrary
                 CostBatch costs = new CostBatch();
                 foreach (ITECConnectable item in e.NewItems)
                 {
-                    NotifyCombinedChanged(Change.Add, "Devices", this, item);
+                    notifyCombinedChanged(Change.Add, "Devices", this, item);
                     if(item is INotifyCostChanged costly)
                     {
                         costs += costly.CostBatch;
                     }
                 }
-                NotifyCostChanged(costs);
+                notifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 CostBatch costs = new CostBatch();
                 foreach (TECDevice item in e.OldItems)
                 {
-                    NotifyCombinedChanged(Change.Remove, "Devices", this, item);
+                    notifyCombinedChanged(Change.Remove, "Devices", this, item);
                     if (item is INotifyCostChanged costly)
                     {
                         costs += costly.CostBatch;
                     }
                 }
-                NotifyCostChanged(costs * -1);
+                notifyCostChanged(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyCombinedChanged(Change.Edit, "Devices", this, sender);
+                notifyCombinedChanged(Change.Edit, "Devices", this, sender);
             }
         }
         #endregion
