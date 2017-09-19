@@ -519,7 +519,6 @@ namespace Tests
             resetRaised();
 
             //Act
-
             ss.AssociatedCosts.Add(assCost);
 
             //Assert
