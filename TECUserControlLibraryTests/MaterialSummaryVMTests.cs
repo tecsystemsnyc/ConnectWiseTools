@@ -873,7 +873,9 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
+            bid.Catalogs.ControllerTypes.Add(controllerType);
+            TECController controller = new TECController(controllerType, false);
             bid.Controllers.Add(controller);
 
             TECTypical typical = new TECTypical();
