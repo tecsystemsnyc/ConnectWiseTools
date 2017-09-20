@@ -3666,7 +3666,6 @@ namespace Tests
             controller.RemoveSubScope(subScope);
 
             Dictionary<string, string> data;
-            Tuple<string, string> pkData;
 
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
