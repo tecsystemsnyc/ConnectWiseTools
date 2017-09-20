@@ -412,8 +412,6 @@ namespace Tests
             bid.Catalogs.Devices.Add(dev);
             typSS.Devices.Add(dev);
 
-            TECSystem instance = typical.AddInstance(bid);
-
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
@@ -421,6 +419,8 @@ namespace Tests
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
+
+            TECSystem instance = typical.AddInstance(bid);
 
             Total totalTEC = CalculateTotal(connection, CostType.TEC);
             Total totalElec = CalculateTotal(connection, CostType.Electrical);

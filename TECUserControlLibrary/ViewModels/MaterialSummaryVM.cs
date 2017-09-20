@@ -215,30 +215,30 @@ namespace TECUserControlLibrary.ViewModels
         }
         private CostBatch addConnection(TECConnection connection)
         {
-            CostBatch deltas = new CostBatch();
-            if (connection is TECNetworkConnection netConnect)
+            if (!connection.IsTypical)
             {
-                deltas += (WireSummaryVM.AddRun(netConnect.ConnectionType, netConnect.Length));
-                if (connection.ConduitType != null)
+                CostBatch deltas = new CostBatch();
+                if (connection is TECNetworkConnection netConnect)
                 {
-                    deltas += (ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+                    deltas += (WireSummaryVM.AddRun(netConnect.ConnectionType, netConnect.Length));
                 }
-            }
-            else if (connection is TECSubScopeConnection ssConnect)
-            {
-                if (!ssConnect.IsTypical)
+                else if (connection is TECSubScopeConnection ssConnect)
                 {
                     foreach (TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
                     {
                         deltas += (WireSummaryVM.AddRun(connectionType, ssConnect.Length));
                     }
-                    if (connection.ConduitType != null)
-                    {
-                        deltas += (ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
-                    }
                 }
+                if (connection.ConduitType != null)
+                {
+                    deltas += (ConduitSummaryVM.AddRun(connection.ConduitType, connection.ConduitLength));
+                }
+                return deltas;
             }
-            return deltas;
+            else
+            {
+                return new CostBatch();
+            }
         }
         
         private CostBatch removeSystem(TECSystem system)
@@ -325,7 +325,10 @@ namespace TECUserControlLibrary.ViewModels
                     deltas += (WireSummaryVM.RemoveRun(connectionType, ssConnect.Length));
                 }
             }
-            deltas += (ConduitSummaryVM.RemoveRun(connection.ConduitType, connection.ConduitLength));
+            if (connection.ConduitType != null)
+            {
+                deltas += (ConduitSummaryVM.RemoveRun(connection.ConduitType, connection.ConduitLength));
+            }
             return deltas;
         }
         #endregion
