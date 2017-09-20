@@ -139,7 +139,7 @@ namespace EstimatingLibrary
 
         #endregion
 
-        #region methods
+        #region Methods
         protected override CostBatch getCosts()
         {
             CostBatch costs = new CostBatch();
@@ -157,8 +157,16 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
+            saveList.Add(this.ConnectionType, "ConnectionType");
+            saveList.AddRange(this.ChildrenControllers, "ChildrenControllers");
+            return saveList;
+        }
+        protected override SaveableMap relatedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.relatedObjects());
             saveList.Add(this.ConnectionType, "ConnectionTypes");
-            saveList.AddRange(this.ChildrenControllers, "ChildrenConnections");
+            saveList.AddRange(this.ChildrenControllers, "ChildrenControllers");
             return saveList;
         }
         #endregion 
