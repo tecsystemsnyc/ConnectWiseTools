@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EstimatingLibrary.Utilities
 {
@@ -18,6 +19,7 @@ namespace EstimatingLibrary.Utilities
         public event Action<TECChangedEventArgs> InstanceChanged;
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
+        public event Action<object, PropertyChangedEventArgs> PropertyChanged;
         #endregion
 
         #region Methods
@@ -50,6 +52,7 @@ namespace EstimatingLibrary.Utilities
         private void registerTECObject(TECObject ob)
         {
             ob.TECChanged += handleTECChanged;
+            ob.PropertyChanged += handlePropertyChanged;
             if (ob is INotifyCostChanged costOb)
             {
                 costOb.CostChanged += (e) => handleCostChanged(ob, e);
@@ -59,6 +62,9 @@ namespace EstimatingLibrary.Utilities
                 pointOb.PointChanged += (e) => handlePointChanged(ob, e);
             }
         }
+
+        
+
         private void registerChange(TECChangedEventArgs args)
         {
             if(args.PropertyName != "TypicalInstanceDictionary")
@@ -108,6 +114,10 @@ namespace EstimatingLibrary.Utilities
                     }
                 }
             }
+        }
+        private void handlePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender, e);
         }
         private void handleCostChanged(TECObject sender, CostBatch obj)
         {

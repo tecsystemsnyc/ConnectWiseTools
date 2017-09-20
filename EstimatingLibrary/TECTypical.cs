@@ -32,6 +32,7 @@ namespace EstimatingLibrary
 
             watcher = new ChangeWatcher(this);
             watcher.Changed += handleSystemChanged;
+            watcher.PropertyChanged += handlePropertyChanged;
         }
 
         public TECTypical() : this(Guid.NewGuid()) { }
@@ -220,6 +221,7 @@ namespace EstimatingLibrary
         {
             watcher = new ChangeWatcher(this);
             watcher.Changed += handleSystemChanged;
+            watcher.PropertyChanged += handlePropertyChanged;
         }
 
         public override object DragDropCopy(TECScopeManager scopeManager)
@@ -294,9 +296,13 @@ namespace EstimatingLibrary
                     handlePointChanged(args.Sender as TECPoint, args.PropertyName);
                 }
             }
-            else if (args.PropertyName == "Connection" && args.Sender is TECSubScope)
+        }
+
+        private void handlePropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == "Connection" && sender is TECSubScope)
             {
-                handleSubScopeConnectionChanged(args.Sender as TECSubScope);
+                handleSubScopeConnectionChanged(sender as TECSubScope);
             }
         }
         protected override void handleCollectionChanged(object sender,
