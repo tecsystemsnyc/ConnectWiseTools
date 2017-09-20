@@ -373,8 +373,8 @@ namespace Tests
             //Act
             TECSystem instance = typical.AddInstance(bid);
 
-            Total totalTEC = CalculateTotalInstanceSystem(instance, typical, CostType.TEC);
-            Total totalElec = CalculateTotalInstanceSystem(instance, typical, CostType.Electrical);
+            Total totalTEC = CalculateTotal(instance, CostType.TEC);
+            Total totalElec = CalculateTotal(instance, CostType.Electrical);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
@@ -799,8 +799,8 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotalInstanceSystem(instance, typical, CostType.TEC);
-            Total totalElec = CalculateTotalInstanceSystem(instance, typical, CostType.Electrical);
+            Total totalTEC = CalculateTotal(instance, CostType.TEC);
+            Total totalElec = CalculateTotal(instance, CostType.Electrical);
 
             //Act
             typical.Instances.Remove(instance);
