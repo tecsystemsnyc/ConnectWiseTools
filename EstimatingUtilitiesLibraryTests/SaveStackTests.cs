@@ -1506,6 +1506,423 @@ namespace Tests
         }
         #endregion
         #endregion
+
+        #region Connections
+        [TestMethod]
+        public void Bid_AddNetworkConnectionInBid()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            TECController child = new TECController(type, false);
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+
+            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECNetworkConnection connection = controller.AddController(child, connectionType);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
+            data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionControllerTable.ControllerID.Name] = child.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionControllerTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+            
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddNetworkConnectionToInstance()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            bid.Controllers.Add(controller);
+
+            TECController child = new TECController(type, false);
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            typical.Controllers.Add(child);
+            TECSystem system = typical.AddInstance(bid);
+            TECController instanceController = system.Controllers[0];
+            
+            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECNetworkConnection connection = controller.AddController(instanceController, connectionType);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
+            data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionControllerTable.ControllerID.Name] = instanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionControllerTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddNetworkConnectionBetweenInstances()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+
+            TECController controller = new TECController(type, false);
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            typical.Controllers.Add(controller);
+            TECSystem system = typical.AddInstance(bid);
+            TECController instanceController = system.Controllers[0];
+
+            TECController otherController = new TECController(type, false);
+            TECTypical otherTypical = new TECTypical();
+            bid.Systems.Add(otherTypical);
+            otherTypical.Controllers.Add(otherController);
+            TECSystem otherSystem = otherTypical.AddInstance(bid);
+            TECController otherInstanceController = otherSystem.Controllers[0];
+
+            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECNetworkConnection connection = instanceController.AddController(otherInstanceController, connectionType);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
+            data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionControllerTable.ControllerID.Name] = otherInstanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionControllerTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddSubScopeConnectionToTypical()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            bid.Controllers.Add(controller);
+
+            TECTypical typical = new TECTypical();
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+            
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
+            data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddSubScopeConnectionToInstance()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            bid.Controllers.Add(controller);
+
+            TECTypical typical = new TECTypical();
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+            TECSystem system = typical.AddInstance(bid);
+            TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
+            data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddSubScopeConnectionInTypical()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+
+            TECTypical typical = new TECTypical();
+            typical.Controllers.Add(controller);
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
+            data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddSubScopeConnectionInTypicalWithInstance()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+
+            TECTypical typical = new TECTypical();
+            typical.Controllers.Add(controller);
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+            TECSystem system = typical.AddInstance(bid);
+
+            TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
+            TECController instanceController = system.Controllers[0];
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            TECSubScopeConnection instanceConnection = instanceController.ChildrenConnections[0] as TECSubScopeConnection;
+
+            Dictionary<string, string> data;
+            Tuple<string, string> pkData;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
+            data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
+            data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
+            data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
+            expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
+
+            data = new Dictionary<string, string>();
+            pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
+            data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
+            expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
+            data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+        #endregion
         #endregion
 
         #region Remove
@@ -2884,6 +3301,407 @@ namespace Tests
             checkUpdateItems(expectedItems, stack);
         }
         #endregion
+        #endregion
+
+        #region Connections
+        [TestMethod]
+        public void Bid_RemoveNetworkConnectionInBid()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            TECController child = new TECController(type, false);
+            bid.Controllers.Add(controller);
+            bid.Controllers.Add(child);
+
+            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECNetworkConnection connection = controller.AddController(child, connectionType);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            controller.RemoveController(child);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionControllerTable.ControllerID.Name] = child.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionControllerTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveNetworkConnectionToInstance()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            bid.Controllers.Add(controller);
+
+            TECController child = new TECController(type, false);
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            typical.Controllers.Add(child);
+            TECSystem system = typical.AddInstance(bid);
+            TECController instanceController = system.Controllers[0];
+
+            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECNetworkConnection connection = controller.AddController(instanceController, connectionType);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            controller.RemoveController(instanceController);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionControllerTable.ControllerID.Name] = instanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionControllerTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionConnectionTypeTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveNetworkConnectionBetweenInstances()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+
+            TECController controller = new TECController(type, false);
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            typical.Controllers.Add(controller);
+            TECSystem system = typical.AddInstance(bid);
+            TECController instanceController = system.Controllers[0];
+
+            TECController otherController = new TECController(type, false);
+            TECTypical otherTypical = new TECTypical();
+            bid.Systems.Add(otherTypical);
+            otherTypical.Controllers.Add(otherController);
+            TECSystem otherSystem = otherTypical.AddInstance(bid);
+            TECController otherInstanceController = otherSystem.Controllers[0];
+
+            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECNetworkConnection connection = instanceController.AddController(otherInstanceController, connectionType);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            instanceController.RemoveController(otherInstanceController);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionControllerTable.ControllerID.Name] = otherInstanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionControllerTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionConnectionTypeTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveSubScopeConnectionToTypical()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            bid.Controllers.Add(controller);
+
+            TECTypical typical = new TECTypical();
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+            controller.RemoveSubScope(subScope);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveSubScopeConnectionToInstance()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+            bid.Controllers.Add(controller);
+
+            TECTypical typical = new TECTypical();
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+            TECSystem system = typical.AddInstance(bid);
+            TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
+            TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope);
+
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            controller.RemoveSubScope(instanceSubScope);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveSubScopeConnectionInTypical()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+
+            TECTypical typical = new TECTypical();
+            typical.Controllers.Add(controller);
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            controller.RemoveSubScope(subScope);
+
+            Dictionary<string, string> data;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveSubScopeConnectionInTypicalWithInstance()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO();
+            io.Type = IOType.BACnetIP;
+            type.IO.Add(io);
+            TECController controller = new TECController(type, false);
+
+            TECTypical typical = new TECTypical();
+            typical.Controllers.Add(controller);
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            bid.Systems.Add(typical);
+            TECSystem system = typical.AddInstance(bid);
+
+            TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
+            TECController instanceController = system.Controllers[0];
+
+            TECSubScopeConnection connection = controller.AddSubScope(subScope);
+            TECSubScopeConnection instanceConnection = instanceController.ChildrenConnections[0] as TECSubScopeConnection;
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            controller.RemoveSubScope(subScope);
+
+            Dictionary<string, string> data;
+            Tuple<string, string> pkData;
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
         #endregion
         #endregion
 

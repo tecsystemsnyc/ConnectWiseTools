@@ -1807,7 +1807,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
-            ConnectionID
+            ConnectionID,
+            TypeID
         };
         private List<Type> types = new List<Type>()
         {
@@ -1855,7 +1856,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ChildControllers"
+            "ChildrenControllers"
         };
 
         public override string NameString { get { return TableName; } }
