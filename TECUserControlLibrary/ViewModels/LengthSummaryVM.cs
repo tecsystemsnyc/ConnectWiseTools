@@ -235,30 +235,37 @@ namespace TECUserControlLibrary.ViewModels
         }
         public CostBatch RemoveLength(TECElectricalMaterial material, double length)
         {
-            bool containsItem = lengthDictionary.ContainsKey(material.Guid);
-            if (containsItem)
+            if (length > 0)
             {
-                CostBatch deltas = new CostBatch();
-                LengthSummaryItem item = lengthDictionary[material.Guid];
-                CostBatch delta = item.RemoveLength(length);
-                LengthCostTotal += delta.GetCost(CostType.Electrical);
-                LengthLaborTotal += delta.GetLabor(CostType.Electrical);
-                deltas += delta;
+                bool containsItem = lengthDictionary.ContainsKey(material.Guid);
+                if (containsItem)
+                {
+                    CostBatch deltas = new CostBatch();
+                    LengthSummaryItem item = lengthDictionary[material.Guid];
+                    CostBatch delta = item.RemoveLength(length);
+                    LengthCostTotal += delta.GetCost(CostType.Electrical);
+                    LengthLaborTotal += delta.GetLabor(CostType.Electrical);
+                    deltas += delta;
 
-                if (item.Length <= 0)
-                {
-                    LengthSummaryItems.Remove(item);
-                    lengthDictionary.Remove(material.Guid);
+                    if (item.Length <= 0)
+                    {
+                        LengthSummaryItems.Remove(item);
+                        lengthDictionary.Remove(material.Guid);
+                    }
+                    foreach (TECCost cost in material.RatedCosts)
+                    {
+                        deltas += removeRatedCost(cost, length);
+                    }
+                    return deltas;
                 }
-                foreach(TECCost cost in material.RatedCosts)
+                else
                 {
-                    deltas += removeRatedCost(cost, length);
+                    throw new NullReferenceException("Length item not present in dictionary.");
                 }
-                return deltas;
             }
             else
             {
-                throw new NullReferenceException("Length item not present in dictionary.");
+                return new CostBatch();
             }
         }
 
@@ -393,38 +400,45 @@ namespace TECUserControlLibrary.ViewModels
         }
         private CostBatch removeRatedCost(TECCost cost, double length)
         {
-            bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
-            if (containsItem)
+            if (length > 0)
             {
-                RatedCostSummaryItem item = ratedCostDictionary[cost.Guid];
-                CostBatch delta = item.RemoveLength(length);
-                if (cost.Type == CostType.TEC)
+                bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
+                if (containsItem)
                 {
-                    RatedTECCostTotal += delta.GetCost(CostType.TEC);
-                    RatedTECLaborTotal += delta.GetLabor(CostType.TEC);
-                }
-                else if (cost.Type == CostType.Electrical)
-                {
-                    RatedElecCostTotal += delta.GetCost(CostType.Electrical);
-                    RatedElecLaborTotal += delta.GetLabor(CostType.Electrical);
-                }
-                if (item.Length <= 0)
-                {
-                    ratedCostDictionary.Remove(cost.Guid);
+                    RatedCostSummaryItem item = ratedCostDictionary[cost.Guid];
+                    CostBatch delta = item.RemoveLength(length);
                     if (cost.Type == CostType.TEC)
                     {
-                        RatedTECItems.Remove(item);
+                        RatedTECCostTotal += delta.GetCost(CostType.TEC);
+                        RatedTECLaborTotal += delta.GetLabor(CostType.TEC);
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        RatedElecItems.Remove(item);
+                        RatedElecCostTotal += delta.GetCost(CostType.Electrical);
+                        RatedElecLaborTotal += delta.GetLabor(CostType.Electrical);
                     }
+                    if (item.Length <= 0)
+                    {
+                        ratedCostDictionary.Remove(cost.Guid);
+                        if (cost.Type == CostType.TEC)
+                        {
+                            RatedTECItems.Remove(item);
+                        }
+                        else if (cost.Type == CostType.Electrical)
+                        {
+                            RatedElecItems.Remove(item);
+                        }
+                    }
+                    return delta;
                 }
-                return delta;
+                else
+                {
+                    throw new NullReferenceException("Cost item not present in dictionary.");
+                }
             }
             else
             {
-                throw new NullReferenceException("Cost item not present in dictionary.");
+                return new CostBatch();
             }
         }
         #endregion

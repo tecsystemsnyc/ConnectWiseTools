@@ -153,6 +153,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += addController(controller);
             }
+            foreach(TECPanel panel in system.Panels)
+            {
+                deltas += addPanel(panel);
+            }
             foreach(TECMisc misc in system.MiscCosts)
             {
                 deltas += (MiscSummaryVM.AddCost(misc));
@@ -251,6 +255,10 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECController controller in system.Controllers)
             {
                 deltas += removeController(controller);
+            }
+            foreach (TECPanel panel in system.Panels)
+            {
+                deltas += removePanel(panel);
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
