@@ -102,7 +102,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(TECController controller in bid.Controllers)
             {
-                updateTotals(addController(controller, bid));
+                updateTotals(addController(controller));
             }
             foreach(TECPanel panel in bid.Panels)
             {
@@ -142,7 +142,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Add/Remove Methods
-        private CostBatch addSystem(TECSystem system, TECBid bid = null)
+        private CostBatch addSystem(TECSystem system)
         {
             CostBatch deltas = new CostBatch();
             foreach(TECEquipment equip in system.Equipment)
@@ -151,7 +151,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(TECController controller in system.Controllers)
             {
-                deltas += addController(controller, bid);
+                deltas += addController(controller);
             }
             foreach(TECMisc misc in system.MiscCosts)
             {
@@ -189,7 +189,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch addController(TECController controller, TECBid bid = null)
+        private CostBatch addController(TECController controller)
         {
             CostBatch deltas = new CostBatch();
             deltas += (ControllerSummaryVM.AddHardware(controller.Type));
@@ -199,7 +199,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
-                deltas += (addConnection(connection, bid));
+                deltas += (addConnection(connection));
             }
             return deltas;
         }
@@ -213,7 +213,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch addConnection(TECConnection connection, TECBid bid = null)
+        private CostBatch addConnection(TECConnection connection)
         {
             CostBatch deltas = new CostBatch();
             if (connection is TECNetworkConnection netConnect)
@@ -226,12 +226,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (connection is TECSubScopeConnection ssConnect)
             {
-                bool connectionIsInstance = true;
-                if (bid != null)
-                {
-                    connectionIsInstance = ssConnectIsInstance(ssConnect, bid);
-                }
-                if (connectionIsInstance)
+                if (!ssConnect.IsTypical)
                 {
                     foreach (TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
                     {
@@ -374,6 +369,21 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                 }
+                else if (args.Value is TECMisc misc)
+                {
+                    updateTotals(MiscSummaryVM.AddCost(misc));
+                }
+                else if (args.Value is TECCost cost)
+                {
+                    if (args.Sender is TECHardware || args.Sender is TECElectricalMaterial)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        updateTotals(MiscSummaryVM.AddCost(cost));
+                    }
+                }
             }
             else if (args.Change == Change.Remove)
             {
@@ -410,6 +420,21 @@ namespace TECUserControlLibrary.ViewModels
                         {
                             updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
                         }
+                    }
+                }
+                else if (args.Value is TECMisc misc)
+                {
+                    updateTotals(MiscSummaryVM.RemoveCost(misc));
+                }
+                else if (args.Value is TECCost cost)
+                {
+                    if (args.Sender is TECHardware || args.Sender is TECElectricalMaterial)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        updateTotals(MiscSummaryVM.RemoveCost(cost));
                     }
                 }
             }
@@ -486,39 +511,6 @@ namespace TECUserControlLibrary.ViewModels
             TotalTECLabor += deltas.GetLabor(CostType.TEC);
             TotalElecCost += deltas.GetCost(CostType.Electrical);
             TotalElecLabor += deltas.GetLabor(CostType.Electrical);
-        }
-
-        private bool ssConnectIsInstance(TECSubScopeConnection ssConnect, TECBid bid)
-        {
-            return (controllerIsInstance(ssConnect.ParentController, bid) && subScopeIsInstance(ssConnect.SubScope, bid));
-        }
-        private bool controllerIsInstance(TECController controller, TECBid bid)
-        {
-            List<TECController> instanceControllers = new List<TECController>();
-            instanceControllers.AddRange(bid.Controllers);
-            foreach(TECTypical typ in bid.Systems)
-            {
-                foreach(TECSystem sys in typ.Instances)
-                {
-                    instanceControllers.AddRange(sys.Controllers);
-                }
-            }
-            return (instanceControllers.Contains(controller));
-        }
-        private bool subScopeIsInstance(TECSubScope ss, TECBid bid)
-        {
-            List<TECSubScope> instanceSubScope = new List<TECSubScope>();
-            foreach(TECTypical typ in bid.Systems)
-            {
-                foreach(TECSystem sys in typ.Instances)
-                {
-                    foreach(TECEquipment equip in sys.Equipment)
-                    {
-                        instanceSubScope.AddRange(equip.SubScope);
-                    }
-                }
-            }
-            return (instanceSubScope.Contains(ss));
         }
         #endregion
     }

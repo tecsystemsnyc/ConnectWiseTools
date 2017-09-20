@@ -65,21 +65,22 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
             TECCost cost = null;
-            while (cost == null)
+            foreach (TECCost assoc in bid.Catalogs.AssociatedCosts)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
-                if (randomCost.Type == CostType.Electrical)
+                if (assoc.Type == CostType.Electrical)
                 {
-                    cost = randomCost;
+                    cost = assoc;
+                    break;
                 }
             }
+            if (cost == null) { Assert.Fail("No electrical cost in catalogs."); }
 
             Total totalTEC = CalculateTotal(cost, CostType.TEC);
             Total totalElec = CalculateTotal(cost, CostType.Electrical);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance(bid);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
