@@ -71,7 +71,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return outStack;
         }
-        private static List<UpdateItem> editStack(TECObject sender, string propertyName, object value, object oldValue)
+        private static List<UpdateItem> editStack(TECObject sender, string propertyName, 
+            object value, object oldValue)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 

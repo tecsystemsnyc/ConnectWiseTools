@@ -42,7 +42,6 @@ namespace EstimatingLibrary
                 {
                     var old = _name;
                     _name = value;
-                    // Call raisePropertyChanged whenever the property is updated
                     notifyCombinedChanged(Change.Edit, "Name", this, value, old);
                 }
             }
@@ -64,7 +63,6 @@ namespace EstimatingLibrary
             {
                 var old = DueDate;
                 _dueDate = value;
-                // Call raisePropertyChanged whenever the property is updated
                 notifyCombinedChanged(Change.Edit, "DueDate", this, value, old);
             }
         }
