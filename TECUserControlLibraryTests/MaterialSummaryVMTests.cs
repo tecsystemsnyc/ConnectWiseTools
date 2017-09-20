@@ -412,6 +412,8 @@ namespace Tests
             bid.Catalogs.Devices.Add(dev);
             typSS.Devices.Add(dev);
 
+            TECSystem instance = typical.AddInstance(bid);
+
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
@@ -420,11 +422,10 @@ namespace Tests
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
-            typical.AddInstance(bid);
-
             Total totalTEC = CalculateTotal(connection, CostType.TEC);
             Total totalElec = CalculateTotal(connection, CostType.Electrical);
 
+            //Assert
             Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
@@ -838,7 +839,7 @@ namespace Tests
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
-            typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance(bid);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
