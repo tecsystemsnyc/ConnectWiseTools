@@ -149,7 +149,7 @@ namespace EstimatingLibrary
             }
             if (ConduitType != null)
             {
-                costs += ConduitType.GetCosts(Length);
+                costs += ConduitType.GetCosts(ConduitLength);
             }
             return costs;
         }

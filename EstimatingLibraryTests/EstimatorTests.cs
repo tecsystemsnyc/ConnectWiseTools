@@ -718,20 +718,20 @@ namespace Tests
         [TestMethod]
         public void Estimate_RemoveSubScopeConnectionInSystem()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
-            ratedCost.Type = CostType.Electrical;
 
-            var assCost = new TECCost(CostType.TEC);
+            var assCost = new TECCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
-            assCost.Type = CostType.Electrical;
 
             var connectionType = new TECElectricalMaterial();
             connectionType.Cost = 1;
@@ -742,14 +742,15 @@ namespace Tests
             conduitType.Cost = 1;
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
+            conduitType.AssociatedCosts.Add(assCost);
 
             var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
+            bid.Catalogs.AssociatedCosts.Add(assCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
-            conduitType.AssociatedCosts.Add(assCost);
             bid.Catalogs.ControllerTypes.Add(controllerType);
 
             var system = new TECTypical();
@@ -1261,7 +1262,9 @@ namespace Tests
         [TestMethod]
         public void Estimate_AddNetworkConnection()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
 
             TECIO io = new TECIO();
