@@ -44,7 +44,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Number = new TableField("Number", "TEXT", ObjectType.GetProperty("BidNumber"));
-        public static TableField DueDate = new TableField("DueDate", "TEXT", ObjectType.GetProperty("DueDateString"));
+        public static TableField DueDate = new TableField("DueDate", "TEXT", ObjectType.GetProperty("DueDate"));
         public static TableField Salesperson = new TableField("Salesperson", "TEXT", ObjectType.GetProperty("Salesperson"));
         public static TableField Estimator = new TableField("Estimator", "TEXT", ObjectType.GetProperty("Estimator"));
         #endregion

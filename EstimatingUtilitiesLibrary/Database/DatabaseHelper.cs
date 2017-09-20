@@ -324,6 +324,10 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 outstring = ((bool)inObject).ToInt().ToString();
             }
+            else if (inObject is DateTime dateTime)
+            {
+                outstring = dateTime.ToString("O");
+            }
             else
             {
                 outstring = inObject.ToString();
