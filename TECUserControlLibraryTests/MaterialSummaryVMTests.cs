@@ -373,8 +373,8 @@ namespace Tests
             //Act
             TECSystem instance = typical.AddInstance(bid);
 
-            Total totalTEC = CalculateTotalInstanceSystem(instance, typical, CostType.TEC);
-            Total totalElec = CalculateTotalInstanceSystem(instance, typical, CostType.Electrical);
+            Total totalTEC = CalculateTotal(instance, CostType.TEC);
+            Total totalElec = CalculateTotal(instance, CostType.Electrical);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
@@ -412,6 +412,8 @@ namespace Tests
             bid.Catalogs.Devices.Add(dev);
             typSS.Devices.Add(dev);
 
+            TECSystem instance = typical.AddInstance(bid);
+
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
@@ -420,11 +422,10 @@ namespace Tests
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
-            typical.AddInstance(bid);
-
             Total totalTEC = CalculateTotal(connection, CostType.TEC);
             Total totalElec = CalculateTotal(connection, CostType.Electrical);
 
+            //Assert
             Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
@@ -799,8 +800,8 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotalInstanceSystem(instance, typical, CostType.TEC);
-            Total totalElec = CalculateTotalInstanceSystem(instance, typical, CostType.Electrical);
+            Total totalTEC = CalculateTotal(instance, CostType.TEC);
+            Total totalElec = CalculateTotal(instance, CostType.Electrical);
 
             //Act
             typical.Instances.Remove(instance);
@@ -838,7 +839,7 @@ namespace Tests
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
-            typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance(bid);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 

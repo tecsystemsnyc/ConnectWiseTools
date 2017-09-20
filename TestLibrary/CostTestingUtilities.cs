@@ -64,9 +64,9 @@ namespace Tests
         static public Total CalculateTotal(TECCost cost, CostType type)
         {
             int qty = 1;
-            if (cost is TECMisc)
+            if (cost is TECMisc misc)
             {
-                qty = (cost as TECMisc).Quantity;
+                qty = misc.Quantity;
             }
             if (cost.Type == type)
             {
@@ -133,35 +133,7 @@ namespace Tests
         {
             Total total = new Total();
             total += CalculateTotal(panel as TECScope, type);
-            total += CalculateTotal(panel.Type as TECCost, type);
-            return total;
-        }
-
-        static public Total CalculateTotalInstanceSystem(TECSystem instance, TECSystem typical, CostType type)
-        {
-            Total total = new Total();
-            foreach (TECEquipment equipment in instance.Equipment)
-            {
-                Total equipSubTotal = CalculateTotal(equipment, type);
-                total += equipSubTotal;
-            }
-            foreach (TECMisc misc in typical.MiscCosts)
-            {
-                Total miscSubTotal = CalculateTotal(misc, type);
-                total += miscSubTotal;
-            }
-            foreach (TECController controller in instance.Controllers)
-            {
-                Total controllerSubTotal = CalculateTotal(controller, type);
-                total += controllerSubTotal;
-            }
-            foreach (TECPanel panel in instance.Panels)
-            {
-                Total panelSubTotal = CalculateTotal(panel, type);
-                total += panelSubTotal;
-            }
-            Total systemScopeSubTotal = CalculateTotal(instance as TECScope, type);
-            total += systemScopeSubTotal;
+            total += CalculateTotal(panel.Type as TECHardware, type);
             return total;
         }
 
@@ -201,6 +173,33 @@ namespace Tests
             return total;
         }
 
+        static public Total CalculateTotal(TECSystem system, CostType type)
+        {
+            Total total = new Total();
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                Total subTotal = CalculateTotal(equip, type);
+                total += subTotal;
+            }
+            foreach (TECController controller in system.Controllers)
+            {
+                Total subTotal = CalculateTotal(controller, type);
+                total += subTotal;
+            }
+            foreach (TECPanel panel in system.Panels)
+            {
+                Total subTotal = CalculateTotal(panel, type);
+                total += subTotal;
+            }
+            foreach (TECMisc misc in system.MiscCosts)
+            {
+                Total subTotal = CalculateTotal(misc, type);
+                total += subTotal;
+            }
+            Total systemSubTotal = CalculateTotal(system as TECScope, type);
+            total += systemSubTotal;
+            return total;
+        }
         #endregion
     }
 }

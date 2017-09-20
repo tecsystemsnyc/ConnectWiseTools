@@ -50,9 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeWatcherTests.cs" />
+    <Compile Include="ControllerTests.cs" />
     <Compile Include="CostChangedTests.cs" />
     <Compile Include="EstimatorTests.cs" />
-    <Compile Include="ModelTests.cs" />
+    <Compile Include="TypicalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
