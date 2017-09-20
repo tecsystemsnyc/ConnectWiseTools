@@ -84,25 +84,28 @@ namespace EstimatingLibrary.Utilities
             registerChange(obj);
             Changed?.Invoke(obj);
 
-            if (obj.Value is ITypicalable valueTyp)
+            if (obj.PropertyName != "TypicalInstanceDictionary")
             {
-                if (!valueTyp.IsTypical)
+                if (obj.Value is ITypicalable valueTyp)
                 {
-                    InstanceChanged?.Invoke(obj);
-                }
-            }
-            else
-            {
-                if (obj.Sender is ITypicalable senderTyp)
-                {
-                    if (!senderTyp.IsTypical)
+                    if (!valueTyp.IsTypical)
                     {
                         InstanceChanged?.Invoke(obj);
                     }
                 }
                 else
                 {
-                    InstanceChanged?.Invoke(obj);
+                    if (obj.Sender is ITypicalable senderTyp)
+                    {
+                        if (!senderTyp.IsTypical)
+                        {
+                            InstanceChanged?.Invoke(obj);
+                        }
+                    }
+                    else
+                    {
+                        InstanceChanged?.Invoke(obj);
+                    }
                 }
             }
         }
