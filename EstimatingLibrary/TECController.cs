@@ -404,14 +404,20 @@ namespace EstimatingLibrary
         
         override protected CostBatch getCosts()
         {
-            CostBatch costs = base.getCosts();
-            costs += Type.CostBatch;
-            foreach (TECConnection connection in 
-                ChildrenConnections.Where(connection => connection is TECSubScopeConnection ssconn && !ssconn.IsTypical))
+            if (!IsTypical)
             {
-                costs += connection.CostBatch;
+                CostBatch costs = base.getCosts();
+                costs += Type.CostBatch;
+                foreach (TECConnection connection in
+                    ChildrenConnections.Where(connection => !connection.IsTypical))
+                {
+                    costs += connection.CostBatch;
+                }
+                return costs;
+            } else
+            {
+                return new CostBatch();
             }
-            return costs;
         }
         protected override SaveableMap saveObjects()
         {

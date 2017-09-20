@@ -718,7 +718,9 @@ namespace Tests
         [TestMethod]
         public void Estimate_RemoveSubScopeConnectionInSystem()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
@@ -1261,7 +1263,9 @@ namespace Tests
         [TestMethod]
         public void Estimate_AddNetworkConnection()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
 
             TECIO io = new TECIO();
