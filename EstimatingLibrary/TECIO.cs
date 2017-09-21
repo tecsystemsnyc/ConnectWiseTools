@@ -10,7 +10,7 @@ namespace EstimatingLibrary
 {
     public enum IOType
     {
-        AI = 1,
+        AI,
         AO,
         DI,
         DO,
@@ -20,12 +20,25 @@ namespace EstimatingLibrary
         BACnetIP,
         LonWorks,
         ModbusTCP,
-        ModbusRTU
+        ModbusRTU,
     }
+
     public class TECIO : TECObject, ISaveable
     {
-        #region Properties
+        public static List<IOType> PointIO = new List<IOType>()
+        {
+            IOType.AI, IOType.AO, IOType.DI, IOType.DO, IOType.BACnetMSTP, IOType.BACnetIP, IOType.LonWorks, IOType.ModbusTCP, IOType.ModbusRTU
+        };
+        public static List<IOType> NetworkIO = new List<IOType>()
+        {
+            IOType.BACnetMSTP, IOType.BACnetIP, IOType.LonWorks, IOType.ModbusTCP, IOType.ModbusRTU
+        };
+        public static List<IOType> UniversalIO = new List<IOType>()
+        {
+            IOType.UI, IOType.UO
+        };
 
+        #region Properties
         private IOType _type;
         public IOType Type
         {
@@ -38,6 +51,7 @@ namespace EstimatingLibrary
             }
         }
 
+
         private int _quantity;
         public int Quantity
         {
@@ -47,19 +61,6 @@ namespace EstimatingLibrary
                 var old = Quantity;
                 _quantity = value;
                 notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
-            }
-        }
-
-        private TECIOModule _ioModule;
-        public TECIOModule IOModule
-        {
-            get { return _ioModule; }
-            set
-            {
-                var old = IOModule;
-                _ioModule = value;
-                notifyCombinedChanged(Change.Edit, "IOModule", this, value, old);
-                //notifyCombinedChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
             }
         }
 
@@ -85,60 +86,17 @@ namespace EstimatingLibrary
         {
             _quantity = ioSource.Quantity;
             _type = ioSource.Type;
-            _ioModule = ioSource.IOModule;
-        }
-
-        public static IOType convertStringToType(string type)
-        {
-            switch (type.ToUpper())
-            {
-                case "AI": return IOType.AI;
-                case "AO": return IOType.AO;
-                case "DI": return IOType.DI;
-                case "DO": return IOType.DO;
-                case "UI": return IOType.UI;
-                case "UO": return IOType.UO;
-                case "BACNETMSTP": return IOType.BACnetMSTP;
-                case "BACNETIP": return IOType.BACnetIP;
-                case "LONWORKS": return IOType.LonWorks;
-                case "MODBUSTCP": return IOType.ModbusTCP;
-                case "MODBUSRTU": return IOType.ModbusRTU;
-
-                default: return 0;
-            }
-        }
-
-        public static string convertTypeToString(IOType type)
-        {
-            switch (type)
-            {
-                case IOType.AI: return "AI";
-                case IOType.AO: return "AO";
-                case IOType.DI: return "DI";
-                case IOType.DO: return "DO";
-                case IOType.UI: return "UI";
-                case IOType.UO: return "UO";
-                case IOType.BACnetMSTP: return "BACnetMSTP";
-                case IOType.BACnetIP: return "BACnetIP";
-                case IOType.LonWorks: return "LonWorks";
-                case IOType.ModbusTCP: return "ModbusTCP";
-                case IOType.ModbusRTU: return "ModbusRTU";
-
-                default: return "";
-            }
         }
 
         private SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.Add(this.IOModule, "IOModule");
             return saveList;
         }
 
         private SaveableMap relatedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.Add(this.IOModule, "IOModule");
             return saveList;
         }
     }
