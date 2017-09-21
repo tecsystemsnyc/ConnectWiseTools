@@ -147,6 +147,14 @@ namespace EstimatingLibrary
         #endregion
 
         #region Connection Methods
+        public bool CanConnectController(TECController controller)
+        {
+
+        }
+        public bool CanConnectSubScope(TECSubScope subScope)
+        {
+
+        }
         public TECNetworkConnection AddController(TECController controller, TECNetworkConnection connection)
         {
             if (controller != this)

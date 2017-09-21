@@ -19,6 +19,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECElectricalMaterial> _connectionTypes;
 
         #endregion
+
         #region Properties
         virtual public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {

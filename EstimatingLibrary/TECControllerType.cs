@@ -15,7 +15,6 @@ namespace EstimatingLibrary
 
         #region Properties
         private ObservableCollection<TECIO> _io;
-
         public ObservableCollection<TECIO> IO
         {
             get { return _io; }
@@ -28,7 +27,6 @@ namespace EstimatingLibrary
                 IO.CollectionChanged += (sender, args) => IO_CollectionChanged(sender, args, "IO");
             }
         }
-
         #endregion
 
         public TECControllerType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
