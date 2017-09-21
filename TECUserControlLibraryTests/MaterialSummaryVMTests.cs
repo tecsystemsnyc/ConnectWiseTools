@@ -412,8 +412,6 @@ namespace Tests
             bid.Catalogs.Devices.Add(dev);
             typSS.Devices.Add(dev);
 
-            TECSystem instance = typical.AddInstance(bid);
-
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
@@ -421,6 +419,8 @@ namespace Tests
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
+
+            TECSystem instance = typical.AddInstance(bid);
 
             Total totalTEC = CalculateTotal(connection, CostType.TEC);
             Total totalElec = CalculateTotal(connection, CostType.Electrical);
@@ -873,7 +873,9 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
+            bid.Catalogs.ControllerTypes.Add(controllerType);
+            TECController controller = new TECController(controllerType, false);
             bid.Controllers.Add(controller);
 
             TECTypical typical = new TECTypical();
