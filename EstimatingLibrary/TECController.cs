@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         Unitary = 1, DDC, Server
     };
 
-    public class TECController : TECLocated, IDragDropable, ITypicalable
+    public class TECController : TECLocated, IDragDropable, ITypicalable, INetworkConnectable
     {
         #region Properties
         //---Stored---
@@ -89,7 +89,7 @@ namespace EstimatingLibrary
         public bool IsGlobal;
 
         //---Derived---
-        public IOCollection NetworkIO
+        public IOCollection AvailableNetworkIO
         {
             get { return getAvailableNetworkIO(); }
         }
@@ -205,7 +205,7 @@ namespace EstimatingLibrary
             {
                 if (ChildrenConnections.Contains(connection))
                 {
-                    connection.ChildrenControllers.Add(controller);
+                    connection.Children.Add(controller);
                     controller.ParentConnection = connection;
                     return connection;
                 }
@@ -226,7 +226,7 @@ namespace EstimatingLibrary
                 bool connectionIsTypical = this.IsTypical || controller.IsTypical;
                 TECNetworkConnection netConnect = new TECNetworkConnection(connectionIsTypical);
                 netConnect.ParentController = this;
-                netConnect.ChildrenControllers.Add(controller);
+                netConnect.Children.Add(controller);
                 netConnect.ConnectionType = connectionType;
                 addChildConnection(netConnect);
                 controller.ParentConnection = netConnect;
@@ -263,13 +263,13 @@ namespace EstimatingLibrary
                 if (connection is TECNetworkConnection)
                 {
                     var netConnect = connection as TECNetworkConnection;
-                    if (netConnect.ChildrenControllers.Contains(controller))
+                    if (netConnect.Children.Contains(controller))
                     {
                         exists = true;
                         controller.ParentConnection = null;
-                        netConnect.ChildrenControllers.Remove(controller);
+                        netConnect.Children.Remove(controller);
                     }
-                    if (netConnect.ChildrenControllers.Count < 1)
+                    if (netConnect.Children.Count < 1)
                     {
                         connectionToRemove = netConnect;
                     }
@@ -322,14 +322,14 @@ namespace EstimatingLibrary
                 if (connectToRemove is TECNetworkConnection)
                 {
                     ObservableCollection<TECController> controllersToRemove = new ObservableCollection<TECController>();
-                    foreach(TECController controller in (connectToRemove as TECNetworkConnection).ChildrenControllers)
+                    foreach(TECController controller in (connectToRemove as TECNetworkConnection).Children)
                     {
                         controller.ParentConnection = null;
                         controllersToRemove.Add(controller);
                     }
                     foreach(TECController controller in controllersToRemove)
                     {
-                        (connectToRemove as TECNetworkConnection).ChildrenControllers.Remove(controller);
+                        (connectToRemove as TECNetworkConnection).Children.Remove(controller);
                     }
                 }
                 else if (connectToRemove is TECSubScopeConnection)
@@ -499,6 +499,11 @@ namespace EstimatingLibrary
                 }
             }
             return availableIO;
+        }
+
+        public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        {
+            return new TECController(item as TECController, isTypical, guidDictionary);
         }
         #endregion
     }

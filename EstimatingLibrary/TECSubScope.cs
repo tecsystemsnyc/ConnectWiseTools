@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, INetworkConnectable
     {
         #region Properties
         private ObservableCollection<ITECConnectable> _devices;
@@ -74,6 +74,12 @@ namespace EstimatingLibrary
         }
         
         public bool IsTypical { get; private set; }
+
+        public IOCollection AvailableNetworkIO
+        {
+            get { return getNetworkIO(); }
+        }
+        
         #endregion //Properties
 
         #region Constructors
@@ -287,6 +293,23 @@ namespace EstimatingLibrary
             {
                 PointChanged?.Invoke(numPoints);
             }
+        }
+        private IOCollection getNetworkIO()
+        {
+            IOCollection collection = new IOCollection();
+            foreach (TECPoint point in Points.Where(point => TECIO.NetworkIO.Contains(point.Type)))
+            {
+                for (int i = 0; i < point.Quantity; i++)
+                {
+                    collection.AddIO(point.Type);
+                }
+            }
+            return collection;
+        }
+
+        public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        {
+            return new TECSubScope(item as TECSubScope, isTypical, guidDictionary);
         }
         #endregion
     }

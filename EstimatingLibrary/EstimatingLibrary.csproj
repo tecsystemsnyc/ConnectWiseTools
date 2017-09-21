@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="Defaults.cs" />
     <Compile Include="Interfaces\IDragDropable.cs" />
+    <Compile Include="Interfaces\INetworkConnectable.cs" />
     <Compile Include="Interfaces\INotifyCostChanged.cs" />
     <Compile Include="Interfaces\INotifyTECChanged.cs" />
     <Compile Include="Interfaces\INotifyPointChanged.cs" />

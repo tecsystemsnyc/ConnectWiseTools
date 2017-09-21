@@ -13,20 +13,20 @@ namespace EstimatingLibrary
     {
         #region Properties
         //---Stored---
-        private ObservableCollection<TECController> _childrenControllers;
+        private ObservableCollection<INetworkConnectable> _children;
         private TECElectricalMaterial _connectionType;
         private IOType _ioType;
 
-        public ObservableCollection<TECController> ChildrenControllers
+        public ObservableCollection<INetworkConnectable> Children
         {
-            get { return _childrenControllers; }
+            get { return _children; }
             set
             {
-                var old = ChildrenControllers;
-                ChildrenControllers.CollectionChanged -= ChildrenControllers_CollectionChanged;
-                _childrenControllers = value;
-                ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
-                notifyCombinedChanged(Change.Edit, "ChildrenControllers", this, value, old);
+                var old = Children;
+                Children.CollectionChanged -= ChildrenControllers_CollectionChanged;
+                _children = value;
+                Children.CollectionChanged += ChildrenControllers_CollectionChanged;
+                notifyCombinedChanged(Change.Edit, "Children", this, value, old);
                 raisePropertyChanged("PossibleIO");
             }
         }
@@ -73,18 +73,18 @@ namespace EstimatingLibrary
                 if (ParentController != null)
                 {
                     //Start off with all IO in the parent controller
-                    foreach (TECIO io in ParentController.NetworkIO.ListIO())
+                    foreach (TECIO io in ParentController.AvailableNetworkIO.ListIO())
                     {
                         IO.Add(io.Type);
                     }
 
                     //If any IO aren't in children controllers, remove them.
-                    foreach (TECController child in ChildrenControllers)
+                    foreach (INetworkConnectable child in Children)
                     {
                         List<IOType> ioToRemove = new List<IOType>();
                         foreach (IOType io in IO)
                         {
-                            if (!child.NetworkIO.Contains(io))
+                            if (!child.AvailableNetworkIO.Contains(io))
                             {
                                 ioToRemove.Add(io);
                             }
@@ -103,16 +103,16 @@ namespace EstimatingLibrary
         #region Constructors
         public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
         {
-            _childrenControllers = new ObservableCollection<TECController>();
-            ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
+            _children = new ObservableCollection<INetworkConnectable>();
+            Children.CollectionChanged += ChildrenControllers_CollectionChanged;
         }
         public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
         public TECNetworkConnection(TECNetworkConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
         {
-            _childrenControllers = new ObservableCollection<TECController>();
-            foreach (TECController controller in connectionSource.ChildrenControllers)
+            _children = new ObservableCollection<INetworkConnectable>();
+            foreach (INetworkConnectable item in connectionSource.Children)
             {
-                _childrenControllers.Add(new TECController(controller, isTypical, guidDictionary));
+                _children.Add(item.Copy(item, isTypical, guidDictionary));
             }
 
             if (connectionSource.ConnectionType != null)

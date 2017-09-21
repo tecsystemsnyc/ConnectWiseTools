@@ -420,7 +420,7 @@ namespace EstimatingLibrary.Utilities
                     {
                         TECNetworkConnection netConnect = connection as TECNetworkConnection;
                         ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
-                        foreach (TECController child in netConnect.ChildrenControllers)
+                        foreach (TECController child in netConnect.Children)
                         {
                             foreach (TECController bidController in controllers)
                             {
@@ -432,7 +432,7 @@ namespace EstimatingLibrary.Utilities
                                 }
                             }
                         }
-                        netConnect.ChildrenControllers = controllersToAdd;
+                        netConnect.Children = controllersToAdd;
                     }
                 }
             }
