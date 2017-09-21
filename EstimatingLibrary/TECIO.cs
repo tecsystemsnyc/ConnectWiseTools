@@ -109,6 +109,10 @@ namespace EstimatingLibrary
             }
             return list;
         }
+        public bool Contains(IOType type)
+        {
+            return ioDictionary.ContainsKey(type);
+        }
         public void AddIO(IOType type)
         {
             if (ioDictionary.ContainsKey(type))

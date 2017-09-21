@@ -87,6 +87,12 @@ namespace EstimatingLibrary
             get; private set;
         }
         public bool IsGlobal;
+
+        //---Derived---
+        public IOCollection NetworkIO
+        {
+            get { return getAvailableNetworkIO(); }
+        }
         #endregion
 
         #region Constructors

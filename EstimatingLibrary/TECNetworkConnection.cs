@@ -51,7 +51,6 @@ namespace EstimatingLibrary
                 var old = IOType;
                 _ioType = value;
                 notifyCombinedChanged(Change.Edit, "IOType", this, value, old);
-                //notifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
 
@@ -74,9 +73,9 @@ namespace EstimatingLibrary
                 if (ParentController != null)
                 {
                     //Start off with all IO in the parent controller
-                    foreach (IOType io in ParentController.NetworkIO)
+                    foreach (TECIO io in ParentController.NetworkIO.ListIO())
                     {
-                        IO.Add(io);
+                        IO.Add(io.Type);
                     }
 
                     //If any IO aren't in children controllers, remove them.
