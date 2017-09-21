@@ -1075,9 +1075,9 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECIO getIOFromRow(DataRow row)
         {
             Guid guid = new Guid(row[IOTable.ID.Name].ToString());
-            var io = new TECIO(guid);
+            IOType type = UtilitiesMethods.StringToEnum<IOType>(row[IOTable.IOType.Name].ToString());
+            var io = new TECIO(guid, type);
             assignValuePropertiesFromTable(io, new IOTable(), row);
-            io.Type = UtilitiesMethods.StringToEnum<IOType>(row[IOTable.IOType.Name].ToString());
             return io;
         }
         private static TECSubScopeConnection getSubScopeConnectionFromRow(DataRow row, bool isTypical)

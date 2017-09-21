@@ -351,8 +351,7 @@ namespace Tests
             //Controller
             var expectedControllerType = new TECControllerType(testMan);
             expectedControllerType.Price = 42.6;
-            TECIO ioToAdd = new TECIO();
-            ioToAdd.Type = IOType.AI;
+            TECIO ioToAdd = new TECIO(IOType.AI);
             ioToAdd.Quantity = 5;
             expectedControllerType.IO.Add(ioToAdd);
             templates.Catalogs.ControllerTypes.Add(expectedControllerType);
@@ -532,8 +531,7 @@ namespace Tests
             controllerType.Labor = 61.34;
             AssignSecondaryProperties(controllerType, outCatalogs);
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             io.Quantity = 100;
 
             controllerType.IO.Add(io);
