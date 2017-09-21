@@ -22,6 +22,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECConnection> _childrenConnections;
         private TECControllerType _type;
         private NetworkType _networkType;
+        private ObservableCollection<TECIOModule> _ioModules;
         
         public TECNetworkConnection ParentConnection
         {
@@ -66,6 +67,18 @@ namespace EstimatingLibrary
                 var old = NetworkType;
                 _networkType = value;
                 notifyCombinedChanged(Change.Edit, "NetworkType", this, value, old);
+            }
+        }
+        public ObservableCollection<TECIOModule> IOModules
+        {
+            get { return _ioModules; }
+            set
+            {
+                var old = IOModules;
+                IOModules.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "IOModules");
+                _ioModules = value;
+                IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
+                notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
             }
         }
 
