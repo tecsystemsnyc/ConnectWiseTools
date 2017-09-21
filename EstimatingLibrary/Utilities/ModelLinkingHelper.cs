@@ -68,8 +68,10 @@ namespace EstimatingLibrary.Utilities
             {
                 linkPanelToCatalogs(panel, bid.Catalogs);
             }
-
-            linkNetworkConnections(allControllers);
+            List<INetworkConnectable> allChildren = new List<INetworkConnectable>();
+            allChildren.AddRange(allControllers);
+            allChildren.AddRange(allSubScope);
+            linkNetworkConnections(allControllers, allChildren);
             linkSubScopeConnections(allControllers, allSubScope);
             linkPanelsToControllers(bid.Panels, bid.Controllers);
             foreach(TECTypical system in bid.Systems)
@@ -410,7 +412,8 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkNetworkConnections(ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
+        private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<INetworkConnectable> children,
+            Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECController controller in controllers)
             {
@@ -419,16 +422,23 @@ namespace EstimatingLibrary.Utilities
                     if (connection is TECNetworkConnection)
                     {
                         TECNetworkConnection netConnect = connection as TECNetworkConnection;
-                        ObservableCollection<TECController> controllersToAdd = new ObservableCollection<TECController>();
-                        foreach (TECController child in netConnect.Children)
+                        ObservableCollection<INetworkConnectable> controllersToAdd = new ObservableCollection<INetworkConnectable>();
+                        foreach (INetworkConnectable child in netConnect.Children)
                         {
-                            foreach (TECController bidController in controllers)
+                            foreach (INetworkConnectable item in children)
                             {
-                                bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[bidController.Guid]);
-                                if (child.Guid == bidController.Guid || isCopy)
+                                bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[item.Guid]);
+                                if (child.Guid == item.Guid || isCopy)
                                 {
-                                    controllersToAdd.Add(bidController);
-                                    bidController.ParentConnection = netConnect;
+                                    controllersToAdd.Add(item);
+                                    if(item is TECController childController)
+                                    {
+                                        childController.ParentConnection = netConnect;
+                                    }
+                                    else if (item is TECSubScope childSubScope)
+                                    {
+                                        childSubScope.NetworkConnections.Add(netConnect);
+                                    }
                                 }
                             }
                         }
