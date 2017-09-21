@@ -19,20 +19,11 @@ namespace EstimatingUtilitiesLibrary.Database
         
         public bool Save(List<UpdateItem> updates)
         {
-            //try
-            //{
-                DatabaseUpdater.Update(path, updates);
-                return true;
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
+            DatabaseUpdater.Update(path, updates);
+            return true;
         }
         public bool New(TECScopeManager scopeManager)
         {
-            //try
-            //{
             if(scopeManager is TECBid)
             {
                 DatabaseGenerator.CreateBidDatabase(path);
@@ -47,30 +38,18 @@ namespace EstimatingUtilitiesLibrary.Database
             List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
             DatabaseUpdater.Update(path, newStack);
             return true;
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
         }
         public TECScopeManager Load()
         {
-            //try
-            //{
-                DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
-                if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
-                {
-                    return DatabaseLoader.Load(path, true);
-                }
-                else
-                {
-                    return DatabaseLoader.Load(path);
-                }
-            //}
-            //catch
-            //{
-            //    return null; 
-            //}
+            DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
+            if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
+            {
+                return DatabaseLoader.Load(path, true);
+            }
+            else
+            {
+                return DatabaseLoader.Load(path);
+            }
         }
     }
 }
