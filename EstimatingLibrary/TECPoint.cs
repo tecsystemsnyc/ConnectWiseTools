@@ -22,10 +22,17 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var old = Type;
-                _type = value;
-                // Call raisePropertyChanged whenever the property is updated
-                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                if (TECIO.PointIO.Contains(value))
+                {
+                    var old = Type;
+                    _type = value;
+                    // Call raisePropertyChanged whenever the property is updated
+                    notifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                }
+                else
+                {
+                    throw new InvalidOperationException("TECPoint cannot be non PointIO.");
+                }
             }
         }
         public int Quantity
