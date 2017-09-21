@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EstimatingLibrary.Interfaces;
 
 namespace EstimatingLibrary
 {
@@ -53,6 +54,14 @@ namespace EstimatingLibrary
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
+        }
+
+        protected override SaveableMap saveObjects()
+        {
+            SaveableMap saveMap = new SaveableMap();
+            saveMap.AddRange(base.saveObjects());
+            saveMap.AddRange(IO, "IO");
+            return saveMap;
         }
 
     }
