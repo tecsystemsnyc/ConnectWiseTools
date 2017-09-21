@@ -82,6 +82,8 @@ namespace EstimatingLibrary
         }
 
         public bool IsTypical { get; private set; }
+
+        public abstract ObservableCollection<TECIO> IO { get; }
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;
