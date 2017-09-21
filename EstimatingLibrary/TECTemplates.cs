@@ -193,6 +193,10 @@ namespace EstimatingLibrary
             {
                 removeChildFromScope(type, child);
             }
+            foreach (TECControllerType type in Catalogs.ControllerTypes)
+            {
+                removeChildFromScope(type, child);
+            }
             foreach (TECIOModule module in Catalogs.IOModules)
             {
                 removeChildFromScope(module, child);
