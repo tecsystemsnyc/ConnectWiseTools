@@ -1683,7 +1683,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class LoactedLocationTable : TableBase
+    internal class LocatedLocationTable : TableBase
     {
         public static string TableName = "LocatedLocation";
         public static Type ObjectType = typeof(TECLocated);
@@ -2314,7 +2314,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new SubScopePointTable(),
             new ScopeTagTable(),
             new HardwareManufacturerTable(),
-            new LoactedLocationTable(),
+            new LocatedLocationTable(),
             new ControllerTable(),
             new AssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
@@ -2448,7 +2448,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeTagTable(),
             new HardwareManufacturerTable(),
             new DeviceConnectionTypeTable(),
-            new LoactedLocationTable(),
+            new LocatedLocationTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
             new ControllerControllerTypeTable(),

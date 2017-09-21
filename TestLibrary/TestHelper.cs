@@ -151,7 +151,7 @@ namespace Tests
             //Points
             var point1 = new TECPoint(true);
             point1.Label = "Point 1";
-            point1.Type = PointTypes.Serial;
+            point1.Type = IOType.BACnetMSTP;
             point1.Quantity = 321;
 
             subScope1.Points.Add(point1);
@@ -298,7 +298,7 @@ namespace Tests
             sysSS.Description = "Child SubScope";
             sysSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint sysPoint = new TECPoint(false);
-            sysPoint.Type = PointTypes.Serial;
+            sysPoint.Type = IOType.BACnetIP;
             sysPoint.Label = "System Point";
 
             sysSS.Points.Add(sysPoint);
@@ -321,7 +321,7 @@ namespace Tests
             equipSS.Name = "Equipment SubScope";
             equipSS.Description = "Child SubScope";
             TECPoint equipPoint = new TECPoint(false);
-            equipPoint.Type = PointTypes.AI;
+            equipPoint.Type = IOType.AI;
             equipPoint.Label = "Equipment Point";
 
             equipSS.Points.Add(equipPoint);
@@ -338,7 +338,7 @@ namespace Tests
             subScope.Name = "Test SubScope";
             subScope.Description = "SubScope Description";
             TECPoint ssPoint = new TECPoint(false);
-            ssPoint.Type = PointTypes.BO;
+            ssPoint.Type = IOType.DO;
             ssPoint.Label = "SubScope Point";
 
             subScope.Points.Add(ssPoint);
@@ -615,7 +615,7 @@ namespace Tests
         {
             var device = catalogs.Devices[0];
             var point = new TECPoint(isTypical);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
 
             var subScope = new TECSubScope(isTypical);
             subScope.Tags.Add(catalogs.Tags[0]);
@@ -626,7 +626,7 @@ namespace Tests
         public static TECPoint CreateTestPoint(bool isTypical, TECCatalogs catalogs)
         {
             TECPoint point = new TECPoint(isTypical);
-            point.Type = (PointTypes)Enum.GetNames(typeof(PointTypes)).Length;
+            point.Type = (IOType)Enum.GetNames(typeof(IOType)).Length;
             return point;
         }
         public static TECEquipment CreateTestEquipment(bool isTypical, TECCatalogs catalogs)

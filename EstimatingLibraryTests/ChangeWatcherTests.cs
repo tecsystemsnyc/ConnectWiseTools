@@ -96,7 +96,7 @@ namespace Tests
             TECEquipment equip = new TECEquipment(true);
             TECSubScope ss = new TECSubScope(true);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -229,7 +229,7 @@ namespace Tests
             TECEquipment equip = new TECEquipment(true);
             TECSubScope ss = new TECSubScope(true);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -260,7 +260,7 @@ namespace Tests
             //Ensure equip has points and cost:
             TECSubScope ss = new TECSubScope(true);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -384,7 +384,7 @@ namespace Tests
             TECEquipment equip = new TECEquipment(false);
             TECSubScope ss = new TECSubScope(false);
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -480,7 +480,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.BI;
+            point.Type = IOType.DI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
@@ -506,7 +506,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
@@ -560,7 +560,7 @@ namespace Tests
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
 
             resetRaised();
@@ -587,7 +587,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
@@ -617,7 +617,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
@@ -674,7 +674,7 @@ namespace Tests
             instance.Equipment.Add(equip);
 
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
 
             resetRaised();
@@ -878,7 +878,7 @@ namespace Tests
             TECEquipment equip = new TECEquipment(true);
             TECSubScope ss = new TECSubScope(true);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -1028,7 +1028,7 @@ namespace Tests
             TECEquipment equip = new TECEquipment(true);
             TECSubScope ss = new TECSubScope(true);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -1060,7 +1060,7 @@ namespace Tests
             //Ensure equip has points and cost:
             TECSubScope ss = new TECSubScope(true);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -1191,7 +1191,7 @@ namespace Tests
             TECEquipment equip = new TECEquipment(false);
             TECSubScope ss = new TECSubScope(false);
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             TECDevice dev = bid.Catalogs.Devices[0];
@@ -1291,7 +1291,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.BI;
+            point.Type = IOType.DI;
             point.Quantity = 2;
             ss.Points.Add(point);
             equip.SubScope.Add(ss);
@@ -1319,7 +1319,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
@@ -1372,7 +1372,7 @@ namespace Tests
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
             TECPoint point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
@@ -1400,7 +1400,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
             equip.SubScope.Add(ss);
@@ -1431,7 +1431,7 @@ namespace Tests
             TECDevice dev = bid.Catalogs.Devices[0];
             ss.Devices.Add(dev);
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
@@ -1490,7 +1490,7 @@ namespace Tests
             instance.Equipment.Add(equip);
 
             TECPoint point = new TECPoint(false);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 2;
             ss.Points.Add(point);
 
