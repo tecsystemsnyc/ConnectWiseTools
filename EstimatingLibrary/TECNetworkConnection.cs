@@ -54,7 +54,16 @@ namespace EstimatingLibrary
                 //notifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
-        
+
+        public override ObservableCollection<TECIO> IO
+        {
+            get
+            {
+                List<TECIO> io = new List<TECIO>();
+                io.Add(new TECIO(IOType));
+                return io;
+            }
+        }
 
         //---Derived---
         public ObservableCollection<IOType> PossibleIO

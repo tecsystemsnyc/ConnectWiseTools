@@ -66,17 +66,17 @@ namespace EstimatingLibrary
 
         #endregion
 
-        public TECIO(Guid guid) : base(guid)
+        public TECIO(Guid guid, IOType type) : base(guid)
         {
+            _type = type;
             _quantity = 1;
         }
 
-        public TECIO() : this(Guid.NewGuid()) { }
+        public TECIO(IOType type) : this(Guid.NewGuid(), type) { }
 
-        public TECIO(TECIO ioSource) : this()
+        public TECIO(TECIO ioSource) : this(ioSource.Type)
         {
             _quantity = ioSource.Quantity;
-            _type = ioSource.Type;
         }
     }
 }
