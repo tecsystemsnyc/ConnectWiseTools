@@ -143,6 +143,10 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     notifyCombinedChanged(Change.Add, propertyName, this, item);
+                    if(item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
+                    {
+                        notifyCostChanged(cost.CostBatch);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -150,6 +154,10 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    if (item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
+                    {
+                        notifyCostChanged(cost.CostBatch * -1);
+                    }
                 }
             }
             if (sender == ChildrenConnections)
