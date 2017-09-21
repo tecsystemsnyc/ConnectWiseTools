@@ -1100,6 +1100,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid guid = new Guid(row[PanelTypeTable.ID.Name].ToString());
             TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
             TECPanelType panelType = new TECPanelType(guid, manufacturer);
+            getScopeChildren(panelType);
             assignValuePropertiesFromTable(panelType, new PanelTypeTable(), row);
             return panelType;
         }
@@ -1109,6 +1110,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
             TECIOModule module = new TECIOModule(guid, manufacturer);
             assignValuePropertiesFromTable(module, new IOModuleTable(), row);
+            getScopeChildren(module);
             return module;
         }
         private static TECControllerType getControllerTypeFromRow(DataRow row)
@@ -1117,6 +1119,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECManufacturer manufacturer = getPlaceholderManufacturer(guid);
             TECControllerType controllerType = new TECControllerType(guid, manufacturer);
             controllerType.IO = getIOInControllerType(guid);
+            getScopeChildren(controllerType);
             assignValuePropertiesFromTable(controllerType, new ControllerTypeTable(), row);
             return controllerType;
         }

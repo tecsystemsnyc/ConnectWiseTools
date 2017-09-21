@@ -414,18 +414,32 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECController controller in controllers)
                 {
+                    List<TECSubScopeConnection> newConnections = new List<TECSubScopeConnection>();
+                    List<TECSubScopeConnection> oldConnections = new List<TECSubScopeConnection>();
                     foreach (TECConnection connection in controller.ChildrenConnections)
                     {
+                        
                         if (connection is TECSubScopeConnection)
                         {
                             TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
                             bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
                             if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
                             {
-                                ssConnect.SubScope = subScope;
-                                subScope.LinkConnection(ssConnect);
+                                TECSubScopeConnection linkedConnection = new TECSubScopeConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
+                                subScope.LinkConnection(linkedConnection);
+                                newConnections.Add(linkedConnection);
+                                oldConnections.Add(ssConnect);
+                                linkedConnection.ParentController = controller;
                             }
                         }
+                    }
+                    foreach(TECSubScopeConnection conn in newConnections)
+                    {
+                        controller.ChildrenConnections.Add(conn);
+                    }
+                    foreach(TECSubScopeConnection conn in oldConnections)
+                    {
+                        controller.ChildrenConnections.Remove(conn);
                     }
                 }
             }

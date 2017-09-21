@@ -888,6 +888,155 @@ namespace Tests
             }
             return false;
         }
+
+        public static TECObject ObjectWithGuid(Guid guid, TECBid bid)
+        {
+            if(bid.Guid == guid)
+            {
+                return bid;
+            }
+            foreach(TECTypical typical in bid.Systems)
+            {
+                if(typical.Guid == guid)
+                {
+                    return typical;
+                }
+                foreach(TECEquipment equipment in typical.Equipment)
+                {
+                    if (equipment.Guid == guid)
+                    {
+                        return equipment;
+                    }
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        if(subScope.Guid == guid)
+                        {
+                            return subScope;
+                        }
+                        foreach(TECPoint point in subScope.Points)
+                        {
+                            if(point.Guid == guid)
+                            {
+                                return point;
+                            }
+                        }
+                    }
+                }
+                foreach (TECController controller in typical.Controllers)
+                {
+                    if (controller.Guid == guid)
+                    {
+                        return controller;
+                    }
+                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    {
+                        if (connection.Guid == guid)
+                        {
+                            return connection;
+                        }
+                    }
+                }
+                foreach (TECPanel panel in typical.Panels)
+                {
+                    if (panel.Guid == guid)
+                    {
+                        return panel;
+                    }
+                }
+                foreach (TECMisc misc in typical.MiscCosts)
+                {
+                    if (misc.Guid == guid)
+                    {
+                        return misc;
+                    }
+                }
+                foreach (TECSystem system in typical.Instances)
+                {
+                    if (system.Guid == guid)
+                    {
+                        return system;
+                    }
+                    foreach (TECEquipment equipment in system.Equipment)
+                    {
+                        if (equipment.Guid == guid)
+                        {
+                            return equipment;
+                        }
+                        foreach (TECSubScope subScope in equipment.SubScope)
+                        {
+                            if (subScope.Guid == guid)
+                            {
+                                return subScope;
+                            }
+                            foreach (TECPoint point in subScope.Points)
+                            {
+                                if (point.Guid == guid)
+                                {
+                                    return point;
+                                }
+                            }
+                        }
+                    }
+                    foreach (TECController controller in system.Controllers)
+                    {
+                        if (controller.Guid == guid)
+                        {
+                            return controller;
+                        }
+                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        {
+                            if (connection.Guid == guid)
+                            {
+                                return connection;
+                            }
+                        }
+                    }
+                    foreach (TECPanel panel in system.Panels)
+                    {
+                        if (panel.Guid == guid)
+                        {
+                            return panel;
+                        }
+                    }
+                    foreach (TECMisc misc in system.MiscCosts)
+                    {
+                        if (misc.Guid == guid)
+                        {
+                            return misc;
+                        }
+                    }
+                }
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                if(controller.Guid == guid)
+                {
+                    return controller;
+                }
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    if(connection.Guid == guid)
+                    {
+                        return connection;
+                    }
+                }
+            }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                if(panel.Guid == guid)
+                {
+                    return panel;
+                }
+            }
+            foreach (TECMisc misc in bid.MiscCosts)
+            {
+                if (misc.Guid == guid)
+                {
+                    return misc;
+                }
+            }
+            return null;
+        }
         
     }
 }

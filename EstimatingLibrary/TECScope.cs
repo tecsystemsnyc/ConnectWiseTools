@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-
     public abstract class TECScope : TECObject, INotifyCostChanged, ISaveable
     {
         #region Properties
