@@ -1178,40 +1178,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ControllerTypeIOTable : TableBase
-    {
-        public static string TableName = "ControllerTypeIO";
-        public static Type ObjectType = typeof(TECControllerType);
-        public static Type ReferenceType = typeof(TECIO);
-
-        public static TableField TypeID = new TableField("TypeID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
-
-        private List<TableField> primaryKeys = new List<TableField>() {
-            TypeID,
-            IOID
-            };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            TypeID,
-            IOID
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "IO"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
     internal class HardwareManufacturerTable : TableBase
     {
         public static string TableName = "HardwareManufacturer";
@@ -1246,18 +1212,120 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class IOIOModuleTable : TableBase
+    internal class ControllerTypeIOTable : TableBase
     {
-        public static string TableName = "IOModuleIO";
-        public static Type ObjectType = typeof(TECIO);
-        public static Type ReferenceType = typeof(TECIOModule);
+        public static string TableName = "ControllerTypeIO";
+        public static Type ObjectType = typeof(TECControllerType);
+        public static Type ReferenceType = typeof(TECIO);
 
-        public static TableField IOID = new TableField("IOID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField ModuleID = new TableField("IOModuleID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("TypeID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
-            IOID,
+            TypeID,
+            IOID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            TypeID,
+            IOID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "IO"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ControllerTypeIOModuleTable : TableBase
+    {
+        public static string TableName = "ControllerTypeIOModule";
+        public static Type ObjectType = typeof(TECControllerType);
+        public static Type ReferenceType = typeof(TECIOModule);
+
+        public static TableField TypeID = new TableField("TypeID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ModuleID = new TableField("ModuleID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            TypeID,
             ModuleID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            TypeID,
+            ModuleID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "IOModules"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ControllerIOModuleTable : TableBase
+    {
+        public static string TableName = "ControllerIOModule";
+        public static Type ObjectType = typeof(TECController);
+        public static Type ReferenceType = typeof(TECIOModule);
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ModuleID = new TableField("ModuleID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ControllerID,
+            ModuleID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ControllerID,
+            ModuleID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "IOModules"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class IOModuleIOTable : TableBase
+    {
+        public static string TableName = "ModuleIOIO";
+        public static Type ObjectType = typeof(TECIOModule);
+        public static Type ReferenceType = typeof(TECIO);
+
+        public static TableField ModuleID = new TableField("IOModuleID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ModuleID,
+            IOID
         };
         private List<Type> types = new List<Type>()
         {
@@ -1266,12 +1334,12 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<TableField> fields = new List<TableField>()
         {
-            IOID,
-            ModuleID
+            ModuleID,
+            IOID
         };
         private List<string> propertyNames = new List<string>()
         {
-            "IOModule"
+            "IO"
         };
 
         public override string NameString { get { return TableName; } }
@@ -2252,7 +2320,9 @@ namespace EstimatingUtilitiesLibrary.Database
             new ElectricalMaterialRatedCostTable(),
             new ControllerConnectionTable(),
             new ControllerTypeIOTable(),
-            new IOIOModuleTable(),
+            new IOModuleIOTable(),
+            new ControllerIOModuleTable(),
+            new ControllerTypeIOModuleTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
@@ -2308,7 +2378,9 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeTagTable(),
             new ControllerTable(),
             new ControllerTypeIOTable(),
-            new IOIOModuleTable(),
+            new IOModuleIOTable(),
+            new ControllerIOModuleTable(),
+            new ControllerTypeIOModuleTable(),
             new HardwareManufacturerTable(),
             new DeviceConnectionTypeTable(),
             new ScopeAssociatedCostTable(),
@@ -2363,7 +2435,9 @@ namespace EstimatingUtilitiesLibrary.Database
             new AssociatedCostTable(),
             new ControllerTable(),
             new ControllerTypeIOTable(),
-            new IOIOModuleTable(),
+            new IOModuleIOTable(),
+            new ControllerIOModuleTable(),
+            new ControllerTypeIOModuleTable(),
             new ControllerConnectionTable(),
             new ScopeBranchHierarchyTable(),
             new BidSystemTable(),
