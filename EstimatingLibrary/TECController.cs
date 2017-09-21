@@ -86,17 +86,6 @@ namespace EstimatingLibrary
         {
             get; private set;
         }
-        
-        //---Derived---
-        public ObservableCollection<IOType> AvailableIO
-        {
-            get { return getAvailableIO(); }
-        }
-        public ObservableCollection<IOType> NetworkIO
-        {
-            get
-            { return getNetworkIO(); }
-        }
         public bool IsGlobal;
         #endregion
 
@@ -170,79 +159,68 @@ namespace EstimatingLibrary
         #region Connection Methods
         public bool CanConnectController(TECController controller)
         {
-
+            if (controller == this) { return false; }
+            foreach (TECIO thisIO in this.getAvailableNetworkIO().ListIO())
+            {
+                foreach (TECIO otherIO in controller.getAvailableNetworkIO().ListIO())
+                {
+                    if (thisIO.Type == otherIO.Type)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         public bool CanConnectSubScope(TECSubScope subScope)
         {
-
+            IOCollection ssIO = new IOCollection();
+            foreach (TECPoint point in subScope.Points)
+            {
+                for (int i = 0; i < point.Quantity; i++)
+                {
+                    ssIO.AddIO(point.Type);
+                }
+            }
+            bool canConnect = true;
+            try
+            {
+                IOCollection remainingIO = getAvailableIO() - ssIO;
+            }
+            catch (ObjectDisposedException)
+            {
+                canConnect = false;
+            }
+            return canConnect;
         }
         public TECNetworkConnection AddController(TECController controller, TECNetworkConnection connection)
         {
-            if (controller != this)
+            if (CanConnectController(controller))
             {
-                foreach (TECConnection conn in ChildrenConnections)
+                if (ChildrenConnections.Contains(connection))
                 {
-                    if (conn is TECNetworkConnection)
-                    {
-                        TECNetworkConnection netConn = conn as TECNetworkConnection;
-                        if (connection == netConn)
-                        {
-                            bool ioMatches = false;
-                            foreach(IOType ioType in controller.NetworkIO)
-                            {
-                                if (connection.IOType == ioType)
-                                {
-                                    ioMatches = true;
-                                    break;
-                                }
-                            }
-                            if (ioMatches)
-                            {
-                                netConn.ChildrenControllers.Add(controller);
-                                controller.ParentConnection = netConn;
-                                return netConn;
-                            }
-                            else
-                            {
-                                throw new ArgumentException("Controller and connection do not have a matching IOType.");
-                            }
-                        }
-                    }
+                    connection.ChildrenControllers.Add(controller);
+                    controller.ParentConnection = connection;
+                    return connection;
                 }
-                throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
+                else
+                {
+                    throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
+                }
             }
             else
             {
-                return null;
+                throw new InvalidOperationException("Controller incompatible.");
             }
         }
         public TECNetworkConnection AddController(TECController controller, TECElectricalMaterial connectionType)
         {
-            if (controller != this)
+            if (CanConnectController(controller))
             {
-                IOType ioType = 0;
-                foreach (IOType thisType in this.NetworkIO)
-                {
-                    foreach (IOType otherType in controller.NetworkIO)
-                    {
-                        if (thisType == otherType)
-                        {
-                            ioType = thisType;
-                            break;
-                        }
-                    }
-                    if (ioType != 0) { break; }
-                }
-                if (ioType == 0)
-                {
-                    throw new ArgumentException("Controller and parent do not have a matching IOType.");
-                }
-
                 bool connectionIsTypical = this.IsTypical || controller.IsTypical;
                 TECNetworkConnection netConnect = new TECNetworkConnection(connectionIsTypical);
                 netConnect.ParentController = this;
                 netConnect.ChildrenControllers.Add(controller);
-                netConnect.IOType = ioType;
                 netConnect.ConnectionType = connectionType;
                 addChildConnection(netConnect);
                 controller.ParentConnection = netConnect;
@@ -250,18 +228,25 @@ namespace EstimatingLibrary
             }
             else
             {
-                return null;
+                throw new InvalidOperationException("Controller incompatible.");
             }
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
-            bool connectionIsTypical = (this.IsTypical || subScope.IsTypical);
-            TECSubScopeConnection connection = new TECSubScopeConnection(connectionIsTypical);
-            connection.ParentController = this;
-            connection.SubScope = subScope;
-            addChildConnection(connection);
-            subScope.Connection = connection;
-            return connection;
+            if (CanConnectSubScope(subScope))
+            {
+                bool connectionIsTypical = (this.IsTypical || subScope.IsTypical);
+                TECSubScopeConnection connection = new TECSubScopeConnection(connectionIsTypical);
+                connection.ParentController = this;
+                connection.SubScope = subScope;
+                addChildConnection(connection);
+                subScope.Connection = connection;
+                return connection;
+            }
+            else
+            {
+                throw new InvalidOperationException("Subscope incompatible.");
+            }
         }
         public void RemoveController(TECController controller)
         {
@@ -401,35 +386,6 @@ namespace EstimatingLibrary
             ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }
-        private ObservableCollection<IOType> getAvailableIO()
-        {
-            var availableIO = new ObservableCollection<IOType>();
-            foreach (TECIO type in this.Type.IO)
-            {
-                for (var x = 0; x < type.Quantity; x++)
-                {
-                    availableIO.Add(type.Type);
-                }
-            }
-            return availableIO;
-        }
-        private ObservableCollection<IOType> getNetworkIO()
-        {
-            var outIO = new ObservableCollection<IOType>();
-            foreach (TECIO io in this.Type.IO)
-            {
-                var type = io.Type;
-                if (type != IOType.AI && type != IOType.AO && type != IOType.DI && type != IOType.DO)
-                {
-                    for (var x = 0; x < io.Quantity; x++)
-                    {
-                        outIO.Add(type);
-                    }
-                }
-            }
-
-            return outIO;
-        }
         
         override protected CostBatch getCosts()
         {
@@ -490,6 +446,53 @@ namespace EstimatingLibrary
             {
                 notifyCostChanged(connection.CostBatch * -1);
             }
+        }
+
+        private IOCollection getTotalIO()
+        {
+            IOCollection totalIO = new IOCollection(this.Type.IO);
+            foreach(TECIOModule module in this.IOModules)
+            {
+                totalIO.AddIO(module.IO);
+            }
+            return totalIO;
+        }
+        private IOCollection getUsedIO()
+        {
+            IOCollection usedIO = new IOCollection();
+            foreach(TECConnection connection in ChildrenConnections)
+            {
+                usedIO += connection.IO;
+            }
+            return usedIO;
+        }
+        private IOCollection getUsedNetworkIO()
+        {
+            IOCollection usedIO = getUsedIO();
+            foreach(TECIO io in usedIO.ListIO())
+            {
+                if (!TECIO.NetworkIO.Contains(io.Type))
+                {
+                    usedIO.RemoveIO(io);
+                }
+            }
+            return usedIO;
+        }
+        private IOCollection getAvailableIO()
+        {
+            return (getTotalIO() - getUsedIO());
+        }
+        private IOCollection getAvailableNetworkIO()
+        {
+            IOCollection availableIO = getAvailableIO();
+            foreach(TECIO io in availableIO.ListIO())
+            {
+                if (!TECIO.NetworkIO.Contains(io.Type))
+                {
+                    availableIO.RemoveIO(io);
+                }
+            }
+            return availableIO;
         }
         #endregion
     }

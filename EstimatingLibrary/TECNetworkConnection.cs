@@ -55,12 +55,12 @@ namespace EstimatingLibrary
             }
         }
 
-        public override ObservableCollection<TECIO> IO
+        public override IOCollection IO
         {
             get
             {
-                List<TECIO> io = new List<TECIO>();
-                io.Add(new TECIO(IOType));
+                IOCollection io = new IOCollection();
+                io.AddIO(IOType);
                 return io;
             }
         }

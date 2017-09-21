@@ -46,27 +46,19 @@ namespace EstimatingLibrary
                 return outConnectionTypes;
             }
         }
-        public override ObservableCollection<TECIO> IO
+        public override IOCollection IO
         {
             get
             {
-                ObservableCollection<TECIO> IO = new ObservableCollection<TECIO>();
-                Dictionary<IOType, TECIO> ioDictionary = new Dictionary<IOType, TECIO>();
+                IOCollection io = new IOCollection();
                 foreach(TECPoint point in SubScope.Points)
                 {
-                    if (ioDictionary.ContainsKey(point.Type))
+                    for(int i = 0; i < point.Quantity; i++)
                     {
-                        ioDictionary[point.Type].Quantity += point.Quantity;
-                    }
-                    else
-                    {
-                        TECIO io = new TECIO(point.Type);
-                        io.Quantity = point.Quantity;
-                        IO.Add(io);
-                        ioDictionary.Add(io.Type, io);
+                        io.AddIO(point.Type);
                     }
                 }
-                return IO;
+                return io;
             }
         }
         #endregion
