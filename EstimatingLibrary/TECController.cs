@@ -442,6 +442,10 @@ namespace EstimatingLibrary
                 {
                     costs += connection.CostBatch;
                 }
+                foreach(TECIOModule module in IOModules)
+                {
+                    costs += module.CostBatch;
+                }
                 return costs;
             } else
             {
