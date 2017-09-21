@@ -51,6 +51,39 @@ namespace Tests
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
             checkUpdateItems(expectedItems, stack);
         }
+        [TestMethod]
+        public void Bid_AddControllerAssociatedCost()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECController controller = new TECController(type, false);
+            bid.Controllers.Add(controller);
+
+            TECCost cost = new TECCost(CostType.TEC);
+            controller.AssociatedCosts.Add(cost);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+            
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = controller.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = cost.Guid.ToString();
+            data[ScopeAssociatedCostTable.Quantity.Name] = "2";
+            expectedItems.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            controller.AssociatedCosts.Add(cost);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            checkUpdateItems(expectedItems, stack);
+        }
         #endregion
         #region Panel
         [TestMethod]

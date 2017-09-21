@@ -956,6 +956,7 @@ namespace Tests
             Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
             Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
+            Assert.IsFalse(actualConnection.IsTypical, "Loaded as typical.");
         }
 
         [TestMethod]

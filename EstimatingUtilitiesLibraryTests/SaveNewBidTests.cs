@@ -380,7 +380,7 @@ namespace Tests
             Assert.AreEqual(expectedSystem.AssociatedCosts.Count, actualSystem.AssociatedCosts.Count);
             Assert.AreEqual(expectedSystem.MiscCosts.Count, actualSystem.MiscCosts.Count);
             Assert.AreEqual(expectedSystem.TypicalInstanceDictionary.GetFullDictionary().Count, actualSystem.TypicalInstanceDictionary.GetFullDictionary().Count);
-
+            Assert.IsTrue(compareCosts(expectedSystem.CostBatch, actualSystem.CostBatch));
         }
 
         [TestMethod]
@@ -407,6 +407,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
+            Assert.IsTrue(compareCosts(expectedEquipment.CostBatch, actualEquipment.CostBatch));
         }
 
         [TestMethod]
@@ -436,6 +437,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
+            Assert.IsTrue(compareCosts(expectedSubScope.CostBatch, actualSubScope.CostBatch));
         }
         
         [TestMethod]
@@ -607,6 +609,9 @@ namespace Tests
                 }
                 Assert.IsTrue(ioExists);
             }
+            CostBatch expectedBatch = expectedController.CostBatch;
+            CostBatch actualBatch = actualController.CostBatch;
+            Assert.IsTrue(compareCosts(expectedBatch, actualBatch));
         }
 
         [TestMethod]
@@ -640,6 +645,8 @@ namespace Tests
             Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
             Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
             Assert.AreEqual(expectedConnection.SubScope.Guid, actualConnection.SubScope.Guid);
+            Assert.IsTrue(compareCosts(expectedConnection.CostBatch, actualConnection.CostBatch));
+            //Assert.IsFalse(actualConnection.IsTypical);
 
         }
 
@@ -660,6 +667,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
             Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+            Assert.IsTrue(compareCosts(expectedCost.CostBatch, actualCost.CostBatch));
         }
 
         [TestMethod]
@@ -679,6 +687,7 @@ namespace Tests
 
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
+            Assert.IsTrue(compareCosts(expectedPanel.CostBatch, actualPanel.CostBatch));
         }
 
         [TestMethod]
@@ -700,6 +709,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Price, actualCost.Price, DELTA);
             Assert.AreEqual(expectedCost.Manufacturer.Guid, actualCost.Manufacturer.Guid);
+            Assert.IsTrue(compareCosts(expectedCost.CostBatch, actualCost.CostBatch));
         }
 
         [TestMethod]
@@ -721,6 +731,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Price, actualCost.Price, DELTA);
             Assert.AreEqual(expectedCost.Manufacturer.Guid, actualCost.Manufacturer.Guid);
+            Assert.IsTrue(compareCosts(expectedCost.CostBatch, actualCost.CostBatch));
         }
 
         [TestMethod]
@@ -742,6 +753,7 @@ namespace Tests
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
             Assert.AreEqual(expectedCost.Price, actualCost.Price, DELTA);
             Assert.AreEqual(expectedCost.Manufacturer.Guid, actualCost.Manufacturer.Guid);
+            Assert.IsTrue(compareCosts(expectedCost.CostBatch, actualCost.CostBatch));
         }
 
         [TestMethod]
@@ -774,6 +786,7 @@ namespace Tests
                 }
             }
             Assert.AreEqual(expectedSystem.Panels.Count, actualSystem.Panels.Count);
+            Assert.IsTrue(compareCosts(expectedSystem.CostBatch, actualSystem.CostBatch));
 
         }
 
@@ -802,6 +815,7 @@ namespace Tests
                         Assert.AreEqual(loadedInstance.Equipment.Count, saveInstance.Equipment.Count);
                         Assert.AreEqual(loadedInstance.Panels.Count, saveInstance.Panels.Count);
                         Assert.AreEqual(loadedInstance.Controllers.Count, saveInstance.Controllers.Count);
+                        Assert.IsTrue(compareCosts(loadedInstance.CostBatch, saveInstance.CostBatch));
                     }
                 }
             }
@@ -816,6 +830,9 @@ namespace Tests
             var expectedTotalCost = estimate.TotalCost;
             double delta = 0.0001;
 
+            Dictionary<Guid, CostBatch> saveCostDictionary = new Dictionary<Guid, CostBatch>();
+            addToCost(saveCostDictionary, saveBid);
+
             //Act
             path = Path.GetTempFileName();
             DatabaseManager manager = new DatabaseManager(path);
@@ -824,7 +841,64 @@ namespace Tests
             var loadedWatcher = new ChangeWatcher(saveBid);
             TECEstimator loadedEstimate = new TECEstimator(loadedBid, loadedWatcher);
 
+            Dictionary<Guid, CostBatch> loadCostDictionary = new Dictionary<Guid, CostBatch>();
+            addToCost(loadCostDictionary, loadedBid);
+
+            compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
+
             Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
+        }
+
+        private void compareCosts(TECBid saveBid, TECBid LoadBid, 
+            Dictionary<Guid, CostBatch> saveCostDictionary, Dictionary<Guid, CostBatch> loadCostDictionary)
+        {
+            foreach(KeyValuePair<Guid, CostBatch> pair in saveCostDictionary.Reverse()){
+                if (!loadCostDictionary.ContainsKey(pair.Key))
+                {
+                    TECObject lost = TestHelper.ObjectWithGuid(pair.Key, saveBid);
+                    Assert.Fail("Guid not found with cost: " + lost);
+                }
+                else
+                {
+                    CostBatch saveCost = pair.Value;
+                    CostBatch loadCost = loadCostDictionary[pair.Key];
+                    TECObject item = TestHelper.ObjectWithGuid(pair.Key, LoadBid);
+                    Assert.IsTrue(compareCosts(saveCost, loadCost),
+                        "Loaded value not correct: " + item);
+                }
+            }
+        }
+
+        public void addToCost(Dictionary<Guid, CostBatch> costDictionary, TECObject item)
+        {
+            if(item is INotifyCostChanged costItem)
+            {
+                costDictionary[item.Guid] = costItem.CostBatch;
+            }
+            if(item is ISaveable saveable)
+            {
+                foreach(TECObject child in saveable.SaveObjects.Objects)
+                {
+                    if (!saveable.RelatedObjects.Contains(child))
+                    {
+                        addToCost(costDictionary, child);
+                    }
+
+                }
+            }
+        } 
+
+        public bool compareCosts(CostBatch expected, CostBatch actual)
+        {
+            if (expected.GetCost(CostType.Electrical) == actual.GetCost(CostType.Electrical) &&
+                expected.GetCost(CostType.TEC) == actual.GetCost(CostType.TEC))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

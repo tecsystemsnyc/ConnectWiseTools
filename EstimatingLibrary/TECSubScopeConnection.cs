@@ -70,6 +70,11 @@ namespace EstimatingLibrary
             if (connectionSource._subScope != null)
             { _subScope = new TECSubScope(connectionSource.SubScope, isTypical, guidDictionary); }
         }
+        public TECSubScopeConnection(TECSubScopeConnection linkingSource, TECSubScope actualSubScope, bool isTypical) : base(linkingSource, isTypical)
+        {
+            _subScope = actualSubScope;
+            _guid = linkingSource.Guid;
+        }
         #endregion Constructors
 
         #region Methods
