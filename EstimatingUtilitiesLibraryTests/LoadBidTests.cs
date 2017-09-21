@@ -639,7 +639,7 @@ namespace Tests
             Guid expectedGuid = new Guid("03a16819-9205-4e65-a16b-96616309f171");
             string expectedName = "Typical Point";
             int expectedQuantity = 1;
-            PointTypes expectedType = PointTypes.AI;
+            IOType expectedType = IOType.AI;
 
             TECPoint actualPoint = null;
             foreach (TECTypical typical in actualBid.Systems)
@@ -674,7 +674,7 @@ namespace Tests
             Guid expectedGuid = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
             string expectedName = "Instance Point";
             int expectedQuantity = 1;
-            PointTypes expectedType = PointTypes.AI;
+            IOType expectedType = IOType.AI;
 
             TECPoint actualPoint = null;
             foreach (TECTypical typical in actualBid.Systems)
@@ -1571,7 +1571,7 @@ namespace Tests
             Assert.AreEqual(expectedName, actualModule.Name);
             Assert.AreEqual(expectedDescription, actualModule.Description);
             Assert.AreEqual(expectedCost, actualModule.Price);
-            Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
+            Assert.AreEqual(expectedIOPerModule, actualModule.IO.Count);
             Assert.AreEqual(manufacturerGuid, actualModule.Manufacturer.Guid);
 
         }
@@ -1601,7 +1601,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
             Assert.AreEqual(expectedQty, actualIO.Quantity, "Quantity not loaded");
-            Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
+            //Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
         }
 
         [TestMethod]
@@ -1632,7 +1632,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
             Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
-            Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
+            //Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
         }
 
         [TestMethod]
@@ -1664,7 +1664,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
             Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
-            Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
+            //Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
         }
 
         //----------------------------------------Tests above have new values, below do not-------------------------------------------

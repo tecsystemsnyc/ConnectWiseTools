@@ -257,13 +257,43 @@ namespace EstimatingLibrary.Utilities
         {
             linkHardwareToManufacturers(controllerType, catalogs.Manufacturers);
             linkScopeChildrenToCatalogs(controllerType, catalogs);
-
-            foreach (TECIO io in controllerType.IO)
-            {
-                linkIOToModule(io, catalogs.IOModules);
-            }
+            linkControllerTypeToIOModules(controllerType, catalogs.IOModules);
         }
-        
+
+        private static void linkControllerTypeToIOModules(TECControllerType controllerType, ObservableCollection<TECIOModule> iOModules)
+        {
+            ObservableCollection<TECIOModule> modules = new ObservableCollection<TECIOModule>();
+            foreach(TECIOModule module in controllerType.IOModules)
+            {
+                foreach (TECIOModule item in iOModules)
+                {
+                    if (module.Guid == item.Guid)
+                    {
+                        modules.Add(item);
+                        break;
+                    }
+                }
+            }
+            controllerType.IOModules = modules;
+        }
+
+        private static void linkControllerTypeToIOModules(TECController controller, ObservableCollection<TECIOModule> iOModules)
+        {
+            ObservableCollection<TECIOModule> modules = new ObservableCollection<TECIOModule>();
+            foreach (TECIOModule module in controller.IOModules)
+            {
+                foreach (TECIOModule item in iOModules)
+                {
+                    if (module.Guid == item.Guid)
+                    {
+                        modules.Add(item);
+                        break;
+                    }
+                }
+            }
+            controller.IOModules = modules;
+        }
+
         private static void linkSystemToCatalogs(TECSystem system, TECCatalogs catalogs)
         {
             //Should assume linking a typical system with potential instances, controllers and panels.
@@ -328,6 +358,7 @@ namespace EstimatingLibrary.Utilities
                 linkConnectionToCatalogs(connection, catalogs);
             }
             linkScopeChildrenToCatalogs(controller, catalogs);
+            linkControllerTypeToIOModules(controller, catalogs.IOModules);
         }
 
         private static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
@@ -512,21 +543,6 @@ namespace EstimatingLibrary.Utilities
             component.RatedCosts = costsToAssign;
         }
         
-        private static void linkIOToModule(TECIO io, ObservableCollection<TECIOModule> modules)
-        {
-            if (io.IOModule != null)
-            {
-                foreach (TECIOModule module in modules)
-                {
-                    if (io.IOModule.Guid == module.Guid)
-                    {
-                        io.IOModule = module;
-                        break;
-                    }
-                }
-            }
-        }
-
         private static void linkConnectionToConduitType(TECConnection connection, ObservableCollection<TECElectricalMaterial> conduitTypes)
         {
             if (connection.ConduitType != null)
