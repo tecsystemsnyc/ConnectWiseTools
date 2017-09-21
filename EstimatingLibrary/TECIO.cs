@@ -23,7 +23,7 @@ namespace EstimatingLibrary
         ModbusRTU,
     }
 
-    public class TECIO : TECObject, ISaveable
+    public class TECIO : TECObject
     {
         public static List<IOType> PointIO = new List<IOType>()
         {
@@ -64,15 +64,6 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap SaveObjects
-        {
-            get { return saveObjects(); }
-        }
-        public SaveableMap RelatedObjects
-        {
-            get { return relatedObjects(); }
-        }
-
         #endregion
 
         public TECIO(Guid guid) : base(guid)
@@ -86,18 +77,6 @@ namespace EstimatingLibrary
         {
             _quantity = ioSource.Quantity;
             _type = ioSource.Type;
-        }
-
-        private SaveableMap saveObjects()
-        {
-            SaveableMap saveList = new SaveableMap();
-            return saveList;
-        }
-
-        private SaveableMap relatedObjects()
-        {
-            SaveableMap saveList = new SaveableMap();
-            return saveList;
         }
     }
 }
