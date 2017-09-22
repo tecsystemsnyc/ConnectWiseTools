@@ -210,24 +210,6 @@ namespace EstimatingLibrary
                 throw new InvalidOperationException("Controller incompatible.");
             }
         }
-        public TECNetworkConnection AddController(TECController controller, TECElectricalMaterial connectionType)
-        {
-            if (CanConnectINetworkConnectable(controller))
-            {
-                bool connectionIsTypical = this.IsTypical || controller.IsTypical;
-                TECNetworkConnection netConnect = new TECNetworkConnection(connectionIsTypical);
-                netConnect.ParentController = this;
-                netConnect.Children.Add(controller);
-                netConnect.ConnectionTypes.Add(connectionType);
-                addChildConnection(netConnect);
-                controller.ParentConnection = netConnect;
-                return netConnect;
-            }
-            else
-            {
-                throw new InvalidOperationException("Controller incompatible.");
-            }
-        }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
             if (CanConnectSubScope(subScope))
@@ -342,7 +324,7 @@ namespace EstimatingLibrary
                 }
                 ChildrenConnections.Remove(connectToRemove);
             }
-            SetParentController(null, null);
+            GetParentController().RemoveController(this);
         }
 
         public TECController GetParentController()
@@ -354,18 +336,6 @@ namespace EstimatingLibrary
             else
             {
                 return ParentConnection.ParentController;
-            }
-        }
-        public void SetParentController(TECController controller, TECElectricalMaterial connectionType)
-        {
-            if (ParentConnection != null)
-            {
-                GetParentController().RemoveController(this);
-            }
-
-            if (controller != null)
-            {
-                controller.AddController(this, connectionType);
             }
         }
 
