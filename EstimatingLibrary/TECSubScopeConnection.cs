@@ -79,19 +79,6 @@ namespace EstimatingLibrary
         #endregion Constructors
 
         #region Methods
-        protected override CostBatch getCosts()
-        {
-            CostBatch costs = new CostBatch();
-            foreach (TECElectricalMaterial connectionType in ConnectionTypes)
-            {
-                costs += connectionType.GetCosts(Length);
-            }
-            if (ConduitType != null)
-            {
-                costs += ConduitType.GetCosts(ConduitLength);
-            }
-            return costs;
-        }
         protected override SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();
@@ -105,6 +92,10 @@ namespace EstimatingLibrary
             saveList.AddRange(base.relatedObjects());
             saveList.Add(this.SubScope, "SubScope");
             return saveList;
+        }
+        public override ObservableCollection<TECElectricalMaterial> GetConnectionTypes()
+        {
+            return ConnectionTypes;
         }
         #endregion
     }
