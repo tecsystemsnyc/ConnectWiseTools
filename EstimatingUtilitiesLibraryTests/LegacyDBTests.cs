@@ -637,7 +637,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("03a16819-9205-4e65-a16b-96616309f171");
             string expectedName = "Typical Point";
             int expectedQuantity = 1;
-            PointTypes expectedType = PointTypes.AI;
+            IOType expectedType = IOType.AI;
 
             TECPoint actualPoint = null;
             foreach (TECSystem typical in actualBid.Systems)
@@ -672,7 +672,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
             string expectedName = "Instance Point";
             int expectedQuantity = 1;
-            PointTypes expectedType = PointTypes.AI;
+            IOType expectedType = IOType.AI;
 
             TECPoint actualPoint = null;
             foreach (TECTypical typical in actualBid.Systems)
@@ -984,7 +984,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            foreach (TECController controller in actualNetConnect.Children)
             {
                 if (controller.Guid == expectedChildControllerGuid)
                 {
@@ -992,13 +992,23 @@ namespace EstimatingUtilitiesLibraryTests
                     break;
                 }
             }
+            bool foundConnectionType = false;
+            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if (type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
 
             //Assert
             Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualNetConnect.ConduitType.Guid, "ConduitType didn't load properly in network connection.");
             Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
         }
@@ -1029,7 +1039,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            foreach (TECController controller in actualNetConnect.Children)
             {
                 if (controller.Guid == expectedChildControllerGuid)
                 {
@@ -1037,13 +1047,23 @@ namespace EstimatingUtilitiesLibraryTests
                     break;
                 }
             }
+            bool foundConnectionType = false;
+            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if (type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
 
             //Assert
             Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
             Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
         }
 
@@ -1081,11 +1101,21 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            foreach (TECController controller in actualNetConnect.Children)
             {
                 if (controller.Guid == expectedChildControllerGuid)
                 {
                     childControllerFound = true;
+                    break;
+                }
+            }
+
+            bool foundConnectionType = false;
+            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if (type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
                     break;
                 }
             }
@@ -1095,7 +1125,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
             Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
         }
 
@@ -1128,7 +1158,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             bool daisy1Found = false;
             bool daisy2Found = false;
-            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            foreach (TECController controller in actualNetConnect.Children)
             {
                 if (controller.Guid == expectedDaisy1Guid)
                 {
@@ -1141,12 +1171,22 @@ namespace EstimatingUtilitiesLibraryTests
                 if (daisy1Found && daisy2Found) break;
             }
 
+            bool foundConnectionType = false;
+            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if (type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
             //Assert
             Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
 
             Assert.IsTrue(daisy1Found, "First daisy chain controller didn't load properly in network connection.");
             Assert.IsTrue(daisy2Found, "Second daisy chain controller didn't load properly in network connection.");
@@ -1512,7 +1552,6 @@ namespace EstimatingUtilitiesLibraryTests
             string expectedName = "Test IO Module";
             string expectedDescription = "Test IO Module Description";
             double expectedCost = 2233;
-            double expectedIOPerModule = 10;
 
             TECIOModule actualModule = null;
             foreach (TECIOModule module in actualBid.Catalogs.IOModules)
@@ -1527,7 +1566,6 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedName, actualModule.Name);
             Assert.AreEqual(expectedDescription, actualModule.Description);
             Assert.AreEqual(expectedCost, actualModule.Price);
-            Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
         }
         
         private void testForScopeChildren(TECScope scope)

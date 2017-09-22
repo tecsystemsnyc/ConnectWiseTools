@@ -986,11 +986,21 @@ namespace Tests
             }
 
             bool childControllerFound = false;
-            foreach(TECController controller in actualNetConnect.ChildrenControllers)
+            foreach(TECController controller in actualNetConnect.Children)
             {
                 if (controller.Guid == expectedChildControllerGuid)
                 {
                     childControllerFound = true;
+                    break;
+                }
+            }
+
+            bool foundConnectionType = false;
+            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if (type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
                     break;
                 }
             }
@@ -1000,7 +1010,7 @@ namespace Tests
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualNetConnect.ConduitType.Guid, "ConduitType didn't load properly in network connection.");
             Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
         }
@@ -1031,11 +1041,21 @@ namespace Tests
             }
 
             bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            foreach (TECController controller in actualNetConnect.Children)
             {
                 if (controller.Guid == expectedChildControllerGuid)
                 {
                     childControllerFound = true;
+                    break;
+                }
+            }
+
+            bool foundConnectionType = false;
+            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if (type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
                     break;
                 }
             }
@@ -1045,7 +1065,7 @@ namespace Tests
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
             Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
         }
 
@@ -1083,7 +1103,7 @@ namespace Tests
             }
 
             bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.ChildrenControllers)
+            foreach (TECController controller in actualNetConnect.Children)
             {
                 if (controller.Guid == expectedChildControllerGuid)
                 {
@@ -1092,12 +1112,21 @@ namespace Tests
                 }
             }
 
+            bool foundConnectionType = false;
+            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if (type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
             //Assert
             Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
             Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
         }
 
@@ -1130,7 +1159,7 @@ namespace Tests
 
             bool daisy1Found = false;
             bool daisy2Found = false;
-            foreach(TECController controller in actualNetConnect.ChildrenControllers)
+            foreach(INetworkConnectable controller in actualNetConnect.Children)
             {
                 if(controller.Guid == expectedDaisy1Guid)
                 {
@@ -1143,12 +1172,23 @@ namespace Tests
                 if (daisy1Found && daisy2Found) break;
             }
 
+            bool foundConnectionType = false;
+            foreach(TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            {
+                if(type.Guid == expectedConnectionTypeGuid)
+                {
+                    foundConnectionType = true;
+                    break;
+                }
+            }
+
+
             //Assert
             Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
             Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
 
             Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.AreEqual(expectedConnectionTypeGuid, actualNetConnect.ConnectionType.Guid, "ConnectionType didn't load properly in network connection.");
+            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
 
             Assert.IsTrue(daisy1Found, "First daisy chain controller didn't load properly in network connection.");
             Assert.IsTrue(daisy2Found, "Second daisy chain controller didn't load properly in network connection.");

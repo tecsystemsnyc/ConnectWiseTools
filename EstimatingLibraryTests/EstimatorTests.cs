@@ -1285,10 +1285,10 @@ namespace Tests
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
 
-            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP, 
-                new List<TECElectricalMaterial>() { connectionType });
+            var connection = controller1.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
 
-            connection.AddNetworkConnectable(controller2);
+            connection.AddINetworkConnectable(controller2);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = conduitType;
@@ -1319,13 +1319,13 @@ namespace Tests
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
 
-            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
-                new List<TECElectricalMaterial>() { connectionType });
+            var connection = controller1.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
 
-            connection.AddNetworkConnectable(controller2);
+            connection.AddINetworkConnectable(controller2);
             connection.Length = 50;
 
-            controller1.RemoveController(controller2);
+            connection.RemoveINetworkConnectable(controller2);
 
             Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
@@ -1357,10 +1357,10 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
-                new List<TECElectricalMaterial>() { connectionType });
+            var connection = controller1.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
 
-            connection.AddNetworkConnectable(instanceController);
+            connection.AddINetworkConnectable(instanceController);
             connection.Length = 50;
 
             Assert.AreEqual(50, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
@@ -1393,13 +1393,13 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
-                new List<TECElectricalMaterial>() { connectionType });
+            var connection = controller1.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
 
-            connection.AddNetworkConnectable(instanceController);
+            connection.AddINetworkConnectable(instanceController);
             connection.Length = 50;
 
-            controller1.RemoveController(instanceController);
+            connection.RemoveINetworkConnectable(instanceController);
 
             Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");

@@ -152,14 +152,19 @@ namespace Tests
                     }
                 }
             }
-            else if (connection is TECNetworkConnection)
+            else if (connection is TECNetworkConnection netConn)
             {
-                total += CalculateTotal((connection as TECNetworkConnection).ConnectionType, type) * connection.Length;
-                total += CalculateTotal((connection as TECNetworkConnection).ConnectionType as TECScope, type);
-                foreach (TECCost cost in (connection as TECNetworkConnection).ConnectionType.RatedCosts)
+                
+                foreach(TECElectricalMaterial connType in netConn.ConnectionTypes)
                 {
-                    total += CalculateTotal(cost, type) * connection.Length;
+                    total += CalculateTotal(connType, type) * connection.Length;
+                    total += CalculateTotal(connType as TECScope, type);
+                    foreach (TECCost cost in connType.RatedCosts)
+                    {
+                        total += CalculateTotal(cost, type) * connection.Length;
+                    }
                 }
+                
             }
             if (connection.ConduitType != null)
             {

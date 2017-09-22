@@ -700,7 +700,7 @@ namespace Tests
                 expected.Add(item);
             }
             TECPoint edit = new TECPoint(true);
-            edit.Type = PointTypes.AI;
+            edit.Type = IOType.AI;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -837,7 +837,7 @@ namespace Tests
             var Bid = TestHelper.CreateTestBid();
             var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             string expected = point.Type.ToString();
-            PointTypes edit = PointTypes.AO;
+            IOType edit = IOType.AO;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1503,7 +1503,7 @@ namespace Tests
             //Arrange
             var Bid = TestHelper.CreateTestBid();
             TECPoint edit = new TECPoint(true);
-            edit.Type = PointTypes.AI;
+            edit.Type = IOType.AI;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1600,7 +1600,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            PointTypes edit = PointTypes.AO;
+            IOType edit = IOType.AO;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1610,7 +1610,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            PointTypes actual = point.Type;
+            IOType actual = point.Type;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }

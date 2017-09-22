@@ -1234,7 +1234,7 @@ namespace Tests
         {
             //Act
             TECPoint expectedPoint = new TECPoint(true);
-            expectedPoint.Type = PointTypes.Serial;
+            expectedPoint.Type = IOType.BACnetIP;
             expectedPoint.Label = "New Point";
             expectedPoint.Quantity = 84300;
 
@@ -1394,7 +1394,7 @@ namespace Tests
         {
             //Act
             TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
-            expectedPoint.Type = PointTypes.BI;
+            expectedPoint.Type = IOType.DI;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;

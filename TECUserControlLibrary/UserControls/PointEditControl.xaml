@@ -48,7 +48,7 @@
                                  VerticalAlignment="Top"
                              Margin="5"/>
             <Label Content="Point Type:" Grid.Row="2"/>
-            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:PointTypes}}}" SelectedValue="{Binding SelectedPoint.Type, Mode=TwoWay}"
+            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:IOType}}}" SelectedValue="{Binding SelectedPoint.Type, Mode=TwoWay}"
                      Grid.Column="1" Grid.Row="2" Margin="5"/>
             <Label Content="Quantity:"
                                Grid.Column="0" Grid.Row="3"/>

@@ -1547,8 +1547,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             TECController child = new TECController(type, false);
@@ -1562,7 +1561,9 @@ namespace Tests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECNetworkConnection connection = controller.AddController(child, connectionType);
+            TECNetworkConnection connection = controller.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+            connection.AddINetworkConnectable(child);
 
             Dictionary<string, string> data;
 
@@ -1579,9 +1580,9 @@ namespace Tests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionControllerTable.ControllerID.Name] = child.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionControllerTable.TableName, data));
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = child.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
@@ -1601,8 +1602,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.Controllers.Add(controller);
@@ -1621,7 +1621,9 @@ namespace Tests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECNetworkConnection connection = controller.AddController(instanceController, connectionType);
+            TECNetworkConnection connection = controller.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+            connection.AddINetworkConnectable(instanceController);
 
             Dictionary<string, string> data;
 
@@ -1638,9 +1640,9 @@ namespace Tests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionControllerTable.ControllerID.Name] = instanceController.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionControllerTable.TableName, data));
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = instanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
@@ -1660,7 +1662,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
+            TECIO io = new TECIO(IOType.BACnetIP);
             io.Type = IOType.BACnetIP;
             type.IO.Add(io);
 
@@ -1685,7 +1687,9 @@ namespace Tests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECNetworkConnection connection = instanceController.AddController(otherInstanceController, connectionType);
+            TECNetworkConnection connection = instanceController.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+            connection.AddINetworkConnectable(otherInstanceController);
 
             Dictionary<string, string> data;
 
@@ -1702,9 +1706,9 @@ namespace Tests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionControllerTable.ControllerID.Name] = otherInstanceController.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionControllerTable.TableName, data));
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = otherInstanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
@@ -1724,8 +1728,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.Controllers.Add(controller);
@@ -1775,8 +1778,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.Controllers.Add(controller);
@@ -1828,8 +1830,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
 
@@ -1879,8 +1880,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
 
@@ -3343,8 +3343,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             TECController child = new TECController(type, false);
@@ -3352,12 +3351,14 @@ namespace Tests
             bid.Controllers.Add(child);
 
             TECElectricalMaterial connectionType = new TECElectricalMaterial();
-            TECNetworkConnection connection = controller.AddController(child, connectionType);
+            TECNetworkConnection connection = controller.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+            connection.AddINetworkConnectable(child);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
 
-            controller.RemoveController(child);
+            controller.RemoveNetworkConnection(connection);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -3365,9 +3366,9 @@ namespace Tests
             Dictionary<string, string> data;
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionControllerTable.ControllerID.Name] = child.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionControllerTable.TableName, data));
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = child.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
@@ -3396,8 +3397,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.Controllers.Add(controller);
@@ -3410,11 +3410,13 @@ namespace Tests
             TECController instanceController = system.Controllers[0];
 
             TECElectricalMaterial connectionType = new TECElectricalMaterial();
-            TECNetworkConnection connection = controller.AddController(instanceController, connectionType);
+            TECNetworkConnection connection = controller.AddNetworkConnection(false, 
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+            connection.AddINetworkConnectable(instanceController);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            controller.RemoveController(instanceController);
+            controller.RemoveNetworkConnection(connection);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -3422,9 +3424,9 @@ namespace Tests
             Dictionary<string, string> data;
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionControllerTable.ControllerID.Name] = instanceController.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionControllerTable.TableName, data));
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = instanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
@@ -3453,8 +3455,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
 
             TECController controller = new TECController(type, false);
@@ -3472,12 +3473,13 @@ namespace Tests
             TECController otherInstanceController = otherSystem.Controllers[0];
 
             TECElectricalMaterial connectionType = new TECElectricalMaterial();
-            TECNetworkConnection connection = instanceController.AddController(otherInstanceController, connectionType);
-
+            TECNetworkConnection connection = instanceController.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+            connection.AddINetworkConnectable(otherInstanceController);
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
 
-            instanceController.RemoveController(otherInstanceController);
+            instanceController.RemoveNetworkConnection(connection);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -3485,9 +3487,9 @@ namespace Tests
             Dictionary<string, string> data;
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionControllerTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionControllerTable.ControllerID.Name] = otherInstanceController.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionControllerTable.TableName, data));
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = otherInstanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[NetworkConnectionTable.ID.Name] = connection.Guid.ToString();
@@ -3516,8 +3518,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.Controllers.Add(controller);
@@ -3566,8 +3567,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.Controllers.Add(controller);
@@ -3619,8 +3619,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
 
@@ -3671,8 +3670,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
 

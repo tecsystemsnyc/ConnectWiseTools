@@ -659,7 +659,7 @@ namespace Tests
                     if (netConnect != null)
                     {
                         Assert.IsTrue(netConnect.ParentController == controller);
-                        foreach (TECController childControl in netConnect.ChildrenControllers)
+                        foreach (TECController childControl in netConnect.Children)
                         {
                             Assert.IsTrue(childControl.ParentConnection == netConnect);
                             Assert.IsTrue(allControllers.Contains(childControl));

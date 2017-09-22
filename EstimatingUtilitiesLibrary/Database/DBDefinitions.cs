@@ -955,7 +955,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Name = new TableField("Name", "TEXT", IOModuleType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", IOModuleType.GetProperty("Description"));
         public static TableField Price = new TableField("Price", "REAL", IOModuleType.GetProperty("Price"));
-        public static TableField IOPerModule = new TableField("IOPerModule", "REAL", IOModuleType.GetProperty("IOPerModule"));
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -971,8 +970,7 @@ namespace EstimatingUtilitiesLibrary.Database
             ID,
             Name,
             Description,
-            Price,
-            IOPerModule
+            Price
         };
         private List<string> propertyNames = new List<string>()
         {

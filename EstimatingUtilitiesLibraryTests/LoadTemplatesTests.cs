@@ -546,7 +546,6 @@ namespace Tests
             Assert.AreEqual(expectedName, actualModule.Name);
             Assert.AreEqual(expectedDescription, actualModule.Description);
             Assert.AreEqual(expectedCost, actualModule.Price);
-            Assert.AreEqual(expectedIOPerModule, actualModule.IOPerModule);
         }
 
         [TestMethod]

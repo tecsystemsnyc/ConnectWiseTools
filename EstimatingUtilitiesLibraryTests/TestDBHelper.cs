@@ -594,7 +594,6 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test IO Module");
             values.Add("Test IO Module Description");
             values.Add("2233");
-            values.Add("10");
             addDataToTable(new IOModuleTable(), values);
 
         }
@@ -638,19 +637,19 @@ namespace EstimatingUtilitiesLibraryTests
         private static void addToIOIOModuleTable()
         {
             List<string> values = new List<string>();
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
-            addDataToTable(new IOIOModuleTable(), values);
+            addDataToTable(new IOModuleIOTable(), values);
 
             values = new List<string>();
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("fbae3851-3320-4e94-a674-ddec86bc4964");
-            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
-            addDataToTable(new IOIOModuleTable(), values);
+            addDataToTable(new IOModuleIOTable(), values);
 
             values = new List<string>();
-            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
-            addDataToTable(new IOIOModuleTable(), values);
+            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
+            addDataToTable(new IOModuleIOTable(), values);
         }
         private static void addToControllerConnectionTable()
         {
@@ -930,17 +929,17 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
-            addDataToTable(new LoactedLocationTable(), values);
+            addDataToTable(new LocatedLocationTable(), values);
 
             values = new List<string>();
             values.Add("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
             values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
-            addDataToTable(new LoactedLocationTable(), values);
+            addDataToTable(new LocatedLocationTable(), values);
 
             values = new List<string>();
             values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
             values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
-            addDataToTable(new LoactedLocationTable(), values);
+            addDataToTable(new LocatedLocationTable(), values);
         }
         private static void addToScopeAssociatedCostTable()
         {
@@ -1270,27 +1269,27 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
-            addDataToTable(new NetworkConnectionControllerTable(), values);
+            addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
             values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
-            addDataToTable(new NetworkConnectionControllerTable(), values);
+            addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
             values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
-            addDataToTable(new NetworkConnectionControllerTable(), values);
+            addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
             values.Add("7b6825df-57da-458a-a859-a9459c15907b");
-            addDataToTable(new NetworkConnectionControllerTable(), values);
+            addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
-            addDataToTable(new NetworkConnectionControllerTable(), values);
+            addDataToTable(new NetworkConnectionChildrenTable(), values);
         }
         private static void addToSubScopeConnectionChildrenTable()
         {

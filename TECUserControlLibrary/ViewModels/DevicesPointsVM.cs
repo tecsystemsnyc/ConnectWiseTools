@@ -65,7 +65,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private string _pointName;
         
-        public PointTypes PointType
+        public IOType PointType
         {
             get { return _pointType; }
             set
@@ -74,7 +74,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PointType");
             }
         }
-        private PointTypes _pointType;
+        private IOType _pointType;
 
         public int PointQuantity
         {
