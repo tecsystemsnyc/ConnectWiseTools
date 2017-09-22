@@ -198,11 +198,12 @@ namespace EstimatingLibrary
             {
                 return true;
             }
-            else if(TECIO.NetworkIO.Contains(point.Type) && Points.Count > 0)
+            IOCollection networkIO = getNetworkIO();
+            if(TECIO.NetworkIO.Contains(point.Type) && networkIO.Contains(point.Type))
             {
-                return false;
+                return true;
             }
-            else if (TECIO.PointIO.Contains(point.Type))
+            else if (TECIO.PointIO.Contains(point.Type) && networkIO.ListIO().Count == 0)
             {
                 return true;
             }
@@ -222,6 +223,8 @@ namespace EstimatingLibrary
         {
             Points.Remove(point);
         }
+        
+
 
         private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
         {
