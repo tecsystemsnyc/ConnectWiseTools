@@ -63,7 +63,8 @@ namespace EstimatingLibrary
                 if(Connection is TECNetworkConnection netConn)
                 {
                     return netConn;
-                } else
+                }
+                else
                 {
                     return null;
                 }
@@ -240,8 +241,20 @@ namespace EstimatingLibrary
         {
             Points.Remove(point);
         }
-        
 
+        public bool CanConnectToNetwork(TECNetworkConnection netConnect)
+        {
+            if (!this.IsNetwork) return false;
+
+            IOCollection thisIO = new IOCollection(getNetworkIO());
+            IOCollection netConnectIO = netConnect.IO;
+            bool ioMatches = (thisIO.Contains(netConnectIO) && netConnectIO.Contains(thisIO));
+
+            bool connectionTypesMatch = (this.ConnectionTypes.Except(netConnect.ConnectionTypes).Count() == 0) 
+                && (netConnect.ConnectionTypes.Except(this.ConnectionTypes).Count() == 0);
+
+            return (ioMatches && connectionTypesMatch);
+        }
 
         private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
         {

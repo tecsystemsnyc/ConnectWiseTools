@@ -169,6 +169,35 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
+        public bool CanAddINetworkConnectable(INetworkConnectable connectable)
+        {
+            return (connectable.CanConnectToNetwork(this));
+        }
+        public void AddINetworkConnectable(INetworkConnectable connectable)
+        {
+            if (CanAddINetworkConnectable(connectable))
+            {
+                Children.Add(connectable);
+                connectable.ParentConnection = this;
+            }
+            else
+            {
+                throw new InvalidOperationException("Connectable not compatible with Network Connection.");
+            }
+        }
+        public void RemoveINetworkConnectable(INetworkConnectable connectable)
+        {
+            if (Children.Contains(connectable))
+            {
+                Children.Remove(connectable);
+                connectable.ParentConnection = null;
+            }
+            else
+            {
+                throw new InvalidOperationException("INetworkConnectable doesn't exist in Network Connection.");
+            }
+        }
+
         protected override SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();

@@ -13,5 +13,7 @@ namespace EstimatingLibrary.Interfaces
         TECNetworkConnection ParentConnection { get; set; }
 
         INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary);
+
+        bool CanConnectToNetwork(TECNetworkConnection netConnect);
     }
 }

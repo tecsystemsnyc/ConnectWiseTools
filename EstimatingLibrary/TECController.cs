@@ -130,54 +130,48 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        #region Event Handlers
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, propertyName, this, item);
-                    if(item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
-                    {
-                        notifyCostChanged(cost.CostBatch);
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                    if (item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
-                    {
-                        notifyCostChanged(cost.CostBatch * -1);
-                    }
-                }
-            }
-            if (sender == ChildrenConnections)
-            {
-                raisePropertyChanged("ChildNetworkConnections");
-            }
-        }
-        #endregion
-
         #region Connection Methods
-        public bool CanConnectINetworkConnectable(INetworkConnectable connectable)
+        public bool CanAddNetworkConnection(IOType ioType)
         {
-            if (connectable == this) { return false; }
-            foreach (TECIO thisIO in this.getAvailableNetworkIO().ListIO())
-            {
-                foreach (TECIO otherIO in connectable.AvailableNetworkIO.ListIO())
-                {
-                    if (thisIO.Type == otherIO.Type)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return (AvailableNetworkIO.Contains(ioType));
         }
+        public TECNetworkConnection AddNetworkConnection(bool isTypical, IEnumerable<TECElectricalMaterial> connectionTypes, IOType ioType)
+        {
+            if (CanAddNetworkConnection(ioType))
+            {
+                TECNetworkConnection netConnect = new TECNetworkConnection(isTypical);
+                netConnect.ConnectionTypes = new ObservableCollection<TECElectricalMaterial>(connectionTypes);
+                netConnect.IOType = ioType;
+                ChildrenConnections.Add(netConnect);
+                return netConnect;
+            }
+            else
+            {
+                throw new InvalidOperationException("Network connection incompatible with controller.");
+            }
+        }
+        public void RemoveNetworkConnection(TECNetworkConnection connection)
+        {
+            if (this.ChildrenConnections.Contains(connection))
+            {
+                List<INetworkConnectable> children = new List<INetworkConnectable>(connection.Children);
+                foreach(INetworkConnectable child in children)
+                {
+                    connection.RemoveINetworkConnectable(child);
+                }
+                this.ChildrenConnections.Remove(connection);
+            }
+            else
+            {
+                throw new InvalidOperationException("Network connection doesn't exist in controller.");
+            }
+        }
+
+        public bool CanConnectToNetwork(TECNetworkConnection netConnect)
+        {
+            return (AvailableNetworkIO.Contains(netConnect.IOType));
+        }
+
         public bool CanConnectSubScope(TECSubScope subScope)
         {
             IOCollection ssIO = new IOCollection();
@@ -189,26 +183,6 @@ namespace EstimatingLibrary
                 }
             }
             return getAvailableIO().Contains(ssIO.ListIO());
-        }
-        public TECNetworkConnection AddINetworkConnectable(INetworkConnectable connectable, TECNetworkConnection connection)
-        {
-            if (CanConnectINetworkConnectable(connectable))
-            {
-                if (ChildrenConnections.Contains(connection))
-                {
-                    connection.Children.Add(connectable);
-                    connectable.ParentConnection = connection;
-                    return connection;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException("Passed connection does not exist in controller.");
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("Controller incompatible.");
-            }
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
@@ -232,37 +206,6 @@ namespace EstimatingLibrary
             else
             {
                 throw new InvalidOperationException("Subscope incompatible.");
-            }
-        }
-        public void RemoveController(TECController controller)
-        {
-            bool exists = false;
-            TECNetworkConnection connectionToRemove = null;
-            foreach (TECConnection connection in ChildrenConnections)
-            {
-                if (connection is TECNetworkConnection)
-                {
-                    var netConnect = connection as TECNetworkConnection;
-                    if (netConnect.Children.Contains(controller))
-                    {
-                        exists = true;
-                        controller.ParentConnection = null;
-                        netConnect.Children.Remove(controller);
-                    }
-                    if (netConnect.Children.Count < 1)
-                    {
-                        connectionToRemove = netConnect;
-                    }
-                }
-
-            }
-            if (connectionToRemove != null)
-            {
-                removeChildConnection(connectionToRemove);
-            }
-            if (!exists)
-            {
-                throw new ArgumentOutOfRangeException("Passed controller does not exist in any connection in controller.");
             }
         }
         public void RemoveSubScope(TECSubScope subScope)
@@ -299,18 +242,9 @@ namespace EstimatingLibrary
             }
             foreach(TECConnection connectToRemove in connectionsToRemove)
             {
-                if (connectToRemove is TECNetworkConnection)
+                if (connectToRemove is TECNetworkConnection netConnect)
                 {
-                    ObservableCollection<TECController> controllersToRemove = new ObservableCollection<TECController>();
-                    foreach(TECController controller in (connectToRemove as TECNetworkConnection).Children)
-                    {
-                        controller.ParentConnection = null;
-                        controllersToRemove.Add(controller);
-                    }
-                    foreach(TECController controller in controllersToRemove)
-                    {
-                        (connectToRemove as TECNetworkConnection).Children.Remove(controller);
-                    }
+                    RemoveNetworkConnection(netConnect);
                 }
                 else if (connectToRemove is TECSubScopeConnection)
                 {
@@ -324,7 +258,7 @@ namespace EstimatingLibrary
                 }
                 ChildrenConnections.Remove(connectToRemove);
             }
-            GetParentController().RemoveController(this);
+            ParentConnection.RemoveINetworkConnectable(this);
         }
 
         public TECController GetParentController()
@@ -354,6 +288,37 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
+        #region Event Handlers
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
+                    if (item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
+                    {
+                        notifyCostChanged(cost.CostBatch);
+                    }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    if (item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
+                    {
+                        notifyCostChanged(cost.CostBatch * -1);
+                    }
+                }
+            }
+            if (sender == ChildrenConnections)
+            {
+                raisePropertyChanged("ChildNetworkConnections");
+            }
+        }
+        #endregion
         public Object DragDropCopy(TECScopeManager scopeManager)
         {
             var outController = new TECController(this, this.IsTypical);
@@ -473,6 +438,8 @@ namespace EstimatingLibrary
         {
             return new TECController(item as TECController, isTypical, guidDictionary);
         }
+
+        
         #endregion
     }
 }
