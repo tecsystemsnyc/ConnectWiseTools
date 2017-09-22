@@ -151,8 +151,8 @@ namespace Tests
             //Points
             var point1 = new TECPoint(true);
             point1.Label = "Point 1";
-            point1.Type = IOType.BACnetMSTP;
-            point1.Quantity = 321;
+            point1.Type = IOType.AI;
+            point1.Quantity = 2;
 
             subScope1.Points.Add(point1);
 
@@ -353,7 +353,10 @@ namespace Tests
             expectedControllerType.Price = 42.6;
             TECIO ioToAdd = new TECIO(IOType.AI);
             ioToAdd.Quantity = 5;
+            TECIO otherIO = new TECIO(IOType.BACnetMSTP);
+            otherIO.Quantity = 3;
             expectedControllerType.IO.Add(ioToAdd);
+            expectedControllerType.IO.Add(otherIO);
             templates.Catalogs.ControllerTypes.Add(expectedControllerType);
 
             TECController expectedController = new TECController(expectedControllerType, false);
@@ -533,7 +536,10 @@ namespace Tests
 
             TECIO io = new TECIO(IOType.BACnetIP);
             io.Quantity = 100;
+            controllerType.IO.Add(io);
 
+            io = new TECIO(IOType.AI);
+            io.Quantity = 11;
             controllerType.IO.Add(io);
 
             outCatalogs.ControllerTypes.Add(controllerType);
