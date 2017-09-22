@@ -115,9 +115,6 @@
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NetworkControllerView.xaml.cs">
-      <DependentUpon>NetworkControllerView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\SystemProposalGridControl.xaml.cs">
       <DependentUpon>SystemProposalGridControl.xaml</DependentUpon>
     </Compile>
@@ -191,9 +188,6 @@
     <Compile Include="ViewModels\MiscCostsSummaryVM.cs" />
     <Compile Include="Views\MiscCostsView.xaml.cs">
       <DependentUpon>MiscCostsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NetworkView.xaml.cs">
-      <DependentUpon>NetworkView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
@@ -318,10 +312,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NetworkControllerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\SystemProposalGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -411,10 +401,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MiscCostsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NetworkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
