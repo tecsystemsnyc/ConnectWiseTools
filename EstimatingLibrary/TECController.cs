@@ -163,12 +163,12 @@ namespace EstimatingLibrary
         #endregion
 
         #region Connection Methods
-        public bool CanConnectController(TECController controller)
+        public bool CanConnectINetworkConnectable(INetworkConnectable connectable)
         {
-            if (controller == this) { return false; }
+            if (connectable == this) { return false; }
             foreach (TECIO thisIO in this.getAvailableNetworkIO().ListIO())
             {
-                foreach (TECIO otherIO in controller.getAvailableNetworkIO().ListIO())
+                foreach (TECIO otherIO in connectable.AvailableNetworkIO.ListIO())
                 {
                     if (thisIO.Type == otherIO.Type)
                     {
@@ -190,14 +190,14 @@ namespace EstimatingLibrary
             }
             return getAvailableIO().Contains(ssIO.ListIO());
         }
-        public TECNetworkConnection AddController(TECController controller, TECNetworkConnection connection)
+        public TECNetworkConnection AddINetworkConnectable(INetworkConnectable connectable, TECNetworkConnection connection)
         {
-            if (CanConnectController(controller))
+            if (CanConnectINetworkConnectable(connectable))
             {
                 if (ChildrenConnections.Contains(connection))
                 {
-                    connection.Children.Add(controller);
-                    controller.ParentConnection = connection;
+                    connection.Children.Add(connectable);
+                    connectable.ParentConnection = connection;
                     return connection;
                 }
                 else
@@ -212,13 +212,13 @@ namespace EstimatingLibrary
         }
         public TECNetworkConnection AddController(TECController controller, TECElectricalMaterial connectionType)
         {
-            if (CanConnectController(controller))
+            if (CanConnectINetworkConnectable(controller))
             {
                 bool connectionIsTypical = this.IsTypical || controller.IsTypical;
                 TECNetworkConnection netConnect = new TECNetworkConnection(connectionIsTypical);
                 netConnect.ParentController = this;
                 netConnect.Children.Add(controller);
-                netConnect.ConnectionType = connectionType;
+                netConnect.ConnectionTypes.Add(connectionType);
                 addChildConnection(netConnect);
                 controller.ParentConnection = netConnect;
                 return netConnect;
@@ -232,38 +232,20 @@ namespace EstimatingLibrary
         {
             if (CanConnectSubScope(subScope))
             {
-                foreach(TECIO io in subScope.AvailableNetworkIO.ListIO())
-                {
-                    bool foundConnectionWithIO = false;
-                    foreach (TECConnection childConnection in ChildrenConnections)
-                    {
-                        if (childConnection is TECNetworkConnection netConnect)
-                        {
-                            if (netConnect.IOType == io.Type && netConnect.IsTypical == subScope.IsTypical)
-                            {
-                                netConnect.ParentController = this;
-                                netConnect.Children.Add(subScope);
-                                netConnect.ConnectionType = 
-                                subScope.NetworkConnections.Add(netConnect);
-                                foundConnectionWithIO = true;
-                            }
-                        }
-                    }
-                    if (!foundConnectionWithIO)
-                    {
-                        TECNetworkConnection netConnect = new TECNetworkConnection(subScope.IsTypical || this.IsTypical);
-                        netConnect.Children.Add(subScope);
-                        subScope.NetworkConnections.Add(netConnect);
-                    }
-                }
-
                 bool connectionIsTypical = (this.IsTypical || subScope.IsTypical);
-                TECSubScopeConnection connection = new TECSubScopeConnection(connectionIsTypical);
-                connection.ParentController = this;
-                connection.SubScope = subScope;
-                addChildConnection(connection);
-                subScope.SubScopeConnection = connection;
-                return connection;
+                if (!subScope.IsNetwork)
+                {
+                    TECSubScopeConnection connection = new TECSubScopeConnection(connectionIsTypical);
+                    connection.ParentController = this;
+                    connection.SubScope = subScope;
+                    addChildConnection(connection);
+                    subScope.Connection = connection;
+                    return connection;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Can't connect network subscope without a known connection.");
+                }
             }
             else
             {
