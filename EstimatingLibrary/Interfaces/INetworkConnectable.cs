@@ -10,6 +10,7 @@ namespace EstimatingLibrary.Interfaces
     {
         Guid Guid { get; }
         IOCollection AvailableNetworkIO { get; }
+        TECNetworkConnection ParentConnection { get; set; }
 
         INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary);
     }

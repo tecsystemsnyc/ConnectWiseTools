@@ -116,10 +116,23 @@ namespace EstimatingLibrary
             }
         }
 
-        protected abstract CostBatch getCosts();
+        protected virtual CostBatch getCosts()
+        {
+            CostBatch costs = new CostBatch();
+            foreach (TECElectricalMaterial connectionType in GetConnectionTypes())
+            {
+                costs += connectionType.GetCosts(Length);
+            }
+            if (ConduitType != null)
+            {
+                costs += ConduitType.GetCosts(ConduitLength);
+            }
+            return costs;
+        }
         protected virtual SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");
             if(this.ConduitType != null)
             {
                 saveList.Add(this.ConduitType, "ConduitType");
@@ -129,11 +142,14 @@ namespace EstimatingLibrary
         protected virtual SaveableMap relatedObjects()
         {
             SaveableMap relatedList = new SaveableMap();
+            relatedList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");
             if (this.ConduitType != null)
             {
                 relatedList.Add(this.ConduitType, "ConduitType");
             }
             return relatedList;
         }
+
+        abstract public ObservableCollection<TECElectricalMaterial> GetConnectionTypes();
     }
 }

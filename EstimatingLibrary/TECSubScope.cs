@@ -56,6 +56,23 @@ namespace EstimatingLibrary
                 raisePropertyChanged("Connection");
             }
         }
+        public TECNetworkConnection ParentConnection
+        {
+            get
+            {
+                if(Connection is TECNetworkConnection netConn)
+                {
+                    return netConn;
+                } else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                Connection = value;
+            }
+        }
         
         public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {

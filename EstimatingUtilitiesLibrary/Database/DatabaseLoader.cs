@@ -1096,8 +1096,8 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(connection, new NetworkConnectionTable(), row);
             connection.IOType = UtilitiesMethods.StringToEnum<IOType>(row[NetworkConnectionTable.IOType.Name].ToString());
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
-            connection.ChildrenControllers = getControllersInNetworkConnection(connection.Guid, isTypical);
-            connection.ConnectionType = getConnectionTypeInNetworkConnection(connection.Guid);
+            connection.Children = getChildrenInNetworkConnection(connection.Guid, isTypical);
+            connection.ConnectionType = getConnectionTypesInNetworkConnection(connection.Guid);
             return connection;
         }
         #endregion

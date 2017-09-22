@@ -120,10 +120,9 @@ namespace EstimatingLibrary
             {
                 _children.Add(item.Copy(item, isTypical, guidDictionary));
             }
-
-            if (connectionSource.ConnectionType != null)
+            foreach(TECElectricalMaterial type in connectionSource.ConnectionTypes)
             {
-                _connectionType = connectionSource.ConnectionType;
+                _connectionTypes.Add(type);
             }
 
             _ioType = connectionSource.IOType;
@@ -170,24 +169,10 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        protected override CostBatch getCosts()
-        {
-            CostBatch costs = new CostBatch();
-            if (ConnectionType != null)
-            {
-                costs += ConnectionType.GetCosts(Length);
-            }
-            if (ConduitType != null)
-            {
-                costs += ConduitType.GetCosts(ConduitLength);
-            }
-            return costs;
-        }
         protected override SaveableMap saveObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
-            saveList.Add(this.ConnectionTypes, "ConnectionTypes");
             List<TECObject> objects = new List<TECObject>();
             foreach(INetworkConnectable netconnect in Children)
             {
@@ -200,7 +185,6 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.relatedObjects());
-            saveList.Add(this.ConnectionTypes, "ConnectionTypes");
             List<TECObject> objects = new List<TECObject>();
             foreach (INetworkConnectable netconnect in Children)
             {
@@ -208,6 +192,10 @@ namespace EstimatingLibrary
             }
             saveList.AddRange(objects, "Children");
             return saveList;
+        }
+        public override ObservableCollection<TECElectricalMaterial> GetConnectionTypes()
+        {
+            return ConnectionTypes;
         }
         #endregion 
 

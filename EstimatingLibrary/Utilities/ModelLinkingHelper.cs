@@ -431,14 +431,7 @@ namespace EstimatingLibrary.Utilities
                                 if (child.Guid == item.Guid || isCopy)
                                 {
                                     controllersToAdd.Add(item);
-                                    if(item is TECController childController)
-                                    {
-                                        childController.ParentConnection = netConnect;
-                                    }
-                                    else if (item is TECSubScope childSubScope)
-                                    {
-                                        childSubScope.NetworkConnections.Add(netConnect);
-                                    }
+                                    item.ParentConnection = netConnect;
                                 }
                             }
                         }
@@ -467,7 +460,7 @@ namespace EstimatingLibrary.Utilities
                             if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
                             {
                                 TECSubScopeConnection linkedConnection = new TECSubScopeConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
-                                subScope.LinkConnection(linkedConnection);
+                                subScope.Connection = linkedConnection;
                                 newConnections.Add(linkedConnection);
                                 oldConnections.Add(ssConnect);
                                 linkedConnection.ParentController = controller;
@@ -570,14 +563,18 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECElectricalMaterial> connectionTypes)
         {
+            ObservableCollection<TECElectricalMaterial> linkedTypes = new ObservableCollection<TECElectricalMaterial>();
             foreach (TECElectricalMaterial type in connectionTypes)
             {
-                if (netConnect.ConnectionType.Guid == type.Guid)
+                foreach(TECElectricalMaterial connType in netConnect.ConnectionTypes)
                 {
-                    netConnect.ConnectionType = type;
-                    break;
+                    if (connType.Guid == type.Guid)
+                    {
+                        linkedTypes.Add(type);
+                    }
                 }
             }
+            netConnect.ConnectionTypes = linkedTypes;
         }
 
         private static void linkPanelToPanelType(TECPanel panel, ObservableCollection<TECPanelType> panelTypes)
