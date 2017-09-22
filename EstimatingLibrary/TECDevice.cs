@@ -36,7 +36,6 @@ namespace EstimatingLibrary
                     ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
                 notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
-                //notifyCombinedChanged("ChildChanged", (object)this, (object)value);
             }
         }
         #endregion//Properties

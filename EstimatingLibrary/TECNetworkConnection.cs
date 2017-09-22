@@ -14,7 +14,7 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private ObservableCollection<INetworkConnectable> _children;
-        private TECElectricalMaterial _connectionType;
+        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
         private IOType _ioType;
 
         public ObservableCollection<INetworkConnectable> Children
@@ -30,17 +30,23 @@ namespace EstimatingLibrary
                 raisePropertyChanged("PossibleIO");
             }
         }
-        public TECElectricalMaterial ConnectionType
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
-            get { return _connectionType; }
+            get { return _connectionTypes; }
             set
             {
-                var old = ConnectionType;
-                var originalCost = this.CostBatch;
-                _connectionType = value;
-                notifyCombinedChanged(Change.Edit, "ConnectionType", this, value, old);
-                notifyCostChanged(CostBatch - originalCost);
-
+                if (ConnectionTypes != null)
+                {
+                    ConnectionTypes.CollectionChanged -= (sender, args) =>
+                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
+                }
+                var old = ConnectionTypes;
+                _connectionTypes = value; if (ConnectionTypes != null)
+                {
+                    ConnectionTypes.CollectionChanged += (sender, args) =>
+                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
+                }
+                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
             }
         }
         public IOType IOType
@@ -144,7 +150,23 @@ namespace EstimatingLibrary
                 }
             }
         }
-
+        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (TECElectricalMaterial type in e.NewItems)
+                {
+                    notifyCombinedChanged(Change.Add, propertyName, this, type);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECElectricalMaterial type in e.OldItems)
+                {
+                    notifyCombinedChanged(Change.Remove, propertyName, this, type);
+                }
+            }
+        }
         #endregion
 
         #region Methods
@@ -166,7 +188,7 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
             saveList.Add(this.ConnectionType, "ConnectionType");
-            saveList.AddRange(this.ChildrenControllers, "ChildrenControllers");
+            saveList.AddRange(this.Children, "Children");
             return saveList;
         }
         protected override SaveableMap relatedObjects()

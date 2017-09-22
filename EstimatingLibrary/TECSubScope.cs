@@ -15,7 +15,7 @@ namespace EstimatingLibrary
         #region Properties
         private ObservableCollection<ITECConnectable> _devices;
         private ObservableCollection<TECPoint> _points;
-        private TECSubScopeConnection _connection { get; set; }
+        private TECConnection _connection { get; set; }
 
         public ObservableCollection<ITECConnectable> Devices
         {
@@ -47,7 +47,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
-        public TECSubScopeConnection Connection
+        public TECConnection Connection
         {
             get { return _connection; }
             set
@@ -190,6 +190,37 @@ namespace EstimatingLibrary
             TECSubScope outScope = new TECSubScope(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
+        }
+        
+        public bool CanAddPoint(TECPoint point)
+        {
+            if(Points.Count == 0)
+            {
+                return true;
+            }
+            else if(TECIO.NetworkIO.Contains(point.Type) && Points.Count > 0)
+            {
+                return false;
+            }
+            else if (TECIO.PointIO.Contains(point.Type))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void AddPoint(TECPoint point)
+        {
+            if (CanAddPoint(point))
+            {
+                Points.Add(point);
+            }
+        }
+        public void RemovePoint(TECPoint point)
+        {
+            Points.Remove(point);
         }
 
         private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
