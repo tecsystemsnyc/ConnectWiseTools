@@ -118,7 +118,6 @@ namespace EstimateBuilder.MVVM
         public ReviewVM ReviewVM { get; set; }
         public ProposalVM ProposalVM { get; set; }
         public ElectricalVM ElectricalVM { get; set; }
-        public NetworkVM NetworkVM { get; set; }
         #endregion
 
         #region Command Properties
@@ -199,10 +198,6 @@ namespace EstimateBuilder.MVVM
             MenuVM.TemplatesHidden = TemplatesHidden;
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
         }
-        private void setupNetworkVM(TECBid bid)
-        {
-            NetworkVM = new NetworkVM(bid);
-        }
         #endregion
 
         #region Commands Methods
@@ -229,7 +224,6 @@ namespace EstimateBuilder.MVVM
             setupProposalVM(new TECBid());
             setupElectricalVM(new TECBid());
             setupMenuVM();
-            setupNetworkVM(new TECBid());
         }
         override protected void refresh()
         {
@@ -240,7 +234,6 @@ namespace EstimateBuilder.MVVM
                 //ReviewVM.Refresh(Bid);
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
-                NetworkVM.Refresh(Bid);
             }
         }
         #endregion

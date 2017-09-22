@@ -75,10 +75,6 @@
                     <views:ScopeEditorView
                         ViewModel="{Binding ScopeEditorVM}"/>
                 </TabItem>
-                <TabItem Header="Network">
-                    <views:NetworkView
-                        ViewModel="{Binding NetworkVM}"/>
-                </TabItem>
                 <TabItem Header="Review">
                     <controls:ReviewTabControl
                         ViewModel="{Binding}"/>
