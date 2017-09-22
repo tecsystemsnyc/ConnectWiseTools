@@ -424,14 +424,14 @@ namespace TECUserControlLibrary.Utilities
 
                 foreach (IOType type in ioTypes)
                 {
-                    stringTypes.Add(TECIO.convertTypeToString(type));
+                    stringTypes.Add(type.ToString());
                 }
 
                 return stringTypes;
             }
             else if (value is IOType)
             {
-                return (TECIO.convertTypeToString((IOType)value));
+                return (value.ToString());
             }
             else
             {
@@ -441,9 +441,9 @@ namespace TECUserControlLibrary.Utilities
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string)
+            if (value is string str)
             {
-                return (TECIO.convertStringToType((string)value));
+                return (UtilitiesMethods.StringToEnum<IOType>(str));
             }
             else
             {
