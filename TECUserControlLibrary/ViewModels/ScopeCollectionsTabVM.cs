@@ -1044,8 +1044,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void AddIOToControllerExecute()
         {
-            var newIO = new TECIO();
-            newIO.Type = ControllerIOType;
+            var newIO = new TECIO(ControllerIOType);
             newIO.Quantity = ControllerIOQTY;
             ControllerIO.Add(newIO);
         }
