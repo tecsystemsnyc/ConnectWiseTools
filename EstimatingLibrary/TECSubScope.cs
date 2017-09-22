@@ -75,9 +75,15 @@ namespace EstimatingLibrary
         
         public bool IsTypical { get; private set; }
 
+        //Derived
         public IOCollection AvailableNetworkIO
         {
             get { return getNetworkIO(); }
+        }
+
+        public bool IsNetwork
+        {
+            get { return isNetwork(); }
         }
         
         #endregion //Properties
@@ -114,22 +120,7 @@ namespace EstimatingLibrary
         #region Events
         public event Action<int> PointChanged;
         #endregion
-
-        #region Num Point Types
-        //private int _ai;
-        //private int _ao;
-        //private int _bi;
-        //private int _bo;
-        //private int _serial;
-
-        //public int AI { get { return _ai; } }
-        //public int AO { get { return _ao; } }
-        //public int BI { get { return _bi; } }
-        //public int BO { get { return _bo; } }
-        //public int Serial { get { return _serial; } }
-
-        #endregion //Num Point Types
-
+        
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -239,6 +230,16 @@ namespace EstimatingLibrary
         {
             Points.CollectionChanged += PointsCollectionChanged;
             Devices.CollectionChanged += Devices_CollectionChanged;
+        }
+        private bool isNetwork()
+        {
+            if(Points.Count != 1)
+            {
+                return false;
+            } else
+            {
+                return TECIO.NetworkIO.Contains(Points[0].Type);
+            }
         }
 
         public void LinkConnection(TECSubScopeConnection connection)

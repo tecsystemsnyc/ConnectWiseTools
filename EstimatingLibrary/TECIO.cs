@@ -27,7 +27,7 @@ namespace EstimatingLibrary
     {
         public static List<IOType> PointIO = new List<IOType>()
         {
-            IOType.AI, IOType.AO, IOType.DI, IOType.DO, IOType.BACnetMSTP, IOType.BACnetIP, IOType.LonWorks, IOType.ModbusTCP, IOType.ModbusRTU
+            IOType.AI, IOType.AO, IOType.DI, IOType.DO
         };
         public static List<IOType> NetworkIO = new List<IOType>()
         {
