@@ -166,7 +166,12 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
             saveList.Add(this.ConnectionType, "ConnectionType");
-            saveList.AddRange(this.ChildrenControllers, "ChildrenControllers");
+            List<TECObject> objects = new List<TECObject>();
+            foreach(INetworkConnectable netconnect in Children)
+            {
+                objects.Add(netconnect as TECObject);
+            }
+            saveList.AddRange(objects, "ChildrenControllers");
             return saveList;
         }
         protected override SaveableMap relatedObjects()
@@ -174,7 +179,12 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.relatedObjects());
             saveList.Add(this.ConnectionType, "ConnectionTypes");
-            saveList.AddRange(this.ChildrenControllers, "ChildrenControllers");
+            List<TECObject> objects = new List<TECObject>();
+            foreach (INetworkConnectable netconnect in Children)
+            {
+                objects.Add(netconnect as TECObject);
+            }
+            saveList.AddRange(objects, "ChildrenControllers");
             return saveList;
         }
         #endregion 

@@ -15,7 +15,8 @@ namespace EstimatingLibrary
         #region Properties
         private ObservableCollection<ITECConnectable> _devices;
         private ObservableCollection<TECPoint> _points;
-        private TECSubScopeConnection _connection { get; set; }
+        private TECSubScopeConnection _subScopeConnection;
+        private TECNetworkConnection _networkConnection;
 
         public ObservableCollection<ITECConnectable> Devices
         {
@@ -47,13 +48,22 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
-        public TECSubScopeConnection Connection
+        public TECSubScopeConnection SubScopeConnection
         {
-            get { return _connection; }
+            get { return _subScopeConnection; }
             set
             {
-                _connection = value;
-                raisePropertyChanged("Connection");
+                _subScopeConnection = value;
+                raisePropertyChanged("SubScopeConnection");
+            }
+        }
+        public TECNetworkConnection NetworkConnection
+        {
+            get { return _networkConnection; }
+            set
+            {
+                _networkConnection = value;
+                raisePropertyChanged("NetworkConnections");
             }
         }
         
@@ -239,11 +249,6 @@ namespace EstimatingLibrary
         {
             Points.CollectionChanged += PointsCollectionChanged;
             Devices.CollectionChanged += Devices_CollectionChanged;
-        }
-
-        public void LinkConnection(TECSubScopeConnection connection)
-        {
-            _connection = connection;
         }
 
         override protected CostBatch getCosts()

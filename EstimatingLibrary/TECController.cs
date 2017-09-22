@@ -241,12 +241,37 @@ namespace EstimatingLibrary
         {
             if (CanConnectSubScope(subScope))
             {
+                foreach(TECIO io in subScope.AvailableNetworkIO.ListIO())
+                {
+                    bool foundConnectionWithIO = false;
+                    foreach (TECConnection childConnection in ChildrenConnections)
+                    {
+                        if (childConnection is TECNetworkConnection netConnect)
+                        {
+                            if (netConnect.IOType == io.Type && netConnect.IsTypical == subScope.IsTypical)
+                            {
+                                netConnect.ParentController = this;
+                                netConnect.Children.Add(subScope);
+                                netConnect.ConnectionType = 
+                                subScope.NetworkConnections.Add(netConnect);
+                                foundConnectionWithIO = true;
+                            }
+                        }
+                    }
+                    if (!foundConnectionWithIO)
+                    {
+                        TECNetworkConnection netConnect = new TECNetworkConnection(subScope.IsTypical || this.IsTypical);
+                        netConnect.Children.Add(subScope);
+                        subScope.NetworkConnections.Add(netConnect);
+                    }
+                }
+
                 bool connectionIsTypical = (this.IsTypical || subScope.IsTypical);
                 TECSubScopeConnection connection = new TECSubScopeConnection(connectionIsTypical);
                 connection.ParentController = this;
                 connection.SubScope = subScope;
                 addChildConnection(connection);
-                subScope.Connection = connection;
+                subScope.SubScopeConnection = connection;
                 return connection;
             }
             else
