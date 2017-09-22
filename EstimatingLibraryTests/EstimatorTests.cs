@@ -1284,8 +1284,11 @@ namespace Tests
 
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
-            
-            var connection = controller1.AddController(controller2, connectionType);
+
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP, 
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(controller2);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = conduitType;
@@ -1316,7 +1319,10 @@ namespace Tests
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
 
-            var connection = controller1.AddController(controller2, connectionType);
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(controller2);
             connection.Length = 50;
 
             controller1.RemoveController(controller2);
@@ -1351,7 +1357,10 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddController(instanceController, connectionType);
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(instanceController);
             connection.Length = 50;
 
             Assert.AreEqual(50, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
@@ -1384,7 +1393,10 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddController(instanceController, connectionType);
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(instanceController);
             connection.Length = 50;
 
             controller1.RemoveController(instanceController);
