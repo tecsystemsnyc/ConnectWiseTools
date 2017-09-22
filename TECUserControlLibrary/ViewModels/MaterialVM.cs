@@ -201,16 +201,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("IOModuleCost");
             }
         }
-        private int _ioModuleIOPerModule;
-        public int IOModuleIOPerModule
-        {
-            get { return _ioModuleIOPerModule; }
-            set
-            {
-                _ioModuleIOPerModule = value;
-                RaisePropertyChanged("IOModuleIOPerModule");
-            }
-        }
         private TECManufacturer _ioModuleManufacturer;
         public TECManufacturer IOModuleManufacturer
         {
@@ -354,14 +344,12 @@ namespace TECUserControlLibrary.ViewModels
             var ioModule = new TECIOModule(IOModuleManufacturer);
             ioModule.Name = IOModuleName;
             ioModule.Price = IOModuleCost;
-            ioModule.IOPerModule = IOModuleIOPerModule;
             ioModule.Description = IOModuleDescription;
 
             Templates.Catalogs.IOModules.Add(ioModule);
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;
-            IOModuleIOPerModule = 1;
             IOModuleManufacturer = null;
         }
         private bool canAddIOModuleExecute()
@@ -406,7 +394,6 @@ namespace TECUserControlLibrary.ViewModels
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;
-            IOModuleIOPerModule = 1;
         }
 
         private void setupVMs()
