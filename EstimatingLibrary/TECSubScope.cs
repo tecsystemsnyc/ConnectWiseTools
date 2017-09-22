@@ -15,7 +15,7 @@ namespace EstimatingLibrary
         #region Properties
         private ObservableCollection<ITECConnectable> _devices;
         private ObservableCollection<TECPoint> _points;
-        private TECConnection _connection { get; set; }
+        private TECConnection _connection;
 
         public ObservableCollection<ITECConnectable> Devices
         {
@@ -271,11 +271,6 @@ namespace EstimatingLibrary
             {
                 return TECIO.NetworkIO.Contains(Points[0].Type);
             }
-        }
-
-        public void LinkConnection(TECSubScopeConnection connection)
-        {
-            _connection = connection;
         }
 
         override protected CostBatch getCosts()
