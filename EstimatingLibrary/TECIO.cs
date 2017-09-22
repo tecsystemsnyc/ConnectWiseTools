@@ -113,6 +113,27 @@ namespace EstimatingLibrary
         {
             return ioDictionary.ContainsKey(type);
         }
+        public bool Contains(TECIO io)
+        {
+            if(ioDictionary.ContainsKey(io.Type))
+            {
+                TECIO collectionIO = ioDictionary[io.Type];
+                return (collectionIO.Quantity >= io.Quantity);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool Contains(IEnumerable<TECIO> io)
+        {
+            IOCollection ioCollection = new IOCollection(io);
+            foreach (TECIO ioToCheck in ioCollection.ListIO())
+            {
+                if (!this.Contains(ioToCheck)) return false;
+            }
+            return true;
+        }
         public void AddIO(IOType type)
         {
             if (ioDictionary.ContainsKey(type))

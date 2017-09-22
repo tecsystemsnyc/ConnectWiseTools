@@ -188,16 +188,7 @@ namespace EstimatingLibrary
                     ssIO.AddIO(point.Type);
                 }
             }
-            bool canConnect = true;
-            try
-            {
-                IOCollection remainingIO = getAvailableIO() - ssIO;
-            }
-            catch (ObjectDisposedException)
-            {
-                canConnect = false;
-            }
-            return canConnect;
+            return getAvailableIO().Contains(ssIO.ListIO());
         }
         public TECNetworkConnection AddController(TECController controller, TECNetworkConnection connection)
         {
