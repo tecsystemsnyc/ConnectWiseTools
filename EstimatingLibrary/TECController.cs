@@ -102,7 +102,9 @@ namespace EstimatingLibrary
             IsGlobal = isGlobal;
             _type = type;
             _childrenConnections = new ObservableCollection<TECConnection>();
+            _ioModules = new ObservableCollection<TECIOModule>();
             ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
+            IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
         }
 
         public TECController(TECControllerType type, bool isTypical, bool isGlobal = true) : this(Guid.NewGuid(), type, isTypical, isGlobal) { }
