@@ -82,11 +82,11 @@ namespace EstimatingUtilitiesLibrary
 
                                 foreach (TECPoint point in subScope.Points)
                                 {
-                                    if (point.Type == PointTypes.AI) { AI++; }
-                                    else if (point.Type == PointTypes.BI) { BI++; }
-                                    else if (point.Type == PointTypes.AO) { AO++; }
-                                    else if (point.Type == PointTypes.BO) { BO++; }
-                                    else if (point.Type == PointTypes.Serial) { serial++; }
+                                    if (point.Type == IOType.AI) { AI += point.Quantity; }
+                                    else if (point.Type == IOType.DI) { BI += point.Quantity; }
+                                    else if (point.Type == IOType.AO) { AO += point.Quantity; }
+                                    else if (point.Type == IOType.DO) { BO += point.Quantity; }
+                                    else if (TECIO.NetworkIO.Contains(point.Type) ){ serial += point.Quantity; }
                                 }
                                 row.Add(AI.ToString());
                                 row.Add(BI.ToString());

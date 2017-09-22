@@ -1267,8 +1267,7 @@ namespace Tests
             var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             var controllerType = new TECControllerType(manufacturer);
             controllerType.IO.Add(io);
 
@@ -1304,8 +1303,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
@@ -1338,8 +1336,7 @@ namespace Tests
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
@@ -1372,8 +1369,7 @@ namespace Tests
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
@@ -1764,7 +1760,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
             var point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 1;
 
             subScope.Points.Add(point);

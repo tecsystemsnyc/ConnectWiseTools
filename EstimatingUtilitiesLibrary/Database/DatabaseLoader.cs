@@ -522,17 +522,16 @@ namespace EstimatingUtilitiesLibrary.Database
             else
             { return null; }
         }
-        static private TECElectricalMaterial getConnectionTypeInNetworkConnection(Guid netConnectionID)
+        static private ObservableCollection<TECElectricalMaterial> getConnectionTypesInNetworkConnection(Guid netConnectionID)
         {
+            ObservableCollection<TECElectricalMaterial> outTypes = new ObservableCollection<TECElectricalMaterial>();
             DataTable connectionTypeDT = getChildIDs(new NetworkConnectionConnectionTypeTable(), netConnectionID);
-            if (connectionTypeDT.Rows.Count > 0)
+            foreach(DataRow row in connectionTypeDT.Rows)
             {
-                return (getConnectionTypeFromRow(connectionTypeDT.Rows[0]));
+                outTypes.Add(getPlaceholderConnectionTypeFromRow(connectionTypeDT.Rows[0],
+                    NetworkConnectionConnectionTypeTable.ConnectionID.Name));
             }
-            else
-            {
-                return null;
-            }
+            return outTypes;
         }
         static private ObservableCollection<TECLabeled> getNotes()
         {
@@ -637,18 +636,17 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return outScope;
         }
-        static private ObservableCollection<TECController> getControllersInNetworkConnection(Guid connectionID, bool isTypical)
+        static private ObservableCollection<INetworkConnectable> getChildrenInNetworkConnection(Guid connectionID, bool isTypical)
         {
-            var outScope = new ObservableCollection<TECController>();
+            var outScope = new ObservableCollection<INetworkConnectable>();
 
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName + " where " + ControllerTable.ID.Name + " in ";
-            command += "(select " + NetworkConnectionControllerTable.ControllerID.Name + " from " + NetworkConnectionControllerTable.TableName + " where ";
-            command += NetworkConnectionControllerTable.ConnectionID.Name + " = '" + connectionID;
-            command += "')";
-
-            DataTable scopeDT = SQLiteDB.GetDataFromCommand(command);
-            foreach (DataRow row in scopeDT.Rows)
+            DataTable dt = getChildObjects(new NetworkConnectionChildrenTable(), new ControllerTable(), connectionID);
+            foreach (DataRow row in dt.Rows)
             { outScope.Add(getControllerPlaceholderFromRow(row, isTypical)); }
+
+            dt = getChildObjects(new NetworkConnectionChildrenTable(), new SubScopeTable(), connectionID);
+            foreach (DataRow row in dt.Rows)
+            { outScope.Add(getPlaceholderSubScopeFromRow(row, isTypical)); }
 
             return outScope;
         }
@@ -1097,7 +1095,7 @@ namespace EstimatingUtilitiesLibrary.Database
             connection.IOType = UtilitiesMethods.StringToEnum<IOType>(row[NetworkConnectionTable.IOType.Name].ToString());
             connection.ConduitType = getConduitTypeInConnection(connection.Guid);
             connection.Children = getChildrenInNetworkConnection(connection.Guid, isTypical);
-            connection.ConnectionType = getConnectionTypesInNetworkConnection(connection.Guid);
+            connection.ConnectionTypes = getConnectionTypesInNetworkConnection(connection.Guid);
             return connection;
         }
         #endregion
@@ -1208,9 +1206,9 @@ namespace EstimatingUtilitiesLibrary.Database
             TECControllerType type = new TECControllerType(guid, new TECManufacturer());
             return type;
         }
-        private static TECElectricalMaterial getPlaceholderDeviceConnectionTypeFromRow(DataRow row)
+        private static TECElectricalMaterial getPlaceholderConnectionTypeFromRow(DataRow row, string keyField)
         {
-            Guid guid = new Guid(row[DeviceConnectionTypeTable.TypeID.Name].ToString());
+            Guid guid = new Guid(row[keyField].ToString());
             TECElectricalMaterial connectionType = new TECElectricalMaterial(guid);
             return connectionType;
         }
@@ -1229,6 +1227,11 @@ namespace EstimatingUtilitiesLibrary.Database
             TECDevice device = new TECDevice(guid, connectionTypes, manufacturer);
             device.Description = "placeholder";
             return device;
+        }
+        private static TECSubScope getPlaceholderSubScopeFromRow(DataRow row, bool isTypical)
+        {
+            Guid guid = new Guid(row[SubScopeTable.ID.Name].ToString());
+            return new TECSubScope(guid, isTypical);
         }
 
         private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict)
