@@ -1899,32 +1899,32 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class NetworkConnectionControllerTable : TableBase
+    internal class NetworkConnectionChildrenTable : TableBase
     {
         public static string TableName = "NetworkConnectionController";
         public static Type ConnectionType = typeof(TECNetworkConnection);
-        public static Type ControllerType = typeof(TECController);
+        public static Type ChildType = typeof(INetworkConnectable);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
-        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("ChildID", "TEXT", ChildType.GetProperty("Guid"));
        
         private List<TableField> primaryKeys = new List<TableField>() {
             ConnectionID,
-            ControllerID
+            ChildID
             };
         private List<Type> types = new List<Type>()
         {
             ConnectionType,
-            ControllerType
+            ChildType
         };
         private List<TableField> fields = new List<TableField>()
         {
             ConnectionID,
-            ControllerID
+            ChildID
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ChildrenControllers"
+            "Children"
         };
 
         public override string NameString { get { return TableName; } }
@@ -2338,7 +2338,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
-            new NetworkConnectionControllerTable(),
+            new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
             };
     }
@@ -2395,6 +2395,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new SystemMiscTable(),
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
+            new NetworkConnectionChildrenTable(),
+            new NetworkConnectionConnectionTypeTable(),
             new ScopeBranchHierarchyTable()
         };
     }
@@ -2462,7 +2464,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new SystemMiscTable(),
             new TypicalInstanceTable(),
             new SubScopeConnectionChildrenTable(),
-            new NetworkConnectionControllerTable(),
+            new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
             new BidMiscTable()
         };

@@ -1267,8 +1267,7 @@ namespace Tests
             var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             var controllerType = new TECControllerType(manufacturer);
             controllerType.IO.Add(io);
 
@@ -1285,8 +1284,11 @@ namespace Tests
 
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
-            
-            var connection = controller1.AddController(controller2, connectionType);
+
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP, 
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(controller2);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = conduitType;
@@ -1304,8 +1306,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
@@ -1318,7 +1319,10 @@ namespace Tests
             bid.Controllers.Add(controller1);
             bid.Controllers.Add(controller2);
 
-            var connection = controller1.AddController(controller2, connectionType);
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(controller2);
             connection.Length = 50;
 
             controller1.RemoveController(controller2);
@@ -1338,8 +1342,7 @@ namespace Tests
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
@@ -1354,7 +1357,10 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddController(instanceController, connectionType);
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(instanceController);
             connection.Length = 50;
 
             Assert.AreEqual(50, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
@@ -1372,8 +1378,7 @@ namespace Tests
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO();
-            io.Type = IOType.BACnetIP;
+            TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
             var connectionType = new TECElectricalMaterial();
@@ -1388,7 +1393,10 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddController(instanceController, connectionType);
+            var connection = controller1.AddNetworkConnection(false, IOType.BACnetIP,
+                new List<TECElectricalMaterial>() { connectionType });
+
+            connection.AddNetworkConnectable(instanceController);
             connection.Length = 50;
 
             controller1.RemoveController(instanceController);
@@ -1764,7 +1772,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
             var point = new TECPoint(true);
-            point.Type = PointTypes.AI;
+            point.Type = IOType.AI;
             point.Quantity = 1;
 
             subScope.Points.Add(point);
