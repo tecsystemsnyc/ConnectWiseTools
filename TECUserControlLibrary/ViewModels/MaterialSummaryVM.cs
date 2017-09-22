@@ -222,16 +222,9 @@ namespace TECUserControlLibrary.ViewModels
             if (!connection.IsTypical)
             {
                 CostBatch deltas = new CostBatch();
-                if (connection is TECNetworkConnection netConnect)
+                foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
                 {
-                    deltas += (WireSummaryVM.AddRun(netConnect.ConnectionType, netConnect.Length));
-                }
-                else if (connection is TECSubScopeConnection ssConnect)
-                {
-                    foreach (TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
-                    {
-                        deltas += (WireSummaryVM.AddRun(connectionType, ssConnect.Length));
-                    }
+                    deltas += (WireSummaryVM.AddRun(connectionType, connection.Length));
                 }
                 if (connection.ConduitType != null)
                 {
@@ -322,16 +315,9 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeConnection(TECConnection connection)
         {
             CostBatch deltas = new CostBatch();
-            if (connection is TECNetworkConnection netConnect)
+            foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
             {
-                deltas += (WireSummaryVM.RemoveRun(netConnect.ConnectionType, netConnect.Length));
-            }
-            else if (connection is TECSubScopeConnection ssConnect)
-            {
-                foreach(TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
-                {
-                    deltas += (WireSummaryVM.RemoveRun(connectionType, ssConnect.Length));
-                }
+                deltas += (WireSummaryVM.RemoveRun(connectionType, connection.Length));
             }
             if (connection.ConduitType != null)
             {
@@ -456,16 +442,9 @@ namespace TECUserControlLibrary.ViewModels
                     if (args.PropertyName == "Length")
                     {
                         double deltaLength = (double)args.Value - (double)args.OldValue;
-                        if (connection is TECNetworkConnection netConnect)
+                        foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
                         {
-                            updateTotals(WireSummaryVM.AddLength(netConnect.ConnectionType, deltaLength));
-                        }
-                        else if (connection is TECSubScopeConnection ssConnect)
-                        {
-                            foreach(TECElectricalMaterial connectionType in ssConnect.ConnectionTypes)
-                            {
-                                updateTotals(WireSummaryVM.AddLength(connectionType, deltaLength));
-                            }
+                            updateTotals(WireSummaryVM.AddLength(connectionType, deltaLength));
                         }
                     }
                     else if (args.PropertyName == "ConduitLength")
