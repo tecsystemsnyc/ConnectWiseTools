@@ -696,9 +696,6 @@ namespace Tests
             TECController parentController = new TECController(type, false);
             bid.Controllers.Add(parentController);
 
-            TECController childController = new TECController(type, false);
-            bid.Controllers.Add(childController);
-
             TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
 
             resetRaised();
@@ -706,7 +703,6 @@ namespace Tests
             //Act
             TECNetworkConnection netConnect = parentController.AddNetworkConnection(false,
                 new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
-            netConnect.AddINetworkConnectable(childController);
 
             //Assert
             checkRaised(true, true, false);
@@ -719,28 +715,50 @@ namespace Tests
         {
             //Arrange
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController parentController = new TECController(type, false);
-            bid.Controllers.Add(parentController);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
             TECController childController = new TECController(type, false);
             typical.Controllers.Add(childController);
+            TECSystem instance = typical.AddInstance(bid);
+            TECController instanceController = instance.Controllers[0];
 
             TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
             
             resetRaised();
 
             //Act
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false,
+            TECNetworkConnection netConnect = instanceController.AddNetworkConnection(false,
                 new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
-            netConnect.AddINetworkConnectable(childController);
 
             //Assert
             checkRaised(true, true, false);
-            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", parentController, netConnect);
+            checkInstanceChangedArgs(Change.Add, "ChildrenConnections", instanceController, netConnect);
             checkCostDelta(netConnect.CostBatch);
+        }
+
+        [TestMethod]
+        public void AddNetworkConnectionToTypicalController()
+        {
+            //Arrange
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+
+            TECController typicalController = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            typical.Controllers.Add(typicalController);
+
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
+
+            resetRaised();
+
+            //Act
+            TECNetworkConnection netConnect = typicalController.AddNetworkConnection(true,
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+
+            //Assert
+            checkRaised(false, false, false);
+            checkChangedArgs(Change.Add, "ChildrenConnections", typicalController, netConnect);
         }
 
         [TestMethod]
