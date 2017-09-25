@@ -1314,7 +1314,7 @@ namespace EstimatingUtilitiesLibrary.Database
     }
     internal class IOModuleIOTable : TableBase
     {
-        public static string TableName = "ModuleIOIO";
+        public static string TableName = "IOModuleIO";
         public static Type ObjectType = typeof(TECIOModule);
         public static Type ReferenceType = typeof(TECIO);
 
@@ -2359,6 +2359,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new PanelTable(),
             new MiscTable(),
             new SubScopeConnectionTable(),
+            new NetworkConnectionTable(),
             new IOModuleTable(),
             new IOTable(),
             new ScopeBranchTable(),
