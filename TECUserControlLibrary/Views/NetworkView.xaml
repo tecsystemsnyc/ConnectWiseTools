@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.NetworkView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1200">
+    <!--Main Grid-->
+    <Grid Background="{DynamicResource SectionBackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <!--Item Selection Grid-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--Controller Selection Grid-->
+            <Border BorderBrush="Black" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Controllers" FontSize="20"/>
+                    <!--Controller DataGrid-->
+                    <DataGrid Grid.Row="1">
+                    </DataGrid>
+
+                </Grid>
+            </Border>
+            
+
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
+
+            <!--Network Devices Selection Grid-->
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Network Devices" FontSize="20"/>
+                    <!--Network Devices DataGrid-->
+                    <DataGrid Grid.Row="1">
+                    </DataGrid>
+
+                </Grid>
+            </Border>
+            
+        </Grid>
+        
+        <!--Item Grid-->
+        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!--Item Info Grid-->
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Name:" FontSize="15"/>
+                        <Label Grid.Column="1" FontSize="15" Content="'Controller Name'"/>
+                        
+                    </Grid>
+                </Border>
+                
+                <!--Network Connections DataGrid-->
+                <DataGrid Grid.Row="1">
+                    
+                </DataGrid>
+
+                <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch"/>
+                
+                <!--SubScope Connections DataGrid-->
+                <DataGrid Grid.Row="3">
+                    
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
