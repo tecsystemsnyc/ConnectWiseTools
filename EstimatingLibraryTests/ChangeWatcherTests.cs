@@ -1748,29 +1748,25 @@ namespace Tests
         }
 
         [TestMethod]
-        public void RemoveBidNetworkConnectionConnectionType()
+        public void RemoveConnectionTypeFromNetworkConnection()
         {
             //Arrange
-            var original = bid.Catalogs.ConnectionTypes[0];
-            var edited = new TECElectricalMaterial();
-            bid.Catalogs.ConnectionTypes.Add(edited);
-
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
-            bid.Controllers.Add(child);
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
             TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { original }, IOType.BACnetIP);
-            connection.AddINetworkConnectable(child);
+                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+            connection.Length = 10;
 
             resetRaised();
 
             //Act
-            connection.ConnectionTypes.Remove(original);
+            connection.ConnectionTypes.Remove(connectionType);
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
-            checkChangedArgs(Change.Remove, "ConnectionTypes", connection, edited, original);
+            checkInstanceChangedArgs(Change.Remove, "ConnectionTypes", connection, connectionType);
+            checkCostDelta(-connectionType.GetCosts(10));
         }
         #endregion
 
@@ -1857,32 +1853,6 @@ namespace Tests
             //Assert
             checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
             checkChangedArgs(Change.Edit, "Length", connection, edited, original);
-        }
-
-        [TestMethod]
-        public void EditBidNetworkConnectionConnectionType()
-        {
-            //Arrange
-            var original = bid.Catalogs.ConnectionTypes[0];
-            var edited = new TECElectricalMaterial();
-            bid.Catalogs.ConnectionTypes.Add(edited);
-
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.Controllers.Add(controller);
-            bid.Controllers.Add(child);
-            TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { original }, IOType.BACnetIP);
-            connection.AddINetworkConnectable(child);
-
-            resetRaised();
-
-            //Act
-            connection.ConnectionTypes.Add(edited);
-
-            //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
-            checkChangedArgs(Change.Add, "ConnectionTypes", connection, edited, original);
         }
 
         [TestMethod]
