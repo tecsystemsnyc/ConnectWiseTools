@@ -48,6 +48,15 @@ namespace EstimatingLibrary.Utilities
             }
             return newCostBatch;
         }
+        public static CostBatch operator -(CostBatch costBatch)
+        {
+            CostBatch negativeCostBatch = new CostBatch();
+            foreach(KeyValuePair<CostType, CostObject> type in costBatch.typeDictionary)
+            {
+                negativeCostBatch.typeDictionary[type.Key] = (-type.Value);
+            }
+            return negativeCostBatch;
+        }
         public static CostBatch operator -(CostBatch left, CostBatch right)
         {
             CostBatch newCostBatch = new CostBatch();
@@ -140,13 +149,17 @@ namespace EstimatingLibrary.Utilities
             {
                 Cost = cost.Cost;
                 Labor = cost.Labor;
-            } 
+            }
 
             public static CostObject operator +(CostObject left, CostObject right)
             {
                 return new CostObject((left.Cost + right.Cost), (left.Labor + right.Labor));
             }
 
+            public static CostObject operator -(CostObject costObject)
+            {
+                return new CostObject(-costObject.Cost, -costObject.Labor);
+            }
             public static CostObject operator -(CostObject left, CostObject right)
             {
                 return new CostObject((left.Cost - right.Cost), (left.Labor - right.Labor));

@@ -874,29 +874,26 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddBidNetworkConnectionConnectionType()
+        public void AddConnectionTypeToNetworkConnection()
         {
             //Arrange
-            var original = bid.Catalogs.ConnectionTypes[0];
-            var edited = new TECElectricalMaterial();
-            bid.Catalogs.ConnectionTypes.Add(edited);
-
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.Controllers.Add(controller);
-            bid.Controllers.Add(child);
-            TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { original }, IOType.BACnetIP);
-            connection.AddINetworkConnectable(child);
+            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECElectricalMaterial>(), IOType.BACnetIP);
+            TECElectricalMaterial connectionType = bid.Catalogs.ConnectionTypes[0];
+            connection.Length = 10;
+
+            CostBatch connectionTypeCosts = connectionType.GetCosts(10);
 
             resetRaised();
 
             //Act
-            connection.ConnectionTypes.Add(edited);
+            connection.ConnectionTypes.Add(connectionType);
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
-            checkChangedArgs(Change.Add, "ConnectionTypes", connection, edited, original);
+            checkChangedArgs(Change.Add, "ConnectionTypes", connection, connectionType);
+            checkCostDelta(connectionTypeCosts);
         }
         #endregion
 
