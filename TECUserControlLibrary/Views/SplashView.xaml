@@ -32,8 +32,8 @@
 
         <!--Default Directory Setting-->
         <TextBlock Text="Existing Bid:" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <TextBlock Text="{Binding DefaultDirectory}" Grid.Column="1" ToolTip="{Binding DefaultDirectory}" VerticalAlignment="Center"/>
-        <Button Grid.Column="2" Margin="5" Command="{Binding ResetDefaultDirectoryCommand}">
+        <TextBlock Text="{Binding BidPath}" Grid.Column="1" ToolTip="{Binding BidPath}" VerticalAlignment="Center"/>
+        <Button Grid.Column="2" Margin="5" Command="{Binding GetBidPathCommand}">
             <TextBlock VerticalAlignment="Center">Select</TextBlock>
         </Button>
 
@@ -42,13 +42,13 @@
                    Grid.Column="0" Grid.Row="1"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"/>
-        <TextBlock Text="{Binding TemplatesLoadPath}"
-                   ToolTip="{Binding TemplatesLoadPath}"
+        <TextBlock Text="{Binding TemplatesPath}"
+                   ToolTip="{Binding TemplatesPath}"
                    Grid.Column="1" Grid.Row="1"
                    VerticalAlignment="Center"/>
         <Button Grid.Column="2" Grid.Row="1"
                 Margin="5"
-                Command="{Binding ReloadTemplatesCommand}">
+                Command="{Binding GetTemplatesPathCommand}">
             <TextBlock VerticalAlignment="Center">Change Path</TextBlock>
         </Button>
 
@@ -56,10 +56,10 @@
         <TextBlock Grid.Row="3" Text="Start:"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"/>
-        <Button Grid.Column="2" Grid.Row="3" Margin="5" Command="{Binding ResetDefaultDirectoryCommand}">
+        <Button Grid.Column="2" Grid.Row="3" Margin="5" Command="{Binding CreateNewCommand}">
             <TextBlock VerticalAlignment="Center">New</TextBlock>
         </Button>
-        <Button Grid.Column="1" Grid.Row="3" Margin="5" Command="{Binding ResetDefaultDirectoryCommand}">
+        <Button Grid.Column="1" Grid.Row="3" Margin="5" Command="{Binding OpenExistingCommand}">
             <TextBlock VerticalAlignment="Center">Open</TextBlock>
         </Button>
 

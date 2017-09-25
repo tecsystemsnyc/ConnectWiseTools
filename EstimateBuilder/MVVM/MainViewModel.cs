@@ -26,11 +26,12 @@ namespace EstimateBuilder.MVVM
         public MainViewModel() : base()
         {
             SplashVM = new SplashVM();
+            SplashVM.Started += startUp;
             CurrentVM = SplashVM;
             
         }
 
-        private void startUp(string templatesPath, string bidPath = "")
+        private void startUp(string bidPath, string templatesPath)
         {
             if(bidPath == "")
             {
@@ -39,14 +40,14 @@ namespace EstimateBuilder.MVVM
             {
                 isNew = false;
             }
-            setupData();
 
             buildTitleString();
             setupCommands();
             setupExtensions();
+            setupData();
 
             workingFileParameters = UIHelpers.EstimateFileParameters;
-
+            CurrentVM = this;
         }
 
         #region Properties

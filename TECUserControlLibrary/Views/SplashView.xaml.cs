@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -20,6 +21,22 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class SplashView : UserControl
     {
+        /// <summary>
+        /// Gets or sets the ViewModel which is used
+        /// </summary>
+        public SplashVM ViewModel
+        {
+            get { return (SplashVM)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        /// <summary>
+        /// Identified the ViewModel dependency property
+        /// </summary>
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(SplashVM),
+              typeof(SplashView));
+
         public SplashView()
         {
             InitializeComponent();

@@ -40,6 +40,8 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand OpenExistingCommand { get; private set; }
         public ICommand CreateNewCommand { get; private set; }
 
+        public event Action<string, string> Started;
+
         public SplashVM()
         {
             GetBidPathCommand = new RelayCommand(getBidPathExecute);
@@ -63,7 +65,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void openExistingExecute()
         {
-            throw new NotImplementedException();
+            Started?.Invoke(BidPath, TemplatesPath);
         }
 
         private bool openExistingCanExecute()
@@ -80,7 +82,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void createNewExecute()
         {
-           
+            Started?.Invoke("", TemplatesPath);
         }
 
         private bool createNewCanExecute()

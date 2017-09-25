@@ -103,7 +103,7 @@
         </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SplashVM}">
-            <views:SplashView/>
+            <views:SplashView ViewModel="{Binding}"/>
         </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>
