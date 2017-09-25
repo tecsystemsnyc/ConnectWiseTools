@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface ITECConnectable
+    public interface IEndDevice
     {
         ObservableCollection<TECElectricalMaterial> ConnectionTypes { get; }
         Guid Guid { get; }

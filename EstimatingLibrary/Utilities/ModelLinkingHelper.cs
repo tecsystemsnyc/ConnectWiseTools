@@ -603,8 +603,8 @@ namespace EstimatingLibrary.Utilities
         
         private static void linkSubScopeToDevices(TECSubScope subScope, IEnumerable<TECDevice> devices, IEnumerable<TECValve> valves)
         {
-            ObservableCollection<ITECConnectable> replacements = new ObservableCollection<ITECConnectable>();
-            foreach (ITECConnectable item in subScope.Devices)
+            ObservableCollection<IEndDevice> replacements = new ObservableCollection<IEndDevice>();
+            foreach (IEndDevice item in subScope.Devices)
             {
                 bool found = false;
                 foreach (TECDevice catalogDevice in devices)

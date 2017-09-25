@@ -158,14 +158,18 @@ namespace EstimatingLibrary
             {
                 foreach (TECElectricalMaterial type in e.NewItems)
                 {
+                    CostBatch connectionTypeCost = type.GetCosts(this.Length);
                     notifyCombinedChanged(Change.Add, propertyName, this, type);
+                    notifyCostChanged(connectionTypeCost);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECElectricalMaterial type in e.OldItems)
                 {
+                    CostBatch connectionTypeCost = type.GetCosts(this.Length);
                     notifyCombinedChanged(Change.Remove, propertyName, this, type);
+                    notifyCostChanged(-connectionTypeCost);
                 }
             }
         }

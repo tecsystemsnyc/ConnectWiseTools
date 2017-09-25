@@ -144,7 +144,7 @@ namespace EstimatingLibrary
                 TECNetworkConnection netConnect = new TECNetworkConnection(isTypical);
                 netConnect.ConnectionTypes = new ObservableCollection<TECElectricalMaterial>(connectionTypes);
                 netConnect.IOType = ioType;
-                ChildrenConnections.Add(netConnect);
+                addChildConnection(netConnect);
                 return netConnect;
             }
             else
@@ -161,7 +161,7 @@ namespace EstimatingLibrary
                 {
                     connection.RemoveINetworkConnectable(child);
                 }
-                this.ChildrenConnections.Remove(connection);
+                removeChildConnection(connection);
             }
             else
             {
@@ -317,10 +317,6 @@ namespace EstimatingLibrary
                         notifyCostChanged(cost.CostBatch * -1);
                     }
                 }
-            }
-            if (sender == ChildrenConnections)
-            {
-                raisePropertyChanged("ChildNetworkConnections");
             }
         }
         #endregion

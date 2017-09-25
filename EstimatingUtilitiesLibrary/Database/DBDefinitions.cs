@@ -1536,7 +1536,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "SubScopeDevice";
         public static Type ObjectType = typeof(TECSubScope);
-        public static Type ReferenceType = typeof(ITECConnectable);
+        public static Type ReferenceType = typeof(IEndDevice);
 
         public static Type HelperType = typeof(HelperProperties);
 

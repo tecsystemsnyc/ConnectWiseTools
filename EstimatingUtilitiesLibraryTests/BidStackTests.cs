@@ -737,7 +737,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<ITECConnectable> actual = subScope.Devices;
+            ObservableCollection<IEndDevice> actual = subScope.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1545,7 +1545,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<ITECConnectable> actual = subscope.Devices;
+            ObservableCollection<IEndDevice> actual = subscope.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
