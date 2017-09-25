@@ -41,6 +41,7 @@ namespace EstimateBuilder.MVVM
             */
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<SplashVM>();
             SimpleIoc.Default.Register<ScopeEditorVM>();
             SimpleIoc.Default.Register<LaborVM>();
             SimpleIoc.Default.Register<ReviewVM>();
@@ -58,6 +59,20 @@ namespace EstimateBuilder.MVVM
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Splash property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public SplashVM Splash
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<SplashVM>();
             }
         }
 

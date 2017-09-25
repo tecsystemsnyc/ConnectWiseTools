@@ -31,7 +31,7 @@ namespace EstimatingUtilitiesLibrary
         private TECBid _bid;
         private TECEstimator _estimate;
 
-        public void CreateScopeWordDocument(TECBid bid, TECEstimator estimate, string path, bool isEstimate)
+        public void CreateScopeWordDocument(TECBid bid, TECEstimator estimate, string path)
         {
             _bid = bid;
             _estimate = estimate;

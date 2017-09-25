@@ -76,17 +76,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
-        protected string _programName;
-        protected string programName
-        {
-            get { return _programName; }
-            set
-            {
-                _programName = value;
-            }
-        }
-
+        
         public string TECLogo { get; set; }
 
         protected bool isNew;
@@ -146,71 +136,8 @@ namespace TECUserControlLibrary.ViewModels
         public StatusBarVM StatusBarVM { get; set; }
         public SettingsVM SettingsVM { get; set; }
         #endregion
-
-        #region File Parameters
-        protected FileDialogParameters BidFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
-                fileParams.DefaultExtension = "bdb";
-                return fileParams;
-            }
-        }
-        protected FileDialogParameters EstimateFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Estimate Database Files (*.edb)|*.edb" + "|All Files (*.*)|*.*";
-                fileParams.DefaultExtension = "edb";
-                return fileParams;
-            }
-        }
-        protected FileDialogParameters TemplatesFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Templates Database Files (*.tdb)|*.tdb" + "|All Files (*.*)|*.*";
-                fileParams.DefaultExtension = "tdb";
-                return fileParams;
-            }
-        }
-        protected FileDialogParameters DocumentFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Rich Text Files (*.rtf)|*.rtf";
-                fileParams.DefaultExtension = "rtf";
-                return fileParams;
-            }
-        }
-        protected FileDialogParameters WordDocumentFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Word Documents (*.docx)|*.docx";
-                fileParams.DefaultExtension = "docx";
-                return fileParams;
-            }
-        }
-        protected FileDialogParameters CSVFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Comma Separated Values Files (*.csv)|*.csv";
-                fileParams.DefaultExtension = "csv";
-                return fileParams;
-            }
-        }
-        #endregion
-
-        #region SettingsProperties
+        
+        #region Settings Properties
         abstract protected bool TemplatesHidden
         {
             get;
@@ -233,8 +160,6 @@ namespace TECUserControlLibrary.ViewModels
 
         public BuilderViewModel()
         {
-            setupCommands();
-            setupExtensions();
             getStartupFile();
 
             if (workingScopeManager == null)
@@ -287,7 +212,6 @@ namespace TECUserControlLibrary.ViewModels
             IsReady = true;
             UserCanInteract = true;
         }
-        abstract protected void buildTitleString();
 
         #region Setup
         virtual protected void setupExtensions()
@@ -296,7 +220,6 @@ namespace TECUserControlLibrary.ViewModels
             setupStatusBar();
             setupSettings();
         }
-
         virtual protected void setupCommands()
         {
             NewCommand = new RelayCommand(NewExecute);
@@ -331,7 +254,7 @@ namespace TECUserControlLibrary.ViewModels
         protected bool saveNew(bool async)
         {
             //User choose path
-            string path = getSavePath(workingFileParameters, defaultSaveFileName, ScopeDirectoryPath);
+            string path = UIHelpers.GetSavePath(workingFileParameters, defaultSaveFileName, defaultDirectory, ScopeDirectoryPath, isNew);
             if (path != null)
             {
                 saveFilePath = path;
@@ -387,7 +310,6 @@ namespace TECUserControlLibrary.ViewModels
                         isNew = false;
                         ResetStatus();
                     };
-
                     worker.RunWorkerAsync();
                     return false;
                 }
@@ -407,7 +329,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(path == null)
             {
-                path = getLoadPath(workingFileParameters, ScopeDirectoryPath);
+                path = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory, ScopeDirectoryPath);
             }
             if (path != null)
             {
@@ -514,55 +436,7 @@ namespace TECUserControlLibrary.ViewModels
             return outScope;
         }
         #endregion 
-
-        #region Get Path Methods
-        protected string getSavePath(FileDialogParameters fileParams, string defaultFileName, string initialDirectory = null)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (initialDirectory != null && !isNew)
-            {
-                saveFileDialog.InitialDirectory = initialDirectory;
-            }
-            else
-            {
-                saveFileDialog.InitialDirectory = defaultDirectory;
-            }
-            saveFileDialog.FileName = defaultFileName;
-            saveFileDialog.Filter = fileParams.Filter;
-            saveFileDialog.DefaultExt = fileParams.DefaultExtension;
-            saveFileDialog.AddExtension = true;
-
-            string savePath = null;
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                savePath = saveFileDialog.FileName;
-            }
-            return savePath;
-        }
-        protected string getLoadPath(FileDialogParameters fileParams, string initialDirectory = null)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (initialDirectory != null)
-            {
-                openFileDialog.InitialDirectory = initialDirectory;
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = defaultDirectory;
-            }
-            openFileDialog.Filter = fileParams.Filter;
-            openFileDialog.DefaultExt = fileParams.DefaultExtension;
-            openFileDialog.AddExtension = true;
-
-            string savePath = null;
-            if (openFileDialog.ShowDialog() == true)
-            {
-                savePath = openFileDialog.FileName;
-            }
-            return savePath;
-        }
-        #endregion
-
+        
         #region Commands
         protected abstract void NewExecute();
         protected void LoadExecute()
@@ -676,6 +550,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
+
         #region Drag-Drop
         public void DragOver(IDropInfo dropInfo)
         {
@@ -704,7 +579,6 @@ namespace TECUserControlLibrary.ViewModels
                 defaultDirectory = SettingsVM.DefaultDirectory;
             }
         }
-
         protected void TemplatesHiddenChanged()
         {
             SettingsVM.TemplatesHidden = TemplatesHidden;
@@ -719,7 +593,6 @@ namespace TECUserControlLibrary.ViewModels
                 MenuVM.TemplatesHidden = false;
             }
         }
-
         protected void TemplatesFilePathChanged()
         {
             SettingsVM.TemplatesLoadPath = TemplatesFilePath;

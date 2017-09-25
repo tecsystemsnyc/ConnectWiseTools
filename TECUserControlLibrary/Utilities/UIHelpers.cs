@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GongSolutions.Wpf.DragDrop;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -225,6 +226,118 @@ namespace TECUserControlLibrary.Utilities
                 ((dynamic)dropInfo.TargetCollection).Move(currentIndex, finalIndex);
             }
         }
+
+        #region File Parameters
+        public static FileDialogParameters BidFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
+                fileParams.DefaultExtension = "bdb";
+                return fileParams;
+            }
+        }
+        public static FileDialogParameters EstimateFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.Filter = "Estimate Database Files (*.edb)|*.edb" + "|All Files (*.*)|*.*";
+                fileParams.DefaultExtension = "edb";
+                return fileParams;
+            }
+        }
+        public static FileDialogParameters TemplatesFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.Filter = "Templates Database Files (*.tdb)|*.tdb" + "|All Files (*.*)|*.*";
+                fileParams.DefaultExtension = "tdb";
+                return fileParams;
+            }
+        }
+        public static FileDialogParameters DocumentFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.Filter = "Rich Text Files (*.rtf)|*.rtf";
+                fileParams.DefaultExtension = "rtf";
+                return fileParams;
+            }
+        }
+        public static FileDialogParameters WordDocumentFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.Filter = "Word Documents (*.docx)|*.docx";
+                fileParams.DefaultExtension = "docx";
+                return fileParams;
+            }
+        }
+        public static FileDialogParameters CSVFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.Filter = "Comma Separated Values Files (*.csv)|*.csv";
+                fileParams.DefaultExtension = "csv";
+                return fileParams;
+            }
+        }
+        #endregion
+
+        #region Get Path Methods
+        public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string defaultDirectory,
+            string initialDirectory = null, bool isNew = false)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (initialDirectory != null && !isNew)
+            {
+                saveFileDialog.InitialDirectory = initialDirectory;
+            }
+            else
+            {
+                saveFileDialog.InitialDirectory = defaultDirectory;
+            }
+            saveFileDialog.FileName = defaultFileName;
+            saveFileDialog.Filter = fileParams.Filter;
+            saveFileDialog.DefaultExt = fileParams.DefaultExtension;
+            saveFileDialog.AddExtension = true;
+
+            string savePath = null;
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                savePath = saveFileDialog.FileName;
+            }
+            return savePath;
+        }
+        public static string GetLoadPath(FileDialogParameters fileParams, string defaultDirectory, string initialDirectory = null)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (initialDirectory != null)
+            {
+                openFileDialog.InitialDirectory = initialDirectory;
+            }
+            else
+            {
+                openFileDialog.InitialDirectory = defaultDirectory;
+            }
+            openFileDialog.Filter = fileParams.Filter;
+            openFileDialog.DefaultExt = fileParams.DefaultExtension;
+            openFileDialog.AddExtension = true;
+
+            string savePath = null;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                savePath = openFileDialog.FileName;
+            }
+            return savePath;
+        }
+        #endregion
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };
@@ -239,4 +352,6 @@ namespace TECUserControlLibrary.Utilities
     public enum ElectricalMaterialIndex { Wire, Conduit, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
+
+
 }
