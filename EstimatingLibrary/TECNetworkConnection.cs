@@ -110,7 +110,10 @@ namespace EstimatingLibrary
         public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
         {
             _children = new ObservableCollection<INetworkConnectable>();
+            _connectionTypes = new ObservableCollection<TECElectricalMaterial>();
             Children.CollectionChanged += ChildrenControllers_CollectionChanged;
+            ConnectionTypes.CollectionChanged += (sender, args) =>
+                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
         public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
         public TECNetworkConnection(TECNetworkConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)

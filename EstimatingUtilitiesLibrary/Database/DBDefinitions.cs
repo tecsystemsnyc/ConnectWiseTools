@@ -1888,7 +1888,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ConnectionType"
+            "ConnectionTypes"
         };
 
         public override string NameString { get { return TableName; } }
