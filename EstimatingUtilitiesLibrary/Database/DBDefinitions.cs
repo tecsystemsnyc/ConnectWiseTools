@@ -1888,7 +1888,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ConnectionType"
+            "ConnectionTypes"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1899,7 +1899,7 @@ namespace EstimatingUtilitiesLibrary.Database
     }
     internal class NetworkConnectionChildrenTable : TableBase
     {
-        public static string TableName = "NetworkConnectionController";
+        public static string TableName = "NetworkConnectionChildren";
         public static Type ConnectionType = typeof(TECNetworkConnection);
         public static Type ChildType = typeof(INetworkConnectable);
 

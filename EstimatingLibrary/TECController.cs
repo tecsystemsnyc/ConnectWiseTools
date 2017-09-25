@@ -260,7 +260,10 @@ namespace EstimatingLibrary
                 }
                 ChildrenConnections.Remove(connectToRemove);
             }
-            ParentConnection.RemoveINetworkConnectable(this);
+            if(ParentConnection != null)
+            {
+                ParentConnection.RemoveINetworkConnectable(this);
+            }
         }
 
         public TECController GetParentController()

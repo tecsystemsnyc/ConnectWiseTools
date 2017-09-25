@@ -355,7 +355,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("6776a30b-0325-42ad-8aa3-3c065b4bb908");
             values.Add("Child Point");
             values.Add("1");
-            values.Add("BO");
+            values.Add("DO");
             addDataToTable(new PointTable(), values);
         }
         private static void addToTagTable()

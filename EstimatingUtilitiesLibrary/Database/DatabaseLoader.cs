@@ -304,14 +304,14 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECLabeled> getTagsInScope(Guid scopeID)
         {
             ObservableCollection<TECLabeled> tags = new ObservableCollection<TECLabeled>();
-            DataTable tagsDT = getChildObjects(new ScopeTagTable(), new TagTable(), scopeID);
+            DataTable tagsDT = getChildIDs(new ScopeTagTable(), scopeID);
             foreach (DataRow row in tagsDT.Rows)
-            { tags.Add(getPlaceholderTagFromRow(row)); }
+            { tags.Add(getPlaceholderTagFromRow(row, ScopeTagTable.TagID.Name)); }
             return tags;
         }
         static private ObservableCollection<TECCost> getAssociatedCostsInScope(Guid scopeID)
         {
-            DataTable DT = getChildObjects(new ScopeAssociatedCostTable(), new AssociatedCostTable(), scopeID);
+            DataTable DT = getChildIDs(new ScopeAssociatedCostTable(), scopeID, ScopeAssociatedCostTable.Quantity.Name);
             var associatedCosts = new ObservableCollection<TECCost>();
             foreach (DataRow row in DT.Rows)
             {
@@ -504,7 +504,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECElectricalMaterial> getConnectionTypesInDevice(Guid deviceID)
         {
             ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
-            DataTable connectionTypeTable = getChildObjects(new DeviceConnectionTypeTable(), new ConnectionTypeTable(), deviceID);
+            DataTable connectionTypeTable = getChildIDs(new DeviceConnectionTypeTable(), deviceID, DeviceConnectionTypeTable.Quantity.Name);
             foreach (DataRow row in connectionTypeTable.Rows)
             {
                 var connectionTypeToAdd = new TECElectricalMaterial(new Guid(row[DeviceConnectionTypeTable.TypeID.Name].ToString()));
@@ -516,7 +516,7 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         static private TECElectricalMaterial getConduitTypeInConnection(Guid connectionID)
         {
-            DataTable conduitTypeTable = getChildIDs(new ConnectionConduitTypeTable(), connectionID);
+            DataTable conduitTypeTable = getChildObjects(new ConnectionConduitTypeTable(), new ConduitTypeTable(), connectionID);
             if (conduitTypeTable.Rows.Count > 0)
             { return (getConduitTypeFromRow(conduitTypeTable.Rows[0])); }
             else
@@ -528,8 +528,8 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable connectionTypeDT = getChildIDs(new NetworkConnectionConnectionTypeTable(), netConnectionID);
             foreach(DataRow row in connectionTypeDT.Rows)
             {
-                outTypes.Add(getPlaceholderConnectionTypeFromRow(connectionTypeDT.Rows[0],
-                    NetworkConnectionConnectionTypeTable.ConnectionID.Name));
+                outTypes.Add(getPlaceholderConnectionTypeFromRow(row,
+                    NetworkConnectionConnectionTypeTable.TypeID.Name));
             }
             return outTypes;
         }
@@ -824,7 +824,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECMisc> getMiscInBid(Guid guid)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            DataTable miscDT = getChildIDs(new BidMiscTable(), guid);
+            DataTable miscDT = getChildObjects(new BidMiscTable(), new MiscTable(), guid);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row, false));
@@ -1161,7 +1161,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()), isTypical);
             return controller;
         }
-        private static TECLabeled getPlaceholderTagFromRow(DataRow row)
+        private static TECLabeled getPlaceholderTagFromRow(DataRow row, string keyString)
         {
             Guid guid = new Guid(row[ScopeTagTable.TagID.Name].ToString());
             TECLabeled tag = new TECLabeled(guid);
@@ -1310,14 +1310,20 @@ namespace EstimatingUtilitiesLibrary.Database
                 orderString);
             return SQLiteDB.GetDataFromCommand(command);
         }
-        private static DataTable getChildIDs(TableBase relationTable, Guid parentID)
+        private static DataTable getChildIDs(TableBase relationTable, Guid parentID, string quantityField = "")
         {
+
             if (relationTable.PrimaryKeys.Count != 2)
             {
                 throw new Exception("Relation table must have primary keys for each object");
             }
+            string fieldString = relationTable.PrimaryKeys[1].Name;
+            if(quantityField != "")
+            {
+                fieldString += ", " + quantityField;
+            }
             string command = string.Format("select {0} from {1} where {2} = '{3}'",
-                relationTable.PrimaryKeys[1].Name, relationTable.NameString,
+                fieldString, relationTable.NameString,
                 relationTable.PrimaryKeys[0].Name, parentID.ToString());
             return SQLiteDB.GetDataFromCommand(command);
         }

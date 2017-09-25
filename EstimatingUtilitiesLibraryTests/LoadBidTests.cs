@@ -1594,7 +1594,7 @@ namespace Tests
             string expectedName = "Test IO Module";
             string expectedDescription = "Test IO Module Description";
             double expectedCost = 2233;
-            double expectedIOPerModule = 10;
+            double expectedIOCount = 1;
 
             Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
 
@@ -1611,7 +1611,7 @@ namespace Tests
             Assert.AreEqual(expectedName, actualModule.Name);
             Assert.AreEqual(expectedDescription, actualModule.Description);
             Assert.AreEqual(expectedCost, actualModule.Price);
-            Assert.AreEqual(expectedIOPerModule, actualModule.IO.Count);
+            Assert.AreEqual(expectedIOCount, actualModule.IO.Count);
             Assert.AreEqual(manufacturerGuid, actualModule.Manufacturer.Guid);
 
         }
