@@ -474,9 +474,9 @@ namespace EstimatingUtilitiesLibrary.Database
             { subScope.Add(getSubScopeFromRow(row, isTypical)); }
             return subScope;
         }
-        static private ObservableCollection<ITECConnectable> getDevicesInSubScope(Guid subScopeID)
+        static private ObservableCollection<IEndDevice> getDevicesInSubScope(Guid subScopeID)
         {
-            ObservableCollection<ITECConnectable> devices = new ObservableCollection<ITECConnectable>();
+            ObservableCollection<IEndDevice> devices = new ObservableCollection<IEndDevice>();
 
             string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
                 SubScopeDeviceTable.DeviceID.Name, SubScopeDeviceTable.TableName,

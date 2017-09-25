@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECValve: TECHardware, ITECConnectable
+    public class TECValve: TECHardware, IEndDevice
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;

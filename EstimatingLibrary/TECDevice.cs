@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECHardware, IDragDropable, ITECConnectable
+    public class TECDevice : TECHardware, IDragDropable, IEndDevice
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;

@@ -13,11 +13,11 @@ namespace EstimatingLibrary
     public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, INetworkConnectable
     {
         #region Properties
-        private ObservableCollection<ITECConnectable> _devices;
+        private ObservableCollection<IEndDevice> _devices;
         private ObservableCollection<TECPoint> _points;
         private TECConnection _connection;
 
-        public ObservableCollection<ITECConnectable> Devices
+        public ObservableCollection<IEndDevice> Devices
         {
             get { return _devices; }
             set
@@ -110,7 +110,7 @@ namespace EstimatingLibrary
         public TECSubScope(Guid guid, bool isTypical) : base(guid)
         {
             IsTypical = isTypical;
-            _devices = new ObservableCollection<ITECConnectable>();
+            _devices = new ObservableCollection<IEndDevice>();
             _points = new ObservableCollection<TECPoint>();
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
@@ -123,7 +123,7 @@ namespace EstimatingLibrary
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
-            foreach (ITECConnectable device in sourceSubScope.Devices)
+            foreach (IEndDevice device in sourceSubScope.Devices)
             { _devices.Add(device); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
@@ -172,7 +172,7 @@ namespace EstimatingLibrary
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 CostBatch costs = new CostBatch();
-                foreach (ITECConnectable item in e.NewItems)
+                foreach (IEndDevice item in e.NewItems)
                 {
                     notifyCombinedChanged(Change.Add, "Devices", this, item);
                     if(item is INotifyCostChanged costly)
@@ -320,7 +320,7 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.saveObjects());
             List<TECObject> deviceList = new List<TECObject>();
-            foreach (ITECConnectable item in this.Devices)
+            foreach (IEndDevice item in this.Devices)
             {
                 deviceList.Add(item as TECObject);
             }
@@ -333,7 +333,7 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.relatedObjects());
             List<TECObject> deviceList = new List<TECObject>();
-            foreach (ITECConnectable item in this.Devices)
+            foreach (IEndDevice item in this.Devices)
             {
                 deviceList.Add(item as TECObject);
             }

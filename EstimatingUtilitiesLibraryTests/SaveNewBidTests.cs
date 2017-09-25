@@ -46,7 +46,7 @@ namespace Tests
         static TECEquipment actualEquipment;
         static TECSubScope actualSubScope;
         static TECDevice actualDevice;
-        static ObservableCollection<ITECConnectable> actualDevices;
+        static ObservableCollection<IEndDevice> actualDevices;
         static TECManufacturer actualManufacturer;
         static TECPoint actualPoint;
         static TECScopeBranch actualBranch;
@@ -473,7 +473,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             int actualQuantity = 0;
-            foreach (ITECConnectable device in actualDevices)
+            foreach (IEndDevice device in actualDevices)
             {
                 if (device.Guid == actualDevice.Guid)
                 {
@@ -481,7 +481,7 @@ namespace Tests
                 }
             }
             int expectedQuantity = 0;
-            foreach (ITECConnectable device in expectedSubScope.Devices)
+            foreach (IEndDevice device in expectedSubScope.Devices)
             {
                 if (device.Guid == expectedDevice.Guid)
                 {

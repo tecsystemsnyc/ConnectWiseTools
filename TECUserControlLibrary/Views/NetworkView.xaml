@@ -87,9 +87,37 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
-                        <Label Content="Name:" FontSize="15"/>
-                        <Label Grid.Column="1" FontSize="15" Content="'Controller Name'"/>
+                        <Label FontSize="15" FontWeight="Bold" Content="Item Info"/>
                         
+                        <Label Grid.Column="1" FontSize="15" Content="Name:"/>
+                        <Label Grid.Column="2" FontSize="15" Content="'Controller Name'"/>
+                        <Label Grid.Column="3" FontSize="15" Content="Type:"/>
+                        <Label Grid.Column="4" FontSize="15" Content="'Controller Type'"/>
+
+                        <Label Grid.Column="1" Grid.Row="1" FontSize="15" Content="Parent Controller:"/>
+                        <Label Grid.Column="2" Grid.Row="1" FontSize="15" Content="'Parent Name'"/>
+                        <Label Grid.Column="3" Grid.Row="1" FontSize="15" Content="Parent Type:"/>
+                        <Label Grid.Column="4" Grid.Row="1" FontSize="15" Content="'Parent Type'"/>
+                        <Button Grid.Column="5" Grid.Row="1" Margin="5" Content="View Parent Details"/>
+
+
+
+                        <Label Grid.Row="2" FontSize="15" FontWeight="Bold" Content="Connection Info"/>
+
+                        <Label Grid.Column="1" Grid.Row="2" FontSize="15" Content="Run Length:"/>
+                        <Label Grid.Column="2" Grid.Row="2" FontSize="15" Content="123.45"/>
+                        <Label Grid.Column="3" Grid.Row="2" FontSize="15" Content="Conduit Length:"/>
+                        <Label Grid.Column="4" Grid.Row="2" FontSize="15" Content="543.21"/>
+
+                        <Label Grid.Column="3" Grid.Row="3" FontSize="15" Content="Conduit Type:"/>
+                        <Label Grid.Column="4" Grid.Row="3" FontSize="15" Content="'Conduit Type'"/>
+
+                        <Label Grid.Column="1" Grid.Row="4" FontSize="15" Content="Wire Types:"/>
+                        <DataGrid Grid.Column="2" Grid.Row="4">
+                            
+                        </DataGrid>
+                        <Label Grid.Column="3" Grid.Row="4" FontSize="15" Content="IO Types:"/>
+                        <DataGrid Grid.Column="4" Grid.Row="4"/>
                     </Grid>
                 </Border>
                 
