@@ -286,6 +286,16 @@ namespace EstimatingLibrary
                 bool raiseEvents = false;
                 foreach (object item in e.NewItems)
                 {
+                    if (item != null)
+                    {
+                        if (item is TECSystem sys)
+                        {
+                            costs += sys.CostBatch;
+                            pointNum += sys.PointNumber;
+                            raiseEvents = true;
+                        }
+                        notifyTECChanged(Change.Add, propertyName, this, item);
+                    }
                 }
                 if (raiseEvents)
                 {

@@ -71,7 +71,6 @@ namespace Tests
                 Assert.AreEqual(system.Controllers.Count, instance.Controllers.Count);
                 Assert.AreEqual(system.Panels.Count, instance.Panels.Count);
             }
-
         }
 
         [TestMethod]
