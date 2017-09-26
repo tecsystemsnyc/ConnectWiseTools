@@ -112,6 +112,7 @@
     <Compile Include="ViewModels\HardwareSummaryVM.cs" />
     <Compile Include="ViewModels\LengthSummaryVM.cs" />
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
+    <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
     </Compile>

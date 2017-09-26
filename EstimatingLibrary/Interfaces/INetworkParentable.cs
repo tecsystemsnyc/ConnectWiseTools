@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface INetworkParentable
+    public interface INetworkParentable
     {
+        string Name { get; }
     }
 }
