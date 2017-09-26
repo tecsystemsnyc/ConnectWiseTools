@@ -45,6 +45,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Constructors
         public BuilderViewModel(string splashTitle, string splashSubtitle, bool isEstimate)
         {
+            setupStatusBar();
             getStartupFile();
             isNew = workingScopeManager == null;
             if (isNew)
@@ -146,8 +147,9 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
             string path = UIHelpers.FileDrop(dropInfo);
+            throw new NotImplementedException();
+
         }
 
         protected abstract TECScopeManager NewScopeManager();
@@ -166,7 +168,6 @@ namespace TECUserControlLibrary.ViewModels
         protected virtual void setupExtensions(MenuType menuType)
         {
             setupMenu(menuType);
-            setupStatusBar();
             setupSettings();
         }
         protected virtual void setupCommands()
@@ -245,52 +246,41 @@ namespace TECUserControlLibrary.ViewModels
                 return saveNew(async);
             }
         }
-        protected bool load(bool async, string path = null)
+        protected bool load(bool async, string path)
         {
-            if (path == null)
-            {
-                path = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory, ScopeDirectoryPath);
-            }
-            if (path != null)
-            {
-                saveFilePath = path;
-                ScopeDirectoryPath = Path.GetDirectoryName(path);
-                SetBusyStatus("Loading File: " + path, false);
-                workingDB = new DatabaseManager(path);
+            saveFilePath = path;
+            ScopeDirectoryPath = Path.GetDirectoryName(path);
+            SetBusyStatus("Loading File: " + path, false);
+            workingDB = new DatabaseManager(path);
 
-                if (async)
+            if (async)
+            {
+                workingDB.LoadComplete += (scope) =>
                 {
-                    workingDB.LoadComplete += (scope) =>
+                    if (scope != null)
                     {
-                        if (scope != null)
-                        {
-                            workingScopeManager = scope;
-                        }
-                        if (isNew)
-                        {
-                            loadedStackLength = deltaStack.CleansedStack().Count;
-                        }
-                        else
-                        {
-                            loadedStackLength = 0;
-                        }
-                        isNew = false;
-                        ResetStatus();
-                    };
-                    workingDB.AsyncLoad();
-                    return false;
-                }
-                else
-                {
-                    workingScopeManager = workingDB.Load();
+                        workingScopeManager = scope;
+                    }
+                    if (isNew)
+                    {
+                        loadedStackLength = deltaStack.CleansedStack().Count;
+                    }
+                    else
+                    {
+                        loadedStackLength = 0;
+                    }
                     isNew = false;
                     ResetStatus();
-                    return (workingScopeManager != null);
-                }
+                };
+                workingDB.AsyncLoad();
+                return false;
             }
             else
             {
-                return false;
+                workingScopeManager = workingDB.Load();
+                isNew = false;
+                ResetStatus();
+                return (workingScopeManager != null);
             }
         }
         
@@ -307,10 +297,6 @@ namespace TECUserControlLibrary.ViewModels
                 TemplatesVisibility = Visibility.Visible;
                 MenuVM.TemplatesHidden = false;
             }
-        }
-        protected void TemplatesFilePathChanged()
-        {
-            SettingsVM.TemplatesLoadPath = TemplatesFilePath;
         }
 
         private void getLogo()
@@ -364,16 +350,16 @@ namespace TECUserControlLibrary.ViewModels
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-
+            string path = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory, ScopeDirectoryPath);
             if (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength)
             {
                 string message = "Would you like to save your changes before loading?";
-                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                MessageBoxResult result = MessageBox.Show(message, "Save", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.Yes)
                 {
                     if (saveDelta(false))
                     {
-                        load(true);
+                        load(true, path);
                     }
                     else
                     {
@@ -382,7 +368,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (result == MessageBoxResult.No)
                 {
-                    load(true);
+                    load(true, path);
                 }
                 else
                 {
@@ -391,7 +377,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                load(true);
+                load(true, path);
             }
         }
         private void saveExecute()

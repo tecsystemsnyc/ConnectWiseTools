@@ -42,6 +42,8 @@ namespace EstimateBuilder.MVVM
         }
 
         #endregion
+        #region Events
+        #endregion
         #region Properties
         public ScopeEditorVM ScopeEditorVM { get; set; }
         public LaborVM LaborVM { get; set; }
@@ -133,8 +135,6 @@ namespace EstimateBuilder.MVVM
                     Properties.Settings.Default.TemplatesFilePath = value;
                     Properties.Settings.Default.Save();
                     SettingsVM.TemplatesLoadPath = TemplatesFilePath;
-
-                    TemplatesFilePathChanged();
                 }
             }
         }
@@ -206,17 +206,17 @@ namespace EstimateBuilder.MVVM
         protected override void setupExtensions(MenuType menuType)
         {
             base.setupExtensions(menuType);
-            setupScopeEditorVM(new TECBid(), new TECTemplates());
-            setupLaborVM(new TECBid(), new TECTemplates());
-            setupReviewVM(new TECBid());
-            setupProposalVM(new TECBid());
-            setupElectricalVM(new TECBid());
+            setupScopeEditorVM(Bid, Templates);
+            setupLaborVM(Bid, Templates);
+            setupReviewVM(Bid);
+            setupProposalVM(Bid);
+            setupElectricalVM(Bid);
         }
         protected override void setupCommands()
         {
             base.setupCommands();
             DocumentCommand = new RelayCommand(documentExecute);
-            CSVExportCommand = new RelayCommand(cSVExportExecute);
+            CSVExportCommand = new RelayCommand(csvExportExecute);
             BudgetCommand = new RelayCommand(budgetExecute);
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
             ExcelExportCommand = new RelayCommand(excelExportExecute);
@@ -275,7 +275,6 @@ namespace EstimateBuilder.MVVM
         }
         protected override void startUp(string bidPath, string templatesPath)
         {
-            templatesDB = new DatabaseManager(templatesPath);
             if (bidPath == "")
             {
                 isNew = true;
@@ -284,11 +283,11 @@ namespace EstimateBuilder.MVVM
             {
                 isNew = false;
             }
+            setupData(templatesPath, bidPath);
 
             buildTitleString();
             setupCommands();
             setupExtensions(MenuType.EB);
-            setupData();
 
             workingFileParameters = UIHelpers.EstimateFileParameters;
             CurrentVM = this;
@@ -328,6 +327,39 @@ namespace EstimateBuilder.MVVM
         {
             ElectricalVM = new ElectricalVM(bid);
         }
+        private void setupData(string templatesPath, string bidPath = "")
+        {
+            if (isNew)
+            {
+                Bid = new TECBid();
+            }
+            else
+            {
+                load(false, bidPath);
+            }
+            loadTemplates(TemplatesFilePath, false);
+        }
+        private void loadTemplates(string TemplatesFilePath, bool async = true)
+        {
+            SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
+            templatesDB = new DatabaseManager(TemplatesFilePath);
+            if (async)
+            {
+                templatesDB.LoadComplete += (scope) =>
+                {
+                    if (scope != null)
+                    {
+                        Templates = scope as TECTemplates;
+                    }
+                    ResetStatus();
+                };
+                templatesDB.AsyncLoad();
+            } else
+            {
+                Templates = templatesDB.Load() as TECTemplates;
+            }
+            
+        }
         private void toggleTemplatesExecute()
         {
             if (TemplatesHidden)
@@ -359,7 +391,7 @@ namespace EstimateBuilder.MVVM
                 }
             }
         }
-        private void cSVExportExecute()
+        private void csvExportExecute()
         {
             //User choose path
             string path = UIHelpers.GetSavePath(UIHelpers.CSVFileParameters, defaultSaveFileName, defaultDirectory, ScopeDirectoryPath, isNew);
@@ -482,81 +514,6 @@ namespace EstimateBuilder.MVVM
                 {
                     Bid.Parameters.UpdateConstants(Templates.Parameters[0]);
                 }
-            }
-        }
-        private void loadTemplates(string TemplatesFilePath)
-        {
-            var loadedTemplates = new TECTemplates();
-            if (TemplatesFilePath != null)
-            {
-                SetBusyStatus("Loading templates from file: " + TemplatesFilePath, false);
-                DatabaseManager manager = new DatabaseManager(TemplatesFilePath);
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) =>
-                {
-                    if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-                    {
-                        loadedTemplates = manager.Load() as TECTemplates;
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Could not open file " + TemplatesFilePath + " File is open elsewhere.");
-                    }
-                    DebugHandler.LogDebugMessage("Finished loading templates");
-                };
-                worker.RunWorkerCompleted += (s, e) =>
-                {
-                    Templates = loadedTemplates;
-                    ResetStatus();
-                };
-                worker.RunWorkerAsync();
-            }
-        }
-        private void setupData()
-        {
-            if (isNew)
-            {
-                Bid = new TECBid();
-            }
-            
-            if (TemplatesFilePath == "" || !File.Exists(TemplatesFilePath))
-            {
-                TemplatesFilePath = null;
-                string message = "No templates file loaded. Would you like to load templates?";
-                MessageBoxResult result = MessageBox.Show(message, "Load Templates?", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    //User choose path
-                    string path = UIHelpers.GetLoadPath(UIHelpers.TemplatesFileParameters, defaultDirectory);
-                    if (path != null)
-                    {
-                        TemplatesFilePath = path;
-                    }
-                    else
-                    {
-                        ResetStatus();
-                    }
-                }
-                else
-                {
-                    templatesLoaded = false;
-                    TemplatesFilePath = null;
-                    ResetStatus();
-                    return;
-                }
-            }
-
-            if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
-            {
-                loadTemplates(TemplatesFilePath);
-                DebugHandler.LogDebugMessage("Finished loading templates.");
-                templatesLoaded = true;
-            }
-            else
-            {
-                DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
-                templatesLoaded = false;
-                ResetStatus();
             }
         }
         private void settingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)

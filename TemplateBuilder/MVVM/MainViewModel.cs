@@ -100,7 +100,7 @@ namespace TemplateBuilder.MVVM
                 {
                     Properties.Settings.Default.TemplatesFilePath = value;
                     Properties.Settings.Default.Save();
-                    TemplatesFilePathChanged();
+                    SettingsVM.TemplatesLoadPath = TemplatesFilePath;
                 }
             }
         }
