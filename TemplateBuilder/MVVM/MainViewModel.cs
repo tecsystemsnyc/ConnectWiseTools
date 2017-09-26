@@ -1,23 +1,10 @@
 ﻿using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
-using Microsoft.Win32;
-using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using TemplateBuilder.Model;
-using TECUserControlLibrary;
-using System.Collections;
-using System.Drawing.Imaging;
-using System.Diagnostics;
-using System.Reflection;
-using System.Deployment.Application;
-using System.ComponentModel;
-using System.Windows.Controls;
 using DebugLibrary;
 using TECUserControlLibrary.ViewModels;
 using TECUserControlLibrary.Utilities;
@@ -31,12 +18,13 @@ namespace TemplateBuilder.MVVM
         public MainViewModel() : base()
         {
             getTemplates();
+
             buildTitleString();
             setupCommands();
-            setupVMs();
-            DGTabIndex = TemplateGridIndex.Systems;
+            setupExtensions();
 
-            ResetStatus();
+            DGTabIndex = TemplateGridIndex.Systems;
+            
         }
 
         #region Resources Paths
@@ -242,7 +230,7 @@ namespace TemplateBuilder.MVVM
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    TemplatesFilePath = getLoadPath(TemplatesFileParameters);
+                    TemplatesFilePath = getLoadPath(UIHelpers.TemplatesFileParameters);
 
                     if (TemplatesFilePath != null)
                     {
@@ -259,9 +247,11 @@ namespace TemplateBuilder.MVVM
                     }
                 }
             }
+            ResetStatus();
         }
-        private void setupVMs()
+        protected override void setupExtensions()
         {
+            base.setupExtensions();
             setupScopeCollecion();
             setupEditTab();
             setupScopeDataGrid();
@@ -391,21 +381,6 @@ namespace TemplateBuilder.MVVM
             return !(TemplatesFilePath == "");
         }
         #endregion //Commands Methods
-        #region Drag Drop
-        public void DragOver(IDropInfo dropInfo)
-        {
-            UIHelpers.StandardDragOver(dropInfo);
-        }
-        public void Drop(IDropInfo dropInfo)
-        {
-            bool newDevice = false;
-            if(DGTabIndex == TemplateGridIndex.Devices)
-            {
-                newDevice = true;
-            }
-            UIHelpers.StandardDrop(dropInfo, Templates, newDevice);
-        }
-        #endregion
         #region Helper Methods
         private void setVisibility(TemplateGridIndex gridIndex)
         {

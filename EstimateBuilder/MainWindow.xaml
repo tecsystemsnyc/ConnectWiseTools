@@ -8,6 +8,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:localMVVM="clr-namespace:EstimateBuilder.MVVM"
+        xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
         
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
@@ -48,50 +50,62 @@
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
-        <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}">
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type localMVVM:MainViewModel}">
+
+
+        <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
+            <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
 
-        <Grid x:Name="LayoutRoot">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
+            <Grid x:Name="LayoutRoot">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="150"/>
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
 
-            <Image Source="{Binding TECLogo}"
+                <Image Source="{Binding TECLogo}"
                    Grid.Column="2"
                    Grid.RowSpan="2"/>
 
-            <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
-                <TabItem Header="Scope Editor">
-                    <views:ScopeEditorView
+                <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
+                    <TabItem Header="Scope Editor">
+                        <views:ScopeEditorView
                         ViewModel="{Binding ScopeEditorVM}"/>
-                </TabItem>
-                <TabItem Header="Review">
-                    <controls:ReviewTabControl
+                    </TabItem>
+                    <TabItem Header="Review">
+                        <controls:ReviewTabControl
                         ViewModel="{Binding}"/>
-                </TabItem>
-                <TabItem Header="Proposal">
-                    <views:ProposalView
+                    </TabItem>
+                    <TabItem Header="Proposal">
+                        <views:ProposalView
                         ViewModel="{Binding ProposalVM}"/>
-                </TabItem>
-                <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
-                    <views:SettingsView
+                    </TabItem>
+                    <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
+                        <views:SettingsView
                         ViewModel="{Binding SettingsVM}"/>
-                </TabItem>
-            </TabControl>
-            <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+                    </TabItem>
+                </TabControl>
+                <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
                                            Grid.Row="3" Grid.ColumnSpan="3"
                                            dd:DragDrop.IsDropTarget="True"
                                            dd:DragDrop.DropHandler="{Binding}"/>
-        </Grid>
-    </DockPanel>
+            </Grid>
+        </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SplashVM}">
+            <views:SplashView ViewModel="{Binding}"/>
+        </DataTemplate>
+        </ContentControl.Resources>
+    </ContentControl>
+
 </Window>

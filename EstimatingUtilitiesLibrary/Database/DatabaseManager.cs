@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,9 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         private string path;
 
+        public event Action<bool> SaveComplete;
+        public event Action<TECScopeManager> LoadComplete;
+
         public DatabaseManager(string databasePath)
         {
             path = databasePath;
@@ -22,12 +26,27 @@ namespace EstimatingUtilitiesLibrary.Database
             DatabaseUpdater.Update(path, updates);
             return true;
         }
+        public void AsyncSave(List<UpdateItem> updates)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (s, e) =>
+            {
+                Save(updates);
+            };
+            worker.RunWorkerCompleted += (s, e) =>
+            {
+                SaveComplete?.Invoke(true);
+            };
+            worker.RunWorkerAsync();
+        }
+
         public bool New(TECScopeManager scopeManager)
         {
-            if(scopeManager is TECBid)
+            if (scopeManager is TECBid)
             {
                 DatabaseGenerator.CreateBidDatabase(path);
-            } else if (scopeManager is TECTemplates)
+            }
+            else if (scopeManager is TECTemplates)
             {
                 DatabaseGenerator.CreateTemplateDatabase(path);
             }
@@ -39,6 +58,20 @@ namespace EstimatingUtilitiesLibrary.Database
             DatabaseUpdater.Update(path, newStack);
             return true;
         }
+        public void AsyncNew(TECScopeManager scopeManager)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (s, e) =>
+            {
+                New(scopeManager);
+            };
+            worker.RunWorkerCompleted += (s, e) =>
+            {
+                SaveComplete?.Invoke(true);
+            };
+            worker.RunWorkerAsync();
+        }
+
         public TECScopeManager Load()
         {
             DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
@@ -50,6 +83,25 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 return DatabaseLoader.Load(path);
             }
+        }
+        public void AsyncLoad()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (s, e) =>
+            {
+                e.Result = Load();
+            };
+            worker.RunWorkerCompleted += (s, e) =>
+            {
+                if(e.Result is TECScopeManager scopeManager)
+                {
+                    LoadComplete?.Invoke(scopeManager);
+                } else
+                {
+                    LoadComplete?.Invoke(null);
+                }
+            };
+            worker.RunWorkerAsync();
         }
     }
 }

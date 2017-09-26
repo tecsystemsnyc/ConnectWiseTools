@@ -112,6 +112,7 @@
     <Compile Include="ViewModels\HardwareSummaryVM.cs" />
     <Compile Include="ViewModels\LengthSummaryVM.cs" />
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
+    <Compile Include="ViewModels\SplashVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
@@ -231,6 +232,9 @@
       <DependentUpon>ScopeTreeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\UIHelpers.cs" />
+    <Compile Include="Views\SplashView.xaml.cs">
+      <DependentUpon>SplashView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StatusBarView.xaml.cs">
       <DependentUpon>StatusBarView.xaml</DependentUpon>
     </Compile>
@@ -262,7 +266,6 @@
     <Compile Include="ViewModels\ScopeCollectionsTabVM.cs" />
     <Compile Include="ViewModels\SystemsVM.cs" />
     <Compile Include="ViewModels\StatusBarVM.cs" />
-    <Compile Include="BaseVMs\BidEditorBase.cs" />
     <Compile Include="ViewModels\ProposalVM.cs" />
     <Compile Include="ViewModels\MenuVM.cs" />
     <Compile Include="ViewModels\ReviewVM.cs" />
@@ -469,6 +472,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ScopeTreeGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SplashView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
