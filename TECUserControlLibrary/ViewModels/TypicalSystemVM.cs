@@ -163,18 +163,29 @@ namespace TECUserControlLibrary.ViewModels
         #region Constructors
         public TypicalSystemVM(TECBid bid)
         {
-            if(bid is TECBid)
-            {
-                _bid = bid as TECBid;
-                _scopeSource = Bid.Systems;
-                InstanceVisibility = Visibility.Visible;
-            }
+            
+            _bid = bid;
+            _scopeSource = Bid.Systems;
+            InstanceVisibility = Visibility.Visible;
             AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
             DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControlledScopeCanExecute);
             _selectedSystem = null;
             DebugVisibility = Visibility.Collapsed;
             
             setupVMs(bid);
+        }
+        public TypicalSystemVM(TECTemplates templates)
+        {
+            
+            _templates = templates;
+            _scopeSource = new ObservableCollection<TECTypical>();
+            InstanceVisibility = Visibility.Visible;
+            AddControlledScopeCommand = new RelayCommand(addControlledScopeExecute, addControlledScopeCanExecute);
+            DeleteControlledScopeCommand = new RelayCommand(deleteControlledScopeExecute, deleteControlledScopeCanExecute);
+            _selectedSystem = null;
+            DebugVisibility = Visibility.Collapsed;
+
+            setupVMs(templates);
         }
 
         #endregion

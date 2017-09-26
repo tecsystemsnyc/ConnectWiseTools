@@ -73,8 +73,6 @@ namespace EstimateBuilder.MVVM
             {
                 _templates = value;
                 RaisePropertyChanged("Templates");
-                updateBidWithTemplates();
-                refresh();
             }
         }
         public TECEstimator Estimate
@@ -278,12 +276,14 @@ namespace EstimateBuilder.MVVM
             if (bidPath == "")
             {
                 isNew = true;
+                setupData(templatesPath);
             }
             else
             {
                 isNew = false;
+                setupData(templatesPath, bidPath);
+
             }
-            setupData(templatesPath, bidPath);
 
             buildTitleString();
             setupCommands();
@@ -338,6 +338,7 @@ namespace EstimateBuilder.MVVM
                 load(false, bidPath);
             }
             loadTemplates(TemplatesFilePath, false);
+            updateBidWithTemplates();
         }
         private void loadTemplates(string TemplatesFilePath, bool async = true)
         {
@@ -357,6 +358,7 @@ namespace EstimateBuilder.MVVM
             } else
             {
                 Templates = templatesDB.Load() as TECTemplates;
+                ResetStatus();
             }
             
         }
