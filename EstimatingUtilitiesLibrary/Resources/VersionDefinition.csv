@@ -112,7 +112,7 @@ TECController,ControllerID,Controller,ID
 TECController,Name,Controller,Name
 TECController,Description,Controller,Description
 TECController,Cost,NONE,NONE
-TECController,Type,Controller,Type
+TECController,Type,NONE,NONE
 TECMisc,MiscID,Misc,ID
 TECMisc,Name,Misc,Name
 TECMisc,Cost,Misc,Cost

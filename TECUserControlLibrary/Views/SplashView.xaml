@@ -35,46 +35,42 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <TextBlock FontSize="24">
-                Welcome to Estimate Builder. 
-            </TextBlock>
-            <TextBlock FontSize="12" Grid.Row="1">
-                Please select object templates and select an existing file or start a new bid.
-            </TextBlock>
+            <TextBlock FontSize="24" Text="{Binding TitleText}"/>
+            <TextBlock FontSize="12" Grid.Row="1" Text="{Binding SubtitleText}"/>
         </Grid>
-
-        <!--Default Directory Setting-->
-        <TextBlock Text="Bid:" 
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   Margin="5"
-                   Grid.Row="1"/>
-        <TextBlock Text="{Binding BidPath}" Margin="5"
-                   Grid.Column="1" ToolTip="{Binding BidPath}" 
-                   VerticalAlignment="Center"
-                   Grid.Row="1"/>
-        <Button Grid.Column="2" Margin="5" Command="{Binding GetBidPathCommand}"
-                Grid.Row="1">
-            <TextBlock VerticalAlignment="Center">Select...</TextBlock>
-        </Button>
 
         <!--Templates Path Setting-->
         <TextBlock Text="Templates:"
-                   Grid.Column="0" Grid.Row="2"
+                   Grid.Column="0" Grid.Row="1"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
                    Margin="5"/>
         <TextBlock Text="{Binding TemplatesPath}"
                    ToolTip="{Binding TemplatesPath}"
-                   Grid.Column="1" Grid.Row="2" Margin="5"
+                   Grid.Column="1" Grid.Row="1" Margin="5"
                    VerticalAlignment="Center"/>
-        <Button Grid.Column="2" Grid.Row="2"
+        <Button Grid.Column="2" Grid.Row="1"
                 Margin="5"
                 Command="{Binding GetTemplatesPathCommand}">
             <TextBlock VerticalAlignment="Center">Select...</TextBlock>
         </Button>
+        
+        <!--Bid Path Setting-->
+        <TextBlock Text="Bid:" 
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Margin="5"
+                   Grid.Row="2" Visibility="{Binding BidVisibilty}"/>
+        <TextBlock Text="{Binding BidPath}" Margin="5"
+                   Grid.Column="1" ToolTip="{Binding BidPath}" 
+                   VerticalAlignment="Center"
+                   Grid.Row="2" Visibility="{Binding BidVisibilty}"/>
+        <Button Grid.Column="2" Margin="5" Command="{Binding GetBidPathCommand}"
+                Grid.Row="2" Visibility="{Binding BidVisibilty}">
+            <TextBlock VerticalAlignment="Center">Select...</TextBlock>
+        </Button>
 
-        <!--Hide Templates Setting-->
+
         <Grid Grid.Row="4" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -98,7 +94,10 @@
         <Border Grid.Row="2" Grid.ColumnSpan="3"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"
-                Margin="5,0,5,0"/>
+                Margin="5,0,5,0"
+                Visibility="{Binding BidVisibilty}"/>
+        
+        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Grid.Row="3"  Text="{Binding LoadingText}" />
 
     </Grid>
 </UserControl>

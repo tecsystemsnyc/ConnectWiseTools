@@ -26,8 +26,8 @@ namespace TECUserControlLibrary.ViewModels
         protected string DEFAULT_STATUS_TEXT = "Ready";
         #endregion
         #region Fields 
-        protected DoStacker doStack;
-        protected DeltaStacker deltaStack;
+        public SplashVM SplashVM;
+        
         protected bool isNew;
         protected bool _isReady;
         protected int loadedStackLength;
@@ -38,16 +38,38 @@ namespace TECUserControlLibrary.ViewModels
 
         private string _titleString;
         private TECScopeManager _workingScopeManager;
+        private ViewModelBase _currentVM;
+        private DoStacker doStack;
+        private DeltaStacker deltaStack;
         #endregion
         #region Constructors
-        public BuilderViewModel(string workingPath = "")
+        public BuilderViewModel(string splashTitle, string splashSubtitle, bool isEstimate)
         {
             getStartupFile();
             isNew = workingScopeManager == null;
+            if (isNew)
+            {
+                SplashVM = new SplashVM(splashTitle, splashSubtitle, TemplatesFilePath, defaultDirectory, isEstimate);
+                SplashVM.Started += startUp;
+                CurrentVM = SplashVM;
+            } else
+            {
+                startFromFile();
+            }
             getLogo();
         }
         #endregion
         #region Properties
+        public ViewModelBase CurrentVM
+        {
+            get { return _currentVM; }
+            set
+            {
+                _currentVM = value;
+                RaisePropertyChanged("CurrentVM");
+            }
+        }
+
         public abstract Visibility TemplatesVisibility { get; set; }
         public bool IsReady
         {
@@ -110,8 +132,12 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _workingScopeManager = value;
+                watcher = new ChangeWatcher(value);
+                deltaStack = new DeltaStacker(watcher);
+                doStack = new DoStacker(watcher);
             }
         }
+        
         #endregion
         #region Methods
         public void DragOver(IDropInfo dropInfo)
@@ -124,7 +150,7 @@ namespace TECUserControlLibrary.ViewModels
             string path = UIHelpers.FileDrop(dropInfo);
         }
 
-        protected abstract void NewExecute();
+        protected abstract TECScopeManager NewScopeManager();
         protected virtual void setupMenu(MenuType menuType)
         {
             MenuVM = new MenuVM(menuType);
@@ -146,14 +172,16 @@ namespace TECUserControlLibrary.ViewModels
         protected virtual void setupCommands()
         {
             NewCommand = new RelayCommand(NewExecute);
-            LoadCommand = new RelayCommand(LoadExecute);
-            SaveCommand = new RelayCommand(SaveExecute);
-            SaveAsCommand = new RelayCommand(SaveAsExecute);
+            LoadCommand = new RelayCommand(loadExecute);
+            SaveCommand = new RelayCommand(saveExecute);
+            SaveAsCommand = new RelayCommand(saveAsExecute);
             UndoCommand = new RelayCommand(undoExecute, undoCanExecute);
             RedoCommand = new RelayCommand(redoExecute, redoCanExecute);
             ClosingCommand = new RelayCommand<CancelEventArgs>(e => closingExecute(e));
         }
-        
+        protected abstract void startUp(string main, string templates);
+        protected abstract void startFromFile();
+
         protected void SetBusyStatus(string statusText, bool userCanInteract)
         {
             StatusBarVM.CurrentStatusText = statusText;
@@ -265,61 +293,7 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
-        protected void LoadExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-
-            if (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength)
-            {
-                string message = "Would you like to save your changes before loading?";
-                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (saveDelta(false))
-                    {
-                        load(true);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Save unsuccessful. File not loaded.");
-                    }
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    load(true);
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else
-            {
-                load(true);
-            }
-        }
-        protected void SaveExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-            saveDelta(true);
-        }
-        protected void SaveAsExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-            saveNew(true);
-        }
+        
         protected void TemplatesHiddenChanged()
         {
             SettingsVM.TemplatesHidden = TemplatesHidden;
@@ -382,6 +356,108 @@ namespace TECUserControlLibrary.ViewModels
                 return true;
             else
                 return false;
+        }
+        private void loadExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+
+            if (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength)
+            {
+                string message = "Would you like to save your changes before loading?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (saveDelta(false))
+                    {
+                        load(true);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Save unsuccessful. File not loaded.");
+                    }
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    load(true);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                load(true);
+            }
+        }
+        private void saveExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            saveDelta(true);
+        }
+        private void saveAsExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            saveNew(true);
+        }
+        private void NewExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            if (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength)
+            {
+                string message = "Would you like to save your changes before creating a new scope?";
+                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SetBusyStatus("Saving...", false);
+                    if (saveDelta(false))
+                    {
+                        DebugHandler.LogDebugMessage("Creating new.");
+                        isNew = true;
+                        workingScopeManager = NewScopeManager();
+                        saveFilePath = null;
+                    }
+                    else
+                    {
+                        DebugHandler.LogError("Save unsuccessful. New scope not created.");
+                    }
+                    ResetStatus();
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    DebugHandler.LogDebugMessage("Creating new.");
+                    isNew = true;
+                    workingScopeManager = NewScopeManager();
+                    saveFilePath = null;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                DebugHandler.LogDebugMessage("Creating new.");
+                isNew = true;
+                workingScopeManager = NewScopeManager();
+                saveFilePath = null;
+            }
         }
         private void closingExecute(CancelEventArgs e)
         {

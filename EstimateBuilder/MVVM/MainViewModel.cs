@@ -23,11 +23,12 @@ namespace EstimateBuilder.MVVM
     /// </summary>
     public class MainViewModel : BuilderViewModel
     {
+        #region Constants
+        const string SPLASH_TITLE = "Welcome to Estimate Builder";
+        const string SPLASH_SUBTITLE = "Please select object templates and select and existing file or create a new bid";
+        #endregion
         #region Fields
-        public SplashVM SplashVM;
 
-        private ViewModelBase _currentVM;
-        private DatabaseManager bidDB;
         private DatabaseManager templatesDB;
         private bool _templatesLoaded;
         private TECEstimator _estimate;
@@ -35,27 +36,13 @@ namespace EstimateBuilder.MVVM
 
         #endregion
         #region Constructors
-        public MainViewModel() : base()
+        public MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, true)
         {
-            if (workingScopeManager == null)
-            {
-                SplashVM = new SplashVM(TemplatesFilePath, defaultDirectory);
-                SplashVM.Started += startUp;
-                CurrentVM = SplashVM;
-            }
+            
         }
 
         #endregion
         #region Properties
-        public ViewModelBase CurrentVM
-        {
-            get { return _currentVM; }
-            set
-            {
-                _currentVM = value;
-                RaisePropertyChanged("CurrentVM");
-            }
-        }
         public ScopeEditorVM ScopeEditorVM { get; set; }
         public LaborVM LaborVM { get; set; }
         public ReviewVM ReviewVM { get; set; }
@@ -103,7 +90,6 @@ namespace EstimateBuilder.MVVM
             {
                 return ScopeEditorVM.TemplatesVisibility;
             }
-
             set
             {
                 ScopeEditorVM.TemplatesVisibility = value;
@@ -158,7 +144,6 @@ namespace EstimateBuilder.MVVM
             {
                 return Properties.Settings.Default.StartupFile;
             }
-
             set
             {
                 Properties.Settings.Default.StartupFile = value;
@@ -171,7 +156,6 @@ namespace EstimateBuilder.MVVM
             {
                 return (Properties.Settings.Default.DefaultDirectory);
             }
-
             set
             {
                 Properties.Settings.Default.DefaultDirectory = value;
@@ -218,54 +202,7 @@ namespace EstimateBuilder.MVVM
         }
         #endregion
         #region Methods
-        protected override void NewExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-            if (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength)
-            {
-                string message = "Would you like to save your changes before creating a new scope?";
-                MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-                if (result == MessageBoxResult.Yes)
-                {
-                    SetBusyStatus("Saving...", false);
-                    if (saveDelta(false))
-                    {
-                        DebugHandler.LogDebugMessage("Creating new bid.");
-                        isNew = true;
-                        Bid = new TECBid();
-                        saveFilePath = null;
-                    }
-                    else
-                    {
-                        DebugHandler.LogError("Save unsuccessful. New scope not created.");
-                    }
-                    ResetStatus();
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    DebugHandler.LogDebugMessage("Creating new bid.");
-                    isNew = true;
-                    Bid = new TECBid();
-                    saveFilePath = null;
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else
-            {
-                DebugHandler.LogDebugMessage("Creating new bid.");
-                isNew = true;
-                Bid = new TECBid();
-                saveFilePath = null;
-            }
-
-        }
+        
         protected override void setupExtensions(MenuType menuType)
         {
             base.setupExtensions(menuType);
@@ -332,8 +269,11 @@ namespace EstimateBuilder.MVVM
             }
             TitleString = bidName + " - Estimate Builder";
         }
-        
-        private void startUp(string bidPath, string templatesPath)
+        protected override TECScopeManager NewScopeManager()
+        {
+            return new TECBid();
+        }
+        protected override void startUp(string bidPath, string templatesPath)
         {
             templatesDB = new DatabaseManager(templatesPath);
             if (bidPath == "")
@@ -353,6 +293,11 @@ namespace EstimateBuilder.MVVM
             workingFileParameters = UIHelpers.EstimateFileParameters;
             CurrentVM = this;
         }
+        protected override void startFromFile()
+        {
+            throw new NotImplementedException();
+        }
+
         private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
         {
             ScopeEditorVM = new ScopeEditorVM(bid, templates);
@@ -473,7 +418,7 @@ namespace EstimateBuilder.MVVM
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            if (deltaStack.CleansedStack().Count > 0 && deltaStack.CleansedStack().Count != loadedStackLength)
+            if (loadedStackLength > 0)
             {
                 string message = "Would you like to save your changes before reloading?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
@@ -536,7 +481,6 @@ namespace EstimateBuilder.MVVM
                 if (isNew && Templates.Parameters.Count > 0)
                 {
                     Bid.Parameters.UpdateConstants(Templates.Parameters[0]);
-                    loadedStackLength = deltaStack.CleansedStack().Count;
                 }
             }
         }
@@ -573,13 +517,8 @@ namespace EstimateBuilder.MVVM
             if (isNew)
             {
                 Bid = new TECBid();
-                watcher = new ChangeWatcher(Bid);
-                doStack = new DoStacker(watcher);
-                deltaStack = new DeltaStacker(watcher);
             }
-
-            Templates = new TECTemplates();
-
+            
             if (TemplatesFilePath == "" || !File.Exists(TemplatesFilePath))
             {
                 TemplatesFilePath = null;
@@ -656,6 +595,8 @@ namespace EstimateBuilder.MVVM
                 buildTitleString();
             }
         }
+
+        
         #endregion
     }
 }

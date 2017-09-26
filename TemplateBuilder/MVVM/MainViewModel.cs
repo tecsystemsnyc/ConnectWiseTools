@@ -9,6 +9,7 @@ using DebugLibrary;
 using TECUserControlLibrary.ViewModels;
 using TECUserControlLibrary.Utilities;
 using EstimatingUtilitiesLibrary.Database;
+using System;
 
 namespace TemplateBuilder.MVVM
 {
@@ -17,6 +18,8 @@ namespace TemplateBuilder.MVVM
         #region Constants
         const string APPDATA_FOLDER = @"TECSystems\";
         const string TEMPLATES_FILE_NAME = @"TECTemplates.tdb";
+        const string SPLASH_TITLE = "Welcome to Template Builder";
+        const string SPLASH_SUBTITLE = "Please select object templates or create new templates";
         #endregion
         #region Fields
         private TemplateGridIndex _DGTabIndex;
@@ -24,15 +27,8 @@ namespace TemplateBuilder.MVVM
 
         #endregion
         #region Constructors
-        public MainViewModel() : base()
+        public MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, false)
         {
-            getTemplates();
-
-            buildTitleString();
-            setupCommands();
-            setupExtensions(MenuType.TB);
-
-            DGTabIndex = TemplateGridIndex.Systems;
 
         }
 
@@ -189,46 +185,43 @@ namespace TemplateBuilder.MVVM
             setupTypicalSystemseTab();
             setupControllersPanelsVM();
         }
-        protected override void NewExecute()
-        {
-            if (deltaStack.CleansedStack().Count > 0)
-            {
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before creating new templates?", "Save?", MessageBoxButton.YesNoCancel);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (!saveDelta(false))
-                    {
-                        MessageBox.Show("Save unsuccessful.");
-                        return;
-                    }
-                    else
-                    {
-                        Templates = new TECTemplates();
-                    }
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    Templates = new TECTemplates();
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else
-            {
-                Templates = new TECTemplates();
-            }
-            refresh();
-            TemplatesFilePath = "";
-        }
         protected override void setupMenu(MenuType menuType)
         {
             base.setupMenu(menuType);
             MenuVM.RefreshTemplatesCommand = RefreshCommand;
             MenuVM.LoadTemplatesCommand = LoadCommand;
         }
-        
+        protected override TECScopeManager NewScopeManager()
+        {
+            return new TECTemplates();
+        }
+        protected override void startUp(string mainPath, string templatesPath)
+        {
+            if (mainPath == "")
+            {
+                isNew = true;
+            }
+            else
+            {
+                isNew = false;
+            }
+
+            getTemplates();
+
+            buildTitleString();
+            setupCommands();
+            setupExtensions(MenuType.TB);
+
+            DGTabIndex = TemplateGridIndex.Systems;
+
+            workingFileParameters = UIHelpers.EstimateFileParameters;
+            CurrentVM = this;
+        }
+        protected override void startFromFile()
+        {
+            throw new NotImplementedException();
+        }
+
         private void refresh()
         {
             if (ScopeCollection != null)
@@ -333,7 +326,7 @@ namespace TemplateBuilder.MVVM
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
                 return;
             }
-            if (deltaStack.CleansedStack().Count > 0)
+            if (loadedStackLength > 0)
             {
                 string message = "Would you like to save your changes before loading?";
                 MessageBoxResult result = MessageBox.Show(message, "Create new", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
@@ -487,7 +480,6 @@ namespace TemplateBuilder.MVVM
                     break;
             }
         }
-
         #endregion
     }
 }
