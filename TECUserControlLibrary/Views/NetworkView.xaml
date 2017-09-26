@@ -6,6 +6,15 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1200">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <!--Main Grid-->
     <Grid Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
@@ -31,7 +40,13 @@
 
                     <Label Content="Controllers" FontSize="20"/>
                     <!--Controller DataGrid-->
-                    <DataGrid Grid.Row="1">
+                    <DataGrid Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Header="Description" Width="Auto" MinWidth="50"/>
+                        </DataGrid.Columns>
                     </DataGrid>
 
                 </Grid>

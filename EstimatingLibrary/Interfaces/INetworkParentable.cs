@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface INetworkParentable
+    public interface INetworkParentable
     {
+        bool IsServer { get; }
+        string Name { get; }
+        
+        IEnumerable<TECNetworkConnection> GetNetworkConnections();
     }
 }
