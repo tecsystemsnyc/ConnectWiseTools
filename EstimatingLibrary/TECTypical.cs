@@ -32,7 +32,6 @@ namespace EstimatingLibrary
 
             watcher = new ChangeWatcher(this);
             watcher.Changed += handleSystemChanged;
-            watcher.PropertyChanged += handlePropertyChanged;
         }
 
         public TECTypical() : this(Guid.NewGuid()) { }
@@ -192,27 +191,7 @@ namespace EstimatingLibrary
                 newSystem.AssociatedCosts.Add(cost);
             }
             ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
-
-            //Link subscope to controllers.
-            var newSubScope = newSystem.AllSubScope();
-            foreach (TECSubScope subScope in AllSubScope())
-            {
-                var instances = TypicalInstanceDictionary.GetInstances(subScope);
-                foreach (TECSubScope subInstance in instances)
-                {
-                    if (newSubScope.Contains(subInstance))
-                    {
-                        if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
-                        {
-                            TECSubScopeConnection instanceSSConnect = subScope.Connection.ParentController.AddSubScope(subInstance);
-                            instanceSSConnect.Length = subScope.Connection.Length;
-                            instanceSSConnect.ConduitLength = subScope.Connection.ConduitLength;
-                            instanceSSConnect.ConduitType = subScope.Connection.ConduitType;
-                        }
-                    }
-                }
-            }
-
+            
             Instances.Add(newSystem);
 
             return (newSystem);
@@ -221,7 +200,6 @@ namespace EstimatingLibrary
         {
             watcher = new ChangeWatcher(this);
             watcher.Changed += handleSystemChanged;
-            watcher.PropertyChanged += handlePropertyChanged;
         }
 
         public override object DragDropCopy(TECScopeManager scopeManager)
@@ -297,14 +275,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        private void handlePropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName == "Connection" && sender is TECSubScope)
-            {
-                handleSubScopeConnectionChanged(sender as TECSubScope);
-            }
-        }
+        
         protected override void handleCollectionChanged(object sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
@@ -315,20 +286,6 @@ namespace EstimatingLibrary
                 bool raiseEvents = false;
                 foreach (object item in e.NewItems)
                 {
-                    if (item != null)
-                    {
-                        if (item is TECSystem sys)
-                        {
-                            costs += sys.CostBatch;
-                            pointNum += sys.PointNumber;
-                            raiseEvents = true;
-                        }
-                        notifyTECChanged(Change.Add, propertyName, this, item);
-                        if (item is TECController controller)
-                        {
-                            controller.IsGlobal = false;
-                        }
-                    }
                 }
                 if (raiseEvents)
                 {
@@ -390,7 +347,7 @@ namespace EstimatingLibrary
         {
             foreach (TECSubScope subScope in instance.AllSubScope())
             {
-                if (subScope.Connection != null && subScope.Connection.ParentController.IsGlobal)
+                if (subScope.Connection != null && !instance.Controllers.Contains(subScope.Connection.ParentController))
                 {
                     subScope.Connection.ParentController.RemoveSubScope(subScope);
                 }
@@ -423,30 +380,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private void handleSubScopeConnectionChanged(TECSubScope subScope)
-        {
-            if (TypicalInstanceDictionary.ContainsKey(subScope))
-            {
-                if (subScope.Connection == null)
-                {
-                    foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
-                    {
-                        if (instance.Connection == null || !instance.Connection.ParentController.IsGlobal)
-                        {
-                            break;
-                        }
-                        instance.Connection.ParentController.RemoveSubScope(instance);
-                    }
-                }
-                else if (subScope.Connection.ParentController.IsGlobal)
-                {
-                    foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
-                    {
-                        subScope.Connection.ParentController.AddSubScope(instance);
-                    }
-                }
-            }
-        }
 
         private void handleAdd(TECObject value, TECObject sender)
         {
@@ -456,7 +389,6 @@ namespace EstimatingLibrary
                 foreach (TECSystem system in Instances)
                 {
                     var controllerToAdd = new TECController(characteristicController, false);
-                    controllerToAdd.IsGlobal = false;
                     _typicalInstanceDictionary.AddItem(characteristicController, controllerToAdd);
                     system.Controllers.Add(controllerToAdd);
                 }
@@ -536,53 +468,6 @@ namespace EstimatingLibrary
                         var pointToAdd = new TECPoint(characteristicPoint, false);
                         _typicalInstanceDictionary.AddItem(characteristicPoint, pointToAdd);
                         subScope.Points.Add(pointToAdd);
-                    }
-                }
-            }
-            else if (value is TECSubScopeConnection && sender is TECController)
-            {
-                var characteristicConnection = value as TECSubScopeConnection;
-                var characteristicSubScope = (value as TECSubScopeConnection).SubScope;
-                var characteristicController = (sender as TECController);
-                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope) && (TypicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
-                {
-                    foreach (TECSystem system in Instances)
-                    {
-                        TECSubScope subScopeToConnect = null;
-                        foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
-                        {
-                            foreach (TECEquipment equipment in system.Equipment)
-                            {
-                                if (equipment.SubScope.Contains(subScope))
-                                {
-                                    subScopeToConnect = subScope;
-                                    break;
-                                }
-                            }
-                        }
-                        if (subScopeToConnect != null)
-                        {
-                            if (characteristicController.IsGlobal)
-                            {
-                                var connection = characteristicController.AddSubScope(subScopeToConnect);
-                                connection.Length = characteristicConnection.Length;
-                                connection.ConduitLength = characteristicConnection.ConduitLength;
-                                connection.ConduitType = characteristicConnection.ConduitType;
-                            }
-                            else
-                            {
-                                foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
-                                {
-                                    if (system.Controllers.Contains(controller))
-                                    {
-                                        var connection = controller.AddSubScope(subScopeToConnect);
-                                        connection.Length = characteristicConnection.Length;
-                                        connection.ConduitLength = characteristicConnection.ConduitLength;
-                                        connection.ConduitType = characteristicConnection.ConduitType;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -798,47 +683,6 @@ namespace EstimatingLibrary
                         foreach (TECPoint point in pointsToRemove)
                         {
                             subScope.Points.Remove(point);
-                        }
-                    }
-                }
-            }
-            else if (value is TECSubScopeConnection && sender is TECController)
-            {
-                var characteristicConnection = value as TECSubScopeConnection;
-                var characteristicSubScope = (value as TECSubScopeConnection).SubScope;
-                var characteristicController = (sender as TECController);
-                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope) && (TypicalInstanceDictionary.ContainsKey(characteristicController) || characteristicController.IsGlobal))
-                {
-                    foreach (TECSystem system in Instances)
-                    {
-                        TECSubScope subScopeToRemove = null;
-                        foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
-                        {
-                            foreach (TECEquipment equipment in system.Equipment)
-                            {
-                                if (equipment.SubScope.Contains(subScope))
-                                {
-                                    subScopeToRemove = subScope;
-                                    break;
-                                }
-                            }
-                        }
-                        if (subScopeToRemove != null)
-                        {
-                            if (characteristicController.IsGlobal)
-                            {
-                                characteristicController.RemoveSubScope(subScopeToRemove);
-                            }
-                            else
-                            {
-                                foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
-                                {
-                                    if (system.Controllers.Contains(controller))
-                                    {
-                                        controller.RemoveSubScope(subScopeToRemove);
-                                    }
-                                }
-                            }
                         }
                     }
                 }

@@ -286,10 +286,6 @@ namespace EstimatingLibrary
                             pointNum += pointItem.PointNumber;
                         }
                         notifyTECChanged(Change.Add, propertyName, this, item);
-                        if (item is TECController controller)
-                        {
-                            controller.IsGlobal = false;
-                        }
                     }
                 }
                 notifyCostChanged(costs);

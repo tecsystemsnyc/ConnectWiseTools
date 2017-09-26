@@ -134,7 +134,6 @@ namespace TECUserControlLibrary.Utilities
                 if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
                 {
                     var controller = sourceItem as TECController;
-                    controller.IsGlobal = isGlobal;
                     var controllerInPanel = new ControllerInPanel(controller, null);
                     controllers.Add(sourceItem as TECController);
                     sourceItem = controllerInPanel;
