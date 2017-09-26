@@ -9,19 +9,14 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public enum NetworkType
-    {
-        Unitary = 1, DDC, Server
-    };
-
-    public class TECController : TECLocated, IDragDropable, ITypicalable, INetworkConnectable
+    public class TECController : TECLocated, IDragDropable, ITypicalable, INetworkConnectable, INetworkParentable
     {
         #region Properties
         //---Stored---
         private TECNetworkConnection _parentConnection;
         private ObservableCollection<TECConnection> _childrenConnections;
         private TECControllerType _type;
-        private NetworkType _networkType;
+        private bool _isServer;
         private ObservableCollection<TECIOModule> _ioModules;
         
         public TECNetworkConnection ParentConnection
@@ -59,14 +54,14 @@ namespace EstimatingLibrary
                 notifyCostChanged(value.CostBatch - old.CostBatch);
             }
         }
-        public NetworkType NetworkType
+        public bool IsServer
         {
-            get { return _networkType; }
+            get { return _isServer; }
             set
             {
-                var old = NetworkType;
-                _networkType = value;
-                notifyCombinedChanged(Change.Edit, "NetworkType", this, value, old);
+                var old = IsServer;
+                _isServer = value;
+                notifyCombinedChanged(Change.Edit, "IsServer", this, value, old);
             }
         }
         public ObservableCollection<TECIOModule> IOModules
@@ -86,7 +81,6 @@ namespace EstimatingLibrary
         {
             get; private set;
         }
-        public bool IsGlobal;
 
         //---Derived---
         public IOCollection AvailableNetworkIO
@@ -96,10 +90,10 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECController(Guid guid, TECControllerType type, bool isTypical, bool isGlobal = true) : base(guid)
+        public TECController(Guid guid, TECControllerType type, bool isTypical) : base(guid)
         {
+            _isServer = false;
             IsTypical = isTypical;
-            IsGlobal = isGlobal;
             _type = type;
             _childrenConnections = new ObservableCollection<TECConnection>();
             _ioModules = new ObservableCollection<TECIOModule>();
@@ -107,7 +101,7 @@ namespace EstimatingLibrary
             IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
         }
 
-        public TECController(TECControllerType type, bool isTypical, bool isGlobal = true) : this(Guid.NewGuid(), type, isTypical, isGlobal) { }
+        public TECController(TECControllerType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
         public TECController(TECController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Type, isTypical)
         {
             if (guidDictionary != null)
