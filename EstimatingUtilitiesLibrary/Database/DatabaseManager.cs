@@ -1,8 +1,10 @@
-﻿using EstimatingLibrary;
+﻿using DebugLibrary;
+using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +25,25 @@ namespace EstimatingUtilitiesLibrary.Database
         
         public bool Save(List<UpdateItem> updates)
         {
-            DatabaseUpdater.Update(path, updates);
-            return true;
+            if (!UtilitiesMethods.IsFileLocked(path))
+            {
+                try
+                {
+                    DatabaseUpdater.Update(path, updates);
+                    return true;
+                }
+                catch (Exception ex) when (DebugBooleans.CatchSaveDelta)
+                {
+                    DebugHandler.LogError("Save delta failed. Exception: " + ex.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                return false;
+            }
+            
         }
         public void AsyncSave(List<UpdateItem> updates)
         {
@@ -42,21 +61,34 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public bool New(TECScopeManager scopeManager)
         {
-            if (scopeManager is TECBid)
+            if (!UtilitiesMethods.IsFileLocked(path))
             {
-                DatabaseGenerator.CreateBidDatabase(path);
-            }
-            else if (scopeManager is TECTemplates)
-            {
-                DatabaseGenerator.CreateTemplateDatabase(path);
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+                if (scopeManager is TECBid)
+                {
+                    DatabaseGenerator.CreateBidDatabase(path);
+                }
+                else if (scopeManager is TECTemplates)
+                {
+                    DatabaseGenerator.CreateTemplateDatabase(path);
+                }
+                else
+                {
+                    throw new Exception("Generator can only reate bid or template DBs");
+                }
+                List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
+                DatabaseUpdater.Update(path, newStack);
+                return true;
             }
             else
             {
-                throw new Exception("Generator can only reate bid or template DBs");
+                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                return false;
             }
-            List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
-            DatabaseUpdater.Update(path, newStack);
-            return true;
+            
         }
         public void AsyncNew(TECScopeManager scopeManager)
         {

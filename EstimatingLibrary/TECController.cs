@@ -327,7 +327,7 @@ namespace EstimatingLibrary
             return outController;
         }
         
-        override protected CostBatch getCosts()
+        protected override CostBatch getCosts()
         {
             if (!IsTypical)
             {

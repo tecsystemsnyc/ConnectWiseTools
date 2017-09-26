@@ -23,37 +23,30 @@ namespace EstimateBuilder.MVVM
     /// </summary>
     public class MainViewModel : BuilderViewModel
     {
-        public MainViewModel() : base()
-        {
-            SplashVM = new SplashVM();
-            SplashVM.Started += startUp;
-            CurrentVM = SplashVM;
-            
-        }
-
-        private void startUp(string bidPath, string templatesPath)
-        {
-            if(bidPath == "")
-            {
-                isNew = true;
-            } else
-            {
-                isNew = false;
-            }
-
-            buildTitleString();
-            setupCommands();
-            setupExtensions();
-            setupData();
-
-            workingFileParameters = UIHelpers.EstimateFileParameters;
-            CurrentVM = this;
-        }
-
-        #region Properties
+        #region Fields
         public SplashVM SplashVM;
 
-        public ViewModelBase _currentVM;
+        private ViewModelBase _currentVM;
+        private DatabaseManager bidDB;
+        private DatabaseManager templatesDB;
+        private bool _templatesLoaded;
+        private TECEstimator _estimate;
+        private TECTemplates _templates;
+
+        #endregion
+        #region Constructors
+        public MainViewModel() : base()
+        {
+            if (workingScopeManager == null)
+            {
+                SplashVM = new SplashVM(TemplatesFilePath, defaultDirectory);
+                SplashVM.Started += startUp;
+                CurrentVM = SplashVM;
+            }
+        }
+
+        #endregion
+        #region Properties
         public ViewModelBase CurrentVM
         {
             get { return _currentVM; }
@@ -63,9 +56,62 @@ namespace EstimateBuilder.MVVM
                 RaisePropertyChanged("CurrentVM");
             }
         }
+        public ScopeEditorVM ScopeEditorVM { get; set; }
+        public LaborVM LaborVM { get; set; }
+        public ReviewVM ReviewVM { get; set; }
+        public ProposalVM ProposalVM { get; set; }
+        public ElectricalVM ElectricalVM { get; set; }
+        public ICommand ToggleTemplatesCommand { get; private set; }
+        public ICommand DocumentCommand { get; private set; }
+        public ICommand LoadTemplatesCommand { get; private set; }
+        public ICommand CSVExportCommand { get; private set; }
+        public ICommand BudgetCommand { get; private set; }
+        public ICommand ExcelExportCommand { get; private set; }
+        public ICommand RefreshTemplatesCommand { get; private set; }
+        public ICommand RefreshBidCommand { get; private set; }
+        public TECBid Bid
+        {
+            get { return workingScopeManager as TECBid; }
+            set
+            {
+                workingScopeManager = value;
+            }
+        }
+        public TECTemplates Templates
+        {
+            get { return _templates; }
+            set
+            {
+                _templates = value;
+                RaisePropertyChanged("Templates");
+                updateBidWithTemplates();
+                refresh();
+            }
+        }
+        public TECEstimator Estimate
+        {
+            get { return _estimate; }
+            set
+            {
+                _estimate = value;
+                RaisePropertyChanged("Estimate");
+            }
+        }
+        public override Visibility TemplatesVisibility
+        {
+            get
+            {
+                return ScopeEditorVM.TemplatesVisibility;
+            }
 
-        #region Settings Properties
-        override protected bool TemplatesHidden
+            set
+            {
+                ScopeEditorVM.TemplatesVisibility = value;
+                RaisePropertyChanged("TemplatesVisibility");
+            }
+        }
+
+        protected override bool TemplatesHidden
         {
             get
             {
@@ -82,7 +128,7 @@ namespace EstimateBuilder.MVVM
                 }
             }
         }
-        override protected string ScopeDirectoryPath
+        protected override string ScopeDirectoryPath
         {
             get { return Properties.Settings.Default.ScopeDirectoryPath; }
             set
@@ -91,7 +137,7 @@ namespace EstimateBuilder.MVVM
                 Properties.Settings.Default.Save();
             }
         }
-        override protected string TemplatesFilePath
+        protected override string TemplatesFilePath
         {
             get { return Properties.Settings.Default.TemplatesFilePath; }
             set
@@ -132,58 +178,6 @@ namespace EstimateBuilder.MVVM
                 Properties.Settings.Default.Save();
             }
         }
-        #endregion
-
-        #region VM Extensions
-        public ScopeEditorVM ScopeEditorVM { get; set; }
-        public LaborVM LaborVM { get; set; }
-        public ReviewVM ReviewVM { get; set; }
-        public ProposalVM ProposalVM { get; set; }
-        public ElectricalVM ElectricalVM { get; set; }
-        #endregion
-
-        #region Command Properties
-        public ICommand ToggleTemplatesCommand { get; private set; }
-        public ICommand DocumentCommand { get; private set; }
-        public ICommand LoadTemplatesCommand { get; private set; }
-        public ICommand CSVExportCommand { get; private set; }
-        public ICommand BudgetCommand { get; private set; }
-        public ICommand ExcelExportCommand { get; private set; }
-
-        public ICommand RefreshTemplatesCommand { get; private set; }
-        public ICommand RefreshBidCommand { get; private set; }
-        #endregion Command Properties
-
-        public override Visibility TemplatesVisibility
-        {
-            get
-            {
-                return ScopeEditorVM.TemplatesVisibility;
-            }
-
-            set
-            {
-                ScopeEditorVM.TemplatesVisibility = value;
-                RaisePropertyChanged("TemplatesVisibility");
-            }
-        }
-
-        private bool _templatesLoaded;
-        private bool templatesLoaded
-        {
-            get { return _templatesLoaded; }
-            set
-            {
-                _templatesLoaded = value;
-                if (LaborVM != null)
-                {
-                    LaborVM.TemplatesLoaded = templatesLoaded;
-                }
-            }
-        }
-
-        private TECEstimator _estimate;
-
         protected override string defaultSaveFileName
         {
             get
@@ -191,7 +185,6 @@ namespace EstimateBuilder.MVVM
                 return (Bid.BidNumber + " " + Bid.Name);
             }
         }
-
         protected override TECScopeManager workingScopeManager
         {
             get
@@ -210,85 +203,22 @@ namespace EstimateBuilder.MVVM
                 refresh();
             }
         }
-        public TECBid Bid
+        
+        private bool templatesLoaded
         {
-            get { return workingScopeManager as TECBid; }
+            get { return _templatesLoaded; }
             set
             {
-                workingScopeManager = value;
+                _templatesLoaded = value;
+                if (LaborVM != null)
+                {
+                    LaborVM.TemplatesLoaded = templatesLoaded;
+                }
             }
-        }
-        private TECTemplates _templates;
-        public TECTemplates Templates
-        {
-            get { return _templates; }
-            set
-            {
-                _templates = value;
-                RaisePropertyChanged("Templates");
-                updateBidWithTemplates();
-                refresh();
-            }
-        }
-        public TECEstimator Estimate
-        {
-            get { return _estimate; }
-            set
-            {
-                _estimate = value;
-                RaisePropertyChanged("Estimate");
-            }
-        }
-        #endregion Properties
-
-        #region Methods
-
-        #region VM Setup Methods
-        private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
-        {
-            ScopeEditorVM = new ScopeEditorVM(bid, templates);
-            ScopeEditorVM.PropertyChanged += scopeEditorVM_PropertyChanged;
-            if (TemplatesHidden)
-            { ScopeEditorVM.TemplatesVisibility = Visibility.Hidden; }
-            else
-            {  ScopeEditorVM.TemplatesVisibility = Visibility.Visible; }
-        }
-        private void setupLaborVM(TECBid bid, TECTemplates templates)
-        {
-            LaborVM = new LaborVM();
-            LaborVM.Bid = bid;
-            LaborVM.Templates = templates;
-            LaborVM.LoadTemplates += LoadTemplatesExecute;
-            LaborVM.TemplatesLoaded = templatesLoaded;
-        }
-        private void setupReviewVM(TECBid bid)
-        {
-            ReviewVM = new ReviewVM();
-            ReviewVM.Bid = bid;
-        }
-        private void setupProposalVM(TECBid bid)
-        {
-            ProposalVM = new ProposalVM(bid);
-        }
-        private void setupElectricalVM(TECBid bid)
-        {
-            ElectricalVM = new ElectricalVM(bid);
         }
         #endregion
-
-        #region Command Methods
-        private void toggleTemplatesExecute()
-        {
-            if (TemplatesHidden)
-            {
-                TemplatesHidden = false;
-            }
-            else
-            {
-                TemplatesHidden = true;
-            }
-        }
-        override protected void NewExecute()
+        #region Methods
+        protected override void NewExecute()
         {
             if (!IsReady)
             {
@@ -336,9 +266,137 @@ namespace EstimateBuilder.MVVM
             }
 
         }
-        private void DocumentExecute()
+        protected override void setupExtensions(MenuType menuType)
         {
-            string path = UIHelpers.GetSavePath(UIHelpers.WordDocumentFileParameters, defaultSaveFileName, 
+            base.setupExtensions(menuType);
+            setupScopeEditorVM(new TECBid(), new TECTemplates());
+            setupLaborVM(new TECBid(), new TECTemplates());
+            setupReviewVM(new TECBid());
+            setupProposalVM(new TECBid());
+            setupElectricalVM(new TECBid());
+        }
+        protected override void setupCommands()
+        {
+            base.setupCommands();
+            DocumentCommand = new RelayCommand(documentExecute);
+            CSVExportCommand = new RelayCommand(cSVExportExecute);
+            BudgetCommand = new RelayCommand(budgetExecute);
+            LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
+            ExcelExportCommand = new RelayCommand(excelExportExecute);
+            RefreshTemplatesCommand = new RelayCommand(refreshTemplatesExecute);
+            RefreshBidCommand = new RelayCommand(refreshBidExecute, refreshBidCanExecute);
+            ToggleTemplatesCommand = new RelayCommand(toggleTemplatesExecute);
+        }
+        protected override void setupMenu(MenuType menuType)
+        {
+            MenuVM = new MenuVM(MenuType.SB);
+
+            MenuVM.NewCommand = NewCommand;
+            MenuVM.LoadCommand = LoadCommand;
+            MenuVM.SaveCommand = SaveCommand;
+            MenuVM.SaveAsCommand = SaveAsCommand;
+            MenuVM.ExportProposalCommand = DocumentCommand;
+            MenuVM.LoadTemplatesCommand = LoadTemplatesCommand;
+            MenuVM.ExportPointsListCommand = CSVExportCommand;
+            MenuVM.UndoCommand = UndoCommand;
+            MenuVM.RedoCommand = RedoCommand;
+            //MenuVM.ExportExcelCommand = ExcelExportCommand;
+
+            MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
+            MenuVM.RefreshBidCommand = RefreshBidCommand;
+
+            MenuVM.TemplatesHidden = TemplatesHidden;
+            MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
+        }
+        protected void LoadTemplatesExecute()
+        {
+            if (!IsReady)
+            {
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+                return;
+            }
+            //User choose path
+            string path = UIHelpers.GetLoadPath(UIHelpers.TemplatesFileParameters, defaultDirectory);
+            if (path != null)
+            {
+                TemplatesFilePath = path;
+                loadTemplates(TemplatesFilePath);
+            }
+        }
+        protected void buildTitleString()
+        {
+            string bidName = "";
+            if (Bid != null)
+            {
+                bidName = Bid.Name;
+            }
+            TitleString = bidName + " - Estimate Builder";
+        }
+        
+        private void startUp(string bidPath, string templatesPath)
+        {
+            templatesDB = new DatabaseManager(templatesPath);
+            if (bidPath == "")
+            {
+                isNew = true;
+            }
+            else
+            {
+                isNew = false;
+            }
+
+            buildTitleString();
+            setupCommands();
+            setupExtensions(MenuType.EB);
+            setupData();
+
+            workingFileParameters = UIHelpers.EstimateFileParameters;
+            CurrentVM = this;
+        }
+        private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
+        {
+            ScopeEditorVM = new ScopeEditorVM(bid, templates);
+            ScopeEditorVM.PropertyChanged += scopeEditorVM_PropertyChanged;
+            if (TemplatesHidden)
+            { ScopeEditorVM.TemplatesVisibility = Visibility.Hidden; }
+            else
+            { ScopeEditorVM.TemplatesVisibility = Visibility.Visible; }
+        }
+        private void setupLaborVM(TECBid bid, TECTemplates templates)
+        {
+            LaborVM = new LaborVM();
+            LaborVM.Bid = bid;
+            LaborVM.Templates = templates;
+            LaborVM.LoadTemplates += LoadTemplatesExecute;
+            LaborVM.TemplatesLoaded = templatesLoaded;
+        }
+        private void setupReviewVM(TECBid bid)
+        {
+            ReviewVM = new ReviewVM();
+            ReviewVM.Bid = bid;
+        }
+        private void setupProposalVM(TECBid bid)
+        {
+            ProposalVM = new ProposalVM(bid);
+        }
+        private void setupElectricalVM(TECBid bid)
+        {
+            ElectricalVM = new ElectricalVM(bid);
+        }
+        private void toggleTemplatesExecute()
+        {
+            if (TemplatesHidden)
+            {
+                TemplatesHidden = false;
+            }
+            else
+            {
+                TemplatesHidden = true;
+            }
+        }
+        private void documentExecute()
+        {
+            string path = UIHelpers.GetSavePath(UIHelpers.WordDocumentFileParameters, defaultSaveFileName,
                 defaultDirectory, ScopeDirectoryPath, isNew);
 
             if (path != null)
@@ -356,7 +414,7 @@ namespace EstimateBuilder.MVVM
                 }
             }
         }
-        private void CSVExportExecute()
+        private void cSVExportExecute()
         {
             //User choose path
             string path = UIHelpers.GetSavePath(UIHelpers.CSVFileParameters, defaultSaveFileName, defaultDirectory, ScopeDirectoryPath, isNew);
@@ -374,12 +432,12 @@ namespace EstimateBuilder.MVVM
                 }
             }
         }
-        private void BudgetExecute()
+        private void budgetExecute()
         {
             //new View.BudgetWindow();
             //MessengerInstance.Send<GenericMessage<ObservableCollection<TECSystem>>>(new GenericMessage<ObservableCollection<TECSystem>>(Bid.Systems));
         }
-        private void ExcelExportExecute()
+        private void excelExportExecute()
         {
             //User choose path
             string path = UIHelpers.GetSavePath(UIHelpers.CSVFileParameters, defaultSaveFileName, defaultDirectory, ScopeDirectoryPath, isNew);
@@ -396,22 +454,7 @@ namespace EstimateBuilder.MVVM
                 }
             }
         }
-        protected void LoadTemplatesExecute()
-        {
-            if (!IsReady)
-            {
-                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
-                return;
-            }
-            //User choose path
-            string path = UIHelpers.GetLoadPath(UIHelpers.TemplatesFileParameters, defaultDirectory);
-            if (path != null)
-            {
-                TemplatesFilePath = path;
-                loadTemplates(TemplatesFilePath);
-            }
-        }
-        private void RefreshTemplatesExecute()
+        private void refreshTemplatesExecute()
         {
             if (!IsReady)
             {
@@ -423,7 +466,7 @@ namespace EstimateBuilder.MVVM
                 loadTemplates(TemplatesFilePath);
             }
         }
-        private void RefreshBidExecute()
+        private void refreshBidExecute()
         {
             if (!IsReady)
             {
@@ -453,7 +496,7 @@ namespace EstimateBuilder.MVVM
                 {
                     SetBusyStatus("Loading...", false);
                     DebugHandler.LogDebugMessage("Reloading bid.");
-                    Bid = loadFromPath(saveFilePath) as TECBid;
+                    //Bid = load(saveFilePath) as TECBid;
                     ResetStatus();
                 }
                 else
@@ -465,17 +508,14 @@ namespace EstimateBuilder.MVVM
             {
                 SetBusyStatus("Loading...", false);
                 DebugHandler.LogDebugMessage("Reloading bid.");
-                Bid = loadFromPath(saveFilePath) as TECBid;
+                //Bid = load(saveFilePath) as TECBid;
                 ResetStatus();
             }
         }
-        private bool RefreshBidCanExecute()
+        private bool refreshBidCanExecute()
         {
             return (!isNew);
         }
-        #endregion Commands Methods
-
-        #region Helper Methods
         private void refresh()
         {
             if (Bid != null && Templates != null)
@@ -499,15 +539,6 @@ namespace EstimateBuilder.MVVM
                     loadedStackLength = deltaStack.CleansedStack().Count;
                 }
             }
-        }
-        protected void buildTitleString()
-        {
-            string bidName = "";
-            if (Bid != null)
-            {
-                bidName = Bid.Name;
-            }
-            TitleString = bidName + " - Estimate Builder";
         }
         private void loadTemplates(string TemplatesFilePath)
         {
@@ -537,9 +568,6 @@ namespace EstimateBuilder.MVVM
                 worker.RunWorkerAsync();
             }
         }
-        #endregion
-
-        #region Setup
         private void setupData()
         {
             if (isNew)
@@ -548,7 +576,7 @@ namespace EstimateBuilder.MVVM
                 watcher = new ChangeWatcher(Bid);
                 doStack = new DoStacker(watcher);
                 deltaStack = new DeltaStacker(watcher);
-            } 
+            }
 
             Templates = new TECTemplates();
 
@@ -592,55 +620,6 @@ namespace EstimateBuilder.MVVM
                 ResetStatus();
             }
         }
-
-        override protected void setupExtensions()
-        {
-            base.setupExtensions();
-            setupScopeEditorVM(new TECBid(), new TECTemplates());
-            setupLaborVM(new TECBid(), new TECTemplates());
-            setupReviewVM(new TECBid());
-            setupProposalVM(new TECBid());
-            setupElectricalVM(new TECBid());
-        }
-        override protected void setupCommands()
-        {
-            base.setupCommands();
-            DocumentCommand = new RelayCommand(DocumentExecute);
-            CSVExportCommand = new RelayCommand(CSVExportExecute);
-            BudgetCommand = new RelayCommand(BudgetExecute);
-            LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
-            ExcelExportCommand = new RelayCommand(ExcelExportExecute);
-            RefreshTemplatesCommand = new RelayCommand(RefreshTemplatesExecute);
-            RefreshBidCommand = new RelayCommand(RefreshBidExecute, RefreshBidCanExecute);
-            ToggleTemplatesCommand = new RelayCommand(toggleTemplatesExecute);
-        }
-        protected override void setupMenu()
-        {
-            MenuVM = new MenuVM(MenuType.SB);
-
-            MenuVM.NewCommand = NewCommand;
-            MenuVM.LoadCommand = LoadCommand;
-            MenuVM.SaveCommand = SaveCommand;
-            MenuVM.SaveAsCommand = SaveAsCommand;
-            MenuVM.ExportProposalCommand = DocumentCommand;
-            MenuVM.LoadTemplatesCommand = LoadTemplatesCommand;
-            MenuVM.ExportPointsListCommand = CSVExportCommand;
-            MenuVM.UndoCommand = UndoCommand;
-            MenuVM.RedoCommand = RedoCommand;
-            //MenuVM.ExportExcelCommand = ExcelExportCommand;
-
-            MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
-            MenuVM.RefreshBidCommand = RefreshBidCommand;
-
-            MenuVM.TemplatesHidden = TemplatesHidden;
-            MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
-        }
-        
-        #endregion
-
-        #endregion
-
-        #region Event Handlers
         private void settingsVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "TemplatesHidden")

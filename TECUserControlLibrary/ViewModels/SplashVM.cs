@@ -11,6 +11,9 @@ namespace TECUserControlLibrary.ViewModels
     public class SplashVM : ViewModelBase
     {
         private string _bidPath;
+        private string _templatesPath;
+        private string _defaultDirectory;
+
         public string BidPath
         {
             get { return _bidPath; }
@@ -20,8 +23,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("BidPath");
             }
         }
-        
-        private string _templatesPath;
         public string TemplatesPath
         {
             get
@@ -34,7 +35,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TemplatesPath");
             }
         }
-
+        
         public ICommand GetBidPathCommand { get; private set; }
         public ICommand GetTemplatesPathCommand { get; private set; }
         public ICommand OpenExistingCommand { get; private set; }
@@ -42,7 +43,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<string, string> Started;
 
-        public SplashVM()
+        public SplashVM(string initialTemplates, string defaultDirectory)
         {
             GetBidPathCommand = new RelayCommand(getBidPathExecute);
             GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
@@ -50,24 +51,24 @@ namespace TECUserControlLibrary.ViewModels
             CreateNewCommand = new RelayCommand(createNewExecute, createNewCanExecute);
 
             _bidPath = "";
-            _templatesPath = "";
+            _defaultDirectory = defaultDirectory;
+            _templatesPath = initialTemplates;
         }
 
         private void getBidPathExecute()
         {
-            _bidPath = getPath(UIHelpers.BidFileParameters);
+            BidPath = getPath(UIHelpers.BidFileParameters, _defaultDirectory);
         }
 
         private void getTemplatesPathExecute()
         {
-            _templatesPath = getPath(UIHelpers.TemplatesFileParameters);
+            TemplatesPath = getPath(UIHelpers.TemplatesFileParameters, _defaultDirectory);
         }
 
         private void openExistingExecute()
         {
             Started?.Invoke(BidPath, TemplatesPath);
         }
-
         private bool openExistingCanExecute()
         {
             if(BidPath != "" && TemplatesPath != "")
@@ -84,7 +85,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             Started?.Invoke("", TemplatesPath);
         }
-
         private bool createNewCanExecute()
         {
             if (TemplatesPath != "")

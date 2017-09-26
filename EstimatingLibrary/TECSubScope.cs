@@ -306,7 +306,7 @@ namespace EstimatingLibrary
             }
         }
 
-        override protected CostBatch getCosts()
+        protected override CostBatch getCosts()
         {
             CostBatch costs = base.getCosts();
             foreach (TECDevice dev in Devices)

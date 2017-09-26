@@ -338,6 +338,7 @@ namespace TECUserControlLibrary.Utilities
             return savePath;
         }
         #endregion
+        
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };

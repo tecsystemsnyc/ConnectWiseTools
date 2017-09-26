@@ -14,33 +14,69 @@ namespace TemplateBuilder.MVVM
 {
     public class MainViewModel : BuilderViewModel, IDropTarget
     {
-        //Initializer
+        #region Constants
+        const string APPDATA_FOLDER = @"TECSystems\";
+        const string TEMPLATES_FILE_NAME = @"TECTemplates.tdb";
+        #endregion
+        #region Fields
+        private TemplateGridIndex _DGTabIndex;
+        private Visibility _templatesVisibility;
+
+        #endregion
+        #region Constructors
         public MainViewModel() : base()
         {
             getTemplates();
 
             buildTitleString();
             setupCommands();
-            setupExtensions();
+            setupExtensions(MenuType.TB);
 
             DGTabIndex = TemplateGridIndex.Systems;
-            
+
         }
 
-        #region Resources Paths
-        const string APPDATA_FOLDER = @"TECSystems\";
-        const string TEMPLATES_FILE_NAME = @"TECTemplates.tdb";
-        #endregion //Resources Paths
-
+        #endregion
         #region Properties
-        #region VM Extensions
+        public override Visibility TemplatesVisibility
+        {
+            get
+            { return _templatesVisibility; }
+            set
+            {
+                _templatesVisibility = value;
+                RaisePropertyChanged("TemplatesVisibility");
+            }
+        }
         public ScopeCollectionsTabVM ScopeCollection { get; set; }
         public EquipmentVM ScopeDataGrid { get; set; }
         public EditTabVM EditTab { get; set; }
         public MaterialVM MaterialsTab { get; set; }
         public TypicalSystemVM TypicalSystemsTab { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
-        #endregion
+        public TECTemplates Templates
+        {
+            get { return workingScopeManager as TECTemplates; }
+            set
+            {
+                workingScopeManager = value;
+            }
+        }
+        public TemplateGridIndex DGTabIndex
+        {
+            get
+            {
+                return _DGTabIndex;
+            }
+            set
+            {
+                _DGTabIndex = value;
+                setVisibility(_DGTabIndex);
+                RaisePropertyChanged("DGTabIndex");
+            }
+        }
+        public ICommand RefreshCommand { get; private set; }
+        
         protected override TECScopeManager workingScopeManager
         {
             get
@@ -52,14 +88,6 @@ namespace TemplateBuilder.MVVM
                 refresh();
             }
         }
-        public TECTemplates Templates
-        {
-            get { return workingScopeManager as TECTemplates; }
-            set
-            {
-                workingScopeManager = value;
-            }
-        }
         protected override string defaultSaveFileName
         {
             get
@@ -67,8 +95,7 @@ namespace TemplateBuilder.MVVM
                 return "Templates";
             }
         }
-
-        override protected string TemplatesFilePath
+        protected override string TemplatesFilePath
         {
             get { return Properties.Settings.Default.TemplatesFilePath; }
             set
@@ -93,48 +120,7 @@ namespace TemplateBuilder.MVVM
                 TemplatesFilePath = value;
             }
         }
-
-        #region Interface Properties
-
-        #region Tab Indexes
-        public TemplateGridIndex DGTabIndex
-        {
-            get
-            {
-                return _DGTabIndex;
-            }
-            set
-            {
-                _DGTabIndex = value;
-                setVisibility(_DGTabIndex);
-                RaisePropertyChanged("DGTabIndex");
-            }
-        }
-        private TemplateGridIndex _DGTabIndex;
-        #endregion //Tab Indexes
-
-        #endregion //Interface Properties
-
-        #region Commands Properties
-        public ICommand RefreshCommand { get; private set; }
-        #endregion //Commands Properties
-
-        #region Visibility Properties
-        private Visibility _templatesVisibility;
-        override public Visibility TemplatesVisibility
-        {
-            get
-            { return _templatesVisibility; }
-            set
-            {
-                _templatesVisibility = value;
-                RaisePropertyChanged("TemplatesVisibility");
-            }
-        }
-        #endregion Visibility Properties
-
-        #region SettingsProperties
-        override protected bool TemplatesHidden
+        protected override bool TemplatesHidden
         {
             get
             {
@@ -151,7 +137,7 @@ namespace TemplateBuilder.MVVM
                 }
             }
         }
-        override protected string ScopeDirectoryPath
+        protected override string ScopeDirectoryPath
         {
             get { return Properties.Settings.Default.ScopeDirectoryPath; }
             set
@@ -187,9 +173,62 @@ namespace TemplateBuilder.MVVM
             }
         }
         #endregion
-        #endregion //Properties
-
         #region Methods
+        protected override void setupCommands()
+        {
+            base.setupCommands();
+            RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
+        }
+        protected override void setupExtensions(MenuType menuType)
+        {
+            base.setupExtensions(menuType);
+            setupScopeCollecion();
+            setupEditTab();
+            setupScopeDataGrid();
+            setupMaterialsTab();
+            setupTypicalSystemseTab();
+            setupControllersPanelsVM();
+        }
+        protected override void NewExecute()
+        {
+            if (deltaStack.CleansedStack().Count > 0)
+            {
+                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before creating new templates?", "Save?", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (!saveDelta(false))
+                    {
+                        MessageBox.Show("Save unsuccessful.");
+                        return;
+                    }
+                    else
+                    {
+                        Templates = new TECTemplates();
+                    }
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    Templates = new TECTemplates();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                Templates = new TECTemplates();
+            }
+            refresh();
+            TemplatesFilePath = "";
+        }
+        protected override void setupMenu(MenuType menuType)
+        {
+            base.setupMenu(menuType);
+            MenuVM.RefreshTemplatesCommand = RefreshCommand;
+            MenuVM.LoadTemplatesCommand = LoadCommand;
+        }
+        
         private void refresh()
         {
             if (ScopeCollection != null)
@@ -202,12 +241,6 @@ namespace TemplateBuilder.MVVM
                 ControllersPanelsVM.Refresh(Templates);
             }
         }
-        #region Setup Methods
-        override protected void setupCommands()
-        {
-            base.setupCommands();
-            RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
-        }
         private void getTemplates()
         {
             Templates = new TECTemplates();
@@ -217,7 +250,8 @@ namespace TemplateBuilder.MVVM
                 if (!UtilitiesMethods.IsFileLocked(TemplatesFilePath))
                 {
                     DatabaseManager manager = new DatabaseManager(TemplatesFilePath);
-                    Templates = manager.Load() as TECTemplates; }
+                    Templates = manager.Load() as TECTemplates;
+                }
                 else
                 {
                     DebugHandler.LogError("TECTemplates file is open elsewhere. Could not load templates. Please close the templates file and load again.");
@@ -230,7 +264,7 @@ namespace TemplateBuilder.MVVM
                 if (result == MessageBoxResult.Yes)
                 {
                     //User choose path
-                    TemplatesFilePath = getLoadPath(UIHelpers.TemplatesFileParameters);
+                    TemplatesFilePath = UIHelpers.GetLoadPath(UIHelpers.TemplatesFileParameters, defaultDirectory);
 
                     if (TemplatesFilePath != null)
                     {
@@ -249,17 +283,6 @@ namespace TemplateBuilder.MVVM
             }
             ResetStatus();
         }
-        protected override void setupExtensions()
-        {
-            base.setupExtensions();
-            setupScopeCollecion();
-            setupEditTab();
-            setupScopeDataGrid();
-            setupMaterialsTab();
-            setupTypicalSystemseTab();
-            setupControllersPanelsVM();
-        }
-
         private void setupScopeCollecion()
         {
             ScopeCollection = new ScopeCollectionsTabVM(Templates);
@@ -303,41 +326,6 @@ namespace TemplateBuilder.MVVM
             ControllersPanelsVM.DropHandler += Drop;
             ControllersPanelsVM.SelectionChanged += EditTab.updateSelection;
         }
-        #endregion
-        #region Commands Methods
-        protected override void NewExecute()
-        {
-            if (deltaStack.CleansedStack().Count > 0)
-            {
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before creating new templates?", "Save?", MessageBoxButton.YesNoCancel);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (!saveDelta(false))
-                    {
-                        MessageBox.Show("Save unsuccessful.");
-                        return;
-                    }
-                    else
-                    {
-                        Templates = new TECTemplates();
-                    }
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    Templates = new TECTemplates();
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else
-            {
-                Templates = new TECTemplates();
-            }
-            refresh();
-            TemplatesFilePath = "";
-        }
         private void RefreshTemplatesExecute()
         {
             if (!IsReady)
@@ -380,8 +368,10 @@ namespace TemplateBuilder.MVVM
         {
             return !(TemplatesFilePath == "");
         }
-        #endregion //Commands Methods
-        #region Helper Methods
+        private void buildTitleString()
+        {
+            TitleString = "Template Builder";
+        }
         private void setVisibility(TemplateGridIndex gridIndex)
         {
             ScopeDataGrid.NullifySelected();
@@ -404,12 +394,12 @@ namespace TemplateBuilder.MVVM
 
             switch (gridIndex)
             {
-               case TemplateGridIndex.Equipment:
+                case TemplateGridIndex.Equipment:
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                    
+
 
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Visible;
@@ -418,28 +408,28 @@ namespace TemplateBuilder.MVVM
 
                     break;
                 case TemplateGridIndex.SubScope:
-                    
+
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                   
+
                     ScopeDataGrid.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
                     ScopeCollection.TabIndex = ScopeCollectionIndex.SubScope;
 
                     break;
                 case TemplateGridIndex.Devices:
-                    
+
                     ScopeCollection.DevicesVisibility = Visibility.Visible;
                     ScopeCollection.DevicesEditVisibility = Visibility.Visible;
                     ScopeCollection.ManufacturerVisibility = Visibility.Visible;
                     ScopeCollection.TagsVisibility = Visibility.Visible;
-                    
+
                     ScopeCollection.TabIndex = ScopeCollectionIndex.Devices;
-                    
+
                     break;
                 case TemplateGridIndex.DDC:
-                    
+
                     ScopeCollection.ControllerEditVisibility = Visibility.Visible;
                     ScopeCollection.ControllerVisibility = Visibility.Visible;
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
@@ -450,7 +440,7 @@ namespace TemplateBuilder.MVVM
 
                     break;
                 case TemplateGridIndex.Materials:
-                   
+
                     ScopeCollection.AssociatedCostsVisibility = Visibility.Visible;
                     ScopeCollection.MiscCostVisibility = Visibility.Visible;
                     ScopeCollection.MiscWiringVisibility = Visibility.Visible;
@@ -458,7 +448,7 @@ namespace TemplateBuilder.MVVM
                     ScopeCollection.TabIndex = ScopeCollectionIndex.AssociatedCosts;
                     break;
                 case TemplateGridIndex.Constants:
-                    
+
                     ScopeCollection.TabIndex = ScopeCollectionIndex.None;
 
                     break;
@@ -485,7 +475,7 @@ namespace TemplateBuilder.MVVM
 
                     break;
                 default:
-                    
+
                     ScopeCollection.SystemsVisibility = Visibility.Visible;
                     ScopeCollection.EquipmentVisibility = Visibility.Visible;
                     ScopeCollection.SubScopeVisibility = Visibility.Visible;
@@ -497,26 +487,7 @@ namespace TemplateBuilder.MVVM
                     break;
             }
         }
-        
-        protected override void setupMenu()
-        {
-            MenuVM = new MenuVM(MenuType.TB);
 
-            MenuVM.NewCommand = NewCommand;
-            MenuVM.LoadCommand = LoadCommand;
-            MenuVM.SaveCommand = SaveCommand;
-            MenuVM.SaveAsCommand = SaveAsCommand;
-            MenuVM.UndoCommand = UndoCommand;
-            MenuVM.RedoCommand = RedoCommand;
-            MenuVM.RefreshTemplatesCommand = RefreshCommand;
-            MenuVM.LoadTemplatesCommand = LoadCommand;
-        }
-
-        protected override void buildTitleString()
-        {
-            TitleString = "Template Builder";
-        }
-        #endregion //Helper Methods
-        #endregion //Methods
+        #endregion
     }
 }
