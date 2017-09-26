@@ -627,7 +627,6 @@ namespace Tests
             resetRaised();
 
             //Act
-
             ss.AssociatedCosts.Add(assCost);
 
             //Assert
@@ -2504,42 +2503,6 @@ namespace Tests
             //Assert
             checkRaised(instanceChanged: true, costChanged: false, pointChanged: true);
             checkChangedArgs(Change.Edit, "Quantity", point, edited, original);
-        }
-
-        [TestMethod]
-        public void EditSystemSubScopeConnectionInBidController()
-        {
-            //Arrange
-            TECTypical typical = new TECTypical();
-            TECEquipment typEquip = new TECEquipment(true);
-            TECSubScope typSS = new TECSubScope(true);
-            TECDevice typDev = bid.Catalogs.Devices[0];
-            typSS.Devices.Add(typDev);
-            typEquip.SubScope.Add(typSS);
-            typical.Equipment.Add(typEquip);
-            bid.Systems.Add(typical);
-
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.Controllers.Add(controller);
-
-            controller.AddSubScope(typSS);
-
-            TECSystem instance = typical.AddInstance(bid);
-            TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
-            ssConnect.Length = 461.31;
-            ssConnect.ConduitLength = 734.16;
-
-            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
-
-            resetRaised();
-
-            //Act
-            ssConnect.ConduitType = conduitType;
-
-            //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
-            checkInstanceChangedArgs(Change.Edit, "ConduitType", ssConnect, conduitType, null);
-            checkCostDelta(conduitType.GetCosts(ssConnect.ConduitLength));
         }
 
         [TestMethod]

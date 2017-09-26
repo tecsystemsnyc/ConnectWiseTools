@@ -295,7 +295,6 @@ namespace EstimatingLibrary
                             raiseEvents = true;
                         }
                         notifyTECChanged(Change.Add, propertyName, this, item);
-                                                
                     }
                 }
                 if (raiseEvents)
