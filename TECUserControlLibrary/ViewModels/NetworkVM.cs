@@ -55,6 +55,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void resetCollections()
         {
+            connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
             Parentables = new ObservableCollection<ConnectableItem>();
             NonParentables = new ObservableCollection<ConnectableItem>();
             RaisePropertyChanged("Parentables");
@@ -92,11 +93,27 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectableItem(INetworkConnectable connectable)
         {
-            ConnectableItem item = new ConnectableItem(connectable);
+            bool parentConnected = false;
+            if (connectable.ParentConnection != null && connectable.ParentConnection.ParentController != null)
+            {
+                INetworkConnectable parentNetConnectable = connectable.ParentConnection.ParentController;
+                parentConnected = connectableDictionary[parentNetConnectable].IsConnected;
+            }
+
+            bool isServer = false;
+            if (connectable is INetworkParentable parent)
+            {
+                isServer = parent.IsServer;
+            }
+
+            bool isConnected = (parentConnected || isServer);
+
+            ConnectableItem item = new ConnectableItem(connectable, isConnected);
             connectableDictionary.Add(connectable, item);
-            if (connectable is INetworkParentable)
+            if (connectable is INetworkParentable parentable)
             {
                 Parentables.Add(item);
+                updateChildrenConnected(parentable);
             }
             else
             {
@@ -122,18 +139,23 @@ namespace TECUserControlLibrary.ViewModels
                     if (!(parentable.IsServer && !isConnected))
                     {
                         connectableItem.IsConnected = isConnected;
-                        foreach (TECNetworkConnection netConnect in parentable.GetNetworkConnections())
-                        {
-                            foreach (INetworkConnectable child in netConnect.Children)
-                            {
-                                updateIsConnected(child, isConnected);
-                            }
-                        }
+                        updateChildrenConnected(parentable);
                     }
                 }
                 else
                 {
                     connectableItem.IsConnected = isConnected;
+                }
+            }
+        }
+        private void updateChildrenConnected(INetworkParentable parentable)
+        {
+            bool isConnected = connectableDictionary[parentable as INetworkConnectable].IsConnected;
+            foreach (TECNetworkConnection netConnect in parentable.GetNetworkConnections())
+            {
+                foreach (INetworkConnectable child in netConnect.Children)
+                {
+                    updateIsConnected(child, isConnected);
                 }
             }
         }
@@ -144,9 +166,10 @@ namespace TECUserControlLibrary.ViewModels
             public INetworkConnectable Item { get; private set; }
             private bool _isConnected;
 
-            public ConnectableItem(INetworkConnectable item)
+            public ConnectableItem(INetworkConnectable item, bool isConnected)
             {
                 Item = item;
+                _isConnected = isConnected;
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
