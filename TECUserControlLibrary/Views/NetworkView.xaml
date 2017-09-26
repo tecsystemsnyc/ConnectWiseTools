@@ -6,6 +6,15 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1200">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <!--Main Grid-->
     <Grid Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>

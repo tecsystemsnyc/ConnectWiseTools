@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModels;
+using static TECUserControlLibrary.ViewModels.NetworkVM;
 
 namespace Tests
 {
@@ -14,341 +16,90 @@ namespace Tests
     public class NetworkVMTests
     {
         #region Is Connected Tests
+        #region Make Connection Tests
         [TestMethod]
-        public void MakeServer_ConnectPanel_ConnectUnitary()
+        public void ConnectControllerToServer()
         {
-            ////Arrange
-            //TECBid bid = new TECBid();
-            //bid.Catalogs = TestHelper.CreateTestCatalogs();
+            //Arrange
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+            TECController server = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            server.IsServer = true;
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            bid.Controllers.Add(server);
+            bid.Controllers.Add(controller);
+            TECNetworkConnection netConnect = server.AddNetworkConnection(false,
+                new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
 
-            //TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            //TECIO io = new TECIO();
-            //io.Type = IOType.BACnetIP;
-            //io.Quantity = 100;
-            //controllerType.IO.Add(io);
-            //bid.Catalogs.ControllerTypes.Add(controllerType);
+            ChangeWatcher cw = new ChangeWatcher(bid);
+            NetworkVM netVM = new NetworkVM(bid, cw);
 
-            //TECController server = new TECController(controllerType, false);
-            //bid.Controllers.Add(server);
+            ConnectableItem serverItem = null;
+            ConnectableItem controllerItem = null;
 
-            //TECController panel = new TECController(controllerType, false);
-            //bid.Controllers.Add(panel);
+            foreach(ConnectableItem item in netVM.Parentables)
+            {
+                if (item.Item == server)
+                {
+                    serverItem = item;
+                }
+                else if (item.Item == controller)
+                {
+                    controllerItem = item;
+                }
+            }
 
-            //TECController unitary = new TECController(controllerType, false);
-            //bid.Controllers.Add(unitary);
+            //Act
+            netConnect.AddINetworkConnectable(controller);
 
-            //NetworkVM netVM = new NetworkVM(bid);
+            //Assert
+            checkIsConnected(serverItem, true);
+            checkIsConnected(controllerItem, true);
+        }
 
-            //NetworkController netServer = null;
-            //NetworkController netPanel = null;
-            //NetworkController netUnitary = null;
-            //foreach (NetworkController netController in netVM.UnitaryControllersVM.NetworkControllers)
-            //{
-            //    if (netController.Controller == server)
-            //    {
-            //        netServer = netController;
-            //    }
-            //    else if (netController.Controller == panel)
-            //    {
-            //        netPanel = netController;
-            //    }
-            //    else if (netController.Controller == unitary)
-            //    {
-            //        netUnitary = netController;
-            //    }
-            //}
-
-            ////Act
-            //netServer.IsServer = true;
-            //netPanel.ParentController = netServer.Controller;
-            //netUnitary.ParentController = netPanel.Controller;
-
-            ////Assert
-            //Assert.IsTrue(netServer.IsConnected);
-            //Assert.IsTrue(netPanel.IsConnected);
-            //Assert.IsTrue(netUnitary.IsConnected);
+        [TestMethod]
+        public void ConnectSubScopeToServer()
+        {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void MakeServer_ConnectUnitary_ConnectPanel()
+        public void ConnectServerToServer()
         {
-            ////Arrange
-            //TECBid bid = new TECBid();
-            //bid.Catalogs = TestHelper.CreateTestCatalogs();
-
-            //TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            //TECIO io = new TECIO();
-            //io.Type = IOType.BACnetIP;
-            //io.Quantity = 100;
-            //controllerType.IO.Add(io);
-            //bid.Catalogs.ControllerTypes.Add(controllerType);
-
-            //TECController server = new TECController(controllerType, false);
-            //bid.Controllers.Add(server);
-
-            //TECController panel = new TECController(controllerType, false);
-            //bid.Controllers.Add(panel);
-
-            //TECController unitary = new TECController(controllerType, false);
-            //bid.Controllers.Add(unitary);
-
-            //NetworkVM netVM = new NetworkVM(bid);
-
-            //NetworkController netServer = null;
-            //NetworkController netPanel = null;
-            //NetworkController netUnitary = null;
-            //foreach (NetworkController netController in netVM.UnitaryControllersVM.NetworkControllers)
-            //{
-            //    if (netController.Controller == server)
-            //    {
-            //        netServer = netController;
-            //    }
-            //    else if (netController.Controller == panel)
-            //    {
-            //        netPanel = netController;
-            //    }
-            //    else if (netController.Controller == unitary)
-            //    {
-            //        netUnitary = netController;
-            //    }
-            //}
-
-            ////Act
-            //netServer.IsServer = true;
-            //netUnitary.ParentController = netPanel.Controller;
-            //netPanel.ParentController = netServer.Controller;
-
-            ////Assert
-            //Assert.IsTrue(netServer.IsConnected);
-            //Assert.IsTrue(netPanel.IsConnected);
-            //Assert.IsTrue(netUnitary.IsConnected);
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void ConnectPanel_MakeServer_ConnectUnitary()
+        public void ConnectControllerToConnectedController()
         {
-            ////Arrange
-            //TECBid bid = new TECBid();
-            //bid.Catalogs = TestHelper.CreateTestCatalogs();
-
-            //TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            //TECIO io = new TECIO();
-            //io.Type = IOType.BACnetIP;
-            //io.Quantity = 100;
-            //controllerType.IO.Add(io);
-            //bid.Catalogs.ControllerTypes.Add(controllerType);
-
-            //TECController server = new TECController(controllerType, false);
-            //bid.Controllers.Add(server);
-
-            //TECController panel = new TECController(controllerType, false);
-            //bid.Controllers.Add(panel);
-
-            //TECController unitary = new TECController(controllerType, false);
-            //bid.Controllers.Add(unitary);
-
-            //NetworkVM netVM = new NetworkVM(bid);
-
-            //NetworkController netServer = null;
-            //NetworkController netPanel = null;
-            //NetworkController netUnitary = null;
-            //foreach (NetworkController netController in netVM.UnitaryControllersVM.NetworkControllers)
-            //{
-            //    if (netController.Controller == server)
-            //    {
-            //        netServer = netController;
-            //    }
-            //    else if (netController.Controller == panel)
-            //    {
-            //        netPanel = netController;
-            //    }
-            //    else if (netController.Controller == unitary)
-            //    {
-            //        netUnitary = netController;
-            //    }
-            //}
-
-            ////Act
-            //netPanel.ParentController = netServer.Controller;
-            //netServer.IsServer = true;
-            //netUnitary.ParentController = netPanel.Controller;
-
-            ////Assert
-            //Assert.IsTrue(netServer.IsConnected);
-            //Assert.IsTrue(netPanel.IsConnected);
-            //Assert.IsTrue(netUnitary.IsConnected);
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void ConnectPanel_ConnectUnitary_MakeServer()
+        public void ConnectSubScopeToConnectedController()
         {
-            ////Arrange
-            //TECBid bid = new TECBid();
-            //bid.Catalogs = TestHelper.CreateTestCatalogs();
-
-            //TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            //TECIO io = new TECIO();
-            //io.Type = IOType.BACnetIP;
-            //io.Quantity = 100;
-            //controllerType.IO.Add(io);
-            //bid.Catalogs.ControllerTypes.Add(controllerType);
-
-            //TECController server = new TECController(controllerType, false);
-            //bid.Controllers.Add(server);
-
-            //TECController panel = new TECController(controllerType, false);
-            //bid.Controllers.Add(panel);
-
-            //TECController unitary = new TECController(controllerType, false);
-            //bid.Controllers.Add(unitary);
-
-            //NetworkVM netVM = new NetworkVM(bid);
-
-            //NetworkController netServer = null;
-            //NetworkController netPanel = null;
-            //NetworkController netUnitary = null;
-            //foreach (NetworkController netController in netVM.UnitaryControllersVM.NetworkControllers)
-            //{
-            //    if (netController.Controller == server)
-            //    {
-            //        netServer = netController;
-            //    }
-            //    else if (netController.Controller == panel)
-            //    {
-            //        netPanel = netController;
-            //    }
-            //    else if (netController.Controller == unitary)
-            //    {
-            //        netUnitary = netController;
-            //    }
-            //}
-
-            ////Act
-            //netPanel.ParentController = netServer.Controller;
-            //netUnitary.ParentController = netPanel.Controller;
-            //netServer.IsServer = true;
-
-            ////Assert
-            //Assert.IsTrue(netServer.IsConnected);
-            //Assert.IsTrue(netPanel.IsConnected);
-            //Assert.IsTrue(netUnitary.IsConnected);
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void ConnectUnitary_MakeServer_ConnectPanel()
+        public void ConnectParentControllerToServer()
         {
-            ////Arrange
-            //TECBid bid = new TECBid();
-            //bid.Catalogs = TestHelper.CreateTestCatalogs();
+            throw new NotImplementedException();
+        }
+        #endregion
 
-            //TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            //TECIO io = new TECIO();
-            //io.Type = IOType.BACnetIP;
-            //io.Quantity = 100;
-            //controllerType.IO.Add(io);
-            //bid.Catalogs.ControllerTypes.Add(controllerType);
-
-            //TECController server = new TECController(controllerType, false);
-            //bid.Controllers.Add(server);
-
-            //TECController panel = new TECController(controllerType, false);
-            //bid.Controllers.Add(panel);
-
-            //TECController unitary = new TECController(controllerType, false);
-            //bid.Controllers.Add(unitary);
-
-            //NetworkVM netVM = new NetworkVM(bid);
-
-            //NetworkController netServer = null;
-            //NetworkController netPanel = null;
-            //NetworkController netUnitary = null;
-            //foreach (NetworkController netController in netVM.UnitaryControllersVM.NetworkControllers)
-            //{
-            //    if (netController.Controller == server)
-            //    {
-            //        netServer = netController;
-            //    }
-            //    else if (netController.Controller == panel)
-            //    {
-            //        netPanel = netController;
-            //    }
-            //    else if (netController.Controller == unitary)
-            //    {
-            //        netUnitary = netController;
-            //    }
-            //}
-
-            ////Act
-            //netUnitary.ParentController = netPanel.Controller;
-            //netServer.IsServer = true;
-            //netPanel.ParentController = netServer.Controller;
-
-            ////Assert
-            //Assert.IsTrue(netServer.IsConnected);
-            //Assert.IsTrue(netPanel.IsConnected);
-            //Assert.IsTrue(netUnitary.IsConnected);
+        #region Make Server Tests
+        [TestMethod]
+        public void MakeServer()
+        {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void ConnectUnitary_ConnectPanel_MakeServer()
+        public void MakeNotServer()
         {
-            ////Arrange
-            //TECBid bid = new TECBid();
-            //bid.Catalogs = TestHelper.CreateTestCatalogs();
-
-            //TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            //TECIO io = new TECIO();
-            //io.Type = IOType.BACnetIP;
-            //io.Quantity = 100;
-            //controllerType.IO.Add(io);
-            //bid.Catalogs.ControllerTypes.Add(controllerType);
-
-            //TECController server = new TECController(controllerType, false);
-            //bid.Controllers.Add(server);
-
-            //TECController panel = new TECController(controllerType, false);
-            //bid.Controllers.Add(panel);
-
-            //TECController unitary = new TECController(controllerType, false);
-            //bid.Controllers.Add(unitary);
-
-            //NetworkVM netVM = new NetworkVM(bid);
-
-            //NetworkController netServer = null;
-            //NetworkController netPanel = null;
-            //NetworkController netUnitary = null;
-            //foreach (NetworkController netController in netVM.UnitaryControllersVM.NetworkControllers)
-            //{
-            //    if (netController.Controller == server)
-            //    {
-            //        netServer = netController;
-            //    }
-            //    else if (netController.Controller == panel)
-            //    {
-            //        netPanel = netController;
-            //    }
-            //    else if (netController.Controller == unitary)
-            //    {
-            //        netUnitary = netController;
-            //    }
-            //}
-
-            ////Act
-            //netUnitary.ParentController = netPanel.Controller;
-            //netPanel.ParentController = netServer.Controller;
-            //netServer.IsServer = true;
-
-            ////Assert
-            //Assert.IsTrue(netServer.IsConnected);
-            //Assert.IsTrue(netPanel.IsConnected);
-            //Assert.IsTrue(netUnitary.IsConnected);
             throw new NotImplementedException();
         }
+        #endregion
         #endregion
 
         #region Possible Parents Tests
@@ -561,5 +312,17 @@ namespace Tests
         }
 
         #endregion
+
+        private void checkIsConnected(ConnectableItem item, bool isConnected)
+        {
+            if (isConnected)
+            {
+                Assert.IsTrue(item.IsConnected, "ConnectableItem isn't connected when it should be.");
+            }
+            else
+            {
+                Assert.IsFalse(item.IsConnected, "ConnectableItem is connected when it shouldn't be.");
+            }
+        }
     }
 }

@@ -8,6 +8,9 @@ namespace EstimatingLibrary.Interfaces
 {
     public interface INetworkParentable
     {
+        bool IsServer { get; }
         string Name { get; }
+        
+        IEnumerable<TECNetworkConnection> GetNetworkConnections();
     }
 }

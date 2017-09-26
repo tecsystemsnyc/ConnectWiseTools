@@ -15,10 +15,11 @@ namespace TECUserControlLibrary.ViewModels
     public class NetworkVM : ViewModelBase
     {
         #region Fields
-        public ObservableCollection<INetworkParentable> Parentables { get; private set; }
-        public ObservableCollection<INetworkConnectable> NonParentables { get; private set; }
+        public ObservableCollection<ConnectableItem> Parentables { get; private set; }
+        public ObservableCollection<ConnectableItem> NonParentables { get; private set; }
 
         private INetworkConnectable _selectedItem;
+        private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
         #endregion
 
         //Constructor
@@ -45,10 +46,17 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Methods
+        public void Refresh(TECBid bid, ChangeWatcher cw)
+        {
+            resetCollections();
+            addBid(bid);
+            resubscribe(cw);
+        }
+
         private void resetCollections()
         {
-            Parentables = new ObservableCollection<INetworkParentable>();
-            NonParentables = new ObservableCollection<INetworkConnectable>();
+            Parentables = new ObservableCollection<ConnectableItem>();
+            NonParentables = new ObservableCollection<ConnectableItem>();
             RaisePropertyChanged("Parentables");
             RaisePropertyChanged("NonParentables");
         }
@@ -56,7 +64,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             foreach (TECController controller in bid.Controllers)
             {
-                Parentables.Add(controller);
+                addConnectableItem(controller);
             }
             foreach (TECTypical typical in bid.Systems)
             {
@@ -64,13 +72,13 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach (TECController controller in system.Controllers)
                     {
-                        Parentables.Add(controller);
+                        addConnectableItem(controller);
                     }
                     foreach(TECEquipment equip in system.Equipment)
                     {
                         foreach(TECSubScope ss in equip.SubScope)
                         {
-                            NonParentables.Add(ss);
+                            addConnectableItem(ss);
                         }
                     }
                 }
@@ -82,20 +90,63 @@ namespace TECUserControlLibrary.ViewModels
             cw.InstanceChanged += instanceChanged;
         }
 
+        private void addConnectableItem(INetworkConnectable connectable)
+        {
+            ConnectableItem item = new ConnectableItem(connectable);
+            connectableDictionary.Add(connectable, item);
+            if (connectable is INetworkParentable)
+            {
+                Parentables.Add(item);
+            }
+            else
+            {
+                NonParentables.Add(item);
+            }
+        }
+
         private void instanceChanged(TECChangedEventArgs obj)
         {
-            throw new NotImplementedException();
+            if (obj.PropertyName == "IsServer" && obj.Sender is INetworkConnectable networkConnectable && obj.Value is bool isServer)
+            {
+                updateIsConnected(networkConnectable, isServer);
+            }
+        }
+
+        private void updateIsConnected(INetworkConnectable networkConnectable, bool isConnected)
+        {
+            ConnectableItem connectableItem = connectableDictionary[networkConnectable];
+            if (connectableItem.IsConnected != isConnected)
+            {
+                if (networkConnectable is INetworkParentable parentable)
+                {
+                    if (!(parentable.IsServer && !isConnected))
+                    {
+                        connectableItem.IsConnected = isConnected;
+                        foreach (TECNetworkConnection netConnect in parentable.GetNetworkConnections())
+                        {
+                            foreach (INetworkConnectable child in netConnect.Children)
+                            {
+                                updateIsConnected(child, isConnected);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    connectableItem.IsConnected = isConnected;
+                }
+            }
         }
         #endregion
 
-        public class Connectable : INotifyPropertyChanged
+        public class ConnectableItem : INotifyPropertyChanged
         {
             public INetworkConnectable Item { get; private set; }
             private bool _isConnected;
 
-            public Connectable(INetworkConnectable item)
+            public ConnectableItem(INetworkConnectable item)
             {
-
+                Item = item;
             }
 
             public event PropertyChangedEventHandler PropertyChanged;

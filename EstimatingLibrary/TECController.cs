@@ -434,7 +434,17 @@ namespace EstimatingLibrary
             return new TECController(item as TECController, isTypical, guidDictionary);
         }
 
-        
+        public IEnumerable<TECNetworkConnection> GetNetworkConnections()
+        {
+            List<TECNetworkConnection> netConnections = new List<TECNetworkConnection>();
+            foreach(TECConnection connection in ChildrenConnections.Where(connect => connect is TECNetworkConnection))
+            {
+                netConnections.Add(connection as TECNetworkConnection);
+            }
+            return netConnections;
+        }
+
+
         #endregion
     }
 }
