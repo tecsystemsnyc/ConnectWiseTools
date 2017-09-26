@@ -5,6 +5,7 @@ using System.Windows.Input;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 using Microsoft.Win32;
+using System.Windows;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -13,6 +14,11 @@ namespace TECUserControlLibrary.ViewModels
         private string _bidPath;
         private string _templatesPath;
         private string _defaultDirectory;
+        private Visibility _bidVisibility;
+        private string _titleText;
+        private string _subtitleText;
+        private bool _isEstimate;
+        private string _loadingText;
 
         public string BidPath
         {
@@ -35,6 +41,45 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TemplatesPath");
             }
         }
+        public Visibility BidVisiblity
+        {
+            get
+            {
+                return _bidVisibility;
+            }
+            set
+            {
+                _bidVisibility = value;
+                RaisePropertyChanged("BidVisibility");
+            }
+        }
+        public string TitleText
+        {
+            get { return _titleText; }
+            set
+            {
+                _titleText = value;
+                RaisePropertyChanged("TitleText");
+            }
+        }
+        public string SubtitleText
+        {
+            get { return _subtitleText; }
+            set
+            {
+                _subtitleText = value;
+                RaisePropertyChanged("SubtitleText");
+            }
+        }
+        public string LoadingText
+        {
+            get { return _loadingText; }
+            set
+            {
+                _loadingText = value;
+                RaisePropertyChanged("LoadingText");
+            }
+        }
         
         public ICommand GetBidPathCommand { get; private set; }
         public ICommand GetTemplatesPathCommand { get; private set; }
@@ -43,7 +88,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<string, string> Started;
 
-        public SplashVM(string initialTemplates, string defaultDirectory)
+        public SplashVM(string titleText, string subtitleText, string initialTemplates, string defaultDirectory, bool isEstimate)
         {
             GetBidPathCommand = new RelayCommand(getBidPathExecute);
             GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
@@ -53,6 +98,10 @@ namespace TECUserControlLibrary.ViewModels
             _bidPath = "";
             _defaultDirectory = defaultDirectory;
             _templatesPath = initialTemplates;
+            _titleText = titleText;
+            _subtitleText = subtitleText;
+            _isEstimate = isEstimate;
+            _bidVisibility = isEstimate ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void getBidPathExecute()
@@ -67,11 +116,16 @@ namespace TECUserControlLibrary.ViewModels
 
         private void openExistingExecute()
         {
+            LoadingText = "Loading...";
             Started?.Invoke(BidPath, TemplatesPath);
         }
         private bool openExistingCanExecute()
         {
             if(BidPath != "" && TemplatesPath != "")
+            {
+                return true;
+            }
+            else if (!_isEstimate && TemplatesPath != "")
             {
                 return true;
             }
@@ -83,11 +137,12 @@ namespace TECUserControlLibrary.ViewModels
 
         private void createNewExecute()
         {
+            LoadingText = "Creating...";
             Started?.Invoke("", TemplatesPath);
         }
         private bool createNewCanExecute()
         {
-            if (TemplatesPath != "")
+            if (TemplatesPath != "" || !_isEstimate)
             {
                 return true;
             }

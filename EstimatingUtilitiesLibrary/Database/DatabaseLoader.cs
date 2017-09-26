@@ -261,9 +261,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable controllerDT = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid);
             foreach (DataRow row in controllerDT.Rows)
             {
-                var controller = getControllerFromRow(row, isTypical);
-                controller.IsGlobal = false;
-                controllers.Add(controller);
+                controllers.Add(getControllerFromRow(row, isTypical));
             }
 
             return controllers;
@@ -570,9 +568,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable controllersDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in controllersDT.Rows)
             {
-                var controller = getControllerFromRow(row, false);
-                controller.IsGlobal = true;
-                controllers.Add(controller);
+                controllers.Add(getControllerFromRow(row, false));
             }
 
             return controllers;
@@ -1067,7 +1063,6 @@ namespace EstimatingUtilitiesLibrary.Database
             getScopeChildren(controller);
             controller.ChildrenConnections = getConnectionsInController(controller, isTypical);
             controller.IOModules = getIOModuleInController(guid);
-            controller.NetworkType = UtilitiesMethods.StringToEnum<NetworkType>(row[ControllerTable.Type.Name].ToString(), 0);
             return controller;
         }
         private static TECIO getIOFromRow(DataRow row)
