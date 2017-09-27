@@ -48,27 +48,6 @@
                                         Header="Location" Width="Auto"  MinWidth="60"
                                         Visibility="{Binding Data.DataGridVisibilty.EquipmentLocation,
                                         Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding Quantity, UpdateSourceTrigger=LostFocus}" Header="Quantity" Width="Auto"  MinWidth="60"
-                                    ElementStyle="{StaticResource RightCell}"
-                                    Visibility="{Binding Data.DataGridVisibilty.EquipmentQuantity,
-                                    Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding SubScopeQuantity}" Header="Points Each" Width="Auto" IsReadOnly="True"  MinWidth="70"
-                                    ElementStyle="{StaticResource RightCell}"
-                                    Visibility="{Binding Data.DataGridVisibilty.EquipmentSubScopeCount,
-                                    Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding BudgetUnitPrice, UpdateSourceTrigger=LostFocus, Converter={utilities:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
-                                    Header="Unit Price" 
-                                    Width="Auto" MinWidth="60"
-                                    ElementStyle="{StaticResource RightCell}"
-                                    Visibility="{Binding Data.DataGridVisibilty.EquipmentUnitPrice, 
-                                    Source={StaticResource proxy}}"/>
-                <DataGridTextColumn Binding="{Binding TotalBudgetPrice, Converter={utilities:BudgetPriceConverter}, StringFormat= {} {0:C}}" 
-                                    IsReadOnly="True"
-                                    Header="Total Price" 
-                                    Width="Auto" MinWidth="60"
-                                    ElementStyle="{StaticResource RightCell}"
-                                    Visibility="{Binding Data.DataGridVisibilty.EquipmentTotalPrice, 
-                                    Source={StaticResource proxy}}"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
