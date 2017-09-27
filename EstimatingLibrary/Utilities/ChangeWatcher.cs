@@ -123,9 +123,10 @@ namespace EstimatingLibrary.Utilities
         private void raiseInstanceChanged(TECChangedEventArgs e)
         {
             InstanceChanged?.Invoke(e);
-            if(e.Change == Change.Add || e.Change == Change.Remove)
+            if((e.Change == Change.Add || e.Change == Change.Remove) && e.Sender is IRelatable parent)
             {
-                raiseConstituents(e.Change, e.Value as TECObject);
+                if(!parent.LinkedObjects.Contains(e.PropertyName))
+                    raiseConstituents(e.Change, e.Value as TECObject);
             }
         }
         private void raiseConstituents(Change change, TECObject item)

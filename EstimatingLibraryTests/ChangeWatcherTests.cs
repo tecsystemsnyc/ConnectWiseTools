@@ -683,10 +683,9 @@ namespace Tests
             ss.AssociatedCosts.Add(assCost);
 
             //Assert
-            checkRaised(true, true, false, true);
+            checkRaised(true, true, false, false);
             checkInstanceChangedArgs(Change.Add, "AssociatedCosts", ss, assCost);
             checkCostDelta(assCost.CostBatch);
-            checkConstituentArgs(Change.Add, assCost);
         }
 
         [TestMethod]
@@ -946,7 +945,7 @@ namespace Tests
 
             //Assert
             checkRaised(true, false, false, false);
-            checkInstanceChangedArgs(Change.Add, "ChildrenControllers", netConnect, daisyController);
+            checkInstanceChangedArgs(Change.Add, "Children", netConnect, daisyController);
         }
 
         [TestMethod]
@@ -1851,7 +1850,7 @@ namespace Tests
 
             //Assert
             checkRaised(true, false, false, false);
-            checkInstanceChangedArgs(Change.Remove, "ChildrenControllers", netConnect, daisyController);
+            checkInstanceChangedArgs(Change.Remove, "Children", netConnect, daisyController);
         }
 
         [TestMethod]
