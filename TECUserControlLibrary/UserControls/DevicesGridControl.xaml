@@ -26,12 +26,13 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
-                <!--<DataGridTextColumn Binding="{Binding Quantity}" Header="Qty." Width="Auto"/>-->
+                <DataGridTextColumn Binding="{Binding Price, StringFormat= {} {0:C}}"
+                                    Header="Price" Width="Auto" IsReadOnly="True" MinWidth="40"
+                                    ElementStyle="{StaticResource RightCell}"/>
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
                                     Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
-                <!--<DataGridTextColumn Binding="{Binding ConnectionType.Name}" Header="Connection" Width="Auto" IsReadOnly="True" MinWidth="70"/>-->
-                <DataGridTextColumn Binding="{Binding Manufacturer.Name}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
+                <DataGridTextColumn Binding="{Binding Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

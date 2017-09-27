@@ -11,7 +11,15 @@
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
-    <ScrollViewer DataContext="{Binding ElementName=parent, Path=Selected}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer DataContext="{Binding ElementName=parent, Path=Selected}"
+                  Background="{DynamicResource SectionBackgroundBrush}">
         <StackPanel>
             <ContentPresenter Content="{Binding}">
                 <ContentPresenter.Resources>
@@ -20,6 +28,7 @@
                             <controls:ScopePropertiesControl Selected="{Binding}"/>
                         </Expander>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:TECObject}"/>
                 </ContentPresenter.Resources>
             </ContentPresenter>
             <ContentPresenter Content="{Binding}">
@@ -29,6 +38,17 @@
                             <controls:CostPropertiesControl Selected="{Binding}"/>
                         </Expander>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:TECObject}"/>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type interfaces:INotifyCostChanged}">
+                        <Expander Header="Cost batch" >
+                            <controls:CostBatchPropertiesControl Selected="{Binding}"/>
+                        </Expander>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:TECObject}"/>
                 </ContentPresenter.Resources>
             </ContentPresenter>
         </StackPanel>

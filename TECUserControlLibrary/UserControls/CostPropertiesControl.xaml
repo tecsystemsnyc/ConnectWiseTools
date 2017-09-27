@@ -40,29 +40,31 @@
             <Label Grid.Column="0"
                            Grid.Row="2"
                            Content="Labor:"/>
-            <ContentPresenter Content="{Binding}">
+            <ContentPresenter Content="{Binding}" Grid.Column="1"
+                           Grid.Row="0" VerticalAlignment="Top">
                 <ContentPresenter.Resources>
                     <DataTemplate DataType="{x:Type models:TECHardware}">
-                        <Label Grid.Column="0"
-                           Grid.Row="2"
-                           Content="{Binding Price}"/>
+                        <Label Content="{Binding Cost}"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
-                        <TextBox Grid.Column="1"
-                               Grid.Row="0"
-                               Text="{Binding Cost}"
-                                     VerticalAlignment="Top"
+                        <TextBox Text="{Binding Cost}" 
                              Margin="5"/>
                     </DataTemplate>
                 </ContentPresenter.Resources>
             </ContentPresenter>
-            
-            
-            <TextBox Grid.Column="1"
-                               Grid.Row="2"
-                               Text="{Binding Labor}"
-                                     VerticalAlignment="Top"
-                             Margin="5"/>
+
+            <ContentPresenter Content="{Binding}" Grid.Column="1"
+                           Grid.Row="1" VerticalAlignment="Top" >
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type models:TECHardware}">
+                        <Label Content="{Binding Labor}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:TECCost}">
+                        <TextBox Text="{Binding Labor}" Margin="5"/>
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
+
         </Grid>
     </Grid>
 </UserControl>
