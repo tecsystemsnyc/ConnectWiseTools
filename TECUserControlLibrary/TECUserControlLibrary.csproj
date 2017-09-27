@@ -115,6 +115,9 @@
     <Compile Include="UserControls\CostBatchPropertiesControl.xaml.cs">
       <DependentUpon>CostBatchPropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PointPropetiesControl.xaml.cs">
+      <DependentUpon>PointPropetiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ScopePropertiesControl.xaml.cs">
       <DependentUpon>ScopePropertiesControl.xaml</DependentUpon>
     </Compile>
@@ -333,6 +336,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CostBatchPropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PointPropetiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

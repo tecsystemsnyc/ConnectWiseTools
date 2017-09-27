@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface INotifyPointChanged
+    public interface INotifyPointChanged
     {
         event Action<int> PointChanged;
         int PointNumber { get; }
