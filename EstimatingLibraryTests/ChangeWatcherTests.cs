@@ -1085,6 +1085,8 @@ namespace Tests
             TECScopeBranch scopeTree = new TECScopeBranch(false);
             TECScopeBranch branch1 = new TECScopeBranch(false);
             TECScopeBranch branch2 = new TECScopeBranch(false);
+            scopeTree.Branches.Add(branch1);
+            scopeTree.Branches.Add(branch2);
             bid.ScopeTree.Add(scopeTree);
 
             resetRaised();
