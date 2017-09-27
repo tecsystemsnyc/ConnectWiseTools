@@ -118,6 +118,7 @@
     <Compile Include="UserControls\ScopePropertiesControl.xaml.cs">
       <DependentUpon>ScopePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\InterfaceDataTemplateSelector.cs" />
     <Compile Include="ViewModels\HardwareSummaryVM.cs" />
     <Compile Include="ViewModels\LengthSummaryVM.cs" />
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />

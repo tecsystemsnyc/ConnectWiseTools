@@ -20,12 +20,25 @@
         <ItemsControl ItemsSource="{Binding CostBatch.AllCosts}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <Label FontSize="18" Content="{Binding Type}"/>
-                        <Label Content="{Binding Cost}"/>
-                        <Label Content="{Binding Labor}"/>
-                        <Border BorderThickness="1"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label FontSize="18" Content="{Binding Type}" 
+                               Grid.ColumnSpan="2"/>
+                        <Label Content="Cost: " Grid.Row="1"/>
+                        <Label Content="{Binding Cost}" Grid.Row="1" Grid.Column="1"/>
+                        <Label Content="Labor" Grid.Row="2" Grid.Column="0"/>
+                        <Label Content="{Binding Labor}" Grid.Row="2" Grid.Column="1"/>
+                        <Border Grid.Row="2" BorderThickness="0 0 0 1" Grid.ColumnSpan="2"
+                                BorderBrush="Black"/>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

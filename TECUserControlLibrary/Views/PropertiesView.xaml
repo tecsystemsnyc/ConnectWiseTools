@@ -7,6 +7,7 @@
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              
              mc:Ignorable="d" 
              x:Name="parent"
@@ -16,7 +17,17 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="costBatchInterface">
+                <Expander Header="Cost batch" >
+                    <controls:CostBatchPropertiesControl Selected="{Binding}"/>
+                </Expander>
+            </DataTemplate>
+            <DataTemplate x:Key="default"/>
+            <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
+                                              InterfaceTemplate="{StaticResource costBatchInterface}" 
+                                              DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
+        
     </UserControl.Resources>
     <ScrollViewer DataContext="{Binding ElementName=parent, Path=Selected}"
                   Background="{DynamicResource SectionBackgroundBrush}">
@@ -41,16 +52,7 @@
                     <DataTemplate DataType="{x:Type models:TECObject}"/>
                 </ContentPresenter.Resources>
             </ContentPresenter>
-            <ContentPresenter Content="{Binding}">
-                <ContentPresenter.Resources>
-                    <DataTemplate DataType="{x:Type interfaces:INotifyCostChanged}">
-                        <Expander Header="Cost batch" >
-                            <controls:CostBatchPropertiesControl Selected="{Binding}"/>
-                        </Expander>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type models:TECObject}"/>
-                </ContentPresenter.Resources>
-            </ContentPresenter>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

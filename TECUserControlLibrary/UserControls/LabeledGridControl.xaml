@@ -10,7 +10,7 @@
              x:Name="parent">
     <UserControl.Resources>
         <ResourceDictionary>
-            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=DataContext}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
