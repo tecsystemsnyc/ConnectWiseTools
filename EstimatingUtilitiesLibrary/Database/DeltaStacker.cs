@@ -38,10 +38,10 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return addRemoveStack(Change.Add, propertyName, sender, item);
         }
-        public static List<UpdateItem> ChildStack(Change change, ISaveable item)
+        public static List<UpdateItem> ChildStack(Change change, IRelatable item)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
-            foreach (Tuple<string, TECObject> saveItem in item.SaveObjects.ChildList())
+            foreach (Tuple<string, TECObject> saveItem in item.PropertyObjects.ChildList())
             {
                 outStack.AddRange(addRemoveStack(change, saveItem.Item1, item as TECObject, saveItem.Item2));
             }
@@ -57,11 +57,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             List<TableBase> tables;
-            if(sender is ISaveable parent && !parent.RelatedObjects.Contains(propertyName) && parent.SaveObjects.Contains(propertyName))
+            if(sender is IRelatable parent && !parent.LinkedObjects.Contains(propertyName) && parent.PropertyObjects.Contains(propertyName))
             {
                 tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, dbType);
                 outStack.AddRange(tableObjectStack(change, tables, item));
-                if(item is ISaveable saveable)
+                if(item is IRelatable saveable)
                 {
                     outStack.AddRange(ChildStack(change, saveable));
                 }

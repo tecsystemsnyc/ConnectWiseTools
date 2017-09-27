@@ -10,7 +10,7 @@ namespace EstimatingLibrary.Utilities
         #region Constructors
         public ChangeWatcher(TECObject item)
         {
-            initialize(item);
+            register(item);
         }
         #endregion
 
@@ -20,51 +20,42 @@ namespace EstimatingLibrary.Utilities
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
         public event Action<object, PropertyChangedEventArgs> PropertyChanged;
+        public event Action<Change, TECObject> InstanceConstituentChanged;
         #endregion
 
         #region Methods
         public void Refresh(TECObject item)
         {
-            initialize(item);
-        }
-
-        private void initialize(TECObject item)
-        {
             register(item);
         }
-
-        #region Registration
-        public void register(TECObject item)
+        
+        private void register(TECObject item)
         {
             registerTECObject(item);
-            if (item is ISaveable saveable)
+            if (item is IRelatable saveable)
             {
-                foreach (Tuple<string, TECObject> child in saveable.SaveObjects.ChildList())
+                foreach (Tuple<string, TECObject> child in saveable.PropertyObjects.ChildList())
                 {
-                    if (!saveable.RelatedObjects.Contains(child.Item1))
+                    if (!saveable.LinkedObjects.Contains(child.Item1))
                     {
                         register(child.Item2);
                     }
                 }
             }
         }
-        
         private void registerTECObject(TECObject ob)
         {
             ob.TECChanged += handleTECChanged;
-            ob.PropertyChanged += handlePropertyChanged;
+            ob.PropertyChanged += raisePropertyChanged;
             if (ob is INotifyCostChanged costOb)
             {
-                costOb.CostChanged += (e) => handleCostChanged(ob, e);
+                costOb.CostChanged += (e) => raiseCostChanged(ob, e);
             }
             if (ob is INotifyPointChanged pointOb)
             {
-                pointOb.PointChanged += (e) => handlePointChanged(ob, e);
+                pointOb.PointChanged += (e) => raisePointChanged(ob, e);
             }
         }
-
-        
-
         private void registerChange(TECChangedEventArgs args)
         {
             if(args.PropertyName != "TypicalInstanceDictionary")
@@ -73,62 +64,85 @@ namespace EstimatingLibrary.Utilities
                 {
                     register(tObj);
                 }
-                else if (args.Change == Change.Edit && args.Sender is ISaveable saveable)
+                else if (args.Change == Change.Edit && args.Sender is IRelatable saveable)
                 {
-                    if (!saveable.RelatedObjects.Contains(args.PropertyName) && args.Value is TECObject tValue)
+                    if (!saveable.LinkedObjects.Contains(args.PropertyName) && args.Value is TECObject tValue)
                     {
                         register(tValue);
                     }
                 }
             }
         }
-        #endregion
-
-        #region Event Handlers
-        private void handleTECChanged(TECChangedEventArgs obj)
+        private void handleTECChanged(TECChangedEventArgs e)
         {
-            registerChange(obj);
-            Changed?.Invoke(obj);
+            registerChange(e);
+            raiseChanged(e);
 
-            if (obj.PropertyName != "TypicalInstanceDictionary")
+            if (e.PropertyName != "TypicalInstanceDictionary")
             {
-                if (obj.Value is ITypicalable valueTyp)
+                if (e.Value is ITypicalable valueTyp)
                 {
                     if (!valueTyp.IsTypical)
                     {
-                        InstanceChanged?.Invoke(obj);
+                        raiseInstanceChanged(e);
                     }
                 }
                 else
                 {
-                    if (obj.Sender is ITypicalable senderTyp)
+                    if (e.Sender is ITypicalable senderTyp)
                     {
                         if (!senderTyp.IsTypical)
                         {
-                            InstanceChanged?.Invoke(obj);
+                            raiseInstanceChanged(e);
                         }
                     }
                     else
                     {
-                        InstanceChanged?.Invoke(obj);
+                        raiseInstanceChanged(e);
                     }
                 }
             }
         }
-        private void handlePropertyChanged(object sender, PropertyChangedEventArgs e)
+
+        private void raisePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(sender, e);
         }
-        private void handleCostChanged(TECObject sender, CostBatch obj)
+        private void raiseChanged(TECChangedEventArgs e)
+        {
+            Changed?.Invoke(e);
+        }
+        private void raiseCostChanged(TECObject sender, CostBatch obj)
         {
             CostChanged?.Invoke(obj);
         }
-        private void handlePointChanged(TECObject sender, int num)
+        private void raisePointChanged(TECObject sender, int num)
         {
             PointChanged?.Invoke(num);
         }
+        private void raiseInstanceChanged(TECChangedEventArgs e)
+        {
+            InstanceChanged?.Invoke(e);
+            if(e.Change == Change.Add || e.Change == Change.Remove)
+            {
+                raiseConstituents(e.Change, e.Value as TECObject);
+            }
+        }
+        private void raiseConstituents(Change change, TECObject item)
+        {
+            InstanceConstituentChanged?.Invoke(change, item);
+            if(item is IRelatable parent)
+            {
+                foreach(var child in parent.PropertyObjects.ChildList())
+                {
+                    if (!parent.LinkedObjects.Contains(child.Item1))
+                    {
+                        raiseConstituents(change, child.Item2);
+                    }
+                }
+            }
+        }
         #endregion
         
-        #endregion
     }
 }

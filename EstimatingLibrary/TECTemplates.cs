@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECTemplates : TECScopeManager, ISaveable
+    public class TECTemplates : TECScopeManager, IRelatable
     {
         #region Properties
         private ObservableCollection<TECSystem> _systemTemplates;
@@ -123,8 +123,8 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap SaveObjects { get { return saveObjects(); } }
-        public SaveableMap RelatedObjects { get { return new SaveableMap(); } }
+        public SaveableMap PropertyObjects { get { return propertyObjects(); } }
+        public SaveableMap LinkedObjects { get { return new SaveableMap(); } }
 
         #region Constructors
         public TECTemplates() : this(Guid.NewGuid()) { }
@@ -256,7 +256,7 @@ namespace EstimatingLibrary
                 throw new NotImplementedException("Scope child isn't cost or tag.");
             }
         }
-        private SaveableMap saveObjects()
+        private SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.Add(this.Catalogs, "Catalogs");

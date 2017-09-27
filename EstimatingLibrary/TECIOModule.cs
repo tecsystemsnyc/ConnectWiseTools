@@ -56,10 +56,10 @@ namespace EstimatingLibrary
             }
         }
 
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveMap = new SaveableMap();
-            saveMap.AddRange(base.saveObjects());
+            saveMap.AddRange(base.propertyObjects());
             saveMap.AddRange(IO, "IO");
             return saveMap;
         }

@@ -74,7 +74,9 @@
         <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
 
         <!--Right Tab Control-->
-        <views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
+        <!--<views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
+                             Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>-->
+        <views:PropertiesView Selected="{Binding EditTab.Selected}" Margin="0,-2,0,0"
                              Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>
     </Grid>
 </UserControl>

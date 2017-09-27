@@ -231,10 +231,10 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.Equipment, "Equipment");
             saveList.AddRange(this.Panels, "Panels");
             saveList.AddRange(this.Controllers, "Controllers");
@@ -266,8 +266,7 @@ namespace EstimatingLibrary
         {
             PointChanged?.Invoke(pointNum);
         }
-
-
+        
         #region Event Handlers
         protected virtual void handleCollectionChanged(object sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)

@@ -875,11 +875,11 @@ namespace Tests
             {
                 costDictionary[item.Guid] = costItem.CostBatch;
             }
-            if(item is ISaveable saveable)
+            if(item is IRelatable saveable)
             {
-                foreach(TECObject child in saveable.SaveObjects.Objects)
+                foreach(TECObject child in saveable.PropertyObjects.Objects)
                 {
-                    if (!saveable.RelatedObjects.Contains(child))
+                    if (!saveable.LinkedObjects.Contains(child))
                     {
                         addToCost(costDictionary, child);
                     }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface ISaveable
+    public interface IRelatable
     {
-        SaveableMap SaveObjects { get; }
-        SaveableMap RelatedObjects { get; }
+        SaveableMap PropertyObjects { get; }
+        SaveableMap LinkedObjects { get; }
     }
 
     public class SaveableMap

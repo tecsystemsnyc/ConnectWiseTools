@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged, ISaveable
+    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged, IRelatable
     {
         #region Properties
         private string _name;
@@ -227,15 +227,15 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap SaveObjects
+        public SaveableMap PropertyObjects
         {
             get
             {
-                return saveObjects();
+                return propertyObjects();
             }
         }
 
-        public SaveableMap RelatedObjects
+        public SaveableMap LinkedObjects
         {
             get
             {
@@ -427,7 +427,7 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        private SaveableMap saveObjects()
+        private SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.Add(this.Parameters, "Parameters");

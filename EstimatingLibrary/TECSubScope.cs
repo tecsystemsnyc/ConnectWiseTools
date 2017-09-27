@@ -315,10 +315,10 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(base.propertyObjects());
             List<TECObject> deviceList = new List<TECObject>();
             foreach (IEndDevice item in this.Devices)
             {
@@ -328,10 +328,10 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Points, "Points");
             return saveList;
         }
-        protected override SaveableMap relatedObjects()
+        protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.relatedObjects());
+            saveList.AddRange(base.linkedObjects());
             List<TECObject> deviceList = new List<TECObject>();
             foreach (IEndDevice item in this.Devices)
             {

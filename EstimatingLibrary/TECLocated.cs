@@ -43,20 +43,20 @@ namespace EstimatingLibrary
             { _location = scope.Location as TECLabeled; }
         }
 
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(base.propertyObjects());
             if(this.Location != null)
             {
                 saveList.Add(this.Location, "Location");
             }
             return saveList;
         }
-        protected override SaveableMap relatedObjects()
+        protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            SaveableMap baseMap = base.relatedObjects();
+            SaveableMap baseMap = base.linkedObjects();
             saveList.AddRange(baseMap);
             if (this.Location != null)
             {
