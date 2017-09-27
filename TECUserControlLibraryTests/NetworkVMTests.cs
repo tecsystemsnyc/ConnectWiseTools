@@ -235,7 +235,77 @@ namespace Tests
         [TestMethod]
         public void ConnectSubScopeToConnectedController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+
+            ChangeWatcher cw = new ChangeWatcher(bid);
+            NetworkVM netVM = new NetworkVM(bid, cw);
+
+            TECController server = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            server.IsServer = true;
+            TECController parentController = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            bid.Controllers.Add(server);
+            bid.Controllers.Add(parentController);
+
+            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
+            bid.Catalogs.Devices.Add(device);
+
+            TECNetworkConnection serverConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
+            serverConnect.AddINetworkConnectable(parentController);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
+
+            TECTypical typical = new TECTypical();
+            TECEquipment typEquip = new TECEquipment(true);
+            TECSubScope typSS = new TECSubScope(true);
+            TECPoint typPoint = new TECPoint(true);
+            typPoint.Type = IOType.BACnetIP;
+            typPoint.Quantity = 5;
+            typSS.AddPoint(typPoint);
+            typSS.Devices.Add(device);
+            typEquip.SubScope.Add(typSS);
+            typical.Equipment.Add(typEquip);
+            bid.Systems.Add(typical);
+
+            TECSystem instance = typical.AddInstance(bid);
+            TECSubScope ss = instance.Equipment[0].SubScope[0];
+
+            ConnectableItem serverItem = null;
+            ConnectableItem controllerItem = null;
+            ConnectableItem ssItem = null;
+
+            foreach (ConnectableItem item in netVM.Parentables)
+            {
+                if (item.Item == server)
+                {
+                    serverItem = item;
+                }
+                else if (item.Item == parentController)
+                {
+                    controllerItem = item;
+                }
+            }
+            foreach (ConnectableItem item in netVM.NonParentables)
+            {
+                if (item.Item == ss)
+                {
+                    ssItem = item;
+                }
+            }
+
+            //Act
+            netConnect.AddINetworkConnectable(ss);
+
+            //Assert
+            checkIsConnected(serverItem, true);
+            checkIsConnected(controllerItem, true);
+            checkIsConnected(ssItem, true);
+
+            netVM.Refresh(bid, cw);
+
+            checkIsConnected(serverItem, true);
+            checkIsConnected(controllerItem, true);
+            checkIsConnected(ssItem, true);
         }
 
         [TestMethod]
