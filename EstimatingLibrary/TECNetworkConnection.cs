@@ -23,9 +23,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = Children;
-                Children.CollectionChanged -= ChildrenControllers_CollectionChanged;
+                Children.CollectionChanged -= Children_CollectionChanged;
                 _children = value;
-                Children.CollectionChanged += ChildrenControllers_CollectionChanged;
+                Children.CollectionChanged += Children_CollectionChanged;
                 notifyCombinedChanged(Change.Edit, "Children", this, value, old);
                 raisePropertyChanged("PossibleIO");
             }
@@ -111,7 +111,7 @@ namespace EstimatingLibrary
         {
             _children = new ObservableCollection<INetworkConnectable>();
             _connectionTypes = new ObservableCollection<TECElectricalMaterial>();
-            Children.CollectionChanged += ChildrenControllers_CollectionChanged;
+            Children.CollectionChanged += Children_CollectionChanged;
             ConnectionTypes.CollectionChanged += (sender, args) =>
                     ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
@@ -133,13 +133,13 @@ namespace EstimatingLibrary
         #endregion
 
         #region Event Handlers
-        private void ChildrenControllers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    notifyCombinedChanged(Change.Add, "ChildrenControllers", this, item);
+                    notifyCombinedChanged(Change.Add, "Children", this, item);
                     raisePropertyChanged("PossibleIO");
                 }
             }
@@ -147,7 +147,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.OldItems)
                 {
-                    notifyCombinedChanged(Change.Remove, "ChildrenControllers", this, item);
+                    notifyCombinedChanged(Change.Remove, "Children", this, item);
                     raisePropertyChanged("PossibleIO");
                 }
             }
@@ -184,8 +184,8 @@ namespace EstimatingLibrary
         {
             if (CanAddINetworkConnectable(connectable))
             {
-                Children.Add(connectable);
                 connectable.ParentConnection = this;
+                Children.Add(connectable);
             }
             else
             {
