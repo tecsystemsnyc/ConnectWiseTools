@@ -30,6 +30,22 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
+        public List<TECCost> AllCosts
+        {
+            get
+            {
+                List<TECCost> costs = new List<TECCost>();
+                foreach(KeyValuePair<CostType, CostObject> pair in typeDictionary)
+                {
+                    TECCost cost = new TECCost(pair.Key);
+                    cost.Cost = pair.Value.Cost;
+                    cost.Labor = pair.Value.Labor;
+                    costs.Add(cost);
+                }
+                return costs;
+            }
+        }
+
         public static CostBatch operator +(CostBatch left, CostBatch right)
         {
             CostBatch newCostBatch = new CostBatch();

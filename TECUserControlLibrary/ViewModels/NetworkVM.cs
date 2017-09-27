@@ -87,8 +87,11 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void resubscribe(ChangeWatcher cw)
         {
-            cw.InstanceChanged -= instanceChanged;
-            cw.InstanceChanged += instanceChanged;
+            cw.InstanceChanged -= handleInstanceChanged;
+            cw.InstanceConstituentChanged -= handleInstanceConstituentChanged;
+
+            cw.InstanceChanged += handleInstanceChanged;
+            cw.InstanceConstituentChanged += handleInstanceConstituentChanged;
         }
 
         private void addConnectableItem(INetworkConnectable connectable)
@@ -120,31 +123,41 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void instanceChanged(TECChangedEventArgs obj)
+        private void handleInstanceConstituentChanged(Change change, TECObject obj)
         {
-            if (obj.Change == Change.Add)
+            if (change == Change.Add)
             {
-                if (obj.Sender is TECNetworkConnection netConnection)
+                if (obj is INetworkConnectable networkConnectable)
                 {
-                    if (obj.PropertyName == "Children" && obj.Value is INetworkConnectable childConnectable)
+                    addConnectableItem(networkConnectable);
+                }
+            }
+            else if (change == Change.Remove)
+            {
+
+            }
+        }
+        private void handleInstanceChanged(TECChangedEventArgs e)
+        {
+            if (e.Change == Change.Add)
+            {
+                if (e.Sender is TECNetworkConnection netConnection)
+                {
+                    if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
                     {
                         ConnectableItem parentConnectable = connectableDictionary[netConnection.ParentController];
                         bool parentIsConnected = parentConnectable.IsConnected;
                         updateIsConnected(childConnectable, parentIsConnected);
                     }
                 }
-                else if (obj.Value is INetworkConnectable networkConnectable)
-                {
-                    addConnectableItem(networkConnectable);
-                }
             }
-            else if (obj.Change == Change.Remove)
+            else if (e.Change == Change.Remove)
             {
 
             }
-            else if (obj.Change == Change.Edit)
+            else if (e.Change == Change.Edit)
             {
-                if (obj.Sender is INetworkConnectable networkConnectable && obj.PropertyName == "IsServer" && obj.Value is bool isServer)
+                if (e.Sender is INetworkConnectable networkConnectable && e.PropertyName == "IsServer" && e.Value is bool isServer)
                 {
                     updateIsConnected(networkConnectable, isServer);
                 }
