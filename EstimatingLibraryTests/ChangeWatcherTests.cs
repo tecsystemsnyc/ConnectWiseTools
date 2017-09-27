@@ -23,12 +23,14 @@ namespace Tests
         private TECChangedEventArgs changedArgs;
         private TECChangedEventArgs instanceChangedArgs;
         private CostBatch costDelta;
-        private int pointDelta;
+        private int? pointDelta;
+        private List<Tuple<Change, TECObject>> instanceConstituentChangedArgs;
 
         private bool changedRaised;
         private bool instanceChangedRaised;
         private bool costChangedRaised;
         private bool pointChangedRaised;
+        private bool instanceConstituentChangedRaised;
 
         [TestInitialize]
         public void TestInitialize()
@@ -38,6 +40,8 @@ namespace Tests
             
             templates = TestHelper.CreateTestTemplates();
             tcw = new ChangeWatcher(templates);
+
+            instanceConstituentChangedArgs = new List<Tuple<Change, TECObject>>();
 
             resetRaised();
 
@@ -60,6 +64,11 @@ namespace Tests
             {
                 pointDelta = numPoints;
                 pointChangedRaised = true;
+            };
+            cw.InstanceConstituentChanged += (changeType, obj) =>
+            {
+                instanceConstituentChangedArgs.Add(new Tuple<Change, TECObject>(changeType, obj));
+                instanceConstituentChangedRaised = true;
             };
             
             tcw.Changed += (args) =>
@@ -110,7 +119,7 @@ namespace Tests
             bid.Systems.Add(typical);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "Systems", bid, typical);
         }
 
@@ -125,9 +134,10 @@ namespace Tests
             bid.Controllers.Add(controller);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "Controllers", bid, controller);
             checkCostDelta(controller.CostBatch);
+            checkConstituentArgs(Change.Add, controller);
         }
 
         [TestMethod]
@@ -141,9 +151,10 @@ namespace Tests
             bid.Panels.Add(panel);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "Panels", bid, panel);
             checkCostDelta(panel.CostBatch);
+            checkConstituentArgs(Change.Add, panel);
         }
 
         [TestMethod]
@@ -159,9 +170,10 @@ namespace Tests
             bid.MiscCosts.Add(misc);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "MiscCosts", bid, misc);
             checkCostDelta(misc.CostBatch);
+            checkConstituentArgs(Change.Add, misc);
         }
 
         [TestMethod]
@@ -174,8 +186,30 @@ namespace Tests
             bid.ScopeTree.Add(sb);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Add, "ScopeTree", bid, sb);
+            checkConstituentArgs(Change.Add, sb);
+        }
+
+        [TestMethod]
+        public void AddScopeTreeToBid()
+        {
+            //Arrange
+            TECScopeBranch scopeTree = new TECScopeBranch(false);
+            TECScopeBranch branch1 = new TECScopeBranch(false);
+            TECScopeBranch branch2 = new TECScopeBranch(false);
+            scopeTree.Branches.Add(branch1);
+            scopeTree.Branches.Add(branch2);
+
+            //Act
+            bid.ScopeTree.Add(scopeTree);
+
+            //Assert
+            checkRaised(true, false, false, true);
+            checkInstanceChangedArgs(Change.Add, "ScopeTree", bid, scopeTree);
+            checkConstituentArgs(Change.Add, scopeTree);
+            checkConstituentArgs(Change.Add, branch1);
+            checkConstituentArgs(Change.Add, branch2);
         }
 
         [TestMethod]
@@ -188,8 +222,9 @@ namespace Tests
             bid.Notes.Add(note);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Add, "Notes", bid, note);
+            checkConstituentArgs(Change.Add, note);
         }
 
         [TestMethod]
@@ -202,8 +237,9 @@ namespace Tests
             bid.Exclusions.Add(exclusion);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Add, "Exclusions", bid, exclusion);
+            checkConstituentArgs(Change.Add, exclusion);
         }
 
         [TestMethod]
@@ -216,8 +252,9 @@ namespace Tests
             bid.Locations.Add(location);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Add, "Locations", bid, location);
+            checkConstituentArgs(Change.Add, location);
         }
 
         [TestMethod]
@@ -243,11 +280,19 @@ namespace Tests
             //Act
             TECSystem instance = typical.AddInstance(bid);
 
+            TECEquipment instanceEquip = instance.Equipment[0];
+            TECSubScope instanceSS = instanceEquip.SubScope[0];
+            TECPoint instancePoint = instanceSS.Points[0];
+
             //Assert
-            checkRaised(true, true, true);
+            checkRaised(true, true, true, true);
             checkInstanceChangedArgs(Change.Add, "Instances", typical, instance);
             checkCostDelta(instance.CostBatch);
             checkPointDelta(instance.PointNumber);
+            checkConstituentArgs(Change.Add, instance);
+            checkConstituentArgs(Change.Add, instanceEquip);
+            checkConstituentArgs(Change.Add, instanceSS);
+            checkConstituentArgs(Change.Add, instancePoint);
         }
 
         [TestMethod]
@@ -273,7 +318,7 @@ namespace Tests
             typical.Equipment.Add(equip);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "Equipment", typical, equip);
         }
 
@@ -292,7 +337,7 @@ namespace Tests
             typical.Controllers.Add(controller);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "Controllers", typical, controller);
         }
 
@@ -311,7 +356,7 @@ namespace Tests
             typical.Panels.Add(panel);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "Panels", typical, panel);
         }
 
@@ -332,7 +377,7 @@ namespace Tests
             typical.MiscCosts.Add(misc);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "MiscCosts", typical, misc);
         }
 
@@ -352,7 +397,7 @@ namespace Tests
             typical.AssociatedCosts.Add(assCost);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "AssociatedCosts", typical, assCost);
         }
 
@@ -370,7 +415,7 @@ namespace Tests
             typical.ScopeBranches.Add(sb);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "ScopeBranches", typical, sb);
         }
 
@@ -397,10 +442,13 @@ namespace Tests
             instance.Equipment.Add(equip);
 
             //Assert
-            checkRaised(true, true, true);
+            checkRaised(true, true, true, true);
             checkInstanceChangedArgs(Change.Add, "Equipment", instance, equip);
             checkCostDelta(equip.CostBatch);
             checkPointDelta(equip.PointNumber);
+            checkConstituentArgs(Change.Add, equip);
+            checkConstituentArgs(Change.Add, ss);
+            checkConstituentArgs(Change.Add, point);
         }
 
         [TestMethod]
@@ -419,9 +467,10 @@ namespace Tests
             instance.Controllers.Add(controller);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "Controllers", instance, controller);
             checkCostDelta(controller.CostBatch);
+            checkConstituentArgs(Change.Add, controller);
         }
 
         [TestMethod]
@@ -440,9 +489,10 @@ namespace Tests
             instance.Panels.Add(panel);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "Panels", instance, panel);
             checkCostDelta(panel.CostBatch);
+            checkConstituentArgs(Change.Add, panel);
         }
 
         [TestMethod]
@@ -463,9 +513,10 @@ namespace Tests
             instance.MiscCosts.Add(misc);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "MiscCosts", instance, misc);
             checkCostDelta(misc.CostBatch);
+            checkConstituentArgs(Change.Add, misc);
         }
 
         [TestMethod]
@@ -490,7 +541,7 @@ namespace Tests
             equip.SubScope.Add(ss);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "SubScope", equip, ss);
         }
 
@@ -522,7 +573,7 @@ namespace Tests
             ss.AssociatedCosts.Add(assCost);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "AssociatedCosts", ss, assCost);
         }
 
@@ -545,7 +596,7 @@ namespace Tests
             ss.Devices.Add(dev);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "Devices", ss, dev);
         }
 
@@ -569,7 +620,7 @@ namespace Tests
             ss.Points.Add(point);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "Points", ss, point);
         }
 
@@ -597,10 +648,12 @@ namespace Tests
             equip.SubScope.Add(ss);
 
             //Assert
-            checkRaised(true, true, true);
+            checkRaised(true, true, true, true);
             checkInstanceChangedArgs(Change.Add, "SubScope", equip, ss);
             checkCostDelta(ss.CostBatch);
             checkPointDelta(ss.PointNumber);
+            checkConstituentArgs(Change.Add, ss);
+            checkConstituentArgs(Change.Add, point);
         }
 
         [TestMethod]
@@ -630,9 +683,10 @@ namespace Tests
             ss.AssociatedCosts.Add(assCost);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "AssociatedCosts", ss, assCost);
             checkCostDelta(assCost.CostBatch);
+            checkConstituentArgs(Change.Add, assCost);
         }
 
         [TestMethod]
@@ -655,7 +709,7 @@ namespace Tests
             ss.Devices.Add(dev);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, false);
             checkInstanceChangedArgs(Change.Add, "Devices", ss, dev);
             checkCostDelta(dev.CostBatch);
         }
@@ -682,9 +736,10 @@ namespace Tests
             ss.Points.Add(point);
 
             //Assert
-            checkRaised(true, false, true);
+            checkRaised(true, false, true, true);
             checkInstanceChangedArgs(Change.Add, "Points", ss, point);
             checkPointDelta(point.PointNumber);
+            checkConstituentArgs(Change.Add, point);
         }
 
         [TestMethod]
@@ -704,9 +759,10 @@ namespace Tests
                 new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "ChildrenConnections", parentController, netConnect);
             checkCostDelta(netConnect.CostBatch);
+            checkConstituentArgs(Change.Add, netConnect);
         }
 
         [TestMethod]
@@ -732,9 +788,10 @@ namespace Tests
                 new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "ChildrenConnections", instanceController, netConnect);
             checkCostDelta(netConnect.CostBatch);
+            checkConstituentArgs(Change.Add, netConnect);
         }
 
         [TestMethod]
@@ -756,7 +813,7 @@ namespace Tests
                 new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "ChildrenConnections", typicalController, netConnect);
         }
 
@@ -782,9 +839,10 @@ namespace Tests
             TECSubScopeConnection connection = controller.AddSubScope(instanceSubScope);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
             checkCostDelta(connection.CostBatch);
+            checkConstituentArgs(Change.Add, connection);
         }
 
         [TestMethod]
@@ -807,7 +865,7 @@ namespace Tests
             TECSubScopeConnection connection = controller.AddSubScope(subScope);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
         }
 
@@ -831,7 +889,7 @@ namespace Tests
             TECSubScopeConnection connection = controller.AddSubScope(subScope);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
         }
 
@@ -857,9 +915,10 @@ namespace Tests
             TECSubScopeConnection connection = instanceController.AddSubScope(instanceSubScope);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Add, "ChildrenConnections", instanceController, connection);
             checkCostDelta(connection.CostBatch);
+            checkConstituentArgs(Change.Add, connection);
         }
 
         [TestMethod]
@@ -886,7 +945,7 @@ namespace Tests
             netConnect.AddINetworkConnectable(daisyController);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, false);
             checkInstanceChangedArgs(Change.Add, "ChildrenControllers", netConnect, daisyController);
         }
 
@@ -908,7 +967,7 @@ namespace Tests
             connection.ConnectionTypes.Add(connectionType);
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Add, "ConnectionTypes", connection, connectionType);
             checkCostDelta(connectionTypeCosts);
         }
@@ -939,7 +998,7 @@ namespace Tests
             bid.Systems.Remove(typical);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "Systems", bid, typical);
         }
 
@@ -957,9 +1016,10 @@ namespace Tests
             bid.Controllers.Remove(controller);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "Controllers", bid, controller);
             checkCostDelta(controller.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, controller);
         }
 
         [TestMethod]
@@ -975,9 +1035,10 @@ namespace Tests
             bid.Panels.Remove(panel);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "Panels", bid, panel);
             checkCostDelta(panel.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, panel);
         }
 
         [TestMethod]
@@ -995,9 +1056,10 @@ namespace Tests
             bid.MiscCosts.Remove(misc);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "MiscCosts", bid, misc);
             checkCostDelta(misc.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, misc);
         }
 
         [TestMethod]
@@ -1012,8 +1074,31 @@ namespace Tests
             bid.ScopeTree.Remove(sb);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Remove, "ScopeTree", bid, sb);
+            checkConstituentArgs(Change.Remove, sb);
+        }
+
+        [TestMethod]
+        public void RemoveScopeTreeFromBid()
+        {
+            //Arrange
+            TECScopeBranch scopeTree = new TECScopeBranch(false);
+            TECScopeBranch branch1 = new TECScopeBranch(false);
+            TECScopeBranch branch2 = new TECScopeBranch(false);
+            bid.ScopeTree.Add(scopeTree);
+
+            resetRaised();
+
+            //Act
+            bid.ScopeTree.Remove(scopeTree);
+
+            //Assert
+            checkRaised(true, false, false, true);
+            checkInstanceChangedArgs(Change.Remove, "ScopeTree", bid, scopeTree);
+            checkConstituentArgs(Change.Remove, scopeTree);
+            checkConstituentArgs(Change.Remove, branch1);
+            checkConstituentArgs(Change.Remove, branch2);
         }
 
         [TestMethod]
@@ -1028,12 +1113,13 @@ namespace Tests
             bid.Notes.Remove(note);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Remove, "Notes", bid, note);
+            checkConstituentArgs(Change.Remove, note);
         }
 
         [TestMethod]
-        public void RemoevExclusionFromBid()
+        public void RemoveExclusionFromBid()
         {
             //Arrange
             TECLabeled exclusion = new TECLabeled();
@@ -1044,8 +1130,9 @@ namespace Tests
             bid.Exclusions.Remove(exclusion);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Remove, "Exclusions", bid, exclusion);
+            checkConstituentArgs(Change.Remove, exclusion);
         }
 
         [TestMethod]
@@ -1061,8 +1148,9 @@ namespace Tests
             bid.Locations.Remove(location);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, true);
             checkInstanceChangedArgs(Change.Remove, "Locations", bid, location);
+            checkConstituentArgs(Change.Remove, location);
         }
 
         [TestMethod]
@@ -1083,6 +1171,9 @@ namespace Tests
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
+            TECEquipment instanceEquip = instance.Equipment[0];
+            TECSubScope instanceSS = instanceEquip.SubScope[0];
+            TECPoint instancePoint = instanceSS.Points[0];
 
             resetRaised();
 
@@ -1090,10 +1181,14 @@ namespace Tests
             typical.Instances.Remove(instance);
 
             //Assert
-            checkRaised(true, true, true);
+            checkRaised(true, true, true, true);
             checkInstanceChangedArgs(Change.Remove, "Instances", typical, instance);
             checkCostDelta(instance.CostBatch * -1);
             checkPointDelta(instance.PointNumber * -1);
+            checkConstituentArgs(Change.Remove, instance);
+            checkConstituentArgs(Change.Remove, instanceEquip);
+            checkConstituentArgs(Change.Remove, instanceSS);
+            checkConstituentArgs(Change.Remove, instancePoint);
         }
 
         [TestMethod]
@@ -1120,7 +1215,7 @@ namespace Tests
             typical.Equipment.Remove(equip);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "Equipment", typical, equip);
         }
 
@@ -1140,7 +1235,7 @@ namespace Tests
             typical.Controllers.Remove(controller);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "Controllers", typical, controller);
         }
 
@@ -1160,7 +1255,7 @@ namespace Tests
             typical.Panels.Remove(panel);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "Panels", typical, panel);
         }
 
@@ -1183,7 +1278,7 @@ namespace Tests
             typical.MiscCosts.Remove(misc);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "MiscCosts", typical, misc);
         }
 
@@ -1204,7 +1299,7 @@ namespace Tests
             typical.AssociatedCosts.Remove(cost);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "AssociatedCosts", typical, cost);
         }
 
@@ -1223,7 +1318,7 @@ namespace Tests
             typical.ScopeBranches.Remove(sb);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "ScopeBranches", typical, sb);
         }
 
@@ -1251,10 +1346,13 @@ namespace Tests
             instance.Equipment.Remove(equip);
 
             //Assert
-            checkRaised(true, true, true);
+            checkRaised(true, true, true, true);
             checkInstanceChangedArgs(Change.Remove, "Equipment", instance, equip);
             checkCostDelta(equip.CostBatch * -1);
             checkPointDelta(equip.PointNumber * -1);
+            checkConstituentArgs(Change.Remove, equip);
+            checkConstituentArgs(Change.Remove, ss);
+            checkConstituentArgs(Change.Remove, point);
         }
 
         [TestMethod]
@@ -1274,9 +1372,10 @@ namespace Tests
             instance.Controllers.Remove(controller);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "Controllers", instance, controller);
             checkCostDelta(controller.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, controller);
         }
 
         [TestMethod]
@@ -1296,9 +1395,10 @@ namespace Tests
             instance.Panels.Remove(panel);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "Panels", instance, panel);
             checkCostDelta(panel.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, panel);
         }
 
         [TestMethod]
@@ -1320,9 +1420,10 @@ namespace Tests
             instance.MiscCosts.Remove(misc);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "MiscCosts", instance, misc);
             checkCostDelta(misc.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, misc);
         }
 
         [TestMethod]
@@ -1348,7 +1449,7 @@ namespace Tests
             equip.SubScope.Remove(ss);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "SubScope", equip, ss);
         }
 
@@ -1380,7 +1481,7 @@ namespace Tests
             ss.AssociatedCosts.Remove(assCost);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "AssociatedCosts", ss, assCost);
         }
 
@@ -1403,7 +1504,7 @@ namespace Tests
             ss.Devices.Remove(dev);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "Devices", ss, dev);
         }
 
@@ -1428,7 +1529,7 @@ namespace Tests
             ss.Points.Remove(point);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "Points", ss, point);
         }
 
@@ -1457,10 +1558,12 @@ namespace Tests
             equip.SubScope.Remove(ss);
 
             //Assert
-            checkRaised(true, true, true);
+            checkRaised(true, true, true, true);
             checkInstanceChangedArgs(Change.Remove, "SubScope", equip, ss);
             checkCostDelta(ss.CostBatch * -1);
             checkPointDelta(ss.PointNumber * -1);
+            checkConstituentArgs(Change.Remove, ss);
+            checkConstituentArgs(Change.Remove, point);
         }
 
         [TestMethod]
@@ -1492,7 +1595,7 @@ namespace Tests
             ss.AssociatedCosts.Remove(assCost);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, false);
             checkInstanceChangedArgs(Change.Remove, "AssociatedCosts", ss, assCost);
             checkCostDelta(assCost.CostBatch * -1);
         }
@@ -1518,7 +1621,7 @@ namespace Tests
             ss.Devices.Remove(dev);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, false);
             checkInstanceChangedArgs(Change.Remove, "Devices", ss, dev);
             checkCostDelta(dev.CostBatch * -1);
         }
@@ -1546,9 +1649,10 @@ namespace Tests
             ss.Points.Remove(point);
 
             //Assert
-            checkRaised(true, false, true);
+            checkRaised(true, false, true, true);
             checkInstanceChangedArgs(Change.Remove, "Points", ss, point);
             checkPointDelta(point.PointNumber * -1);
+            checkConstituentArgs(Change.Remove, point);
         }
 
         [TestMethod]
@@ -1574,9 +1678,10 @@ namespace Tests
             parentController.RemoveNetworkConnection(netConnect);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", parentController, netConnect);
             checkCostDelta(netConnect.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, netConnect);
         }
 
         [TestMethod]
@@ -1606,9 +1711,10 @@ namespace Tests
             parentController.RemoveNetworkConnection(netConnect);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", parentController, netConnect);
             checkCostDelta(netConnect.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, netConnect);
         }
 
         [TestMethod]
@@ -1634,9 +1740,10 @@ namespace Tests
             controller.RemoveSubScope(instanceSubScope);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
             checkCostDelta(connection.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, connection);
         }
 
         [TestMethod]
@@ -1660,7 +1767,7 @@ namespace Tests
             controller.RemoveSubScope(subScope);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
         }
 
@@ -1685,7 +1792,7 @@ namespace Tests
             controller.RemoveSubScope(subScope);
 
             //Assert
-            checkRaised(false, false, false);
+            checkRaised(false, false, false, false);
             checkChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
         }
 
@@ -1712,9 +1819,10 @@ namespace Tests
             instanceController.RemoveSubScope(instanceSubScope);
 
             //Assert
-            checkRaised(true, true, false);
+            checkRaised(true, true, false, true);
             checkInstanceChangedArgs(Change.Remove, "ChildrenConnections", instanceController, connection);
             checkCostDelta(connection.CostBatch * -1);
+            checkConstituentArgs(Change.Remove, connection);
         }
 
         [TestMethod]
@@ -1742,7 +1850,7 @@ namespace Tests
             netConnect.RemoveINetworkConnectable(daisyController);
 
             //Assert
-            checkRaised(true, false, false);
+            checkRaised(true, false, false, false);
             checkInstanceChangedArgs(Change.Remove, "ChildrenControllers", netConnect, daisyController);
         }
 
@@ -1763,7 +1871,7 @@ namespace Tests
             connection.ConnectionTypes.Remove(connectionType);
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkInstanceChangedArgs(Change.Remove, "ConnectionTypes", connection, connectionType);
             checkCostDelta(-connectionType.GetCosts(10));
         }
@@ -1782,7 +1890,7 @@ namespace Tests
             bid.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", bid, edited, original);
         }
 
@@ -1803,7 +1911,7 @@ namespace Tests
             controller.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", controller, edited, original);
         }
 
@@ -1824,7 +1932,7 @@ namespace Tests
             controller.Type = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Type", controller, edited, original);
         }
 
@@ -1850,7 +1958,7 @@ namespace Tests
             connection.Length = 12;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Length", connection, edited, original);
         }
 
@@ -1876,7 +1984,7 @@ namespace Tests
             connection.ConduitType = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "ConduitType", connection, edited, original);
         }
 
@@ -1897,7 +2005,7 @@ namespace Tests
             panel.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", panel, edited, original);
         }
 
@@ -1918,7 +2026,7 @@ namespace Tests
             panel.Type = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Type", panel, edited, original);
         }
 
@@ -1939,7 +2047,7 @@ namespace Tests
             misc.Quantity = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Quantity", misc, edited, original);
         }
 
@@ -1960,7 +2068,7 @@ namespace Tests
             branch.Label = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", branch, edited, original);
         }
 
@@ -1977,7 +2085,7 @@ namespace Tests
             bid.Parameters = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Parameters", bid, edited, original);
         }
 
@@ -1994,7 +2102,7 @@ namespace Tests
             bid.ExtraLabor = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "ExtraLabor", bid, edited, original);
         }
 
@@ -2015,7 +2123,7 @@ namespace Tests
             typical.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", typical, edited, original);
         }
 
@@ -2038,7 +2146,7 @@ namespace Tests
             controller.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", controller, edited, original);
         }
 
@@ -2061,7 +2169,7 @@ namespace Tests
             panel.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", panel, edited, original);
         }
 
@@ -2084,7 +2192,7 @@ namespace Tests
             misc.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", misc, edited, original);
         }
 
@@ -2107,7 +2215,7 @@ namespace Tests
             branch.Label = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", branch, edited, original);
         }
 
@@ -2130,7 +2238,7 @@ namespace Tests
             equipment.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", equipment, edited, original);
         }
 
@@ -2155,7 +2263,7 @@ namespace Tests
             subScope.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", subScope, edited, original);
         }
 
@@ -2182,7 +2290,7 @@ namespace Tests
             point.Label = edited;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", point, edited, original);
         }
 
@@ -2214,7 +2322,7 @@ namespace Tests
             connection.ConduitType = conduitType;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "ConduitType", connection, conduitType, null);
         }
 
@@ -2245,7 +2353,7 @@ namespace Tests
             connection.ConduitType = conduitType;
 
             //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "ConduitType", connection, conduitType, null);
         }
 
@@ -2267,7 +2375,7 @@ namespace Tests
             system.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkInstanceChangedArgs(Change.Edit, "Name", system, edited, original);
         }
 
@@ -2291,7 +2399,7 @@ namespace Tests
             system.Location = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Location", system, edited, original);
         }
 
@@ -2316,7 +2424,7 @@ namespace Tests
             systemController.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemController, edited, original);
         }
 
@@ -2341,7 +2449,7 @@ namespace Tests
             systemPanel.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemPanel, edited, original);
         }
 
@@ -2366,7 +2474,7 @@ namespace Tests
             systemMisc.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemMisc, edited, original);
         }
 
@@ -2391,7 +2499,7 @@ namespace Tests
             systemScopeBranch.Label = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", systemScopeBranch, edited, original);
         }
 
@@ -2416,7 +2524,7 @@ namespace Tests
             systemEquipment.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemEquipment, edited, original);
         }
 
@@ -2443,7 +2551,7 @@ namespace Tests
             systemSubScope.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", systemSubScope, edited, original);
         }
 
@@ -2472,7 +2580,7 @@ namespace Tests
             systemPoint.Label = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", systemPoint, edited, original);
         }
 
@@ -2501,7 +2609,7 @@ namespace Tests
             point.Quantity = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: true);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: true, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Quantity", point, edited, original);
         }
 
@@ -2536,7 +2644,7 @@ namespace Tests
             ssConnect.ConduitType = conduitType;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkInstanceChangedArgs(Change.Edit, "ConduitType", ssConnect, conduitType, null);
             checkCostDelta(conduitType.GetCosts(ssConnect.ConduitLength));
         }
@@ -2558,7 +2666,7 @@ namespace Tests
             device.Manufacturer = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Manufacturer", device, edited, original);
         }
 
@@ -2579,7 +2687,7 @@ namespace Tests
             valve.Actuator = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Actuator", valve, edited, original);
         }
 
@@ -2599,7 +2707,7 @@ namespace Tests
             material.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", material, edited, original);
         }
 
@@ -2619,7 +2727,7 @@ namespace Tests
             material.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", material, edited, original);
         }
 
@@ -2639,7 +2747,7 @@ namespace Tests
             cost.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", cost, edited, original);
         }
 
@@ -2659,7 +2767,7 @@ namespace Tests
             panelType.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", panelType, edited, original);
         }
 
@@ -2679,7 +2787,7 @@ namespace Tests
             controllerType.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", controllerType, edited, original);
         }
 
@@ -2699,7 +2807,7 @@ namespace Tests
             ioModule.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", ioModule, edited, original);
         }
 
@@ -2719,7 +2827,7 @@ namespace Tests
             device.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", device, edited, original);
         }
 
@@ -2739,7 +2847,7 @@ namespace Tests
             valve.Name = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Name", valve, edited, original);
         }
 
@@ -2759,7 +2867,7 @@ namespace Tests
             manufacturer.Label= edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", manufacturer, edited, original);
         }
 
@@ -2779,7 +2887,7 @@ namespace Tests
             tag.Label = edited;
 
             //Assert
-            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false);
+            checkRaised(instanceChanged: true, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", tag, edited, original);
         }
 
@@ -2793,10 +2901,17 @@ namespace Tests
             instanceChangedRaised = false;
             costChangedRaised = false;
             pointChangedRaised = false;
+            instanceConstituentChangedRaised = false;
+
+            changedArgs = null;
+            instanceChangedArgs = null;
+            costDelta = null;
+            pointDelta = null;
+            instanceConstituentChangedArgs = new List<Tuple<Change, TECObject>>();
         }
 
         #region Check Methods
-        private void checkRaised(bool instanceChanged, bool costChanged, bool pointChanged)
+        private void checkRaised(bool instanceChanged, bool costChanged, bool pointChanged, bool instanceConstituentChanged)
         {
             Assert.IsTrue(changedRaised, "Changed event on the ChangeWatcher wasn't raised.");
 
@@ -2825,6 +2940,15 @@ namespace Tests
             else
             {
                 Assert.IsFalse(pointChangedRaised, "PointChanged event on the ChangeWatcher was raised when it shouldn't have been.");
+            }
+
+            if (instanceConstituentChanged)
+            {
+                Assert.IsTrue(instanceConstituentChangedRaised, "InstanceConstituentChanged event on the ChangeWatcher wasn't raised when it should have been.");
+            }
+            else
+            {
+                Assert.IsFalse(instanceConstituentChangedRaised, "InstanceConstituentChanged event on the ChangeWatcher was raised when it shouldn't have been.");
             }
         }
 
@@ -2866,6 +2990,20 @@ namespace Tests
         private void checkPointDelta(int points)
         {
             Assert.AreEqual(points, pointDelta, "ChangeWatcher point delta is wrong.");
+        }
+
+        private void checkConstituentArgs(Change changeType, TECObject obj)
+        {
+            bool argsMatch = false;
+            foreach(Tuple<Change, TECObject> args in instanceConstituentChangedArgs)
+            {
+                if (args.Item1 == changeType && args.Item2 == obj)
+                {
+                    argsMatch = true;
+                    break;
+                }
+            }
+            Assert.IsTrue(argsMatch, "ConstituentChangedArgs not found.");
         }
         #endregion
     }
