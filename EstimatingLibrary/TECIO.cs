@@ -220,5 +220,18 @@ namespace EstimatingLibrary
             newCollection.RemoveIO(right.ListIO());
             return newCollection;
         }
+
+        public static bool IOTypesMatch(IOCollection collection1, IOCollection collection2)
+        {
+            foreach(KeyValuePair<IOType, TECIO> pair in collection1.ioDictionary)
+            {
+                if (!collection2.Contains(pair.Key)) return false;
+            }
+            foreach(KeyValuePair<IOType, TECIO> pair in collection2.ioDictionary)
+            {
+                if (!collection1.Contains(pair.Key)) return false;
+            }
+            return true;
+        }
     }
 }

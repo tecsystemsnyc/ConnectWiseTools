@@ -110,10 +110,9 @@ namespace TECUserControlLibrary.ViewModels
 
             ConnectableItem item = new ConnectableItem(connectable, isConnected);
             connectableDictionary.Add(connectable, item);
-            if (connectable is INetworkParentable parentable)
+            if (connectable is INetworkParentable)
             {
                 Parentables.Add(item);
-                updateChildrenConnected(parentable);
             }
             else
             {
@@ -123,9 +122,32 @@ namespace TECUserControlLibrary.ViewModels
 
         private void instanceChanged(TECChangedEventArgs obj)
         {
-            if (obj.PropertyName == "IsServer" && obj.Sender is INetworkConnectable networkConnectable && obj.Value is bool isServer)
+            if (obj.Change == Change.Add)
             {
-                updateIsConnected(networkConnectable, isServer);
+                if (obj.Sender is TECNetworkConnection netConnection)
+                {
+                    if (obj.PropertyName == "Children" && obj.Value is INetworkConnectable childConnectable)
+                    {
+                        ConnectableItem parentConnectable = connectableDictionary[netConnection.ParentController];
+                        bool parentIsConnected = parentConnectable.IsConnected;
+                        updateIsConnected(childConnectable, parentIsConnected);
+                    }
+                }
+                else if (obj.Value is INetworkConnectable networkConnectable)
+                {
+                    addConnectableItem(networkConnectable);
+                }
+            }
+            else if (obj.Change == Change.Remove)
+            {
+
+            }
+            else if (obj.Change == Change.Edit)
+            {
+                if (obj.Sender is INetworkConnectable networkConnectable && obj.PropertyName == "IsServer" && obj.Value is bool isServer)
+                {
+                    updateIsConnected(networkConnectable, isServer);
+                }
             }
         }
 

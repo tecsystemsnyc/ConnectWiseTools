@@ -136,6 +136,7 @@ namespace EstimatingLibrary
             if (CanAddNetworkConnection(ioType))
             {
                 TECNetworkConnection netConnect = new TECNetworkConnection(isTypical);
+                netConnect.ParentController = this;
                 netConnect.ConnectionTypes = new ObservableCollection<TECElectricalMaterial>(connectionTypes);
                 netConnect.IOType = ioType;
                 addChildConnection(netConnect);

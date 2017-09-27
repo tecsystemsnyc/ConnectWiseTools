@@ -236,6 +236,10 @@ namespace EstimatingLibrary
             {
                 Points.Add(point);
             }
+            else
+            {
+                throw new InvalidOperationException("Point incompatible with SubScope.");
+            }
         }
         public void RemovePoint(TECPoint point)
         {
@@ -248,7 +252,7 @@ namespace EstimatingLibrary
 
             IOCollection thisIO = new IOCollection(getNetworkIO());
             IOCollection netConnectIO = netConnect.IO;
-            bool ioMatches = (thisIO.Contains(netConnectIO) && netConnectIO.Contains(thisIO));
+            bool ioMatches = IOCollection.IOTypesMatch(thisIO, netConnectIO);
 
             bool connectionTypesMatch = (this.ConnectionTypes.Except(netConnect.ConnectionTypes).Count() == 0) 
                 && (netConnect.ConnectionTypes.Except(this.ConnectionTypes).Count() == 0);
