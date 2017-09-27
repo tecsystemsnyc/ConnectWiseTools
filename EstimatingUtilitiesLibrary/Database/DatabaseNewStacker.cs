@@ -14,7 +14,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             saveStack.AddRange(newStackForObject(toSave));
-            if (toSave is ISaveable saveable)
+            if (toSave is IRelatable saveable)
             {
                 saveStack.AddRange(DeltaStacker.ChildStack(Change.Add, saveable));
             }

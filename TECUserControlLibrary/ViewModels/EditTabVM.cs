@@ -19,6 +19,16 @@ namespace TECUserControlLibrary.ViewModels
     {
         #region Properties
         private bool isBid;
+        private TECObject _selected;
+        public TECObject Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
+            }
+        }
 
         public EditIndex TabIndex
         {
@@ -806,6 +816,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Events
         public void updateSelection(object selection)
         {
+            Selected = selection as TECObject;
             if (selection is TECTypical typical)
             {
                 SelectedSystem = typical;

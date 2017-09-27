@@ -305,7 +305,7 @@ namespace TemplateBuilder.MVVM
         }
         private void setupTypicalSystemseTab()
         {
-            //TypicalSystemsTab = new TypicalSystemVM(Templates);
+            TypicalSystemsTab = new TypicalSystemVM(Templates);
             TypicalSystemsTab.DragHandler += DragOver;
             TypicalSystemsTab.DropHandler += Drop;
             TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;

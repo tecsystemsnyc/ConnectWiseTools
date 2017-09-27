@@ -205,10 +205,10 @@ namespace EstimatingLibrary
             }
         }
 
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(base.propertyObjects());
             List<TECObject> objects = new List<TECObject>();
             foreach(INetworkConnectable netconnect in Children)
             {
@@ -217,10 +217,10 @@ namespace EstimatingLibrary
             saveList.AddRange(objects, "Children");
             return saveList;
         }
-        protected override SaveableMap relatedObjects()
+        protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.relatedObjects());
+            saveList.AddRange(base.linkedObjects());
             List<TECObject> objects = new List<TECObject>();
             foreach (INetworkConnectable netconnect in Children)
             {

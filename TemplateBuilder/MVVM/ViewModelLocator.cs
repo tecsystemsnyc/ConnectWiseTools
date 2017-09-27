@@ -12,6 +12,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using TECUserControlLibrary.ViewModels;
 using TemplateBuilder.Model;
 
 namespace TemplateBuilder.MVVM
@@ -39,6 +40,8 @@ namespace TemplateBuilder.MVVM
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<SplashVM>();
+
         }
 
         /// <summary>
@@ -52,6 +55,20 @@ namespace TemplateBuilder.MVVM
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Splash property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public SplashVM Splash
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<SplashVM>();
             }
         }
 

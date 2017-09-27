@@ -41,7 +41,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TemplatesPath");
             }
         }
-        public Visibility BidVisiblity
+        public Visibility BidVisibility
         {
             get
             {

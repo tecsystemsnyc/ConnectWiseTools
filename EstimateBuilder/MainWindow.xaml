@@ -53,9 +53,7 @@
     <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}">
         <ContentControl.Resources>
             <DataTemplate DataType="{x:Type localMVVM:MainViewModel}">
-
-
-        <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
+                <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
             <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                   DockPanel.Dock="Top"/>
 
@@ -101,7 +99,7 @@
                                            dd:DragDrop.DropHandler="{Binding}"/>
             </Grid>
         </DockPanel>
-        </DataTemplate>
+            </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SplashVM}">
             <views:SplashView ViewModel="{Binding}"/>
         </DataTemplate>

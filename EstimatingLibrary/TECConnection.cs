@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECConnection : TECObject, INotifyCostChanged, ISaveable, ITypicalable
+    public abstract class TECConnection : TECObject, INotifyCostChanged, IRelatable, ITypicalable
     {
         #region Properties
         protected double _length;
@@ -72,13 +72,13 @@ namespace EstimatingLibrary
             get { return getCosts(); }
         }
 
-        public SaveableMap SaveObjects
+        public SaveableMap PropertyObjects
         {
-            get { return saveObjects(); }
+            get { return propertyObjects(); }
         }
-        public SaveableMap RelatedObjects
+        public SaveableMap LinkedObjects
         {
-            get { return relatedObjects(); }
+            get { return linkedObjects(); }
         }
 
         public bool IsTypical { get; private set; }
@@ -129,7 +129,7 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected virtual SaveableMap saveObjects()
+        protected virtual SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");
@@ -139,7 +139,7 @@ namespace EstimatingLibrary
             }
             return saveList;
         }
-        protected virtual SaveableMap relatedObjects()
+        protected virtual SaveableMap linkedObjects()
         {
             SaveableMap relatedList = new SaveableMap();
             relatedList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");

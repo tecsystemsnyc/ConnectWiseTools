@@ -90,17 +90,17 @@ namespace EstimatingLibrary
             }
         }
 
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
         }
-        protected override SaveableMap relatedObjects()
+        protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.relatedObjects());
+            saveList.AddRange(base.linkedObjects());
             saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
         }

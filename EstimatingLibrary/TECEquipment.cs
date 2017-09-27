@@ -151,10 +151,10 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.SubScope, "SubScope");
             return saveList;
         }

@@ -67,17 +67,17 @@ namespace EstimatingLibrary
             _price = hardware.Price;
         }
         
-        protected override SaveableMap saveObjects()
+        protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.saveObjects());
+            saveList.AddRange(base.propertyObjects());
             saveList.Add(this.Manufacturer, "Manufacturer");
             return saveList;
         }
-        protected override SaveableMap relatedObjects()
+        protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.relatedObjects());
+            saveList.AddRange(base.linkedObjects());
             saveList.Add(this.Manufacturer, "Manufacturer");
             return saveList;
         }

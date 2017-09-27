@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECScopeBranch : TECLabeled, ISaveable, ITypicalable
+    public class TECScopeBranch : TECLabeled, IRelatable, ITypicalable
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
         private ObservableCollection<TECScopeBranch> _branches;
@@ -25,11 +25,11 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap SaveObjects
+        public SaveableMap PropertyObjects
         {
-            get { return saveObjects(); }
+            get { return propertyObjects(); }
         }
-        public SaveableMap RelatedObjects
+        public SaveableMap LinkedObjects
         {
             get { return new SaveableMap(); }
         }
@@ -76,7 +76,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private SaveableMap saveObjects()
+        private SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(this.Branches, "Branches");

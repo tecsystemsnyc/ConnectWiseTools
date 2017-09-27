@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.PropertiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <ScrollViewer DataContext="{Binding ElementName=parent, Path=Selected}">
+        <StackPanel>
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type models:TECScope}">
+                        <Expander Header="Scope" >
+                            <controls:ScopePropertiesControl Selected="{Binding}"/>
+                        </Expander>
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type models:TECCost}">
+                        <Expander Header="Cost" >
+                            <controls:CostPropertiesControl Selected="{Binding}"/>
+                        </Expander>
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECCatalogs : TECObject, ISaveable
+    public class TECCatalogs : TECObject, IRelatable
     {
         private ObservableCollection<TECElectricalMaterial> _connectionTypes;
         private ObservableCollection<TECElectricalMaterial> _conduitTypes;
@@ -148,13 +148,13 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap SaveObjects
+        public SaveableMap PropertyObjects
         {
-            get { return saveObjects(); }
+            get { return propertyObjects(); }
         }
-        public SaveableMap RelatedObjects
+        public SaveableMap LinkedObjects
         {
-            get { return relatedObjects(); }
+            get { return linkedObjects(); }
         }
 
         public Action<TECObject> ScopeChildRemoved;
@@ -228,7 +228,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private SaveableMap saveObjects()
+        private SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(this.IOModules, "IOModules");
@@ -243,7 +243,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Tags, "Tags");
             return saveList;
         }
-        private SaveableMap relatedObjects()
+        private SaveableMap linkedObjects()
         {
             SaveableMap relatedList = new SaveableMap();
             return relatedList;

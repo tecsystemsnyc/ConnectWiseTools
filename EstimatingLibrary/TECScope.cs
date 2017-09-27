@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECScope : TECObject, INotifyCostChanged, ISaveable
+    public abstract class TECScope : TECObject, INotifyCostChanged, IRelatable
     {
         #region Properties
 
@@ -79,19 +79,19 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap SaveObjects
+        public SaveableMap PropertyObjects
         {
             get
             {
-                return saveObjects();
+                return propertyObjects();
             }
         }
-        public SaveableMap RelatedObjects
+        public SaveableMap LinkedObjects
         {
             get
             {
-                SaveableMap map = relatedObjects();
-                return relatedObjects();
+                SaveableMap map = linkedObjects();
+                return linkedObjects();
             }
         }
         #endregion
@@ -164,14 +164,14 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected virtual SaveableMap saveObjects()
+        protected virtual SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(this.Tags, "Tags");
             saveList.AddRange(this.AssociatedCosts.Distinct(), "AssociatedCosts");
             return saveList;
         }
-        protected virtual SaveableMap relatedObjects()
+        protected virtual SaveableMap linkedObjects()
         {
             SaveableMap relatedList = new SaveableMap();
             relatedList.AddRange(this.Tags, "Tags");
