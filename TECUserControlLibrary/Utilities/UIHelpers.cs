@@ -345,13 +345,14 @@ namespace TECUserControlLibrary.Utilities
     public enum TemplateGridIndex { None, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope };
-    public enum MaterialType { Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
+    public enum MaterialType { Devices, Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
     public enum TypicalSystemIndex { Edit, Instances };
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
     public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }
     public enum ElectricalMaterialIndex { Wire, Conduit, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
+    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel }
 
 
 }
