@@ -24,7 +24,12 @@ namespace TemplateBuilder.MVVM
         #region Fields
         private TemplateGridIndex _DGTabIndex;
         private Visibility _templatesVisibility;
+        private object _selected;
 
+        #endregion
+
+        #region Events
+        public event Action<Object> SelectionChanged;
         #endregion
         #region Constructors
         public MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, false)
@@ -72,6 +77,15 @@ namespace TemplateBuilder.MVVM
             }
         }
         public ICommand RefreshCommand { get; private set; }
+        public object Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                SelectionChanged?.Invoke(value);
+            }
+        }
         
         protected override TECScopeManager workingScopeManager
         {
@@ -295,6 +309,7 @@ namespace TemplateBuilder.MVVM
             EditTab = new EditTabVM(Templates);
             EditTab.DragHandler += DragOver;
             EditTab.DropHandler += Drop;
+            SelectionChanged += EditTab.updateSelection;
         }
         private void setupMaterialsTab()
         {

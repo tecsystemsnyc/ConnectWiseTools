@@ -96,6 +96,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControls\BaseListControl.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
@@ -120,6 +121,9 @@
     </Compile>
     <Compile Include="UserControls\ScopePropertiesControl.xaml.cs">
       <DependentUpon>ScopePropertiesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SystemListControl.xaml.cs">
+      <DependentUpon>SystemListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\InterfaceDataTemplateSelector.cs" />
     <Compile Include="ViewModels\HardwareSummaryVM.cs" />
@@ -344,6 +348,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ScopePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SystemListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

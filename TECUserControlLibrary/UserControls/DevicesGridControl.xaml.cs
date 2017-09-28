@@ -48,7 +48,9 @@ namespace TECUserControlLibrary.UserControls
             set { SetValue(SelectedDeviceProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectedDeviceProperty = DependencyProperty.Register("SelectedDevice", typeof(TECDevice), typeof(DevicesGridControl), new FrameworkPropertyMetadata(null)
+        public static readonly DependencyProperty SelectedDeviceProperty = 
+            DependencyProperty.Register("SelectedDevice", typeof(TECDevice), 
+                typeof(DevicesGridControl), new FrameworkPropertyMetadata(null)
         {
             BindsTwoWayByDefault = true,
             DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
