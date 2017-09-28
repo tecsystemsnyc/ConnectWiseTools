@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using TECUserControlLibrary.Models;
 
@@ -203,7 +204,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (SelectedSystem != null)
             {
-                SelectedSystem.Controllers.CollectionChanged += collectionChanged;
+                ((INotifyCollectionChanged)SelectedSystem.Controllers).CollectionChanged += collectionChanged;
                 SelectedSystem.Equipment.CollectionChanged += collectionChanged;
                 foreach (TECEquipment equipment in SelectedSystem.Equipment)
                 {
@@ -215,7 +216,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (SelectedSystem != null)
             {
-                SelectedSystem.Controllers.CollectionChanged -= collectionChanged;
+                ((INotifyCollectionChanged)SelectedSystem.Controllers).CollectionChanged -= collectionChanged;
                 SelectedSystem.Equipment.CollectionChanged -= collectionChanged;
                 foreach (TECEquipment equipment in SelectedSystem.Equipment)
                 {
@@ -228,7 +229,7 @@ namespace TECUserControlLibrary.ViewModels
             var bid = ScopeManager as TECBid;
             if (bid != null)
             {
-                bid.Controllers.CollectionChanged += collectionChanged;
+                ((INotifyCollectionChanged)bid.Controllers).CollectionChanged += collectionChanged;
             }
         }
 
@@ -237,7 +238,7 @@ namespace TECUserControlLibrary.ViewModels
             var bid = ScopeManager as TECBid;
             if (bid != null)
             {
-                bid.Controllers.CollectionChanged -= collectionChanged;
+                ((INotifyCollectionChanged)bid.Controllers).CollectionChanged -= collectionChanged;
             }
         }
 

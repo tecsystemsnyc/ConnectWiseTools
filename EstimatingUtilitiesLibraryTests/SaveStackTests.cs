@@ -45,7 +45,7 @@ namespace Tests
 
             int expectedCount = expectedItems.Count;
 
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -58,7 +58,7 @@ namespace Tests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECCost cost = new TECCost(CostType.TEC);
             controller.AssociatedCosts.Add(cost);
@@ -131,7 +131,7 @@ namespace Tests
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
             TECController controller = new TECController(controllerType, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1049,7 +1049,7 @@ namespace Tests
 
             int expectedCount = expectedItems.Count;
 
-            system.Controllers.Add(controller);
+            system.AddController(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -1072,7 +1072,7 @@ namespace Tests
             ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher);
 
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1130,7 +1130,7 @@ namespace Tests
 
             TECController controller = new TECController(type, true);
             bid.Systems.Add(typical);
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1231,7 +1231,7 @@ namespace Tests
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
             TECController controller = new TECController(ControllerType, true);
-            system.Controllers.Add(controller);
+            system.AddController(controller);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1551,8 +1551,8 @@ namespace Tests
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             TECController child = new TECController(type, false);
-            bid.Controllers.Add(controller);
-            bid.Controllers.Add(child);
+            bid.AddController(controller);
+            bid.AddController(child);
 
             TECElectricalMaterial connectionType = new TECElectricalMaterial();
 
@@ -1605,12 +1605,12 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECController child = new TECController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.Controllers.Add(child);
+            typical.AddController(child);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
             
@@ -1669,14 +1669,14 @@ namespace Tests
             TECController controller = new TECController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
             TECController otherController = new TECController(type, false);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
-            otherTypical.Controllers.Add(otherController);
+            otherTypical.AddController(otherController);
             TECSystem otherSystem = otherTypical.AddInstance(bid);
             TECController otherInstanceController = otherSystem.Controllers[0];
 
@@ -1731,7 +1731,7 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
@@ -1781,7 +1781,7 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
@@ -1835,7 +1835,7 @@ namespace Tests
             TECController controller = new TECController(type, false);
 
             TECTypical typical = new TECTypical();
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
@@ -1885,7 +1885,7 @@ namespace Tests
             TECController controller = new TECController(type, false);
 
             TECTypical typical = new TECTypical();
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
@@ -1969,7 +1969,7 @@ namespace Tests
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1988,7 +1988,7 @@ namespace Tests
             
             int expectedCount = expectedItems.Count;
 
-            bid.Controllers.Remove(controller);
+            bid.RemoveController(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -2040,7 +2040,7 @@ namespace Tests
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
             TECController controller = new TECController(controllerType, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
             panel.Controllers.Add(controller);
 
             //Act
@@ -2862,7 +2862,7 @@ namespace Tests
             TECControllerType type = new TECControllerType(manufacturer);
             TECController controller = new TECController(type, true);
             bid.Systems.Add(system);
-            system.Controllers.Add(controller);
+            system.AddController(controller);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -2884,7 +2884,7 @@ namespace Tests
 
             int expectedCount = expectedItems.Count;
 
-            system.Controllers.Remove(controller);
+            system.RemoveController(controller);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
@@ -2902,12 +2902,12 @@ namespace Tests
             TECController controller = new TECController(type, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
             var removed = instance.Controllers[0];
-            typical.Controllers.Remove(controller);
+            typical.RemoveController(controller);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -2957,7 +2957,7 @@ namespace Tests
             TECControllerType type = new TECControllerType(manufacturer);
             TECController controller = new TECController(type, true);
             bid.Systems.Add(typical);
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
@@ -3052,7 +3052,7 @@ namespace Tests
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
             TECController controller = new TECController(ControllerType, true);
-            system.Controllers.Add(controller);
+            system.AddController(controller);
             panel.Controllers.Add(controller);
 
             //Act
@@ -3347,8 +3347,8 @@ namespace Tests
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             TECController child = new TECController(type, false);
-            bid.Controllers.Add(controller);
-            bid.Controllers.Add(child);
+            bid.AddController(controller);
+            bid.AddController(child);
 
             TECElectricalMaterial connectionType = new TECElectricalMaterial();
             TECNetworkConnection connection = controller.AddNetworkConnection(false,
@@ -3400,12 +3400,12 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECController child = new TECController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.Controllers.Add(child);
+            typical.AddController(child);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
@@ -3461,14 +3461,14 @@ namespace Tests
             TECController controller = new TECController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
             TECController otherController = new TECController(type, false);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
-            otherTypical.Controllers.Add(otherController);
+            otherTypical.AddController(otherController);
             TECSystem otherSystem = otherTypical.AddInstance(bid);
             TECController otherInstanceController = otherSystem.Controllers[0];
 
@@ -3521,7 +3521,7 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
@@ -3570,7 +3570,7 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
@@ -3624,7 +3624,7 @@ namespace Tests
             TECController controller = new TECController(type, false);
 
             TECTypical typical = new TECTypical();
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
@@ -3675,7 +3675,7 @@ namespace Tests
             TECController controller = new TECController(type, false);
 
             TECTypical typical = new TECTypical();
-            typical.Controllers.Add(controller);
+            typical.AddController(controller);
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);

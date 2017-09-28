@@ -178,7 +178,7 @@ namespace TECUserControlLibrary.ViewModels
             isGlobal = true;
             PanelSelectionReadOnly = false;
             PanelSelectionVisibility = Visibility.Visible;
-            sourceControllers = bid.Controllers;
+            sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
             PanelsSource = bid.Panels;
             Bid = bid;
             setup();
@@ -207,7 +207,7 @@ namespace TECUserControlLibrary.ViewModels
             isGlobal = false;
             PanelSelectionReadOnly = !canSelectPanel;
             PanelSelectionVisibility = Visibility.Visible;
-            sourceControllers = system.Controllers;
+            sourceControllers = new ObservableCollection<TECController>(system.Controllers);
             PanelsSource = system.Panels;
             SelectedSystem = system;
             setup();
@@ -217,7 +217,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Methods
         public void Refresh(TECBid bid)
         {
-            sourceControllers = bid.Controllers;
+            sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
             PanelsSource = bid.Panels;
             Bid = bid;
             setup();
@@ -243,7 +243,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
             
-            sourceControllers = system.Controllers;
+            sourceControllers = new ObservableCollection<TECController>(system.Controllers);
             PanelsSource = system.Panels;
             SelectedSystem = system;
             setup();
@@ -387,7 +387,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             if (dropInfo.Data is TECController)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers, scopeManager, isGlobal);
+                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers.Add, scopeManager, isGlobal);
             }
             else
             {

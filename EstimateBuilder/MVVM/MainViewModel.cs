@@ -50,6 +50,7 @@ namespace EstimateBuilder.MVVM
         public ReviewVM ReviewVM { get; set; }
         public ProposalVM ProposalVM { get; set; }
         public ElectricalVM ElectricalVM { get; set; }
+        public NetworkVM NetworkVM { get; set; }
         public ICommand ToggleTemplatesCommand { get; private set; }
         public ICommand DocumentCommand { get; private set; }
         public ICommand LoadTemplatesCommand { get; private set; }
@@ -209,6 +210,7 @@ namespace EstimateBuilder.MVVM
             setupReviewVM(Bid);
             setupProposalVM(Bid);
             setupElectricalVM(Bid);
+            setupNetworkVM(Bid, watcher);
         }
         protected override void setupCommands()
         {
@@ -288,6 +290,7 @@ namespace EstimateBuilder.MVVM
             buildTitleString();
             setupCommands();
             setupExtensions(MenuType.EB);
+            TemplatesFilePath = templatesPath;
 
             workingFileParameters = UIHelpers.EstimateFileParameters;
             CurrentVM = this;
@@ -327,6 +330,10 @@ namespace EstimateBuilder.MVVM
         {
             ElectricalVM = new ElectricalVM(bid);
         }
+        private void setupNetworkVM(TECBid bid, ChangeWatcher cw)
+        {
+            NetworkVM = new NetworkVM(bid, cw);
+        }
         private void setupData(string templatesPath, string bidPath = "")
         {
             if (isNew)
@@ -337,7 +344,7 @@ namespace EstimateBuilder.MVVM
             {
                 load(false, bidPath);
             }
-            loadTemplates(TemplatesFilePath, false);
+            loadTemplates(templatesPath, false);
             updateBidWithTemplates();
         }
         private void loadTemplates(string TemplatesFilePath, bool async = true)
@@ -504,6 +511,7 @@ namespace EstimateBuilder.MVVM
                 //ReviewVM.Refresh(Bid);
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
+                NetworkVM.Refresh(Bid, watcher);
             }
         }
         private void updateBidWithTemplates()

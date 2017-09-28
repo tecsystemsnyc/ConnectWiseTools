@@ -12,7 +12,7 @@ namespace EstimatingLibrary
 {
     public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged, IRelatable
     {
-        #region Properties
+        #region Fields
         private string _name;
         private string _bidNumber;
         private DateTime _dueDate;
@@ -24,14 +24,18 @@ namespace EstimatingLibrary
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
 
-        private ObservableCollection<TECScopeBranch> _scopeTree { get; set; }
-        private ObservableCollection<TECTypical> _systems { get; set; }
-        private ObservableCollection<TECLabeled> _notes { get; set; }
-        private ObservableCollection<TECLabeled> _exclusions { get; set; }
-        private ObservableCollection<TECLabeled> _locations { get; set; }
-        private ObservableCollection<TECController> _controllers { get; set; }
-        private ObservableCollection<TECMisc> _miscCosts { get; set; }
-        private ObservableCollection<TECPanel> _panels { get; set; }
+        private ObservableCollection<TECScopeBranch> _scopeTree;
+        private ObservableCollection<TECTypical> _systems;
+        private ObservableCollection<TECLabeled> _notes;
+        private ObservableCollection<TECLabeled> _exclusions;
+        private ObservableCollection<TECLabeled> _locations;
+        private ObservableCollection<TECController> _controllers;
+        private ObservableCollection<TECMisc> _miscCosts;
+        private ObservableCollection<TECPanel> _panels;
+        #endregion
+
+        #region Properties
+
 
         public string Name
         {
@@ -178,17 +182,9 @@ namespace EstimatingLibrary
             }
         }
         
-        public ObservableCollection<TECController> Controllers
+        public ReadOnlyObservableCollection<TECController> Controllers
         {
-            get { return _controllers; }
-            set
-            {
-                var old = Controllers;
-                Controllers.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Controllers");
-                _controllers = value;
-                Controllers.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Controllers");
-                notifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
-            }
+            get { return new ReadOnlyObservableCollection<TECController>(_controllers); }
         }
         public ObservableCollection<TECMisc> MiscCosts
         {
@@ -268,7 +264,6 @@ namespace EstimatingLibrary
             Exclusions.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Exclusions");
             Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
             Locations.CollectionChanged += locationsCollectionChanged;
-            Controllers.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Controllers");
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
 
@@ -303,6 +298,28 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
+        #region Add/Remove Object Methods
+        public void AddController(TECController controller)
+        {
+            _controllers.Add(controller);
+            notifyCombinedChanged(Change.Add, "Controllers", this, controller);
+            CostChanged?.Invoke(controller.CostBatch);
+        }
+        public void RemoveController(TECController controller)
+        {
+            controller.RemoveAllConnections();
+            _controllers.Remove(controller);
+            notifyCombinedChanged(Change.Remove, "Controllers", this, controller);
+            CostChanged?.Invoke(-controller.CostBatch);
+        }
+        public void SetControllers(IEnumerable<TECController> newControllers)
+        {
+            IEnumerable<TECController> oldControllers = Controllers;
+            _controllers = new ObservableCollection<TECController>(newControllers);
+            notifyCombinedChanged(Change.Edit, "Controllers", this, newControllers, oldControllers);
+        }
+        #endregion
+
         #region Event Handlers
         private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string collectionName)
         {
@@ -364,10 +381,6 @@ namespace EstimatingLibrary
                             costChanged = false;
                             pointChanged = false;
                         }
-                    }
-                    else if (item is TECController)
-                    {
-                        (item as TECController).RemoveAllConnections();
                     }
                 }
                 if (pointChanged) PointChanged?.Invoke(pointNumber);

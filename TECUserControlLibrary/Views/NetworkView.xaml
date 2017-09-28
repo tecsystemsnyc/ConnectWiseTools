@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              mc:Ignorable="d" 
+             x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
 
     <UserControl.Resources>
@@ -16,7 +17,8 @@
     </UserControl.Resources>
 
     <!--Main Grid-->
-    <Grid Background="{DynamicResource SectionBackgroundBrush}">
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+        Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
@@ -40,12 +42,14 @@
 
                     <Label Content="Controllers" FontSize="20"/>
                     <!--Controller DataGrid-->
-                    <DataGrid Grid.Row="1"
+                    <DataGrid ItemsSource="{Binding Parentables}"
+                              Grid.Row="1"
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Width="Auto" MinWidth="50"/>
-                            <DataGridTextColumn Header="Description" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70"/>
+                            <DataGridCheckBoxColumn Binding="{Binding IsConnected}" Header="Connected To BMS" Width="Auto"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

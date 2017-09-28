@@ -107,17 +107,9 @@ namespace EstimatingLibrary
                 _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
             }
         }
-        public ObservableCollection<TECController> Controllers
+        public ReadOnlyObservableCollection<TECController> Controllers
         {
-            get { return _controllers; }
-            set
-            {
-                var old = _controllers;
-                _controllers.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Controllers");
-                _controllers = value;
-                notifyTECChanged(Change.Edit, "Controllers", this, value, old);
-                _controllers.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Controllers");
-            }
+            get { return new ReadOnlyObservableCollection<TECController>(_controllers); }
         }
         public ObservableCollection<TECPanel> Panels
         {
@@ -180,6 +172,25 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
+        public void AddController(TECController controller)
+        {
+            _controllers.Add(controller);
+            notifyTECChanged(Change.Add, "Controllers", this, controller);
+            notifyCostChanged(controller.CostBatch);
+        }
+        public void RemoveController(TECController controller)
+        {
+            _controllers.Remove(controller);
+            notifyTECChanged(Change.Remove, "Controllers", this, controller);
+            notifyCostChanged(-controller.CostBatch);
+        }
+        public void SetControllers(IEnumerable<TECController> newControllers)
+        {
+            IEnumerable<TECController> oldControllers = Controllers;
+            _controllers = new ObservableCollection<TECController>(newControllers);
+            notifyTECChanged(Change.Edit, "Controllers", this, newControllers, oldControllers);
+        }
+
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();

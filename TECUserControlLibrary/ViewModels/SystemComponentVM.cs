@@ -204,7 +204,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (dropInfo.Data is TECController)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, SelectedSystem.Controllers, scopeManager);
+                UIHelpers.ControllerInPanelDrop(dropInfo, SelectedSystem.AddController, scopeManager);
             }
             else
             {

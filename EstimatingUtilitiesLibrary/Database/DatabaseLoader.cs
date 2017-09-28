@@ -76,7 +76,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Locations = getAllLocations();
             bid.Notes = getNotes();
             bid.Exclusions = getExclusions();
-            bid.Controllers = getOrphanControllers();
+            bid.SetControllers(getOrphanControllers());
             bid.MiscCosts = getMiscInBid(bid.Guid);
             bid.Panels = getOrphanPanels();
             var placeholderDict = getCharacteristicInstancesList();
@@ -863,7 +863,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECTypical system = new TECTypical(guid);
 
             assignValuePropertiesFromTable(system, new SystemTable(), row);
-            system.Controllers = getControllersInSystem(guid, true);
+            system.SetControllers(getControllersInSystem(guid, true));
             system.Equipment = getEquipmentInSystem(guid, true);
             system.Panels = getPanelsInSystem(guid, true);
             system.Instances = getChildrenSystems(guid);
@@ -879,7 +879,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECSystem system = new TECSystem(guid, false);
 
             assignValuePropertiesFromTable(system, new SystemTable(), row);
-            system.Controllers = getControllersInSystem(guid, false);
+            system.SetControllers(getControllersInSystem(guid, false));
             system.Equipment = getEquipmentInSystem(guid, false);
             system.Panels = getPanelsInSystem(guid, false);
             system.MiscCosts = getMiscInSystem(guid, false);

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -20,6 +21,16 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class NetworkView : UserControl
     {
+        public NetworkVM ViewModel
+        {
+            get { return (NetworkVM)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(NetworkVM),
+                typeof(NetworkView));
+
         public NetworkView()
         {
             InitializeComponent();

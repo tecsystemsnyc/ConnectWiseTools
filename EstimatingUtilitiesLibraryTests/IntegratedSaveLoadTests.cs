@@ -2270,7 +2270,7 @@ namespace Tests
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
 
-            bid.Controllers.Add(expectedController);
+            bid.AddController(expectedController);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -2298,7 +2298,7 @@ namespace Tests
             int oldNumControllers = bid.Controllers.Count;
             TECController controllerToRemove = bid.Controllers[0];
 
-            bid.Controllers.Remove(controllerToRemove);
+            bid.RemoveController(controllerToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 

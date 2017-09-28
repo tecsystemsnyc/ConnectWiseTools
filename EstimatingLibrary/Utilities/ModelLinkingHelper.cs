@@ -387,7 +387,7 @@ namespace EstimatingLibrary.Utilities
         
         #endregion
 
-        private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, ObservableCollection<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
+        private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, IEnumerable<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECPanel panel in panels)
             {
@@ -441,7 +441,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkSubScopeConnections(ObservableCollection<TECController> controllers, ObservableCollection<TECSubScope> subscope,
+        private static void linkSubScopeConnections(IEnumerable<TECController> controllers, ObservableCollection<TECSubScope> subscope,
             Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECSubScope subScope in subscope)
