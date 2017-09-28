@@ -15,8 +15,8 @@ namespace TECUserControlLibrary.ViewModels
     public class NetworkVM : ViewModelBase
     {
         #region Fields
-        public ObservableCollection<ConnectableItem> Parentables { get; private set; }
-        public ObservableCollection<ConnectableItem> NonParentables { get; private set; }
+        private ObservableCollection<ConnectableItem> _parentables;
+        private ObservableCollection<ConnectableItem> _nonParentables;
 
         private INetworkConnectable _selectedItem;
         private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
@@ -31,6 +31,15 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Properties
+        public ReadOnlyObservableCollection<ConnectableItem> Parentables
+        {
+            get { return new ReadOnlyObservableCollection<ConnectableItem>(_parentables); }
+        }
+        public ReadOnlyObservableCollection<ConnectableItem> NonParentables
+        {
+            get { return new ReadOnlyObservableCollection<ConnectableItem>(_nonParentables); }
+        }
+
         public INetworkConnectable SelectedItem
         {
             get
@@ -56,8 +65,8 @@ namespace TECUserControlLibrary.ViewModels
         private void resetCollections()
         {
             connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
-            Parentables = new ObservableCollection<ConnectableItem>();
-            NonParentables = new ObservableCollection<ConnectableItem>();
+            _parentables = new ObservableCollection<ConnectableItem>();
+            _nonParentables = new ObservableCollection<ConnectableItem>();
             RaisePropertyChanged("Parentables");
             RaisePropertyChanged("NonParentables");
         }
@@ -115,11 +124,11 @@ namespace TECUserControlLibrary.ViewModels
             connectableDictionary.Add(connectable, item);
             if (connectable is INetworkParentable)
             {
-                Parentables.Add(item);
+                _parentables.Add(item);
             }
             else
             {
-                NonParentables.Add(item);
+                _nonParentables.Add(item);
             }
         }
         private void removeConnectableItem(INetworkConnectable connectable)
@@ -134,11 +143,11 @@ namespace TECUserControlLibrary.ViewModels
                         updateIsConnected(child, false);
                     }
                 }
-                Parentables.Add(item);
+                _parentables.Remove(item);
             }
             else
             {
-                NonParentables.Remove(item);
+                _nonParentables.Remove(item);
             }
 
             connectableDictionary.Remove(connectable);

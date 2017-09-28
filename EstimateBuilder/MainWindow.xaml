@@ -92,6 +92,10 @@
                         <views:SettingsView
                         ViewModel="{Binding SettingsVM}"/>
                     </TabItem>
+                    <TabItem>
+                                <views:NetworkView
+                            ViewModel="{Binding NetworkVM}"/>
+                            </TabItem>
                 </TabControl>
                 <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
                                            Grid.Row="3" Grid.ColumnSpan="3"
