@@ -83,7 +83,7 @@ namespace Tests
             controllerType.Price = 100;
             TECController controller = new TECController(controllerType, false);
 
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
             
             Assert.AreEqual(100, costs.GetCost(CostType.TEC));
             Assert.AreEqual(0, costs.GetCost(CostType.Electrical));

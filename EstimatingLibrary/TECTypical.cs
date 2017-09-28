@@ -57,7 +57,7 @@ namespace EstimatingLibrary
                 {
                     characteristicReference.AddItem(controller, toAdd);
                 }
-                Controllers.Add(toAdd);
+                AddController(toAdd);
             }
             foreach (TECPanel panel in source.Panels)
             {
@@ -93,7 +93,7 @@ namespace EstimatingLibrary
             foreach (TECController controller in system.Controllers)
             {
                 var toAdd = new TECController(controller, true, guidDictionary);
-                Controllers.Add(toAdd);
+                AddController(toAdd);
             }
             foreach (TECPanel panel in system.Panels)
             {
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
             {
                 var toAdd = new TECController(controller, false, guidDictionary);
                 _typicalInstanceDictionary.AddItem(controller, toAdd);
-                newSystem.Controllers.Add(toAdd);
+                newSystem.AddController(toAdd);
             }
             foreach (TECPanel panel in Panels)
             {
@@ -400,7 +400,7 @@ namespace EstimatingLibrary
                 {
                     var controllerToAdd = new TECController(characteristicController, false);
                     _typicalInstanceDictionary.AddItem(characteristicController, controllerToAdd);
-                    system.Controllers.Add(controllerToAdd);
+                    system.AddController(controllerToAdd);
                 }
             }
             else if (value is TECPanel && sender is TECTypical)
@@ -555,7 +555,7 @@ namespace EstimatingLibrary
                     }
                     foreach (TECController controller in controllersToRemove)
                     {
-                        system.Controllers.Remove(controller);
+                        system.RemoveController(controller);
                     }
                 }
             }

@@ -29,8 +29,8 @@ namespace Tests
             TECController server = new TECController(bid.Catalogs.ControllerTypes[0], false);
             server.IsServer = true;
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.Controllers.Add(server);
-            bid.Controllers.Add(controller);
+            bid.AddController(server);
+            bid.AddController(controller);
             TECNetworkConnection netConnect = server.AddNetworkConnection(false,
                 new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
             
@@ -77,7 +77,7 @@ namespace Tests
 
             TECController server = new TECController(bid.Catalogs.ControllerTypes[0], false);
             server.IsServer = true;
-            bid.Controllers.Add(server);
+            bid.AddController(server);
             TECNetworkConnection netConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
 
             TECTypical typical = new TECTypical();
@@ -139,8 +139,8 @@ namespace Tests
             server1.IsServer = true;
             TECController server2 = new TECController(bid.Catalogs.ControllerTypes[0], false);
             server2.IsServer = true;
-            bid.Controllers.Add(server1);
-            bid.Controllers.Add(server2);
+            bid.AddController(server1);
+            bid.AddController(server2);
 
             List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
 
@@ -187,9 +187,9 @@ namespace Tests
             server.IsServer = true;
             TECController parentController = new TECController(bid.Catalogs.ControllerTypes[0], false);
             TECController childController = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.Controllers.Add(server);
-            bid.Controllers.Add(parentController);
-            bid.Controllers.Add(childController);
+            bid.AddController(server);
+            bid.AddController(parentController);
+            bid.AddController(childController);
 
             List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
 
@@ -244,8 +244,8 @@ namespace Tests
             TECController server = new TECController(bid.Catalogs.ControllerTypes[0], false);
             server.IsServer = true;
             TECController parentController = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.Controllers.Add(server);
-            bid.Controllers.Add(parentController);
+            bid.AddController(server);
+            bid.AddController(parentController);
 
             List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
@@ -311,13 +311,107 @@ namespace Tests
         [TestMethod]
         public void ConnectParentControllerToServer()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+
+            ChangeWatcher cw = new ChangeWatcher(bid);
+            NetworkVM netVM = new NetworkVM(bid, cw);
+
+            TECController server = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            server.IsServer = true;
+            TECController parentController = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController childController = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            bid.AddController(server);
+            bid.AddController(parentController);
+            bid.AddController(childController);
+
+            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConduitTypes[0] };
+
+            TECNetworkConnection serverConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
+            TECNetworkConnection parentConnect = parentController.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
+            parentConnect.AddINetworkConnectable(childController);
+
+            ConnectableItem serverItem = null;
+            ConnectableItem parentItem = null;
+            ConnectableItem childItem = null;
+
+            foreach(ConnectableItem item in netVM.Parentables)
+            {
+                if (item.Item == server)
+                {
+                    serverItem = item;
+                }
+                else if (item.Item == parentController)
+                {
+                    parentItem = item;
+                }
+                else if (item.Item == childController)
+                {
+                    childItem = item;
+                }
+            }
+
+            //Act
+            serverConnect.AddINetworkConnectable(parentController);
+
+            //Assert
+            checkIsConnected(serverItem, true);
+            checkIsConnected(parentItem, true);
+            checkIsConnected(childItem, true);
+
+            netVM.Refresh(bid, cw);
+
+            checkIsConnected(serverItem, true);
+            checkIsConnected(parentItem, true);
+            checkIsConnected(childItem, true);
         }
 
         [TestMethod]
         public void DisconnectControllerFromServer()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+
+            ChangeWatcher cw = new ChangeWatcher(bid);
+            NetworkVM netVM = new NetworkVM(bid, cw);
+
+            TECController server = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            server.IsServer = true;
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            bid.AddController(server);
+            bid.AddController(controller);
+
+            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConduitTypes[0] };
+
+            TECNetworkConnection serverConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
+            serverConnect.AddINetworkConnectable(controller);
+
+            ConnectableItem serverItem = null;
+            ConnectableItem controllerItem = null;
+
+            foreach(ConnectableItem item in netVM.Parentables)
+            {
+                if (item.Item == server)
+                {
+                    serverItem = item;
+                }
+                else if (item.Item == controller)
+                {
+                    controllerItem = item;
+                }
+            }
+
+            //Act
+            serverConnect.RemoveINetworkConnectable(controller);
+
+            //Assert
+            checkIsConnected(serverItem, true);
+            checkIsConnected(controllerItem, false);
+
+            netVM.Refresh(bid, cw);
+
+            checkIsConnected(serverItem, true);
+            checkIsConnected(controllerItem, false);
         }
 
         [TestMethod]
@@ -383,19 +477,19 @@ namespace Tests
 
             //TECController server = new TECController(controllerType, false);
             //server.NetworkType = EstimatingLibrary.NetworkType.Server;
-            //bid.Controllers.Add(server);
+            //bid.AddController(server);
 
             //TECController ddc = new TECController(controllerType, false);
             //ddc.NetworkType = EstimatingLibrary.NetworkType.DDC;
-            //bid.Controllers.Add(ddc);
+            //bid.AddController(ddc);
 
             //TECController unitary = new TECController(controllerType, false);
             //unitary.NetworkType = EstimatingLibrary.NetworkType.Unitary;
-            //bid.Controllers.Add(unitary);
+            //bid.AddController(unitary);
 
             //TECController child = new TECController(controllerType, false);
             //child.NetworkType = EstimatingLibrary.NetworkType.Unitary;
-            //bid.Controllers.Add(child);
+            //bid.AddController(child);
 
             //NetworkVM netVM = new NetworkVM(bid);
 
@@ -438,14 +532,14 @@ namespace Tests
 
             //TECController bacnetController = new TECController(bacnetType, false);
             //bacnetController.NetworkType = EstimatingLibrary.NetworkType.Server;
-            //bid.Controllers.Add(bacnetController);
+            //bid.AddController(bacnetController);
 
             //TECController lonController = new TECController(lonType, false);
             //lonController.NetworkType = EstimatingLibrary.NetworkType.Server;
-            //bid.Controllers.Add(lonController);
+            //bid.AddController(lonController);
 
             //TECController childController = new TECController(bacnetType, false);
-            //bid.Controllers.Add(childController);
+            //bid.AddController(childController);
 
             //NetworkVM netVM = new NetworkVM(bid);
 
@@ -480,13 +574,13 @@ namespace Tests
 
             //TECController parentController = new TECController(controllerType, false);
             //parentController.NetworkType = EstimatingLibrary.NetworkType.Server;
-            //bid.Controllers.Add(parentController);
+            //bid.AddController(parentController);
 
             //TECController adoptedChildController = new TECController(controllerType, false);
-            //bid.Controllers.Add(adoptedChildController);
+            //bid.AddController(adoptedChildController);
 
             //TECController orphanChildController = new TECController(controllerType, false);
-            //bid.Controllers.Add(orphanChildController);
+            //bid.AddController(orphanChildController);
 
             //NetworkVM netVM = new NetworkVM(bid);
 
@@ -530,15 +624,15 @@ namespace Tests
 
             //TECController grandparent = new TECController(controllerType, false);
             //grandparent.NetworkType = EstimatingLibrary.NetworkType.DDC;
-            //bid.Controllers.Add(grandparent);
+            //bid.AddController(grandparent);
 
             //TECController parent = new TECController(controllerType, false);
             //parent.NetworkType = EstimatingLibrary.NetworkType.DDC;
-            //bid.Controllers.Add(parent);
+            //bid.AddController(parent);
 
             //TECController child = new TECController(controllerType, false);
             //child.NetworkType = EstimatingLibrary.NetworkType.DDC;
-            //bid.Controllers.Add(child);
+            //bid.AddController(child);
 
             //NetworkVM netVM = new NetworkVM(bid);
 

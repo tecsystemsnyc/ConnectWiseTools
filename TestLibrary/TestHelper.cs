@@ -1,6 +1,7 @@
 ﻿using System;
 using EstimatingLibrary;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -67,7 +68,7 @@ namespace Tests
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             
-            bid.Controllers.Add(expectedController);
+            bid.AddController(expectedController);
             
             //Misc Cost
             TECMisc cost = new TECMisc(CostType.TEC, false);
@@ -576,7 +577,7 @@ namespace Tests
             outScope.Equipment.Add(equipment);
 
             var controller = CreateTestController(true, catalogs);
-            outScope.Controllers.Add(controller);
+            outScope.AddController(controller);
 
             ConnectEquipmentToController(equipment, controller);
             panel.Controllers.Add(controller);
@@ -775,7 +776,7 @@ namespace Tests
             }
             return null;
         }
-        public static TECController FindControllerInController(ObservableCollection<TECController> controllers, TECController reference)
+        public static TECController FindControllerInController(IEnumerable<TECController> controllers, TECController reference)
         {
             foreach(TECController controller in controllers)
             {

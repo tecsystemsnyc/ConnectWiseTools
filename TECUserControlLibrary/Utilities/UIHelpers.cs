@@ -123,7 +123,7 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static void ControllerInPanelDrop(IDropInfo dropInfo, ObservableCollection<TECController> controllers, TECScopeManager scopeManager, bool isGlobal = true)
+        public static void ControllerInPanelDrop(IDropInfo dropInfo, Action<TECController> addMethod, TECScopeManager scopeManager, bool isGlobal = true)
         {
             var sourceItem = (dropInfo.Data as IDragDropable).DragDropCopy(scopeManager);
             Type sourceType = dropInfo.Data.GetType();
@@ -135,7 +135,7 @@ namespace TECUserControlLibrary.Utilities
                 {
                     var controller = sourceItem as TECController;
                     var controllerInPanel = new ControllerInPanel(controller, null);
-                    controllers.Add(sourceItem as TECController);
+                    addMethod(sourceItem as TECController);
                     sourceItem = controllerInPanel;
                 }
             }

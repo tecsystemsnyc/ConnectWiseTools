@@ -245,7 +245,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
             
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
@@ -395,7 +395,7 @@ namespace Tests
             TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.ControllerTypes.Add(controllerType);
             TECController controller = new TECController(controllerType, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -629,7 +629,7 @@ namespace Tests
             ChangeWatcher cw = new ChangeWatcher(bid);
             TECController controller = TestHelper.CreateTestController(false, bid.Catalogs);
             TestHelper.AssignSecondaryProperties(controller, bid.Catalogs);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -643,7 +643,7 @@ namespace Tests
             Total totalElec = CalculateTotal(controller, CostType.Electrical);
 
             //Act
-            bid.Controllers.Remove(controller);
+            bid.RemoveController(controller);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
@@ -823,7 +823,7 @@ namespace Tests
             ChangeWatcher cw = new ChangeWatcher(bid);
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -876,7 +876,7 @@ namespace Tests
             TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.ControllerTypes.Add(controllerType);
             TECController controller = new TECController(controllerType, false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
 

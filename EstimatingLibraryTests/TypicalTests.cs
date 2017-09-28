@@ -62,7 +62,7 @@ namespace Tests
             }
 
             system.Equipment.Add(TestHelper.CreateTestEquipment(true, bid.Catalogs));
-            system.Controllers.Add(TestHelper.CreateTestController(true, bid.Catalogs));
+            system.AddController(TestHelper.CreateTestController(true, bid.Catalogs));
             system.Panels.Add(TestHelper.CreateTestPanel(true, bid.Catalogs));
 
             foreach (TECSystem instance in system.Instances)
@@ -78,7 +78,7 @@ namespace Tests
         {
             var bid = new TECBid();
             var bidController = new TECController(new TECControllerType(new TECManufacturer()), false);
-            bid.Controllers.Add(bidController);
+            bid.AddController(bidController);
 
             var system = new TECTypical();
             var equipment = new TECEquipment(true);
@@ -101,7 +101,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment(true);
@@ -128,7 +128,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
-            bid.Controllers.Add(controller);
+            bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment(true);

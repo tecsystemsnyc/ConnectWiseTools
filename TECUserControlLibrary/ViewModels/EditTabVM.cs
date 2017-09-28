@@ -675,7 +675,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (SelectedController != null && Bid != null)
             {
-                Bid.Controllers.Remove(SelectedController);
+                Bid.RemoveController(SelectedController);
             }
             SelectedController = null;
         }
