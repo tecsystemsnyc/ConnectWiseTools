@@ -122,6 +122,27 @@ namespace TECUserControlLibrary.ViewModels
                 NonParentables.Add(item);
             }
         }
+        private void removeConnectableItem(INetworkConnectable connectable)
+        {
+            ConnectableItem item = connectableDictionary[connectable];
+            if (connectable is INetworkParentable parentable)
+            {
+                foreach(TECNetworkConnection connection in parentable.GetNetworkConnections())
+                {
+                    foreach(INetworkConnectable child in connection.Children)
+                    {
+                        updateIsConnected(child, false);
+                    }
+                }
+                Parentables.Add(item);
+            }
+            else
+            {
+                NonParentables.Remove(item);
+            }
+
+            connectableDictionary.Remove(connectable);
+        }
 
         private void handleInstanceConstituentChanged(Change change, TECObject obj)
         {
@@ -134,7 +155,10 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (change == Change.Remove)
             {
-
+                if (obj is INetworkConnectable networkConnectable)
+                {
+                    removeConnectableItem(networkConnectable);
+                }
             }
         }
         private void handleInstanceChanged(TECChangedEventArgs e)
@@ -153,7 +177,13 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (e.Change == Change.Remove)
             {
-
+                if (e.Sender is TECNetworkConnection netConnection)
+                {
+                    if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
+                    {
+                        updateIsConnected(childConnectable, false);
+                    }
+                }
             }
             else if (e.Change == Change.Edit)
             {

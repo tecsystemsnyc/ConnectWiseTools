@@ -307,10 +307,10 @@ namespace EstimatingLibrary
         }
         public void RemoveController(TECController controller)
         {
+            controller.RemoveAllConnections();
             _controllers.Remove(controller);
             notifyCombinedChanged(Change.Remove, "Controllers", this, controller);
             CostChanged?.Invoke(-controller.CostBatch);
-            controller.RemoveAllConnections();
         }
         public void SetControllers(IEnumerable<TECController> newControllers)
         {
