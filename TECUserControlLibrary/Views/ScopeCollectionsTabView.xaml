@@ -245,19 +245,19 @@
                              Grid.Column="1"
                              Grid.Row="1"
                              Margin="5"/>
-                    <Label Content="Cost"
+                    <!--<Label Content="Cost"
                            Grid.Row="2"/>
                     <TextBox Text="{Binding Path=ViewModel.ControllerCost}"
                              Grid.Column="1"
                              Grid.Row="2"
-                             Margin="5"/>
-                    <Label Grid.Column="0"
+                             Margin="5"/>-->
+                    <!--<Label Grid.Column="0"
                            Grid.Row="3"
                            Content="Manufacturer:"/>
                     <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
                               DisplayMemberPath="Name"
                           Grid.Row="3" Grid.Column="1" Margin="5"
-                         SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={utilities:ManufacturerConverter}}"/>
+                         SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={utilities:ManufacturerConverter}}"/>-->
                     <Grid Grid.Row="4" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>

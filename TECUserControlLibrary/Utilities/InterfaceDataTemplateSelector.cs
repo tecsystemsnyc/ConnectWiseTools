@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Interfaces;
+﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,10 @@ namespace TECUserControlLibrary.Utilities
         }
     }
 
+    public class ScopeSelector : InterfaceDataTemplateSelector<TECScope> { }
+    public class CostSelector : InterfaceDataTemplateSelector<TECCost> { }
+
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
+    public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }
+
 }

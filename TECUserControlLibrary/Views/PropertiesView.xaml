@@ -17,14 +17,38 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="scope">
+                <Expander Header="Scope" >
+                    <controls:ScopePropertiesControl Selected="{Binding}"/>
+                </Expander>
+            </DataTemplate>
+            <DataTemplate x:Key="cost">
+                <Expander Header="Cost" >
+                    <controls:CostPropertiesControl Selected="{Binding}"/>
+                </Expander>
+            </DataTemplate>
             <DataTemplate x:Key="costBatchInterface">
                 <Expander Header="Cost batch" >
                     <controls:CostBatchPropertiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
+            <DataTemplate x:Key="pointInterface">
+                <Expander Header="Points" >
+                    <controls:PointPropetiesControl Selected="{Binding}"/>
+                </Expander>
+            </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
+                                              DefaultTemplate="{StaticResource default}"/>
+            <utilities:PointInterfaceSelector x:Key="PointSelector"
+                                              InterfaceTemplate="{StaticResource pointInterface}" 
+                                              DefaultTemplate="{StaticResource default}"/>
+            <utilities:ScopeSelector x:Key="ScopeSelector"
+                                              InterfaceTemplate="{StaticResource scope}" 
+                                              DefaultTemplate="{StaticResource default}"/>
+            <utilities:CostSelector x:Key="CostSelector"
+                                              InterfaceTemplate="{StaticResource cost}" 
                                               DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
@@ -32,27 +56,10 @@
     <ScrollViewer DataContext="{Binding ElementName=parent, Path=Selected}"
                   Background="{DynamicResource SectionBackgroundBrush}">
         <StackPanel>
-            <ContentPresenter Content="{Binding}">
-                <ContentPresenter.Resources>
-                    <DataTemplate DataType="{x:Type models:TECScope}">
-                        <Expander Header="Scope" >
-                            <controls:ScopePropertiesControl Selected="{Binding}"/>
-                        </Expander>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type models:TECObject}"/>
-                </ContentPresenter.Resources>
-            </ContentPresenter>
-            <ContentPresenter Content="{Binding}">
-                <ContentPresenter.Resources>
-                    <DataTemplate DataType="{x:Type models:TECCost}">
-                        <Expander Header="Cost" >
-                            <controls:CostPropertiesControl Selected="{Binding}"/>
-                        </Expander>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type models:TECObject}"/>
-                </ContentPresenter.Resources>
-            </ContentPresenter>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

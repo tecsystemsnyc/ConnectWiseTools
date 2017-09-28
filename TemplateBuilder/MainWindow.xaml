@@ -81,7 +81,9 @@
                             <TabItem Header="None" Visibility="Collapsed">
                             </TabItem>
                             <TabItem Header="Systems">
-                                <views:TypicalSystemsView ViewModel="{Binding ElementName=parent, Path=DataContext.TypicalSystemsTab}"/>
+                                <controls:SystemListControl Source="{Binding ElementName=parent, Path=DataContext.Templates.SystemTemplates}"
+                                                            Selected="{Binding Selected}"/>
+                                <!--<views:TypicalSystemsView ViewModel="{Binding ElementName=parent, Path=DataContext.TypicalSystemsTab}"/>-->
                             </TabItem>
                             <TabItem Header="Equipment">
                                 <views:EquipmentGridView EquipmentSource="{Binding Templates.EquipmentTemplates}"
@@ -115,7 +117,7 @@
                         <!--<views:EditTabView Index="{Binding EditTab.TabIndex}"
                                          ViewModel="{Binding ElementName=parent, Path=DataContext.EditTab}"
                                          Grid.Column="4" Grid.Row="1" Grid.RowSpan="1" Margin="0,-2,0,0"/>-->
-                        <views:PropertiesView Selected="{Binding EditTab.Selected}" 
+                        <views:PropertiesView Selected="{Binding EditTab.Selected}"
                                               Grid.Column="4" Grid.Row="1" Grid.RowSpan="1" Margin="0,-2,0,0"/>
 
                         <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
