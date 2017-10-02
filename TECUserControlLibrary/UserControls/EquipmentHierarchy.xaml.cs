@@ -23,16 +23,26 @@ namespace TECUserControlLibrary.UserControls
     public partial class EquipmentHierarchy : UserControl
     {
 
-        public double ParentWidth
+        public double EquipmentWidth
         {
-            get { return (double)GetValue(WidthProperty); }
-            set { SetValue(WidthProperty, value); }
+            get { return (double)GetValue(EquipmentWidthProperty); }
+            set { SetValue(EquipmentWidthProperty, value); }
         }
 
-        public static readonly DependencyProperty ParentWidthProperty =
-            DependencyProperty.Register("ParentWidth", typeof(double),
-              typeof(EquipmentHierarchy), new PropertyMetadata(default(double)));
+        public static readonly DependencyProperty EquipmentWidthProperty =
+            DependencyProperty.Register("EquipmentWidth", typeof(double),
+              typeof(EquipmentHierarchy), new PropertyMetadata(0.0));
 
+        public double HalfWidth
+        {
+            get { return (double)GetValue(HalfWidthProperty); }
+            set { SetValue(HalfWidthProperty, value); }
+        }
+
+        public static readonly DependencyProperty HalfWidthProperty =
+            DependencyProperty.Register("HalfWidth", typeof(double),
+              typeof(EquipmentHierarchy), new PropertyMetadata(0.0));
+        
         public ObservableCollection<TECEquipment> EquipmentSource
         {
             get { return (ObservableCollection<TECEquipment>)GetValue(SourceProperty); }
@@ -43,15 +53,43 @@ namespace TECUserControlLibrary.UserControls
             DependencyProperty.Register("EquipmentSource", typeof(ObservableCollection<TECEquipment>),
               typeof(EquipmentHierarchy), new PropertyMetadata(default(ObservableCollection<TECEquipment>)));
 
-        public object SelectedItem
+        public TECEquipment SelectedEquipment
         {
-            get { return (object)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
+            get { return (TECEquipment)GetValue(SelectedEquipmentProperty); }
+            set { SetValue(SelectedEquipmentProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(object),
-                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(null)
+        public static readonly DependencyProperty SelectedEquipmentProperty =
+            DependencyProperty.Register("SelectedEquipment", typeof(TECEquipment),
+                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECEquipment))
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
+
+        public TECSubScope SelectedSubScope
+        {
+            get { return (TECSubScope)GetValue(SelectedSubScopeProperty); }
+            set { SetValue(SelectedSubScopeProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedSubScopeProperty =
+            DependencyProperty.Register("SelectedSubScope", typeof(TECSubScope),
+                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECSubScope))
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
+
+        public TECDevice SelectedDevice
+        {
+            get { return (TECDevice)GetValue(SelectedDeviceProperty); }
+            set { SetValue(SelectedDeviceProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedDeviceProperty =
+            DependencyProperty.Register("SelectedDevice", typeof(TECDevice),
+                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECDevice))
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
@@ -59,8 +97,26 @@ namespace TECUserControlLibrary.UserControls
 
         public EquipmentHierarchy()
         {
-            ParentWidth = this.Width / 2;
             InitializeComponent();
+            SizeChanged += (sender, e) =>
+            {
+                if (e.WidthChanged)
+                {
+                    if(HalfWidth == 0 || EquipmentWidth != 0)
+                    {
+                        EquipmentWidth = e.NewSize.Width / 2;
+                    }
+                    HalfWidth = e.NewSize.Width / 2;
+                }
+            };
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedSubScope = null;
+            SelectedEquipment = null;
+            SelectedDevice = null;
         }
     }
 }

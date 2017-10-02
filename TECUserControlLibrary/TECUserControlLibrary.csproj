@@ -131,6 +131,9 @@
     <Compile Include="UserControls\PanelListControl.xaml.cs">
       <DependentUpon>PanelListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PointListControl.xaml.cs">
+      <DependentUpon>PointListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PointPropetiesControl.xaml.cs">
       <DependentUpon>PointPropetiesControl.xaml</DependentUpon>
     </Compile>
@@ -378,6 +381,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PanelListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PointListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

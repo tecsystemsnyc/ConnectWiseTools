@@ -66,7 +66,9 @@
                     <controls:SubScopeListControl Source="{Binding ElementName=equipmentList, Path=Selected.SubScope}"
                                                               SelectedItem ="{Binding Selected}" Grid.Column="1"/>-->
                     <controls:EquipmentHierarchy EquipmentSource="{Binding Templates.EquipmentTemplates}"
-                                                SelectedItem="{Binding Selected}"/>
+                                                 SelectedEquipment="{Binding Selected}"
+                                                 SelectedSubScope="{Binding Selected}"
+                                                 SelectedDevice="{Binding Selected}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="SubScopeTemplate">

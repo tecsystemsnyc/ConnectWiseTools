@@ -69,14 +69,13 @@
                         <TextBlock Text="Labor:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                         <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding DeviceLaboe}"/>
+                      Text="{Binding DeviceLabor}"/>
                         <Button Grid.Column="2" Grid.ColumnSpan="2"
                     Content="Add" Margin="2"
                     Command="{Binding AddDeviceCommand}"/>
                     </Grid>
                     <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
                                                  ViewModel="{Binding ElementName=parent, Path=ViewModel}"
-                                                 SelectedDevice="{Binding ElementName=parent, Path=Selected}"
                                                  Grid.Row="3"/>
                 </Grid>
             </TabItem>

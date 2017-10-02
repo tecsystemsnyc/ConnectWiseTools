@@ -19,7 +19,8 @@
 
     <Grid DataContext="{Binding ElementName=parent}">
         <ListView ItemsSource="{Binding Source}" 
-                  Selected="ListView_Selected"
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectionChanged="ListView_Selected"
                   dd:DragDrop.DropHandler="{Binding DropHandler}">
             <ListView.ItemTemplate>
                 <DataTemplate>

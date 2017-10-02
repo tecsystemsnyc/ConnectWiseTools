@@ -69,7 +69,8 @@ namespace TECUserControlLibrary.UserControls
 
         protected void ListView_Selected(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(BaseListControl<T>.SelectedEvent));
+            RoutedEventArgs args = new RoutedEventArgs(SelectedEvent);
+            RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
     }
 }
