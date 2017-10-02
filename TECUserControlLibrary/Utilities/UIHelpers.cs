@@ -353,6 +353,24 @@ namespace TECUserControlLibrary.Utilities
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
     public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel }
+    public enum AllSearchableObjects
+    {
+        SubScope,
+        Equipment,
+        System,
+        Controllers,
+        Panels,
+        ControllerTypes,
+        PanelTypes,
+        Devices,
+        MiscCosts,
+        MiscWiring,
+        Valves,
+        Tags,
+        AssociatedCosts,
+        Wires,
+        Conduits
+    }
 
 
 }
