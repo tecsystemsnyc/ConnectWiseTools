@@ -92,7 +92,7 @@
                         <views:SettingsView
                         ViewModel="{Binding SettingsVM}"/>
                     </TabItem>
-                    <TabItem>
+                    <TabItem Header="Network">
                                 <views:NetworkView
                             ViewModel="{Binding NetworkVM}"/>
                             </TabItem>

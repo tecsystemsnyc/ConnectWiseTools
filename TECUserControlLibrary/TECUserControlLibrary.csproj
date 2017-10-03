@@ -96,6 +96,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debug\DebugWindow.xaml.cs">
+      <DependentUpon>DebugWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\BaseListControl.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
@@ -319,6 +322,10 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\VisibilityModel.cs" />
+    <Page Include="Debug\DebugWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\AddAssociatedCostsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
