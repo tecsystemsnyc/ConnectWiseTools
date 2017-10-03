@@ -96,8 +96,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Debug\DebugWindow.xaml.cs">
-      <DependentUpon>DebugWindow.xaml</DependentUpon>
+    <Compile Include="Debug\EBDebugWindow.xaml.cs">
+      <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\BaseListControl.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
@@ -346,7 +346,7 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\VisibilityModel.cs" />
-    <Page Include="Debug\DebugWindow.xaml">
+    <Page Include="Debug\EBDebugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

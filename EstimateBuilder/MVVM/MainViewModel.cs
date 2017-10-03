@@ -568,7 +568,7 @@ namespace EstimateBuilder.MVVM
 
         private void debugMenuExecute()
         {
-            DebugWindow debug = new DebugWindow(Bid);
+            EBDebugWindow debug = new EBDebugWindow(Bid);
             debug.Show();
         }
         #endregion
