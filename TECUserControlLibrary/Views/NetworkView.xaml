@@ -124,17 +124,23 @@
                         <ContentPresenter Content="{Binding SelectedItem.Item.ParentConnection}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="5">
                             <ContentPresenter.Resources>
                                 <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label FontSize="15" Content="Parent Controller:"/>
+                                        <Label Grid.Column="1" FontSize="15" Content="{Binding ParentController.Name}"/>
+                                        <Label Grid.Column="2" FontSize="15" Content="Parent Type:"/>
+                                        <Label Grid.Column="3" FontSize="15" Content="{Binding ParentController.Type.Name}"/>
+                                        <Button Grid.Column="4" Margin="5" Content="View Parent Details"/>
+                                    </Grid>
                                 </DataTemplate>
                             </ContentPresenter.Resources>
                         </ContentPresenter>
-                        <Label Grid.Column="1" Grid.Row="1" FontSize="15" Content="Parent Controller:"/>
-                        <Label Grid.Column="2" Grid.Row="1" FontSize="15" Content="'Parent Name'"/>
-                        <Label Grid.Column="3" Grid.Row="1" FontSize="15" Content="Parent Type:"/>
-                        <Label Grid.Column="4" Grid.Row="1" FontSize="15" Content="'Parent Type'"/>
-                        <Button Grid.Column="5" Grid.Row="1" Margin="5" Content="View Parent Details"/>
-
-
 
                         <Label Grid.Row="2" FontSize="15" FontWeight="Bold" Content="Connection Info"/>
 

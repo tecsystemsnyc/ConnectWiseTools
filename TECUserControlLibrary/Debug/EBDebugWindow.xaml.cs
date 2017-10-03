@@ -60,6 +60,13 @@ namespace TECUserControlLibrary.Debug
 
             bid.AddController(controller);
 
+            TECController child = new TECController(type, false);
+            child.Name = "Child";
+
+            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
+
+            connection.AddINetworkConnectable(child);
+
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment(true);
             TECSubScope ss = new TECSubScope(true);
