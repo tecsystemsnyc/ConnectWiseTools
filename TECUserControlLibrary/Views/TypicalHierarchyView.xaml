@@ -147,7 +147,7 @@
         <Button Content="Back" Click="BackToEquipment_Click" x:Name="equipmentBack" Grid.Column="3" 
                 Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
                 Width="50" HorizontalAlignment="Left"/>
-        <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=equipmentList, Path=SelectedItem.SubScope}"
+        <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=parent, Path=SelectedEquipment.SubScope}"
                                       SelectedItem ="{Binding SelectedSubScope}" 
                                       Grid.Column="3" Grid.Row="1"/>
         <!--Column 4-->
