@@ -399,7 +399,6 @@ namespace TemplateBuilder.MVVM
                     break;
                 case TemplateGridIndex.Systems:
                     
-
                     ScopeDataGrid.DataGridVisibilty.SystemQuantity = Visibility.Collapsed;
                     ScopeDataGrid.DataGridVisibilty.EquipmentQuantity = Visibility.Visible;
                     ScopeDataGrid.DataGridVisibilty.SystemTotalPrice = Visibility.Collapsed;

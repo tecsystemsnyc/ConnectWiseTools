@@ -37,6 +37,11 @@
                     <controls:PointPropetiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
+            <DataTemplate x:Key="hardware">
+                <Expander Header="Hardware" >
+                    <controls:HardwarePropertiesControl Selected="{Binding}"/>
+                </Expander>
+            </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -50,6 +55,9 @@
             <utilities:CostSelector x:Key="CostSelector"
                                               InterfaceTemplate="{StaticResource cost}" 
                                               DefaultTemplate="{StaticResource default}"/>
+            <utilities:HardwareSelector x:Key="HardwareSelector"
+                                        InterfaceTemplate="{StaticResource hardware}"
+                                        DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -60,6 +68,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

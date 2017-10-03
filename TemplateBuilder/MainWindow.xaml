@@ -56,15 +56,6 @@
             </DataTemplate>
             <DataTemplate x:Key="EquipmentTemplate">
                 <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                    <!--<Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <controls:EquipmentListControl Name="equipmentList" Grid.Column="0" Source="{Binding Templates.EquipmentTemplates}"
-                                                               SelectedItem="{Binding Selected}"
-                                                   Style="{StaticResource moveOver}"/>
-                    <controls:SubScopeListControl Source="{Binding ElementName=equipmentList, Path=Selected.SubScope}"
-                                                              SelectedItem ="{Binding Selected}" Grid.Column="1"/>-->
                     <controls:EquipmentHierarchy EquipmentSource="{Binding Templates.EquipmentTemplates}"
                                                  SelectedEquipment="{Binding Selected}"
                                                  SelectedSubScope="{Binding Selected}"
@@ -73,8 +64,26 @@
             </DataTemplate>
             <DataTemplate x:Key="SubScopeTemplate">
                 <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                    <controls:SubScopeListControl Source="{Binding Templates.SubScopeTemplates}"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding Templates.SubScopeTemplates}"
                                                               SelectedItem ="{Binding Selected}"/>
+                    <Grid Grid.Column="2" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Devices" Grid.Row="0"/>
+                        <controls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+                                    SelectedItem="{Binding Selected}" Grid.Row="1"/>
+                        <Label Content="Points" Grid.Row="2"/>
+                        <controls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                    SelectedItem="{Binding Selected}" Grid.Row="3"/>
+                    </Grid>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ControllerTemplate">

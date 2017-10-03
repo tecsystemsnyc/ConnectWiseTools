@@ -29,6 +29,7 @@ namespace TECUserControlLibrary.Utilities
 
     public class ScopeSelector : InterfaceDataTemplateSelector<TECScope> { }
     public class CostSelector : InterfaceDataTemplateSelector<TECCost> { }
+    public class HardwareSelector : InterfaceDataTemplateSelector<TECHardware> { }
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }

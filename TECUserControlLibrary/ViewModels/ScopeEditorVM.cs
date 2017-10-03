@@ -258,53 +258,7 @@ namespace TECUserControlLibrary.ViewModels
         private void updateVisibilityFromSystems(SystemComponentIndex index)
         {
             TypicalSystemsTab.ComponentVM.NullifySelected();
-
-            var systemsVisibility = Visibility.Collapsed;
-            var equipmentVisibility = Visibility.Collapsed;
-            var subScopeVisibility = Visibility.Collapsed;
-            var devicesVisibility = Visibility.Collapsed;
-            var devicesEditVisibility = Visibility.Collapsed;
-            var manufacturerVisibility = Visibility.Collapsed;
-            var tagsVisibility = Visibility.Collapsed;
-            var controllerEditVisibility = Visibility.Collapsed;
-            var controllerVisibility = Visibility.Collapsed;
-            var associatedCostsVisibility = Visibility.Collapsed;
-            var panelsVisibility = Visibility.Collapsed;
-            var addPanelsVisibility = Visibility.Collapsed;
-            var miscCostsVisibility = Visibility.Collapsed;
-            var miscWiringVisibility = Visibility.Collapsed;
-
-
-            if (TypicalSystemsTab.SelectedSystem == null)
-            {
-                systemsVisibility = Visibility.Visible;
-            }
-            else
-            {
-                if (index == SystemComponentIndex.Controllers)
-                {
-                    systemsVisibility = Visibility.Visible;
-                    controllerVisibility = Visibility.Visible;
-                    panelsVisibility = Visibility.Visible;
-                    associatedCostsVisibility = Visibility.Visible;
-                }
-                else if (index == SystemComponentIndex.Equipment)
-                {
-                    associatedCostsVisibility = Visibility.Visible;
-                    systemsVisibility = Visibility.Visible;
-                    equipmentVisibility = Visibility.Visible;
-                    subScopeVisibility = Visibility.Visible;
-                    devicesVisibility = Visibility.Visible;
-                }
-                else if (index == SystemComponentIndex.Misc)
-                {
-                    EditTab.updateSelection(TypicalSystemsTab.SelectedSystem);
-                    systemsVisibility = Visibility.Visible;
-                    miscWiringVisibility = Visibility.Visible;
-                    miscCostsVisibility = Visibility.Visible;
-                    associatedCostsVisibility = Visibility.Visible;
-                }
-            }
+            
         }
 
         #endregion //Helper Methods
