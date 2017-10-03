@@ -15,24 +15,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
-    /// Interaction logic for EquipmentHierarchy.xaml
+    /// Interaction logic for SystemHierarchyView.xaml
     /// </summary>
-    public partial class EquipmentHierarchy : UserControl
+    public partial class SystemHierarchyView : UserControl
     {
-
-        public double EquipmentWidth
-        {
-            get { return (double)GetValue(EquipmentWidthProperty); }
-            set { SetValue(EquipmentWidthProperty, value); }
-        }
-
-        public static readonly DependencyProperty EquipmentWidthProperty =
-            DependencyProperty.Register("EquipmentWidth", typeof(double),
-              typeof(EquipmentHierarchy), new PropertyMetadata(0.0));
-
         public double HalfWidth
         {
             get { return (double)GetValue(HalfWidthProperty); }
@@ -41,17 +30,51 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty HalfWidthProperty =
             DependencyProperty.Register("HalfWidth", typeof(double),
-              typeof(EquipmentHierarchy), new PropertyMetadata(0.0));
-        
-        public ObservableCollection<TECEquipment> EquipmentSource
+              typeof(SystemHierarchyView), new PropertyMetadata(0.0));
+
+        public double SystemWidth
         {
-            get { return (ObservableCollection<TECEquipment>)GetValue(SourceProperty); }
+            get { return (double)GetValue(SystemWidthProperty); }
+            set { SetValue(SystemWidthProperty, value); }
+        }
+
+        public static readonly DependencyProperty SystemWidthProperty =
+            DependencyProperty.Register("SystemWidth", typeof(double),
+              typeof(SystemHierarchyView), new PropertyMetadata(0.0));
+
+        public double EquipmentWidth
+        {
+            get { return (double)GetValue(EquipmentmWidthProperty); }
+            set { SetValue(EquipmentmWidthProperty, value); }
+        }
+
+        public static readonly DependencyProperty EquipmentmWidthProperty =
+            DependencyProperty.Register("EquipmentWidth", typeof(double),
+              typeof(SystemHierarchyView), new PropertyMetadata(0.0));
+
+        public ObservableCollection<TECSystem> SystemSource
+        {
+            get { return (ObservableCollection<TECSystem>)GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
         }
 
         public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register("EquipmentSource", typeof(ObservableCollection<TECEquipment>),
-              typeof(EquipmentHierarchy), new PropertyMetadata(default(ObservableCollection<TECEquipment>)));
+            DependencyProperty.Register("SystemSource", typeof(ObservableCollection<TECSystem>),
+              typeof(SystemHierarchyView), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
+
+        public TECSystem SelectedSystem
+        {
+            get { return (TECSystem)GetValue(SelectedSystemProperty); }
+            set { SetValue(SelectedSystemProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedSystemProperty =
+            DependencyProperty.Register("SelectedSystem", typeof(TECSystem),
+                typeof(SystemHierarchyView), new FrameworkPropertyMetadata(default(TECSystem))
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
 
         public TECEquipment SelectedEquipment
         {
@@ -61,7 +84,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty SelectedEquipmentProperty =
             DependencyProperty.Register("SelectedEquipment", typeof(TECEquipment),
-                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECEquipment))
+                typeof(SystemHierarchyView), new FrameworkPropertyMetadata(default(TECEquipment))
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
@@ -75,7 +98,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty SelectedSubScopeProperty =
             DependencyProperty.Register("SelectedSubScope", typeof(TECSubScope),
-                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECSubScope))
+                typeof(SystemHierarchyView), new FrameworkPropertyMetadata(default(TECSubScope))
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
@@ -89,50 +112,38 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty SelectedDeviceProperty =
             DependencyProperty.Register("SelectedDevice", typeof(TECDevice),
-                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECDevice))
+                typeof(SystemHierarchyView), new FrameworkPropertyMetadata(default(TECDevice))
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
 
-        public event RoutedEventHandler EquipmentSelected
-        {
-            add { AddHandler(SelectedEvent, value); }
-            remove { RemoveHandler(SelectedEvent, value); }
-        }
-
-        public static readonly RoutedEvent SelectedEvent =
-        EventManager.RegisterRoutedEvent("EquipmentSelected", RoutingStrategy.Bubble,
-        typeof(RoutedEventHandler), typeof(EquipmentHierarchy));
-
-        protected void Equipment_Selected(object sender, RoutedEventArgs e)
-        {
-            RoutedEventArgs args = new RoutedEventArgs(SelectedEvent);
-            RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
-        }
-
-        public EquipmentHierarchy()
+        public SystemHierarchyView()
         {
             InitializeComponent();
             SizeChanged += (sender, e) =>
             {
                 if (e.WidthChanged)
                 {
-                    if(HalfWidth == 0 || EquipmentWidth != 0)
+                    if (HalfWidth == 0 || SystemWidth != 0)
                     {
-                        EquipmentWidth = e.NewSize.Width / 2;
+                        SystemWidth = e.NewSize.Width / 2;
                     }
                     HalfWidth = e.NewSize.Width / 2;
                 }
             };
-            
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BackToEquipment_Click(object sender, RoutedEventArgs e)
         {
             SelectedSubScope = null;
             SelectedEquipment = null;
             SelectedDevice = null;
+        }
+        private void BackToSystem_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedEquipment = null;
+            SelectedSystem = null;
         }
     }
 }

@@ -318,6 +318,9 @@
     <Compile Include="Views\SystemComponentView.xaml.cs">
       <DependentUpon>SystemComponentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SystemHierarchyView.xaml.cs">
+      <DependentUpon>SystemHierarchyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TypicalSystemView.xaml.cs">
       <DependentUpon>TypicalSystemView.xaml</DependentUpon>
     </Compile>
@@ -600,6 +603,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SystemComponentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SystemHierarchyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

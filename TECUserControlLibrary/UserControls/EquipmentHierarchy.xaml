@@ -48,7 +48,8 @@
                 Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
                 Width="50" HorizontalAlignment="Left"/>
         <local:EquipmentListControl x:Name="equipmentList" Grid.Column="0" Source="{Binding EquipmentSource}"
-                                                           SelectedItem="{Binding SelectedEquipment}" Grid.Row="1"/>
+                                                           SelectedItem="{Binding SelectedEquipment}" Grid.Row="1"
+                                    Selected="Equipment_Selected"/>
         <local:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=equipmentList, Path=SelectedItem.SubScope}"
                                    SelectedItem ="{Binding SelectedSubScope}" Grid.Column="1"
                                    Grid.Row="1"/>

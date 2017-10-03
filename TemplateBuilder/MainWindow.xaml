@@ -50,8 +50,9 @@
         <ContentControl.Resources>
             <DataTemplate x:Key="SystemTemplate">
                 <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                <controls:SystemListControl Source="{Binding ElementName=parent, Path=DataContext.Templates.SystemTemplates}"
-                                                            SelectedItem="{Binding Selected}"/>
+                <!--<controls:SystemListControl Source="{Binding ElementName=parent, Path=DataContext.Templates.SystemTemplates}"
+                                                            SelectedItem="{Binding Selected}"/>-->
+                    <views:SystemHierarchyView SystemSource="{Binding ElementName=parent, Path=DataContext.Templates.SystemTemplates}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="EquipmentTemplate">
