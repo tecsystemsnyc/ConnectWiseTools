@@ -21,7 +21,6 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -33,21 +32,61 @@
         <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:MaterialType}}}"
                       SelectedItem="{Binding ElementName=parent, Path=SelectedMaterialType}"
                       Margin="5"
+                  Grid.Row="0"
                   VerticalContentAlignment="Center"/>
-        <TabControl Grid.Column="1" Grid.RowSpan="4"
+        <TabControl Grid.Column="1" Grid.RowSpan="4" Grid.Row="1"
                     SelectedIndex="{Binding ElementName=parent, Path=SelectedMaterialType, Converter={utilities:EditIndexToIntegerConverter}}">
             <TabItem Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Name:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding DeviceName}"/>
+                        <TextBlock Text="List Price:" Grid.Column="2" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="3" Margin="2"
+                      Text="{Binding DeviceListPrice}"/>
+                    </Grid>
+                    <Grid Grid.Row="1" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Labor:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                        <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding DeviceLabor}"/>
+                        <Button Grid.Column="2" Grid.ColumnSpan="2"
+                    Content="Add" Margin="2"
+                    Command="{Binding AddDeviceCommand}"/>
+                    </Grid>
+                    <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
+                                                 ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                 Grid.Row="3"/>
+                </Grid>
+            </TabItem>
+            <TabItem Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Wiring" Grid.Row="0"
-                                   FontWeight="Bold" Foreground="Black"
-                                   VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -63,7 +102,7 @@
                         <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding ConnectionTypeCost}"/>
                     </Grid>
-                    <Grid Grid.Row="2" >
+                    <Grid Grid.Row="1" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -78,7 +117,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddConnectionTypeCommand}"/>
                     </Grid>
-                    <controls:ConnectionTypeGridControl Grid.Row="3" Margin="5"
+                    <controls:ConnectionTypeGridControl Grid.Row="2" Margin="5"
                                          ConnectionTypesSource="{Binding Templates.Catalogs.ConnectionTypes}"
                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                 </Grid>
@@ -88,13 +127,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Conduit" Grid.Row="0"
-                       FontWeight="Bold" Foreground="Black"
-                       VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -111,7 +146,7 @@
                         <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding ConduitTypeCost}"/>
                     </Grid>
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -126,7 +161,7 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddConduitTypeCommand}"/>
                     </Grid>
-                    <controls:ConduitTypeGridControl Grid.Row="3" Margin="5"
+                    <controls:ConduitTypeGridControl Grid.Row="2" Margin="5"
                                       ConduitTypesSource="{Binding Templates.Catalogs.ConduitTypes}"
                                       ViewModel="{Binding ElementName=parent, Path=ViewModel}"/>
                 </Grid>
@@ -136,13 +171,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Panel Types" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -159,7 +190,7 @@
                       Text="{Binding PanelTypeCost}"/>
 
                     </Grid>
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -175,7 +206,7 @@
                     Command="{Binding AddPanelTypeCommand}"/>
                     </Grid>
                     <controls:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
-                                                Grid.Row="3" Margin="5"
+                                                Grid.Row="2" Margin="5"
                                                 ViewModel="{Binding}"/>
                 </Grid>
             </TabItem>
@@ -185,13 +216,9 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Associated Costs" Grid.Column="0" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -211,7 +238,7 @@
                                   ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"/>
 
                     </Grid>
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -229,7 +256,7 @@
                       Text="{Binding AssociatedCostLabor}"/>
                     </Grid>
 
-                    <Grid Grid.Row="3">
+                    <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -243,7 +270,7 @@
                     </Grid>
 
                     <controls:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
-                                          Grid.Row="4"
+                                          Grid.Row="3"
                                           Margin="5"/>
                 </Grid>
             </TabItem>
@@ -252,13 +279,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="IO Modules" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
-                                VerticalAlignment="Center" Margin="5,7,0,7"/>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -281,7 +304,7 @@
                       Text="{Binding IOModuleDescription}"/>
 
                     </Grid>
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -304,7 +327,7 @@
                     Command="{Binding AddIOModuleCommand}"/>
                     </Grid>
                     <controls:IOModuleGridControl IOModuleSource="{Binding Templates.Catalogs.IOModules}"
-                                               Grid.Row="3" Margin="5"/>
+                                               Grid.Row="2" Margin="5"/>
                 </Grid>
             </TabItem>
             <TabItem Visibility="Collapsed">

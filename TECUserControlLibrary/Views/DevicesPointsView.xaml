@@ -30,10 +30,11 @@
                Content="Devices"/>
         <Label Grid.Column="1" Grid.Row="0"
                Content="Points"/>
-        <controls:DevicesGridControl Grid.Row="1" Margin="5"
+        <controls:EndDeviceListControl Grid.Row="1" Source="{Binding Path=DevicesSource}"
+                                       DropHandler="{Binding Path=Viewmodel}"/>
+        <!--<controls:DevicesGridControl Grid.Row="1" Margin="5"
                                   DevicesSource="{Binding Path=DevicesSource}"
-                                  ViewModel="{Binding Path=ViewModel}">
-        </controls:DevicesGridControl>
+                                  ViewModel="{Binding Path=ViewModel}"/>-->
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
@@ -53,11 +54,6 @@
                    HorizontalAlignment="Left"/>
             <TextBox Text="{Binding ElementName=parent, Path=ViewModel.PointName}"
                      Grid.Column="1"
-                     Margin="0,1,5,1"/>
-            <Label Content="Description:" Grid.Column="2"
-                   HorizontalAlignment="Left"/>
-            <TextBox Text="{Binding ElementName=parent, Path=ViewModel.PointDescription}"
-                     Grid.Column="3"
                      Margin="0,1,5,1"/>
             <Label Content="Type:" Grid.Column="0" Grid.Row="1"/>
             <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:IOType}}}" SelectedValue="{Binding ElementName=parent, Path=ViewModel.PointType}"

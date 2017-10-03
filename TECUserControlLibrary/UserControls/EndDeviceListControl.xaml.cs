@@ -1,7 +1,6 @@
-﻿using EstimatingLibrary;
+﻿using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +17,13 @@ using System.Windows.Shapes;
 namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
-    /// Interaction logic for TypicalListControl.xaml
+    /// Interaction logic for EndDeviceListControl.xaml
     /// </summary>
-    public partial class SystemListControl : BaseListControl<TECSystem>
+    public partial class EndDeviceListControl : BaseListControl<IEndDevice>
     {
-        
-        public SystemListControl()
+        public EndDeviceListControl()
         {
             InitializeComponent();
         }
-        
     }
 }

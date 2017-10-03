@@ -1,7 +1,6 @@
 ﻿using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +17,23 @@ using System.Windows.Shapes;
 namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
-    /// Interaction logic for TypicalListControl.xaml
+    /// Interaction logic for HardwarePropertiesControl.xaml
     /// </summary>
-    public partial class SystemListControl : BaseListControl<TECSystem>
+    public partial class HardwarePropertiesControl : UserControl
     {
-        
-        public SystemListControl()
+        public TECHardware Selected
+        {
+            get { return (TECHardware)GetValue(SelectedProperty); }
+            set { SetValue(SelectedProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedProperty =
+            DependencyProperty.Register("Selected", typeof(TECHardware),
+              typeof(HardwarePropertiesControl));
+
+        public HardwarePropertiesControl()
         {
             InitializeComponent();
         }
-        
     }
 }

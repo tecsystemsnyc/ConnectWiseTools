@@ -113,17 +113,41 @@
     <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ControllerListControl.xaml.cs">
+      <DependentUpon>ControllerListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CostPropertiesControl.xaml.cs">
       <DependentUpon>CostPropertiesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CostBatchPropertiesControl.xaml.cs">
       <DependentUpon>CostBatchPropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\EndDeviceListControl.xaml.cs">
+      <DependentUpon>EndDeviceListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EquipmentHierarchy.xaml.cs">
+      <DependentUpon>EquipmentHierarchy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EquipmentListControl.xaml.cs">
+      <DependentUpon>EquipmentListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HardwarePropertiesControl.xaml.cs">
+      <DependentUpon>HardwarePropertiesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PanelListControl.xaml.cs">
+      <DependentUpon>PanelListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PointListControl.xaml.cs">
+      <DependentUpon>PointListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PointPropetiesControl.xaml.cs">
       <DependentUpon>PointPropetiesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScopePropertiesControl.xaml.cs">
       <DependentUpon>ScopePropertiesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SubScopeListControl.xaml.cs">
+      <DependentUpon>SubScopeListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SystemListControl.xaml.cs">
       <DependentUpon>SystemListControl.xaml</DependentUpon>
@@ -342,6 +366,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ControllerListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\CostPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -350,11 +378,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\EndDeviceListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\EquipmentHierarchy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\EquipmentListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HardwarePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PanelListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PointListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\PointPropetiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ScopePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SubScopeListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

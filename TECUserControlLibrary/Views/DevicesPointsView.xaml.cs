@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -45,9 +46,9 @@ namespace TECUserControlLibrary.Views
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECDevice> DevicesSource
+        public ObservableCollection<IEndDevice> DevicesSource
         {
-            get { return (ObservableCollection<TECDevice>)GetValue(DevicesSourceProperty); }
+            get { return (ObservableCollection<IEndDevice>)GetValue(DevicesSourceProperty); }
             set { SetValue(DevicesSourceProperty, value); }
         }
 
@@ -55,8 +56,8 @@ namespace TECUserControlLibrary.Views
         /// Identified the DevicesSource dependency property
         /// </summary>
         public static readonly DependencyProperty DevicesSourceProperty =
-            DependencyProperty.Register("DevicesSource", typeof(ObservableCollection<TECDevice>),
-              typeof(DevicesPointsView), new PropertyMetadata(default(ObservableCollection<TECDevice>)));
+            DependencyProperty.Register("DevicesSource", typeof(ObservableCollection<IEndDevice>),
+              typeof(DevicesPointsView), new PropertyMetadata(default(ObservableCollection<IEndDevice>)));
 
         /// <summary>
         /// Gets or sets the ViewModel which is used

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
@@ -25,6 +26,20 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty SelectedMaterialTypeProperty =
             DependencyProperty.Register("SelectedMaterialType", typeof(MaterialType),
               typeof(MaterialView), new PropertyMetadata(default(MaterialType)));
+
+        public object Selected
+        {
+            get { return (object)GetValue(SelectedProperty); }
+            set { SetValue(SelectedProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedProperty =
+            DependencyProperty.Register("Selected", typeof(object),
+                typeof(MaterialView), new FrameworkPropertyMetadata(null)
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
 
         public MaterialVM ViewModel
         {

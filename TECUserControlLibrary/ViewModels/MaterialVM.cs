@@ -223,14 +223,44 @@ namespace TECUserControlLibrary.ViewModels
                 SelectionChanged?.Invoke(value);
             }
         }
-        
+
+        private string _deviceName;
+        public string DeviceName
+        {
+            get { return _deviceName; }
+            set {
+                _deviceName = value;
+                RaisePropertyChanged("DeviceName");
+            }
+        }
+        private double _deviceListPrice;
+        public double DeviceListPrice
+        {
+            get { return _deviceListPrice; }
+            set
+            {
+                _deviceListPrice = value;
+                RaisePropertyChanged("DeviceListPrice");
+            }
+        }
+        private double _deviceLabor;
+        public double DeviceLabor
+        {
+            get { return _deviceLabor; }
+            set
+            {
+                _deviceLabor = value;
+                RaisePropertyChanged("DeviceLabor");
+            }
+        }
+
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
         public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
-
+        public ICommand AddDeviceCommand { get; private set; }
         #endregion
 
         #region Delegates
