@@ -234,38 +234,38 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
+    }
 
-        public class ConnectableItem : INotifyPropertyChanged
+    public class ConnectableItem : INotifyPropertyChanged
+    {
+        public INetworkConnectable Item { get; private set; }
+        private bool _isConnected;
+
+        public ConnectableItem(INetworkConnectable item, bool isConnected)
         {
-            public INetworkConnectable Item { get; private set; }
-            private bool _isConnected;
+            Item = item;
+            _isConnected = isConnected;
+        }
 
-            public ConnectableItem(INetworkConnectable item, bool isConnected)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool IsConnected
+        {
+            get
             {
-                Item = item;
-                _isConnected = isConnected;
+                return _isConnected;
             }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            public bool IsConnected
+            set
             {
-                get
-                {
-                    return _isConnected;
-                }
-                set
-                {
-                    _isConnected = value;
-                    notifyPropertyChanged("IsConnected");
-                }
+                _isConnected = value;
+                notifyPropertyChanged("IsConnected");
             }
+        }
 
-            private void notifyPropertyChanged(string propertyName)
-            {
-                PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
-                PropertyChanged?.Invoke(this, e);
-            }
+        private void notifyPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
+            PropertyChanged?.Invoke(this, e);
         }
     }
 }
