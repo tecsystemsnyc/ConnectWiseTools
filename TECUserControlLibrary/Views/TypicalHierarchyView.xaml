@@ -67,7 +67,7 @@
                 </EventTrigger.Actions>
             </EventTrigger>
             <EventTrigger RoutedEvent="controls:EquipmentListControl.Selected">
-                <EventTrigger.Actions>Added typical hierarchy view
+                <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
             </EventTrigger>

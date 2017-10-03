@@ -152,6 +152,7 @@ namespace TECUserControlLibrary.Views
                     {
                         TypicalWidth = e.NewSize.Width / 2;
                         SystemWidth = e.NewSize.Width / 2;
+                        EquipmentWidth = e.NewSize.Width / 2;
                     }
                     else if (TypicalWidth != 0)
                     {
