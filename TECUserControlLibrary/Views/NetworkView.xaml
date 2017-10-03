@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:usercontrols="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -45,6 +46,7 @@
                     <!--Controller List-->
                     <usercontrols:ConnectableItemListControl
                         Source="{Binding Parentables}"
+                        SelectedItem="{Binding SelectedParentable}"
                         Grid.Row="1"/>
                 </Grid>
             </Border>
@@ -62,18 +64,10 @@
 
                     <Label Content="Network Devices" FontSize="20"/>
                     <!--Network Devices DataGrid-->
-                    <DataGrid ItemsSource="{Binding NonParentables}"
-                              Name="NetDevices"
-                              Grid.Row="1"
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="50"/>
-                            <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70"/>
-                            <DataGridCheckBoxColumn Binding="{Binding IsConnected}" Header="Connected To BMS" Width="Auto"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
+                    <usercontrols:ConnectableItemListControl
+                        Source="{Binding NonParentables}"
+                        SelectedItem="{Binding SelectedNonParentable}"
+                        Grid.Row="1"/>
                 </Grid>
             </Border>
             
@@ -111,10 +105,29 @@
                         <Label FontSize="15" FontWeight="Bold" Content="Item Info"/>
                         
                         <Label Grid.Column="1" FontSize="15" Content="Name:"/>
-                        <Label Grid.Column="2" FontSize="15" Content="'Controller Name'"/>
-                        <Label Grid.Column="3" FontSize="15" Content="Type:"/>
-                        <Label Grid.Column="4" FontSize="15" Content="'Controller Type'"/>
+                        <Label Grid.Column="2" FontSize="15" Content="{Binding SelectedItem.Item.Name}"/>
+                        <ContentPresenter Content="{Binding SelectedItem.Item}" Grid.Column="3" Grid.ColumnSpan="2">
+                            <ContentPresenter.Resources>
+                                <DataTemplate DataType="{x:Type models:TECController}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label FontSize="15" Content="Type:"/>
+                                        <Label Grid.Column="1" FontSize="15" Content="{Binding Type.Name}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
 
+                        <ContentPresenter Content="{Binding SelectedItem.Item.ParentConnection}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="5">
+                            <ContentPresenter.Resources>
+                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                    
+                                </DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                         <Label Grid.Column="1" Grid.Row="1" FontSize="15" Content="Parent Controller:"/>
                         <Label Grid.Column="2" Grid.Row="1" FontSize="15" Content="'Parent Name'"/>
                         <Label Grid.Column="3" Grid.Row="1" FontSize="15" Content="Parent Type:"/>
