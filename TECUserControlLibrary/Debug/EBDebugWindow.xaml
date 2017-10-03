@@ -18,8 +18,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <Button Command="{DynamicResource AddControllerCommand}" Margin="5">
-            <TextBlock VerticalAlignment="Center">Add Controller</TextBlock>
+        <Button Command="{DynamicResource TestNetworkCommand}" Margin="5">
+            <TextBlock VerticalAlignment="Center">Test Network</TextBlock>
         </Button>
     </Grid>
 </Window>

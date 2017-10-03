@@ -22,7 +22,7 @@ namespace TECUserControlLibrary.Debug
     public partial class EBDebugWindow : Window
     {
         private TECBid bid;
-        private ICommand addController;
+        private ICommand testNetwork;
 
 
         public EBDebugWindow(TECBid bid)
@@ -35,15 +35,15 @@ namespace TECUserControlLibrary.Debug
 
         private void setupCommands()
         {
-            addController = new RelayCommand(addControllerExecute);
+            testNetwork = new RelayCommand(testNetworkExecute);
         }
 
         private void addResources()
         {
-            this.Resources.Add("AddControllerCommand", addController);
+            this.Resources.Add("TestNetworkCommand", testNetwork);
         }
 
-        private void addControllerExecute()
+        private void testNetworkExecute()
         {
             TECControllerType type = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.BACnetIP) };
@@ -51,7 +51,26 @@ namespace TECUserControlLibrary.Debug
             bid.Catalogs.ControllerTypes.Add(type);
 
             TECController controller = new TECController(type, false);
+            controller.Name = "Test Server";
+            controller.Description = "For testing.";
+            controller.IsServer = true;
+
             bid.AddController(controller);
+
+            TECTypical typical = new TECTypical();
+            TECEquipment equip = new TECEquipment(true);
+            TECSubScope ss = new TECSubScope(true);
+            ss.Name = "Test Subscope";
+            ss.Devices.Add(bid.Catalogs.Devices[0]);
+            TECPoint point = new TECPoint(true);
+            point.Type = IOType.BACnetIP;
+            point.Quantity = 1;
+            ss.Points.Add(point);
+            equip.SubScope.Add(ss);
+            typical.Equipment.Add(equip);
+
+            bid.Systems.Add(typical);
+            typical.AddInstance(bid);
         }
     }
 }

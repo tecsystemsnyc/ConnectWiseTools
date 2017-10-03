@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:usercontrols="clr-namespace:TECUserControlLibrary.UserControls"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -41,18 +42,10 @@
                     </Grid.RowDefinitions>
 
                     <Label Content="Controllers" FontSize="20"/>
-                    <!--Controller DataGrid-->
-                    <DataGrid ItemsSource="{Binding Parentables}"
-                              Grid.Row="1"
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="50"/>
-                            <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70"/>
-                            <DataGridCheckBoxColumn Binding="{Binding IsConnected}" Header="Connected To BMS" Width="Auto"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
+                    <!--Controller List-->
+                    <usercontrols:ConnectableItemListControl
+                        Source="{Binding Parentables}"
+                        Grid.Row="1"/>
                 </Grid>
             </Border>
             
@@ -69,7 +62,16 @@
 
                     <Label Content="Network Devices" FontSize="20"/>
                     <!--Network Devices DataGrid-->
-                    <DataGrid Grid.Row="1">
+                    <DataGrid ItemsSource="{Binding NonParentables}"
+                              Name="NetDevices"
+                              Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="50"/>
+                            <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70"/>
+                            <DataGridCheckBoxColumn Binding="{Binding IsConnected}" Header="Connected To BMS" Width="Auto"/>
+                        </DataGrid.Columns>
                     </DataGrid>
 
                 </Grid>

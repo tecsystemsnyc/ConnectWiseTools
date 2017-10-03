@@ -1,0 +1,44 @@
+﻿<local:BaseListControl x:TypeArguments="VMs:ConnectableItem" x:Class="TECUserControlLibrary.UserControls.ConnectableItemListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:VMs="clr-namespace:TECUserControlLibrary.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="parent">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=parent}">
+        <ListView ItemsSource="{Binding Source}" 
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectionChanged="ListView_Selected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Label FontSize="14" Content="{Binding Item.Name}"/>
+                        <Label Content="{Binding Item.Description}" Grid.Column="1"/>
+                        <Label Content="Connected To BMS:" Grid.Row="1"/>
+                        <CheckBox Content="{Binding IsConnected}" Grid.Row="1" Grid.Column="1"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</local:BaseListControl>
