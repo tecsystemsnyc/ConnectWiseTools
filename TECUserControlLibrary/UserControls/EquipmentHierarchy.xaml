@@ -13,12 +13,12 @@
             <Storyboard x:Key="moveAnimation">
                 <DoubleAnimation Storyboard.TargetName="parent"
                                      Storyboard.TargetProperty="(local:EquipmentHierarchy.EquipmentWidth)" 
-                                     To="0" From="{Binding EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     To="0" From="{Binding ElementName=parent, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="moveBackAnimation">
                 <DoubleAnimation Storyboard.TargetName="parent"
                                      Storyboard.TargetProperty="(local:EquipmentHierarchy.EquipmentWidth)" 
-                                     To="{Binding HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -65,7 +65,7 @@
                                     SelectedItem="{Binding SelectedDevice}" Grid.Row="1"/>
             <Label Content="Points" Grid.Row="2"/>
             <local:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                    SelectedItem="{Binding SelectedDevice}" Grid.Row="3"/>
+                                    Grid.Row="3"/>
         </Grid>
         
     </Grid>

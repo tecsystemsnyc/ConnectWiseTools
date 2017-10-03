@@ -69,5 +69,39 @@ namespace TECUserControlLibrary.Utilities
             }
         }
     }
+    public class SystemComponentSelector : DataTemplateSelector
+    {
+        public DataTemplate EquipmentTemplate { get; set; }
+        public DataTemplate ProposalTemplate { get; set; }
+        public DataTemplate ControllerTemplate { get; set; }
+        public DataTemplate PanelTemplate { get; set; }
+        public DataTemplate MiscTemplate { get; set; }
 
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            if (item is SystemComponentIndex index)
+            {
+                switch (index)
+                {
+                    case SystemComponentIndex.Misc:
+                        return MiscTemplate;
+                    case SystemComponentIndex.Equipment:
+                        return EquipmentTemplate;
+                    case SystemComponentIndex.Proposal:
+                        return ProposalTemplate;
+                    case SystemComponentIndex.Controllers:
+                        return ControllerTemplate;
+                    case SystemComponentIndex.Panels:
+                        return PanelTemplate;
+                    default:
+                        return EquipmentTemplate;
+                }
+            }
+            else
+            {
+                return EquipmentTemplate;
+            }
+        }
+    }
 }

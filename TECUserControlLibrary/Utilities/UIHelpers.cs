@@ -347,7 +347,7 @@ namespace TECUserControlLibrary.Utilities
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Devices, Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
     public enum TypicalSystemIndex { Edit, Instances };
-    public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
+    public enum SystemComponentIndex { Equipment, Controllers, Panels, Electrical, Misc, Proposal };
     public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }
     public enum ElectricalMaterialIndex { Wire, Conduit, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }

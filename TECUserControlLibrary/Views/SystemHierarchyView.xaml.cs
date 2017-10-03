@@ -44,11 +44,11 @@ namespace TECUserControlLibrary.Views
 
         public double EquipmentWidth
         {
-            get { return (double)GetValue(EquipmentmWidthProperty); }
-            set { SetValue(EquipmentmWidthProperty, value); }
+            get { return (double)GetValue(EquipmentWidthProperty); }
+            set { SetValue(EquipmentWidthProperty, value); }
         }
 
-        public static readonly DependencyProperty EquipmentmWidthProperty =
+        public static readonly DependencyProperty EquipmentWidthProperty =
             DependencyProperty.Register("EquipmentWidth", typeof(double),
               typeof(SystemHierarchyView), new PropertyMetadata(0.0));
 
@@ -125,9 +125,18 @@ namespace TECUserControlLibrary.Views
             {
                 if (e.WidthChanged)
                 {
-                    if (HalfWidth == 0 || SystemWidth != 0)
+                    if (HalfWidth == 0)
                     {
                         SystemWidth = e.NewSize.Width / 2;
+                        EquipmentWidth = e.NewSize.Width / 2;
+                    }
+                    else if(SystemWidth != 0)
+                    {
+                        SystemWidth = e.NewSize.Width / 2;
+                    }
+                    else if (EquipmentWidth != 0)
+                    {
+                        EquipmentWidth = e.NewSize.Width / 2;
                     }
                     HalfWidth = e.NewSize.Width / 2;
                 }
@@ -145,5 +154,6 @@ namespace TECUserControlLibrary.Views
             SelectedEquipment = null;
             SelectedSystem = null;
         }
+        
     }
 }
