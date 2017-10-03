@@ -9,7 +9,7 @@ using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public enum MenuType { TB, SB, EB }
+    public enum MenuType { TB, EB }
 
     public class MenuVM : ViewModelBase
     {
@@ -159,6 +159,15 @@ namespace TECUserControlLibrary.ViewModels
                 refreshBidMenuItem.Command = value;
             }
         }
+
+        private TECMenuItem debugWindowMenuItem;
+        public ICommand DebugWindowCommand
+        {
+            set
+            {
+                debugWindowMenuItem.Command = value;
+            }
+        }
         #endregion
 
         #region Methods
@@ -242,6 +251,14 @@ namespace TECUserControlLibrary.ViewModels
             TemplatesMenu.Items.Add(refreshTemplatesMenuItem);
 
             Menu.Add(TemplatesMenu);
+
+            //Debug
+            TECMenuItem DebugMenu = new TECMenuItem("Debug", lightTextBrush);
+
+            debugWindowMenuItem = new TECMenuItem("Debug Window", darkTextBrush);
+            DebugMenu.Items.Add(debugWindowMenuItem);
+
+            Menu.Add(DebugMenu);
         }
 
         private void setHideTemplatesString()

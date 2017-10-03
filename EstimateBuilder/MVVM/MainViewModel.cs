@@ -12,6 +12,7 @@ using TECUserControlLibrary.Utilities;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight;
+using TECUserControlLibrary.Debug;
 
 namespace EstimateBuilder.MVVM
 {
@@ -226,7 +227,7 @@ namespace EstimateBuilder.MVVM
         }
         protected override void setupMenu(MenuType menuType)
         {
-            MenuVM = new MenuVM(MenuType.SB);
+            MenuVM = new MenuVM(MenuType.EB);
 
             MenuVM.NewCommand = NewCommand;
             MenuVM.LoadCommand = LoadCommand;
@@ -244,6 +245,8 @@ namespace EstimateBuilder.MVVM
 
             MenuVM.TemplatesHidden = TemplatesHidden;
             MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
+
+            MenuVM.DebugWindowCommand = new RelayCommand(debugMenuExecute);
         }
         protected void LoadTemplatesExecute()
         {
@@ -563,7 +566,11 @@ namespace EstimateBuilder.MVVM
             }
         }
 
-        
+        private void debugMenuExecute()
+        {
+            EBDebugWindow debug = new EBDebugWindow(Bid);
+            debug.Show();
+        }
         #endregion
     }
 }
