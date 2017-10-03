@@ -18,7 +18,9 @@ namespace TECUserControlLibrary.ViewModels
         private ObservableCollection<ConnectableItem> _parentables;
         private ObservableCollection<ConnectableItem> _nonParentables;
 
-        private INetworkConnectable _selectedItem;
+        private ConnectableItem _selectedItem;
+        private ConnectableItem _selectedParentable;
+        private ConnectableItem _selectedNonParentable;
         private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
         #endregion
 
@@ -40,16 +42,46 @@ namespace TECUserControlLibrary.ViewModels
             get { return new ReadOnlyObservableCollection<ConnectableItem>(_nonParentables); }
         }
 
-        public INetworkConnectable SelectedItem
+        public ConnectableItem SelectedItem
         {
             get
             {
                 return _selectedItem;
             }
-            private set
+            set
             {
                 _selectedItem = value;
                 RaisePropertyChanged("SelectedItem");
+            }
+        }
+        public ConnectableItem SelectedParentable
+        {
+            get
+            {
+                return _selectedParentable;
+            }
+            set
+            {
+                _selectedParentable = value;
+                RaisePropertyChanged("SelectedParentable");
+                _selectedNonParentable = null;
+                RaisePropertyChanged("SelectedNonParentable");
+                SelectedItem = SelectedParentable;
+            }
+        }
+        public ConnectableItem SelectedNonParentable
+        {
+            get
+            {
+                return _selectedNonParentable;
+            }
+            set
+            {
+                _selectedNonParentable = value;
+                RaisePropertyChanged("SelectedNonParentable");
+                _selectedParentable = null;
+                RaisePropertyChanged("SelectedParentable");
+                SelectedItem = SelectedNonParentable;
             }
         }
         #endregion

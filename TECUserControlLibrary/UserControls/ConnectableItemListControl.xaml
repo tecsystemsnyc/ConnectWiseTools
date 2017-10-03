@@ -35,7 +35,7 @@
                         <Label FontSize="14" Content="{Binding Item.Name}"/>
                         <Label Content="{Binding Item.Description}" Grid.Column="1"/>
                         <Label Content="Connected To BMS:" Grid.Row="1"/>
-                        <CheckBox Content="{Binding IsConnected}" Grid.Row="1" Grid.Column="1"/>
+                        <Label Content="{Binding IsConnected}" Grid.Row="1" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

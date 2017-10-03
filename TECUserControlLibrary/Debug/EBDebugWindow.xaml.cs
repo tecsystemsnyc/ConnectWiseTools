@@ -48,6 +48,7 @@ namespace TECUserControlLibrary.Debug
         private void testNetworkExecute()
         {
             TECControllerType type = new TECControllerType(bid.Catalogs.Manufacturers[0]);
+            type.Name = "Controller Type";
             type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.BACnetIP) };
 
             bid.Catalogs.ControllerTypes.Add(type);
