@@ -23,15 +23,15 @@ namespace TECUserControlLibrary.UserControls
     /// </summary>
     public partial class BaseListControl<T> : UserControl
     {
-        public IObservable<T> Source
+        public IEnumerable<T> Source
         {
-            get { return (IObservable<T>)GetValue(SourceProperty); }
+            get { return (IEnumerable<T>)GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
         }
 
         public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register("Source", typeof(IObservable<T>),
-              typeof(BaseListControl<T>), new PropertyMetadata(default(IObservable<T>)));
+            DependencyProperty.Register("Source", typeof(IEnumerable<T>),
+              typeof(BaseListControl<T>), new PropertyMetadata(default(IEnumerable<T>)));
 
         public T SelectedItem
         {
