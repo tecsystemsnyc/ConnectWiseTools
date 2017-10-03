@@ -21,5 +21,9 @@
         <Button Command="{DynamicResource TestNetworkCommand}" Margin="5">
             <TextBlock VerticalAlignment="Center">Test Network</TextBlock>
         </Button>
+        <Button Command="{DynamicResource AddTypicalCommand}" Margin="5"
+                Grid.Column="1">
+            <TextBlock VerticalAlignment="Center">Add Typical</TextBlock>
+        </Button>
     </Grid>
 </Window>

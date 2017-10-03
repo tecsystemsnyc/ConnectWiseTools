@@ -289,7 +289,7 @@ namespace EstimateBuilder.MVVM
                 setupData(templatesPath, bidPath);
 
             }
-
+            
             buildTitleString();
             setupCommands();
             setupExtensions(MenuType.EB);
@@ -510,7 +510,7 @@ namespace EstimateBuilder.MVVM
             if (Bid != null && Templates != null)
             {
                 ScopeEditorVM.Refresh(Bid, Templates);
-                LaborVM.Refresh(Bid, Templates);
+                LaborVM.Refresh(Bid, Estimate, Templates);
                 //ReviewVM.Refresh(Bid);
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
@@ -572,5 +572,6 @@ namespace EstimateBuilder.MVVM
             debug.Show();
         }
         #endregion
+        
     }
 }

@@ -22,9 +22,9 @@ namespace TECUserControlLibrary.UserControls
     /// </summary>
     public partial class SystemProposalGridControl : UserControl
     {
-        public ObservableCollection<TECSystem> SystemsSource
+        public ObservableCollection<TECTypical> SystemsSource
         {
-            get { return (ObservableCollection<TECSystem>)GetValue(SystemsSourceProperty); }
+            get { return (ObservableCollection<TECTypical>)GetValue(SystemsSourceProperty); }
             set { SetValue(SystemsSourceProperty, value); }
         }
 
@@ -32,8 +32,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the SystemSource dependency property
         /// </summary>
         public static readonly DependencyProperty SystemsSourceProperty =
-            DependencyProperty.Register("SystemsSource", typeof(ObservableCollection<TECSystem>),
-              typeof(SystemProposalGridControl), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
+            DependencyProperty.Register("SystemsSource", typeof(ObservableCollection<TECTypical>),
+              typeof(SystemProposalGridControl), new PropertyMetadata(default(ObservableCollection<TECTypical>)));
 
         public SystemProposalGridControl()
         {

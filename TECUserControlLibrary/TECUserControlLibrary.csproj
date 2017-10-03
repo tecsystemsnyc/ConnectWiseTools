@@ -327,6 +327,12 @@
     <Compile Include="Views\SystemHierarchyView.xaml.cs">
       <DependentUpon>SystemHierarchyView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TypicalHierarchyView.xaml.cs">
+      <DependentUpon>TypicalHierarchyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TypicalListControl.xaml.cs">
+      <DependentUpon>TypicalListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TypicalSystemView.xaml.cs">
       <DependentUpon>TypicalSystemView.xaml</DependentUpon>
     </Compile>
@@ -673,6 +679,14 @@
       <DependentUpon>LabeledGridControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TypicalHierarchyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\TypicalListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

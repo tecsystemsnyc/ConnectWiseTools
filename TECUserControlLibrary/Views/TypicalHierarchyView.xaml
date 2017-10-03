@@ -1,0 +1,170 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.TypicalHierarchyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             mc:Ignorable="d" 
+             x:Name="parent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Storyboard x:Key="typicalMove">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.TypicalWidth)" 
+                                     To="0" From="{Binding ElementName=parent, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="typicalMoveBack">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.TypicalWidth)" 
+                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="systemMove">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.SystemWidth)" 
+                                     To="0" From="{Binding ElementName=parent, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="systemMoveBack">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.SystemWidth)" 
+                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="equipmentMove">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.EquipmentWidth)" 
+                                     To="0" From="{Binding ElementName=parent, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="equipmentMoveBack">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.EquipmentWidth)" 
+                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=parent}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding TypicalWidth}"/>
+            <ColumnDefinition Width="{Binding SystemWidth}"/>
+            <ColumnDefinition Width="{Binding EquipmentWidth}"/>
+            <ColumnDefinition Width="{Binding HalfWidth}"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="controls:SystemListControl.Selected">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource typicalMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="instanceBack">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource typicalMoveBack}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="controls:EquipmentListControl.Selected">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="systemBack">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="controls:SubScopeListControl.Selected">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="equipmentBack">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMoveBack}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Grid.Triggers>
+        <!--Column 0-->
+        <controls:TypicalListControl x:Name="typicalList" Grid.Column="0" Grid.Row="1" Source="{Binding TypicalSource}"
+                                    SelectedItem="{Binding SelectedTypical}"/>
+        <!--Column 1-->
+        <Button Content="Back" Click="BackToTypical_Click" x:Name="instanceBack" Grid.Column="1" 
+                Visibility="{Binding TypicalWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
+                Width="50" HorizontalAlignment="Left"/>
+        <controls:SystemListControl x:Name="systemList" Grid.Column="1" Grid.Row="1" Source="{Binding ElementName=typicalList, Path=SelectedItem.Instances}"
+                                    SelectedItem="{Binding SelectedSystem}"/>
+
+        <!--Column 2-->
+        <Button Content="Back" Click="BackToSystem_Click" x:Name="systemBack" Grid.Column="2" 
+                Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
+                Width="50" HorizontalAlignment="Left"/>
+        <Grid  Grid.Column="2" Grid.Row="1">
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="EquipmentTemplate">
+                        <Grid DataContext="{Binding ElementName=parent}">
+                            <controls:EquipmentListControl x:Name="equipmentList"
+                                       Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
+                                       SelectedItem="{Binding SelectedEquipment}"/>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ControllerTemplate">
+                        <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
+                            <controls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
+                                                              SelectedItem ="{Binding Selected}"/>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="PanelTemplate">
+                        <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
+                            <controls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
+                                                              SelectedItem ="{Binding Selected}"/>
+                        </Grid>
+                    </DataTemplate>
+                    <utilities:SystemComponentSelector x:Key="ComponentSelector"
+                                             EquipmentTemplate="{StaticResource EquipmentTemplate}"
+                                             ControllerTemplate="{StaticResource ControllerTemplate}"
+                                             PanelTemplate="{StaticResource PanelTemplate}"/>
+                </ResourceDictionary>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ComboBox Name="componentComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:SystemComponentIndex}}}"
+                                              Margin="2" Grid.Row="0" FontSize="12"
+                                              VerticalContentAlignment="Center"
+                                              SelectedIndex="0"/>
+            <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  
+                                                      ContentTemplateSelector="{StaticResource ComponentSelector}"
+                                                      Grid.Row="1"/>
+
+        </Grid>
+
+        <!--Column 3-->
+        <Button Content="Back" Click="BackToEquipment_Click" x:Name="equipmentBack" Grid.Column="3" 
+                Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
+                Width="50" HorizontalAlignment="Left"/>
+        <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=equipmentList, Path=SelectedItem.SubScope}"
+                                      SelectedItem ="{Binding SelectedSubScope}" 
+                                      Grid.Column="3" Grid.Row="1"/>
+        <!--Column 4-->
+        <Grid Grid.Column="4" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Devices" Grid.Row="0"/>
+            <controls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+                                    SelectedItem="{Binding SelectedDevice}" Grid.Row="1"/>
+            <Label Content="Points" Grid.Row="2"/>
+            <controls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                           Grid.Row="3"/>
+        </Grid>
+
+    </Grid>
+</UserControl>

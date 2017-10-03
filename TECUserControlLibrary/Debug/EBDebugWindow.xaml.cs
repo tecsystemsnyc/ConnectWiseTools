@@ -23,7 +23,7 @@ namespace TECUserControlLibrary.Debug
     {
         private TECBid bid;
         private ICommand testNetwork;
-
+        private ICommand addTypical;
 
         public EBDebugWindow(TECBid bid)
         {
@@ -36,11 +36,13 @@ namespace TECUserControlLibrary.Debug
         private void setupCommands()
         {
             testNetwork = new RelayCommand(testNetworkExecute);
+            addTypical = new RelayCommand(addTypicalExecute);
         }
-
+        
         private void addResources()
         {
             this.Resources.Add("TestNetworkCommand", testNetwork);
+            this.Resources.Add("AddTypicalCommand", addTypical);
         }
 
         private void testNetworkExecute()
@@ -69,6 +71,27 @@ namespace TECUserControlLibrary.Debug
             ss.Points.Add(point);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
+
+            bid.Systems.Add(typical);
+            typical.AddInstance(bid);
+        }
+
+
+        private void addTypicalExecute()
+        {
+            TECTypical typical = new TECTypical();
+            typical.Name = "test";
+            TECEquipment equipment = new TECEquipment(true);
+            equipment.Name = "test equipment";
+            TECSubScope ss = new TECSubScope(true);
+            ss.Name = "Test Subscope";
+            ss.Devices.Add(bid.Catalogs.Devices[0]);
+            TECPoint point = new TECPoint(true);
+            point.Type = IOType.BACnetIP;
+            point.Quantity = 1;
+            ss.Points.Add(point);
+            equipment.SubScope.Add(ss);
+            typical.Equipment.Add(equipment);
 
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
