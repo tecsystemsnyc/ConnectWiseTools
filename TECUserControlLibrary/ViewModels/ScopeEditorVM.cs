@@ -243,10 +243,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 updateVisibilityFromSystemSub(SystemsSubIndex);
             }
-            else
-            {
-                throw new NotImplementedException();
-            }
         }
         private void updateVisibilityFromSystemSub(SystemsSubIndex value)
         {

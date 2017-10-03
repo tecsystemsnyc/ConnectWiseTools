@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -35,6 +36,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
+        private TECEstimator _estimate;
+        public TECEstimator Estimate
+        {
+            get { return _estimate; }
+            set
+            {
+                _estimate = value;
+                RaisePropertyChanged("Estimate");
+            }
+        }
         public bool TemplatesLoaded;
         public ICommand ReloadCommand { get; private set; }
 
@@ -48,11 +59,12 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = new TECBid();
             Templates = new TECTemplates();
+            Estimate = new TECEstimator(Bid, new ChangeWatcher(Bid));
 
             ReloadCommand = new RelayCommand(ReloadExecute);
         }
 
-        public void Refresh(TECBid bid, TECTemplates templates)
+        public void Refresh(TECBid bid, TECEstimator estimate, TECTemplates templates)
         {
             Bid = bid;
             Templates = templates;

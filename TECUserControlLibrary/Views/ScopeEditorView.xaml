@@ -45,7 +45,8 @@
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
             <TabItem Header="NoneTab" Visibility="Collapsed"/>
             <TabItem Header="Systems">
-                <TabControl SelectedIndex="{Binding SystemsSubIndex, Converter={utilities:SystemsSubIndexIntegerConverter}, Mode=OneWayToSource}">
+                <views:TypicalHierarchyView TypicalSource="{Binding Bid.Systems}"/>
+                <!--<TabControl SelectedIndex="{Binding SystemsSubIndex, Converter={utilities:SystemsSubIndexIntegerConverter}, Mode=OneWayToSource}">
                     <TabItem Header="Typical">
                         <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
                     </TabItem>
@@ -56,7 +57,7 @@
                         <views:LocationView LabeledSource="{Binding Bid.Locations}"
                                             ViewModel="{Binding LocationDataGrid}"/>
                     </TabItem>
-                </TabControl>
+                </TabControl>-->
             </TabItem>
             <TabItem Header="Controllers and Panels">
                 <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
