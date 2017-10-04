@@ -104,4 +104,29 @@ namespace TECUserControlLibrary.Utilities
             }
         }
     }
+
+    public class TypicalInstancesSelector : DataTemplateSelector
+    {
+        public DataTemplate TypicalTemplate { get; set; }
+        public DataTemplate InstancesTemplate { get; set; }
+        
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            if (item is TypicalInstanceEnum index)
+            {
+                switch (index)
+                {
+                    case TypicalInstanceEnum.Typical:
+                        return TypicalTemplate;
+                    case TypicalInstanceEnum.Instance:
+                        return InstancesTemplate;
+                }
+                return InstancesTemplate;
+            }
+            else
+            {
+                return InstancesTemplate;
+            }
+        }
+    }
 }

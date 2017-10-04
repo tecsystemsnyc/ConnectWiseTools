@@ -594,6 +594,30 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class TypicalSelectionTemplateWidthConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if ((TypicalInstanceEnum)value == TypicalInstanceEnum.Typical)
+            {
+                return parameter;
+            }
+            else
+            {
+                return 0.0;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter

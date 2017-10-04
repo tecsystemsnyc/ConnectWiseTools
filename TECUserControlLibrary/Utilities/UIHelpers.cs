@@ -337,7 +337,13 @@ namespace TECUserControlLibrary.Utilities
             return savePath;
         }
         #endregion
-        
+
+        public static List<Tuple<string, TypicalInstanceEnum>> TypicalInstanceSelectorList = new List<Tuple<string, TypicalInstanceEnum>>
+        {
+            new Tuple<string, TypicalInstanceEnum>("Typical System Defintions", TypicalInstanceEnum.Typical),
+            new Tuple<string, TypicalInstanceEnum>("Physical Instances", TypicalInstanceEnum.Instance)
+        };
+
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };
@@ -371,6 +377,9 @@ namespace TECUserControlLibrary.Utilities
         Wires,
         Conduits
     }
+    public enum TypicalInstanceEnum { Typical, Instance }
+
+    
 
 
 }
