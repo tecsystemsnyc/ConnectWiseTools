@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,6 +141,16 @@ namespace TECUserControlLibrary.Views
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
+
+        public IDropTarget DropHandler
+        {
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
+        }
+
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget),
+              typeof(TypicalHierarchyView));
 
         public TypicalHierarchyView()
         {

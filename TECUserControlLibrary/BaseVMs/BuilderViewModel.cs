@@ -45,6 +45,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Constructors
         public BuilderViewModel(string splashTitle, string splashSubtitle, bool isEstimate)
         {
+            TitleString = "";
             setupStatusBar();
             getStartupFile();
             isNew = workingScopeManager == null;
