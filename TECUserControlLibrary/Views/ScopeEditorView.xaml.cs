@@ -26,6 +26,16 @@ namespace TECUserControlLibrary.Views
             DependencyProperty.Register("ViewModel", typeof(ScopeEditorVM),
               typeof(ScopeEditorView));
 
+        public double TemplatesWidth
+        {
+            get { return (double)GetValue(TemplatesWidthProperty); }
+            set { SetValue(TemplatesWidthProperty, value); }
+        }
+        
+        public static readonly DependencyProperty TemplatesWidthProperty =
+            DependencyProperty.Register("TemplatesWidth", typeof(double),
+              typeof(ScopeEditorView), new PropertyMetadata(250.0));
+
         /// <summary>
         /// Initializes a new instance of the ScopeEditorView class.
         /// </summary>

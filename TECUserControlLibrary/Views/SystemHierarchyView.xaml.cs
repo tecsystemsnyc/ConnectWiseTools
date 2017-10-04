@@ -52,15 +52,15 @@ namespace TECUserControlLibrary.Views
             DependencyProperty.Register("EquipmentWidth", typeof(double),
               typeof(SystemHierarchyView), new PropertyMetadata(0.0));
 
-        public ObservableCollection<TECSystem> SystemSource
+        public IEnumerable<TECSystem> SystemSource
         {
             get { return (ObservableCollection<TECSystem>)GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
         }
 
         public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register("SystemSource", typeof(ObservableCollection<TECSystem>),
-              typeof(SystemHierarchyView), new PropertyMetadata(default(ObservableCollection<TECSystem>)));
+            DependencyProperty.Register("SystemSource", typeof(IEnumerable<TECSystem>),
+              typeof(SystemHierarchyView), new PropertyMetadata(default(IEnumerable<TECSystem>)));
 
         public TECSystem SelectedSystem
         {
