@@ -21,7 +21,13 @@
     <Grid DataContext="{Binding ElementName=parent}">
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
-                  SelectionChanged="ListView_Selected">
+                  SelectionChanged="ListView_Selected"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
