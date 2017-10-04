@@ -18,10 +18,19 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="typical">
-                <views:SystemHierarchyView SystemSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"/>
+                <views:SystemHierarchyView SystemSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
+                                           SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                           SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                           SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                           SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"/>
             </DataTemplate>
             <DataTemplate x:Key="instances">
                 <views:TypicalHierarchyView TypicalSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
+                                            SelectedTypical="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                            SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                            SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                            SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                            SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
                                             DropHandler="{Binding ElementName=scopeEditorView, Path=ViewModel}"/>
             </DataTemplate>
             <utilities:TypicalInstancesSelector x:Key="typicalInstanceSelector"

@@ -132,7 +132,7 @@
             </Grid.ColumnDefinitions>
             <Button Content="Back" Click="BackToSystem_Click" x:Name="systemBack"
                     Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"/>
-            <TextBlock Grid.Column="1" Text="{Binding SelectedTypical.Name, StringFormat='Equipment in {0}'}"
+            <TextBlock Grid.Column="1" Text="{Binding SelectedTypical.Name, StringFormat='Components of {0}'}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <Grid  Grid.Column="2" Grid.Row="1">
