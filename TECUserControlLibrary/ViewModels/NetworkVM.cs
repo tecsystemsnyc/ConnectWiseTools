@@ -22,14 +22,14 @@ namespace TECUserControlLibrary.ViewModels
         private ConnectableItem _selectedParentable;
         private ConnectableItem _selectedNonParentable;
         private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
+
+        private ObservableCollection<TECElectricalMaterial> _selectedConnectionTypes;
         #endregion
 
         //Constructor
         public NetworkVM(TECBid bid, ChangeWatcher cw)
         {
-            resetCollections();
-            addBid(bid);
-            resubscribe(cw);
+            Refresh(bid, cw);
         }
 
         #region Properties
@@ -84,23 +84,36 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedItem = SelectedNonParentable;
             }
         }
+
+        public ReadOnlyObservableCollection<TECElectricalMaterial> AllConnectionTypes { get; private set; }
+        public List<IOType> IOTypes { get; private set; }
+        public ReadOnlyObservableCollection<TECElectricalMaterial> SelectedConnectionTypes
+        {
+            get { return new ReadOnlyObservableCollection<TECElectricalMaterial>(_selectedConnectionTypes); }
+        }
         #endregion
 
         #region Methods
         public void Refresh(TECBid bid, ChangeWatcher cw)
         {
-            resetCollections();
+            resetCollections(bid);
             addBid(bid);
             resubscribe(cw);
         }
 
-        private void resetCollections()
+        private void resetCollections(TECBid bid)
         {
             connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
             _parentables = new ObservableCollection<ConnectableItem>();
             _nonParentables = new ObservableCollection<ConnectableItem>();
+            AllConnectionTypes = new ReadOnlyObservableCollection<TECElectricalMaterial>(bid.Catalogs.ConnectionTypes);
+            IOTypes = new List<IOType>(TECIO.NetworkIO);
+            _selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
             RaisePropertyChanged("Parentables");
             RaisePropertyChanged("NonParentables");
+            RaisePropertyChanged("AllConnectionTypes");
+            RaisePropertyChanged("IOTypes");
+            RaisePropertyChanged("SelectedConnectionTypes");
         }
         private void addBid(TECBid bid)
         {
