@@ -125,6 +125,9 @@
     <Compile Include="UserControls\CostBatchPropertiesControl.xaml.cs">
       <DependentUpon>CostBatchPropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ElectricalMaterialListControl.xaml.cs">
+      <DependentUpon>ElectricalMaterialListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\EndDeviceListControl.xaml.cs">
       <DependentUpon>EndDeviceListControl.xaml</DependentUpon>
     </Compile>
@@ -391,6 +394,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CostBatchPropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ElectricalMaterialListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -63,6 +63,8 @@ namespace TECUserControlLibrary.Debug
             TECController child = new TECController(type, false);
             child.Name = "Child";
 
+            bid.AddController(child);
+
             TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
 
             connection.AddINetworkConnectable(child);

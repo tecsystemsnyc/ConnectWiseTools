@@ -97,11 +97,9 @@
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
                         </Grid.RowDefinitions>
 
+                        <!--Item Info-->
                         <Label FontSize="15" FontWeight="Bold" Content="Item Info"/>
                         
                         <Label Grid.Column="1" FontSize="15" Content="Name:"/>
@@ -121,7 +119,8 @@
                             </ContentPresenter.Resources>
                         </ContentPresenter>
 
-                        <ContentPresenter Content="{Binding SelectedItem.Item.ParentConnection}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="5">
+                        <!--Connection Info-->
+                        <ContentPresenter Content="{Binding SelectedItem.Item.ParentConnection}" Grid.Row="1" Grid.ColumnSpan="5">
                             <ContentPresenter.Resources>
                                 <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
                                     <Grid>
@@ -132,32 +131,56 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
-                                        <Label FontSize="15" Content="Parent Controller:"/>
-                                        <Label Grid.Column="1" FontSize="15" Content="{Binding ParentController.Name}"/>
-                                        <Label Grid.Column="2" FontSize="15" Content="Parent Type:"/>
-                                        <Label Grid.Column="3" FontSize="15" Content="{Binding ParentController.Type.Name}"/>
-                                        <Button Grid.Column="4" Margin="5" Content="View Parent Details"/>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <!--Title-->
+                                        <Label FontSize="15" FontWeight="Bold" Content="Connection Info"/>
+                                        
+                                        <!--Parent Info-->
+                                        <Label Grid.Column="1" FontSize="15" Content="Parent Controller:"/>
+                                        <Label Grid.Column="2" FontSize="15" Content="{Binding ParentController.Name}"/>
+
+                                        <Label Grid.Column="1" Grid.Row="1" FontSize="15" Content="Parent Type:"/>
+                                        <Label Grid.Column="2" Grid.Row="1" FontSize="15" Content="{Binding ParentController.Type.Name}"/>
+
+                                        <Button Grid.Column="1" Grid.Row="2" Margin="5" Content="View Parent Details"/>
+                                        
+                                        <!--Connection Info-->
+                                        <Label Grid.Column="3" FontSize="15" Content="Run Length:"/>
+                                        <Label Grid.Column="4" FontSize="15" Content="123.45"/>
+                                        
+                                        <Label Grid.Column="3" Grid.Row="1" FontSize="15" Content="Conduit Length:"/>
+                                        <Label Grid.Column="4" Grid.Row="1" FontSize="15" Content="543.21"/>
+
+                                        <Label Grid.Column="3" Grid.Row="2" FontSize="15" Content="Conduit Type:"/>
+                                        <Label Grid.Column="4" Grid.Row="2" FontSize="15" Content="'Conduit Type'"/>
                                     </Grid>
                                 </DataTemplate>
                             </ContentPresenter.Resources>
                         </ContentPresenter>
 
-                        <Label Grid.Row="2" FontSize="15" FontWeight="Bold" Content="Connection Info"/>
-
-                        <Label Grid.Column="1" Grid.Row="2" FontSize="15" Content="Run Length:"/>
-                        <Label Grid.Column="2" Grid.Row="2" FontSize="15" Content="123.45"/>
-                        <Label Grid.Column="3" Grid.Row="2" FontSize="15" Content="Conduit Length:"/>
-                        <Label Grid.Column="4" Grid.Row="2" FontSize="15" Content="543.21"/>
-
-                        <Label Grid.Column="3" Grid.Row="3" FontSize="15" Content="Conduit Type:"/>
-                        <Label Grid.Column="4" Grid.Row="3" FontSize="15" Content="'Conduit Type'"/>
-
-                        <Label Grid.Column="1" Grid.Row="4" FontSize="15" Content="Wire Types:"/>
-                        <DataGrid Grid.Column="2" Grid.Row="4">
-                            
-                        </DataGrid>
-                        <Label Grid.Column="3" Grid.Row="4" FontSize="15" Content="IO Types:"/>
-                        <DataGrid Grid.Column="4" Grid.Row="4"/>
+                        <!--Lists-->
+                        <ContentPresenter Content="{Binding SelectedItem.Item.ParentConnection}" Grid.Column="5" Grid.RowSpan="2">
+                            <ContentPresenter.Resources>
+                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Label FontSize="15" Content="Wire Types:"/>
+                                        <DataGrid Grid.Row="1"/>
+                                        <Label Grid.Row="2" FontSize="15" Content="IO Types:"/>
+                                        <DataGrid Grid.Row="3"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Grid>
                 </Border>
                 
