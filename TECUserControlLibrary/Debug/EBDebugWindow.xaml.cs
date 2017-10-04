@@ -65,7 +65,7 @@ namespace TECUserControlLibrary.Debug
 
             bid.AddController(child);
 
-            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
+            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0], bid.Catalogs.ConnectionTypes[1] }, IOType.BACnetIP);
 
             connection.AddINetworkConnectable(child);
 

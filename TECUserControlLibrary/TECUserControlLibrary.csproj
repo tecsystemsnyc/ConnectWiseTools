@@ -140,6 +140,9 @@
     <Compile Include="UserControls\HardwarePropertiesControl.xaml.cs">
       <DependentUpon>HardwarePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\IOListControl.xaml.cs">
+      <DependentUpon>IOListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PanelListControl.xaml.cs">
       <DependentUpon>PanelListControl.xaml</DependentUpon>
     </Compile>
@@ -414,6 +417,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\HardwarePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\IOListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

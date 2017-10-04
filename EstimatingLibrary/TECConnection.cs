@@ -84,6 +84,11 @@ namespace EstimatingLibrary
         public bool IsTypical { get; private set; }
 
         public abstract IOCollection IO { get; }
+
+        public List<TECIO> IOList
+        {
+            get { return IO.ListIO(); }
+        }
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;
