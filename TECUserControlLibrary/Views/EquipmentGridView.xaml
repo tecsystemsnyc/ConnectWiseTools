@@ -23,7 +23,7 @@
         <DataGrid ItemsSource="{Binding Path=EquipmentSource}"
                   x:Name="equipmentDataGrid"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding Path=ViewModel.SelectedEquipment, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedEquipment}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}">
             <i:Interaction.Triggers>

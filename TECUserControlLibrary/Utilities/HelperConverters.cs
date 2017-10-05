@@ -113,35 +113,7 @@ namespace TECUserControlLibrary.Utilities
 
         #endregion
     }
-
-    public class BudgetPriceConverter : BaseConverter, IValueConverter
-    {
-        #region IValueConverter Members
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-
-            if (((double)value) >= 0)
-            {
-                return value;
-            }
-            else
-            {
-                return "None";
-            }
-        }
-        
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            string inString = (string)value;
-            inString = inString.Trim(new Char[] { ' ', '$', ',', '.' });
-
-            return inString.ToDouble(-1);
-        }
-
-        #endregion
-    }
-
+    
     public class PercentageToNumberConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
@@ -160,24 +132,7 @@ namespace TECUserControlLibrary.Utilities
 
         #endregion
     }
-
-    public class ManufacturerConverter : BaseConverter, IValueConverter
-    {
-        #region IValueConverter Members
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return value;
-        }
-
-        #endregion
-    }
-
+    
     public class SelectedLocationToLocationConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
@@ -217,42 +172,7 @@ namespace TECUserControlLibrary.Utilities
 
         #endregion
     }
-
-    public class IgnoreNewItemPlaceholderConverter : BaseConverter, IValueConverter
-    {
-        public static readonly IgnoreNewItemPlaceholderConverter Instance = new IgnoreNewItemPlaceholderConverter();
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value != null && value.ToString() == "{NewItemPlaceholder}")
-                return DependencyProperty.UnsetValue;
-            return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class IgnoreNewItemPlaceholderToNullConverter : BaseConverter, IValueConverter
-    {
-        public static readonly IgnoreNewItemPlaceholderConverter Instance = new IgnoreNewItemPlaceholderConverter();
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value != null && value.ToString() == "{NewItemPlaceholder}")
-                return null;
-            else
-                return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return value;
-        }
-    }
-
+    
     public class PercentageConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members

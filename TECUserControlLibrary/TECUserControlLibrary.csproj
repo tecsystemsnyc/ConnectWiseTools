@@ -99,6 +99,9 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
+      <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\BaseListControl.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
@@ -372,6 +375,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\AddAssociatedCostsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\AddEquipmentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
