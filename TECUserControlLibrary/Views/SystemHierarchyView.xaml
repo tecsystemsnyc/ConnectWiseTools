@@ -124,7 +124,7 @@
                     Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"/>
                 <TextBlock Grid.Column="1" Text="{Binding SelectedSystem.Name, StringFormat='Components of {0}'}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Content="Add" x:Name="addEquipment" Grid.Column="2"/>
+                <Button Content="Add" x:Name="addEquipment" Grid.Column="2" Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
             </Grid>
         <Grid  Grid.Column="1" Grid.Row="1">
             <Grid.Resources>

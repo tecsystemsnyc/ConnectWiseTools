@@ -320,6 +320,31 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class NullToCollapsedConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return Visibility.Collapsed;
+            }
+            else
+            {
+                return Visibility.Visible;
+            }
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     public class NullToBoolConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
