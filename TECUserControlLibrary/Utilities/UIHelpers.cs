@@ -33,7 +33,10 @@ namespace TECUserControlLibrary.Utilities
             if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-                if (sourceItem != null && sourceType == targetType && sourceType is IDragDropable)
+                bool isDragDropable = sourceItem is IDragDropable;
+                bool sourceNotNull = sourceItem != null;
+                bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
+                if (sourceNotNull && sourceMatchesTarget && isDragDropable)
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;
@@ -68,6 +71,78 @@ namespace TECUserControlLibrary.Utilities
                         sourceItem = ((IDragDropable)dropInfo.Data).DragDropCopy(scopeManager);
                     }
                 }
+                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                {
+                    if (sourceItem is IList)
+                    {
+                        foreach (object item in ((IList)sourceItem))
+                        {
+                            ((IList)dropInfo.TargetCollection).Add(item);
+                        }
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    }
+                }
+                else
+                {
+                    if (sourceItem is IList)
+                    {
+                        var x = dropInfo.InsertIndex;
+                        foreach (object item in ((IList)sourceItem))
+                        {
+                            ((IList)dropInfo.TargetCollection).Insert(x, item);
+                            x += 1;
+                        }
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+
+                    }
+                }
+            }
+            else
+            {
+                handleReorderDrop(dropInfo);
+            }
+        }
+
+        public static void SystemToTypicalDragOver(IDropInfo dropInfo)
+        {
+            var sourceItem = dropInfo.Data;
+            Type sourceType;
+            if (sourceItem is IList && ((IList)sourceItem).Count > 0)
+            { sourceType = ((IList)sourceItem)[0].GetType(); }
+            else
+            { sourceType = sourceItem.GetType(); }
+
+            var targetCollection = dropInfo.TargetCollection;
+            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
+            {
+                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+                bool isDragDropable = sourceItem is IDragDropable;
+                bool sourceNotNull = sourceItem != null;
+                bool sourceMatchesTarget = sourceType ==  typeof(TECSystem) && targetType == typeof(TECTypical);
+                if (sourceNotNull && sourceMatchesTarget && isDragDropable)
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
+            }
+        }
+
+        public static void SystemToTypicalDrop(IDropInfo dropInfo, TECBid bid)
+        {
+            TECSystem sourceItem = (TECSystem)dropInfo.Data;
+            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            {
+                TECSystem copiedSystem = (sourceItem).DragDropCopy(bid) as TECSystem;
+                sourceItem = new TECTypical(copiedSystem);
+
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
                     if (sourceItem is IList)

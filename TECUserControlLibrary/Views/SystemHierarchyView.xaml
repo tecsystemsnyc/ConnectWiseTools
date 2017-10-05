@@ -8,39 +8,39 @@
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             x:Name="parent"
+             x:Name="systemHierarchyView"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <Storyboard x:Key="systemMove">
-                <DoubleAnimation Storyboard.TargetName="parent"
+                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)" 
-                                     To="0" From="{Binding ElementName=parent, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     To="0" From="{Binding ElementName=systemHierarchyView, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="systemMoveBack">
-                <DoubleAnimation Storyboard.TargetName="parent"
+                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)" 
-                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     To="{Binding ElementName=systemHierarchyView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="equipmentMove">
-                <DoubleAnimation Storyboard.TargetName="parent"
+                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.EquipmentWidth)" 
-                                     To="0" From="{Binding ElementName=parent, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     To="0" From="{Binding ElementName=systemHierarchyView, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="equipmentMoveBack">
-                <DoubleAnimation Storyboard.TargetName="parent"
+                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.EquipmentWidth)" 
-                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     To="{Binding ElementName=systemHierarchyView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="modalIn">
-                <DoubleAnimation Storyboard.TargetName="parent"
+                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.ModalHeight)" 
-                                     From="{Binding ElementName=parent, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     From="{Binding ElementName=systemHierarchyView, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="modalOut">
-                <DoubleAnimation Storyboard.TargetName="parent"
+                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.ModalHeight)" 
-                                     From="0" To="{Binding ElementName=parent, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                     From="0" To="{Binding ElementName=systemHierarchyView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             
             <Style TargetType="TextBlock">
@@ -88,7 +88,7 @@
                 </EventTrigger.Actions>
             </EventTrigger>
         </Grid.Triggers>
-        <Grid DataContext="{Binding ElementName=parent}">
+        <Grid DataContext="{Binding ElementName=systemHierarchyView}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding SystemWidth}"/>
                 <ColumnDefinition Width="{Binding EquipmentWidth}"/>
@@ -111,7 +111,8 @@
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
             <controls:SystemListControl x:Name="systemList" Grid.Column="0" Grid.Row="1" Source="{Binding SystemSource}"
-                                        SelectedItem="{Binding SelectedSystem}"/>
+                                        SelectedItem="{Binding SelectedSystem}"
+                                        DropHandler="{Binding DropHandler}"/>
             <!--Column 1-->
             <Grid Grid.Column="1" >
                 <Grid.ColumnDefinitions>
@@ -129,22 +130,25 @@
             <Grid.Resources>
                 <ResourceDictionary>
                     <DataTemplate x:Key="EquipmentTemplate">
-                        <Grid DataContext="{Binding ElementName=parent}">
+                        <Grid DataContext="{Binding ElementName=systemHierarchyView}">
                             <controls:EquipmentListControl x:Name="equipmentList"
                                        Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
-                                       SelectedItem="{Binding SelectedEquipment}"/>
+                                       SelectedItem="{Binding SelectedEquipment}"
+                                                           DropHandler="{Binding ElementName=systemHierarchyView, Path=DropHandler}"/>
                         </Grid>
                     </DataTemplate>
                     <DataTemplate x:Key="ControllerTemplate">
-                        <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
+                        <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
                             <controls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
-                                                              SelectedItem ="{Binding Selected}"/>
+                                                              SelectedItem ="{Binding Selected}"
+                                                            DropHandler="{Binding DropHandler}"/>
                         </Grid>
                     </DataTemplate>
                     <DataTemplate x:Key="PanelTemplate">
-                        <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
+                        <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
                             <controls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
-                                                              SelectedItem ="{Binding Selected}"/>
+                                                              SelectedItem ="{Binding Selected}"
+                                                       DropHandler="{Binding DropHandler}"/>
                         </Grid>
                     </DataTemplate>
                     <utilities:SystemComponentSelector x:Key="ComponentSelector"
@@ -180,9 +184,10 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         
-        <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=parent, Path=SelectedEquipment.SubScope}"
+        <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=SelectedEquipment.SubScope}"
                                       SelectedItem ="{Binding SelectedSubScope}" 
-                                      Grid.Column="2" Grid.Row="1"/>
+                                      Grid.Column="2" Grid.Row="1"
+                                      DropHandler="{Binding DropHandler}"/>
         <!--Column 3-->
         <Grid Grid.Column="3" Grid.Row="1">
             <Grid.RowDefinitions>
@@ -193,7 +198,8 @@
             </Grid.RowDefinitions>
             <Label Content="Devices" Grid.Row="0"/>
                 <controls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
-                                    SelectedItem="{Binding SelectedDevice}" Grid.Row="1"/>
+                                    SelectedItem="{Binding SelectedDevice}" Grid.Row="1"
+                                               DropHandler="{Binding DropHandler}"/>
             <Label Content="Points" Grid.Row="2"/>
                 <controls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                            Grid.Row="3"/>
@@ -202,15 +208,15 @@
     </Grid>
         <!--Add Modal-->
         <Grid Background="LightGray"
-              Width="{Binding ElementName=parent, Path=ActualWidth}"
-              Height="{Binding ElementName=parent, Path=ActualHeight}">
+              Width="{Binding ElementName=systemHierarchyView, Path=ActualWidth}"
+              Height="{Binding ElementName=systemHierarchyView, Path=ActualHeight}">
             <Grid.Resources>
                 <sys:Double x:Key="marginEdge">40</sys:Double>
             </Grid.Resources>
             <Grid.Margin>
                 <MultiBinding Converter="{utilities:HeightToGridMarginConverter}">
                     <Binding Source="{StaticResource marginEdge}"/>
-                    <Binding ElementName="parent" Path="ModalHeight"/>
+                    <Binding ElementName="systemHierarchyView" Path="ModalHeight"/>
                 </MultiBinding>
             </Grid.Margin>
             <Button Content="Done" x:Name="addDone" Height="30" Width="40"/>

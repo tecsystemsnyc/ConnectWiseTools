@@ -33,6 +33,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
             Templates = templates;
+            testcollection = new ObservableCollection<TECEquipment>();
 
             setupEditTab();
             setupScopeCollection();
@@ -75,6 +76,16 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private ObservableCollection<TECEquipment> testcollection;
+        public ObservableCollection<TECEquipment> TESTCOLLECTION
+        {
+            get { return testcollection; }
+            set
+            {
+                testcollection = value;
+                RaisePropertyChanged("TESTCOLLECTION");
+            }
+        }
 
         #region Extensions
         public SystemsVM ScopeDataGrid { get; set; }
@@ -226,11 +237,25 @@ namespace TECUserControlLibrary.ViewModels
         #region Drag Drop
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            if(dropInfo.Data is TECSystem)
+            {
+                UIHelpers.SystemToTypicalDragOver(dropInfo);
+            }
+            else
+            {
+                UIHelpers.StandardDragOver(dropInfo);
+            }
         }
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDrop(dropInfo, Bid);
+            if (dropInfo.Data is TECSystem)
+            {
+                UIHelpers.SystemToTypicalDrop(dropInfo, Bid);
+            }
+            else
+            {
+                UIHelpers.StandardDrop(dropInfo, Bid);
+            }
         }
         #endregion
 

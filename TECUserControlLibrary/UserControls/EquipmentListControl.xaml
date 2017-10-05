@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
                        xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
-             x:Name="parent"
+             x:Name="equipmentListControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -17,11 +17,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=equipmentListControl}">
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected"
-                  dd:DragDrop.DropHandler="{Binding DropHandler}">
+                  dd:DragDrop.DropHandler="{Binding ElementName=equipmentListControl, Path=DropHandler}"
+                  dd:DragDrop.IsDropTarget="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

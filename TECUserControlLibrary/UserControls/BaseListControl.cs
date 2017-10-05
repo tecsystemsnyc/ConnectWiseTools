@@ -1,5 +1,4 @@
-﻿using EstimatingLibrary;
-using GongSolutions.Wpf.DragDrop;
+﻿using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.UserControls
 {
