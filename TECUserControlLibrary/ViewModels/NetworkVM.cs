@@ -181,7 +181,7 @@ namespace TECUserControlLibrary.ViewModels
             ConnectableItem item = connectableDictionary[connectable];
             if (connectable is INetworkParentable parentable)
             {
-                foreach(TECNetworkConnection connection in parentable.GetNetworkConnections())
+                foreach(TECNetworkConnection connection in parentable.ChildNetworkConnections)
                 {
                     foreach(INetworkConnectable child in connection.Children)
                     {
@@ -270,7 +270,7 @@ namespace TECUserControlLibrary.ViewModels
         private void updateChildrenConnected(INetworkParentable parentable)
         {
             bool isConnected = connectableDictionary[parentable as INetworkConnectable].IsConnected;
-            foreach (TECNetworkConnection netConnect in parentable.GetNetworkConnections())
+            foreach (TECNetworkConnection netConnect in parentable.ChildNetworkConnections)
             {
                 foreach (INetworkConnectable child in netConnect.Children)
                 {
