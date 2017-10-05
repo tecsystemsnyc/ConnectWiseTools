@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -31,6 +32,17 @@
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.EquipmentWidth)" 
                                      To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
+            <Storyboard x:Key="modalIn">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:SystemHierarchyView.ModalHeight)" 
+                                     From="{Binding ElementName=parent, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="modalOut">
+                <DoubleAnimation Storyboard.TargetName="parent"
+                                     Storyboard.TargetProperty="(local:SystemHierarchyView.ModalHeight)" 
+                                     From="0" To="{Binding ElementName=parent, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            
             <Style TargetType="TextBlock">
                 <Style.Setters>
                     <Setter Property="Foreground" Value="Black"/>
@@ -38,17 +50,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding SystemWidth}"/>
-            <ColumnDefinition Width="{Binding EquipmentWidth}"/>
-            <ColumnDefinition Width="{Binding HalfWidth}"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid>
         <Grid.Triggers>
             <EventTrigger RoutedEvent="controls:EquipmentListControl.Selected">
                 <EventTrigger.Actions>
@@ -61,10 +63,10 @@
                 </EventTrigger.Actions>
             </EventTrigger>
             <!--<EventTrigger RoutedEvent="ComboBox.SelectionChanged" SourceName="componentComboBox">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>-->
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>-->
             <EventTrigger RoutedEvent="controls:SubScopeListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
@@ -75,31 +77,54 @@
                     <BeginStoryboard Storyboard="{StaticResource equipmentMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="addEquipment">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="addDone">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
         </Grid.Triggers>
-        <!--Column 0-->
-        <Grid>
+        <Grid DataContext="{Binding ElementName=parent}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="{Binding SystemWidth}"/>
+                <ColumnDefinition Width="{Binding EquipmentWidth}"/>
+                <ColumnDefinition Width="{Binding HalfWidth}"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="1" Text="Typical Systems"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-        <controls:SystemListControl x:Name="systemList" Grid.Column="0" Grid.Row="1" Source="{Binding SystemSource}"
-                                    SelectedItem="{Binding SelectedSystem}"/>
-        <!--Column 1-->
-        <Grid Grid.Column="1" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Back" Click="BackToSystem_Click" x:Name="systemBack" 
-                Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"/>
-            <TextBlock Grid.Column="1" Text="{Binding SelectedSystem.Name, StringFormat='Components of {0}'}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!--Column 0-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" Text="Typical Systems"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+            <controls:SystemListControl x:Name="systemList" Grid.Column="0" Grid.Row="1" Source="{Binding SystemSource}"
+                                        SelectedItem="{Binding SelectedSystem}"/>
+            <!--Column 1-->
+            <Grid Grid.Column="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Back" Click="BackToSystem_Click" x:Name="systemBack" 
+                    Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"/>
+                <TextBlock Grid.Column="1" Text="{Binding SelectedSystem.Name, StringFormat='Components of {0}'}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="Add" x:Name="addEquipment" Grid.Column="2"/>
+            </Grid>
         <Grid  Grid.Column="1" Grid.Row="1">
             <Grid.Resources>
                 <ResourceDictionary>
@@ -147,7 +172,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Button Content="Back" Click="BackToEquipment_Click" x:Name="equipmentBack"
                 Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"/>
@@ -174,5 +199,21 @@
                                            Grid.Row="3"/>
         </Grid>
 
+    </Grid>
+        <!--Add Modal-->
+        <Grid Background="LightGray"
+              Width="{Binding ElementName=parent, Path=ActualWidth}"
+              Height="{Binding ElementName=parent, Path=ActualHeight}">
+            <Grid.Resources>
+                <sys:Double x:Key="marginEdge">40</sys:Double>
+            </Grid.Resources>
+            <Grid.Margin>
+                <MultiBinding Converter="{utilities:HeightToGridMarginConverter}">
+                    <Binding Source="{StaticResource marginEdge}"/>
+                    <Binding ElementName="parent" Path="ModalHeight"/>
+                </MultiBinding>
+            </Grid.Margin>
+            <Button Content="Done" x:Name="addDone" Height="30" Width="40"/>
+        </Grid>
     </Grid>
 </UserControl>

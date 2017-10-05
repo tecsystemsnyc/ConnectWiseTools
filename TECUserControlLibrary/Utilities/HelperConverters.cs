@@ -618,6 +618,28 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class HeightToGridMarginConverter : BaseConverter, IMultiValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object[] values, Type targetType,
+           object parameter, System.Globalization.CultureInfo culture)
+        {
+            double edges = (double)values[0];
+            double topOffset = (double)values[1];
+            double top = topOffset != 0 ? topOffset : edges;
+            double bottom = topOffset != 0 ? 0 : edges;
+            return new Thickness(edges, top, edges, bottom);
+        }
+        public object[] ConvertBack(object value, Type[] targetTypes,
+               object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter

@@ -22,6 +22,16 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class SystemHierarchyView : UserControl
     {
+        public double ModalHeight
+        {
+            get { return (double)GetValue(ModalHeightProperty); }
+            set { SetValue(ModalHeightProperty, value); }
+        }
+
+        public static readonly DependencyProperty ModalHeightProperty =
+            DependencyProperty.Register("ModalHeight", typeof(double),
+              typeof(SystemHierarchyView), new PropertyMetadata(0.0));
+
         public double HalfWidth
         {
             get { return (double)GetValue(HalfWidthProperty); }
@@ -129,6 +139,7 @@ namespace TECUserControlLibrary.Views
                     {
                         SystemWidth = e.NewSize.Width / 2;
                         EquipmentWidth = e.NewSize.Width / 2;
+                        ModalHeight = e.NewSize.Height;
                     }
                     else if(SystemWidth != 0)
                     {
@@ -138,6 +149,11 @@ namespace TECUserControlLibrary.Views
                     else if (EquipmentWidth != 0)
                     {
                         EquipmentWidth = e.NewSize.Width / 2;
+                    }
+
+                    if(ModalHeight != 0)
+                    {
+                        ModalHeight = e.NewSize.Height;
                     }
                     HalfWidth = e.NewSize.Width / 2;
                 }
