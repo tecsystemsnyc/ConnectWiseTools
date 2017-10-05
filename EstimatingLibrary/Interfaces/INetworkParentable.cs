@@ -11,6 +11,6 @@ namespace EstimatingLibrary.Interfaces
         bool IsServer { get; }
         string Name { get; }
         
-        IEnumerable<TECNetworkConnection> GetNetworkConnections();
+        IEnumerable<TECNetworkConnection> ChildNetworkConnections { get; }
     }
 }

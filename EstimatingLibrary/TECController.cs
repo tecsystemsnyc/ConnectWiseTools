@@ -87,6 +87,13 @@ namespace EstimatingLibrary
         {
             get { return getAvailableNetworkIO(); }
         }
+        public IEnumerable<TECNetworkConnection> ChildNetworkConnections
+        {
+            get
+            {
+                return getNetworkConnections();
+            }
+        }
         #endregion
 
         #region Constructors
@@ -273,9 +280,9 @@ namespace EstimatingLibrary
             }
         }
 
-        private ObservableCollection<TECNetworkConnection> getNetworkConnections()
+        private List<TECNetworkConnection> getNetworkConnections()
         {
-            ObservableCollection<TECNetworkConnection> networkConnections = new ObservableCollection<TECNetworkConnection>();
+            List<TECNetworkConnection> networkConnections = new List<TECNetworkConnection>();
             foreach (TECConnection connection in ChildrenConnections)
             {
                 if (connection is TECNetworkConnection)
@@ -312,6 +319,10 @@ namespace EstimatingLibrary
                         notifyCostChanged(cost.CostBatch * -1);
                     }
                 }
+            }
+            if (propertyName == "ChildrenConnections")
+            {
+                raisePropertyChanged("ChildNetworkConnections");
             }
         }
         #endregion
@@ -433,16 +444,6 @@ namespace EstimatingLibrary
         public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
         {
             return new TECController(item as TECController, isTypical, guidDictionary);
-        }
-
-        public IEnumerable<TECNetworkConnection> GetNetworkConnections()
-        {
-            List<TECNetworkConnection> netConnections = new List<TECNetworkConnection>();
-            foreach(TECConnection connection in ChildrenConnections.Where(connect => connect is TECNetworkConnection))
-            {
-                netConnections.Add(connection as TECNetworkConnection);
-            }
-            return netConnections;
         }
 
 
