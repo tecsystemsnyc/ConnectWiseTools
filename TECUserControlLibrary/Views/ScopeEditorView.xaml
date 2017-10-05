@@ -19,18 +19,18 @@
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="typical">
                 <views:SystemHierarchyView SystemSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
-                                           SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
-                                           SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
-                                           SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
-                                           SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"/>
+                                           SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                           SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                           SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                           SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"/>
             </DataTemplate>
             <DataTemplate x:Key="instances">
                 <views:TypicalHierarchyView TypicalSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
-                                            SelectedTypical="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
-                                            SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
-                                            SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
-                                            SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
-                                            SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected}"
+                                            SelectedTypical="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                            SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                            SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                            SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                            SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
                                             DropHandler="{Binding ElementName=scopeEditorView, Path=ViewModel}"/>
             </DataTemplate>
             <utilities:TypicalInstancesSelector x:Key="typicalInstanceSelector"
