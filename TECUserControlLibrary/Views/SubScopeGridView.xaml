@@ -20,7 +20,7 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=SubScopeSource}"
-                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedSubScope}"
                   AutoGenerateColumns="False"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}">

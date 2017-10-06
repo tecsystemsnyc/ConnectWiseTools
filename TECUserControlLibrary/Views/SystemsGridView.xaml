@@ -28,7 +28,7 @@
         <!--<Button Style="{StaticResource CollapseAll}" Content="Collapse All"/>-->
         <DataGrid ItemsSource="{Binding Path=SystemsSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding Path=ViewModel.SelectedSystem, Converter={utilities:IgnoreNewItemPlaceholderToNullConverter}}"
+                  SelectedItem="{Binding Path=ViewModel.SelectedSystem}"
                   dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
                   CanUserAddRows="{Binding Path=AllowAddingNew}"
                   Grid.Row="1">

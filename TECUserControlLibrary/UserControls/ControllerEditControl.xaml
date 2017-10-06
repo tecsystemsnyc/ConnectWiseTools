@@ -63,7 +63,7 @@
             <ComboBox ItemsSource="{Binding ManufacturerSelections}"
                               DisplayMemberPath="Name"
                           Grid.Row="3" Grid.Column="1" Margin="5"
-                         SelectedItem="{Binding SelectedController.Manufacturer, Converter={utilities:ManufacturerConverter}}"/>
+                         SelectedItem="{Binding SelectedController.Manufacturer}"/>
             <Grid Grid.Row="4" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30"/>

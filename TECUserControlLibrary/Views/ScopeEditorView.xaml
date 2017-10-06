@@ -22,7 +22,8 @@
                                            SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
                                            SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
                                            SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
-                                           SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"/>
+                                           SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
+                                           DropHandler="{Binding ElementName=scopeEditorView, Path=ViewModel}"/>
             </DataTemplate>
             <DataTemplate x:Key="instances">
                 <views:TypicalHierarchyView TypicalSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
@@ -30,12 +31,24 @@
                                             SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
                                             SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
                                             SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
-                                            SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
-                                            DropHandler="{Binding ElementName=scopeEditorView, Path=ViewModel}"/>
+                                            SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"/>
             </DataTemplate>
             <utilities:TypicalInstancesSelector x:Key="typicalInstanceSelector"
                                                 TypicalTemplate="{StaticResource typical}"
                                                 InstancesTemplate="{StaticResource instances}"/>
+            <DataTemplate x:Key="typicalDescription">
+                <Label>
+                    Adding scope to the typical system will add to all instances.
+                </Label>
+            </DataTemplate>
+            <DataTemplate x:Key="instancesDescription">
+                <Label>
+                    View and edit the properties of individual instances.
+                </Label>
+            </DataTemplate>
+            <utilities:TypicalInstancesSelector x:Key="typicalInstanceDescriptionSelector"
+                                                TypicalTemplate="{StaticResource typicalDescription}"
+                                                InstancesTemplate="{StaticResource instancesDescription}"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Background="{DynamicResource WindowBackgroundBrush}"
@@ -79,13 +92,21 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
                     <ComboBox Name="TypicalInstanceCombo" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.TypicalInstanceSelectorList}}"
                               DisplayMemberPath="Item1"
                               SelectedValuePath="Item2"
-                              SelectedIndex="0"/>
+                              SelectedIndex="0"
+                              VerticalAlignment="Center"/>
+                    <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
+                                      ContentTemplateSelector="{StaticResource typicalInstanceDescriptionSelector}"
+                                      Grid.Row="0" Grid.Column="1"/>
                     <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceSelector}"
-                                      Grid.Row="1"/>
+                                      Grid.Row="1" Grid.ColumnSpan="2"/>
                 </Grid>
                 
                 
