@@ -8,7 +8,7 @@
                        xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-                       x:Name="parent">
+                       x:Name="IOList">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,7 +18,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=IOList}">
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected">
@@ -30,9 +30,9 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label FontSize="14" Content="{Binding Type}"/>
-                        <Label Content="Qty:" Grid.Column="1"/>
-                        <Label Content="{Binding Quantity}" Grid.Column="2"/>
+                        <Label FontSize="10" Content="{Binding Type}"/>
+                        <Label FontSize="10" Content="Qty:" Grid.Column="1"/>
+                        <Label FontSize="10" Content="{Binding Quantity}" Grid.Column="2"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

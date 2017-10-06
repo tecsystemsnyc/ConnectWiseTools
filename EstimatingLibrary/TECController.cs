@@ -83,6 +83,10 @@ namespace EstimatingLibrary
         }
 
         //---Derived---
+        public List<TECIO> AllNetworkIOList
+        {
+            get { return getTotalNetworkIO().ListIO(); }
+        }
         public IOCollection AvailableNetworkIO
         {
             get { return getAvailableNetworkIO(); }
@@ -402,6 +406,18 @@ namespace EstimatingLibrary
                 totalIO.AddIO(module.IO);
             }
             return totalIO;
+        }
+        private IOCollection getTotalNetworkIO()
+        {
+            IOCollection networkIO = getTotalIO();
+            foreach(TECIO io in networkIO.ListIO())
+            {
+                if (!TECIO.NetworkIO.Contains(io.Type))
+                {
+                    networkIO.RemoveIO(io);
+                }
+            }
+            return networkIO;
         }
         private IOCollection getUsedIO()
         {

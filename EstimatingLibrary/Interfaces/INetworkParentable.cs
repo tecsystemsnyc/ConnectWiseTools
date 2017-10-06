@@ -12,5 +12,8 @@ namespace EstimatingLibrary.Interfaces
         string Name { get; }
         
         IEnumerable<TECNetworkConnection> ChildNetworkConnections { get; }
+
+        bool CanAddNetworkConnection(IOType ioType);
+        TECNetworkConnection AddNetworkConnection(bool isTypical, IEnumerable<TECElectricalMaterial> connectionTypes, IOType ioType);
     }
 }

@@ -94,6 +94,10 @@ namespace EstimatingLibrary
         public bool IsTypical { get; private set; }
 
         //Derived
+        public List<TECIO> AllNetworkIOList
+        {
+            get { return getNetworkIO().ListIO(); }
+        }
         public IOCollection AvailableNetworkIO
         {
             get { return getNetworkIO(); }
