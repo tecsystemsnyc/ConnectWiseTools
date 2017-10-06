@@ -1,0 +1,29 @@
+﻿<local:AddBaseView x:Class="TECUserControlLibrary.Views.AddViews.AddPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views.AddViews"
+                   xmlns:views="clr-namespace:TECUserControlLibrary.Views"
+             mc:Ignorable="d" 
+                   x:Name="addPanelView"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=addPanelView, Path=DataContext}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" DataContext="{Binding ToAdd}">
+            <Label Height="Auto" Content="{Binding Name}"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1"/>
+            <Button Content="Add" x:Name="doneButton" Click="doneButton_Click" Grid.Row="0"
+                    Command="{Binding AddCommand}"/>
+        </Grid>
+    </Grid>
+    </local:AddBaseView>

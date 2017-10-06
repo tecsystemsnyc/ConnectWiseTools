@@ -23,7 +23,8 @@
                                            SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
                                            SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
                                            SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.EditTab.Selected, Mode=OneWayToSource}"
-                                           DropHandler="{Binding ElementName=scopeEditorView, Path=ViewModel}"/>
+                                           DropHandler="{Binding ElementName=scopeEditorView, Path=ViewModel}"
+                                           ViewModel="{Binding ElementName=scopeEditorView, Path=ViewModel.TypicalEditVM}"/>
             </DataTemplate>
             <DataTemplate x:Key="instances">
                 <views:TypicalHierarchyView TypicalSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
