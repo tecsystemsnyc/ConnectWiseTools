@@ -277,8 +277,9 @@
                                 </Grid.RowDefinitions>
 
                                 <Label Content="Network Connections" FontSize="15" FontWeight="Bold"/>
-                                <usercontrols:NetworkConnectionListControl Source="{Binding ChildNetworkConnections}"
-                                                               Grid.Row="1"/>
+                                <usercontrols:NetworkConnectionListControl 
+                                    Source="{Binding ChildNetworkConnections}"
+                                    Grid.Row="1"/>
 
                                 <Expander ExpandDirection="Left" Grid.Column="1" Grid.RowSpan="2">
 
