@@ -22,8 +22,14 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="0"/>
             <Button Content="Add" x:Name="doneButton" Click="doneButton_Click" Grid.Row="0"
-                    Command="{Binding AddCommand}"/>
+                    Command="{Binding AddCommand}" Grid.Column="1"/>
         </Grid>
     </Grid>
     </local:AddBaseView>
