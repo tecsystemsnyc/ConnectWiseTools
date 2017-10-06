@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -23,16 +25,19 @@ namespace TECUserControlLibrary.ViewModels
         private ConnectableItem _selectedNonParentable;
         private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
 
-        private ObservableCollection<TECElectricalMaterial> _selectedConnectionTypes;
+        private ObservableCollection<TECElectricalMaterial> selectedConnectionTypes;
+        private IOType _selectedIOType;
         #endregion
 
         //Constructor
         public NetworkVM(TECBid bid, ChangeWatcher cw)
         {
+            setupCommands();
             Refresh(bid, cw);
         }
 
         #region Properties
+        //Item Properties
         public ReadOnlyObservableCollection<ConnectableItem> Parentables
         {
             get { return new ReadOnlyObservableCollection<ConnectableItem>(_parentables); }
@@ -85,12 +90,32 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public ICommand SetParentAsSelectedCommand { get; private set; }
+        
+        //Add Connection Properties
         public ReadOnlyObservableCollection<TECElectricalMaterial> AllConnectionTypes { get; private set; }
         public List<IOType> IOTypes { get; private set; }
         public ReadOnlyObservableCollection<TECElectricalMaterial> SelectedConnectionTypes
         {
-            get { return new ReadOnlyObservableCollection<TECElectricalMaterial>(_selectedConnectionTypes); }
+            get { return new ReadOnlyObservableCollection<TECElectricalMaterial>(selectedConnectionTypes); }
         }
+
+        public TECElectricalMaterial SelectedPotentialConnectionType { get; set; }
+        public TECElectricalMaterial SelectedChosenConnectionType { get; set; }
+        public IOType SelectedIOType
+        {
+            get { return _selectedIOType; }
+            set
+            {
+                _selectedIOType = value;
+                RaisePropertyChanged("SelectedIOType");
+            }
+        }
+
+        public ICommand AddConnectionTypeCommand { get; private set; }
+        public ICommand RemoveConnectionTypeCommand { get; private set; }
+
+        public ICommand AddConnectionCommand { get; private set; }
         #endregion
 
         #region Methods
@@ -100,7 +125,13 @@ namespace TECUserControlLibrary.ViewModels
             addBid(bid);
             resubscribe(cw);
         }
-
+        private void setupCommands()
+        {
+            SetParentAsSelectedCommand = new RelayCommand(setParentAsSelectedExecute);
+            AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
+            RemoveConnectionTypeCommand = new RelayCommand(removeConnectionTypeExecute);
+            AddConnectionCommand = new RelayCommand(addConnectionExecute, canAddConnection);
+        }
         private void resetCollections(TECBid bid)
         {
             connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
@@ -108,7 +139,7 @@ namespace TECUserControlLibrary.ViewModels
             _nonParentables = new ObservableCollection<ConnectableItem>();
             AllConnectionTypes = new ReadOnlyObservableCollection<TECElectricalMaterial>(bid.Catalogs.ConnectionTypes);
             IOTypes = new List<IOType>(TECIO.NetworkIO);
-            _selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
             RaisePropertyChanged("Parentables");
             RaisePropertyChanged("NonParentables");
             RaisePropertyChanged("AllConnectionTypes");
@@ -276,6 +307,46 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateIsConnected(child, isConnected);
                 }
+            }
+        }
+
+        private void setParentAsSelectedExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private void addConnectionTypeExecute()
+        {
+            selectedConnectionTypes.Add(SelectedPotentialConnectionType);
+            SelectedPotentialConnectionType = null;
+        }
+        private void removeConnectionTypeExecute()
+        {
+            selectedConnectionTypes.Remove(SelectedChosenConnectionType);
+            SelectedChosenConnectionType = null;
+        }
+        private void addConnectionExecute()
+        {
+            if (SelectedParentable.Item is INetworkParentable parentable)
+            {
+                parentable.AddNetworkConnection(false, selectedConnectionTypes, SelectedIOType);
+                selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+                RaisePropertyChanged("SelectedConnectionTypes");
+            }
+            else
+            {
+                throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
+            }
+        }
+        private bool canAddConnection()
+        {
+            if (SelectedParentable.Item is INetworkParentable parentable)
+            {
+                bool parentCanAdd = parentable.CanAddNetworkConnection(SelectedIOType);
+                return parentCanAdd;
+            }
+            else
+            {
+                throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
             }
         }
         #endregion

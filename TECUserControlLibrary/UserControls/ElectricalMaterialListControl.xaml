@@ -8,7 +8,7 @@
              xmlns:models ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-                       x:Name="parent">
+                       x:Name="ElectricalMaterialList">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,7 +18,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=ElectricalMaterialList}">
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected"
@@ -35,8 +35,8 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label FontSize="14" Content="{Binding Name}"/>
-                        <Label Content="{Binding Description}" Grid.Column="1"/>
+                        <Label FontSize="10" Content="{Binding Name}"/>
+                        <Label FontSize="10" Content="{Binding Description}" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
