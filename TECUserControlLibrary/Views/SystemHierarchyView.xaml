@@ -7,6 +7,8 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:addViews="clr-namespace:TECUserControlLibrary.Views.AddViews"
+             xmlns:addVMs="clr-namespace:TECUserControlLibrary.ViewModels.AddVMs"
              mc:Ignorable="d" 
              x:Name="systemHierarchyView"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -109,7 +111,12 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="Button.Click" SourceName="addDone">
+            <EventTrigger RoutedEvent="Button.Click" SourceName="addPoint">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="addViews:AddBaseView.Done">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
                 </EventTrigger.Actions>
@@ -152,7 +159,9 @@
                 <TextBlock Grid.Column="1" Text="{Binding SelectedSystem.Name, StringFormat='Components of {0}'}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button Content="Add" x:Name="addEquipment" Grid.Column="2" 
-                        Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
+                        Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"
+                        Command="{Binding ViewModel.AddEquipmentCommand}"
+                        CommandParameter="{Binding SelectedSystem}"/>
             </Grid>
         <Grid  Grid.Column="1" Grid.Row="1">
             <Grid.Resources>
@@ -189,7 +198,9 @@
             <TextBlock Grid.Column="1" Text="{Binding SelectedEquipment.Name, StringFormat='Points in {0}'}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button Content="Add" x:Name="addSubScope" Grid.Column="2" 
-                        Visibility="{Binding ElementName=systemHierarchyView, Path=SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"/>
+                    Visibility="{Binding ElementName=systemHierarchyView, Path=SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"
+                    Command="{Binding ViewModel.AddSubScopeCommand}"
+                    CommandParameter="{Binding SelectedEquipment}"/>
         </Grid>
         
         <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=SelectedEquipment.SubScope}"
@@ -208,7 +219,17 @@
                 <controls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                SelectedItem="{Binding SelectedDevice}" Grid.Row="1"
                                                DropHandler="{Binding DropHandler}"/>
-            <Label Content="Points" Grid.Row="2"/>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Points"/>
+                    <Button Content="Add" x:Name="addPoint" Grid.Column="1" 
+                            Visibility="{Binding ElementName=systemHierarchyView, Path=SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"
+                            Command="{Binding ViewModel.AddPointCommand}"
+                            CommandParameter="{Binding SelectedSubScope}"/>
+                </Grid>
                 <controls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                            Grid.Row="3"/>
         </Grid>
@@ -227,7 +248,31 @@
                     <Binding ElementName="systemHierarchyView" Path="ModalHeight"/>
                 </MultiBinding>
             </Grid.Margin>
-            <Button Content="Done" x:Name="addDone" Height="30" Width="40"/>
+            <ContentPresenter Content="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedVM}">
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type addVMs:AddSystemVM}">
+                        <addViews:AddSystemView ViewModel="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type addVMs:AddEquipmentVM}">
+                        <addViews:AddEquipmentView ViewModel="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type addVMs:AddSubScopeVM}">
+                        <addViews:AddSubScopeView ViewModel="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type addVMs:AddPointVM}">
+                        <addViews:AddPointView ViewModel="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type addVMs:AddControllerVM}">
+                        <addViews:AddControllerView ViewModel="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type addVMs:AddPanelVM}">
+                        <addViews:AddPanelView ViewModel="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type addVMs:AddMiscVM}">
+                        <addViews:AddMiscView ViewModel="{Binding}"/>
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
         </Grid>
     </Grid>
 </UserControl>

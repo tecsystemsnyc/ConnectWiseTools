@@ -33,7 +33,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
             Templates = templates;
-            testcollection = new ObservableCollection<TECEquipment>();
 
             setupEditTab();
             setupScopeCollection();
@@ -43,6 +42,7 @@ namespace TECUserControlLibrary.ViewModels
             setupAddControlledScope();
             setupMiscVM();
             setupInstanceSystemVM();
+            TypicalEditVM = new SystemHierarchyVM(Bid.Catalogs);
 
             DGTabIndex = GridIndex.Systems;
 
@@ -76,17 +76,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private ObservableCollection<TECEquipment> testcollection;
-        public ObservableCollection<TECEquipment> TESTCOLLECTION
-        {
-            get { return testcollection; }
-            set
-            {
-                testcollection = value;
-                RaisePropertyChanged("TESTCOLLECTION");
-            }
-        }
-
         #region Extensions
         public SystemsVM ScopeDataGrid { get; set; }
         public LocationVM LocationDataGrid { get; set; }
@@ -96,6 +85,7 @@ namespace TECUserControlLibrary.ViewModels
         public TypicalSystemVM TypicalSystemsTab { get; set; }
         public MiscCostsVM MiscVM { get; set; }
         public InstanceSystemVM InstanceSystemVM { get; set; }
+        public SystemHierarchyVM TypicalEditVM { get; set; }
         #endregion
 
         #region Interface Properties
@@ -157,6 +147,7 @@ namespace TECUserControlLibrary.ViewModels
             TypicalSystemsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
             InstanceSystemVM.Refresh(Bid);
+            TypicalEditVM.Refresh(Bid.Catalogs);
 
             LocationDataGrid.PropertyChanged += LocationDataGrid_PropertyChanged;
         }
