@@ -121,6 +121,11 @@
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="addViews:AddBaseView.Cancel">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
         </Grid.Triggers>
         <Grid DataContext="{Binding ElementName=systemHierarchyView}">
             <Grid.ColumnDefinitions>
@@ -236,11 +241,10 @@
 
     </Grid>
         <!--Add Modal-->
-        <Grid Background="LightGray"
-              Width="{Binding ElementName=systemHierarchyView, Path=ActualWidth}"
+        <Grid Width="{Binding ElementName=systemHierarchyView, Path=ActualWidth}"
               Height="{Binding ElementName=systemHierarchyView, Path=ActualHeight}">
             <Grid.Resources>
-                <sys:Double x:Key="marginEdge">40</sys:Double>
+                <sys:Double x:Key="marginEdge">0.0</sys:Double>
             </Grid.Resources>
             <Grid.Margin>
                 <MultiBinding Converter="{utilities:HeightToGridMarginConverter}">
@@ -248,7 +252,8 @@
                     <Binding ElementName="systemHierarchyView" Path="ModalHeight"/>
                 </MultiBinding>
             </Grid.Margin>
-            <ContentPresenter Content="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedVM}">
+            <ContentPresenter Content="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedVM}"
+                              Margin="40">
                 <ContentPresenter.Resources>
                     <DataTemplate DataType="{x:Type addVMs:AddSystemVM}">
                         <addViews:AddSystemView ViewModel="{Binding}"/>
