@@ -54,7 +54,8 @@
                                                SelectedSystem="{Binding Selected}"
                                                SelectedEquipment="{Binding Selected}"
                                                SelectedSubScope="{Binding Selected}"
-                                               SelectedDevice="{Binding Selected}"/>
+                                               SelectedDevice="{Binding Selected}"
+                                               ViewModel="{Binding ElementName=parent, Path=DataContext.SystemHierarchyVM}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="EquipmentTemplate">
