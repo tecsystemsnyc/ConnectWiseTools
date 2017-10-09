@@ -10,9 +10,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.UserControls;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
@@ -61,20 +63,6 @@ namespace TECUserControlLibrary.Views
 
 
 
-        public TECNetworkConnection SelectedConnection
-        {
-            get { return (TECNetworkConnection)GetValue(SelectedConnectionProperty); }
-            set { SetValue(SelectedConnectionProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for SelectedConnection.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedConnectionProperty =
-            DependencyProperty.Register("SelectedConnection", typeof(TECNetworkConnection), typeof(NetworkView), new PropertyMetadata(default(TECNetworkConnection)));
-
-
-
-
-
 
         public NetworkView()
         {
@@ -92,9 +80,14 @@ namespace TECUserControlLibrary.Views
             };
         }
 
-        private void DoneButton_Click(object sender, RoutedEventArgs e)
+        private void NetworkConnectionListControl_Selected(object sender, RoutedEventArgs e)
         {
-            SelectedConnection = null;
+            var selectedItem = (sender as NetworkConnectionListControl).SelectedItem;
+            if (selectedItem != null)
+            {
+                DoubleAnimation showChildren = new DoubleAnimation(0, HalfWidth, TimeSpan.FromMilliseconds(200));
+                BeginAnimation(ConnectableWidthProperty, showChildren);
+            }
         }
     }
 }
