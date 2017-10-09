@@ -266,12 +266,6 @@
                 <Border x:Name="ConnectionsBorder"
                     BorderBrush="Black" BorderThickness="1" Grid.Row="2">
                     <Border.Resources>
-                        <Storyboard x:Key="showChildren">
-                            <DoubleAnimation Storyboard.Target="{Binding ElementName=networkView}"
-                                                         Storyboard.TargetProperty="(local:NetworkView.ConnectableWidth)"
-                                                         From="0" To="{Binding ElementName=networkView, Path=HalfWidth}"
-                                                         BeginTime="0:0:0" Duration="0:0:0.2"/>
-                        </Storyboard>
                         <Storyboard x:Key="hideChildren">
                             <DoubleAnimation Storyboard.Target="{Binding ElementName=networkView}"
                                                          Storyboard.TargetProperty="(local:NetworkView.ConnectableWidth)"
@@ -281,11 +275,6 @@
                         <DataTemplate x:Key="displayConnections">
                             <Grid>
                                 <Grid.Triggers>
-                                    <EventTrigger RoutedEvent="usercontrols:NetworkConnectionListControl.Selected">
-                                        <EventTrigger.Actions>
-                                            <BeginStoryboard Storyboard="{StaticResource showChildren}"/>
-                                        </EventTrigger.Actions>
-                                    </EventTrigger>
                                     <EventTrigger RoutedEvent="Button.Click" SourceName="DoneButton">
                                         <EventTrigger.Actions>
                                             <BeginStoryboard Storyboard="{StaticResource hideChildren}"/>
@@ -294,7 +283,7 @@
                                 </Grid.Triggers>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition Width="{Binding ElementName=networkView, Path=ConnectableWidth}"/>
+                                    <ColumnDefinition x:Name="ConnectableColumn" Width="{Binding ElementName=networkView, Path=ConnectableWidth}"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -304,10 +293,11 @@
                                 <Label Content="Network Connections" FontSize="15" FontWeight="Bold"/>
                                 <usercontrols:NetworkConnectionListControl 
                                     Source="{Binding ChildNetworkConnections}"
-                                    SelectedItem="{Binding ElementName=networkView, Path=SelectedConnection}"
+                                    SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedConnection}"
+                                    Selected="NetworkConnectionListControl_Selected"
                                     Grid.Row="1"/>
 
-                                <Button x:Name="DoneButton" Content="Done" Grid.Column="1" Click="DoneButton_Click"/>
+                                <Button x:Name="DoneButton" Content="Done" Grid.Column="1" Command="{Binding ElementName=networkView, Path=ViewModel.DoneConnectionCommand}"/>
                             </Grid>
                         </DataTemplate>
                         <utilities:NetworkParentableSelector x:Key="DisplayConnectionsSelector"
@@ -316,7 +306,6 @@
                     </Border.Resources>
                     <ContentPresenter Content="{Binding SelectedItem.Item}" ContentTemplateSelector="{StaticResource DisplayConnectionsSelector}"/>
                 </Border>
-                
             </Grid>
         </Border>
     </Grid>

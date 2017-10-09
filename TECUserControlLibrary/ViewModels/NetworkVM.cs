@@ -73,12 +73,12 @@ namespace TECUserControlLibrary.ViewModels
             }
             set
             {
-                _selectedParentable = value;
-                RaisePropertyChanged("SelectedParentable");
-                _selectedNonParentable = null;
-                RaisePropertyChanged("SelectedNonParentable");
                 if (!isConnecting)
                 {
+                    _selectedParentable = value;
+                    RaisePropertyChanged("SelectedParentable");
+                    _selectedNonParentable = null;
+                    RaisePropertyChanged("SelectedNonParentable");
                     SelectedItem = SelectedParentable;
                 }
             }
@@ -91,12 +91,12 @@ namespace TECUserControlLibrary.ViewModels
             }
             set
             {
-                _selectedNonParentable = value;
-                RaisePropertyChanged("SelectedNonParentable");
-                _selectedParentable = null;
-                RaisePropertyChanged("SelectedParentable");
                 if (!isConnecting)
                 {
+                    _selectedNonParentable = value;
+                    RaisePropertyChanged("SelectedNonParentable");
+                    _selectedParentable = null;
+                    RaisePropertyChanged("SelectedParentable");
                     SelectedItem = SelectedNonParentable;
                 }
             }
@@ -145,6 +145,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand AddConnectionCommand { get; private set; }
 
+        public ICommand DoneConnectionCommand { get; private set; }
+
         //Add Controller Properties
         public TECNetworkConnection SelectedConnection
         {
@@ -172,6 +174,7 @@ namespace TECUserControlLibrary.ViewModels
             AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute, canAddConnectionType);
             RemoveConnectionTypeCommand = new RelayCommand(removeConnectionTypeExecute, canRemoveConnectionType);
             AddConnectionCommand = new RelayCommand(addConnectionExecute, canAddConnection);
+            DoneConnectionCommand = new RelayCommand(doneConnectionExecute);
         }
         private void resetCollections(TECBid bid)
         {
@@ -386,6 +389,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
             }
+        }
+        private void doneConnectionExecute()
+        {
+            SelectedConnection = null;
         }
 
         private bool canAddConnectionType()
