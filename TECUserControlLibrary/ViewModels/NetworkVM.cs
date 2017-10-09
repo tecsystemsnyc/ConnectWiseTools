@@ -17,6 +17,8 @@ namespace TECUserControlLibrary.ViewModels
     public class NetworkVM : ViewModelBase
     {
         #region Fields
+        bool isConnecting;
+
         private ObservableCollection<ConnectableItem> _parentables;
         private ObservableCollection<ConnectableItem> _nonParentables;
 
@@ -26,7 +28,11 @@ namespace TECUserControlLibrary.ViewModels
         private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
 
         private ObservableCollection<TECElectricalMaterial> selectedConnectionTypes;
+        private TECElectricalMaterial _selectedPotentialConnectionType;
+        private TECElectricalMaterial _selectedChosenConnectionType;
         private IOType _selectedIOType;
+
+        private TECNetworkConnection _selectedConnection;
         #endregion
 
         //Constructor
@@ -71,7 +77,10 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedParentable");
                 _selectedNonParentable = null;
                 RaisePropertyChanged("SelectedNonParentable");
-                SelectedItem = SelectedParentable;
+                if (!isConnecting)
+                {
+                    SelectedItem = SelectedParentable;
+                }
             }
         }
         public ConnectableItem SelectedNonParentable
@@ -86,7 +95,10 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedNonParentable");
                 _selectedParentable = null;
                 RaisePropertyChanged("SelectedParentable");
-                SelectedItem = SelectedNonParentable;
+                if (!isConnecting)
+                {
+                    SelectedItem = SelectedNonParentable;
+                }
             }
         }
 
@@ -100,8 +112,24 @@ namespace TECUserControlLibrary.ViewModels
             get { return new ReadOnlyObservableCollection<TECElectricalMaterial>(selectedConnectionTypes); }
         }
 
-        public TECElectricalMaterial SelectedPotentialConnectionType { get; set; }
-        public TECElectricalMaterial SelectedChosenConnectionType { get; set; }
+        public TECElectricalMaterial SelectedPotentialConnectionType
+        {
+            get { return _selectedPotentialConnectionType; }
+            set
+            {
+                _selectedPotentialConnectionType = value;
+                RaisePropertyChanged("SelectedPotentialConnectionType");
+            }
+        }
+        public TECElectricalMaterial SelectedChosenConnectionType
+        {
+            get { return _selectedChosenConnectionType; }
+            set
+            {
+                _selectedChosenConnectionType = value;
+                RaisePropertyChanged("SelectedChosenConnectionType");
+            }
+        }
         public IOType SelectedIOType
         {
             get { return _selectedIOType; }
@@ -116,11 +144,24 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand RemoveConnectionTypeCommand { get; private set; }
 
         public ICommand AddConnectionCommand { get; private set; }
+
+        //Add Controller Properties
+        public TECNetworkConnection SelectedConnection
+        {
+            get { return _selectedConnection; }
+            set
+            {
+                _selectedConnection = value;
+                RaisePropertyChanged("SelectedConnection");
+                handleSelectedConnectionChanged(SelectedConnection);
+            }
+        }
         #endregion
 
         #region Methods
         public void Refresh(TECBid bid, ChangeWatcher cw)
         {
+            isConnecting = false;
             resetCollections(bid);
             addBid(bid);
             resubscribe(cw);
@@ -128,8 +169,8 @@ namespace TECUserControlLibrary.ViewModels
         private void setupCommands()
         {
             SetParentAsSelectedCommand = new RelayCommand(setParentAsSelectedExecute);
-            AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
-            RemoveConnectionTypeCommand = new RelayCommand(removeConnectionTypeExecute);
+            AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute, canAddConnectionType);
+            RemoveConnectionTypeCommand = new RelayCommand(removeConnectionTypeExecute, canRemoveConnectionType);
             AddConnectionCommand = new RelayCommand(addConnectionExecute, canAddConnection);
         }
         private void resetCollections(TECBid bid)
@@ -312,7 +353,16 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setParentAsSelectedExecute()
         {
-            throw new NotImplementedException();
+            INetworkConnectable parent = SelectedItem.Item.ParentConnection.ParentController;
+            ConnectableItem selected = connectableDictionary[parent];
+            if (selected.Item is INetworkParentable)
+            {
+                SelectedParentable = selected;
+            }
+            else
+            {
+                SelectedNonParentable = selected;
+            }
         }
         private void addConnectionTypeExecute()
         {
@@ -337,6 +387,15 @@ namespace TECUserControlLibrary.ViewModels
                 throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
             }
         }
+
+        private bool canAddConnectionType()
+        {
+            return (SelectedPotentialConnectionType != null);
+        }
+        private bool canRemoveConnectionType()
+        {
+            return (SelectedChosenConnectionType != null);
+        }
         private bool canAddConnection()
         {
             if (SelectedParentable.Item is INetworkParentable parentable)
@@ -347,6 +406,18 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
+            }
+        }
+
+        private void handleSelectedConnectionChanged(TECNetworkConnection selected)
+        {
+            if (selected != null)
+            {
+                isConnecting = true;
+            }
+            else
+            {
+                isConnecting = false;
             }
         }
         #endregion

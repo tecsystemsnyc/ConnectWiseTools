@@ -9,7 +9,7 @@
              xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
-             x:Name="parent"
+             x:Name="networkView"
              d:DesignHeight="720" d:DesignWidth="1200">
 
     <UserControl.Resources>
@@ -22,7 +22,7 @@
     </UserControl.Resources>
 
     <!--Main Grid-->
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+    <Grid DataContext="{Binding ElementName=networkView, Path=ViewModel}"
         Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -153,7 +153,7 @@
                         <ContentPresenter Content="{Binding ParentConnection}" Grid.Row="1">
                             <ContentPresenter.Resources>
                                 <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Button Command="{Binding ElementName=parent, Path=ViewModel.SetParentAsSelectedCommand}"
+                                    <Button Command="{Binding ElementName=networkView, Path=ViewModel.SetParentAsSelectedCommand}"
                                         Margin="5" Content="View Parent Details"/>
                                 </DataTemplate>
                             </ContentPresenter.Resources>
@@ -209,7 +209,7 @@
                 <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1">
                     <Border.Resources>
                         <DataTemplate x:Key="addConnection">
-                            <Expander DataContext="{Binding ElementName=parent, Path=ViewModel}">
+                            <Expander DataContext="{Binding ElementName=networkView, Path=ViewModel}">
                                 <Expander.Header>
                                     <Label Content="Add Connection" FontSize="15" FontWeight="Bold"/>
                                 </Expander.Header>
@@ -263,13 +263,38 @@
                 </Border>
 
                 <!--Connections-->
-                <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2">
+                <Border x:Name="ConnectionsBorder"
+                    BorderBrush="Black" BorderThickness="1" Grid.Row="2">
                     <Border.Resources>
+                        <Storyboard x:Key="showChildren">
+                            <DoubleAnimation Storyboard.Target="{Binding ElementName=networkView}"
+                                                         Storyboard.TargetProperty="(local:NetworkView.ConnectableWidth)"
+                                                         From="0" To="{Binding ElementName=networkView, Path=HalfWidth}"
+                                                         BeginTime="0:0:0" Duration="0:0:0.2"/>
+                        </Storyboard>
+                        <Storyboard x:Key="hideChildren">
+                            <DoubleAnimation Storyboard.Target="{Binding ElementName=networkView}"
+                                                         Storyboard.TargetProperty="(local:NetworkView.ConnectableWidth)"
+                                                         To="0" From="{Binding ElementName=networkView, Path=HalfWidth}"
+                                                         BeginTime="0:0:0" Duration="0:0:0.2"/>
+                        </Storyboard>
                         <DataTemplate x:Key="displayConnections">
-                            <Grid >
+                            <Grid>
+                                <Grid.Triggers>
+                                    <EventTrigger RoutedEvent="usercontrols:NetworkConnectionListControl.Selected">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard Storyboard="{StaticResource showChildren}"/>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="Button.Click" SourceName="DoneButton">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard Storyboard="{StaticResource hideChildren}"/>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                                </Grid.Triggers>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="{Binding ElementName=networkView, Path=ConnectableWidth}"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -277,12 +302,12 @@
                                 </Grid.RowDefinitions>
 
                                 <Label Content="Network Connections" FontSize="15" FontWeight="Bold"/>
-                                <usercontrols:NetworkConnectionListControl Source="{Binding ChildNetworkConnections}"
-                                                               Grid.Row="1"/>
+                                <usercontrols:NetworkConnectionListControl 
+                                    Source="{Binding ChildNetworkConnections}"
+                                    SelectedItem="{Binding ElementName=networkView, Path=SelectedConnection}"
+                                    Grid.Row="1"/>
 
-                                <Expander ExpandDirection="Left" Grid.Column="1" Grid.RowSpan="2">
-
-                                </Expander>
+                                <Button x:Name="DoneButton" Content="Done" Grid.Column="1" Click="DoneButton_Click"/>
                             </Grid>
                         </DataTemplate>
                         <utilities:NetworkParentableSelector x:Key="DisplayConnectionsSelector"

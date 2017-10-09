@@ -23,20 +23,22 @@
                   SelectionChanged="ListView_Selected">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Label FontSize="14" Content="{Binding Item.Name}"/>
-                        <Label Content="{Binding Item.Description}" Grid.Column="1"/>
-                        <Label Content="Connected To BMS:" Grid.Row="1"/>
-                        <Label Content="{Binding IsConnected}" Grid.Row="1" Grid.Column="1"/>
-                    </Grid>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Label FontSize="14" Content="{Binding Item.Name}"/>
+                            <Label Content="{Binding Item.Description}" Grid.Column="1"/>
+                            <Label Content="Connected To BMS:" Grid.Row="1"/>
+                            <Label Content="{Binding IsConnected}" Grid.Row="1" Grid.Column="1"/>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
