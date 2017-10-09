@@ -12,9 +12,12 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.UserControls;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
@@ -130,6 +133,48 @@ namespace TECUserControlLibrary.Views
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
 
+        public TECController SelectedController
+        {
+            get { return (TECController)GetValue(SelectedControllerProperty); }
+            set { SetValue(SelectedControllerProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedControllerProperty =
+            DependencyProperty.Register("SelectedController", typeof(TECController),
+                typeof(SystemHierarchyView), new FrameworkPropertyMetadata(default(TECController))
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
+
+        public TECPanel SelectedPanel
+        {
+            get { return (TECPanel)GetValue(SelectedPanelProperty); }
+            set { SetValue(SelectedPanelProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedPanelProperty =
+            DependencyProperty.Register("SelectedPanel", typeof(TECPanel),
+                typeof(SystemHierarchyView), new FrameworkPropertyMetadata(default(TECPanel))
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
+
+        public TECMisc SelectedMisc
+        {
+            get { return (TECMisc)GetValue(SelectedMiscProperty); }
+            set { SetValue(SelectedMiscProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedMiscProperty =
+            DependencyProperty.Register("SelectedMisc", typeof(TECMisc),
+                typeof(SystemHierarchyView), new FrameworkPropertyMetadata(default(TECMisc))
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
+
         public IDropTarget DropHandler
         {
             get { return (IDropTarget)GetValue(DropHandlerProperty); }
@@ -151,9 +196,7 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(SystemHierarchyVM), typeof(SystemHierarchyView), new PropertyMetadata(default(SystemHierarchyVM)));
-
-
-
+        
         public SystemHierarchyView()
         {
             InitializeComponent();
@@ -186,17 +229,44 @@ namespace TECUserControlLibrary.Views
             };
         }
 
-        private void BackToEquipment_Click(object sender, RoutedEventArgs e)
+        private void systemBack_Click(object sender, RoutedEventArgs e)
         {
-            SelectedSubScope = null;
-            SelectedEquipment = null;
-            SelectedDevice = null;
+            EquipmentListControl eList = UIHelpers.FindVisualChild<EquipmentListControl>(this);
+            if(eList != null)
+            {
+                eList.SelectedItem = null;
+            }
         }
-        private void BackToSystem_Click(object sender, RoutedEventArgs e)
+
+        private void equipmentBack_Click(object sender, RoutedEventArgs e)
         {
-            SelectedEquipment = null;
-            SelectedSystem = null;
+            subScopeList.SelectedItem = null;
         }
-        
+
+        private void componentComboBox_Selected(object sender, RoutedEventArgs e)
+        {
+            
+            EquipmentListControl eList = UIHelpers.FindVisualChild<EquipmentListControl>(this);
+            if (eList != null) { 
+                if(eList.SelectedItem != null)
+                {
+
+                    eList.SelectedItem = null;
+                    Storyboard moveBack = (Storyboard)FindResource("systemMoveBack");
+                    moveBack.Begin();
+                }
+            }
+            ControllerListControl cList = UIHelpers.FindVisualChild<ControllerListControl>(this);
+            if (cList != null)
+            {
+                cList.SelectedItem = null;
+            }
+            PanelListControl pList = UIHelpers.FindVisualChild<PanelListControl>(this);
+            if (pList != null)
+            {
+                pList.SelectedItem = null;
+            }
+            
+        }
     }
 }

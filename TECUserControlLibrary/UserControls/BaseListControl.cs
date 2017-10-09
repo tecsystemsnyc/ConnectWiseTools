@@ -73,5 +73,20 @@ namespace TECUserControlLibrary.UserControls
         {
             RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
+
+        public static readonly RoutedEvent DroppedEvent =
+        EventManager.RegisterRoutedEvent("Dropped", RoutingStrategy.Bubble,
+        typeof(RoutedEventHandler), typeof(BaseListControl<T>));
+
+        public event RoutedEventHandler Dropped
+        {
+            add { AddHandler(DroppedEvent, value); }
+            remove { RemoveHandler(DroppedEvent, value); }
+        }
+
+        protected void ListView_Dropped(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(DroppedEvent, this));
+        }
     }
 }

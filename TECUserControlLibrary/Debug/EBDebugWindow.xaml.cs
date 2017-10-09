@@ -107,6 +107,18 @@ namespace TECUserControlLibrary.Debug
             equipment.SubScope.Add(ss);
             typical.Equipment.Add(equipment);
 
+            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), true);
+            controller.Name = "Test Controller";
+            typical.AddController(controller);
+
+            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), true);
+            panel.Name = "Test Panel";
+            typical.Panels.Add(panel);
+
+            TECMisc misc = new TECMisc(CostType.TEC, true);
+            misc.Name = "test Misc";
+            typical.MiscCosts.Add(misc);
+
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
         }
