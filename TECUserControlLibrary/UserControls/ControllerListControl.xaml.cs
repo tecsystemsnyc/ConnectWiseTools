@@ -21,6 +21,7 @@ namespace TECUserControlLibrary.UserControls
     /// </summary>
     public partial class ControllerListControl : BaseListControl<TECController>
     {
+
         public ControllerListControl()
         {
             InitializeComponent();
