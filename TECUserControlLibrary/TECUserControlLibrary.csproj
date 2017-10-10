@@ -119,6 +119,9 @@
     <Compile Include="UserControls\ConnectableItemListControl.xaml.cs">
       <DependentUpon>ConnectableItemListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ItemControls\ControllerItemControl.xaml.cs">
+      <DependentUpon>ControllerItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\SubScopeItemControl.xaml.cs">
       <DependentUpon>SubScopeItemControl.xaml</DependentUpon>
     </Compile>
@@ -432,6 +435,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ConnectableItemListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\ControllerItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

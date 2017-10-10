@@ -29,20 +29,7 @@
                     <ContentPresenter Content="{Binding}">
                         <ContentPresenter.Resources>
                             <DataTemplate DataType="{x:Type models:TECController}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30"/>
-                                        <RowDefinition Height="30"/>
-                                    </Grid.RowDefinitions>
-                                    <Label FontSize="14" Content="{Binding Name}"/>
-                                    <Label Content="{Binding Description}" Grid.Column="1"/>
-                                    <Label Content="Type: " Grid.Row="1"/>
-                                    <Label Content="{Binding Type.Name}" Grid.Row="1" Grid.Column="1"/>
-                                </Grid>
+                                <itemControls:ControllerItemControl Controller="{Binding}"/>
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type models:TECSubScope}">
                                 <itemControls:SubScopeItemControl SubScope="{Binding}"/>
