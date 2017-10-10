@@ -283,7 +283,7 @@
                                 </Grid.Triggers>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition x:Name="ConnectableColumn" Width="{Binding ElementName=networkView, Path=ConnectableWidth}"/>
+                                    <ColumnDefinition Width="{Binding ElementName=networkView, Path=ConnectableWidth}"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -291,13 +291,36 @@
                                 </Grid.RowDefinitions>
 
                                 <Label Content="Network Connections" FontSize="15" FontWeight="Bold"/>
-                                <usercontrols:NetworkConnectionListControl 
+                                <usercontrols:NetworkConnectionListControl  x:Name="Connections"
                                     Source="{Binding ChildNetworkConnections}"
                                     SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedConnection}"
                                     Selected="NetworkConnectionListControl_Selected"
                                     Grid.Row="1"/>
 
-                                <Button x:Name="DoneButton" Content="Done" Grid.Column="1" Command="{Binding ElementName=networkView, Path=ViewModel.DoneConnectionCommand}"/>
+                                <!--Add to Connection-->
+                                <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.RowSpan="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Content="Add Connectables to Connection" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+                                        <usercontrols:NetworkConnectableListControl
+                                        Source="{Binding ElementName=Connections, Path=SelectedItem.Children}"
+                                        SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedChildConnectable}"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                            Margin="5"/>
+                                        <Button Content="Remove" Grid.Row="2" Margin="5"/>
+                                        <Button x:Name="DoneButton" Content="Done" Grid.Column="1" Grid.Row="2" Margin="5"
+                                            Command="{Binding ElementName=networkView, Path=ViewModel.DoneConnectionCommand}"/>
+                                    </Grid>
+                                </Border>
                             </Grid>
                         </DataTemplate>
                         <utilities:NetworkParentableSelector x:Key="DisplayConnectionsSelector"

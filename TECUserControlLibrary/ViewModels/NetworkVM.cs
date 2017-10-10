@@ -33,6 +33,8 @@ namespace TECUserControlLibrary.ViewModels
         private IOType _selectedIOType;
 
         private TECNetworkConnection _selectedConnection;
+
+        private INetworkConnectable _selectedChildConnectable;
         #endregion
 
         //Constructor
@@ -137,6 +139,19 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedIOType = value;
                 RaisePropertyChanged("SelectedIOType");
+            }
+        }
+
+        public INetworkConnectable SelectedChildConnectable
+        {
+            get
+            {
+                return _selectedChildConnectable;
+            }
+            set
+            {
+                _selectedChildConnectable = value;
+                RaisePropertyChanged("SelectedChildConnectable");
             }
         }
 

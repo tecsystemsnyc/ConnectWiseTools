@@ -1,0 +1,56 @@
+﻿<local:BaseListControl x:TypeArguments="interfaces:INetworkConnectable" x:Class="TECUserControlLibrary.UserControls.NetworkConnectableListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+                       xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
+                       xmlns:dd="urn:gong-wpf-dragdrop"
+                       xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
+             x:Name="parent"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=parent}">
+        <ListView ItemsSource="{Binding Source}" 
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectionChanged="ListView_Selected"
+                  dd:DragDrop.DropHandler="{Binding DropHandler}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter Content="{Binding}">
+                        <ContentPresenter.Resources>
+                            <DataTemplate DataType="{x:Type models:TECController}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <Label FontSize="14" Content="{Binding Name}"/>
+                                    <Label Content="{Binding Description}" Grid.Column="1"/>
+                                    <Label Content="Type: " Grid.Row="1"/>
+                                    <Label Content="{Binding Type.Name}" Grid.Row="1" Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type models:TECSubScope}">
+                                <itemControls:SubScopeItemControl SubScope="{Binding}"/>
+                            </DataTemplate>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</local:BaseListControl>

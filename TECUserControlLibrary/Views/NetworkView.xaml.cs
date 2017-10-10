@@ -49,8 +49,6 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty ConnectableWidthProperty =
             DependencyProperty.Register("ConnectableWidth", typeof(double), typeof(NetworkView), new PropertyMetadata(0.0));
 
-
-
         public double HalfWidth
         {
             get { return (double)GetValue(HalfWidthProperty); }
@@ -60,9 +58,6 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for HalfWidth.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty HalfWidthProperty =
             DependencyProperty.Register("HalfWidth", typeof(double), typeof(NetworkView), new PropertyMetadata(0.0));
-
-
-
 
         public NetworkView()
         {
