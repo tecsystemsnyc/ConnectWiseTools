@@ -285,32 +285,38 @@
                     <Binding ElementName="systemHierarchyView" Path="ModalHeight"/>
                 </MultiBinding>
             </Grid.Margin>
-            <ContentPresenter Content="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedVM}"
-                              Margin="40">
-                <ContentPresenter.Resources>
-                    <DataTemplate DataType="{x:Type addVMs:AddSystemVM}">
-                        <addViews:AddSystemView ViewModel="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type addVMs:AddEquipmentVM}">
-                        <addViews:AddEquipmentView ViewModel="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type addVMs:AddSubScopeVM}">
-                        <addViews:AddSubScopeView ViewModel="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type addVMs:AddPointVM}">
-                        <addViews:AddPointView ViewModel="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type addVMs:AddControllerVM}">
-                        <addViews:AddControllerView ViewModel="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type addVMs:AddPanelVM}">
-                        <addViews:AddPanelView ViewModel="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type addVMs:AddMiscVM}">
-                        <addViews:AddMiscView ViewModel="{Binding}"/>
-                    </DataTemplate>
-                </ContentPresenter.Resources>
-            </ContentPresenter>
+            <Border BorderBrush="LightGray" Background="{StaticResource EBWindowBackgroundBrush}" 
+                    BorderThickness="2" CornerRadius="8" Margin="20">
+                <Border.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" Softness="1" 
+                                            Opacity="0.5"/>
+                </Border.BitmapEffect>
+                <ContentPresenter Content="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedVM}">
+                    <ContentPresenter.Resources>
+                        <DataTemplate DataType="{x:Type addVMs:AddSystemVM}">
+                            <addViews:AddSystemView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddEquipmentVM}">
+                            <addViews:AddEquipmentView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddSubScopeVM}">
+                            <addViews:AddSubScopeView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddPointVM}">
+                            <addViews:AddPointView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddControllerVM}">
+                            <addViews:AddControllerView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddPanelVM}">
+                            <addViews:AddPanelView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddMiscVM}">
+                            <addViews:AddMiscView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

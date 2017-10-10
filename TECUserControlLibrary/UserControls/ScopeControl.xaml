@@ -27,6 +27,6 @@
             <TextBlock Text="{Binding Path=DescriptionLabel}" Grid.Row="1"
                        ToolTip="{Binding  Path=DescriptionLabel}"
                         FontSize="8" Margin="2" TextWrapping="Wrap"/>
-    </Grid>
+        </Grid>
     </Border>
 </UserControl>
