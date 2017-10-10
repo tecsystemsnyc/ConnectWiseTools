@@ -42,6 +42,7 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate SubScopeTemplate { get; set; }
         public DataTemplate ControllerTemplate { get; set; }
         public DataTemplate PanelTemplate { get; set; }
+        public DataTemplate MiscTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -59,6 +60,8 @@ namespace TECUserControlLibrary.Utilities
                         return ControllerTemplate;
                     case ScopeTemplateIndex.Panel:
                         return PanelTemplate;
+                    case ScopeTemplateIndex.Misc:
+                        return MiscTemplate;
                     default:
                         return SystemTemplate;
                 }
@@ -126,6 +129,46 @@ namespace TECUserControlLibrary.Utilities
             else
             {
                 return InstancesTemplate;
+            }
+        }
+    }
+
+    public class MaterialTypeSelector : DataTemplateSelector
+    {
+        public DataTemplate DeviceTemplate { get; set; }
+        public DataTemplate ConnectionTypeTemplate { get; set; }
+        public DataTemplate ConduitTypeTemplate { get; set; }
+        public DataTemplate ControllerTypeTemplate { get; set; }
+        public DataTemplate PanelTypeTemplate { get; set; }
+        public DataTemplate AssociatedCostTemplate { get; set; }
+        public DataTemplate IOModuleTemplate { get; set; }
+        
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            if (item is MaterialType index)
+            {
+                switch (index)
+                {
+                    case MaterialType.Device:
+                        return DeviceTemplate;
+                    case MaterialType.ConnectionType:
+                        return ConnectionTypeTemplate;
+                    case MaterialType.ConduitType:
+                        return ConduitTypeTemplate;
+                    case MaterialType.ControllerType:
+                        return ControllerTypeTemplate;
+                    case MaterialType.PanelType:
+                        return PanelTypeTemplate;
+                    case MaterialType.AssociatedCost:
+                        return AssociatedCostTemplate;
+                    case MaterialType.IOModule:
+                        return IOModuleTemplate;
+                }
+                return DeviceTemplate;
+            }
+            else
+            {
+                return DeviceTemplate;
             }
         }
     }

@@ -102,12 +102,16 @@
                                                               SelectedItem ="{Binding Selected}"/>
                 </Grid>
             </DataTemplate>
+            <DataTemplate x:Key="MiscTemplate">
+                <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
+            </DataTemplate>
             <utilities:ScopeTemplateSelector x:Key="ScopeSelector"
                                              SystemTemplate="{StaticResource SystemTemplate}"
                                              EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                              SubScopeTemplate="{StaticResource SubScopeTemplate}"
                                              ControllerTemplate="{StaticResource ControllerTemplate}"
-                                             PanelTemplate="{StaticResource PanelTemplate}"/>
+                                             PanelTemplate="{StaticResource PanelTemplate}"
+                                             MiscTemplate="{StaticResource MiscTemplate}"/>
 
             <DataTemplate DataType="{x:Type localMVVM:MainViewModel}">
                 <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
