@@ -316,7 +316,8 @@
                                         Grid.Row="1"
                                         Grid.ColumnSpan="2"
                                             Margin="5"/>
-                                        <Button Content="Remove" Grid.Row="2" Margin="5"/>
+                                        <Button Content="Remove" Grid.Row="2" Margin="5"
+                                                Command="{Binding ElementName=networkView, Path=ViewModel.RemoveConnectableCommand}"/>
                                         <Button x:Name="DoneButton" Content="Done" Grid.Column="1" Grid.Row="2" Margin="5"
                                             Command="{Binding ElementName=networkView, Path=ViewModel.DoneConnectionCommand}"/>
                                     </Grid>

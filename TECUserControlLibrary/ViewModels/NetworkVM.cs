@@ -105,7 +105,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand SetParentAsSelectedCommand { get; private set; }
-        
+
         //Add Connection Properties
         public ReadOnlyObservableCollection<TECElectricalMaterial> AllConnectionTypes { get; private set; }
         public List<IOType> IOTypes { get; private set; }
@@ -162,6 +162,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand DoneConnectionCommand { get; private set; }
 
+        public ICommand RemoveConnectableCommand { get; private set; }
+
         //Add Controller Properties
         public TECNetworkConnection SelectedConnection
         {
@@ -190,6 +192,7 @@ namespace TECUserControlLibrary.ViewModels
             RemoveConnectionTypeCommand = new RelayCommand(removeConnectionTypeExecute, canRemoveConnectionType);
             AddConnectionCommand = new RelayCommand(addConnectionExecute, canAddConnection);
             DoneConnectionCommand = new RelayCommand(doneConnectionExecute);
+            RemoveConnectableCommand = new RelayCommand(removeConnectableExecute, canRemoveConnectable);
         }
         private void resetCollections(TECBid bid)
         {
@@ -219,9 +222,9 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         addConnectableItem(controller);
                     }
-                    foreach(TECEquipment equip in system.Equipment)
+                    foreach (TECEquipment equip in system.Equipment)
                     {
-                        foreach(TECSubScope ss in equip.SubScope)
+                        foreach (TECSubScope ss in equip.SubScope)
                         {
                             addConnectableItem(ss);
                         }
@@ -271,9 +274,9 @@ namespace TECUserControlLibrary.ViewModels
             ConnectableItem item = connectableDictionary[connectable];
             if (connectable is INetworkParentable parentable)
             {
-                foreach(TECNetworkConnection connection in parentable.ChildNetworkConnections)
+                foreach (TECNetworkConnection connection in parentable.ChildNetworkConnections)
                 {
-                    foreach(INetworkConnectable child in connection.Children)
+                    foreach (INetworkConnectable child in connection.Children)
                     {
                         updateIsConnected(child, false);
                     }
@@ -409,6 +412,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             SelectedConnection = null;
         }
+        private void removeConnectableExecute()
+        {
+            SelectedConnection.RemoveINetworkConnectable(SelectedChildConnectable);
+        }
 
         private bool canAddConnectionType()
         {
@@ -429,6 +436,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
             }
+        }
+        private bool canRemoveConnectable()
+        {
+            return (SelectedChildConnectable != null);
         }
 
         private void handleSelectedConnectionChanged(TECNetworkConnection selected)
