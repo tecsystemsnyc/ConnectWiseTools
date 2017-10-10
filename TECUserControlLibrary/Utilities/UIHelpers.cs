@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.Utilities
@@ -419,6 +420,49 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, TypicalInstanceEnum>("Physical Instances", TypicalInstanceEnum.Instance)
         };
 
+        public static List<Tuple<string, MaterialType>> MaterialSelectorList = new List<Tuple<string, MaterialType>>
+        {
+            new Tuple<string, MaterialType>("Devices", MaterialType.Device),
+            new Tuple<string, MaterialType>("Wiring", MaterialType.ConnectionType),
+            new Tuple<string, MaterialType>("Conduit", MaterialType.ConduitType),
+            new Tuple<string, MaterialType>("Controller Types", MaterialType.ControllerType),
+            new Tuple<string, MaterialType>("Panel Types", MaterialType.PanelType),
+            new Tuple<string, MaterialType>("Associated Costs", MaterialType.AssociatedCost),
+            new Tuple<string, MaterialType>("IO Modules", MaterialType.IOModule)
+        };
+
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
+       where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+
+        public static childItem FindVisualChild<childItem>(DependencyObject obj)
+            where childItem : DependencyObject
+        {
+            foreach (childItem child in FindVisualChildren<childItem>(obj))
+            {
+                return child;
+            }
+
+            return null;
+        }
+
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };
@@ -426,14 +470,14 @@ namespace TECUserControlLibrary.Utilities
     public enum TemplateGridIndex { None, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope };
-    public enum MaterialType { Devices, Wiring, Conduit, PanelTypes, AssociatedCosts, IOModules, MiscCosts };
+    public enum MaterialType { Device, ConnectionType, ConduitType, ControllerType, PanelType, AssociatedCost, IOModule};
     public enum TypicalSystemIndex { Edit, Instances };
     public enum SystemComponentIndex { Equipment, Controllers, Panels, Electrical, Misc, Proposal };
     public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }
     public enum ElectricalMaterialIndex { Wire, Conduit, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
-    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel }
+    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel, Misc }
     public enum AllSearchableObjects
     {
         SubScope,

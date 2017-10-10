@@ -36,7 +36,6 @@ namespace TemplateBuilder.MVVM
         {
 
         }
-
         #endregion
         #region Properties
         public override Visibility TemplatesVisibility
@@ -55,6 +54,7 @@ namespace TemplateBuilder.MVVM
         public MaterialVM MaterialsTab { get; set; }
         public TypicalSystemVM TypicalSystemsTab { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
+        public SystemHierarchyVM SystemHierarchyVM { get; set; }
         public TECTemplates Templates
         {
             get { return workingScopeManager as TECTemplates; }
@@ -198,6 +198,7 @@ namespace TemplateBuilder.MVVM
             setupMaterialsTab();
             setupTypicalSystemseTab();
             setupControllersPanelsVM();
+            SystemHierarchyVM = new SystemHierarchyVM(Templates.Catalogs);
         }
         protected override void setupMenu(MenuType menuType)
         {

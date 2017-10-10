@@ -25,5 +25,6 @@ namespace TECUserControlLibrary.UserControls
         {
             InitializeComponent();
         }
+        
     }
 }

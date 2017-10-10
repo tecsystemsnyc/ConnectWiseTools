@@ -610,6 +610,29 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class SelectedComponentToCommandConverter : BaseConverter, IMultiValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object[] values, Type targetType,
+           object parameter, System.Globalization.CultureInfo culture)
+        {
+            int index = System.Convert.ToInt32(values[0]);
+            if(index - 1 > values.Length)
+            {
+                return values[1];
+            }
+            return values[index + 1];
+        }
+        public object[] ConvertBack(object value, Type[] targetTypes,
+               object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter

@@ -1,20 +1,25 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels.AddVMs;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class SystemHierarchyVM : ViewModelBase
+    public class SystemHierarchyVM : ViewModelBase, IDropTarget
     {
         private TECCatalogs catalogs;
         private IAddVM selectedVM;
+        private TECSystem selectedSystem;
+        private TECEquipment selectedEquipment;
+        private TECSubScope selectedSubScope;
 
         public IAddVM SelectedVM
         {
@@ -25,6 +30,33 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedVM");
             }
         }
+        public TECSystem SelectedSystem
+        {
+            get { return selectedSystem; }
+            set
+            {
+                selectedSystem = value;
+                RaisePropertyChanged("SelectedSystem");
+            }
+        }
+        public TECEquipment SelectedEquipment
+        {
+            get { return selectedEquipment; }
+            set
+            {
+                selectedEquipment = value;
+                RaisePropertyChanged("SelectedEquipment");
+            }
+        }
+        public TECSubScope SelectedSubScope
+        {
+            get { return selectedSubScope; }
+            set
+            {
+                selectedSubScope = value;
+                RaisePropertyChanged("SelectedSubScope");
+            }
+        }
 
         public RelayCommand AddSystemCommand { get; private set; }
         public RelayCommand<TECSystem> AddEquipmentCommand { get; private set; }
@@ -33,6 +65,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECSystem> AddControllerCommand { get; private set; }
         public RelayCommand<TECSystem> AddPanelCommand { get; private set; }
         public RelayCommand<TECSystem> AddMiscCommand { get; private set; }
+        public RelayCommand<object> BackCommand { get; private set; }
 
         public SystemHierarchyVM(TECCatalogs scopeCatalogs)
         {
@@ -43,7 +76,19 @@ namespace TECUserControlLibrary.ViewModels
             AddControllerCommand = new RelayCommand<TECSystem>(AddControllerExecute, CanAddController);
             AddPanelCommand = new RelayCommand<TECSystem>(AddPanelExecute, CanAddPanel);
             AddMiscCommand = new RelayCommand<TECSystem>(AddMiscExecute, CanAddMisc);
+            BackCommand = new RelayCommand<object>(BackExecute);
             catalogs = scopeCatalogs;
+        }
+
+        private void BackExecute(object obj)
+        {
+            if(obj is TECEquipment)
+            {
+                SelectedEquipment = null;
+            } else if (obj is TECSubScope)
+            {
+                SelectedSubScope = null;
+            }
         }
 
         public void Refresh(TECCatalogs scopeCatalogs)
@@ -93,7 +138,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool CanAddController(TECSystem system)
         {
-            return true;
+            return catalogs.ControllerTypes.Count > 0;
         }
 
         private void AddPanelExecute(TECSystem system)
@@ -102,7 +147,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool CanAddPanel(TECSystem system)
         {
-            return true;
+            return catalogs.PanelTypes.Count > 0;
         }
 
         private void AddMiscExecute(TECSystem system)
@@ -112,6 +157,44 @@ namespace TECUserControlLibrary.ViewModels
         private bool CanAddMisc(TECSystem system)
         {
             return true;
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.StandardDragOver(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            if(dropInfo.Data is TECEquipment equipment)
+            {
+                SelectedVM = new AddEquipmentVM(SelectedSystem);
+                ((AddEquipmentVM)SelectedVM).ToAdd = new TECEquipment(equipment, SelectedSystem.IsTypical);
+            } else if (dropInfo.Data is TECSubScope subScope)
+            {
+                SelectedVM = new AddSubScopeVM(SelectedEquipment);
+                ((AddSubScopeVM)SelectedVM).ToAdd = new TECSubScope(subScope, SelectedSystem.IsTypical);
+            }
+            else if (dropInfo.Data is TECPoint point)
+            {
+                SelectedVM = new AddPointVM(SelectedSubScope);
+                ((AddPointVM)SelectedVM).ToAdd = new TECPoint(point, SelectedSystem.IsTypical);
+            }
+            else if (dropInfo.Data is TECController controller)
+            {
+                SelectedVM = new AddControllerVM(SelectedSystem, catalogs.ControllerTypes);
+                ((AddControllerVM)SelectedVM).ToAdd = new TECController(controller, SelectedSystem.IsTypical);
+            }
+            else if (dropInfo.Data is TECPanel panel)
+            {
+                SelectedVM = new AddPanelVM(SelectedSystem, catalogs.PanelTypes);
+                ((AddPanelVM)SelectedVM).ToAdd = new TECPanel(panel, SelectedSystem.IsTypical);
+            }
+            else if (dropInfo.Data is TECMisc misc)
+            {
+                SelectedVM = new AddMiscVM(SelectedSystem);
+                ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
+            }
         }
     }
 }
