@@ -194,8 +194,16 @@
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button Content="Add" x:Name="addEquipment" Grid.Column="2" 
                         Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"
-                        Command="{Binding ViewModel.AddEquipmentCommand}"
-                        CommandParameter="{Binding ViewModel.SelectedSystem}"/>
+                        CommandParameter="{Binding ViewModel.SelectedSystem}">
+                    <Button.Command>
+                        <MultiBinding Converter="{utilities:SelectedComponentToCommandConverter}" >
+                            <Binding ElementName="componentComboBox" Path="SelectedItem"/>
+                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddEquipmentCommand"/>
+                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddControllerCommand"/>
+                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddPanelCommand"/>
+                        </MultiBinding>
+                    </Button.Command>
+                </Button>
             </Grid>
         <Grid  Grid.Column="1" Grid.Row="1">
             <Grid.Resources>
