@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
-                       
+                       xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="equipmentListControl"
              mc:Ignorable="d" 
@@ -28,20 +28,7 @@
                   Drop="ListView_Dropped">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Label FontSize="14" Content="{Binding Name}"/>
-                        <Label Content="{Binding Description}" Grid.Column="1"/>
-                        <Label Content="# of SubScope: " Grid.Row="1"/>
-                        <Label Content="{Binding SubScope.Count}" Grid.Row="1" Grid.Column="1"/>
-                    </Grid>
+                    <itemControls:EquipmentControl Equipment="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

@@ -119,8 +119,29 @@
     <Compile Include="UserControls\ConnectableItemListControl.xaml.cs">
       <DependentUpon>ConnectableItemListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ItemControls\DeviceControl.xaml.cs">
+      <DependentUpon>DeviceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\ElectricalMaterialControl.xaml.cs">
+      <DependentUpon>ElectricalMaterialControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\EquipmentControl.xaml.cs">
+      <DependentUpon>EquipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\PanelControl.xaml.cs">
+      <DependentUpon>PanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\PointControl.xaml.cs">
+      <DependentUpon>PointControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\SubScopeItemControl.xaml.cs">
       <DependentUpon>SubScopeItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\SystemControl.xaml.cs">
+      <DependentUpon>SystemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\ValveControl.xaml.cs">
+      <DependentUpon>ValveControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\NetworkConnectableListControl.xaml.cs">
       <DependentUpon>NetworkConnectableListControl.xaml</DependentUpon>
@@ -435,7 +456,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ItemControls\DeviceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\ElectricalMaterialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\EquipmentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\PanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\PointControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ItemControls\SubScopeItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\SystemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\ValveControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

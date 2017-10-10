@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:models ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+                       xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
                        x:Name="ElectricalMaterialList">
@@ -30,14 +31,7 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label FontSize="10" Content="{Binding Name}"/>
-                        <Label FontSize="10" Content="{Binding Description}" Grid.Column="1"/>
-                    </Grid>
+                    <itemControls:ElectricalMaterialControl ElectricalMaterial="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

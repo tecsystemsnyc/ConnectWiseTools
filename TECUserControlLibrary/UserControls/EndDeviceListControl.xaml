@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
                        xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
+                       xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+                       xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
                        x:Name="endDeviceListControl"
                        xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
@@ -19,21 +21,16 @@
                   Drop="ListView_Dropped">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Label FontSize="12" Content="{Binding Name}"/>
-                        <Label Content="{Binding Description}" Grid.Column="1"/>
-                        <Label Content="Cost: " Grid.Column="2"/>
-                        <Label Content="{Binding Cost}" Grid.Column="3"/>
-                    </Grid>
+                    <ContentPresenter Content="{Binding}">
+                        <ContentPresenter.Resources>
+                            <DataTemplate DataType="{x:Type models:TECDevice}">
+                                <itemControls:DeviceControl Device="{Binding}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type models:TECValve}">
+                                <itemControls:ValveControl Valve="{Binding}"/>
+                            </DataTemplate>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>  

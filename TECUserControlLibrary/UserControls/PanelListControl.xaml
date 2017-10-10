@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
                        xmlns:dd="urn:gong-wpf-dragdrop"
+                       xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
              x:Name="panelListControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -27,20 +28,7 @@
                   Drop="ListView_Dropped">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Label FontSize="14" Content="{Binding Name}"/>
-                        <Label Content="{Binding Description}" Grid.Column="1"/>
-                        <Label Content="Type: " Grid.Row="1"/>
-                        <Label Content="{Binding Type.Name}" Grid.Row="1" Grid.Column="1"/>
-                    </Grid>
+                    <itemControls:PanelControl Panel="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
