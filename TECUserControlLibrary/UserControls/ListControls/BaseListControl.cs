@@ -18,7 +18,7 @@ using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
     /// Interaction logic for TypicalListControl.xaml

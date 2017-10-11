@@ -13,15 +13,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.UserControls;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
-    /// Interaction logic for NetworkConnectionListControl.xaml
+    /// Interaction logic for TypicalListControl.xaml
     /// </summary>
-    public partial class NetworkConnectionListControl : BaseListControl<TECNetworkConnection>
+    public partial class TypicalListControl : BaseListControl<TECTypical>
     {
-        public NetworkConnectionListControl()
+        public TypicalListControl()
         {
             InitializeComponent();
         }

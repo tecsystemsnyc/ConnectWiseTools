@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
     /// Interaction logic for IOListControl.xaml

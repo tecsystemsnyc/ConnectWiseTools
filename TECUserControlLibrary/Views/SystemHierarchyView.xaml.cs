@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TECUserControlLibrary.UserControls;
+using TECUserControlLibrary.UserControls.ListControls;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 

@@ -1,7 +1,6 @@
 ﻿using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +17,13 @@ using System.Windows.Shapes;
 namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
-    /// Interaction logic for TypicalListControl.xaml
+    /// Interaction logic for NetworkConnectionListControl.xaml
     /// </summary>
-    public partial class SystemListControl : BaseListControl<TECSystem>
+    public partial class NetworkConnectionListControl : BaseListControl<TECNetworkConnection>
     {
-        
-        public SystemListControl()
+        public NetworkConnectionListControl()
         {
             InitializeComponent();
         }
-        
     }
 }

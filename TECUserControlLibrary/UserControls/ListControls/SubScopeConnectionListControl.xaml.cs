@@ -1,5 +1,4 @@
 ﻿using EstimatingLibrary;
-using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
-    /// Interaction logic for ControllerListControl.xaml
+    /// Interaction logic for SubScopeConnectionListControl.xaml
     /// </summary>
-    public partial class NetworkConnectableListControl : BaseListControl<INetworkConnectable>
+    public partial class SubScopeConnectionListControl : BaseListControl<TECSubScopeConnection>
     {
-        public NetworkConnectableListControl()
+        public SubScopeConnectionListControl()
         {
             InitializeComponent();
         }
-        
     }
 }

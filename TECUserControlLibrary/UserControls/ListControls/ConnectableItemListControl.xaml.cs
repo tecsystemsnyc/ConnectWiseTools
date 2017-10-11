@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
     /// Interaction logic for ConnectableItemListControl.xaml

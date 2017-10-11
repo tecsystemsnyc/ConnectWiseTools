@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TECUserControlLibrary.UserControls;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
-    /// Interaction logic for TypicalListControl.xaml
+    /// Interaction logic for ControllerListControl.xaml
     /// </summary>
-    public partial class TypicalListControl : BaseListControl<TECTypical>
+    public partial class NetworkConnectableListControl : BaseListControl<INetworkConnectable>
     {
-        public TypicalListControl()
+        public NetworkConnectableListControl()
         {
             InitializeComponent();
         }
+        
     }
 }

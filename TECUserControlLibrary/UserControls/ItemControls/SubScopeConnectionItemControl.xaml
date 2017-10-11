@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
              xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:converters="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d"
              x:Name="subScopeConnectionItemControl">
 
@@ -35,12 +37,12 @@
             <Label Content="{Binding SubScope.Description}" Grid.Row="1"/>
 
             <Label Content="Connection Types" Grid.Column="1"/>
-            <userControls:ElectricalMaterialListControl 
+            <listControls:ElectricalMaterialListControl 
                 Source="{Binding ConnectionTypes}"
                 Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
 
             <Label Content="IO Types" Grid.Column="2"/>
-            <userControls:IOListControl 
+            <listControls:IOListControl 
                 Source="{Binding IOList}"
                 Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"/>
             <Border Grid.ColumnSpan="3" Grid.RowSpan="3"/>
@@ -50,17 +52,37 @@
             <Border Grid.Row="3" Grid.ColumnSpan="2"/>
 
             <Label Content="Wire Length:" Grid.Row="4"/>
-            <TextBox Text="{Binding Length}" Grid.Column="1" Grid.Row="4"/>
+            <Grid Grid.Column="1" Grid.Row="4">
+                <Label Content="{Binding Length}" 
+                   Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly, 
+                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
+                <TextBox Text="{Binding Length}"
+                     Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=False}"/>
+            </Grid>
             <Border Grid.Row="4" Grid.ColumnSpan="2"/>
 
             <Label Content="Conduit Length:" Grid.Row="5"/>
-            <TextBox Text="{Binding ConduitLength}" Grid.Column="1" Grid.Row="5"/>
+            <Grid Grid.Column="1" Grid.Row="5">
+                <Label Content="{Binding ConduitLength}"
+                       Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
+                <TextBox Text="{Binding ConduitLength}"
+                         Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=False}"/>
+            </Grid>
             <Border Grid.Row="5" Grid.ColumnSpan="2"/>
 
             <Label Content="Conduit Type:" Grid.Row="3" Grid.Column="2"/>
-            <ListBox SelectedItem="{Binding ConduitType}" 
-                 ItemsSource="{Binding ElementName=subScopeConnectionItemControl, Path=ConduitTypes}"
-                 Grid.Row="4" Grid.Column="2"/>
+            <Grid Grid.Row="4" Grid.Column="2">
+                <Label Content="{Binding ConduitType}"
+                       Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
+                <ListBox SelectedItem="{Binding ConduitType}" 
+                         ItemsSource="{Binding ElementName=subScopeConnectionItemControl, Path=ConduitTypes}"
+                         Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=False}"/>
+            </Grid>
             <Border Grid.Column="2" Grid.Row="3" Grid.RowSpan="3"/>
         </Grid>
     </Border>

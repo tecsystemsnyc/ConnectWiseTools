@@ -149,7 +149,10 @@
     <Compile Include="UserControls\ItemControls\ValveControl.xaml.cs">
       <DependentUpon>ValveControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\NetworkConnectableListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\SubScopeConnectionListControl.xaml.cs">
+      <DependentUpon>SubScopeConnectionListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListControls\NetworkConnectableListControl.xaml.cs">
       <DependentUpon>NetworkConnectableListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
@@ -179,7 +182,7 @@
     <Compile Include="UserControls\ListControls\IOListControl.xaml.cs">
       <DependentUpon>IOListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\NetworkConnectionListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\NetworkConnectionListControl.xaml.cs">
       <DependentUpon>NetworkConnectionListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\PanelListControl.xaml.cs">
@@ -410,7 +413,7 @@
     <Compile Include="Views\TypicalHierarchyView.xaml.cs">
       <DependentUpon>TypicalHierarchyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\TypicalListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\TypicalListControl.xaml.cs">
       <DependentUpon>TypicalListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TypicalSystemView.xaml.cs">
@@ -506,7 +509,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\NetworkConnectableListControl.xaml">
+    <Page Include="UserControls\ListControls\SubScopeConnectionListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\NetworkConnectableListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -546,7 +553,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\NetworkConnectionListControl.xaml">
+    <Page Include="UserControls\ListControls\NetworkConnectionListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -858,7 +865,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\TypicalListControl.xaml">
+    <Page Include="UserControls\ListControls\TypicalListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

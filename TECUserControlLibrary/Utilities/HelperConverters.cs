@@ -72,13 +72,28 @@ namespace TECUserControlLibrary.Utilities
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value)
+            if (value is bool boolVal)
             {
-                return Visibility.Visible;
+                if (parameter is bool boolParam)
+                {
+                    if (!boolParam)
+                    {
+                        boolVal = !boolVal;
+                    }
+                }
+
+                if (boolVal)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
             }
             else
             {
-                return Visibility.Collapsed;
+                throw new InvalidCastException("Value not bool.");
             }
         }
 

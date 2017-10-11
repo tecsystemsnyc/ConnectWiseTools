@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:dd="urn:gong-wpf-dragdrop"
@@ -62,7 +63,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Triggers>
-            <EventTrigger RoutedEvent="controls:SystemListControl.Selected">
+            <EventTrigger RoutedEvent="ListControls:SystemListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource typicalMove}"/>
                 </EventTrigger.Actions>
@@ -72,7 +73,7 @@
                     <BeginStoryboard Storyboard="{StaticResource typicalMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:EquipmentListControl.Selected">
+            <EventTrigger RoutedEvent="ListControls:EquipmentListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
@@ -82,7 +83,7 @@
                     <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:SubScopeListControl.Selected">
+            <EventTrigger RoutedEvent="ListControls:SubScopeListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>
@@ -103,7 +104,7 @@
             <TextBlock Grid.Column="1" Text="Typical Systems"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
-        <controls:TypicalListControl x:Name="typicalList" Grid.Column="0" Grid.Row="1" Source="{Binding TypicalSource}"
+        <listControls:TypicalListControl x:Name="typicalList" Grid.Column="0" Grid.Row="1" Source="{Binding TypicalSource}"
                                     SelectedItem="{Binding SelectedTypical}"
                                      DropHandler="{Binding DropHandler}"/>
         <!--Column 1-->
@@ -118,7 +119,7 @@
             <TextBlock Grid.Column="1" Text="{Binding SelectedTypical.Name, StringFormat='Instances of {0}'}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
-        <controls:SystemListControl x:Name="systemList" Grid.Column="1" Grid.Row="1" Source="{Binding ElementName=typicalList, Path=SelectedItem.Instances}"
+        <listControls:SystemListControl x:Name="systemList" Grid.Column="1" Grid.Row="1" Source="{Binding ElementName=typicalList, Path=SelectedItem.Instances}"
                                     SelectedItem="{Binding SelectedSystem}"
                                     DropHandler="{Binding DropHandler}"/>
 
@@ -139,20 +140,20 @@
                 <ResourceDictionary>
                     <DataTemplate x:Key="EquipmentTemplate">
                         <Grid DataContext="{Binding ElementName=parent}">
-                            <controls:EquipmentListControl x:Name="equipmentList"
+                            <listControls:EquipmentListControl x:Name="equipmentList"
                                        Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
                                        SelectedItem="{Binding SelectedEquipment}"/>
                         </Grid>
                     </DataTemplate>
                     <DataTemplate x:Key="ControllerTemplate">
                         <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                            <controls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
+                            <listControls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
                                                               SelectedItem ="{Binding Selected}"/>
                         </Grid>
                     </DataTemplate>
                     <DataTemplate x:Key="PanelTemplate">
                         <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                            <controls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
+                            <listControls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
                                                               SelectedItem ="{Binding Selected}"/>
                         </Grid>
                     </DataTemplate>
@@ -188,7 +189,7 @@
             <TextBlock Grid.Column="1" Text="{Binding SelectedEquipment.Name, StringFormat='Points in {0}'}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
-        <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=parent, Path=SelectedEquipment.SubScope}"
+        <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=parent, Path=SelectedEquipment.SubScope}"
                                       SelectedItem ="{Binding SelectedSubScope}" 
                                       Grid.Column="3" Grid.Row="1"/>
         <!--Column 4-->
@@ -200,10 +201,10 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Devices" Grid.Row="0"/>
-            <controls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+            <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                     SelectedItem="{Binding SelectedDevice}" Grid.Row="1"/>
             <Label Content="Points" Grid.Row="2"/>
-            <controls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+            <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                            Grid.Row="3"/>
         </Grid>
 

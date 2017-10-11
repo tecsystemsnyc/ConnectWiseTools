@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:addViews="clr-namespace:TECUserControlLibrary.Views.AddViews"
              xmlns:addVMs="clr-namespace:TECUserControlLibrary.ViewModels.AddVMs"
@@ -18,7 +19,7 @@
         <ResourceDictionary>
             <DataTemplate x:Key="EquipmentTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView}">
-                    <controls:EquipmentListControl x:Name="equipmentList"
+                    <listControls:EquipmentListControl x:Name="equipmentList"
                                                    Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
                                                    SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment}"
                                                    DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"/>
@@ -26,14 +27,14 @@
             </DataTemplate>
             <DataTemplate x:Key="ControllerTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                    <controls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
+                    <listControls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
                                                     SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedController}"
                                                     DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="PanelTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                    <controls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
+                    <listControls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
                                                SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedPanel}"
                                                DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"/>
                 </Grid>
@@ -176,7 +177,7 @@
                 <TextBlock Grid.Column="1" Text="Typical Systems"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
-            <controls:SystemListControl x:Name="systemList" Grid.Column="0" Grid.Row="1" Source="{Binding SystemSource}"
+            <listControls:SystemListControl x:Name="systemList" Grid.Column="0" Grid.Row="1" Source="{Binding SystemSource}"
                                         SelectedItem="{Binding ViewModel.SelectedSystem}"
                                         DropHandler="{Binding ViewModel}"/>
             <!--Column 1-->
@@ -248,8 +249,8 @@
                     Command="{Binding ViewModel.AddSubScopeCommand}"
                     CommandParameter="{Binding ViewModel.SelectedEquipment}"/>
         </Grid>
-        
-        <controls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
+
+            <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
                                       SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
                                       Grid.Column="2" Grid.Row="1"
                                       DropHandler="{Binding ViewModel}"/>
@@ -262,7 +263,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Devices" Grid.Row="0"/>
-                <controls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+                <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                SelectedItem="{Binding SelectedDevice}" Grid.Row="1"
                                                DropHandler="{Binding ViewModel}"/>
                 <Grid Grid.Row="2">
@@ -276,7 +277,7 @@
                             Command="{Binding ViewModel.AddPointCommand}"
                             CommandParameter="{Binding ViewModel.SelectedSubScope}"/>
                 </Grid>
-                <controls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                            Grid.Row="3"/>
         </Grid>
 

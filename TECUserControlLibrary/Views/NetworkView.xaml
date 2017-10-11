@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:usercontrols="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
@@ -47,7 +48,7 @@
 
                     <Label Content="Controllers" FontSize="20"/>
                     <!--Controller List-->
-                    <usercontrols:ConnectableItemListControl
+                    <listControls:ConnectableItemListControl
                         Source="{Binding Parentables}"
                         SelectedItem="{Binding SelectedParentable}"
                         Grid.Row="1"/>
@@ -67,7 +68,7 @@
 
                     <Label Content="Network Devices" FontSize="20"/>
                     <!--Network Devices DataGrid-->
-                    <usercontrols:ConnectableItemListControl
+                    <listControls:ConnectableItemListControl
                         Source="{Binding NonParentables}"
                         SelectedItem="{Binding SelectedNonParentable}"
                         Grid.Row="1"/>
@@ -143,7 +144,7 @@
                         </ContentPresenter>
 
                         <Label Grid.Column="5" FontSize="15" Content="Network IO Types:"/>
-                        <usercontrols:IOListControl 
+                        <listControls:IOListControl 
                             Source="{Binding AllNetworkIOList}" 
                             Grid.Column="5"
                             Grid.Row="1"/>
@@ -228,7 +229,7 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Label Content="Connection Types"/>
-                                    <usercontrols:ElectricalMaterialListControl Source="{Binding AllConnectionTypes}"
+                                    <listControls:ElectricalMaterialListControl Source="{Binding AllConnectionTypes}"
                                                                     SelectedItem="{Binding SelectedPotentialConnectionType}"
                                                                 Margin="5" 
                                                                 Grid.Row="1" 
@@ -240,7 +241,7 @@
                             Content="-&gt;" Grid.Column="1" Grid.Row="3" Width="30" Height="30"/>
 
                                     <Label Content="Selected Types" Grid.Column="2"/>
-                                    <usercontrols:ElectricalMaterialListControl Source="{Binding SelectedConnectionTypes}"
+                                    <listControls:ElectricalMaterialListControl Source="{Binding SelectedConnectionTypes}"
                                                                     SelectedItem="{Binding SelectedChosenConnectionType}"
                                                                 Margin="5"
                                                                 Grid.Column="2" 
@@ -291,7 +292,7 @@
                                 </Grid.RowDefinitions>
 
                                 <Label Content="Network Connections" FontSize="15" FontWeight="Bold"/>
-                                <usercontrols:NetworkConnectionListControl  x:Name="Connections"
+                                <listControls:NetworkConnectionListControl  x:Name="Connections"
                                     Source="{Binding ChildNetworkConnections}"
                                     SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedConnection}"
                                     Selected="NetworkConnectionListControl_Selected"
@@ -310,7 +311,7 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Label Content="Add Connectables to Connection" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-                                        <usercontrols:NetworkConnectableListControl
+                                        <listControls:NetworkConnectableListControl
                                         Source="{Binding ElementName=Connections, Path=SelectedItem.Children}"
                                         SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedChildConnectable}"
                                         Grid.Row="1"

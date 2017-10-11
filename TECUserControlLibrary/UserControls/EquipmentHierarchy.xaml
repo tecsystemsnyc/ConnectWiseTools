@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -47,10 +48,10 @@
         <Button Content="Back" Click="Button_Click" Grid.Column="1" 
                 Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
                 Width="50" HorizontalAlignment="Left"/>
-        <local:EquipmentListControl x:Name="equipmentList" Grid.Column="0" Source="{Binding EquipmentSource}"
+        <listControls:EquipmentListControl x:Name="equipmentList" Grid.Column="0" Source="{Binding EquipmentSource}"
                                                            SelectedItem="{Binding SelectedEquipment}" Grid.Row="1"
                                     Selected="Equipment_Selected"/>
-        <local:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=equipmentList, Path=SelectedItem.SubScope}"
+        <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=equipmentList, Path=SelectedItem.SubScope}"
                                    SelectedItem ="{Binding SelectedSubScope}" Grid.Column="1"
                                    Grid.Row="1"/>
         <Grid Grid.Column="2" Grid.Row="1">
@@ -61,10 +62,10 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Devices" Grid.Row="0"/>
-            <local:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+            <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                     SelectedItem="{Binding SelectedDevice}" Grid.Row="1"/>
             <Label Content="Points" Grid.Row="2"/>
-            <local:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+            <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                     Grid.Row="3"/>
         </Grid>
         

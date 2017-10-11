@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
@@ -30,7 +31,7 @@
                Content="Devices"/>
         <Label Grid.Column="1" Grid.Row="0"
                Content="Points"/>
-        <controls:EndDeviceListControl Grid.Row="1" Source="{Binding Path=DevicesSource}"
+        <listControls:EndDeviceListControl Grid.Row="1" Source="{Binding Path=DevicesSource}"
                                        DropHandler="{Binding Path=Viewmodel}"/>
         <!--<controls:DevicesGridControl Grid.Row="1" Margin="5"
                                   DevicesSource="{Binding Path=DevicesSource}"
