@@ -137,6 +137,9 @@
     <Compile Include="UserControls\ItemControls\ControllerItemControl.xaml.cs">
       <DependentUpon>ControllerItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ItemControls\SubScopeConnectionItemControl.xaml.cs">
+      <DependentUpon>SubScopeConnectionItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\SubScopeItemControl.xaml.cs">
       <DependentUpon>SubScopeItemControl.xaml</DependentUpon>
     </Compile>
@@ -211,6 +214,7 @@
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
     <Compile Include="ViewModels\SplashVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
+    <Compile Include="ViewModels\SystemConnectionsVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
     <Compile Include="Views\AddViews\AddBaseView.cs" />
     <Compile Include="Views\AddViews\AddControllerView.xaml.cs">
@@ -397,6 +401,9 @@
     <Compile Include="Views\SystemComponentView.xaml.cs">
       <DependentUpon>SystemComponentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SystemConnectionsView.xaml.cs">
+      <DependentUpon>SystemConnectionsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SystemHierarchyView.xaml.cs">
       <DependentUpon>SystemHierarchyView.xaml</DependentUpon>
     </Compile>
@@ -480,6 +487,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\ControllerItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\SubScopeConnectionItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -780,6 +791,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SystemComponentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SystemConnectionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
