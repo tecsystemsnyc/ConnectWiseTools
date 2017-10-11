@@ -79,7 +79,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.Triggers>
-            <EventTrigger RoutedEvent="controls:EquipmentListControl.Selected">
+            <EventTrigger RoutedEvent="listControls:EquipmentListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
@@ -89,7 +89,7 @@
                     <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:SubScopeListControl.Selected">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>
@@ -124,32 +124,32 @@
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:EquipmentListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:EquipmentListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:SystemListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:SystemListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:ControllerListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:ControllerListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:PanelListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:PanelListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:EndDeviceListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:EndDeviceListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="controls:SubScopeListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>

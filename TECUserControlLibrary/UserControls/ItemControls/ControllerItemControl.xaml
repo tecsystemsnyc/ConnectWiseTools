@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              x:Name="controllerItemControl"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=controllerItemControl, Path=Controller}">
+    <Grid DataContext="{Binding ElementName=controllerItemControl, Path=Controller}"
+          Background="LightCoral">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
