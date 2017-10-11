@@ -146,6 +146,13 @@
         <Setter Property="Background" Value="{DynamicResource SectionBackgroundBrush}"/>
     </Style>
 
+    <Style TargetType="ListView">
+        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
+        <Setter Property="BorderBrush" Value="{StaticResource TextBackgroundBrush}"/>
+        <Setter Property="dd:DragDrop.IsDropTarget" Value="True"/>
+        <Setter Property="dd:DragDrop.IsDragSource" Value="True"/>
+        <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
+    </Style>
     <!--Expand Grid Detail-->
     <DataTemplate x:Key="ExpandDetails">
         <ToggleButton Name="ShowDetails" 
