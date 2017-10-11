@@ -102,7 +102,7 @@
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\BaseListControl.cs" />
+    <Compile Include="UserControls\ListControls\BaseListControl.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
@@ -116,7 +116,7 @@
     <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ConnectableItemListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\ConnectableItemListControl.xaml.cs">
       <DependentUpon>ConnectableItemListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemControls\DeviceControl.xaml.cs">
@@ -152,7 +152,7 @@
     <Compile Include="UserControls\NetworkConnectableListControl.xaml.cs">
       <DependentUpon>NetworkConnectableListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ControllerListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
       <DependentUpon>ControllerListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CostPropertiesControl.xaml.cs">
@@ -161,31 +161,31 @@
     <Compile Include="UserControls\CostBatchPropertiesControl.xaml.cs">
       <DependentUpon>CostBatchPropertiesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ElectricalMaterialListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\ElectricalMaterialListControl.xaml.cs">
       <DependentUpon>ElectricalMaterialListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\EndDeviceListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\EndDeviceListControl.xaml.cs">
       <DependentUpon>EndDeviceListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\EquipmentHierarchy.xaml.cs">
       <DependentUpon>EquipmentHierarchy.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\EquipmentListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\EquipmentListControl.xaml.cs">
       <DependentUpon>EquipmentListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HardwarePropertiesControl.xaml.cs">
       <DependentUpon>HardwarePropertiesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\IOListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\IOListControl.xaml.cs">
       <DependentUpon>IOListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\NetworkConnectionListControl.xaml.cs">
       <DependentUpon>NetworkConnectionListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PanelListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\PanelListControl.xaml.cs">
       <DependentUpon>PanelListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PointListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\PointListControl.xaml.cs">
       <DependentUpon>PointListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PointPropetiesControl.xaml.cs">
@@ -194,10 +194,10 @@
     <Compile Include="UserControls\ScopePropertiesControl.xaml.cs">
       <DependentUpon>ScopePropertiesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SubScopeListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\SubScopeListControl.xaml.cs">
       <DependentUpon>SubScopeListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SystemListControl.xaml.cs">
+    <Compile Include="UserControls\ListControls\SystemListControl.xaml.cs">
       <DependentUpon>SystemListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\InterfaceDataTemplateSelector.cs" />
@@ -462,7 +462,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ConnectableItemListControl.xaml">
+    <Page Include="UserControls\ListControls\ConnectableItemListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -510,7 +510,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\ControllerListControl.xaml">
+    <Page Include="UserControls\ListControls\ControllerListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -522,11 +522,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ElectricalMaterialListControl.xaml">
+    <Page Include="UserControls\ListControls\ElectricalMaterialListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\EndDeviceListControl.xaml">
+    <Page Include="UserControls\ListControls\EndDeviceListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -534,7 +534,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\EquipmentListControl.xaml">
+    <Page Include="UserControls\ListControls\EquipmentListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -542,7 +542,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\IOListControl.xaml">
+    <Page Include="UserControls\ListControls\IOListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -550,11 +550,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\PanelListControl.xaml">
+    <Page Include="UserControls\ListControls\PanelListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\PointListControl.xaml">
+    <Page Include="UserControls\ListControls\PointListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -566,11 +566,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\SubScopeListControl.xaml">
+    <Page Include="UserControls\ListControls\SubScopeListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\SystemListControl.xaml">
+    <Page Include="UserControls\ListControls\SystemListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
