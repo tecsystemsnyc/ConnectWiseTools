@@ -6,13 +6,14 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
                  xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
                        xmlns:dd="urn:gong-wpf-dragdrop"
+                       xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
              x:Name="parent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -21,23 +22,11 @@
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected"
-                  dd:DragDrop.DropHandler="{Binding DropHandler}">
+                  dd:DragDrop.DropHandler="{Binding DropHandler}"
+                  HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Label FontSize="14" Content="{Binding Name}"/>
-                        <Label Content="{Binding Description}" Grid.Column="1"/>
-                        <Label Content="# of Instances: " Grid.Row="1"/>
-                        <Label Content="{Binding Instances.Count}" Grid.Row="1" Grid.Column="1"/>
-                    </Grid>
+                    <itemControls:TypicalControl Typical="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
