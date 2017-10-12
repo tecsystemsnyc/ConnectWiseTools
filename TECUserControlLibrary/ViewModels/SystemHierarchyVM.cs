@@ -213,7 +213,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             if(dropInfo.Data is TECEquipment equipment)
@@ -245,6 +244,11 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddMiscVM(SelectedSystem);
                 ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
             }
+        }
+
+        protected void NotifySelected(TECObject item)
+        {
+            Selected?.Invoke(item);
         }
     }
 }
