@@ -7,18 +7,21 @@
              mc:Ignorable="d" 
              x:Name="equipmentControl"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=equipmentControl, Path=Equipment}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
-        <Label FontSize="14" Content="{Binding Name}"/>
-        <Label Content="{Binding Description}" Grid.Column="1"/>
-        <Label Content="# of SubScope: " Grid.Row="1"/>
-        <Label Content="{Binding SubScope.Count}" Grid.Row="1" Grid.Column="1"/>
-    </Grid>
+    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+
+        <Grid DataContext="{Binding ElementName=equipmentControl, Path=Equipment}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label FontSize="14" Content="{Binding Name}"/>
+            <Label Content="{Binding Description}" Grid.Column="1"/>
+            <Label Content="# of SubScope: " Grid.Row="1"/>
+            <Label Content="{Binding SubScope.Count}" Grid.Row="1" Grid.Column="1"/>
+        </Grid>
+    </Border>
 </UserControl>

@@ -7,12 +7,15 @@
              x:Name="electricalMaterialControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=electricalMaterialControl, Path=ElectricalMaterial}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Label FontSize="10" Content="{Binding Name}"/>
-        <Label FontSize="10" Content="{Binding Description}" Grid.Column="1"/>
-    </Grid>
+    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+
+        <Grid DataContext="{Binding ElementName=electricalMaterialControl, Path=ElectricalMaterial}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label FontSize="10" Content="{Binding Name}"/>
+            <Label FontSize="10" Content="{Binding Description}" Grid.Column="1"/>
+        </Grid>
+    </Border>
 </UserControl>

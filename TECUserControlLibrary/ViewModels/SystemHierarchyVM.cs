@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -20,6 +21,10 @@ namespace TECUserControlLibrary.ViewModels
         private TECSystem selectedSystem;
         private TECEquipment selectedEquipment;
         private TECSubScope selectedSubScope;
+        private IEndDevice selectedDevice;
+        private TECPoint selectedPoint;
+        private TECController selectedController;
+        private TECPanel selectedPanel;
 
         public IAddVM SelectedVM
         {
@@ -37,6 +42,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
+                Selected?.Invoke(value);
             }
         }
         public TECEquipment SelectedEquipment
@@ -46,6 +52,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
+                Selected?.Invoke(value);
             }
         }
         public TECSubScope SelectedSubScope
@@ -55,6 +62,47 @@ namespace TECUserControlLibrary.ViewModels
             {
                 selectedSubScope = value;
                 RaisePropertyChanged("SelectedSubScope");
+                Selected?.Invoke(value);
+            }
+        }
+        public IEndDevice SelectedDevice
+        {
+            get { return selectedDevice; }
+            set
+            {
+                selectedDevice = value;
+                RaisePropertyChanged("SelectedDevice");
+                Selected?.Invoke(value as TECObject);
+            }
+        }
+        public TECPoint SelectedPoint
+        {
+            get { return selectedPoint; }
+            set
+            {
+                selectedPoint= value;
+                RaisePropertyChanged("SelectedPoint");
+                Selected?.Invoke(value);
+            }
+        }
+        public TECController SelectedController
+        {
+            get { return selectedController; }
+            set
+            {
+                selectedController = value;
+                RaisePropertyChanged("SelectedController");
+                Selected?.Invoke(value);
+            }
+        }
+        public TECPanel SelectedPanel
+        {
+            get { return selectedPanel; }
+            set
+            {
+                selectedPanel = value;
+                RaisePropertyChanged("SelectedPanel");
+                Selected?.Invoke(value);
             }
         }
 
@@ -79,6 +127,8 @@ namespace TECUserControlLibrary.ViewModels
             BackCommand = new RelayCommand<object>(BackExecute);
             catalogs = scopeCatalogs;
         }
+
+        public event Action<TECObject> Selected;
 
         private void BackExecute(object obj)
         {
