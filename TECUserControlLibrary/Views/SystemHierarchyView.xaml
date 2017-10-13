@@ -41,7 +41,7 @@
             </DataTemplate>
             <DataTemplate x:Key="ElectricalTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                    <local:SystemConnectionsView ViewModel="{Binding ConnectionVM}"/>
+                    <local:SystemConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ConnectionsVM}"/>
                 </Grid>
             </DataTemplate>
             <Storyboard x:Key="systemMove">
@@ -236,7 +236,8 @@
                                               Margin="2" Grid.Row="0" FontSize="12"
                                               VerticalContentAlignment="Center"
                                               SelectedIndex="0"
-                      SelectionChanged="componentComboBox_Selected"/>
+                      SelectionChanged="componentComboBox_Selected"
+                      Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
             <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  
                                                       ContentTemplateSelector="{StaticResource ComponentSelector}"
                                                       Grid.Row="1"/>

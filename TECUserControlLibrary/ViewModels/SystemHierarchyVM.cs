@@ -25,6 +25,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECPoint selectedPoint;
         private TECController selectedController;
         private TECPanel selectedPanel;
+        private SystemConnectionsVM connectionsVM;
 
         public IAddVM SelectedVM
         {
@@ -43,8 +44,15 @@ namespace TECUserControlLibrary.ViewModels
                 selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
                 Selected?.Invoke(value);
+                SystemSelected(value);
             }
         }
+
+        private void SystemSelected(TECSystem value)
+        {
+            ConnectionsVM = new SystemConnectionsVM(value);
+        }
+
         public TECEquipment SelectedEquipment
         {
             get { return selectedEquipment; }
@@ -114,6 +122,16 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECSystem> AddPanelCommand { get; private set; }
         public RelayCommand<TECSystem> AddMiscCommand { get; private set; }
         public RelayCommand<object> BackCommand { get; private set; }
+
+        public SystemConnectionsVM ConnectionsVM
+        {
+            get { return connectionsVM; }
+            set
+            {
+                connectionsVM = value;
+                RaisePropertyChanged("ConnectionsVM");
+            }
+        }
 
         public SystemHierarchyVM(TECCatalogs scopeCatalogs)
         {
