@@ -96,11 +96,11 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<UpdateConnectionVM> Update;
 
-
         public void DragOver(IDropInfo dropInfo)
         {
             TECSubScope subScope = dropInfo.Data as TECSubScope;
-            if (subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope))
+            if (subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope)
+                && UIHelpers.TargetCollectionIsType(dropInfo, typeof(TypicalSubScope)))
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
@@ -139,23 +139,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
             SubScope = typSS;
-        }
-
-        public void DragOver(IDropInfo dropInfo)
-        {
-            TECSubScope subScope = dropInfo.Data as TECSubScope;
-            if (subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope)
-                && UIHelpers.TargetCollectionIsType(dropInfo, typeof(TypicalSubScope)))
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Copy;
-            } 
-        }
-
-        public void Drop(IDropInfo dropInfo)
-        {
-            TECSubScope subScope = dropInfo.Data as TECSubScope;
-            SelectedController.AddSubScope(subScope);
         }
     }
 }
