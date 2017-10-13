@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
@@ -52,6 +53,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedController");
             }
         }
+
+        public ICommand UpdateAllCommand;
         #endregion
 
         public TypicalConnectionsVM(TECTypical typical, IEnumerable<TECController> bidControllers)
@@ -75,6 +78,14 @@ namespace TECUserControlLibrary.ViewModels
         {
             _controllers = new ObservableCollection<TECController>();
             _subScope = new ObservableCollection<TypicalSubScope>();
+        }
+
+        private void updateAllExecute()
+        {
+            foreach(TypicalSubScope typSS in SubScope)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

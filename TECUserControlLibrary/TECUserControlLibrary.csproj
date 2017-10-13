@@ -225,6 +225,7 @@
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
     <Compile Include="ViewModels\TypicalConnectionsVM.cs" />
     <Compile Include="ViewModels\TypicalHierarchyVM.cs" />
+    <Compile Include="ViewModels\UpdateConnectionVM.cs" />
     <Compile Include="Views\AddViews\AddBaseView.cs" />
     <Compile Include="Views\AddViews\AddControllerView.xaml.cs">
       <DependentUpon>AddControllerView.xaml</DependentUpon>
@@ -428,6 +429,9 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\VisibilityModel.cs" />
+    <Compile Include="Views\UpdateConnectionView.xaml.cs">
+      <DependentUpon>UpdateConnectionView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Debug\EBDebugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -869,6 +873,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdateConnectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
