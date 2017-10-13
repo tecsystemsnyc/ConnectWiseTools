@@ -47,7 +47,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
 
         // Using a DependencyProperty as the backing store for SubScopeConnection.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SubScopeProperty =
-            DependencyProperty.Register("SubScope", typeof(TECSubScopeConnection), typeof(SubScopeConnectionItemControl));
+            DependencyProperty.Register("SubScope", typeof(TECSubScope), typeof(SubScopeConnectionItemControl));
         
         public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {

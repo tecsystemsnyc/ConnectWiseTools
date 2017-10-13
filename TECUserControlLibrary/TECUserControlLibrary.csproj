@@ -195,6 +195,9 @@
     <Compile Include="UserControls\ListControls\PointListControl.xaml.cs">
       <DependentUpon>PointListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ListControls\TypicalSubScopeConnectionListControl.xaml.cs">
+      <DependentUpon>TypicalSubScopeConnectionListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PointPropetiesControl.xaml.cs">
       <DependentUpon>PointPropetiesControl.xaml</DependentUpon>
     </Compile>
@@ -557,6 +560,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\PointListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\TypicalSubScopeConnectionListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
