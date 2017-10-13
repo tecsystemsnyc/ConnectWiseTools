@@ -98,7 +98,7 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\TypicalSubScopeConnection.cs" />
+    <Compile Include="Models\TypicalSubScope.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
