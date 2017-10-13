@@ -10,11 +10,11 @@ using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class SystemConnectionsVM : ViewModelBase
+    public class TypicalConnectionsVM : ViewModelBase
     {
         #region Fields
         private ObservableCollection<TECController> _controllers;
-        private ObservableCollection<TECSubScope> _subScope;
+        private ObservableCollection<TypicalSubScope> _subScope;
         private TECController _selectedController;
         #endregion
 
@@ -31,12 +31,9 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Controllers");
             }
         }
-        public ObservableCollection<TECSubScope> SubScope
+        public ObservableCollection<TypicalSubScope> SubScope
         {
-            get
-            {
-                return _subScope;
-            }
+            get { return _subScope; }
             set
             {
                 _subScope = value;
@@ -57,14 +54,18 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public SystemConnectionsVM(TECSystem system)
+        public TypicalConnectionsVM(TECTypical typical, IEnumerable<TECController> bidControllers)
         {
             initializeCollections();
-            foreach (TECSubScope ss in system.GetAllSubScope())
-            { 
-                SubScope.Add(ss);
+            foreach (TECSubScope ss in typical.GetAllSubScope())
+            {
+                SubScope.Add(new TypicalSubScope(ss, typical.TypicalInstanceDictionary.GetInstances(ss).ConvertAll((x) => (TECSubScope)x )));
             }
-            foreach (TECController controller in system.Controllers)
+            foreach (TECController controller in typical.Controllers)
+            {
+                Controllers.Add(controller);
+            }
+            foreach(TECController controller in bidControllers)
             {
                 Controllers.Add(controller);
             }
@@ -73,7 +74,7 @@ namespace TECUserControlLibrary.ViewModels
         private void initializeCollections()
         {
             _controllers = new ObservableCollection<TECController>();
-            _subScope = new ObservableCollection<TECSubScope>();
+            _subScope = new ObservableCollection<TypicalSubScope>();
         }
     }
 }
