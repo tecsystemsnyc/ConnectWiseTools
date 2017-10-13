@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.UserControls.ItemControls
 {
@@ -22,6 +23,20 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// </summary>
     public partial class SubScopeConnectionItemControl : UserControl
     {
+        public TypicalSubScopeConnection TypicalSubScopeConnection
+        {
+            get { return (TypicalSubScopeConnection)GetValue(TypicalSubScopeConnectionProperty); }
+            set
+            {
+                SetValue(TypicalSubScopeConnectionProperty, value);
+                SetValue(SubScopeConnectionProperty, value.Connection);
+            }
+        }
+
+        // Using a DependencyProperty as the backing store for TypicalSubScopeConnection.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TypicalSubScopeConnectionProperty =
+            DependencyProperty.Register("TypicalSubScopeConnection", typeof(TypicalSubScopeConnection), typeof(SubScopeConnectionItemControl), new PropertyMetadata(0));
+
 
 
         public TECSubScopeConnection SubScopeConnection
@@ -54,6 +69,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
         public static readonly DependencyProperty ReadOnlyProperty =
             DependencyProperty.Register("ReadOnly", typeof(bool), typeof(SubScopeConnectionItemControl), new PropertyMetadata(false));
         
+
         public SubScopeConnectionItemControl()
         {
             InitializeComponent();

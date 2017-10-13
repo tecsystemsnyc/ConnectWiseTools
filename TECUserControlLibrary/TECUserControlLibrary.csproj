@@ -98,6 +98,7 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\TypicalSubScopeConnection.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
@@ -340,7 +341,6 @@
     <Compile Include="Models\HardwareSummaryItem.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
     <Compile Include="Models\LengthSummaryItem.cs" />
-    <Compile Include="Models\SubScopeConnection.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="UserControls\PanelEditControl.xaml.cs">
       <DependentUpon>PanelEditControl.xaml</DependentUpon>

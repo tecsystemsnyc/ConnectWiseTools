@@ -8,7 +8,7 @@
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid DataContext="{Binding ElementName=SystemConnectionsView, Path=ViewModel}">
         <Grid.Resources>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Black"/>
@@ -22,17 +22,24 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <!--Controllers-->
         <Border Grid.RowSpan="2">
-            <listControls:ControllerListControl/>
+            <listControls:ControllerListControl
+                Source="{Binding Controllers}"
+                SelectedItem="{Binding SelectedController}"/>
         </Border>
         
         <!--SubScope Connections-->
         <Border Grid.Column="1" Grid.ColumnSpan="2">
-            
+            <listControls:SubScopeConnectionListControl/>
         </Border>
+
+        <Button Content="Update All"
+                Command="{Binding UpdateAll}"
+                Margin="5"
+                Grid.Row="2"/>
     </Grid>
 </UserControl>
