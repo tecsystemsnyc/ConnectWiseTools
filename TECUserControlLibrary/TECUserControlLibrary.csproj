@@ -101,6 +101,7 @@
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ItemControls\BaseItemControl.cs" />
     <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
       <DependentUpon>TypicalControl.xaml</DependentUpon>
     </Compile>

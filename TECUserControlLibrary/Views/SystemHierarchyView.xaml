@@ -39,6 +39,11 @@
                                                DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"/>
                 </Grid>
             </DataTemplate>
+            <DataTemplate x:Key="ElectricalTemplate">
+                <!--<Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
+                    <local:SystemConnectionsView
+                </Grid>-->
+            </DataTemplate>
             <Storyboard x:Key="systemMove">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                  Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)" 
