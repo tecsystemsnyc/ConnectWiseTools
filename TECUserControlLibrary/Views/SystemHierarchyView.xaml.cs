@@ -237,6 +237,7 @@ namespace TECUserControlLibrary.Views
             {
                 eList.SelectedItem = null;
             }
+            componentComboBox.SelectedValue = SystemComponentIndex.Equipment;
         }
 
         private void equipmentBack_Click(object sender, RoutedEventArgs e)
@@ -271,7 +272,7 @@ namespace TECUserControlLibrary.Views
             if((SystemComponentIndex)comboBox.SelectedValue == SystemComponentIndex.Electrical)
             {
                 Storyboard move = (Storyboard)FindResource("systemMove");
-                move.Begin;
+                move.Begin();
             }
             
         }

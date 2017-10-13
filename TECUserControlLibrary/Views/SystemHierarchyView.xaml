@@ -191,7 +191,8 @@
                                         SelectedItem="{Binding ViewModel.SelectedSystem}"
                                         DropHandler="{Binding ViewModel}"/>
             <!--Column 1-->
-            <Grid Grid.Column="1" >
+            <Grid Grid.Column="1" Grid.ColumnSpan="{Binding ElementName=componentComboBox, Path=SelectedItem, 
+            Converter={utilities:SelectedComponentToSpanConverter}}" Panel.ZIndex="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>
@@ -218,7 +219,7 @@
                 </Button>
             </Grid>
         <Grid  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="{Binding ElementName=componentComboBox, Path=SelectedItem, 
-            Converter={utilities:SelectedComponentToSpanConverter}}">
+            Converter={utilities:SelectedComponentToSpanConverter}}" Panel.ZIndex="10">
             <Grid.Resources>
                     <ResourceDictionary>
                         <utilities:SystemComponentSelector x:Key="ComponentSelector"
