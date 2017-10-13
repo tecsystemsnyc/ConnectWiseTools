@@ -10,13 +10,13 @@ using System.Windows.Input;
 
 namespace TECUserControlLibrary.Models
 {
-    public class TypicalSubScopeConnection : ViewModelBase
+    public class TypicalSubScope : ViewModelBase
     {
-        private ObservableCollection<TECSubScopeConnection> _instances;
+        private ObservableCollection<TECSubScope> _instances;
         private bool _needsUpdate;
 
-        public TECSubScopeConnection Connection { get; private set; }
-        public ReadOnlyObservableCollection<TECSubScopeConnection> Instances { get { return new ReadOnlyObservableCollection<TECSubScopeConnection>(_instances); } }
+        public TECSubScope SubScope { get; private set; }
+        public ReadOnlyObservableCollection<TECSubScope> Instances { get { return new ReadOnlyObservableCollection<TECSubScope>(_instances); } }
         public bool NeedsUpdate
         {
             get { return _needsUpdate; }
@@ -27,26 +27,53 @@ namespace TECUserControlLibrary.Models
             }
         }
         public ICommand UpdateCommand { get; private set; }
-        public event Action<IEnumerable<TECSubScopeConnection>> Update;
+        public event Action<IEnumerable<TECSubScope>> Update;
 
-        public TypicalSubScopeConnection(TECSubScopeConnection connection, IEnumerable<TECSubScopeConnection> instances)
+        public TypicalSubScope(TECSubScope subScope, IEnumerable<TECSubScope> instances)
         {
-            Connection = connection;
-            _instances = new ObservableCollection<TECSubScopeConnection>(instances);
+            SubScope = subScope;
+            _instances = new ObservableCollection<TECSubScope>(instances);
             NeedsUpdate = true;
 
-            connection.PropertyChanged += Connection_PropertyChanged;
+            subScope.Connection.PropertyChanged += Connection_PropertyChanged;
         }
 
-        public void UpdateInstance(TECSubScopeConnection instance)
+        public bool UpdateInstance(TECSubScope instance)
         {
-            
+            bool sameController = SubScope.ParentConnection.ParentController == instance.ParentConnection.ParentController;
+
+            if (sameController)
+            {
+                updateProperties(SubScope, instance);
+                return true;
+            }
+            else
+            {
+                bool canAdd = SubScope.ParentConnection.ParentController.CanConnectSubScope(instance);
+                if (canAdd)
+                {
+                    SubScope.ParentConnection.ParentController.AddSubScope(instance);
+                    updateProperties(SubScope, instance);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            void updateProperties(TECSubScope typical, TECSubScope toUpdate)
+            {
+                toUpdate.Connection.Length = typical.Connection.Length;
+                toUpdate.Connection.ConduitLength = typical.Connection.ConduitLength;
+                toUpdate.Connection.ConduitType = typical.Connection.ConduitType;
+            }
         }
-        public void AddInstance(TECSubScopeConnection instance)
+        public void AddInstance(TECSubScope instance)
         {
             _instances.Add(instance);
         }
-        public void RemoveInstance(TECSubScopeConnection instance)
+        public void RemoveInstance(TECSubScope instance)
         {
             if (_instances.Contains(instance))
             {
