@@ -95,7 +95,7 @@ namespace Tests
             TECSubScope subScope = new TECSubScope(false);
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
 
-            SubScopeConnection subScopeConnection = new SubScopeConnection(subScope, true);
+            TypicalSubScopeConnection subScopeConnection = new TypicalSubScopeConnection(subScope, true);
             subScopeConnection.Controller = controller;
 
             Assert.AreEqual(controller.ChildrenConnections.Count, 1, "Connection not added to controller");
@@ -109,7 +109,7 @@ namespace Tests
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             controller.AddSubScope(subScope);
 
-            SubScopeConnection subScopeConnection = new SubScopeConnection(subScope, true);
+            TypicalSubScopeConnection subScopeConnection = new TypicalSubScopeConnection(subScope, true);
             subScopeConnection.Controller = null;
 
             Assert.AreEqual(controller.ChildrenConnections.Count, 0, "Connection not removed from controller");

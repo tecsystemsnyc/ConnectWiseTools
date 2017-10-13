@@ -47,8 +47,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        private ObservableCollection<SubScopeConnection> _subScopeConnectionCollection;
-        public ObservableCollection<SubScopeConnection> SubScopeConnectionCollection
+        private ObservableCollection<TypicalSubScopeConnection> _subScopeConnectionCollection;
+        public ObservableCollection<TypicalSubScopeConnection> SubScopeConnectionCollection
         {
             get { return _subScopeConnectionCollection; }
             set
@@ -137,7 +137,7 @@ namespace TECUserControlLibrary.ViewModels
                         currentSubScope.Add(subScope);
                     }
                 }
-                foreach (SubScopeConnection connection in SubScopeConnectionCollection)
+                foreach (TypicalSubScopeConnection connection in SubScopeConnectionCollection)
                 {
                     if (!currentSubScope.Contains(connection.SubScope) && connection.Controller != null)
                     {
@@ -184,14 +184,14 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void populateSubScopeConnections()
         {
-            SubScopeConnectionCollection = new ObservableCollection<SubScopeConnection>();
+            SubScopeConnectionCollection = new ObservableCollection<TypicalSubScopeConnection>();
             if (SelectedSystem != null)
             {
                 foreach (TECEquipment equipment in SelectedSystem.Equipment)
                 {
                     foreach (TECSubScope subScope in equipment.SubScope)
                     {
-                        var subConnectionToAdd = new SubScopeConnection(subScope, IsTypical);
+                        var subConnectionToAdd = new TypicalSubScopeConnection(subScope, IsTypical);
 
                         subConnectionToAdd.ParentEquipment = equipment;
 
