@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace TECUserControlLibrary.ViewModels
         private ObservableCollection<TypicalSubScope> _subScope;
         private ObservableCollection<TECSubScope> _unconnectedSubScope;
         private TECController _selectedController;
+
+        private UpdateConnectionVM _updateVM;
         #endregion
 
         #region Properties
@@ -73,7 +76,18 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public ICommand UpdateAllCommand;
+        public UpdateConnectionVM UpdateVM
+        {
+            get { return _updateVM; }
+            private set
+            {
+                _updateVM = value;
+                RaisePropertyChanged("UpdateVM");
+                Update?.Invoke(value);
+            }
+        }
+
+        public ICommand UpdateAllCommand { get; private set; }
         #endregion
 
         public TypicalConnectionsVM(TECTypical typical)
@@ -92,6 +106,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 Controllers.Add(controller);
             }
+            UpdateAllCommand = new RelayCommand(updateAllExecute);
         }
 
         public event Action<UpdateConnectionVM> Update;
@@ -122,10 +137,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void updateAllExecute()
         {
-            foreach(TypicalSubScope typSS in SubScope)
-            {
-                throw new NotImplementedException();
-            }
+            UpdateVM = new UpdateConnectionVM(SubScope);
         }
 
         private void handleControllerSelected(TECController controller)
@@ -135,7 +147,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (connection is TECSubScopeConnection ssConnect)
                 {
-                    typSS.Add(new TypicalSubScope(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstances(ssConnect.SubScope).ConvertAll(x => (TECSubScope)x)));
+                    typSS.Add(new TypicalSubScope(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstancesOfType(ssConnect.SubScope)));
                 }
             }
             SubScope = typSS;

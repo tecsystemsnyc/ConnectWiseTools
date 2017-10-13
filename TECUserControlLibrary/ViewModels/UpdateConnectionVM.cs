@@ -53,6 +53,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public UpdateConnectionVM(IEnumerable<TypicalSubScope> subScope)
         {
+            initializeCollections();
             List<TECSubScope> instances = new List<TECSubScope>();
             foreach(TypicalSubScope typ in subScope)
             {
@@ -66,6 +67,12 @@ namespace TECUserControlLibrary.ViewModels
             _subScope = instances;
 
             UpdateCommand = new RelayCommand(updateExecute, canUpdate);
+        }
+
+        private void initializeCollections()
+        {
+            typicalDictionary = new Dictionary<TECSubScope, TypicalSubScope>();
+            updatedDictionary = new Dictionary<TECSubScope, bool>();
         }
 
         private void handleNewSelectedInstance(TECSubScope subScope)
