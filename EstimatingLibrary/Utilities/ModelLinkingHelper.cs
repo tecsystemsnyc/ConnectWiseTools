@@ -121,7 +121,7 @@ namespace EstimatingLibrary.Utilities
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
-            linkSubScopeConnections(system.Controllers, new ObservableCollection<TECSubScope>(system.AllSubScope()), guidDictionary);
+            linkSubScopeConnections(system.Controllers, new ObservableCollection<TECSubScope>(system.GetAllSubScope()), guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
             if(system is TECTypical typical)
             {

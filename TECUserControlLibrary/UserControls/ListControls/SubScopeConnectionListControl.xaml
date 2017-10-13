@@ -1,5 +1,5 @@
 ﻿<local:BaseListControl 
-    x:TypeArguments="models:TECSubScopeConnection"
+    x:TypeArguments="models:TECSubScope"
     x:Class="TECUserControlLibrary.UserControls.ListControls.SubScopeConnectionListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -16,7 +16,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:SubScopeConnectionItemControl
-                        SubScopeConnection="{Binding}"
+                        SubScope="{Binding}"
                         ConduitTypes="{Binding ElementName=SubScopeConnectionListControl, Path=ConduitTypes}"
                         ReadOnly="{Binding ElementName=SubScopeConnectionListControl, Path=ReadOnly}"
                         UpdateCommand="{Binding ElementName=SubScopeConnectionListControl, Path=UpdateItemCommand}"/>

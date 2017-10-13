@@ -624,7 +624,7 @@ namespace Tests
                         var subScopeConnection = connection as TECSubScopeConnection;
                         if (subScopeConnection != null)
                         {
-                            Assert.IsTrue(typical.AllSubScope().Contains(subScopeConnection.SubScope));
+                            Assert.IsTrue(typical.GetAllSubScope().Contains(subScopeConnection.SubScope));
                         }
                     }
                 }

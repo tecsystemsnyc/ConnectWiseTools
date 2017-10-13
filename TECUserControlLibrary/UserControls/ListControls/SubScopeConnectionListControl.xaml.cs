@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
     /// <summary>
     /// Interaction logic for SubScopeConnectionListControl.xaml
     /// </summary>
-    public partial class SubScopeConnectionListControl : BaseListControl<TECSubScopeConnection>
+    public partial class SubScopeConnectionListControl : BaseListControl<TECSubScope>
     {
         public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {

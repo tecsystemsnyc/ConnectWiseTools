@@ -147,6 +147,7 @@ namespace EstimatingLibrary
                 }
             }
         }
+        
         #endregion
 
         #region Methods
@@ -355,7 +356,7 @@ namespace EstimatingLibrary
 
         private void handleInstanceRemoved(TECSystem instance)
         {
-            foreach (TECSubScope subScope in instance.AllSubScope())
+            foreach (TECSubScope subScope in instance.GetAllSubScope())
             {
                 if (subScope.Connection != null && !instance.Controllers.Contains(subScope.Connection.ParentController))
                 {
@@ -366,10 +367,10 @@ namespace EstimatingLibrary
             removeFromDictionary(Equipment, instance.Equipment);
             foreach(TECEquipment instanceEquip in instance.Equipment)
             {
-                removeFromDictionary(AllSubScope(), instanceEquip.SubScope);
+                removeFromDictionary(GetAllSubScope(), instanceEquip.SubScope);
                 foreach (TECSubScope instanceSubScope in instanceEquip.SubScope)
                 {
-                    foreach(TECSubScope subScope in AllSubScope())
+                    foreach(TECSubScope subScope in GetAllSubScope())
                     {
                         removeFromDictionary(subScope.Points, instanceSubScope.Points);
                     }
