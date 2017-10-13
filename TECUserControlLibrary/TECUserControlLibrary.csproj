@@ -106,6 +106,9 @@
     <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
       <DependentUpon>TypicalControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ListControls\AbridgedSubScopeConnectionListControl.xaml.cs">
+      <DependentUpon>AbridgedSubScopeConnectionListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ListControls\BaseListControl.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
@@ -457,6 +460,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\TypicalControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\AbridgedSubScopeConnectionListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

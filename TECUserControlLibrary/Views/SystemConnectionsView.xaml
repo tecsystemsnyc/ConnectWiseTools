@@ -24,7 +24,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <!--Controllers-->
         <Border Grid.RowSpan="2">
             <listControls:ControllerListControl
@@ -40,6 +40,7 @@
         <Button Content="Update All"
                 Command="{Binding UpdateAll}"
                 Margin="5"
-                Grid.Row="2"/>
+                Grid.Row="2"
+                Click="updateStarted"/>
     </Grid>
 </UserControl>

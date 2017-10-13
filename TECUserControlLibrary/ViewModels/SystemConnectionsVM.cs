@@ -70,6 +70,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public event Action<UpdateConnectionVM> Update;
+
         private void initializeCollections()
         {
             _controllers = new ObservableCollection<TECController>();

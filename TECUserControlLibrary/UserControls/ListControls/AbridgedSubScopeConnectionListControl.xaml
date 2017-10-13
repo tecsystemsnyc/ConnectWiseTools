@@ -1,0 +1,23 @@
+﻿<local:BaseListControl x:TypeArguments="models:TECSubScopeConnection" x:Class="TECUserControlLibrary.UserControls.ListControls.AbridgedSubScopeConnectionListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+                       xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             mc:Ignorable="d" 
+             x:Name="abridgedSSConnectList"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=abridgedSSConnectList}">
+        <ListView ItemsSource="{Binding Source}"
+                  SelectedItem="{Binding SelectedItem}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Label Content="{Binding SubScope.Name}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</local:BaseListControl>
