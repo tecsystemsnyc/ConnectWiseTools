@@ -23,31 +23,31 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// </summary>
     public partial class SubScopeConnectionItemControl : UserControl
     {
-        public TypicalSubScope TypicalSubScopeConnection
+        public TypicalSubScope TypicalSubScope
         {
-            get { return (TypicalSubScope)GetValue(TypicalSubScopeConnectionProperty); }
+            get { return (TypicalSubScope)GetValue(TypicalSubScopeProperty); }
             set
             {
-                SetValue(TypicalSubScopeConnectionProperty, value);
-                SetValue(SubScopeConnectionProperty, value.SubScope.Connection);
+                SetValue(TypicalSubScopeProperty, value);
+                SetValue(SubScopeProperty, value.SubScope.Connection);
             }
         }
 
         // Using a DependencyProperty as the backing store for TypicalSubScopeConnection.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TypicalSubScopeConnectionProperty =
-            DependencyProperty.Register("TypicalSubScopeConnection", typeof(TypicalSubScope), typeof(SubScopeConnectionItemControl), new PropertyMetadata(default(TypicalSubScope)));
+        public static readonly DependencyProperty TypicalSubScopeProperty =
+            DependencyProperty.Register("TypicalSubScope", typeof(TypicalSubScope), typeof(SubScopeConnectionItemControl), new PropertyMetadata(default(TypicalSubScope)));
 
 
 
-        public TECSubScopeConnection SubScopeConnection
+        public TECSubScope SubScope
         {
-            get { return (TECSubScopeConnection)GetValue(SubScopeConnectionProperty); }
-            set { SetValue(SubScopeConnectionProperty, value); }
+            get { return (TECSubScope)GetValue(SubScopeProperty); }
+            set { SetValue(SubScopeProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for SubScopeConnection.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SubScopeConnectionProperty =
-            DependencyProperty.Register("SubScopeConnection", typeof(TECSubScopeConnection), typeof(SubScopeConnectionItemControl));
+        public static readonly DependencyProperty SubScopeProperty =
+            DependencyProperty.Register("SubScope", typeof(TECSubScopeConnection), typeof(SubScopeConnectionItemControl));
         
         public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {

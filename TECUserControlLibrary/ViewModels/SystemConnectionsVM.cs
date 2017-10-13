@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -13,10 +14,10 @@ namespace TECUserControlLibrary.ViewModels
     {
         #region Fields
         private ObservableCollection<TECController> _controllers;
-        private ObservableCollection<TECSubScopeConnection> _connections;
+        private ObservableCollection<TECSubScope> _instanceSubScope;
+        private ObservableCollection<TypicalSubScope> _typicalSubScope;
         private TECController _selectedController;
-
-        private bool isTypical;
+        private readonly bool _isTypical;
         #endregion
 
         #region Properties
@@ -32,16 +33,25 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Controllers");
             }
         }
-        public ObservableCollection<TECSubScopeConnection> Connections
+        public ObservableCollection<TECSubScope> InstanceSubScope
         {
             get
             {
-                return _connections;
+                return _instanceSubScope;
             }
             set
             {
-                _connections = value;
-                RaisePropertyChanged("Connections");
+                _instanceSubScope = value;
+                RaisePropertyChanged("InstanceSubScope");
+            }
+        }
+        public ObservableCollection<TypicalSubScope> TypicalSubScope
+        {
+            get { return _typicalSubScope; }
+            set
+            {
+                _typicalSubScope = value;
+                RaisePropertyChanged("TypicalSubScope");
             }
         }
         public TECController SelectedController
@@ -56,18 +66,45 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedController");
             }
         }
+        public bool IsTypical { get { return _isTypical; } }
         #endregion
 
-        public SystemConnectionsVM(TECSystem system)
+        public SystemConnectionsVM(TECSystem system, TECBid bid = null)
         {
-            if (system is TECTypical)
+            initializeCollections();
+            if (system is TECTypical typical)
             {
-                isTypical = true;
+                _isTypical = true;
+                foreach (TECSubScope ss in system.GetAllSubScope()) {
+                    TypicalSubScope.Add(new TypicalSubScope(ss, typical.TypicalInstanceDictionary.GetInstances(ss))
+                }
             }
             else
             {
-                isTypical = false;
+                _isTypical = false;
+                foreach (TECSubScope ss in system.GetAllSubScope())
+                { 
+                    InstanceSubScope.Add(ss);
+                }
             }
+            foreach (TECController controller in system.Controllers)
+            {
+                Controllers.Add(controller);
+            }
+            if (bid != null)
+            {
+                foreach(TECController controller in bid.Controllers)
+                {
+                    Controllers.Add(controller);
+                }
+            }
+        }
+
+        private void initializeCollections()
+        {
+            _controllers = new ObservableCollection<TECController>();
+            _instanceSubScope = new ObservableCollection<TECSubScope>();
+            _typicalSubScope = new ObservableCollection<TypicalSubScope>();
         }
     }
 }

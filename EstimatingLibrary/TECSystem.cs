@@ -199,7 +199,7 @@ namespace EstimatingLibrary
             return outSystem;
         }
 
-        public List<TECSubScope> AllSubScope()
+        public List<TECSubScope> GetAllSubScope()
         {
             var outSubScope = new List<TECSubScope>();
             foreach (TECEquipment equip in Equipment)
