@@ -165,6 +165,11 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="local:UpdateConnectionView.Updated">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
         </Grid.Triggers>
         <Grid DataContext="{Binding ElementName=systemHierarchyView}">
             <Grid.ColumnDefinitions>
