@@ -21,20 +21,20 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class TypicalConnectionsView : UserControl
     {
-        public SystemConnectionsVM ViewModel
+        public TypicalConnectionsVM ViewModel
         {
-            get { return (SystemConnectionsVM)GetValue(ViewModelProperty); }
+            get { return (TypicalConnectionsVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(SystemConnectionsVM), typeof(SystemConnectionsView),
-                new PropertyMetadata(default(SystemConnectionsVM)));
+            DependencyProperty.Register("ViewModel", typeof(TypicalConnectionsVM), typeof(TypicalHierarchyView),
+                new PropertyMetadata(default(TypicalConnectionsVM)));
 
         public static readonly RoutedEvent UpdateEvent =
         EventManager.RegisterRoutedEvent("Update", RoutingStrategy.Bubble,
-        typeof(RoutedEventHandler), typeof(SystemConnectionsView));
+        typeof(RoutedEventHandler), typeof(TypicalConnectionsView));
 
         public event RoutedEventHandler Update
         {

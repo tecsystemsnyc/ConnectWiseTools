@@ -58,7 +58,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public SystemConnectionsVM(TECSystem system)
+        public SystemConnectionsVM(TECSystem system, IEnumerable<TECController> bidControllers)
         {
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
@@ -72,9 +72,11 @@ namespace TECUserControlLibrary.ViewModels
             {
                 Controllers.Add(controller);
             }
+            foreach (TECController controller in bidControllers)
+            {
+                Controllers.Add(controller);
+            }
         }
-
-        public event Action<UpdateConnectionVM> Update;
 
         private void initializeCollections()
         {

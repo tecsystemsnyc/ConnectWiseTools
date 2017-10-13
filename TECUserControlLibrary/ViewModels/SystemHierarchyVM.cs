@@ -25,7 +25,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECPoint selectedPoint;
         private TECController selectedController;
         private TECPanel selectedPanel;
-        private SystemConnectionsVM connectionsVM;
+        private TypicalConnectionsVM connectionsVM;
 
         public ViewModelBase SelectedVM
         {
@@ -44,13 +44,13 @@ namespace TECUserControlLibrary.ViewModels
                 selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
                 Selected?.Invoke(value);
-                SystemSelected(value);
+                SystemSelected(value as TECTypical);
             }
         }
 
-        private void SystemSelected(TECSystem value)
+        private void SystemSelected(TECTypical value)
         {
-            ConnectionsVM = new SystemConnectionsVM(value);
+            ConnectionsVM = new TypicalConnectionsVM(value);
         }
 
         public TECEquipment SelectedEquipment
@@ -123,7 +123,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECSystem> AddMiscCommand { get; private set; }
         public RelayCommand<object> BackCommand { get; private set; }
 
-        public SystemConnectionsVM ConnectionsVM
+        public TypicalConnectionsVM ConnectionsVM
         {
             get { return connectionsVM; }
             set
