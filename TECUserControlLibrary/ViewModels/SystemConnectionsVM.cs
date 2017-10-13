@@ -76,7 +76,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _isTypical = true;
                 foreach (TECSubScope ss in system.GetAllSubScope()) {
-                    TypicalSubScope.Add(new TypicalSubScope(ss, typical.TypicalInstanceDictionary.GetInstances(ss))
+                    TypicalSubScope.Add(new TypicalSubScope(ss, typical.TypicalInstanceDictionary.GetInstances(ss).ConvertAll(x => (TECSubScope)x)));
                 }
             }
             else
