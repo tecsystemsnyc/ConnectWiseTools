@@ -42,7 +42,7 @@
             </DataTemplate>
             <DataTemplate x:Key="ElectricalTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                    <local:SystemConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ConnectionsVM}"/>
+                    <local:TypicalConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ConnectionsVM}"/>
                 </Grid>
             </DataTemplate>
             <Storyboard x:Key="systemMove">

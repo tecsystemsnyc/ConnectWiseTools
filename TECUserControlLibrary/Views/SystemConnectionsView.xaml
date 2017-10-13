@@ -36,11 +36,5 @@
         <Border Grid.Column="1" Grid.ColumnSpan="2">
             <listControls:SubScopeConnectionListControl/>
         </Border>
-
-        <Button Content="Update All"
-                Command="{Binding UpdateAll}"
-                Margin="5"
-                Grid.Row="2"
-                Click="updateStarted"/>
     </Grid>
 </UserControl>
