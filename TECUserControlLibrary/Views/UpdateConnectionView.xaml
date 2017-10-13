@@ -13,13 +13,15 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <listControls:AbridgedSubScopeConnectionListControl Source="{Binding SubScopeConnections}"
-                                                            SelectedItem="{Binding SelectedInstance}"/>
+        <listControls:SubScopeListControl Source="{Binding SubScope}"
+                                          SelectedItem="{Binding SelectedInstance}"/>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -35,16 +37,19 @@
             <Label Content="Conduit Type" Grid.Column="4"/>
             <!--Instance-->
             <Label Content="Instance" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.Controller}" Grid.Column="1" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.Length}" Grid.Column="2" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.ConduitLength}" Grid.Column="3" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.ConduitType}" Grid.Column="4" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.Connection.Controller}" Grid.Column="1" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.Connection.Length}" Grid.Column="2" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.Connection.ConduitLength}" Grid.Column="3" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.Connection.ConduitType}" Grid.Column="4" Grid.Row="1"/>
             <!--Typical-->
             <Label Content="Typical" Grid.Row="2"/>
             <Label Content="{Binding SelectedTypical.SubScope.Connection.Controller}" Grid.Column="1" Grid.Row="2"/>
             <Label Content="{Binding SelectedTypical.SubScope.Connection.Length}" Grid.Column="2" Grid.Row="2"/>
             <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitLength}" Grid.Column="3" Grid.Row="2"/>
             <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitType}" Grid.Column="4" Grid.Row="2"/>
+            <!--Buttons-->
+            <Button Content="Update" Command="{Binding UpdateCommand}" Grid.Row="3" Grid.ColumnSpan="2" Margin="2"/>
+            <Button Content="Done" Click="doneButton_Click" Grid.Row="4" Grid.ColumnSpan="2" Margin="2"/>
         </Grid>
     </Grid>
 </UserControl>
