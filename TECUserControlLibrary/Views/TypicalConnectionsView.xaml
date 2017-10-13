@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.TypicalConnectionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=SystemConnectionsView, Path=ViewModel}">
+        <Grid.Resources>
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--Controllers-->
+        <Border Grid.RowSpan="2">
+            <listControls:ControllerListControl
+                Source="{Binding Controllers}"
+                SelectedItem="{Binding SelectedController}"/>
+        </Border>
+        
+        <!--SubScope Connections-->
+        <Border Grid.Column="1" Grid.ColumnSpan="2">
+            <listControls:TypicalSubScopeConnectionListControl
+                Source="{Binding SubScope}"/>
+        </Border>
+
+        <Button Content="Update All"
+                Command="{Binding UpdateAll}"
+                Margin="5"
+                Grid.Row="2"
+                Click="updateStarted"/>
+    </Grid>
+</UserControl>

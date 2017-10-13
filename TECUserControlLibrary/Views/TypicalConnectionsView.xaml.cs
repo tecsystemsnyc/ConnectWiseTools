@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.Views
     /// <summary>
     /// Interaction logic for SystemConnectionsView.xaml
     /// </summary>
-    public partial class SystemConnectionsView : UserControl
+    public partial class TypicalConnectionsView : UserControl
     {
         public SystemConnectionsVM ViewModel
         {
@@ -32,9 +32,25 @@ namespace TECUserControlLibrary.Views
             DependencyProperty.Register("ViewModel", typeof(SystemConnectionsVM), typeof(SystemConnectionsView),
                 new PropertyMetadata(default(SystemConnectionsVM)));
 
-        public SystemConnectionsView()
+        public static readonly RoutedEvent UpdateEvent =
+        EventManager.RegisterRoutedEvent("Update", RoutingStrategy.Bubble,
+        typeof(RoutedEventHandler), typeof(SystemConnectionsView));
+
+        public event RoutedEventHandler Update
+        {
+            add { AddHandler(UpdateEvent, value); }
+            remove { RemoveHandler(UpdateEvent, value); }
+        }
+
+
+        public TypicalConnectionsView()
         {
             InitializeComponent();
+        }
+
+        protected void updateStarted(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(UpdateEvent, this));
         }
     }
 }

@@ -401,6 +401,9 @@
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
+    <Compile Include="Views\TypicalConnectionsView.xaml.cs">
+      <DependentUpon>TypicalConnectionsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SystemConnectionsView.xaml.cs">
       <DependentUpon>SystemConnectionsView.xaml</DependentUpon>
     </Compile>
@@ -790,6 +793,10 @@
     <Page Include="UserControls\SystemEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TypicalConnectionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SystemConnectionsView.xaml">
       <SubType>Designer</SubType>
