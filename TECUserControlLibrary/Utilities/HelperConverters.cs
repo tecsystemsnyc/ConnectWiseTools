@@ -648,6 +648,30 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class SelectedComponentToSpanConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            SystemComponentIndex index = (SystemComponentIndex)value;
+            switch(index)
+            {
+                case SystemComponentIndex.Electrical:
+                    return 2;
+                default:
+                    return 1;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter

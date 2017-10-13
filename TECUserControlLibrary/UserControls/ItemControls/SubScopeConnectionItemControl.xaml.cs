@@ -23,19 +23,19 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// </summary>
     public partial class SubScopeConnectionItemControl : UserControl
     {
-        public TypicalSubScopeConnection TypicalSubScopeConnection
+        public TypicalSubScope TypicalSubScopeConnection
         {
-            get { return (TypicalSubScopeConnection)GetValue(TypicalSubScopeConnectionProperty); }
+            get { return (TypicalSubScope)GetValue(TypicalSubScopeConnectionProperty); }
             set
             {
                 SetValue(TypicalSubScopeConnectionProperty, value);
-                SetValue(SubScopeConnectionProperty, value.Connection);
+                SetValue(SubScopeConnectionProperty, value.SubScope.Connection);
             }
         }
 
         // Using a DependencyProperty as the backing store for TypicalSubScopeConnection.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TypicalSubScopeConnectionProperty =
-            DependencyProperty.Register("TypicalSubScopeConnection", typeof(TypicalSubScopeConnection), typeof(SubScopeConnectionItemControl), new PropertyMetadata(0));
+            DependencyProperty.Register("TypicalSubScopeConnection", typeof(TypicalSubScope), typeof(SubScopeConnectionItemControl), new PropertyMetadata(default(TypicalSubScope)));
 
 
 
@@ -57,7 +57,8 @@ namespace TECUserControlLibrary.UserControls.ItemControls
 
         // Using a DependencyProperty as the backing store for ConduitTypes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConduitTypesProperty =
-            DependencyProperty.Register("ConduitTypes", typeof(ObservableCollection<TECElectricalMaterial>), typeof(SubScopeConnectionItemControl), new PropertyMetadata(0));
+            DependencyProperty.Register("ConduitTypes", typeof(ObservableCollection<TECElectricalMaterial>),
+                typeof(SubScopeConnectionItemControl), new PropertyMetadata(default(ObservableCollection<TECElectricalMaterial>)));
         
         public bool ReadOnly
         {

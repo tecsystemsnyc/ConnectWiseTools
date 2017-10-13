@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
 
         // Using a DependencyProperty as the backing store for ConduitTypes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConduitTypesProperty =
-            DependencyProperty.Register("ConduitTypes", typeof(ObservableCollection<TECElectricalMaterial>), typeof(SubScopeConnectionListControl), new PropertyMetadata(0));
+            DependencyProperty.Register("ConduitTypes", typeof(ObservableCollection<TECElectricalMaterial>), typeof(SubScopeConnectionListControl), new PropertyMetadata(default(ObservableCollection<TECElectricalMaterial>)));
 
         public bool ReadOnly
         {
@@ -50,7 +50,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
 
         // Using a DependencyProperty as the backing store for UpdateItemCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UpdateItemCommandProperty =
-            DependencyProperty.Register("UpdateItemCommand", typeof(ICommand), typeof(SubScopeConnectionListControl), new PropertyMetadata(0));
+            DependencyProperty.Register("UpdateItemCommand", typeof(ICommand), typeof(SubScopeConnectionListControl));
 
 
 

@@ -89,6 +89,11 @@
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:ControllerListControl.Selected">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
             <EventTrigger RoutedEvent="Button.Click" SourceName="systemBack">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
@@ -212,14 +217,15 @@
                     </Button.Command>
                 </Button>
             </Grid>
-        <Grid  Grid.Column="1" Grid.Row="1">
+        <Grid  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="{Binding ElementName=componentComboBox, Path=SelectedItem, 
+            Converter={utilities:SelectedComponentToSpanConverter}}">
             <Grid.Resources>
                     <ResourceDictionary>
                         <utilities:SystemComponentSelector x:Key="ComponentSelector"
                                              EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                              ControllerTemplate="{StaticResource ControllerTemplate}"
                                              PanelTemplate="{StaticResource PanelTemplate}"
-                                                           ConnectionTemplate="{StaticResource ElectricalTemplate}"/>
+                                             ConnectionTemplate="{StaticResource ElectricalTemplate}"/>
                 </ResourceDictionary>
             </Grid.Resources>
             <Grid.RowDefinitions>
