@@ -107,9 +107,19 @@ namespace TECUserControlLibrary.Debug
             equipment.SubScope.Add(ss);
             typical.Equipment.Add(equipment);
 
+            TECSubScope connected = new TECSubScope(true);
+            connected.Name = "Connected";
+            connected.Devices.Add(bid.Catalogs.Devices[0]);
+            TECPoint point2 = new TECPoint(true);
+            point2.Type = IOType.AI;
+            point2.Quantity = 1;
+            connected.Points.Add(point2);
+            equipment.SubScope.Add(connected);
+
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), true);
             controller.Name = "Test Controller";
             typical.AddController(controller);
+            controller.AddSubScope(connected);
 
             TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), true);
             panel.Name = "Test Panel";
