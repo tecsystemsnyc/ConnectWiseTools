@@ -116,7 +116,11 @@ namespace TECUserControlLibrary.Debug
             connected.Points.Add(point2);
             equipment.SubScope.Add(connected);
 
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), true);
+            TECControllerType controllerType = new TECControllerType(new TECManufacturer());
+            TECIO io = new TECIO(IOType.AI);
+            io.Quantity = 10;
+            controllerType.IO.Add(io);
+            TECController controller = new TECController(controllerType, true);
             controller.Name = "Test Controller";
             typical.AddController(controller);
             controller.AddSubScope(connected);
