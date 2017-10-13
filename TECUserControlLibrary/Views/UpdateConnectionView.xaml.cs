@@ -37,5 +37,10 @@ namespace TECUserControlLibrary.Views
         {
             InitializeComponent();
         }
+
+        private void doneButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
