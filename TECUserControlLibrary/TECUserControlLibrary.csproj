@@ -223,6 +223,7 @@
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\SystemConnectionsVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
+    <Compile Include="ViewModels\TypicalConnectionsVM.cs" />
     <Compile Include="ViewModels\TypicalHierarchyVM.cs" />
     <Compile Include="Views\AddViews\AddBaseView.cs" />
     <Compile Include="Views\AddViews\AddControllerView.xaml.cs">
