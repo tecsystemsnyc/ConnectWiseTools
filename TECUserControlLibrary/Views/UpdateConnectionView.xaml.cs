@@ -32,6 +32,16 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(UpdateConnectionVM), typeof(UpdateConnectionView));
 
+        public static readonly RoutedEvent UpdatedEvent =
+        EventManager.RegisterRoutedEvent("Updated", RoutingStrategy.Bubble,
+        typeof(RoutedEventHandler), typeof(UpdateConnectionView));
+
+        public event RoutedEventHandler Updated
+        {
+            add { AddHandler(UpdatedEvent, value); }
+            remove { RemoveHandler(UpdatedEvent, value); }
+        }
+
 
         public UpdateConnectionView()
         {
@@ -40,7 +50,7 @@ namespace TECUserControlLibrary.Views
 
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
-
+            RaiseEvent(new RoutedEventArgs(UpdatedEvent, this));
         }
     }
 }
