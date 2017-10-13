@@ -302,6 +302,19 @@ namespace TECUserControlLibrary.Utilities
             }
         }
 
+        public static bool TargetCollectionIsType(IDropInfo dropInfo, Type type)
+        {
+            var targetCollection = dropInfo.TargetCollection;
+            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
+            {
+                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+                return targetType == type;
+            } else
+            {
+                return false;
+            }
+        }
+
         #region File Parameters
         public static FileDialogParameters BidFileParameters
         {

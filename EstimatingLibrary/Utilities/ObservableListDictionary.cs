@@ -44,6 +44,26 @@ namespace EstimatingLibrary.Utilities
         {
             return dictionary[key];
         }
+        public List<Y> GetInstancesOfType<Y>(Y key)
+        {
+            List<Y> outList = new List<Y>();
+            if (key is T tKey)
+            {
+                var subList = dictionary[tKey];
+                foreach(T item in subList)
+                {
+                    if(item is Y yItem)
+                    {
+                        outList.Add(yItem);
+                    }
+                }
+                return outList;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public bool ContainsKey(T key)
         {

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -111,7 +112,8 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             TECSubScope subScope = dropInfo.Data as TECSubScope;
-            if(subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope))
+            if (subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope)
+                && UIHelpers.TargetCollectionIsType(dropInfo, typeof(TypicalSubScope)))
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
