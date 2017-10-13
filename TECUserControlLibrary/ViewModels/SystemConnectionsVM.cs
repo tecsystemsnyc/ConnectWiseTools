@@ -14,8 +14,9 @@ namespace TECUserControlLibrary.ViewModels
     {
         #region Fields
         private ObservableCollection<TECController> _controllers;
-        private ObservableCollection<TECSubScope> _subScope;
+        private ObservableCollection<TECSubScope> _unconnectedSubScope;
         private TECController _selectedController;
+        private ObservableCollection<TECSubScope> _selectedSubScope;
         #endregion
 
         #region Properties
@@ -31,16 +32,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Controllers");
             }
         }
-        public ObservableCollection<TECSubScope> SubScope
+        public ObservableCollection<TECSubScope> UnconnectedSubScope
         {
             get
             {
-                return _subScope;
+                return _unconnectedSubScope;
             }
             set
             {
-                _subScope = value;
-                RaisePropertyChanged("SubScope");
+                _unconnectedSubScope = value;
+                RaisePropertyChanged("UnconnectedSubScope");
             }
         }
         public TECController SelectedController
@@ -62,7 +63,10 @@ namespace TECUserControlLibrary.ViewModels
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
             { 
-                SubScope.Add(ss);
+                if (ss.ParentConnection == null)
+                {
+                    UnconnectedSubScope.Add(ss);
+                }
             }
             foreach (TECController controller in system.Controllers)
             {
@@ -75,7 +79,7 @@ namespace TECUserControlLibrary.ViewModels
         private void initializeCollections()
         {
             _controllers = new ObservableCollection<TECController>();
-            _subScope = new ObservableCollection<TECSubScope>();
+            _unconnectedSubScope = new ObservableCollection<TECSubScope>();
         }
     }
 }
