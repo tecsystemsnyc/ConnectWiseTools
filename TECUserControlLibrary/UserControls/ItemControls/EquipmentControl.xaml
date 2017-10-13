@@ -8,8 +8,17 @@
              x:Name="equipmentControl"
              d:DesignHeight="300" d:DesignWidth="300">
     <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
-
         <Grid DataContext="{Binding ElementName=equipmentControl, Path=Equipment}">
+            <Grid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Copy" Command="{Binding ElementName=equipmentControl, Path=CopyCommand}"
+                              CommandParameter="{Binding}"/>
+                    <MenuItem Header="Paste" Command="{Binding ElementName=equipmentControl, Path=PasteCommand}"
+                              CommandParameter="{Binding}"/>
+                    <MenuItem Header="Delete" Command="{Binding ElementName=equipmentControl, Path=DeleteCommand}"
+                              CommandParameter="{Binding}"/>
+                </ContextMenu>
+            </Grid.ContextMenu>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>

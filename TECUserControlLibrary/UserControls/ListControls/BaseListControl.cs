@@ -68,12 +68,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
             add { AddHandler(SelectedEvent, value); }
             remove { RemoveHandler(SelectedEvent, value); }
         }
-
-        protected void ListView_Selected(object sender, RoutedEventArgs e)
-        {
-            RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
-        }
-
+        
         public static readonly RoutedEvent DroppedEvent =
         EventManager.RegisterRoutedEvent("Dropped", RoutingStrategy.Bubble,
         typeof(RoutedEventHandler), typeof(BaseListControl<T>));
@@ -83,7 +78,33 @@ namespace TECUserControlLibrary.UserControls.ListControls
             add { AddHandler(DroppedEvent, value); }
             remove { RemoveHandler(DroppedEvent, value); }
         }
+        
+        public object ScopeParent
+        {
+            get { return (object)GetValue(ScopeParentProperty); }
+            set { SetValue(ScopeParentProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for ScopeParent.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ScopeParentProperty =
+            DependencyProperty.Register("ScopeParent", typeof(object), typeof(BaseListControl<T>));
+
+
+        public bool IsDragSource
+        {
+            get { return (bool)GetValue(IsDragSourceProperty); }
+            set { SetValue(IsDragSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsDragSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsDragSourceProperty =
+            DependencyProperty.Register("IsDragSource", typeof(bool), typeof(BaseListControl<T>), new PropertyMetadata(false));
+
+
+        protected void ListView_Selected(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
+        }
         protected void ListView_Dropped(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(DroppedEvent, this));
