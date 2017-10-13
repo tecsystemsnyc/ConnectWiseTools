@@ -237,6 +237,7 @@ namespace TECUserControlLibrary.Views
             {
                 eList.SelectedItem = null;
             }
+            componentComboBox.SelectedValue = SystemComponentIndex.Equipment;
         }
 
         private void equipmentBack_Click(object sender, RoutedEventArgs e)
@@ -246,7 +247,7 @@ namespace TECUserControlLibrary.Views
 
         private void componentComboBox_Selected(object sender, RoutedEventArgs e)
         {
-            
+            ComboBox comboBox = sender as ComboBox;
             EquipmentListControl eList = UIHelpers.FindVisualChild<EquipmentListControl>(this);
             if (eList != null) { 
                 if(eList.SelectedItem != null)
@@ -266,6 +267,12 @@ namespace TECUserControlLibrary.Views
             if (pList != null)
             {
                 pList.SelectedItem = null;
+            }
+
+            if((SystemComponentIndex)comboBox.SelectedValue == SystemComponentIndex.Electrical)
+            {
+                Storyboard move = (Storyboard)FindResource("systemMove");
+                move.Begin();
             }
             
         }

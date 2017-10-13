@@ -24,6 +24,7 @@
                   SelectionChanged="ListView_Selected"
                   dd:DragDrop.DropHandler="{Binding ElementName=controllerListControl, Path=DropHandler}"
                   dd:DragDrop.IsDropTarget="True"
+                  dd:DragDrop.IsDragSource="{Binding ElementName=controllerListControl, Path=IsDragSource}"
                   AllowDrop="True"
                   Drop="ListView_Dropped"
                   HorizontalContentAlignment="Stretch">
