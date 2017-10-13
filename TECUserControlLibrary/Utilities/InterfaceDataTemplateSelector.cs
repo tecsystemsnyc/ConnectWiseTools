@@ -79,6 +79,7 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate ControllerTemplate { get; set; }
         public DataTemplate PanelTemplate { get; set; }
         public DataTemplate MiscTemplate { get; set; }
+        public DataTemplate ConnectionTemplate { get; set; }
 
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -97,6 +98,8 @@ namespace TECUserControlLibrary.Utilities
                         return ControllerTemplate;
                     case SystemComponentIndex.Panels:
                         return PanelTemplate;
+                    case SystemComponentIndex.Electrical:
+                        return ConnectionTemplate;
                     default:
                         return EquipmentTemplate;
                 }

@@ -48,10 +48,6 @@ namespace TECUserControlLibrary.ViewModels
                     MiscCostsVM.Refresh(new TECSystem(false));
                 }
             }
-            if (ConnectionVM != null)
-            {
-                ConnectionVM.SelectedSystem = selected;
-            }
         }
 
         public bool IsTypical { get; private set; }
@@ -81,7 +77,6 @@ namespace TECUserControlLibrary.ViewModels
         #region VM Extenstions
         public EquipmentVM ScopeDataGrid { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
-        public ConnectionVM ConnectionVM { get; set; }
         public MiscCostsVM MiscCostsVM { get; set; }
         #endregion
 
@@ -126,7 +121,6 @@ namespace TECUserControlLibrary.ViewModels
                 Templates = scopeManager as TECTemplates;
             }
             ScopeDataGrid.Refresh(scopeManager);
-            ConnectionVM.Refresh(scopeManager);
             ControllersPanelsVM.Refresh(new TECSystem(false), scopeManager);
         }
         private void setupVMs(TECScopeManager scopeManager, bool isTypicalSystem = true)
@@ -141,7 +135,6 @@ namespace TECUserControlLibrary.ViewModels
             ScopeDataGrid.ChildVM.DataGridVisibilty.SubScopeQuantity = Visibility.Collapsed;
 
             ControllersPanelsVM = new ControllersPanelsVM(new TECSystem(false), scopeManager, isTypicalSystem);
-            ConnectionVM = new ConnectionVM(scopeManager, isTypicalSystem);
             MiscCostsVM = new MiscCostsVM(new TECSystem(false));
         }
 

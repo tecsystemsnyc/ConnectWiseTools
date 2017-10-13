@@ -40,9 +40,9 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ElectricalTemplate">
-                <!--<Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                    <local:SystemConnectionsView
-                </Grid>-->
+                <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
+                    <local:SystemConnectionsView ViewModel="{Binding ConnectionVM}"/>
+                </Grid>
             </DataTemplate>
             <Storyboard x:Key="systemMove">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
@@ -207,6 +207,7 @@
                             <Binding ElementName="systemHierarchyView" Path="ViewModel.AddEquipmentCommand"/>
                             <Binding ElementName="systemHierarchyView" Path="ViewModel.AddControllerCommand"/>
                             <Binding ElementName="systemHierarchyView" Path="ViewModel.AddPanelCommand"/>
+                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddControllerCommand"/>
                         </MultiBinding>
                     </Button.Command>
                 </Button>
@@ -217,7 +218,8 @@
                         <utilities:SystemComponentSelector x:Key="ComponentSelector"
                                              EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                              ControllerTemplate="{StaticResource ControllerTemplate}"
-                                             PanelTemplate="{StaticResource PanelTemplate}"/>
+                                             PanelTemplate="{StaticResource PanelTemplate}"
+                                                           ConnectionTemplate="{StaticResource ElectricalTemplate}"/>
                 </ResourceDictionary>
             </Grid.Resources>
             <Grid.RowDefinitions>

@@ -255,13 +255,8 @@
     <Compile Include="Utilities\AttachableForStyleBehavior.cs" />
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
-    <Compile Include="ViewModels\ConnectionVM.cs" />
-    <Compile Include="ViewModels\InstanceSystemVM.cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
     <Compile Include="ViewModels\SystemComponentVM.cs" />
-    <Compile Include="Views\InstanceSystemView.xaml.cs">
-      <DependentUpon>InstanceSystemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\LocationView.xaml.cs">
       <DependentUpon>LocationView.xaml</DependentUpon>
     </Compile>
@@ -270,9 +265,6 @@
     </Compile>
     <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ConnectionView.xaml.cs">
-      <DependentUpon>ConnectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ConnectionTypeGridControl.xaml.cs">
       <DependentUpon>ConnectionTypeGridControl.xaml</DependentUpon>
@@ -389,7 +381,6 @@
       <DependentUpon>MenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\EnumBindingSourceExtension.cs" />
-    <Compile Include="ViewModels\TypicalSystemVM.cs" />
     <Compile Include="ViewModels\ControllersPanelsVM.cs" />
     <Compile Include="ViewModels\EditTabVM.cs" />
     <Compile Include="ViewModels\LocationVM.cs" />
@@ -405,9 +396,6 @@
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
-    <Compile Include="Views\SystemComponentView.xaml.cs">
-      <DependentUpon>SystemComponentView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SystemConnectionsView.xaml.cs">
       <DependentUpon>SystemConnectionsView.xaml</DependentUpon>
     </Compile>
@@ -420,14 +408,8 @@
     <Compile Include="UserControls\ListControls\TypicalListControl.xaml.cs">
       <DependentUpon>TypicalListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TypicalSystemView.xaml.cs">
-      <DependentUpon>TypicalSystemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ControllersPanelsView.xaml.cs">
       <DependentUpon>ControllersPanelsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ElectricalView.xaml.cs">
-      <DependentUpon>ElectricalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LaborView.xaml.cs">
       <DependentUpon>LaborView.xaml</DependentUpon>
@@ -625,10 +607,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\InstanceSystemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\LocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -638,10 +616,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ConduitTypeGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ConnectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -805,10 +779,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SystemComponentView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\SystemConnectionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -877,17 +847,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TypicalSystemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ControllersPanelsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ElectricalView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LaborView.xaml">
       <Generator>MSBuild:Compile</Generator>

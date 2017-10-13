@@ -26,7 +26,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        public ConnectionVM ConnectionVM { get; set; }
         public SystemsVM SystemsVM { get; set; }
 
         private TECSystem _selectedSystem;
@@ -37,17 +36,12 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
-                if(ConnectionVM != null)
-                {
-                    ConnectionVM.SelectedSystem = SelectedSystem;
-                }
             }
         }
 
         public ElectricalVM(TECBid bid)
         {
             Bid = bid;
-            ConnectionVM = new ConnectionVM(bid);
             SystemsVM = new SystemsVM(bid);
             SystemsVM.SelectionChanged += selectionChanged;
             SystemsVM.DataGridVisibilty.SystemExpander = System.Windows.Visibility.Collapsed;
@@ -62,7 +56,6 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECBid bid)
         {
             Bid = bid;
-            ConnectionVM.Refresh(bid);
             SystemsVM.Refresh(bid);
         }
 
