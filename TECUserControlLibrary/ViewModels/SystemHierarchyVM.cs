@@ -17,7 +17,7 @@ namespace TECUserControlLibrary.ViewModels
     public class SystemHierarchyVM : ViewModelBase, IDropTarget
     {
         private TECCatalogs catalogs;
-        private IAddVM selectedVM;
+        private ViewModelBase selectedVM;
         private TECSystem selectedSystem;
         private TECEquipment selectedEquipment;
         private TECSubScope selectedSubScope;
@@ -27,7 +27,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECPanel selectedPanel;
         private SystemConnectionsVM connectionsVM;
 
-        public IAddVM SelectedVM
+        public ViewModelBase SelectedVM
         {
             get { return selectedVM; }
             set
@@ -130,6 +130,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 connectionsVM = value;
                 RaisePropertyChanged("ConnectionsVM");
+                value.Update += updateVM =>
+                {
+                    SelectedVM = updateVM;
+                };
             }
         }
 

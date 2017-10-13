@@ -10,6 +10,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:addViews="clr-namespace:TECUserControlLibrary.Views.AddViews"
              xmlns:addVMs="clr-namespace:TECUserControlLibrary.ViewModels.AddVMs"
+             xmlns:vms="clr-namespace:TECUserControlLibrary.ViewModels"
              xmlns:cmd="http://www.galasoft.ch/mvvmlight"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
@@ -337,6 +338,9 @@
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type addVMs:AddMiscVM}">
                             <addViews:AddMiscView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vms:UpdateConnectionVM}">
+                            <local:UpdateConnectionView ViewModel="{Binding}"/>
                         </DataTemplate>
                     </ContentPresenter.Resources>
                 </ContentPresenter>
