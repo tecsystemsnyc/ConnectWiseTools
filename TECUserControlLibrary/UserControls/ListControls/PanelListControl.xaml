@@ -25,7 +25,8 @@
                   dd:DragDrop.DropHandler="{Binding ElementName=panelListControl, Path=DropHandler}"
                   dd:DragDrop.IsDropTarget="True"
                   AllowDrop="True"
-                  Drop="ListView_Dropped">
+                  Drop="ListView_Dropped"
+                  HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:PanelControl Panel="{Binding}"/>

@@ -7,19 +7,22 @@
              x:Name="valveControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=valveControl, Path=Valve}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
-        <Label FontSize="12" Content="{Binding Name}"/>
-        <Label Content="{Binding Description}" Grid.Column="1"/>
-        <Label Content="Cost: " Grid.Column="2"/>
-        <Label Content="{Binding Cost}" Grid.Column="3"/>
-    </Grid>
+    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+
+        <Grid DataContext="{Binding ElementName=valveControl, Path=Valve}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label FontSize="12" Content="{Binding Name}"/>
+            <Label Content="{Binding Description}" Grid.Column="1"/>
+            <Label Content="Cost: " Grid.Column="2"/>
+            <Label Content="{Binding Cost}" Grid.Column="3"/>
+        </Grid>
+    </Border>
 </UserControl>

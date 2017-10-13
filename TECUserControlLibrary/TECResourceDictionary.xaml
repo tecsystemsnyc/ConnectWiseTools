@@ -41,6 +41,8 @@
     <SolidColorBrush x:Key="AlertActionBrush" Color="{StaticResource TECFlatRed}"/>
     <SolidColorBrush x:Key="TextInputBrush" Color="{StaticResource TEInputWhite}"/>
 
+    <SolidColorBrush x:Key="ItemBackgroundBrush" Color="LightBlue"/>
+
     <!--GlobalStyles-->
     <Style TargetType="Button">
         <Setter Property="Background" Value="{StaticResource ActionBackgroundBrush}"/>
@@ -141,9 +143,6 @@
     </Style>
     <Style TargetType="ScrollBar">
         <Setter Property="Opacity" Value="0.5"/>
-    </Style>
-    <Style TargetType="Label">
-        <Setter Property="Background" Value="{DynamicResource SectionBackgroundBrush}"/>
     </Style>
 
     <Style TargetType="ListView">

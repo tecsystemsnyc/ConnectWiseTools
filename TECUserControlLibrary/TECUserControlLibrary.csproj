@@ -102,6 +102,9 @@
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
+      <DependentUpon>TypicalControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ListControls\BaseListControl.cs" />
     <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
@@ -219,6 +222,7 @@
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\SystemConnectionsVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
+    <Compile Include="ViewModels\TypicalHierarchyVM.cs" />
     <Compile Include="Views\AddViews\AddBaseView.cs" />
     <Compile Include="Views\AddViews\AddControllerView.xaml.cs">
       <DependentUpon>AddControllerView.xaml</DependentUpon>
@@ -461,6 +465,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\AssociatedCostsGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\TypicalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

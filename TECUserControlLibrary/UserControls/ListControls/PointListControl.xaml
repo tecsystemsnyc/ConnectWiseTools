@@ -22,7 +22,8 @@
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected"
-                  dd:DragDrop.DropHandler="{Binding DropHandler}">
+                  dd:DragDrop.DropHandler="{Binding DropHandler}"
+                  HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:PointControl Point="{Binding}"/>

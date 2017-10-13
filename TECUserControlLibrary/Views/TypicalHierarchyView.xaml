@@ -63,7 +63,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Triggers>
-            <EventTrigger RoutedEvent="ListControls:SystemListControl.Selected">
+            <EventTrigger RoutedEvent="listControls:SystemListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource typicalMove}"/>
                 </EventTrigger.Actions>
@@ -73,7 +73,7 @@
                     <BeginStoryboard Storyboard="{StaticResource typicalMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="ListControls:EquipmentListControl.Selected">
+            <EventTrigger RoutedEvent="listControls:EquipmentListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
@@ -83,7 +83,7 @@
                     <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="ListControls:SubScopeListControl.Selected">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>

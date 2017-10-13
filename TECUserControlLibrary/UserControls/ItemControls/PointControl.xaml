@@ -7,18 +7,21 @@
              mc:Ignorable="d" 
              x:Name="pointControl"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=pointControl, Path=Point}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
-        <Label FontSize="14" Content="{Binding Label}"/>
-        <Label Content="{Binding Type}" Grid.Column="1"/>
-        <Label Content="Qty: " Grid.Row="1"/>
-        <Label Content="{Binding Quantity}" Grid.Row="1" Grid.Column="1"/>
-    </Grid>
+    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+
+        <Grid DataContext="{Binding ElementName=pointControl, Path=Point}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label FontSize="14" Content="{Binding Label}"/>
+            <Label Content="{Binding Type}" Grid.Column="1"/>
+            <Label Content="Qty: " Grid.Row="1"/>
+            <Label Content="{Binding Quantity}" Grid.Row="1" Grid.Column="1"/>
+        </Grid>
+    </Border>
 </UserControl>

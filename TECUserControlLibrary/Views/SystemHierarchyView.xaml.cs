@@ -185,9 +185,7 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty DropHandlerProperty =
             DependencyProperty.Register("DropHandler", typeof(IDropTarget),
               typeof(SystemHierarchyView));
-
-
-
+        
         public SystemHierarchyVM ViewModel
         {
             get { return (SystemHierarchyVM)GetValue(ViewModelProperty); }
@@ -201,33 +199,35 @@ namespace TECUserControlLibrary.Views
         public SystemHierarchyView()
         {
             InitializeComponent();
-            SizeChanged += (sender, e) =>
-            {
-                if (e.WidthChanged)
-                {
-                    if (HalfWidth == 0)
-                    {
-                        SystemWidth = e.NewSize.Width / 2;
-                        EquipmentWidth = e.NewSize.Width / 2;
-                        ModalHeight = e.NewSize.Height;
-                    }
-                    else if(SystemWidth != 0)
-                    {
-                        SystemWidth = e.NewSize.Width / 2;
-                        EquipmentWidth = e.NewSize.Width / 2;
-                    }
-                    else if (EquipmentWidth != 0)
-                    {
-                        EquipmentWidth = e.NewSize.Width / 2;
-                    }
+            SizeChanged += handleSizeChanged;
+        }
 
-                    if(ModalHeight != 0)
-                    {
-                        ModalHeight = e.NewSize.Height;
-                    }
-                    HalfWidth = e.NewSize.Width / 2;
+        virtual protected void handleSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.WidthChanged)
+            {
+                if (HalfWidth == 0)
+                {
+                    SystemWidth = e.NewSize.Width / 2;
+                    EquipmentWidth = e.NewSize.Width / 2;
+                    ModalHeight = e.NewSize.Height;
                 }
-            };
+                else if (SystemWidth != 0)
+                {
+                    SystemWidth = e.NewSize.Width / 2;
+                    EquipmentWidth = e.NewSize.Width / 2;
+                }
+                else if (EquipmentWidth != 0)
+                {
+                    EquipmentWidth = e.NewSize.Width / 2;
+                }
+
+                if (ModalHeight != 0)
+                {
+                    ModalHeight = e.NewSize.Height;
+                }
+                HalfWidth = e.NewSize.Width / 2;
+            }
         }
 
         private void systemBack_Click(object sender, RoutedEventArgs e)
