@@ -23,7 +23,7 @@
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected"
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
-                  dd:DragDrop.IsDragSource="{Binding ElementName=controllerListControl, Path=IsDragSource}"
+                  dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>

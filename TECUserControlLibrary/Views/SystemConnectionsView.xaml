@@ -7,8 +7,9 @@
              xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              mc:Ignorable="d" 
+             x:Name="systemConnectionsView"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=SystemConnectionsView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=systemConnectionsView, Path=ViewModel}">
         <Grid.Resources>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Black"/>

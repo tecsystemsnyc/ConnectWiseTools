@@ -34,7 +34,6 @@ namespace TECUserControlLibrary.Models
             SubScope = subScope;
             _instances = new ObservableCollection<TECSubScope>(instances);
             NeedsUpdate = true;
-
             subScope.Connection.PropertyChanged += Connection_PropertyChanged;
         }
 

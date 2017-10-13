@@ -7,8 +7,9 @@
              xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              mc:Ignorable="d" 
+             x:Name="typicalConnectionsView"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=SystemConnectionsView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=typicalConnectionsView, Path=ViewModel}">
         <Grid.Resources>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Black"/>
@@ -27,21 +28,44 @@
 
         <!--Controllers-->
         <Border Grid.RowSpan="2">
-            <listControls:ControllerListControl
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Controllers"/>
+                <listControls:ControllerListControl
                 Source="{Binding Controllers}"
-                SelectedItem="{Binding SelectedController}"/>
+                SelectedItem="{Binding SelectedController}"
+                    Grid.Row="1"/>
+                <Label Content="Unconnected" Grid.Row="2"/>
+                <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
+                                                  IsDragSource="True"
+                                                  DropHandler="{Binding}" Grid.Row="3"/>
+            </Grid>
+            
         </Border>
         
         <!--SubScope Connections-->
         <Border Grid.Column="1" Grid.ColumnSpan="2">
-            <listControls:TypicalSubScopeConnectionListControl
-                Source="{Binding SubScope}"/>
-        </Border>
-
-        <Button Content="Update All"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Content="Update All"
                 Command="{Binding UpdateAll}"
                 Margin="5"
-                Grid.Row="2"
                 Click="updateStarted"/>
+                <listControls:TypicalSubScopeConnectionListControl
+                Source="{Binding SubScope}" Grid.Row="1"/>
+            </Grid>
+            
+            
+        </Border>
+
+        
     </Grid>
 </UserControl>

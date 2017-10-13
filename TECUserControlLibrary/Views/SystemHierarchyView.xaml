@@ -42,7 +42,7 @@
             </DataTemplate>
             <DataTemplate x:Key="ElectricalTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                    <local:TypicalConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ConnectionsVM}"/>
+                    <local:TypicalConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"/>
                 </Grid>
             </DataTemplate>
             <Storyboard x:Key="systemMove">
@@ -100,7 +100,7 @@
                     <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Selected">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Selected" SourceName="subScopeList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>
