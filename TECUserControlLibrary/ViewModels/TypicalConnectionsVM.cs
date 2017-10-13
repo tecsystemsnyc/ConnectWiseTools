@@ -17,6 +17,8 @@ namespace TECUserControlLibrary.ViewModels
     public class TypicalConnectionsVM : ViewModelBase, IDropTarget
     {
         #region Fields
+        private TECTypical typical;
+
         private ObservableCollection<TECController> _controllers;
         private ObservableCollection<TypicalSubScope> _subScope;
         private ObservableCollection<TECSubScope> _unconnectedSubScope;
@@ -67,6 +69,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedController = value;
                 RaisePropertyChanged("SelectedController");
+                handleControllerSelected(value);
             }
         }
 
@@ -75,16 +78,15 @@ namespace TECUserControlLibrary.ViewModels
 
         public TypicalConnectionsVM(TECTypical typical)
         {
+            this.typical = typical;
             initializeCollections();
             foreach (TECSubScope ss in typical.GetAllSubScope())
             {
-                if (ss.ParentConnection == null)
+                if (ss.ParentConnection == null && ss.Connection == null)
                 {
                     UnconnectedSubScope.Add(ss);
-                }else
-                {
-                    SubScope.Add(new TypicalSubScope(ss, typical.TypicalInstanceDictionary.GetInstances(ss).ConvertAll((x) => (TECSubScope)x)));
                 }
+                
             }
             foreach (TECController controller in typical.Controllers)
             {
@@ -93,6 +95,23 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public event Action<UpdateConnectionVM> Update;
+
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            TECSubScope subScope = dropInfo.Data as TECSubScope;
+            if (subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope))
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            TECSubScope subScope = dropInfo.Data as TECSubScope;
+            SelectedController.AddSubScope(subScope);
+        }
 
         private void initializeCollections()
         {
@@ -107,6 +126,19 @@ namespace TECUserControlLibrary.ViewModels
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private void handleControllerSelected(TECController controller)
+        {
+            ObservableCollection<TypicalSubScope> typSS = new ObservableCollection<TypicalSubScope>();
+            foreach (TECConnection connection in controller.ChildrenConnections)
+            {
+                if (connection is TECSubScopeConnection ssConnect)
+                {
+                    typSS.Add(new TypicalSubScope(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstances(ssConnect.SubScope).ConvertAll(x => (TECSubScope)x)));
+                }
+            }
+            SubScope = typSS;
         }
 
         public void DragOver(IDropInfo dropInfo)
