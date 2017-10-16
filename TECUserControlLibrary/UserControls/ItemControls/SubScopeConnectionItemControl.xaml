@@ -30,7 +30,7 @@
     </UserControl.Resources>
 
     <Border>
-        <Grid DataContext="{Binding ElementName=subScopeConnectionItemControl, Path=SubScope}">
+        <Grid DataContext="{Binding ElementName=subScopeConnectionItemControl, Path=SubScopeConnectionItem.SubScope}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -102,7 +102,6 @@
             <Grid Grid.Column="2" Grid.Row="5">
                 <Button Content="Update"
                         Command="{Binding ElementName=subScopeConnectionItemControl, Path=UpdateCommand}"
-                        CommandParameter="{Binding}"
                         Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                         Margin="5"/>

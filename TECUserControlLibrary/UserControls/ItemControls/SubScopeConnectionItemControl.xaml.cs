@@ -23,15 +23,15 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// </summary>
     public partial class SubScopeConnectionItemControl : UserControl
     {
-        public TECSubScope SubScope
+        public SubScopeConnectionItem SubScopeConnectionItem
         {
-            get { return (TECSubScope)GetValue(SubScopeProperty); }
-            set { SetValue(SubScopeProperty, value); }
+            get { return (SubScopeConnectionItem)GetValue(SubScopeConnectionItemProperty); }
+            set { SetValue(SubScopeConnectionItemProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for SubScopeConnection.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SubScopeProperty =
-            DependencyProperty.Register("SubScope", typeof(TECSubScope), typeof(SubScopeConnectionItemControl));
+        public static readonly DependencyProperty SubScopeConnectionItemProperty =
+            DependencyProperty.Register("SubScopeConnectionItem", typeof(SubScopeConnectionItem), typeof(SubScopeConnectionItemControl));
         
         public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {

@@ -11,7 +11,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
     xmlns:dd="urn:gong-wpf-dragdrop"
-    x:Name="typicalSubScopeConnectionListControl">
+    x:Name="subScopeConnectionListControl">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -21,7 +21,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=typicalSubScopeConnectionListControl}">
+    <Grid DataContext="{Binding ElementName=subScopeConnectionListControl}">
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
                   dd:DragDrop.IsDropTarget="True"
@@ -31,9 +31,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:SubScopeConnectionItemControl
-                        SubScope="{Binding SubScope}"
-                        ConduitTypes="{Binding ElementName=typicalSubScopeConnectionListControl, Path=ConduitTypes}"
-                        ReadOnly="{Binding ElementName=typicalSubScopeConnectionListControl, Path=ReadOnly}"/>
+                        SubScopeConnectionItem="{Binding}"
+                        ConduitTypes="{Binding ElementName=subScopeConnectionListControl, Path=ConduitTypes}"
+                        ReadOnly="{Binding ElementName=subScopeConnectionListControl, Path=ReadOnly}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
