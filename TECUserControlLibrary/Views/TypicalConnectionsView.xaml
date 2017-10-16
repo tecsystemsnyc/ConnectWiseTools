@@ -60,7 +60,8 @@
                 Margin="5"
                 Click="updateStarted"/>
                 <listControls:TypicalSubScopeConnectionListControl
-                Source="{Binding SubScope}" Grid.Row="1"/>
+                Source="{Binding SubScope}" Grid.Row="1"
+                    DropHandler="{Binding}"/>
             </Grid>
             
             

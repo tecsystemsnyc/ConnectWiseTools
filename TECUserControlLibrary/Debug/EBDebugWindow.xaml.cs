@@ -116,6 +116,15 @@ namespace TECUserControlLibrary.Debug
             connected.Points.Add(point2);
             equipment.SubScope.Add(connected);
 
+            TECSubScope toConnect = new TECSubScope(true);
+            toConnect.Name = "To Connect";
+            toConnect.Devices.Add(bid.Catalogs.Devices[0]);
+            TECPoint point3 = new TECPoint(true);
+            point3.Type = IOType.AI;
+            point3.Quantity = 1;
+            toConnect.Points.Add(point3);
+            equipment.SubScope.Add(toConnect);
+
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             io.Quantity = 10;

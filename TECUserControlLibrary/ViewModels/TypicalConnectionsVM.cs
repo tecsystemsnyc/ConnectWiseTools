@@ -126,6 +126,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             TECSubScope subScope = dropInfo.Data as TECSubScope;
             SelectedController.AddSubScope(subScope);
+            UnconnectedSubScope.Remove(subScope);
+            SubScope.Add(new TypicalSubScope(subScope, typical.TypicalInstanceDictionary.GetInstancesOfType(subScope)));
         }
 
         private void initializeCollections()
@@ -143,14 +145,18 @@ namespace TECUserControlLibrary.ViewModels
         private void handleControllerSelected(TECController controller)
         {
             ObservableCollection<TypicalSubScope> typSS = new ObservableCollection<TypicalSubScope>();
-            foreach (TECConnection connection in controller.ChildrenConnections)
+            if(controller != null)
             {
-                if (connection is TECSubScopeConnection ssConnect)
+                foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    typSS.Add(new TypicalSubScope(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstancesOfType(ssConnect.SubScope)));
+                    if (connection is TECSubScopeConnection ssConnect)
+                    {
+                        typSS.Add(new TypicalSubScope(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstancesOfType(ssConnect.SubScope)));
+                    }
                 }
+                SubScope = typSS;
             }
-            SubScope = typSS;
+            
         }
     }
 }
