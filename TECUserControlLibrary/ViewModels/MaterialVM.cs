@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels
@@ -27,6 +28,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        #region Connection Types
         private string _connectionTypeName;
         public string ConnectionTypeName
         {
@@ -57,7 +59,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ConnectionTypeLabor");
             }
         }
-
+        #endregion
+        #region Conduit Types
         private string _conduitTypeName;
         public string ConduitTypeName
         {
@@ -88,7 +91,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ConduitTypeLabor");
             }
         }
-
+        #endregion
+        #region Associated Costs
         private string _associatedCostName;
         public string AssociatedCostName
         {
@@ -129,7 +133,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("AssociatedCostLabor");
             }
         }
-
+        #endregion
+        #region Panel Types
         private string _panelTypeName;
         public string PanelTypeName
         {
@@ -170,7 +175,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PanelTypeManufacturer");
             }
         }
-
+        #endregion
+        #region IO Modules
         private string _ioModuleName;
         public string IOModuleName
         {
@@ -211,24 +217,14 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("IOModuleManufacturer");
             }
         }
-
-        private TECPanelType _selectedPanelType;
-        public TECPanelType SelectedPanelType
-        {
-            get { return _selectedPanelType; }
-            set
-            {
-                _selectedPanelType = value;
-                RaisePropertyChanged("SelectedPanelType");
-                SelectionChanged?.Invoke(value);
-            }
-        }
-
+        #endregion
+        #region Devices
         private string _deviceName;
         public string DeviceName
         {
             get { return _deviceName; }
-            set {
+            set
+            {
                 _deviceName = value;
                 RaisePropertyChanged("DeviceName");
             }
@@ -253,7 +249,134 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DeviceLabor");
             }
         }
-
+        private TECManufacturer _deviceManufacturer;
+        public TECManufacturer DeviceManufacturer
+        {
+            get { return _deviceManufacturer; }
+            set
+            {
+                _deviceManufacturer = value;
+                RaisePropertyChanged("DeviceManufacturer");
+            }
+        }
+        private ObservableCollection<TECElectricalMaterial> _deviceConnectionTypes;
+        public ObservableCollection<TECElectricalMaterial> DeviceConnectionTypes
+        {
+            get { return _deviceConnectionTypes; }
+            set
+            {
+                _deviceConnectionTypes = value;
+                RaisePropertyChanged("DeviceConnectionTypes");
+            }
+        }
+        #endregion
+        #region Devices
+        private string _valveName;
+        public string ValveName
+        {
+            get { return _valveName; }
+            set
+            {
+                _valveName = value;
+                RaisePropertyChanged("ValveName");
+            }
+        }
+        private double _valveListPrice;
+        public double ValveListPrice
+        {
+            get { return _valveListPrice; }
+            set
+            {
+                _valveListPrice = value;
+                RaisePropertyChanged("ValveListPrice");
+            }
+        }
+        private double _valveLabor;
+        public double ValveLabor
+        {
+            get { return _valveLabor; }
+            set
+            {
+                _valveLabor = value;
+                RaisePropertyChanged("ValveLabor");
+            }
+        }
+        private TECManufacturer _valveManufacturer;
+        public TECManufacturer ValveManufacturer
+        {
+            get { return _valveManufacturer; }
+            set
+            {
+                _valveManufacturer = value;
+                RaisePropertyChanged("ValveManufacturer");
+            }
+        }
+        private TECDevice _valveActuator;
+        public TECDevice ValveActuator
+        {
+            get { return _valveActuator; }
+            set
+            {
+                _valveActuator = value;
+                RaisePropertyChanged("ValveActuator");
+            }
+        }
+        #endregion
+        #region Controller Types
+        private string _controllerTypeName;
+        public string ControllerTypeName
+        {
+            get { return _controllerTypeName; }
+            set
+            {
+                _controllerTypeName = value;
+                RaisePropertyChanged("ControllerTypeName");
+            }
+        }
+        private double _controllerTypeCost;
+        public double ControllerTypeCost
+        {
+            get { return _controllerTypeCost; }
+            set
+            {
+                _controllerTypeCost = value;
+                RaisePropertyChanged("ControllerTypeCost");
+            }
+        }
+        private double _controllerTypeLabor;
+        public double ControllerTypeLabor
+        {
+            get { return _controllerTypeLabor; }
+            set
+            {
+                _controllerTypeLabor = value;
+                RaisePropertyChanged("ControllerTypeLabor");
+            }
+        }
+        private TECManufacturer _controllerTypeManufacturer;
+        public TECManufacturer ControllerTypeManufacturer
+        {
+            get { return _controllerTypeManufacturer; }
+            set
+            {
+                _controllerTypeManufacturer = value;
+                RaisePropertyChanged("ControllerTypeManufacturer");
+            }
+        }
+        #endregion
+        
+        private TECPanelType _selectedPanelType;
+        public TECPanelType SelectedPanelType
+        {
+            get { return _selectedPanelType; }
+            set
+            {
+                _selectedPanelType = value;
+                RaisePropertyChanged("SelectedPanelType");
+                SelectionChanged?.Invoke(value);
+            }
+        }
+        
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
@@ -261,6 +384,8 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
         public ICommand AddDeviceCommand { get; private set; }
+        public ICommand AddControllerTypeCommand { get; private set; }
+        public ICommand AddValveCommand { get; private set; }
         #endregion
 
         #region Delegates
@@ -299,8 +424,35 @@ namespace TECUserControlLibrary.ViewModels
             AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
             AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
             AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
+            AddControllerTypeCommand = new RelayCommand(addControllerTypeExecute, canAddControllerType);
+            AddValveCommand = new RelayCommand(addValveExecute, canAddValve);
+            AddDeviceCommand = new RelayCommand(addDeviceExecute, canAddDevice);
         }
 
+        private void addDeviceExecute()
+        {
+            TECDevice toAdd = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
+            toAdd.Name = DeviceName;
+            toAdd.Price = DeviceListPrice;
+            toAdd.Labor = DeviceLabor;
+            Templates.Catalogs.Devices.Add(toAdd);
+
+            DeviceName = "";
+            DeviceListPrice = 0;
+            DeviceLabor = 0;
+            DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            DeviceManufacturer = null;
+        }
+        private bool canAddDevice()
+        {
+            if(DeviceManufacturer != null)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
         private void addConnectionTypeExecute()
         {
             var connectionType = new TECElectricalMaterial();
@@ -389,6 +541,53 @@ namespace TECUserControlLibrary.ViewModels
                 return true;
             }
             else
+            {
+                return false;
+            }
+        }
+        private void addControllerTypeExecute()
+        {
+            TECControllerType toAdd = new TECControllerType(ControllerTypeManufacturer);
+            toAdd.Name = ControllerTypeName;
+            toAdd.Price = ControllerTypeCost;
+            toAdd.Labor = ControllerTypeLabor;
+
+            Templates.Catalogs.ControllerTypes.Add(toAdd);
+            ControllerTypeName = "";
+            ControllerTypeCost = 0;
+            ControllerTypeLabor = 0;
+            ControllerTypeManufacturer = null;
+        }
+        private bool canAddControllerType()
+        {
+            if(ControllerTypeManufacturer != null)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+        private void addValveExecute()
+        {
+            TECValve toAdd = new TECValve(ValveManufacturer, ValveActuator);
+            toAdd.Name = ValveName;
+            toAdd.Price = ValveListPrice;
+            toAdd.Labor = ValveLabor;
+            Templates.Catalogs.Valves.Add(toAdd);
+
+            ValveName = "";
+            ValveListPrice = 0;
+            ValveLabor = 0;
+            ValveActuator = null;
+            ValveManufacturer = null;
+        }
+        private bool canAddValve()
+        {
+            if(ValveActuator != null && ValveManufacturer != null)
+            {
+                return true;
+            } else
             {
                 return false;
             }

@@ -145,6 +145,7 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate PanelTypeTemplate { get; set; }
         public DataTemplate AssociatedCostTemplate { get; set; }
         public DataTemplate IOModuleTemplate { get; set; }
+        public DataTemplate ValveTemplate { get; set; }
         
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -166,6 +167,8 @@ namespace TECUserControlLibrary.Utilities
                         return AssociatedCostTemplate;
                     case MaterialType.IOModule:
                         return IOModuleTemplate;
+                    case MaterialType.Valve:
+                        return ValveTemplate;
                 }
                 return DeviceTemplate;
             }
