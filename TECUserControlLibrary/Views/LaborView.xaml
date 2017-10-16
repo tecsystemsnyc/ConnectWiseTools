@@ -87,7 +87,7 @@
         <TextBlock Text="{Binding Estimate.PMLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="5"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.PMRate, StringFormat= {} {0:C}}"
+        <TextBox Text="{Binding Bid.Parameters.PMRate, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="6"
                  />
         <TextBlock Text="{Binding Estimate.PMLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
@@ -112,7 +112,7 @@
         <TextBlock Text="{Binding Estimate.ENGLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="5"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.ENGRate, StringFormat= {} {0:C}}"
+        <TextBox Text="{Binding Bid.Parameters.ENGRate, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="6"
                  />
         <TextBlock Text="{Binding Estimate.ENGLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
@@ -137,7 +137,7 @@
         <TextBlock Text="{Binding Estimate.SoftLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="5"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.SoftRate, StringFormat= {} {0:C}}"
+        <TextBox Text="{Binding Bid.Parameters.SoftRate, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="6"
                  />
         <TextBlock Text="{Binding Estimate.SoftLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
@@ -162,7 +162,7 @@
         <TextBlock Text="{Binding Estimate.GraphLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="5"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.GraphRate, StringFormat= {} {0:C}}"
+        <TextBox Text="{Binding Bid.Parameters.GraphRate, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="6"
                  />
         <TextBlock Text="{Binding Estimate.GraphLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
@@ -187,7 +187,7 @@
         <TextBlock Text="{Binding Estimate.CommLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="5"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"
+        <TextBox Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="6"
                  />
         <TextBlock Text="{Binding Estimate.CommLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
@@ -199,7 +199,7 @@
                    Grid.Row="6"/>
         <TextBlock Text="{Binding Estimate.TECFieldHours, Mode=OneWay, StringFormat={}{0:F2}}"
                    Grid.Row="6" Grid.Column="5"/>
-        <TextBlock Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"
+        <TextBox Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="6" Grid.Column="6"/>
         <TextBlock Text="{Binding Estimate.TECFieldLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
                    Grid.Row="6" Grid.Column="7"/>

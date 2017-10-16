@@ -113,6 +113,12 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Profit = new TableField("Profit", "REAL", ParameterType.GetProperty("Profit"));
         public static TableField SubcontractorMarkup = new TableField("SubcontractorMarkup", "REAL", ParameterType.GetProperty("SubcontractorMarkup"));
         public static TableField SubcontractorEscalation = new TableField("SubcontractorEscalation", "REAL", ParameterType.GetProperty("SubcontractorEscalation"));
+        public static TableField Warranty = new TableField("Warranty", "REAL", ParameterType.GetProperty("Warranty"));
+        public static TableField Shipping = new TableField("Shipping", "REAL", ParameterType.GetProperty("Shipping"));
+        public static TableField Tax = new TableField("Tax", "REAL", ParameterType.GetProperty("Tax"));
+        public static TableField SubcontractorWarranty = new TableField("SubcontractorWarranty", "REAL", ParameterType.GetProperty("SubcontractorWarranty"));
+        public static TableField SubcontractorShipping = new TableField("SubcontractorShipping", "REAL", ParameterType.GetProperty("SubcontractorShipping"));
+        public static TableField BondRate = new TableField("BondRate", "REAL", ParameterType.GetProperty("BondRate"));
 
         public static TableField IsTaxExempt = new TableField("IsTaxExempt", "INTEGER", ParameterType.GetProperty("IsTaxExempt"));
         public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.GetProperty("RequiresBond"));
@@ -162,6 +168,12 @@ namespace EstimatingUtilitiesLibrary.Database
             Profit,
             SubcontractorMarkup,
             SubcontractorEscalation,
+            Warranty,
+            Shipping,
+            Tax,
+            SubcontractorWarranty,
+            SubcontractorShipping,
+            BondRate,
             IsTaxExempt,
             RequiresBond,
             RequiresWrapUp,

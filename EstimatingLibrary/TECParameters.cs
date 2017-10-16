@@ -15,6 +15,12 @@ namespace EstimatingLibrary
         private double _profit;
         private double _subcontractorMarkup;
         private double _subcontractorEscalation;
+        private double _warranty;
+        private double _shipping;
+        private double _tax;
+        private double _subcontractorWarranty;
+        private double _subcontractorShipping;
+        private double _bondRate;
 
         private bool _isTaxExempt;
         private bool _requiresBond;
@@ -69,6 +75,66 @@ namespace EstimatingLibrary
                 var old = SubcontractorEscalation;
                 _subcontractorEscalation = value;
                 notifyCombinedChanged(Change.Edit, "SubcontractorEscalation", this, value, old);
+            }
+        }
+        public double Warranty
+        {
+            get { return _warranty; }
+            set
+            {
+                var old = Warranty;
+                _warranty = value;
+                notifyCombinedChanged(Change.Edit, "Warranty", this, value, old);
+            }
+        }
+        public double Shipping
+        {
+            get { return _shipping; }
+            set
+            {
+                var old = Shipping;
+                _shipping = value;
+                notifyCombinedChanged(Change.Edit, "Shipping", this, value, old);
+            }
+        }
+        public double Tax
+        {
+            get { return _tax; }
+            set
+            {
+                var old = Tax;
+                _tax = value;
+                notifyCombinedChanged(Change.Edit, "Tax", this, value, old);
+            }
+        }
+        public double SubcontractorWarranty
+        {
+            get { return _subcontractorWarranty; }
+            set
+            {
+                var old = SubcontractorWarranty;
+                _subcontractorWarranty = value;
+                notifyCombinedChanged(Change.Edit, "SubcontractorWarranty", this, value, old);
+            }
+        }
+        public double SubcontractorShipping
+        {
+            get { return _subcontractorShipping; }
+            set
+            {
+                var old = Shipping;
+                _subcontractorShipping = value;
+                notifyCombinedChanged(Change.Edit, "SubcontractorShipping", this, value, old);
+            }
+        }
+        public double BondRate
+        {
+            get { return _bondRate; }
+            set
+            {
+                var old = BondRate;
+                _bondRate = value;
+                notifyCombinedChanged(Change.Edit, "BondRate", this, value, old);
             }
         }
 
@@ -420,6 +486,9 @@ namespace EstimatingLibrary
             _profit = 0;
             _subcontractorMarkup = 0;
             _subcontractorEscalation = 0;
+            _warranty = 0.05;
+            _shipping = 0.03;
+            _tax = 0.0875;
 
             _pmCoef = 1.0;
             _pmRate = 0;
