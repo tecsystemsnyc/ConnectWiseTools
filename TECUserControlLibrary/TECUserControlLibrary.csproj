@@ -98,7 +98,7 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\TypicalSubScope.cs" />
+    <Compile Include="Models\SubScopeConnectionItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
@@ -153,9 +153,6 @@
     <Compile Include="UserControls\ItemControls\ValveControl.xaml.cs">
       <DependentUpon>ValveControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ListControls\SubScopeConnectionListControl.xaml.cs">
-      <DependentUpon>SubScopeConnectionListControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ListControls\NetworkConnectableListControl.xaml.cs">
       <DependentUpon>NetworkConnectableListControl.xaml</DependentUpon>
     </Compile>
@@ -195,8 +192,8 @@
     <Compile Include="UserControls\ListControls\PointListControl.xaml.cs">
       <DependentUpon>PointListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ListControls\TypicalSubScopeConnectionListControl.xaml.cs">
-      <DependentUpon>TypicalSubScopeConnectionListControl.xaml</DependentUpon>
+    <Compile Include="UserControls\ListControls\SubScopeConnectionListControl.xaml.cs">
+      <DependentUpon>SubScopeConnectionListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PointPropetiesControl.xaml.cs">
       <DependentUpon>PointPropetiesControl.xaml</DependentUpon>
@@ -224,9 +221,8 @@
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
     <Compile Include="ViewModels\SplashVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
-    <Compile Include="ViewModels\SystemConnectionsVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
-    <Compile Include="ViewModels\TypicalConnectionsVM.cs" />
+    <Compile Include="ViewModels\SystemConnectionsVM.cs" />
     <Compile Include="ViewModels\TypicalHierarchyVM.cs" />
     <Compile Include="ViewModels\UpdateConnectionVM.cs" />
     <Compile Include="Views\AddViews\AddBaseView.cs" />
@@ -401,9 +397,6 @@
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
-    <Compile Include="Views\TypicalConnectionsView.xaml.cs">
-      <DependentUpon>TypicalConnectionsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SystemConnectionsView.xaml.cs">
       <DependentUpon>SystemConnectionsView.xaml</DependentUpon>
     </Compile>
@@ -510,10 +503,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ListControls\SubScopeConnectionListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ListControls\NetworkConnectableListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -566,7 +555,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ListControls\TypicalSubScopeConnectionListControl.xaml">
+    <Page Include="UserControls\ListControls\SubScopeConnectionListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -794,13 +783,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TypicalConnectionsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\SystemConnectionsView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SystemHierarchyView.xaml">
       <SubType>Designer</SubType>

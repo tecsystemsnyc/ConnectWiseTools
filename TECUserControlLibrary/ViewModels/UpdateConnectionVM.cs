@@ -15,12 +15,12 @@ namespace TECUserControlLibrary.ViewModels
     public class UpdateConnectionVM : ViewModelBase
     {
         #region Fields
-        private Dictionary<TECSubScope, TypicalSubScope> typicalDictionary;
+        private Dictionary<TECSubScope, SubScopeConnectionItem> typicalDictionary;
         private Dictionary<TECSubScope, bool> updatedDictionary;
 
         private readonly List<TECSubScope> _subScope;
         private TECSubScope _selectedInstance;
-        private TypicalSubScope _selectedTypical;
+        private SubScopeConnectionItem _selectedTypical;
         #endregion
 
         #region Properties
@@ -38,7 +38,7 @@ namespace TECUserControlLibrary.ViewModels
                 handleNewSelectedInstance(value);
             }
         }
-        public TypicalSubScope SelectedTypical
+        public SubScopeConnectionItem SelectedTypical
         {
             get { return _selectedTypical; }
             set
@@ -51,11 +51,11 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UpdateCommand;
         #endregion
 
-        public UpdateConnectionVM(IEnumerable<TypicalSubScope> subScope)
+        public UpdateConnectionVM(IEnumerable<SubScopeConnectionItem> subScope)
         {
             initializeCollections();
             List<TECSubScope> instances = new List<TECSubScope>();
-            foreach(TypicalSubScope typ in subScope)
+            foreach(SubScopeConnectionItem typ in subScope)
             {
                 foreach(TECSubScope instance in typ.Instances)
                 {
@@ -71,7 +71,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void initializeCollections()
         {
-            typicalDictionary = new Dictionary<TECSubScope, TypicalSubScope>();
+            typicalDictionary = new Dictionary<TECSubScope, SubScopeConnectionItem>();
             updatedDictionary = new Dictionary<TECSubScope, bool>();
         }
 

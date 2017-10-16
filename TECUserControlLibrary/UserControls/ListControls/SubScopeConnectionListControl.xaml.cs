@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.UserControls.ListControls
 {
     /// <summary>
-    /// Interaction logic for SubScopeConnectionListControl.xaml
+    /// Interaction logic for TypicalSubScopeListControl.xaml
     /// </summary>
-    public partial class SubScopeConnectionListControl : BaseListControl<TECSubScope>
+    public partial class SubScopeConnectionListControl : BaseListControl<SubScopeConnectionItem>
     {
         public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {
@@ -40,7 +42,17 @@ namespace TECUserControlLibrary.UserControls.ListControls
         // Using a DependencyProperty as the backing store for ReadOnly.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ReadOnlyProperty =
             DependencyProperty.Register("ReadOnly", typeof(bool), typeof(SubScopeConnectionListControl), new PropertyMetadata(false));
-        
+
+
+        public ICommand UpdateItemCommand
+        {
+            get { return (ICommand)GetValue(UpdateItemCommandProperty); }
+            set { SetValue(UpdateItemCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UpdateItemCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UpdateItemCommandProperty =
+            DependencyProperty.Register("UpdateItemCommand", typeof(ICommand), typeof(SubScopeConnectionListControl));
 
 
         public SubScopeConnectionListControl()
