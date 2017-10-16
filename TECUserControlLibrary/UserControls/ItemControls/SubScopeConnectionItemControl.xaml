@@ -30,7 +30,15 @@
     </UserControl.Resources>
 
     <Border>
-        <Grid DataContext="{Binding ElementName=subScopeConnectionItemControl, Path=SubScopeConnectionItem.SubScope}">
+        <Border.Background>
+            <MultiBinding Converter="{converters:BooleanChoiceConverter}">
+                <Binding ElementName="subScopeConnectionItemControl" Path="SubScopeConnectionItem.NeedsUpdate"/>
+                <Binding Source="{StaticResource AlertActionBrush}"/>
+                <Binding Source="{StaticResource SectionBackgroundBrush}"/>
+                <Binding Source="{StaticResource SectionBackgroundBrush}"/>
+            </MultiBinding>
+        </Border.Background>
+        <Grid DataContext="{Binding ElementName=subScopeConnectionItemControl}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -45,64 +53,64 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Content="{Binding Name}" FontWeight="Bold"/>
-            <Label Content="{Binding Description}" Grid.Row="1"/>
+            <Label Content="{Binding SubScopeConnectionItem.SubScope.Name}" FontWeight="Bold"/>
+            <Label Content="{Binding SubScopeConnectionItem.SubScope.Description}" Grid.Row="1"/>
 
             <Label Content="Connection Types" Grid.Column="1"/>
             <listControls:ElectricalMaterialListControl 
-                Source="{Binding Connection.ConnectionTypes}"
+                Source="{Binding SubScopeConnectionItem.SubScope.Connection.ConnectionTypes}"
                 Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
 
             <Label Content="IO Types" Grid.Column="2"/>
             <listControls:IOListControl 
-                Source="{Binding Connection.IOList}"
+                Source="{Binding SubScopeConnectionItem.SubScope.Connection.IOList}"
                 Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"/>
             <Border Grid.ColumnSpan="3" Grid.RowSpan="3"/>
 
             <Label Content="Controller:" Grid.Row="3"/>
-            <Label Content="{Binding Connection.ParentController.Name}" Grid.Column="1" Grid.Row="3"/>
+            <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ParentController.Name}" Grid.Column="1" Grid.Row="3"/>
             <Border Grid.Row="3" Grid.ColumnSpan="2"/>
 
             <Label Content="Wire Length:" Grid.Row="4"/>
             <Grid Grid.Column="1" Grid.Row="4">
-                <Label Content="{Binding Connection.Length}" 
-                   Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly, 
+                <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.Length}" 
+                   Visibility="{Binding ElementName=ReadOnly, 
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                <TextBox Text="{Binding Connection.Length}"
-                     Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length}"
+                     Visibility="{Binding ElementName=ReadOnly,
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
             </Grid>
             <Border Grid.Row="4" Grid.ColumnSpan="2"/>
 
             <Label Content="Conduit Length:" Grid.Row="5"/>
             <Grid Grid.Column="1" Grid.Row="5">
-                <Label Content="{Binding Connection.ConduitLength}"
-                       Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
+                       Visibility="{Binding ElementName=ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                <TextBox Text="{Binding Connection.ConduitLength}"
-                         Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
+                         Visibility="{Binding ElementName=ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
             </Grid>
             <Border Grid.Row="5" Grid.ColumnSpan="2"/>
 
             <Label Content="Conduit Type:" Grid.Row="3" Grid.Column="2"/>
             <Grid Grid.Row="4" Grid.Column="2">
-                <Label Content="{Binding Connection.ConduitType}"
-                       Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType}"
+                       Visibility="{Binding ElementName=ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                <ComboBox SelectedItem="{Binding Connection.ConduitType}" 
-                          ItemsSource="{Binding ElementName=subScopeConnectionItemControl, Path=ConduitTypes}"
+                <ComboBox SelectedItem="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType}" 
+                          ItemsSource="{Binding ElementName=ConduitTypes}"
                           DisplayMemberPath="Name"
                           Margin="5"
-                          Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                          Visibility="{Binding ElementName=ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
             </Grid>
             <Border Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"/>
 
             <Grid Grid.Column="2" Grid.Row="5">
                 <Button Content="Update"
-                        Command="{Binding ElementName=subScopeConnectionItemControl, Path=UpdateCommand}"
-                        Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                        Command="{Binding ElementName=UpdateCommand}"
+                        Visibility="{Binding ElementName=ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                         Margin="5"/>
             </Grid>
