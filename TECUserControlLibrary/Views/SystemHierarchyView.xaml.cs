@@ -268,12 +268,15 @@ namespace TECUserControlLibrary.Views
             {
                 pList.SelectedItem = null;
             }
-
-            if((SystemComponentIndex)comboBox.SelectedValue == SystemComponentIndex.Electrical)
+            SystemComponentIndex selectedValue = (SystemComponentIndex)comboBox.SelectedValue;
+            if (selectedValue == SystemComponentIndex.Electrical ||
+                selectedValue == SystemComponentIndex.Misc ||
+                selectedValue == SystemComponentIndex.Proposal)
             {
                 Storyboard move = (Storyboard)FindResource("systemMove");
                 move.Begin();
             }
+            
             
         }
     }

@@ -45,6 +45,14 @@
                     <local:SystemConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"/>
                 </Grid>
             </DataTemplate>
+            <DataTemplate x:Key="MiscTemplate">
+                <local:MiscCostsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.MiscVM}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="ProposalTemplate">
+                <Grid>
+                    <controls:ScopeTreeGridControl ScopeTreeSource="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.ScopeBranches}"/>
+                </Grid>
+            </DataTemplate>
             <Storyboard x:Key="systemMove">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                  Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)" 
@@ -115,7 +123,7 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="Button.Click" SourceName="addEquipment">
+            <EventTrigger RoutedEvent="Button.Click" SourceName="addComponent">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
@@ -216,7 +224,7 @@
                         Click="systemBack_Click"/>
                 <TextBlock Grid.Column="1" Text="{Binding SelectedSystem.Name, StringFormat='Components of {0}'}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Content="Add" x:Name="addEquipment" Grid.Column="2" 
+                <Button Content="Add" x:Name="addComponent" Grid.Column="2" 
                         Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"
                         CommandParameter="{Binding ViewModel.SelectedSystem}">
                     <Button.Command>
@@ -235,10 +243,12 @@
             <Grid.Resources>
                     <ResourceDictionary>
                         <utilities:SystemComponentSelector x:Key="ComponentSelector"
-                                             EquipmentTemplate="{StaticResource EquipmentTemplate}"
-                                             ControllerTemplate="{StaticResource ControllerTemplate}"
-                                             PanelTemplate="{StaticResource PanelTemplate}"
-                                             ConnectionTemplate="{StaticResource ElectricalTemplate}"/>
+                                                           EquipmentTemplate="{StaticResource EquipmentTemplate}"
+                                                           ControllerTemplate="{StaticResource ControllerTemplate}"
+                                                           PanelTemplate="{StaticResource PanelTemplate}"
+                                                           ConnectionTemplate="{StaticResource ElectricalTemplate}"
+                                                           MiscTemplate="{StaticResource MiscTemplate}"
+                                                           ProposalTemplate="{StaticResource ProposalTemplate}"/>
                 </ResourceDictionary>
             </Grid.Resources>
             <Grid.RowDefinitions>
