@@ -132,7 +132,9 @@ namespace TECUserControlLibrary.Debug
             TECController controller = new TECController(controllerType, true);
             controller.Name = "Test Controller";
             typical.AddController(controller);
-            controller.AddSubScope(connected);
+            TECConnection connection = controller.AddSubScope(connected);
+            connection.Length = 10;
+            connection.ConduitLength = 20;
 
             TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), true);
             panel.Name = "Test Panel";
