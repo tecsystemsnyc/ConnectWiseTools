@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,14 +30,15 @@ namespace TECUserControlLibrary.Models
         public ICommand UpdateCommand { get; private set; }
         public event Action<IEnumerable<TECSubScope>> Update;
 
-        public SubScopeConnectionItem(TECSubScope subScope, IEnumerable<TECSubScope> instances = null)
+        public SubScopeConnectionItem(TECSubScope subScope, IEnumerable<TECSubScope> instances = null, bool needsUpdate = false)
         {
             SubScope = subScope;
-            NeedsUpdate = false;
+            NeedsUpdate = needsUpdate;
             if (subScope.IsTypical)
             {
                 _instances = new ObservableCollection<TECSubScope>(instances);
                 subScope.Connection.PropertyChanged += Connection_PropertyChanged;
+                UpdateCommand = new RelayCommand(updateExecute);
             }
         }
 
@@ -95,7 +97,7 @@ namespace TECUserControlLibrary.Models
                 NeedsUpdate = true;
             }
         }
-        private void UpdateExecute()
+        private void updateExecute()
         {
             NeedsUpdate = false;
             Update?.Invoke(Instances);
