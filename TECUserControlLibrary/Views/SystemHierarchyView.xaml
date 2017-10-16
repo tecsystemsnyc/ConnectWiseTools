@@ -90,11 +90,11 @@
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:ControllerListControl.Selected">
+            <!--<EventTrigger RoutedEvent="listControls:ControllerListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
-            </EventTrigger>
+            </EventTrigger>-->
             <EventTrigger RoutedEvent="Button.Click" SourceName="systemBack">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
