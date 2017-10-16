@@ -50,7 +50,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void SystemSelected(TECTypical value)
         {
-            ConnectionsVM = new TypicalConnectionsVM(value);
+            ConnectionsVM = new TypicalConnectionsVM(value, catalogs.ConduitTypes);
         }
 
         public TECEquipment SelectedEquipment

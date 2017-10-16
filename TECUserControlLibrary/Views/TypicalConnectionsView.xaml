@@ -45,7 +45,6 @@
                                                   IsDragSource="True"
                                                   DropHandler="{Binding}" Grid.Row="3"/>
             </Grid>
-            
         </Border>
         
         <!--SubScope Connections-->
@@ -60,12 +59,10 @@
                 Margin="5"
                 Click="updateStarted"/>
                 <listControls:TypicalSubScopeConnectionListControl
-                Source="{Binding SubScope}" Grid.Row="1"/>
+                    Source="{Binding SubScope}"
+                    ConduitTypes="{Binding ConduitTypes}"
+                    Grid.Row="1"/>
             </Grid>
-            
-            
         </Border>
-
-        
     </Grid>
 </UserControl>

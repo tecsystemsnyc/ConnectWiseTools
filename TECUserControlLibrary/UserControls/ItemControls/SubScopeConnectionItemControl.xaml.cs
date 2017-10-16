@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
             set
             {
                 SetValue(TypicalSubScopeProperty, value);
-                SetValue(SubScopeProperty, value.SubScope.Connection);
+                SubScope = value.SubScope;
             }
         }
 

@@ -20,6 +20,8 @@ namespace TECUserControlLibrary.ViewModels
         #region Fields
         private TECTypical typical;
 
+        private readonly ObservableCollection<TECElectricalMaterial> _conduitTypes;
+
         private ObservableCollection<TECController> _controllers;
         private ObservableCollection<TypicalSubScope> _subScope;
         private ObservableCollection<TECSubScope> _unconnectedSubScope;
@@ -29,6 +31,8 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Properties
+        public ObservableCollection<TECElectricalMaterial> ConduitTypes { get { return _conduitTypes; } }
+
         public ObservableCollection<TECController> Controllers
         {
             get
@@ -90,9 +94,10 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UpdateAllCommand { get; private set; }
         #endregion
 
-        public TypicalConnectionsVM(TECTypical typical)
+        public TypicalConnectionsVM(TECTypical typical, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             this.typical = typical;
+            _conduitTypes = new ObservableCollection<TECElectricalMaterial>(conduitTypes);
             initializeCollections();
             foreach (TECSubScope ss in typical.GetAllSubScope())
             {
