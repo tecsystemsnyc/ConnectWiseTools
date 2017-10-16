@@ -75,7 +75,7 @@
                                        VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding DeviceManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="2"/>
+                                      DisplayMemberPath="Label" Grid.Column="3"/>
 
                         </Grid>
                         <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
@@ -129,10 +129,10 @@
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding ValveLabor}"/>
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="1"/>
+                                       VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding ValveManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="2"/>
+                                      DisplayMemberPath="Label" Grid.Column="3"/>
 
                         </Grid>
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
@@ -276,10 +276,10 @@
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding PanelTypeLabor}"/>
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding ControllerTypeManufacturer}"
-                                      DisplayMemberPath="Label"/>
+                                      DisplayMemberPath="Label" Grid.Column="3"/>
                         </Grid>
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
                                     Content="Add" Margin="2"
@@ -329,16 +329,16 @@
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding PanelTypeLabor}"/>
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding DeviceManufacturer}"
-                                      DisplayMemberPath="Label"/>
+                                      DisplayMemberPath="Label" Grid.Column="3"/>
                         </Grid>
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
                                 Content="Add" Margin="2"
                                 Command="{Binding AddPanelTypeCommand}"/>
                         <controls:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
-                                                Grid.Row="2" Margin="5"
+                                                Grid.Row="3" Margin="5"
                                                 ViewModel="{Binding}"/>
                     </Grid>
                 </DataTemplate>
@@ -454,13 +454,13 @@
 
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
                        VerticalAlignment="Center"
-                                   Grid.Column="2"/>
+                                   Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}" 
-                                  SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="3" Margin="2"
+                                  SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="1" Margin="2"
                                   Text="{Binding IOModuleManufacturer.Label}"
                                   DisplayMemberPath="Name"/>
 
-                            <Button Grid.Column="4" Grid.ColumnSpan="2"
+                            <Button Grid.Column="2" Grid.ColumnSpan="4"
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                         </Grid>
