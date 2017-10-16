@@ -32,10 +32,10 @@ namespace TECUserControlLibrary.Models
         public SubScopeConnectionItem(TECSubScope subScope, IEnumerable<TECSubScope> instances = null)
         {
             SubScope = subScope;
+            NeedsUpdate = false;
             if (subScope.IsTypical)
             {
                 _instances = new ObservableCollection<TECSubScope>(instances);
-                NeedsUpdate = true;
                 subScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
         }
