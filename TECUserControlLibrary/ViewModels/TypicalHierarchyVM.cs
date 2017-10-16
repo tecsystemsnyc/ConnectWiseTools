@@ -22,7 +22,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public TypicalHierarchyVM(TECCatalogs scopeCatalogs) : base(scopeCatalogs)
+        public TypicalHierarchyVM(TECScopeManager scopeManager) : base(scopeManager)
         {
         }
     }
