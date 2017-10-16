@@ -175,14 +175,8 @@ namespace EstimateBuilder.MVVM
             { return base.workingScopeManager; }
             set
             {
-                if (Bid != null)
-                {
-                    Bid.PropertyChanged -= bid_PropertyChanged;
-                }
                 base.workingScopeManager = value;
                 RaisePropertyChanged("Bid");
-                Bid.PropertyChanged += bid_PropertyChanged;
-                buildTitleString();
                 updateBidWithTemplates();
                 refresh();
             }
@@ -263,14 +257,15 @@ namespace EstimateBuilder.MVVM
                 loadTemplates(TemplatesFilePath);
             }
         }
-        protected void buildTitleString()
+        protected void buildTitleString(string filePath)
         {
-            string bidName = "";
-            if (Bid != null)
-            {
-                bidName = Bid.Name;
-            }
-            TitleString = bidName + " - Estimate Builder";
+            //string bidName = "";
+            //if (Bid != null)
+            //{
+            //    bidName = Bid.Name;
+            //}
+            string title = Path.GetFileNameWithoutExtension(filePath);
+            TitleString = title + " - Estimate Builder";
         }
         protected override TECScopeManager NewScopeManager()
         {
@@ -290,7 +285,7 @@ namespace EstimateBuilder.MVVM
 
             }
             
-            buildTitleString();
+            buildTitleString(bidPath);
             setupCommands();
             setupExtensions(MenuType.EB);
             TemplatesFilePath = templatesPath;
@@ -556,13 +551,6 @@ namespace EstimateBuilder.MVVM
                 {
                     throw new NotImplementedException();
                 }
-            }
-        }
-        private void bid_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Name")
-            {
-                buildTitleString();
             }
         }
 

@@ -271,12 +271,12 @@ namespace EstimatingLibrary
         #region Calculate Derivatives
         private double getTECShipping()
         {
-            return (TECMaterialCost * 0.03);
+            return (TECMaterialCost * bid.Parameters.Shipping);
         }
 
         private double getTECWarranty()
         {
-            return (TECMaterialCost * 0.05);
+            return (TECMaterialCost * bid.Parameters.Warranty);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace EstimatingLibrary
 
             if (!bid.Parameters.IsTaxExempt)
             {
-                outTax += .0875 * TECMaterialCost;
+                outTax += bid.Parameters.Tax * TECMaterialCost;
             }
 
             return outTax;
@@ -338,12 +338,12 @@ namespace EstimatingLibrary
 
         private double getElectricalShipping()
         {
-            return (ElectricalMaterialCost * 0.03);
+            return (ElectricalMaterialCost * bid.Parameters.SubcontractorShipping);
         }
 
         private double getElectricalWarranty()
         {
-            return (ElectricalMaterialCost * 0.05);
+            return (ElectricalMaterialCost * bid.Parameters.SubcontractorWarranty);
         }
 
         private double getExtendedElectricalMaterialCost()
@@ -641,7 +641,7 @@ namespace EstimatingLibrary
             double outPrice = tecSubtotal + subcontractSubtotal;
             if (bid.Parameters.RequiresBond)
             {
-                outPrice *= 1.013;
+                outPrice *= bid.Parameters.BondRate;
             }
             return outPrice;
         }
