@@ -441,7 +441,8 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, MaterialType>("Controller Types", MaterialType.ControllerType),
             new Tuple<string, MaterialType>("Panel Types", MaterialType.PanelType),
             new Tuple<string, MaterialType>("Associated Costs", MaterialType.AssociatedCost),
-            new Tuple<string, MaterialType>("IO Modules", MaterialType.IOModule)
+            new Tuple<string, MaterialType>("IO Modules", MaterialType.IOModule),
+            new Tuple<string, MaterialType>("Valves", MaterialType.Valve)
         };
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
@@ -483,7 +484,7 @@ namespace TECUserControlLibrary.Utilities
     public enum TemplateGridIndex { None, Systems, Equipment, SubScope, Devices, DDC, Materials, Constants };
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope };
-    public enum MaterialType { Device, ConnectionType, ConduitType, ControllerType, PanelType, AssociatedCost, IOModule};
+    public enum MaterialType { Device, ConnectionType, ConduitType, ControllerType, PanelType, AssociatedCost, IOModule, Valve};
     public enum TypicalSystemIndex { Edit, Instances };
     public enum SystemComponentIndex { Equipment, Controllers, Panels, Electrical, Misc, Proposal };
     public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }

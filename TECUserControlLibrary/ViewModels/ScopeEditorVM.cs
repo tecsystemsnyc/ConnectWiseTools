@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.ViewModels
             setupScopeCollection();
             setupControllersPanelsTab();
             setupMiscVM();
-            TypicalEditVM = new SystemHierarchyVM(Bid.Catalogs);
+            TypicalEditVM = new SystemHierarchyVM(Bid);
             TypicalEditVM.Selected += item =>
             {
                 Selected = item;
@@ -130,7 +130,7 @@ namespace TECUserControlLibrary.ViewModels
             ScopeCollection.Refresh(Templates);
             ControllersPanelsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
-            TypicalEditVM.Refresh(Bid.Catalogs);
+            TypicalEditVM.Refresh(Bid);
             
         }
 

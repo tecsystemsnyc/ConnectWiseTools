@@ -52,7 +52,6 @@ namespace TemplateBuilder.MVVM
         public EquipmentVM ScopeDataGrid { get; set; }
         public EditTabVM EditTab { get; set; }
         public MaterialVM MaterialsTab { get; set; }
-        public TypicalSystemVM TypicalSystemsTab { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
         public SystemHierarchyVM SystemHierarchyVM { get; set; }
         public TECTemplates Templates
@@ -196,9 +195,8 @@ namespace TemplateBuilder.MVVM
             setupEditTab();
             setupScopeDataGrid();
             setupMaterialsTab();
-            setupTypicalSystemseTab();
             setupControllersPanelsVM();
-            SystemHierarchyVM = new SystemHierarchyVM(Templates.Catalogs);
+            SystemHierarchyVM = new SystemHierarchyVM(Templates);
         }
         protected override void setupMenu(MenuType menuType)
         {
@@ -318,15 +316,6 @@ namespace TemplateBuilder.MVVM
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
             MaterialsTab.SelectionChanged += EditTab.updateSelection;
-        }
-        private void setupTypicalSystemseTab()
-        {
-            TypicalSystemsTab = new TypicalSystemVM(Templates);
-            TypicalSystemsTab.DragHandler += DragOver;
-            TypicalSystemsTab.DropHandler += Drop;
-            TypicalSystemsTab.SelectionChanged += EditTab.updateSelection;
-            TypicalSystemsTab.ComponentVM.SelectionChanged += EditTab.updateSelection;
-            TypicalSystemsTab.AssignChildDelegates();
         }
         private void setupControllersPanelsVM()
         {

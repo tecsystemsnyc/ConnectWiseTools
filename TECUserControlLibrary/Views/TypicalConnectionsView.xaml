@@ -61,6 +61,7 @@
                 <listControls:TypicalSubScopeConnectionListControl
                     Source="{Binding SubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
+                    DropHandler="{Binding}"
                     Grid.Row="1"/>
             </Grid>
         </Border>

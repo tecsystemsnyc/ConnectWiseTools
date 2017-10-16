@@ -17,6 +17,7 @@ namespace TECUserControlLibrary.ViewModels
     public class SystemHierarchyVM : ViewModelBase, IDropTarget
     {
         private TECCatalogs catalogs;
+        private TECScopeManager scopeManager;
         private ViewModelBase selectedVM;
         private TECSystem selectedSystem;
         private TECEquipment selectedEquipment;
@@ -137,7 +138,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public SystemHierarchyVM(TECCatalogs scopeCatalogs)
+        public SystemHierarchyVM(TECScopeManager scopeManager)
         {
             AddSystemCommand = new RelayCommand(AddSystemExecute, CanAddSystem);
             AddEquipmentCommand = new RelayCommand<TECSystem>(AddEquipmentExecute, CanAddEquipment);
@@ -147,7 +148,8 @@ namespace TECUserControlLibrary.ViewModels
             AddPanelCommand = new RelayCommand<TECSystem>(AddPanelExecute, CanAddPanel);
             AddMiscCommand = new RelayCommand<TECSystem>(AddMiscExecute, CanAddMisc);
             BackCommand = new RelayCommand<object>(BackExecute);
-            catalogs = scopeCatalogs;
+            catalogs = scopeManager.Catalogs;
+            this.scopeManager = scopeManager;
         }
 
         public event Action<TECObject> Selected;
@@ -163,18 +165,18 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void Refresh(TECCatalogs scopeCatalogs)
+        public void Refresh(TECScopeManager scopeManager)
         {
-            catalogs = scopeCatalogs;
+            catalogs = scopeManager.Catalogs;
         }
 
         private void AddSystemExecute()
         {
-            throw new NotImplementedException();
+            SelectedVM = new AddSystemVM(scopeManager);
         }
         private bool CanAddSystem()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         private void AddEquipmentExecute(TECSystem system)
@@ -233,11 +235,19 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            if(dropInfo.Data is TECSystem)
+            {
+                UIHelpers.SystemToTypicalDragOver(dropInfo);
+            }
+            else
+            {
+                UIHelpers.StandardDragOver(dropInfo);
+            }
+            
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if(dropInfo.Data is TECEquipment equipment)
+            if (dropInfo.Data is TECEquipment equipment)
             {
                 SelectedVM = new AddEquipmentVM(SelectedSystem);
                 ((AddEquipmentVM)SelectedVM).ToAdd = new TECEquipment(equipment, SelectedSystem.IsTypical);
@@ -265,6 +275,11 @@ namespace TECUserControlLibrary.ViewModels
             {
                 SelectedVM = new AddMiscVM(SelectedSystem);
                 ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
+            }
+            else if (dropInfo.Data is TECSystem system)
+            {
+                SelectedVM = new AddSystemVM(scopeManager as TECBid);
+                ((AddSystemVM)SelectedVM).ToAdd = new TECSystem(system, false);
             }
         }
 

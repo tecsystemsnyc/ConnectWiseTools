@@ -9,6 +9,7 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              mc:Ignorable="d" 
              x:Name="materialView"
              d:DesignHeight="400" d:DesignWidth="600">
@@ -40,6 +41,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
@@ -69,11 +71,74 @@
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding DeviceLabor}"/>
-                            <Button Grid.Column="2" Grid.ColumnSpan="2"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddDeviceCommand}"/>
+                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                       VerticalAlignment="Center" Grid.Column="2"/>
+                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                      SelectedItem="{Binding DeviceManufacturer}"
+                                      DisplayMemberPath="Label" Grid.Column="2"/>
+
                         </Grid>
+                        <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
+                                                                    DropHandler="{Binding}"
+                                                                    Grid.Row="2"
+                                                                    Grid.ColumnSpan="2"/>
+                        <Button Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"
+                                Content="Add" Margin="2"
+                                Command="{Binding AddDeviceCommand}"/>
                         <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
+                                                 ViewModel="{Binding ElementName=materialView, Path=ViewModel}"
+                                                 Grid.Row="3"/>
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate x:Key="ValveTemplate">
+                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Name:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                            <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding ValveName}"/>
+                            <TextBlock Text="List Price:" Grid.Column="2" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                            <TextBox  Grid.Column="3" Margin="2"
+                      Text="{Binding ValveListPrice}"/>
+                        </Grid>
+                        <Grid Grid.Row="1" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Labor:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                            <TextBox  Grid.Column="1" Margin="2"
+                      Text="{Binding ValveLabor}"/>
+                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                       VerticalAlignment="Center" Grid.Column="1"/>
+                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                      SelectedItem="{Binding ValveManufacturer}"
+                                      DisplayMemberPath="Label" Grid.Column="2"/>
+
+                        </Grid>
+                        <Button Grid.Row="2" Grid.ColumnSpan="4"
+                                Content="Add" Margin="2"
+                                Command="{Binding AddValveCommand}"/>
+                        <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Valves}"
                                                  ViewModel="{Binding ElementName=materialView, Path=ViewModel}"
                                                  Grid.Row="3"/>
                     </Grid>
@@ -179,6 +244,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
@@ -209,10 +275,15 @@
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding PanelTypeLabor}"/>
-                            <Button Grid.Column="2" Grid.ColumnSpan="2"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddControllerTypeCommand}"/>
+                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                       VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                      SelectedItem="{Binding ControllerTypeManufacturer}"
+                                      DisplayMemberPath="Label"/>
                         </Grid>
+                        <Button Grid.Row="2" Grid.ColumnSpan="4"
+                                    Content="Add" Margin="2"
+                                    Command="{Binding AddControllerTypeCommand}"/>
                         <!--<controls:ControllerTypeGridControl ControllerTypeSource="{Binding Templates.Catalogs.ControllerTypes}"
                                                 Grid.Row="2" Margin="5"
                                                 ViewModel="{Binding}"/>-->
@@ -224,6 +295,7 @@
                             <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
                         </Grid.Resources>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
@@ -256,10 +328,15 @@
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding PanelTypeLabor}"/>
-                            <Button Grid.Column="2" Grid.ColumnSpan="2"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddPanelTypeCommand}"/>
+                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                       VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                      SelectedItem="{Binding DeviceManufacturer}"
+                                      DisplayMemberPath="Label"/>
                         </Grid>
+                        <Button Grid.Row="2" Grid.ColumnSpan="4"
+                                Content="Add" Margin="2"
+                                Command="{Binding AddPanelTypeCommand}"/>
                         <controls:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
                                                 Grid.Row="2" Margin="5"
                                                 ViewModel="{Binding}"/>
@@ -392,13 +469,14 @@
                     </Grid>
                 </DataTemplate>
                 <utilities:MaterialTypeSelector x:Key="materialTypeSelector"
-                                            DeviceTemplate="{StaticResource DevicesTemplate}"
-                                            ConnectionTypeTemplate="{StaticResource ConnectionTypeTemplate}"
-                                            ConduitTypeTemplate="{StaticResource ConduitTypeTemplate}"
-                                            ControllerTypeTemplate="{StaticResource ControllerTypeTemplate}"
-                                            PanelTypeTemplate="{StaticResource PanelTypeTemplate}"
-                                            AssociatedCostTemplate="{StaticResource AssociatedCostTemplate}"
-                                            IOModuleTemplate="{StaticResource IOModuleTemplate}"/>
+                                                DeviceTemplate="{StaticResource DevicesTemplate}"
+                                                ConnectionTypeTemplate="{StaticResource ConnectionTypeTemplate}"
+                                                ConduitTypeTemplate="{StaticResource ConduitTypeTemplate}"
+                                                ControllerTypeTemplate="{StaticResource ControllerTypeTemplate}"
+                                                PanelTypeTemplate="{StaticResource PanelTypeTemplate}"
+                                                AssociatedCostTemplate="{StaticResource AssociatedCostTemplate}"
+                                                IOModuleTemplate="{StaticResource IOModuleTemplate}"
+                                                ValveTemplate="{StaticResource ValveTemplate}"/>
             </ResourceDictionary>
         </Grid.Resources>
         <ComboBox x:Name="MaterialComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.MaterialSelectorList}}"
