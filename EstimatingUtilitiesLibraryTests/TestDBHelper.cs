@@ -195,6 +195,12 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("0");
             values.Add("0");
             values.Add("0");
+            values.Add("0.05");
+            values.Add("0.03");
+            values.Add("0.0875");
+            values.Add("0.05");
+            values.Add("0.03");
+            values.Add("0.13");
 
             values.Add("2");
             values.Add("30");
@@ -486,56 +492,48 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             values.Add("Bid Controller");
             values.Add("Bid Controller Description");
-            values.Add("Server");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
             values.Add("Typical Controller");
             values.Add("Typical Controller Description");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
             values.Add("Instance Controller");
             values.Add("Instance Controller Description");
-            values.Add("DDC");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
             values.Add("Child Bid Controller");
             values.Add("");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
             values.Add("Child Instance Controller");
             values.Add("");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
             values.Add("Daisy 1");
             values.Add("");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("7b6825df-57da-458a-a859-a9459c15907b");
             values.Add("Daisy 2");
             values.Add("");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
 
             values = new List<string>();
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("Child Typical Controller");
             values.Add("");
-            values.Add("0");
             addDataToTable(new ControllerTable(), values);
         }
         private static void addToMiscTable()

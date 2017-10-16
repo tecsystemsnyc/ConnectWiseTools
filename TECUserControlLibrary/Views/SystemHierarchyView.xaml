@@ -220,7 +220,7 @@
                         Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"
                         CommandParameter="{Binding ViewModel.SelectedSystem}">
                     <Button.Command>
-                        <MultiBinding Converter="{utilities:SelectedComponentToCommandConverter}" >
+                        <MultiBinding Converter="{utilities:SelectedComponentToCommandConverter}">
                             <Binding ElementName="componentComboBox" Path="SelectedItem"/>
                             <Binding ElementName="systemHierarchyView" Path="ViewModel.AddEquipmentCommand"/>
                             <Binding ElementName="systemHierarchyView" Path="ViewModel.AddControllerCommand"/>
