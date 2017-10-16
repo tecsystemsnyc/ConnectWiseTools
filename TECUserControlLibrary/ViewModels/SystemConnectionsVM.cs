@@ -132,7 +132,7 @@ namespace TECUserControlLibrary.ViewModels
             TECSubScope subScope = dropInfo.Data as TECSubScope;
             SelectedController.AddSubScope(subScope);
             UnconnectedSubScope.Remove(subScope);
-            SubScope.Add(new SubScopeConnectionItem(subScope, typical.TypicalInstanceDictionary.GetInstancesOfType(subScope)));
+            SubScope.Add(new SubScopeConnectionItem(subScope, typical.TypicalInstanceDictionary.GetInstancesOfType(subScope), needsUpdate: true));
         }
 
         private void initializeCollections()
