@@ -633,9 +633,9 @@ namespace TECUserControlLibrary.Utilities
            object parameter, System.Globalization.CultureInfo culture)
         {
             int index = System.Convert.ToInt32(values[0]);
-            if(index - 1 > values.Length)
+            if(index + 1 >= values.Length)
             {
-                return values[1];
+                return null;
             }
             return values[index + 1];
         }
@@ -658,6 +658,8 @@ namespace TECUserControlLibrary.Utilities
             switch(index)
             {
                 case SystemComponentIndex.Electrical:
+                case SystemComponentIndex.Misc:
+                case SystemComponentIndex.Proposal:
                     return 2;
                 default:
                     return 1;

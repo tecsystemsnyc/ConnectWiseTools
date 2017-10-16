@@ -27,6 +27,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECController selectedController;
         private TECPanel selectedPanel;
         private SystemConnectionsVM connectionsVM;
+        private MiscCostsVM miscVM;
 
         public ViewModelBase SelectedVM
         {
@@ -52,6 +53,7 @@ namespace TECUserControlLibrary.ViewModels
         private void SystemSelected(TECTypical value)
         {
             ConnectionsVM = new SystemConnectionsVM(value, catalogs.ConduitTypes);
+            MiscVM = new MiscCostsVM(value);
         }
 
         public TECEquipment SelectedEquipment
@@ -135,6 +137,15 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     SelectedVM = updateVM;
                 };
+            }
+        }
+        public MiscCostsVM MiscVM
+        {
+            get { return miscVM; }
+            set
+            {
+                miscVM = value;
+                RaisePropertyChanged("MiscVM");
             }
         }
 
