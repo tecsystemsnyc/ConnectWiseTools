@@ -29,11 +29,28 @@ namespace TECUserControlLibrary.Views
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(SystemConnectionsVM), typeof(SystemConnectionsView));
+            DependencyProperty.Register("ViewModel", typeof(SystemConnectionsVM), typeof(SystemConnectionsView),
+                new PropertyMetadata(default(SystemConnectionsVM)));
+
+        public static readonly RoutedEvent UpdateEvent =
+        EventManager.RegisterRoutedEvent("Update", RoutingStrategy.Bubble,
+        typeof(RoutedEventHandler), typeof(SystemConnectionsView));
+
+        public event RoutedEventHandler Update
+        {
+            add { AddHandler(UpdateEvent, value); }
+            remove { RemoveHandler(UpdateEvent, value); }
+        }
+
 
         public SystemConnectionsView()
         {
             InitializeComponent();
+        }
+
+        protected void updateStarted(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(UpdateEvent, this));
         }
     }
 }

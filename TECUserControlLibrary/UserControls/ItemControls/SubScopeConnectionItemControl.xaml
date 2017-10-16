@@ -45,7 +45,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Content="{Binding Name}"/>
+            <Label Content="{Binding Name}" FontWeight="Bold"/>
             <Label Content="{Binding Description}" Grid.Row="1"/>
 
             <Label Content="Connection Types" Grid.Column="1"/>
@@ -78,10 +78,10 @@
             <Grid Grid.Column="1" Grid.Row="5">
                 <Label Content="{Binding Connection.ConduitLength}"
                        Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
                 <TextBox Text="{Binding Connection.ConduitLength}"
                          Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=False}"/>
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
             </Grid>
             <Border Grid.Row="5" Grid.ColumnSpan="2"/>
 
@@ -89,20 +89,22 @@
             <Grid Grid.Row="4" Grid.Column="2">
                 <Label Content="{Binding Connection.ConduitType}"
                        Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
-                <ListBox SelectedItem="{Binding Connection.ConduitType}" 
-                         ItemsSource="{Binding ElementName=subScopeConnectionItemControl, Path=ConduitTypes}"
-                         Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=False}"/>
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
+                <ComboBox SelectedItem="{Binding Connection.ConduitType}" 
+                          ItemsSource="{Binding ElementName=subScopeConnectionItemControl, Path=ConduitTypes}"
+                          DisplayMemberPath="{Binding Name}"
+                          Margin="5"
+                          Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
             </Grid>
-            <Border Grid.Column="2" Grid.Row="3" Grid.RowSpan="3"/>
+            <Border Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"/>
 
             <Grid Grid.Column="2" Grid.Row="5">
                 <Button Content="Update"
                         Command="{Binding ElementName=subScopeConnectionItemControl, Path=UpdateCommand}"
                         CommandParameter="{Binding}"
                         Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=False}"
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                         Margin="5"/>
             </Grid>
         </Grid>

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace TECUserControlLibrary.Models
 {
-    public class TypicalSubScope : ViewModelBase
+    public class SubScopeConnectionItem : ViewModelBase
     {
         private ObservableCollection<TECSubScope> _instances;
         private bool _needsUpdate;
@@ -29,12 +29,15 @@ namespace TECUserControlLibrary.Models
         public ICommand UpdateCommand { get; private set; }
         public event Action<IEnumerable<TECSubScope>> Update;
 
-        public TypicalSubScope(TECSubScope subScope, IEnumerable<TECSubScope> instances)
+        public SubScopeConnectionItem(TECSubScope subScope, IEnumerable<TECSubScope> instances = null)
         {
             SubScope = subScope;
-            _instances = new ObservableCollection<TECSubScope>(instances);
-            NeedsUpdate = true;
-            subScope.Connection.PropertyChanged += Connection_PropertyChanged;
+            if (subScope.IsTypical)
+            {
+                _instances = new ObservableCollection<TECSubScope>(instances);
+                NeedsUpdate = true;
+                subScope.Connection.PropertyChanged += Connection_PropertyChanged;
+            }
         }
 
         public bool UpdateInstance(TECSubScope instance)
