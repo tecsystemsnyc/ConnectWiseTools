@@ -1,4 +1,4 @@
-﻿using EstimatingLibrary.Interfaces;
+﻿using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,24 +14,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.PropertyControls
 {
     /// <summary>
-    /// Interaction logic for PointPropetiesControl.xaml
+    /// Interaction logic for HardwarePropertiesControl.xaml
     /// </summary>
-    public partial class PointPropetiesControl : UserControl
+    public partial class HardwarePropertiesControl : UserControl
     {
-        public INotifyPointChanged Selected
+        public TECHardware Selected
         {
-            get { return (INotifyPointChanged)GetValue(SelectedProperty); }
+            get { return (TECHardware)GetValue(SelectedProperty); }
             set { SetValue(SelectedProperty, value); }
         }
 
         public static readonly DependencyProperty SelectedProperty =
-            DependencyProperty.Register("Selected", typeof(INotifyPointChanged),
-              typeof(PointPropetiesControl));
+            DependencyProperty.Register("Selected", typeof(TECHardware),
+              typeof(HardwarePropertiesControl));
 
-        public PointPropetiesControl()
+        public HardwarePropertiesControl()
         {
             InitializeComponent();
         }

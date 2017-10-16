@@ -8,7 +8,7 @@
              xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
-             
+             xmlns:pControls="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -19,27 +19,32 @@
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="scope">
                 <Expander Header="Scope" >
-                    <controls:ScopePropertiesControl Selected="{Binding}"/>
+                    <pControls:ScopePropertiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
             <DataTemplate x:Key="cost">
                 <Expander Header="Cost" >
-                    <controls:CostPropertiesControl Selected="{Binding}"/>
+                    <pControls:CostPropertiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
             <DataTemplate x:Key="costBatchInterface">
                 <Expander Header="Cost batch" >
-                    <controls:CostBatchPropertiesControl Selected="{Binding}"/>
+                    <pControls:CostBatchPropertiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
             <DataTemplate x:Key="pointInterface">
                 <Expander Header="Points" >
-                    <controls:PointPropetiesControl Selected="{Binding}"/>
+                    <pControls:PointPropetiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
             <DataTemplate x:Key="hardware">
                 <Expander Header="Hardware" >
-                    <controls:HardwarePropertiesControl Selected="{Binding}"/>
+                    <pControls:HardwarePropertiesControl Selected="{Binding}"/>
+                </Expander>
+            </DataTemplate>
+            <DataTemplate x:Key="located">
+                <Expander Header="Located">
+                    <pControls:LocatedPropertiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
             <DataTemplate x:Key="default"/>
@@ -58,6 +63,9 @@
             <utilities:HardwareSelector x:Key="HardwareSelector"
                                         InterfaceTemplate="{StaticResource hardware}"
                                         DefaultTemplate="{StaticResource default}"/>
+            <utilities:LocatedSelector x:Key="LocatedSelector"
+                                       InterfaceTemplate="{StaticResource located}"
+                                       DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -69,6 +77,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LocatedSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

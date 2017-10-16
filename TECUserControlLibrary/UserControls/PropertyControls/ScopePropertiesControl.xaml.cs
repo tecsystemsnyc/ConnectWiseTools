@@ -1,4 +1,4 @@
-﻿using EstimatingLibrary.Interfaces;
+﻿using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,24 +14,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.PropertyControls
 {
     /// <summary>
-    /// Interaction logic for INotifyCostChangedPropertiesControl.xaml
+    /// Interaction logic for ScopePropertiesControl.xaml
     /// </summary>
-    public partial class CostBatchPropertiesControl : UserControl
+    public partial class ScopePropertiesControl : UserControl
     {
-        public INotifyCostChanged Selected
+        public TECScope Selected
         {
-            get { return (INotifyCostChanged)GetValue(SelectedProperty); }
+            get { return (TECScope)GetValue(SelectedProperty); }
             set { SetValue(SelectedProperty, value); }
         }
-
+        
         public static readonly DependencyProperty SelectedProperty =
-            DependencyProperty.Register("Selected", typeof(INotifyCostChanged),
-              typeof(CostBatchPropertiesControl));
+            DependencyProperty.Register("Selected", typeof(TECScope),
+              typeof(ScopePropertiesControl));
 
-        public CostBatchPropertiesControl()
+        public ScopePropertiesControl()
         {
             InitializeComponent();
         }

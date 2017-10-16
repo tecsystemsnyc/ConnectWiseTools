@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TECUserControlLibrary.UserControls.CostBatchPropertiesControl"
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.PropertyControls.CostBatchPropertiesControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,15 +7,6 @@
              x:Name="parent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
     <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
         <ItemsControl ItemsSource="{Binding CostBatch.AllCosts}">
             <ItemsControl.ItemTemplate>
