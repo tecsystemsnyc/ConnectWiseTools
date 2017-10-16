@@ -92,7 +92,7 @@
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
                 <ComboBox SelectedItem="{Binding Connection.ConduitType}" 
                           ItemsSource="{Binding ElementName=subScopeConnectionItemControl, Path=ConduitTypes}"
-                          DisplayMemberPath="{Binding Name}"
+                          DisplayMemberPath="Name"
                           Margin="5"
                           Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
