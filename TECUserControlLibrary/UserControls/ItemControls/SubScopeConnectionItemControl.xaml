@@ -7,6 +7,7 @@
              xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:converters="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              x:Name="subScopeConnectionItemControl">
 
@@ -19,6 +20,12 @@
                 <Setter Property="BorderBrush" Value="Black"/>
                 <Setter Property="BorderThickness" Value="1"/>
             </Style>
+            <system:Boolean x:Key="True">
+                True
+            </system:Boolean>
+            <system:Boolean x:Key="False">
+                False
+            </system:Boolean>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -60,10 +67,10 @@
             <Grid Grid.Column="1" Grid.Row="4">
                 <Label Content="{Binding Connection.Length}" 
                    Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly, 
-                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=True}"/>
+                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
                 <TextBox Text="{Binding Connection.Length}"
                      Visibility="{Binding ElementName=subScopeConnectionItemControl, Path=ReadOnly,
-                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter=False}"/>
+                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
             </Grid>
             <Border Grid.Row="4" Grid.ColumnSpan="2"/>
 

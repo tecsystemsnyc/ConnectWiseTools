@@ -23,22 +23,6 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// </summary>
     public partial class SubScopeConnectionItemControl : UserControl
     {
-        public TypicalSubScope TypicalSubScope
-        {
-            get { return (TypicalSubScope)GetValue(TypicalSubScopeProperty); }
-            set
-            {
-                SetValue(TypicalSubScopeProperty, value);
-                SubScope = value.SubScope;
-            }
-        }
-
-        // Using a DependencyProperty as the backing store for TypicalSubScopeConnection.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TypicalSubScopeProperty =
-            DependencyProperty.Register("TypicalSubScope", typeof(TypicalSubScope), typeof(SubScopeConnectionItemControl), new PropertyMetadata(default(TypicalSubScope)));
-
-
-
         public TECSubScope SubScope
         {
             get { return (TECSubScope)GetValue(SubScopeProperty); }

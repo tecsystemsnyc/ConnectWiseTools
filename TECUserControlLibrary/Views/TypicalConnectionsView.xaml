@@ -62,6 +62,7 @@
                     Source="{Binding SubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
                     DropHandler="{Binding}"
+                    ReadOnly="False"
                     Grid.Row="1"/>
             </Grid>
         </Border>
