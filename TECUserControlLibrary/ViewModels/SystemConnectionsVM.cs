@@ -51,9 +51,14 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _subScope = value;
+                
+                SubScope.CollectionChanged += subScopeItems_CollectionChanged;
                 RaisePropertyChanged("SubScope");
             }
         }
+
+        
+
         public ObservableCollection<TECSubScope> UnconnectedSubScope
         {
             get
@@ -159,6 +164,22 @@ namespace TECUserControlLibrary.ViewModels
         {
             UpdateVM = new UpdateConnectionVM(SubScope);
         }
+        private void updateNeedsUpdate()
+        {
+            List<SubScopeConnectionItem> ssNeedsUpdate = new List<SubScopeConnectionItem>();
+            foreach (SubScopeConnectionItem item in SubScope)
+            {
+                if (item.NeedsUpdate)
+                {
+                    ssNeedsUpdate.Add(item);
+                }
+            }
+            UpdateVM = new UpdateConnectionVM(ssNeedsUpdate);
+        }
+        private void updateItem(SubScopeConnectionItem item)
+        {
+            UpdateVM = new UpdateConnectionVM(new List<SubScopeConnectionItem>() { item });
+        }
 
         private bool selectedControllerCanSwitch()
         {
@@ -193,17 +214,23 @@ namespace TECUserControlLibrary.ViewModels
                 SubScope = ssItems;
             }
         }
-        private void updateNeedsUpdate()
+
+        private void subscribeToItems(IEnumerable<SubScopeConnectionItem> items)
         {
-            List<SubScopeConnectionItem> ssNeedsUpdate = new List<SubScopeConnectionItem>();
-            foreach(SubScopeConnectionItem item in SubScope)
+            foreach(SubScopeConnectionItem item in items)
             {
-                if (item.NeedsUpdate)
+                item.Update += updateItem;
+            }
+        }
+        private void subScopeItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            foreach(object newItem in e.NewItems)
+            {
+                if (newItem is SubScopeConnectionItem item)
                 {
-                    ssNeedsUpdate.Add(item);
+                    item.Update += updateItem;
                 }
             }
-            UpdateVM = new UpdateConnectionVM(ssNeedsUpdate);
         }
     }
 }
