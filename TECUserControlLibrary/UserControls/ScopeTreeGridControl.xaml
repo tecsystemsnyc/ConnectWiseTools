@@ -18,7 +18,8 @@
 
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid  ItemsSource="{Binding Path=ScopeTreeSource}"
-                           AutoGenerateColumns="False">
+                           AutoGenerateColumns="False"
+                   IsReadOnly="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True" />
                 <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto"  MinWidth="40"/>

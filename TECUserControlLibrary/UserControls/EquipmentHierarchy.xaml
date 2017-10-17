@@ -34,7 +34,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Triggers>
-            <EventTrigger RoutedEvent="local:SubScopeListControl.Selected">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Selected">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource moveAnimation}"/>
                 </EventTrigger.Actions>

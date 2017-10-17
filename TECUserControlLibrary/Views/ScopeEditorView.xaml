@@ -56,17 +56,15 @@
                         <Binding ElementName="TypicalInstanceCombo" Path="SelectedValue"
                             Converter="{utilities:TypicalSelectionTemplateWidthConverter}">
                             <Binding.ConverterParameter>
-                                <sys:Double>250</sys:Double>
+                                <sys:Double>200</sys:Double>
                             </Binding.ConverterParameter>
                         </Binding>
                     </ColumnDefinition.Width>
                 </ColumnDefinition>
-                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
@@ -74,12 +72,11 @@
             </Grid.RowDefinitions>
 
             <views:ScopeCollectionsTabView Grid.Column="0" Grid.Row="0"
-                                         Grid.RowSpan="2"
-                                         ViewModel="{Binding ScopeCollection}"/>
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
+                                           Grid.RowSpan="2"
+                                           ViewModel="{Binding ScopeCollection}"/>
             <TabControl Grid.Row="0"
                     Grid.RowSpan="2"
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
                 <TabItem Header="NoneTab" Visibility="Collapsed"/>
@@ -133,12 +130,11 @@
                     <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
                 </TabItem>
             </TabControl>
-            <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
             <!--Right Tab Control-->
             <!--<views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
                              Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>-->
-            <views:PropertiesView Selected="{Binding Selected}" Margin="0,-2,0,0"
-                             Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>
+            <views:PropertiesView Selected="{Binding Selected}"
+                             Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"/>
         </Grid>
     </Border>
     

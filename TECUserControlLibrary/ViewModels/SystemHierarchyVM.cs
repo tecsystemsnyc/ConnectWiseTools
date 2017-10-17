@@ -52,8 +52,11 @@ namespace TECUserControlLibrary.ViewModels
 
         private void SystemSelected(TECTypical value)
         {
-            ConnectionsVM = new SystemConnectionsVM(value, catalogs.ConduitTypes);
-            MiscVM = new MiscCostsVM(value);
+            if(value != null)
+            {
+                ConnectionsVM = new SystemConnectionsVM(value, catalogs.ConduitTypes);
+                MiscVM = new MiscCostsVM(value);
+            }
         }
 
         public TECEquipment SelectedEquipment
