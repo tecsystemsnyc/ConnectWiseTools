@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.PropertyControls
 {
     /// <summary>
     /// Interaction logic for ScopePropertiesControl.xaml

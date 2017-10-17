@@ -1,5 +1,4 @@
-﻿using EstimatingLibrary.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,25 +12,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EstimatingLibrary;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.UserControls.PropertyControls
 {
     /// <summary>
-    /// Interaction logic for INotifyCostChangedPropertiesControl.xaml
+    /// Interaction logic for LabeledPropertiesControl.xaml
     /// </summary>
-    public partial class CostBatchPropertiesControl : UserControl
+    public partial class LabeledPropertiesControl : UserControl
     {
-        public INotifyCostChanged Selected
+
+        public TECLabeled Selected
         {
-            get { return (INotifyCostChanged)GetValue(SelectedProperty); }
+            get { return (TECLabeled)GetValue(SelectedProperty); }
             set { SetValue(SelectedProperty, value); }
         }
 
+        // Using a DependencyProperty as the backing store for Selected.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedProperty =
-            DependencyProperty.Register("Selected", typeof(INotifyCostChanged),
-              typeof(CostBatchPropertiesControl));
+            DependencyProperty.Register("Selected", typeof(TECLabeled), typeof(LabeledPropertiesControl));
 
-        public CostBatchPropertiesControl()
+
+        public LabeledPropertiesControl()
         {
             InitializeComponent();
         }

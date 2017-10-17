@@ -494,9 +494,9 @@ namespace TECUserControlLibrary.Utilities
     public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel, Misc }
     public enum AllSearchableObjects
     {
-        SubScope,
-        Equipment,
         System,
+        Equipment,
+        SubScope,
         Controllers,
         Panels,
         ControllerTypes,
