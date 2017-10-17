@@ -47,6 +47,11 @@
                     <pControls:LocatedPropertiesControl Selected="{Binding}"/>
                 </Expander>
             </DataTemplate>
+            <DataTemplate x:Key="labeled">
+                <Expander Header="Labeled">
+                    <pControls:LabeledPropertiesControl Selected="{Binding}"/>
+                </Expander>
+            </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -66,6 +71,9 @@
             <utilities:LocatedSelector x:Key="LocatedSelector"
                                        InterfaceTemplate="{StaticResource located}"
                                        DefaultTemplate="{StaticResource default}"/>
+            <utilities:LabeledSelector x:Key="LabeledSelector"
+                                       InterfaceTemplate="{StaticResource labeled}"
+                                       DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -73,6 +81,7 @@
                   Background="{DynamicResource SectionBackgroundBrush}">
         <StackPanel>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>

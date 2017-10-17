@@ -195,6 +195,9 @@
     <Compile Include="UserControls\ListControls\SubScopeConnectionListControl.xaml.cs">
       <DependentUpon>SubScopeConnectionListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\LabeledPropertiesControl.xaml.cs">
+      <DependentUpon>LabeledPropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\LocatedPropertiesControl.xaml.cs">
       <DependentUpon>LocatedPropertiesControl.xaml</DependentUpon>
     </Compile>
@@ -559,6 +562,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\SubScopeConnectionListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\LabeledPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

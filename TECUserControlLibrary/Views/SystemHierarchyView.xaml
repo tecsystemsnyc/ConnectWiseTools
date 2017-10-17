@@ -301,7 +301,7 @@
             </Grid.RowDefinitions>
             <Label Content="Devices" Grid.Row="0"/>
                 <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
-                                               SelectedItem="{Binding SelectedDevice}" Grid.Row="1"
+                                               SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
                                                DropHandler="{Binding ViewModel}"/>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -315,7 +315,8 @@
                             CommandParameter="{Binding ViewModel.SelectedSubScope}"/>
                 </Grid>
                 <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                           Grid.Row="3"/>
+                                               Grid.Row="3"
+                                               SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedPoint}"/>
         </Grid>
 
     </Grid>
