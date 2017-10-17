@@ -10,7 +10,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=updateConnectionsView, Path=ViewModel}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <listControls:SubScopeListControl Source="{Binding SubScope}"

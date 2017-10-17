@@ -28,7 +28,7 @@ namespace TECUserControlLibrary.Models
             }
         }
         public ICommand UpdateCommand { get; private set; }
-        public event Action<IEnumerable<TECSubScope>> Update;
+        public event Action<SubScopeConnectionItem> Update;
 
         public SubScopeConnectionItem(TECSubScope subScope, IEnumerable<TECSubScope> instances = null, bool needsUpdate = false)
         {
@@ -100,7 +100,7 @@ namespace TECUserControlLibrary.Models
         private void updateExecute()
         {
             NeedsUpdate = false;
-            Update?.Invoke(Instances);
+            Update?.Invoke(this);
         }
     }
 }
