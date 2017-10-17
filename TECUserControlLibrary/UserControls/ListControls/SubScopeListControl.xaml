@@ -21,12 +21,12 @@
     <Grid DataContext="{Binding ElementName=subScopeListControl}">
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
-                  SelectionChanged="ListView_Selected"
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   AllowDrop="True"
                   Drop="ListView_Dropped"
+                  MouseUp="ListView_MouseUp"
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>

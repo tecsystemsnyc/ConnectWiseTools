@@ -21,26 +21,29 @@
             <DataTemplate x:Key="EquipmentTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView}">
                     <listControls:EquipmentListControl x:Name="equipmentList"
-                                                   Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
-                                                   SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment}"
-                                                   DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
-                                                       DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteEquipmentCommand}"/>
+                                                       Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
+                                                       SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment}"
+                                                       DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
+                                                       DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteEquipmentCommand}"
+                                                       IsDragSource="True"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ControllerTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
                     <listControls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
-                                                    SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedController}"
-                                                    DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
-                                                        DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteControllerCommand}"/>
+                                                        SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedController}"
+                                                        DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
+                                                        DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteControllerCommand}"
+                                                        IsDragSource="True"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="PanelTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
                     <listControls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
-                                               SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedPanel}"
-                                               DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
-                                                   DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeletePanelCommand}"/>
+                                                   SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedPanel}"
+                                                   DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
+                                                   DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeletePanelCommand}"
+                                                   IsDragSource="True"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ElectricalTemplate">
@@ -220,7 +223,8 @@
             <listControls:SystemListControl x:Name="systemList" Grid.Column="0" Grid.Row="1" Source="{Binding SystemSource}"
                                         SelectedItem="{Binding ViewModel.SelectedSystem}"
                                         DropHandler="{Binding ViewModel}"
-                                            DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSystemCommand}"/>
+                                            DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSystemCommand}"
+                                            IsDragSource="True"/>
             <!--Column 1-->
             <Grid Grid.Column="1" Grid.ColumnSpan="{Binding ElementName=componentComboBox, Path=SelectedItem, 
             Converter={utilities:SelectedComponentToSpanConverter}}" Panel.ZIndex="10">
@@ -301,7 +305,8 @@
                                       SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
                                       Grid.Column="2" Grid.Row="1"
                                       DropHandler="{Binding ViewModel}"
-                                      DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"/>
+                                      DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
+                                              IsDragSource="True"/>
         <!--Column 3-->
         <Grid Grid.Column="3" Grid.Row="1">
             <Grid.RowDefinitions>
@@ -314,7 +319,8 @@
                 <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
                                                DropHandler="{Binding ViewModel}"
-                                                   DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteDeviceCommand}"/>
+                                                   DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
+                                                   IsDragSource="True"/>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -329,7 +335,8 @@
                 <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                                Grid.Row="3"
                                                SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedPoint}"
-                                               DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeletePointCommand}"/>
+                                               DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeletePointCommand}"
+                                               IsDragSource="True"/>
         </Grid>
 
     </Grid>
