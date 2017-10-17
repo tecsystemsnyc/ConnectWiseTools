@@ -30,7 +30,8 @@
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <itemControls:ControllerItemControl Controller="{Binding}"/>
+                    <itemControls:ControllerItemControl Controller="{Binding}"
+                                                        DeleteCommand="{Binding ElementName=controllerListControl, Path=DeleteCommand}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

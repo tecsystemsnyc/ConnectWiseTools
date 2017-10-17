@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// <summary>
     /// Interaction logic for PointControl.xaml
     /// </summary>
-    public partial class PointControl : UserControl
+    public partial class PointControl : BaseItemControl
     {
 
 

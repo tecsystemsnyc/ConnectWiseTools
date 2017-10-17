@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// <summary>
     /// Interaction logic for DeviceControl.xaml
     /// </summary>
-    public partial class DeviceControl : UserControl
+    public partial class DeviceControl : BaseItemControl
     {
 
         public TECDevice Device

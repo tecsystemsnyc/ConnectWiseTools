@@ -12,28 +12,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     public class BaseItemControl : UserControl
     {
 
-        public ICommand CopyCommand
-        {
-            get { return (ICommand)GetValue(CopyCommandProperty); }
-            set { SetValue(CopyCommandProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for CopyCommand.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CopyCommandProperty =
-            DependencyProperty.Register("CopyCommand", typeof(ICommand), typeof(BaseItemControl));
-
-
-        public ICommand PasteCommand
-        {
-            get { return (ICommand)GetValue(PasteCommandProperty); }
-            set { SetValue(PasteCommandProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for PasteCommand.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PasteCommandProperty =
-            DependencyProperty.Register("PasteCommand", typeof(ICommand), typeof(BaseItemControl));
-
-
+       
         public ICommand DeleteCommand
         {
             get { return (ICommand)GetValue(DeleteCommandProperty); }

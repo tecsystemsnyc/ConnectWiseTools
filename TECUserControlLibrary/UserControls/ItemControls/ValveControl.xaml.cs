@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// <summary>
     /// Interaction logic for ValveControl.xaml
     /// </summary>
-    public partial class ValveControl : UserControl
+    public partial class ValveControl : BaseItemControl
     {
 
         public TECValve Valve

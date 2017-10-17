@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// <summary>
     /// Interaction logic for SystemControl.xaml
     /// </summary>
-    public partial class SystemControl : UserControl
+    public partial class SystemControl : BaseItemControl
     {
 
 

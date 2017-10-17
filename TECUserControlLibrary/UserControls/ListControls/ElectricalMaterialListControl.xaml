@@ -31,7 +31,8 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <itemControls:ElectricalMaterialControl ElectricalMaterial="{Binding}"/>
+                    <itemControls:ElectricalMaterialControl ElectricalMaterial="{Binding}"
+                                                            DeleteCommand="{Binding ElementName=ElectricalMaterialList, Path=DeleteCommand}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

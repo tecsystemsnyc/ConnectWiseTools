@@ -126,7 +126,13 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECSystem> AddMiscCommand { get; private set; }
         public RelayCommand<object> BackCommand { get; private set; }
 
+        public RelayCommand<TECSystem> DeleteSystemCommand { get; private set; }
         public RelayCommand<TECEquipment> DeleteEquipmentCommand { get; private set; }
+        public RelayCommand<TECSubScope> DeleteSubScopeCommand { get; private set; }
+        public RelayCommand<IEndDevice> DeleteDeviceCommand { get; private set; }
+        public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
+        public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
+        public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
 
         public SystemConnectionsVM ConnectionsVM
         {
@@ -162,13 +168,17 @@ namespace TECUserControlLibrary.ViewModels
             AddMiscCommand = new RelayCommand<TECSystem>(addMiscExecute, canAddMisc);
             BackCommand = new RelayCommand<object>(backExecute);
 
+            DeleteSystemCommand = new RelayCommand<TECSystem>(deleteSystemExecute, canDeleteSystem);
             DeleteEquipmentCommand = new RelayCommand<TECEquipment>(deleteEquipmentExecute, canDeleteEquipment);
+            DeleteSubScopeCommand = new RelayCommand<TECSubScope>(deleteSubScopeExecute, canDeleteSubScope);
+            DeleteDeviceCommand = new RelayCommand<IEndDevice>(deleteDeviceExecute, canDeleteDevice);
+            DeletePointCommand = new RelayCommand<TECPoint>(deletePointExecute, canDeletePoint);
+            DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelExecute, canDeletePanel);
+            DeleteControllerCommand = new RelayCommand<TECController>(deleteControllerExecute, canDeleteController);
             catalogs = scopeManager.Catalogs;
             this.scopeManager = scopeManager;
         }
-
         
-
         public event Action<TECObject> Selected;
 
         private void backExecute(object obj)
@@ -249,6 +259,22 @@ namespace TECUserControlLibrary.ViewModels
         {
             return true;
         }
+        
+        private void deleteSystemExecute(TECSystem obj)
+        {
+            if(scopeManager is TECBid bid)
+            {
+                bid.Systems.Remove(obj as TECTypical);
+            } else if(scopeManager is TECTemplates templates)
+            {
+                templates.SystemTemplates.Remove(obj);
+            }
+        }
+
+        private bool canDeleteSystem(TECSystem arg)
+        {
+            return scopeManager != null;
+        }
 
         private void deleteEquipmentExecute(TECEquipment obj)
         {
@@ -256,6 +282,56 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         private bool canDeleteEquipment(TECEquipment arg)
+        {
+            return true;
+        }
+
+        private void deleteSubScopeExecute(TECSubScope obj)
+        {
+            SelectedEquipment.SubScope.Remove(obj);
+        }
+
+        private bool canDeleteSubScope(TECSubScope arg)
+        {
+            return true;
+        }
+
+        private void deleteDeviceExecute(IEndDevice obj)
+        {
+            SelectedSubScope.Devices.Remove(obj);
+        }
+
+        private bool canDeleteDevice(IEndDevice arg)
+        {
+            return true;
+        }
+
+        private void deletePointExecute(TECPoint obj)
+        {
+            SelectedSubScope.Points.Remove(obj);
+        }
+
+        private bool canDeletePoint(TECPoint arg)
+        {
+            return true;
+        }
+
+        private void deletePanelExecute(TECPanel obj)
+        {
+            SelectedSystem.Panels.Remove(obj);
+        }
+
+        private bool canDeletePanel(TECPanel arg)
+        {
+            return true;
+        }
+
+        private void deleteControllerExecute(TECController obj)
+        {
+            SelectedSystem.RemoveController(obj);
+        }
+
+        private bool canDeleteController(TECController arg)
         {
             return true;
         }

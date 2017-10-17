@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// <summary>
     /// Interaction logic for SubScopeItemControl.xaml
     /// </summary>
-    public partial class SubScopeItemControl : UserControl
+    public partial class SubScopeItemControl : BaseItemControl
     {
 
 

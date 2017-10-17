@@ -30,7 +30,8 @@
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <itemsControls:SubScopeItemControl SubScope="{Binding}"/>
+                    <itemsControls:SubScopeItemControl SubScope="{Binding}"
+                                                       DeleteCommand="{Binding ElementName=subScopeListControl, Path=DeleteCommand}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
