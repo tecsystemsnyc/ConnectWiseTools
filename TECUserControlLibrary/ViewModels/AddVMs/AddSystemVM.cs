@@ -14,6 +14,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
         private TECScopeManager parent;
         private TECSystem toAdd;
+        private int quantity;
 
         public TECSystem ToAdd
         {
@@ -22,6 +23,15 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
+            }
+        }
+        public int Quantity
+        {
+            get { return quantity; }
+            set
+            {
+                quantity = value;
+                RaisePropertyChanged("Quantity");
             }
         }
         public ICommand AddCommand { get; private set; }
@@ -41,16 +51,20 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private void addExecute()
         {
-            if(parent is TECBid bid)
+            for (int x = 0; x < Quantity; x++)
             {
-                TECTypical typical = new TECTypical(ToAdd);
-                bid.Systems.Add(typical);
-                Added?.Invoke(ToAdd);
-            }
-            else if (parent is TECTemplates templates)
-            {
-                templates.SystemTemplates.Add(ToAdd);
-                Added?.Invoke(ToAdd);
+                if (parent is TECBid bid)
+                {
+                    TECTypical typical = new TECTypical(ToAdd);
+                    bid.Systems.Add(typical);
+                    Added?.Invoke(typical);
+                }
+                else if (parent is TECTemplates templates)
+                {
+                    var system = new TECSystem(ToAdd, ToAdd.IsTypical);
+                    templates.SystemTemplates.Add(system);
+                    Added?.Invoke(system);
+                }
             }
             
         }
