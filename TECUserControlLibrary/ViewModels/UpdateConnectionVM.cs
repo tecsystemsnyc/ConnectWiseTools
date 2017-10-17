@@ -48,7 +48,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public ICommand UpdateCommand;
+        public ICommand UpdateCommand { get; private set; }
         #endregion
 
         public UpdateConnectionVM(IEnumerable<SubScopeConnectionItem> subScope)
@@ -87,7 +87,14 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canUpdate()
         {
-            return !updatedDictionary[SelectedInstance];
+            if (SelectedInstance == null)
+            {
+                return false;
+            }
+            else
+            {
+                return !updatedDictionary[SelectedInstance];
+            }
         }
     }
 }
