@@ -13,6 +13,7 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight;
 using TECUserControlLibrary.Debug;
+using EstimatingUtilitiesLibrary.Exports;
 
 namespace EstimateBuilder.MVVM
 {
@@ -58,6 +59,7 @@ namespace EstimateBuilder.MVVM
         public ICommand CSVExportCommand { get; private set; }
         public ICommand BudgetCommand { get; private set; }
         public ICommand ExcelExportCommand { get; private set; }
+        public ICommand EngineeringExportCommand { get; private set; }
         public ICommand RefreshTemplatesCommand { get; private set; }
         public ICommand RefreshBidCommand { get; private set; }
         public TECBid Bid
@@ -66,6 +68,7 @@ namespace EstimateBuilder.MVVM
             set
             {
                 workingScopeManager = value;
+                Estimate = new TECEstimator(Bid, watcher);
             }
         }
         public TECTemplates Templates
@@ -215,10 +218,12 @@ namespace EstimateBuilder.MVVM
             BudgetCommand = new RelayCommand(budgetExecute);
             LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
             ExcelExportCommand = new RelayCommand(excelExportExecute);
+            EngineeringExportCommand = new RelayCommand(engineeringExportExecute);
             RefreshTemplatesCommand = new RelayCommand(refreshTemplatesExecute);
             RefreshBidCommand = new RelayCommand(refreshBidExecute, refreshBidCanExecute);
             ToggleTemplatesCommand = new RelayCommand(toggleTemplatesExecute);
         }
+        
         protected override void setupMenu(MenuType menuType)
         {
             MenuVM = new MenuVM(MenuType.EB);
@@ -228,6 +233,7 @@ namespace EstimateBuilder.MVVM
             MenuVM.SaveCommand = SaveCommand;
             MenuVM.SaveAsCommand = SaveAsCommand;
             MenuVM.ExportProposalCommand = DocumentCommand;
+            MenuVM.ExportEngineeringCommand = EngineeringExportCommand;
             MenuVM.LoadTemplatesCommand = LoadTemplatesCommand;
             MenuVM.ExportPointsListCommand = CSVExportCommand;
             MenuVM.UndoCommand = UndoCommand;
@@ -431,6 +437,23 @@ namespace EstimateBuilder.MVVM
                 {
                     EstimateSpreadsheetExporter.Export(Bid, path);
                     DebugHandler.LogDebugMessage("Exported to estimating spreadhseet.");
+                }
+                else
+                {
+                    DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
+        }
+        private void engineeringExportExecute()
+        {
+            //User choose path
+            string path = UIHelpers.GetSavePath(UIHelpers.WordDocumentFileParameters, defaultSaveFileName, defaultDirectory, ScopeDirectoryPath, isNew);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    TurnoverExporter.GenerateEngineeringExport(path, Bid, Estimate);
+                    DebugHandler.LogDebugMessage("Exported to engineering turnover document.");
                 }
                 else
                 {

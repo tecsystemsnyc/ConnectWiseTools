@@ -105,6 +105,15 @@ namespace TECUserControlLibrary.ViewModels
         //    }
         //}
 
+        private TECMenuItem exportEngineeringMenuItem;
+        public ICommand ExportEngineeringCommand
+        {
+            set
+            {
+                exportEngineeringMenuItem.Command = value;
+            }
+        }
+
         private TECMenuItem undoMenuItem;
         public ICommand UndoCommand
         {
@@ -209,6 +218,8 @@ namespace TECUserControlLibrary.ViewModels
 
                 //exportExcelMenuItem = new TECMenuItem("Excel", darkTextBrush);
                 //ExportMenu.Items.Add(exportExcelMenuItem);
+                exportEngineeringMenuItem = new TECMenuItem("Engineering", darkTextBrush);
+                ExportMenu.Items.Add(exportEngineeringMenuItem);
 
                 FileMenu.Items.Add(ExportMenu);
             }
