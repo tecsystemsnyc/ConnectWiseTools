@@ -36,12 +36,36 @@ namespace TECUserControlLibrary.Views
         EventManager.RegisterRoutedEvent("Update", RoutingStrategy.Bubble,
         typeof(RoutedEventHandler), typeof(SystemConnectionsView));
 
+
+
+        public UpdateConnectionVM UpdateConnectionVM
+        {
+            get { return (UpdateConnectionVM)GetValue(UpdateConnectionVMProperty); }
+            set { SetValue(UpdateConnectionVMProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UpdateConnectionVM.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UpdateConnectionVMProperty =
+            DependencyProperty.Register("UpdateConnectionVM", typeof(UpdateConnectionVM), typeof(SystemConnectionsView), new PropertyMetadata(new PropertyChangedCallback(OnUpdateConnectionVMChanged)));
+
+        private static void OnUpdateConnectionVMChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if ((e.NewValue as UpdateConnectionVM) != null)
+            {
+                SystemConnectionsView thisView = dependencyObject as SystemConnectionsView;
+                if (thisView != null)
+                {
+                    thisView.RaiseEvent(new RoutedEventArgs(UpdateEvent, thisView));
+                }
+            }
+        }
+
+
         public event RoutedEventHandler Update
         {
             add { AddHandler(UpdateEvent, value); }
             remove { RemoveHandler(UpdateEvent, value); }
         }
-
 
         public SystemConnectionsView()
         {

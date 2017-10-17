@@ -132,6 +132,9 @@ namespace TECUserControlLibrary.Debug
             TECController controller = new TECController(controllerType, true);
             controller.Name = "Test Controller";
             typical.AddController(controller);
+            TECController otherController = new TECController(controllerType, true);
+            otherController.Name = "Other Controller";
+            typical.AddController(otherController);
             TECConnection connection = controller.AddSubScope(connected);
             connection.Length = 10;
             connection.ConduitLength = 20;

@@ -18,7 +18,7 @@ namespace TECUserControlLibrary.ViewModels
     public class SystemConnectionsVM : ViewModelBase, IDropTarget
     {
         #region Fields
-        private TECTypical typical;
+        private TECSystem system;
 
         private readonly ObservableCollection<TECElectricalMaterial> _conduitTypes;
 
@@ -74,9 +74,16 @@ namespace TECUserControlLibrary.ViewModels
             }
             set
             {
-                _selectedController = value;
-                RaisePropertyChanged("SelectedController");
-                handleControllerSelected(value);
+                if (selectedControllerCanSwitch())
+                {
+                    _selectedController = value;
+                    RaisePropertyChanged("SelectedController");
+                    handleControllerSelected(value);
+                }
+                else
+                {
+                    updateNeedsUpdate();
+                }
             }
         }
 
@@ -94,20 +101,19 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UpdateAllCommand { get; private set; }
         #endregion
 
-        public SystemConnectionsVM(TECTypical typical, IEnumerable<TECElectricalMaterial> conduitTypes)
+        public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
-            this.typical = typical;
+            this.system = system;
             _conduitTypes = new ObservableCollection<TECElectricalMaterial>(conduitTypes);
             initializeCollections();
-            foreach (TECSubScope ss in typical.GetAllSubScope())
+            foreach (TECSubScope ss in system.GetAllSubScope())
             {
                 if (ss.ParentConnection == null && ss.Connection == null)
                 {
                     UnconnectedSubScope.Add(ss);
                 }
-                
             }
-            foreach (TECController controller in typical.Controllers)
+            foreach (TECController controller in system.Controllers)
             {
                 Controllers.Add(controller);
             }
@@ -132,7 +138,14 @@ namespace TECUserControlLibrary.ViewModels
             TECSubScope subScope = dropInfo.Data as TECSubScope;
             SelectedController.AddSubScope(subScope);
             UnconnectedSubScope.Remove(subScope);
-            SubScope.Add(new SubScopeConnectionItem(subScope, typical.TypicalInstanceDictionary.GetInstancesOfType(subScope), needsUpdate: true));
+            if (system is TECTypical typical)
+            {
+                SubScope.Add(new SubScopeConnectionItem(subScope, typical.TypicalInstanceDictionary.GetInstancesOfType(subScope), needsUpdate: true));
+            }
+            else
+            {
+                SubScope.Add(new SubScopeConnectionItem(subScope));
+            }
         }
 
         private void initializeCollections()
@@ -147,21 +160,50 @@ namespace TECUserControlLibrary.ViewModels
             UpdateVM = new UpdateConnectionVM(SubScope);
         }
 
+        private bool selectedControllerCanSwitch()
+        {
+            foreach (SubScopeConnectionItem item in SubScope)
+            {
+                if (item.NeedsUpdate)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         private void handleControllerSelected(TECController controller)
         {
-            ObservableCollection<SubScopeConnectionItem> typSS = new ObservableCollection<SubScopeConnectionItem>();
+            ObservableCollection<SubScopeConnectionItem> ssItems = new ObservableCollection<SubScopeConnectionItem>();
             if(controller != null)
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)
                 {
                     if (connection is TECSubScopeConnection ssConnect)
                     {
-                        typSS.Add(new SubScopeConnectionItem(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstancesOfType(ssConnect.SubScope)));
+                        if (system is TECTypical typical)
+                        {
+                            ssItems.Add(new SubScopeConnectionItem(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstancesOfType(ssConnect.SubScope)));
+                        }
+                        else
+                        {
+                            ssItems.Add(new SubScopeConnectionItem(ssConnect.SubScope));
+                        }
                     }
                 }
-                SubScope = typSS;
+                SubScope = ssItems;
             }
-            
+        }
+        private void updateNeedsUpdate()
+        {
+            List<SubScopeConnectionItem> ssNeedsUpdate = new List<SubScopeConnectionItem>();
+            foreach(SubScopeConnectionItem item in SubScope)
+            {
+                if (item.NeedsUpdate)
+                {
+                    ssNeedsUpdate.Add(item);
+                }
+            }
+            UpdateVM = new UpdateConnectionVM(ssNeedsUpdate);
         }
     }
 }
