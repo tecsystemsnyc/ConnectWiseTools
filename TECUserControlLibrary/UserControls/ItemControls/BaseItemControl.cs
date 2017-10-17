@@ -12,17 +12,6 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     public class BaseItemControl : UserControl
     {
 
-        public object ScopeParent
-        {
-            get { return (object)GetValue(ScopeParentProperty); }
-            set { SetValue(ScopeParentProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ScopeParent.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ScopeParentProperty =
-            DependencyProperty.Register("ScopeParent", typeof(object), typeof(BaseItemControl));
-
-
         public ICommand CopyCommand
         {
             get { return (ICommand)GetValue(CopyCommandProperty); }
@@ -54,9 +43,6 @@ namespace TECUserControlLibrary.UserControls.ItemControls
         // Using a DependencyProperty as the backing store for DeleteCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(BaseItemControl));
-
         
-
-
     }
 }

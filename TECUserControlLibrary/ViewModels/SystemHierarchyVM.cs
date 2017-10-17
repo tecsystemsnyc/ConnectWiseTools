@@ -126,6 +126,8 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECSystem> AddMiscCommand { get; private set; }
         public RelayCommand<object> BackCommand { get; private set; }
 
+        public RelayCommand<TECEquipment> DeleteEquipmentCommand { get; private set; }
+
         public SystemConnectionsVM ConnectionsVM
         {
             get { return connectionsVM; }
@@ -151,21 +153,25 @@ namespace TECUserControlLibrary.ViewModels
 
         public SystemHierarchyVM(TECScopeManager scopeManager)
         {
-            AddSystemCommand = new RelayCommand(AddSystemExecute, CanAddSystem);
-            AddEquipmentCommand = new RelayCommand<TECSystem>(AddEquipmentExecute, CanAddEquipment);
-            AddSubScopeCommand = new RelayCommand<TECEquipment>(AddSubScopeExecute, CanAddSubScope);
-            AddPointCommand = new RelayCommand<TECSubScope>(AddPointExecute, CanAddPoint);
-            AddControllerCommand = new RelayCommand<TECSystem>(AddControllerExecute, CanAddController);
-            AddPanelCommand = new RelayCommand<TECSystem>(AddPanelExecute, CanAddPanel);
-            AddMiscCommand = new RelayCommand<TECSystem>(AddMiscExecute, CanAddMisc);
-            BackCommand = new RelayCommand<object>(BackExecute);
+            AddSystemCommand = new RelayCommand(addSystemExecute, canAddSystem);
+            AddEquipmentCommand = new RelayCommand<TECSystem>(addEquipmentExecute, canAddEquipment);
+            AddSubScopeCommand = new RelayCommand<TECEquipment>(addSubScopeExecute, canAddSubScope);
+            AddPointCommand = new RelayCommand<TECSubScope>(addPointExecute, canAddPoint);
+            AddControllerCommand = new RelayCommand<TECSystem>(addControllerExecute, canAddController);
+            AddPanelCommand = new RelayCommand<TECSystem>(addPanelExecute, canAddPanel);
+            AddMiscCommand = new RelayCommand<TECSystem>(addMiscExecute, canAddMisc);
+            BackCommand = new RelayCommand<object>(backExecute);
+
+            DeleteEquipmentCommand = new RelayCommand<TECEquipment>(deleteEquipmentExecute, canDeleteEquipment);
             catalogs = scopeManager.Catalogs;
             this.scopeManager = scopeManager;
         }
 
+        
+
         public event Action<TECObject> Selected;
 
-        private void BackExecute(object obj)
+        private void backExecute(object obj)
         {
             if(obj is TECEquipment)
             {
@@ -181,65 +187,75 @@ namespace TECUserControlLibrary.ViewModels
             catalogs = scopeManager.Catalogs;
         }
 
-        private void AddSystemExecute()
+        private void addSystemExecute()
         {
             SelectedVM = new AddSystemVM(scopeManager);
         }
-        private bool CanAddSystem()
+        private bool canAddSystem()
         {
             return true;
         }
 
-        private void AddEquipmentExecute(TECSystem system)
+        private void addEquipmentExecute(TECSystem system)
         {
             SelectedVM = new AddEquipmentVM(system);
         }
-        private bool CanAddEquipment(TECSystem system)
+        private bool canAddEquipment(TECSystem system)
         {
             return true;
         }
 
-        private void AddSubScopeExecute(TECEquipment equipment)
+        private void addSubScopeExecute(TECEquipment equipment)
         {
             SelectedVM = new AddSubScopeVM(equipment);
         }
-        private bool CanAddSubScope(TECEquipment equipment)
+        private bool canAddSubScope(TECEquipment equipment)
         {
             return true;
         }
 
-        private void AddPointExecute(TECSubScope subScope)
+        private void addPointExecute(TECSubScope subScope)
         {
             SelectedVM = new AddPointVM(subScope);
         }
-        private bool CanAddPoint(TECSubScope subScope)
+        private bool canAddPoint(TECSubScope subScope)
         {
             return true;
         }
 
-        private void AddControllerExecute(TECSystem system)
+        private void addControllerExecute(TECSystem system)
         {
             SelectedVM = new AddControllerVM(system, catalogs.ControllerTypes);
         }
-        private bool CanAddController(TECSystem system)
+        private bool canAddController(TECSystem system)
         {
             return catalogs.ControllerTypes.Count > 0;
         }
 
-        private void AddPanelExecute(TECSystem system)
+        private void addPanelExecute(TECSystem system)
         {
             SelectedVM = new AddPanelVM(system, catalogs.PanelTypes);
         }
-        private bool CanAddPanel(TECSystem system)
+        private bool canAddPanel(TECSystem system)
         {
             return catalogs.PanelTypes.Count > 0;
         }
 
-        private void AddMiscExecute(TECSystem system)
+        private void addMiscExecute(TECSystem system)
         {
             SelectedVM = new AddMiscVM(system);
         }
-        private bool CanAddMisc(TECSystem system)
+        private bool canAddMisc(TECSystem system)
+        {
+            return true;
+        }
+
+        private void deleteEquipmentExecute(TECEquipment obj)
+        {
+            SelectedSystem.Equipment.Remove(obj);
+        }
+
+        private bool canDeleteEquipment(TECEquipment arg)
         {
             return true;
         }

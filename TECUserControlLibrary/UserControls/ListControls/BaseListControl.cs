@@ -99,6 +99,17 @@ namespace TECUserControlLibrary.UserControls.ListControls
         // Using a DependencyProperty as the backing store for IsDragSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsDragSourceProperty =
             DependencyProperty.Register("IsDragSource", typeof(bool), typeof(BaseListControl<T>), new PropertyMetadata(false));
+        
+        public ICommand DeleteCommand
+        {
+            get { return (ICommand)GetValue(DeleteCommandProperty); }
+            set { SetValue(DeleteCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DeleteCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DeleteCommandProperty =
+            DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(BaseListControl<T>));
+
 
 
         protected void ListView_Selected(object sender, RoutedEventArgs e)

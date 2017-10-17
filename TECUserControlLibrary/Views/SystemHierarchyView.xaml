@@ -23,7 +23,8 @@
                     <listControls:EquipmentListControl x:Name="equipmentList"
                                                    Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
                                                    SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment}"
-                                                   DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"/>
+                                                   DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
+                                                       DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteEquipmentCommand}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ControllerTemplate">

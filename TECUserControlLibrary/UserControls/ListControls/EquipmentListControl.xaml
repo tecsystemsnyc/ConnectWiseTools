@@ -10,14 +10,6 @@
              x:Name="equipmentListControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
     <Grid DataContext="{Binding ElementName=equipmentListControl}">
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
@@ -30,7 +22,8 @@
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <itemControls:EquipmentControl Equipment="{Binding}"/>
+                    <itemControls:EquipmentControl Equipment="{Binding}"
+                                                   DeleteCommand="{Binding ElementName=equipmentListControl, Path=DeleteCommand}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
