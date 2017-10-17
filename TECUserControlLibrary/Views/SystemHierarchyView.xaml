@@ -43,7 +43,8 @@
             </DataTemplate>
             <DataTemplate x:Key="ElectricalTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                    <local:SystemConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"/>
+                    <local:SystemConnectionsView ViewModel="{Binding ElementName=systemHierarchyView, 
+                        Path=ViewModel.ConnectionsVM}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="MiscTemplate">
@@ -182,6 +183,11 @@
             <EventTrigger RoutedEvent="local:UpdateConnectionView.Updated">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="local:SystemConnectionsView.Update">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
         </Grid.Triggers>

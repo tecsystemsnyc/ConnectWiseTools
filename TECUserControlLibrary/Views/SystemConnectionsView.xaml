@@ -9,6 +9,11 @@
              mc:Ignorable="d" 
              x:Name="systemConnectionsView"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="local:SystemConnectionsView">
+            <Setter Property="UpdateConnectionVM" Value="{Binding ElementName=systemConnectionsView, Path=ViewModel.UpdateVM}"/>
+        </Style>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=systemConnectionsView, Path=ViewModel}">
         <Grid.Resources>
             <Style TargetType="Border">
