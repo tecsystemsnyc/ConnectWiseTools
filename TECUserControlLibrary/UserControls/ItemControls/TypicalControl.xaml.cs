@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// <summary>
     /// Interaction logic for TypicalControl.xaml
     /// </summary>
-    public partial class TypicalControl : UserControl
+    public partial class TypicalControl : BaseItemControl
     {
 
         public TECTypical Typical

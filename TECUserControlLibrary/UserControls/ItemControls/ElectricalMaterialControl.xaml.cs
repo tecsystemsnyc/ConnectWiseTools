@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// <summary>
     /// Interaction logic for ElectricalMaterialControl.xaml
     /// </summary>
-    public partial class ElectricalMaterialControl : UserControl
+    public partial class ElectricalMaterialControl : BaseItemControl
     {
 
         public TECElectricalMaterial ElectricalMaterial

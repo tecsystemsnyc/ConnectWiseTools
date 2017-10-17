@@ -7,18 +7,10 @@
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
                        xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
-             x:Name="parent"
+             x:Name="pointListControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=pointListControl}">
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected"
@@ -27,7 +19,8 @@
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <itemControls:PointControl Point="{Binding}"/>
+                    <itemControls:PointControl Point="{Binding}"
+                                               DeleteCommand="{Binding ElementName=pointListControl, Path=DeleteCommand}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

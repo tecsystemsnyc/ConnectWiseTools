@@ -26,10 +26,12 @@
                     <ContentPresenter Content="{Binding}">
                         <ContentPresenter.Resources>
                             <DataTemplate DataType="{x:Type models:TECDevice}">
-                                <itemControls:DeviceControl Device="{Binding}"/>
+                                <itemControls:DeviceControl Device="{Binding}"
+                                                            DeleteCommand="{Binding ElementName=endDeviceListControl, Path=DeleteCommand}"/>
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type models:TECValve}">
-                                <itemControls:ValveControl Valve="{Binding}"/>
+                                <itemControls:ValveControl Valve="{Binding}"
+                                                           DeleteCommand="{Binding ElementName=endDeviceListControl, Path=DeleteCommand}"/>
                             </DataTemplate>
                         </ContentPresenter.Resources>
                     </ContentPresenter>
