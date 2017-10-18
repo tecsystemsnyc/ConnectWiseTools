@@ -15,12 +15,12 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" MinHeight="100"/>
+            <RowDefinition Height="*" MinHeight="100"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="75"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -36,9 +36,30 @@
                                  VerticalAlignment="Top"
                              Margin="5"/>
         </Grid>
-        <local:LabeledGridControl Grid.ColumnSpan="2" Grid.Row="1" LabelName="Tags"
-                                           LabeledSource="{Binding Tags}"/>
-        <local:AssociatedCostsGridControl Grid.Row="2" Grid.ColumnSpan="2"
-                                          CostsSource="{Binding AssociatedCosts}"/>
+        <Border BorderBrush="DarkGray" BorderThickness="1" Grid.ColumnSpan="2" Grid.Row="1">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Tags:"/>
+                <local:LabeledGridControl LabelName="Label"
+                                           LabeledSource="{Binding Tags}"
+                                          Grid.Row="1"/>
+            </Grid>
+        </Border>
+        <Border BorderBrush="DarkGray" BorderThickness="1" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Associated Costs:"/>
+                <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
+                                          Grid.Row="1"/>
+            </Grid>
+        </Border>
+        
+        
     </Grid>
 </UserControl>

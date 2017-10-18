@@ -91,14 +91,21 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox Name="TypicalInstanceCombo" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.TypicalInstanceSelectorList}}"
-                              DisplayMemberPath="Item1"
-                              SelectedValuePath="Item2"
-                              SelectedIndex="0"
-                              VerticalAlignment="Center"/>
-                        <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
+                            <Grid Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Name="TypicalInstanceCombo" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.TypicalInstanceSelectorList}}"
+                                          DisplayMemberPath="Item1"
+                                          SelectedValuePath="Item2"
+                                          SelectedIndex="0"
+                                          VerticalAlignment="Center"/>
+                                <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceDescriptionSelector}"
-                                      Grid.Row="0" Grid.Column="1"/>
+                                      Grid.Column="1"/>
+                            </Grid>
+                        
                         <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceSelector}"
                                       Grid.Row="1" Grid.ColumnSpan="2"/>

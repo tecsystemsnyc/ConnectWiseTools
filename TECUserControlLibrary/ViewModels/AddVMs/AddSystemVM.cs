@@ -38,6 +38,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         public AddSystemVM(TECScopeManager scopeManager)
         {
+            Quantity = 1;
             parent = scopeManager;
             toAdd = new TECSystem(false);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
