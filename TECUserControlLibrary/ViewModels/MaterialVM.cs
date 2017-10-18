@@ -364,7 +364,31 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-        
+        #region Manufacturer
+        private TECManufacturer _manufacturerToAdd;
+        public TECManufacturer ManufacturerToAdd
+        {
+            get { return _manufacturerToAdd; }
+            set
+            {
+                _manufacturerToAdd = value;
+                RaisePropertyChanged("ManufacturerToAdd");
+            }
+        }
+        #endregion
+        #region Tag
+        private TECLabeled _tagToAdd;
+        public TECLabeled TagToAdd
+        {
+            get { return _tagToAdd; }
+            set
+            {
+                _tagToAdd = value;
+                RaisePropertyChanged("TagToAdd");
+            }
+        }
+        #endregion
+
         private TECPanelType _selectedPanelType;
         public TECPanelType SelectedPanelType
         {
@@ -386,6 +410,8 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand AddDeviceCommand { get; private set; }
         public ICommand AddControllerTypeCommand { get; private set; }
         public ICommand AddValveCommand { get; private set; }
+        public ICommand AddManufacturerCommand { get; private set; }
+        public ICommand AddTagCommand { get; private set; }
         #endregion
 
         #region Delegates
@@ -427,8 +453,10 @@ namespace TECUserControlLibrary.ViewModels
             AddControllerTypeCommand = new RelayCommand(addControllerTypeExecute, canAddControllerType);
             AddValveCommand = new RelayCommand(addValveExecute, canAddValve);
             AddDeviceCommand = new RelayCommand(addDeviceExecute, canAddDevice);
+            AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
+            AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
         }
-
+        
         private void addDeviceExecute()
         {
             TECDevice toAdd = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
@@ -592,6 +620,39 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
+        private void addManufacturerExecute()
+        {
+            Templates.Catalogs.Manufacturers.Add(ManufacturerToAdd);
+            ManufacturerToAdd = new TECManufacturer();
+        }
+
+        private bool canAddManufacturer()
+        {
+            if(ManufacturerToAdd.Label != "")
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        private void addTagExecute()
+        {
+            Templates.Catalogs.Tags.Add(TagToAdd);
+            TagToAdd = new TECLabeled();
+        }
+
+        private bool canAddTag()
+        {
+            if(TagToAdd.Label != "")
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -623,6 +684,16 @@ namespace TECUserControlLibrary.ViewModels
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;
+
+            DeviceName = "";
+            DeviceListPrice = 0;
+
+            ValveName = "";
+            ValveListPrice = 0;
+
+            ManufacturerToAdd = new TECManufacturer();
+
+            TagToAdd = new TECLabeled();
         }
 
         private void setupVMs()

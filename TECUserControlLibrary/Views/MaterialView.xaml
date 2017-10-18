@@ -20,6 +20,8 @@
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="blackText" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -428,12 +430,10 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
+                            <TextBlock Text="Name:" />
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding IOModuleName}"/>
-                            <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
+                            <TextBlock Text="Cost:" Grid.Column="2" />
                             <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding IOModuleCost}"/>
                             <TextBlock Text="Description:" Grid.Column="4" Margin="5,0,0,0"
@@ -457,8 +457,7 @@
                                    Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}" 
                                   SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="1" Margin="2"
-                                  Text="{Binding IOModuleManufacturer.Label}"
-                                  DisplayMemberPath="Name"/>
+                                  DisplayMemberPath="Label"/>
 
                             <Button Grid.Column="2" Grid.ColumnSpan="4"
                     Content="Add" Margin="2"
@@ -466,6 +465,63 @@
                         </Grid>
                         <controls:IOModuleGridControl IOModuleSource="{Binding Templates.Catalogs.IOModules}"
                                                Grid.Row="2" Margin="5"/>
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate x:Key="ManufacturerTemplate">
+                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0"/>
+                            <TextBox Text="{Binding ManufacturerToAdd.Label}" Grid.Row="0" Grid.Column="1"/>
+                            <TextBlock Text="Multiplier: " Grid.Row="0" Grid.Column="2"/>
+                            <TextBox Text="{Binding ManufacturerToAdd.Multiplier}" Grid.Row="0" Grid.Column="3"/>
+                            <Button Content="Add" Command="{Binding AddManufacturerCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"/>
+                        </Grid>
+                        <controls:ManufacturersGridControl ManufacturersSource="{Binding Templates.Catalogs.Manufacturers}"
+                                                           Grid.Row="1"/>
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate x:Key="TagTemplate">
+                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Label: " Grid.Row="0" Grid.Column="0"/>
+                            <TextBox Text="{Binding TagToAdd.Label}" Grid.Row="0" Grid.Column="1"/>
+                            <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        </Grid>
+                        <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Manufacturers}"
+                                                           Grid.Row="1"/>
                     </Grid>
                 </DataTemplate>
                 <utilities:MaterialTypeSelector x:Key="materialTypeSelector"
@@ -476,7 +532,9 @@
                                                 PanelTypeTemplate="{StaticResource PanelTypeTemplate}"
                                                 AssociatedCostTemplate="{StaticResource AssociatedCostTemplate}"
                                                 IOModuleTemplate="{StaticResource IOModuleTemplate}"
-                                                ValveTemplate="{StaticResource ValveTemplate}"/>
+                                                ValveTemplate="{StaticResource ValveTemplate}"
+                                                ManufacturerTemplate="{StaticResource ManufacturerTemplate}"
+                                                TagTemplate="{StaticResource TagTemplate}"/>
             </ResourceDictionary>
         </Grid.Resources>
         <ComboBox x:Name="MaterialComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.MaterialSelectorList}}"
