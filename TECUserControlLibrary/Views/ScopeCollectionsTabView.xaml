@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              mc:Ignorable="d" 
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="parent"
@@ -48,7 +50,13 @@
                       SelectedItem="{Binding Path=ViewModel.ChosenType}"
                                               Margin="2" Grid.Row="1" FontSize="12"
                                               VerticalContentAlignment="Center"
-                                              SelectedIndex="0"/>
+                                              SelectedIndex="0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding ElementName=parent, Path=ViewModel.SearchCollectionCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
         </Grid>
         <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ResultCollection}" Grid.Row="1"/>
     </Grid>

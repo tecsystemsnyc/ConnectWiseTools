@@ -45,6 +45,18 @@ namespace TECUserControlLibrary.ViewModels
 
         public Visibility QuantityVisibility { get; set; }
 
+        private TECMisc _selected;
+        public TECMisc Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
+                SelectionChanged?.Invoke(value);
+            }
+        }
+
         private string _miscName;
         public string MiscName
         {
@@ -78,6 +90,17 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private int _quantity;
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                _quantity = value;
+                RaisePropertyChanged("Quantity");
+            }
+        }
+
         private CostType _miscType;
         public CostType MiscType
         {
@@ -94,6 +117,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECSystem _system;
 
         public ICommand AddNewCommand { get; private set; }
+        public RelayCommand<TECMisc> DeleteCommand { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the MiscCostsVM class.
@@ -101,15 +125,16 @@ namespace TECUserControlLibrary.ViewModels
         public MiscCostsVM(TECScopeManager scopeManager)
         {
             Refresh(scopeManager);
-            AddNewCommand = new RelayCommand(addNewExecute, addNewCanExecute);
-            MiscType = CostType.TEC;
+            setup();
         }
+        
         public MiscCostsVM(TECSystem system)
         {
             Refresh(system);
-            AddNewCommand = new RelayCommand(addNewExecute, addNewCanExecute);
-            MiscType = CostType.TEC;
+            setup();
         }
+
+        public event Action<TECObject> SelectionChanged;
 
         public void Refresh(TECScopeManager scopeManager)
         {
@@ -159,6 +184,17 @@ namespace TECUserControlLibrary.ViewModels
             
         }
 
+        private void setup()
+        {
+            AddNewCommand = new RelayCommand(addNewExecute, addNewCanExecute);
+            DeleteCommand = new RelayCommand<TECMisc>(deleteExecute, canDelete);
+            MiscType = CostType.TEC;
+            MiscName = "";
+            Cost = 0;
+            Labor = 0;
+            Quantity = 1;
+        }
+
         private bool addNewCanExecute()
         {
             if(MiscName != "")
@@ -176,10 +212,20 @@ namespace TECUserControlLibrary.ViewModels
             newMisc.Name = MiscName;
             newMisc.Cost = Cost;
             newMisc.Labor = Labor;
+            newMisc.Quantity = Quantity;
 
             sourceCollection.Add(newMisc);
         }
-        
+
+        private void deleteExecute(TECMisc obj)
+        {
+            sourceCollection.Remove(obj);
+        }
+        private bool canDelete(TECMisc arg)
+        {
+            return true;
+        }
+
         private void MiscCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)

@@ -157,6 +157,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 miscVM = value;
                 RaisePropertyChanged("MiscVM");
+                miscVM.SelectionChanged += misc =>
+                {
+                    Selected?.Invoke(misc as TECObject);
+                };
             }
         }
 

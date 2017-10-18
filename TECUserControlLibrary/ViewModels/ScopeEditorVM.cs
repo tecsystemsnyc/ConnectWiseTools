@@ -154,6 +154,10 @@ namespace TECUserControlLibrary.ViewModels
         private void setupMiscVM()
         {
             MiscVM = new MiscCostsVM(Bid);
+            MiscVM.SelectionChanged += misc =>
+            {
+                Selected = misc;
+            };
         }
         #endregion
 
