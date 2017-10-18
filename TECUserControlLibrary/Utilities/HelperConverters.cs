@@ -703,15 +703,28 @@ namespace TECUserControlLibrary.Utilities
 
     public class NullChoiceConverter : BaseConverter, IMultiValueConverter
     {
+        //First value returns if none of the objects are null
+        //Second values returns if any of the objects are null
+        //Subsequent values are the objects to check
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0] != null)
+            bool isNull = false;
+            for(int i = 2; i < values.Length; i++)
+            {
+                if (values[i] == null)
+                {
+                    isNull = true;
+                    break;
+                }
+            }
+
+            if (isNull)
             {
                 return values[1];
             }
             else
             {
-                return values[2];
+                return values[0];
             }
         }
 
