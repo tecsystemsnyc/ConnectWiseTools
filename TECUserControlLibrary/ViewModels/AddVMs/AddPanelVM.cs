@@ -39,6 +39,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         public AddPanelVM(TECSystem parentSystem, IEnumerable<TECPanelType> panelTypes)
         {
+            Quantity = 1;
             parent = parentSystem;
             PanelTypes = new List<TECPanelType>(panelTypes);
             toAdd = new TECPanel(PanelTypes[0], parentSystem.IsTypical);

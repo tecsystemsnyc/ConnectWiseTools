@@ -38,6 +38,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         public AddSubScopeVM(TECEquipment parentEquipment)
         {
+            Quantity = 1;
             parent = parentEquipment;
             toAdd = new TECSubScope(parentEquipment.IsTypical);
             AddCommand = new RelayCommand(addExecute, addCanExecute);

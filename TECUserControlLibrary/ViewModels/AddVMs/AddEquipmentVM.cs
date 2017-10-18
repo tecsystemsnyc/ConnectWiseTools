@@ -41,6 +41,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             parent = parentSystem;
             toAdd = new TECEquipment(parentSystem.IsTypical);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
+            Quantity = 1;
         }
 
         public Action<object> Added { get; }
