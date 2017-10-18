@@ -15,7 +15,13 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding SubScope}"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label FontSize="14" Content="Instances to Update"/>
+        <ListView Grid.Row="2" 
+                  ItemsSource="{Binding SubScope}"
                   SelectedItem="{Binding SelectedInstance}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -41,11 +47,16 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        <Grid Grid.Column="1">
+        <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="2"/>
+
+        <Grid Grid.Column="1" Grid.RowSpan="2">
             <Grid.Resources>
                 <Style TargetType="Label">
-                    <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
+                    <Setter Property="FontSize" Value="14"/>
+                </Style>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="0 0 0 1"/>
                 </Style>
                 <sys:String x:Key="NoneString">None</sys:String>
             </Grid.Resources>
@@ -59,15 +70,14 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto" MinWidth="100"/>
                 <ColumnDefinition Width="Auto" MinWidth="100"/>
-                <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             
             <!--Headers-->
@@ -129,7 +139,15 @@
 
             <!--Buttons-->
             <Button Content="Update" Command="{Binding UpdateCommand}" Grid.Column="1" Grid.Row="6" Margin="2"/>
-            <Button Content="Done" Click="doneButton_Click" Grid.Column="5" Grid.Row="8" Margin="5"/>
+            <Button Content="Done" Click="doneButton_Click"
+                    Grid.Column="5" Grid.Row="8" Margin="5"
+                    Width="100" Height="50"/>
+
+            <Border Grid.Row="1" Grid.ColumnSpan="3"/>
+            <Border Grid.Row="2" Grid.ColumnSpan="3"/>
+            <Border Grid.Row="3" Grid.ColumnSpan="3"/>
+            <Border Grid.Row="4" Grid.ColumnSpan="3"/>
+            <Border Grid.Row="5" Grid.ColumnSpan="3"/>
         </Grid>
     </Grid>
 </UserControl>
