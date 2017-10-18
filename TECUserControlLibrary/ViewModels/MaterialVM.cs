@@ -5,6 +5,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -270,7 +271,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-        #region Devices
+        #region Valve
         private string _valveName;
         public string ValveName
         {
@@ -656,12 +657,14 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            DragHandler(dropInfo);
+            UIHelpers.StandardDragOver(dropInfo);
+            //DragHandler(dropInfo);
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            DropHandler(dropInfo);
+            UIHelpers.StandardDrop(dropInfo, Templates);
+            //DropHandler(dropInfo);
         }
 
         private void setupInterfaceDefaults()
