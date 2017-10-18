@@ -383,6 +383,18 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                     break;
+                case AllSearchableObjects.Wires:
+                    foreach(TECElectricalMaterial wire in Templates.Catalogs.ConnectionTypes)
+                    {
+                        ResultCollection.Add(wire);
+                    }
+                    break;
+                case AllSearchableObjects.Conduits:
+                    foreach (TECElectricalMaterial conduit in Templates.Catalogs.ConduitTypes)
+                    {
+                        ResultCollection.Add(conduit);
+                    }
+                    break;
                 default:
                     break;
             }

@@ -148,7 +148,9 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate AssociatedCostTemplate { get; set; }
         public DataTemplate IOModuleTemplate { get; set; }
         public DataTemplate ValveTemplate { get; set; }
-        
+        public DataTemplate ManufacturerTemplate { get; set; }
+        public DataTemplate TagTemplate { get; set; }
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item is MaterialType index)
@@ -171,6 +173,10 @@ namespace TECUserControlLibrary.Utilities
                         return IOModuleTemplate;
                     case MaterialType.Valve:
                         return ValveTemplate;
+                    case MaterialType.Manufacturer:
+                        return ManufacturerTemplate;
+                    case MaterialType.Tag:
+                        return TagTemplate;
                 }
                 return DeviceTemplate;
             }

@@ -221,12 +221,15 @@ namespace TECUserControlLibrary.Views
                 {
                     EquipmentWidth = e.NewSize.Width / 2;
                 }
-
+                
+                HalfWidth = e.NewSize.Width / 2;
+            }
+            if (e.HeightChanged)
+            {
                 if (ModalHeight != 0)
                 {
                     ModalHeight = e.NewSize.Height;
                 }
-                HalfWidth = e.NewSize.Width / 2;
             }
         }
 

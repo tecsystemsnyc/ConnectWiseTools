@@ -18,39 +18,39 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="scope">
-                <Expander Header="Scope" >
+                <!--<Expander Header="Scope" >-->
                     <pControls:ScopePropertiesControl Selected="{Binding}"/>
-                </Expander>
+                <!--</Expander>-->
             </DataTemplate>
             <DataTemplate x:Key="cost">
-                <Expander Header="Cost" >
+                <!--<Expander Header="Cost" >-->
                     <pControls:CostPropertiesControl Selected="{Binding}"/>
-                </Expander>
+                <!--</Expander>-->
             </DataTemplate>
             <DataTemplate x:Key="costBatchInterface">
-                <Expander Header="Cost batch" >
+                <!--<Expander Header="Cost batch" >-->
                     <pControls:CostBatchPropertiesControl Selected="{Binding}"/>
-                </Expander>
+                <!--</Expander>-->
             </DataTemplate>
             <DataTemplate x:Key="pointInterface">
-                <Expander Header="Points" >
+                <!--<Expander Header="Points" >-->
                     <pControls:PointPropetiesControl Selected="{Binding}"/>
-                </Expander>
+                <!--</Expander>-->
             </DataTemplate>
             <DataTemplate x:Key="hardware">
-                <Expander Header="Hardware" >
+                <!--<Expander Header="Hardware" >-->
                     <pControls:HardwarePropertiesControl Selected="{Binding}"/>
-                </Expander>
+                <!--</Expander>-->
             </DataTemplate>
             <DataTemplate x:Key="located">
-                <Expander Header="Located">
+                <!--<Expander Header="Located">-->
                     <pControls:LocatedPropertiesControl Selected="{Binding}"/>
-                </Expander>
+                <!--</Expander>-->
             </DataTemplate>
             <DataTemplate x:Key="labeled">
-                <Expander Header="Labeled">
+                <!--<Expander Header="Labeled">-->
                     <pControls:LabeledPropertiesControl Selected="{Binding}"/>
-                </Expander>
+                <!--</Expander>-->
             </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"

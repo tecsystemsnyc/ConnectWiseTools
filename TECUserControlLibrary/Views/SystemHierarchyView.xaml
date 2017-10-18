@@ -352,7 +352,7 @@
                     <Binding ElementName="systemHierarchyView" Path="ModalHeight"/>
                 </MultiBinding>
             </Grid.Margin>
-            <Border BorderBrush="LightGray" Background="{StaticResource EBWindowBackgroundBrush}" 
+            <Border BorderBrush="DarkGray" Background="{StaticResource SectionBackgroundBrush}" 
                     BorderThickness="2" CornerRadius="8" Margin="20">
                 <Border.BitmapEffect>
                     <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" Softness="1" 

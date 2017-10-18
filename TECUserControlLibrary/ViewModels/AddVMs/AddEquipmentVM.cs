@@ -14,6 +14,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
         private TECSystem parent;
         private TECEquipment toAdd;
+        private int quantity;
 
         public TECEquipment ToAdd
         {
@@ -22,6 +23,15 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
+            }
+        }
+        public int Quantity
+        {
+            get { return quantity; }
+            set
+            {
+                quantity = value;
+                RaisePropertyChanged("Quantity");
             }
         }
         public ICommand AddCommand { get; private set; }
@@ -41,8 +51,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private void addExecute()
         {
-            parent.Equipment.Add(ToAdd);
-            Added?.Invoke(ToAdd);
+            for (int x = 0; x < Quantity; x++)
+            {
+                var equipment = new TECEquipment(ToAdd, ToAdd.IsTypical);
+                parent.Equipment.Add(equipment);
+                Added?.Invoke(equipment);
+            }
         }
 
     }

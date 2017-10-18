@@ -14,6 +14,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
         private TECSystem parent;
         private TECController toAdd;
+        private int quantity;
 
         public TECController ToAdd
         {
@@ -24,11 +25,22 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("ToAdd");
             }
         }
+        public int Quantity
+        {
+            get { return quantity; }
+            set
+            {
+                quantity = value;
+                RaisePropertyChanged("Quantity");
+            }
+        }
+
         public List<TECControllerType> ControllerTypes { get; private set; }
         public ICommand AddCommand { get; private set; }
 
         public AddControllerVM(TECSystem parentSystem, IEnumerable<TECControllerType> controllerTypes)
         {
+            Quantity = 1;
             parent = parentSystem;
             ControllerTypes = new List<TECControllerType>(controllerTypes);
             toAdd = new TECController(ControllerTypes[0], parentSystem.IsTypical);
@@ -43,8 +55,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private void addExecute()
         {
-            parent.AddController(ToAdd);
-            Added?.Invoke(ToAdd);
+            for(int x = 0; x < Quantity; x++)
+            {
+                var controller = new TECController(ToAdd, ToAdd.IsTypical);
+                parent.AddController(controller);
+                Added?.Invoke(controller);
+            }
         }
 
     }

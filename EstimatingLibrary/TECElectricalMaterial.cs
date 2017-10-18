@@ -44,6 +44,11 @@ namespace EstimatingLibrary
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
 
+        public override object DragDropCopy(TECScopeManager scopeManager)
+        {
+            return this;
+        }
+
         public CostBatch GetCosts(double length)
         {
             CostBatch costBatch = new CostBatch(Cost, Labor, Type);
@@ -90,5 +95,6 @@ namespace EstimatingLibrary
                 }
             }
         }
+       
     }
 }
