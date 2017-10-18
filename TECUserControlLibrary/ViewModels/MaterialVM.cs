@@ -690,6 +690,7 @@ namespace TECUserControlLibrary.ViewModels
 
             DeviceName = "";
             DeviceListPrice = 0;
+            DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
 
             ValveName = "";
             ValveListPrice = 0;

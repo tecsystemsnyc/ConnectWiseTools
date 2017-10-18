@@ -83,13 +83,15 @@
                         </Grid>
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="65"/>
+                                <ColumnDefinition Width="70"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Connection Types:" TextWrapping="Wrap"/>
-                            <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
-                                                                        DropHandler="{Binding}"
-                                                                        Grid.Column="1"/>
+                            <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
+                                <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
+                                                                        DropHandler="{Binding}"/>
+                            </Border>
+                            
                         </Grid>
                         
                         <Button Grid.Row="3" Grid.Column="2" 
