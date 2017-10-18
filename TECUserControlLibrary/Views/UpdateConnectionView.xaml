@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:converters="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="updateConnectionsView"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -13,14 +14,45 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <listControls:SubScopeListControl Source="{Binding SubScope}"
-                                          SelectedItem="{Binding SelectedInstance}"/>
+        <ListView ItemsSource="{Binding SubScope}"
+                  SelectedItem="{Binding SelectedInstance}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <Border.Background>
+                            <MultiBinding Converter="{converters:BooleanChoiceConverter}">
+                                <Binding Path="Updated"/>
+                                <Binding Source="{StaticResource SectionBackgroundBrush}"/>
+                                <Binding Source="{StaticResource AlertActionBrush}"/>
+                                <Binding Source="{StaticResource AlertActionBrush}"/>
+                            </MultiBinding>
+                        </Border.Background>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label FontSize="14" Content="{Binding SubScope.Name}"/>
+                            <Label Content="{Binding SubScope.Description}" Grid.Column="1"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
         <Grid Grid.Column="1">
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="Background" Value="{StaticResource SectionBackgroundBrush}"/>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -29,27 +61,32 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+
             <!--Headers-->
-            <Label Content="Controller" Grid.Column="1"/>
-            <Label Content="Length" Grid.Column="2"/>
-            <Label Content="Conduit Length" Grid.Column="3"/>
-            <Label Content="Conduit Type" Grid.Column="4"/>
+            <Label Content="Name" Grid.Column="1"/>
+            <Label Content="Controller" Grid.Column="2"/>
+            <Label Content="Length" Grid.Column="3"/>
+            <Label Content="Conduit Length" Grid.Column="4"/>
+            <Label Content="Conduit Type" Grid.Column="5"/>
             <!--Instance-->
             <Label Content="Instance" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.Connection.Controller}" Grid.Column="1" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.Connection.Length}" Grid.Column="2" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.Connection.ConduitLength}" Grid.Column="3" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.Connection.ConduitType}" Grid.Column="4" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.SubScope.Name}" Grid.Column="1" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.SubScope.Connection.ParentController.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="2" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.SubScope.Connection.Length}" Grid.Column="3" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.SubScope.Connection.ConduitLength}" Grid.Column="4" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.SubScope.Connection.ConduitType.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="5" Grid.Row="1"/>
             <!--Typical-->
             <Label Content="Typical" Grid.Row="2"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.Controller}" Grid.Column="1" Grid.Row="2"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.Length}" Grid.Column="2" Grid.Row="2"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitLength}" Grid.Column="3" Grid.Row="2"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitType}" Grid.Column="4" Grid.Row="2"/>
+            <Label Content="{Binding SelectedTypical.SubScope.Name}" Grid.Column="1" Grid.Row="2"/>
+            <Label Content="{Binding SelectedTypical.SubScope.Connection.ParentController.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="2" Grid.Row="2"/>
+            <Label Content="{Binding SelectedTypical.SubScope.Connection.Length}" Grid.Column="3" Grid.Row="2"/>
+            <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitLength}" Grid.Column="4" Grid.Row="2"/>
+            <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitType.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="5" Grid.Row="2"/>
             <!--Buttons-->
-            <Button Content="Update" Command="{Binding UpdateCommand}" Grid.Row="3" Grid.ColumnSpan="2" Margin="2"/>
-            <Button Content="Done" Click="doneButton_Click" Grid.Row="4" Grid.ColumnSpan="2" Margin="2"/>
+            <Button Content="Update" Command="{Binding UpdateCommand}" Grid.Column="4" Grid.Row="3" Grid.ColumnSpan="2" Margin="2"/>
+            <Button Content="Done" Click="doneButton_Click" Grid.Column="4" Grid.Row="5" Grid.ColumnSpan="2" Margin="2"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -44,7 +44,15 @@ namespace TECUserControlLibrary.Models
 
         public bool UpdateInstance(TECSubScope instance)
         {
-            bool sameController = SubScope.ParentConnection.ParentController == instance.ParentConnection.ParentController;
+            bool sameController = false;
+            if (SubScope.ParentConnection == null && SubScope.ParentConnection == null)
+            {
+                sameController = true;
+            }
+            else if (SubScope.ParentConnection.ParentController == instance.ParentConnection.ParentController)
+            {
+                sameController = true;
+            }
 
             if (sameController)
             {

@@ -212,6 +212,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
                 SubScope = ssItems;
+                subscribeToItems(SubScope);
             }
         }
 
