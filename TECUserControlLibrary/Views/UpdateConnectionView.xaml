@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:converters="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              x:Name="updateConnectionsView"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -73,17 +74,28 @@
             <!--Instance-->
             <Label Content="Instance" Grid.Row="1"/>
             <Label Content="{Binding SelectedInstance.SubScope.Name}" Grid.Column="1" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.SubScope.Connection.ParentController.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="2" Grid.Row="1"/>
+            <Label Grid.Column="2" Grid.Row="1">
+                <Label.Resources>
+                    <sys:String x:Key="none">None</sys:String>
+                </Label.Resources>
+                <Label.Content>
+                    <MultiBinding Converter="{converters:NullChoiceConverter}">
+                        <Binding Path="SelectedInstance.SubScope.Connection"/>
+                        <Binding Path="SelectedInstance.SubScope.Connection.ParentController.Name"/>
+                        <Binding Source="{StaticResource none}"/>
+                    </MultiBinding>
+                </Label.Content>
+            </Label>
             <Label Content="{Binding SelectedInstance.SubScope.Connection.Length}" Grid.Column="3" Grid.Row="1"/>
             <Label Content="{Binding SelectedInstance.SubScope.Connection.ConduitLength}" Grid.Column="4" Grid.Row="1"/>
-            <Label Content="{Binding SelectedInstance.SubScope.Connection.ConduitType.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="5" Grid.Row="1"/>
+            <Label Content="{Binding SelectedInstance.SubScope.Connection.ConduitType.Name}" Grid.Column="5" Grid.Row="1"/>
             <!--Typical-->
             <Label Content="Typical" Grid.Row="2"/>
             <Label Content="{Binding SelectedTypical.SubScope.Name}" Grid.Column="1" Grid.Row="2"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.ParentController.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="2" Grid.Row="2"/>
+            <Label Content="{Binding SelectedTypical.SubScope.Connection.ParentController.Name}" Grid.Column="2" Grid.Row="2"/>
             <Label Content="{Binding SelectedTypical.SubScope.Connection.Length}" Grid.Column="3" Grid.Row="2"/>
             <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitLength}" Grid.Column="4" Grid.Row="2"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitType.Name, Converter={converters:NullToNoneStringConverter}}" Grid.Column="5" Grid.Row="2"/>
+            <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitType.Name}" Grid.Column="5" Grid.Row="2"/>
             <!--Buttons-->
             <Button Content="Update" Command="{Binding UpdateCommand}" Grid.Column="4" Grid.Row="3" Grid.ColumnSpan="2" Margin="2"/>
             <Button Content="Done" Click="doneButton_Click" Grid.Column="4" Grid.Row="5" Grid.ColumnSpan="2" Margin="2"/>

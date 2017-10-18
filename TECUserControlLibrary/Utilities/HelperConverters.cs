@@ -701,21 +701,21 @@ namespace TECUserControlLibrary.Utilities
         }
     }
 
-    public class NullToNoneStringConverter : BaseConverter, IValueConverter
+    public class NullChoiceConverter : BaseConverter, IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((value as string) == null)
+            if (values[0] != null)
             {
-                return "None";
+                return values[1];
             }
             else
             {
-                return value;
+                return values[2];
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
