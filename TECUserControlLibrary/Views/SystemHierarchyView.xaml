@@ -100,7 +100,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.Triggers>
-            <EventTrigger RoutedEvent="listControls:EquipmentListControl.Selected">
+            <EventTrigger RoutedEvent="Button.Click" SourceName="equipmentDetails">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
                 </EventTrigger.Actions>
@@ -115,7 +115,7 @@
                     <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Selected" SourceName="subScopeList">
+            <EventTrigger RoutedEvent="Button.Click" SourceName="subScopeDetails">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>
@@ -232,10 +232,15 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Back" x:Name="systemBack" 
+                <Button x:Name="systemBack" 
                         Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
-                        Click="systemBack_Click"/>
+                        Click="systemBack_Click">
+                    <Button.Content>
+                        &lt;-
+                    </Button.Content>
+                </Button>
                 <TextBlock Grid.Column="1" Text="{Binding SelectedSystem.Name, StringFormat='Components of {0}'}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button Content="Add" x:Name="addComponent" Grid.Column="2" 
@@ -251,6 +256,8 @@
                         </MultiBinding>
                     </Button.Command>
                 </Button>
+                <Button Content="->" x:Name="equipmentDetails" Grid.Column="3"
+                        Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"/>
             </Grid>
         <Grid  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="{Binding ElementName=componentComboBox, Path=SelectedItem, 
             Converter={utilities:SelectedComponentToSpanConverter}}" Panel.ZIndex="10">
@@ -287,19 +294,26 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Back" x:Name="equipmentBack"
+            <Button x:Name="equipmentBack"
                     Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
                     Command="{Binding ViewModel.BackCommand}"
                     CommandParameter="{Binding ViewModel.SelectedSubScope}"
-                    Click="equipmentBack_Click"/>
+                    Click="equipmentBack_Click">
+                    <Button.Content>
+                        &lt;-
+                    </Button.Content>
+                </Button>
             <TextBlock Grid.Column="1" Text="{Binding SelectedEquipment.Name, StringFormat='Points in {0}'}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button Content="Add" x:Name="addSubScope" Grid.Column="2" 
                     Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"
                     Command="{Binding ViewModel.AddSubScopeCommand}"
                     CommandParameter="{Binding ViewModel.SelectedEquipment}"/>
-        </Grid>
+                <Button Content="->" x:Name="subScopeDetails" Grid.Column="3"
+                        Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"/>
+            </Grid>
 
             <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
                                       SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
