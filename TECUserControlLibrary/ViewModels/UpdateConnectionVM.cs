@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,20 +16,19 @@ namespace TECUserControlLibrary.ViewModels
     public class UpdateConnectionVM : ViewModelBase
     {
         #region Fields
-        private Dictionary<TECSubScope, SubScopeConnectionItem> typicalDictionary;
-        private Dictionary<TECSubScope, bool> updatedDictionary;
+        private Dictionary<SubScopeUpdatedWrapper, SubScopeConnectionItem> typicalDictionary;
 
-        private readonly List<TECSubScope> _subScope;
-        private TECSubScope _selectedInstance;
+        private readonly List<SubScopeUpdatedWrapper> _subScope;
+        private SubScopeUpdatedWrapper _selectedInstance;
         private SubScopeConnectionItem _selectedTypical;
         #endregion
 
         #region Properties
-        public List<TECSubScope> SubScope
+        public List<SubScopeUpdatedWrapper> SubScope
         {
             get { return _subScope; }
         }
-        public TECSubScope SelectedInstance
+        public SubScopeUpdatedWrapper SelectedInstance
         {
             get { return _selectedInstance; }
             set
@@ -54,14 +54,14 @@ namespace TECUserControlLibrary.ViewModels
         public UpdateConnectionVM(IEnumerable<SubScopeConnectionItem> subScope)
         {
             initializeCollections();
-            List<TECSubScope> instances = new List<TECSubScope>();
+            List<SubScopeUpdatedWrapper> instances = new List<SubScopeUpdatedWrapper>();
             foreach(SubScopeConnectionItem typ in subScope)
             {
                 foreach(TECSubScope instance in typ.Instances)
                 {
-                    instances.Add(instance);
-                    typicalDictionary.Add(instance, typ);
-                    updatedDictionary.Add(instance, false);
+                    SubScopeUpdatedWrapper wrapped = new SubScopeUpdatedWrapper(instance);
+                    instances.Add(wrapped);
+                    typicalDictionary.Add(wrapped, typ);
                 }
             }
             _subScope = instances;
@@ -71,19 +71,18 @@ namespace TECUserControlLibrary.ViewModels
 
         private void initializeCollections()
         {
-            typicalDictionary = new Dictionary<TECSubScope, SubScopeConnectionItem>();
-            updatedDictionary = new Dictionary<TECSubScope, bool>();
+            typicalDictionary = new Dictionary<SubScopeUpdatedWrapper, SubScopeConnectionItem>();
         }
 
-        private void handleNewSelectedInstance(TECSubScope subScope)
+        private void handleNewSelectedInstance(SubScopeUpdatedWrapper subScope)
         {
             SelectedTypical = typicalDictionary[subScope];
         }
 
         private void updateExecute()
         {
-            SelectedTypical.UpdateInstance(SelectedInstance);
-            updatedDictionary[SelectedInstance] = true;
+            SelectedTypical.UpdateInstance(SelectedInstance.SubScope);
+            SelectedInstance.Updated = true;
         }
         private bool canUpdate()
         {
@@ -93,8 +92,38 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                return !updatedDictionary[SelectedInstance];
+                return !SelectedInstance.Updated;
             }
+        }
+    }
+
+    public class SubScopeUpdatedWrapper : INotifyPropertyChanged
+    {
+        private readonly TECSubScope _subScope;
+        private bool _updated;
+
+        public TECSubScope SubScope { get { return _subScope; } }
+        public bool Updated
+        {
+            get { return _updated; }
+            set
+            {
+                _updated = value;
+                raisePropertyChanged("Updated");
+            }
+        }
+
+        public SubScopeUpdatedWrapper(TECSubScope subScope)
+        {
+            _subScope = subScope;
+            _updated = false;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void raisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

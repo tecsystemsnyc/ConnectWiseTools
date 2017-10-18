@@ -45,10 +45,13 @@
                 Source="{Binding Controllers}"
                 SelectedItem="{Binding SelectedController}"
                     Grid.Row="1"/>
-                <Label Content="Unconnected" Grid.Row="2"/>
+                <Border Grid.RowSpan="2"/>
+
+                <Label Content="Unconnected Points" Grid.Row="2"/>
                 <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
                                                   IsDragSource="True"
                                                   DropHandler="{Binding}" Grid.Row="3"/>
+                <Border Grid.Row="2" Grid.RowSpan="2"/>
             </Grid>
         </Border>
         
