@@ -85,9 +85,8 @@ namespace TECUserControlLibrary.ViewModels
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             populateItemsCollections();
+            SearchString = "";
         }
-
-        
         #endregion
 
         #region Methods
@@ -308,12 +307,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool SearchCanExecute()
         {
-            bool canSearch = true;
-            if(SearchString == null)
-            {
-                canSearch = false;
-            }
-            return canSearch;
+            return true;
         }
         private void EndSearchExecute()
         {

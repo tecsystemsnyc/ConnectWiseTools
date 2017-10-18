@@ -28,7 +28,7 @@
         <ScrollViewer>
             <ItemsControl ItemsSource="{Binding Path=ScopeSource}"
                           dd:DragDrop.IsDragSource="True"
-                          dd:DragDrop.IsDropTarget="True"
+                          dd:DragDrop.IsDropTarget="False"
                           dd:DragDrop.DragAdornerTemplate="{StaticResource ScopeDragAdorner}"
                           Background="{StaticResource SectionBackgroundBrush}">
                 <ItemsControl.ItemsPanel>
