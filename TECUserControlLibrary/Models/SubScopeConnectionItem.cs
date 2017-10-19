@@ -13,7 +13,6 @@ namespace TECUserControlLibrary.Models
 {
     public class SubScopeConnectionItem : ViewModelBase
     {
-        private ObservableCollection<TECSubScope> _instances;
         private bool _needsUpdate;
 
         public TECSubScope SubScope { get; private set; }
