@@ -118,6 +118,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand UpdateAllCommand { get; private set; }
+        public ICommand UpdateItemCommand { get; private set; }
         #endregion
 
         public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)
@@ -137,6 +138,7 @@ namespace TECUserControlLibrary.ViewModels
                 Controllers.Add(controller);
             }
             UpdateAllCommand = new RelayCommand(updateAllExecute);
+            UpdateItemCommand = new RelayCommand<SubScopeConnectionItem>(updateItem);
         }
 
         public event Action<UpdateConnectionVM> UpdateVM;

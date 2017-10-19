@@ -53,7 +53,21 @@ namespace TECUserControlLibrary.UserControls.ItemControls
         // Using a DependencyProperty as the backing store for ReadOnly.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ReadOnlyProperty =
             DependencyProperty.Register("ReadOnly", typeof(bool), typeof(SubScopeConnectionItemControl), new PropertyMetadata(false));
-        
+
+
+
+        public ICommand UpdateCommand
+        {
+            get { return (ICommand)GetValue(UpdateCommandProperty); }
+            set { SetValue(UpdateCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UpdateCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UpdateCommandProperty =
+            DependencyProperty.Register("UpdateCommand", typeof(Action<SubScopeConnectionItem>), typeof(SubScopeConnectionItemControl));
+
+
+
         public SubScopeConnectionItemControl()
         {
             InitializeComponent();

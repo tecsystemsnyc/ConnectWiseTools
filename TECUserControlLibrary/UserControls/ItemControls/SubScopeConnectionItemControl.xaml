@@ -109,7 +109,8 @@
 
             <Grid Grid.Column="2" Grid.Row="5">
                 <Button Content="Update"
-                        Command="{Binding SubScopeConnectionItem.UpdateCommand}"
+                        Command="{Binding UpdateCommand}"
+                        CommandParameter="{Binding SubScopeConnectionItem}"
                         Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                         Margin="5"/>

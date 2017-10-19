@@ -11,7 +11,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <Style TargetType="local:SystemConnectionsView">
-            <Setter Property="UpdateConnectionVM" Value="{Binding ElementName=systemConnectionsView, Path=ViewModel.UpdateVM}"/>
+            <Setter Property="UpdateConnectionVM" Value="{Binding ElementName=systemConnectionsView, Path=ViewModel.UpdateConnectionVM}"/>
         </Style>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=systemConnectionsView, Path=ViewModel}">
@@ -69,6 +69,7 @@
                 <listControls:SubScopeConnectionListControl
                     Source="{Binding SubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
+                    UpdateCommand="{Binding UpdateItemCommand}"
                     DropHandler="{Binding}"
                     ReadOnly="False"
                     Grid.Row="1"/>
