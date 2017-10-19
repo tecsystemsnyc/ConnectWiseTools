@@ -660,6 +660,7 @@ namespace TECUserControlLibrary.Utilities
                 case SystemComponentIndex.Electrical:
                 case SystemComponentIndex.Misc:
                 case SystemComponentIndex.Proposal:
+                case SystemComponentIndex.Controllers:
                     return 2;
                 default:
                     return 1;

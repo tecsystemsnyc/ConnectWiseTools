@@ -5,27 +5,42 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              x:Name="parent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Label Content="Controllers" 
-                                FontWeight="Bold" Foreground="Black"
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                Margin="5,0,5,0">
+                <Label Content="Controllers"   Foreground="Black"
                                 VerticalAlignment="Center"/>
-        <controls:ControllerInPanelGridControl ViewModel="{Binding ElementName=parent, Path=ViewModel}" Grid.Row="1"
-                                                 Margin="0,0,5,0"/>
-        <Label Content="Panels" Grid.Column="1" FontWeight="Bold" Foreground="Black"
+            </Border>
+            <listControls:ControllerInPanelListControl Source="{Binding ElementName=parent, Path=ViewModel.ControllerCollection}"
+                                                   ViewModel="{Binding ElementName=parent, Path=ViewModel}" Grid.Row="1"
+                                                   Margin="5,0,5,0"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                    Margin="5,0,5,0">
+                <Label Content="Panels" Foreground="Black"
                                 VerticalAlignment="Center"/>
-        <controls:PanelsGridControl PanelsSource="{Binding ElementName=parent, Path=ViewModel.PanelsSource}"
-                                      ViewModel="{Binding ElementName=parent, Path=ViewModel}" Grid.Column="1" Grid.Row="1"
-                                      Margin="0,0,5,0"/>
+            </Border>
+            <listControls:PanelListControl Source="{Binding ElementName=parent, Path=ViewModel.PanelsSource}"
+                                       DropHandler="{Binding ElementName=parent, Path=ViewModel}" Grid.Row="1"
+                                       Margin="5,0,5,0"/>
+        </Grid>
     </Grid>
 </UserControl>

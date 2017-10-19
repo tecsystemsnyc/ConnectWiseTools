@@ -182,7 +182,6 @@ namespace TECUserControlLibrary.ViewModels
             PanelsSource = bid.Panels;
             Bid = bid;
             setup();
-            
         }
         public ControllersPanelsVM(TECTemplates templates)
         {

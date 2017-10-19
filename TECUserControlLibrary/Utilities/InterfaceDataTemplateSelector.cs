@@ -79,7 +79,6 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate EquipmentTemplate { get; set; }
         public DataTemplate ProposalTemplate { get; set; }
         public DataTemplate ControllerTemplate { get; set; }
-        public DataTemplate PanelTemplate { get; set; }
         public DataTemplate MiscTemplate { get; set; }
         public DataTemplate ConnectionTemplate { get; set; }
 
@@ -98,8 +97,6 @@ namespace TECUserControlLibrary.Utilities
                         return ProposalTemplate;
                     case SystemComponentIndex.Controllers:
                         return ControllerTemplate;
-                    case SystemComponentIndex.Panels:
-                        return PanelTemplate;
                     case SystemComponentIndex.Electrical:
                         return ConnectionTemplate;
                     default:

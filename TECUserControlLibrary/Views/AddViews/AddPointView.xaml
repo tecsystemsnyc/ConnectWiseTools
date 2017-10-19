@@ -24,7 +24,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Point: "/>
-            <Label Content="{Binding Name}" Grid.Column="1"/>
+            <Label Content="{Binding Label}" Grid.Column="1"/>
             <Label Content="Quantity: " Grid.Row="1"/>
             <TextBox Text="{Binding Quantity}" Grid.Row="1" Grid.Column="1"
                      Margin="2"/>
