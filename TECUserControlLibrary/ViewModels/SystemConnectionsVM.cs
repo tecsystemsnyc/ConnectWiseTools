@@ -232,7 +232,12 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (connection is TECSubScopeConnection ssConnect)
                     {
-                        ssItems.Add(new SubScopeConnectionItem(ssConnect.SubScope));
+                        SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ssConnect.SubScope);
+                        ssConnectItem.NeedsUpdateChanged += () =>
+                        {
+                            RaisePropertyChanged("CanLeave");
+                        };
+                        ssItems.Add(ssConnectItem);
                     }
                 }
                 SubScope = ssItems;

@@ -23,8 +23,10 @@ namespace TECUserControlLibrary.Models
             {
                 _needsUpdate = value;
                 RaisePropertyChanged("NeedsUpdate");
+                NeedsUpdateChanged?.Invoke();
             }
         }
+        public event Action NeedsUpdateChanged;
 
         public SubScopeConnectionItem(TECSubScope subScope, bool needsUpdate = false)
         {

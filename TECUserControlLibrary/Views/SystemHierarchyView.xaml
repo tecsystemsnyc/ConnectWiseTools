@@ -185,7 +185,8 @@
                 </Grid.RowDefinitions>
                 <Button x:Name="systemBack" 
                         Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
-                        Click="systemBack_Click" Margin="2">
+                        Click="systemBack_Click" Margin="2"
+                        IsEnabled="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM.CanLeave}">
                     <Button.Content>
                         &lt;-
                     </Button.Content>
