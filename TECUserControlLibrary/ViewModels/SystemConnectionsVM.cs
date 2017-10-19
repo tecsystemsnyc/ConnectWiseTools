@@ -112,12 +112,13 @@ namespace TECUserControlLibrary.ViewModels
             private set
             {
                 _updateConnectionVM = value;
-                RaisePropertyChanged("UpdateVM");
+                RaisePropertyChanged("UpdateConnectionVM");
                 UpdateVM?.Invoke(value);
             }
         }
 
         public ICommand UpdateAllCommand { get; private set; }
+        public ICommand UpdateItemCommand { get; private set; }
         public bool CanLeave
         {
             get { return selectedControllerCanSwitch(); }
@@ -141,6 +142,7 @@ namespace TECUserControlLibrary.ViewModels
                 Controllers.Add(controller);
             }
             UpdateAllCommand = new RelayCommand(updateAllExecute);
+            UpdateItemCommand = new RelayCommand<SubScopeConnectionItem>(updateItem);
         }
 
         public event Action<UpdateConnectionVM> UpdateVM;

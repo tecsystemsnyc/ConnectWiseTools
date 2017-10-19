@@ -33,7 +33,8 @@
                     <itemControls:SubScopeConnectionItemControl
                         SubScopeConnectionItem="{Binding}"
                         ConduitTypes="{Binding ElementName=subScopeConnectionListControl, Path=ConduitTypes}"
-                        ReadOnly="{Binding ElementName=subScopeConnectionListControl, Path=ReadOnly}"/>
+                        ReadOnly="{Binding ElementName=subScopeConnectionListControl, Path=ReadOnly}"
+                        UpdateCommand="{Binding ElementName=subScopeConnectionListControl, Path=UpdateCommand}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
