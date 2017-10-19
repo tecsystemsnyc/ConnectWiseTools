@@ -27,7 +27,7 @@ namespace TECUserControlLibrary.ViewModels
         private ObservableCollection<TECSubScope> _unconnectedSubScope;
         private TECController _selectedController;
 
-        private UpdateConnectionVM _updateVM;
+        private UpdateConnectionVM _updateConnectionVM;
         #endregion
 
         #region Properties
@@ -51,13 +51,9 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _subScope = value;
-                
-                SubScope.CollectionChanged += subScopeItems_CollectionChanged;
                 RaisePropertyChanged("SubScope");
             }
         }
-
-        
 
         public ObservableCollection<TECSubScope> UnconnectedSubScope
         {
@@ -81,25 +77,43 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (selectedControllerCanSwitch())
                 {
+                    setController();
+                }
+                else
+                {
+                    string checkUpdateString = "Some connections haven't been updated. Would you like to update these connections?";
+                    MessageBoxResult result = MessageBox.Show(checkUpdateString, "Update?", MessageBoxButton.YesNoCancel);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        updateNeedsUpdate();
+                    }
+                    else if (result == MessageBoxResult.No)
+                    {
+                        setController();
+                    }
+                    else
+                    {
+                        RaisePropertyChanged("SelectedController");
+                    }
+                }
+
+                void setController()
+                {
                     _selectedController = value;
                     RaisePropertyChanged("SelectedController");
                     handleControllerSelected(value);
                 }
-                else
-                {
-                    updateNeedsUpdate();
-                }
             }
         }
 
-        public UpdateConnectionVM UpdateVM
+        public UpdateConnectionVM UpdateConnectionVM
         {
-            get { return _updateVM; }
+            get { return _updateConnectionVM; }
             private set
             {
-                _updateVM = value;
+                _updateConnectionVM = value;
                 RaisePropertyChanged("UpdateVM");
-                Update?.Invoke(value);
+                UpdateVM?.Invoke(value);
             }
         }
 
@@ -125,7 +139,7 @@ namespace TECUserControlLibrary.ViewModels
             UpdateAllCommand = new RelayCommand(updateAllExecute);
         }
 
-        public event Action<UpdateConnectionVM> Update;
+        public event Action<UpdateConnectionVM> UpdateVM;
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -143,9 +157,9 @@ namespace TECUserControlLibrary.ViewModels
             TECSubScope subScope = dropInfo.Data as TECSubScope;
             SelectedController.AddSubScope(subScope);
             UnconnectedSubScope.Remove(subScope);
-            if (system is TECTypical typical)
+            if (system is TECTypical)
             {
-                SubScope.Add(new SubScopeConnectionItem(subScope, typical.TypicalInstanceDictionary.GetInstancesOfType(subScope), needsUpdate: true));
+                SubScope.Add(new SubScopeConnectionItem(subScope, needsUpdate: true));
             }
             else
             {
@@ -162,7 +176,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void updateAllExecute()
         {
-            UpdateVM = new UpdateConnectionVM(SubScope);
+            updateSubScope(SubScope);
         }
         private void updateNeedsUpdate()
         {
@@ -174,11 +188,22 @@ namespace TECUserControlLibrary.ViewModels
                     ssNeedsUpdate.Add(item);
                 }
             }
-            UpdateVM = new UpdateConnectionVM(ssNeedsUpdate);
+            updateSubScope(ssNeedsUpdate);
         }
         private void updateItem(SubScopeConnectionItem item)
         {
-            UpdateVM = new UpdateConnectionVM(new List<SubScopeConnectionItem>() { item });
+            updateSubScope(new List<SubScopeConnectionItem>() { item });
+        }
+        private void updateSubScope(IEnumerable<SubScopeConnectionItem> subScope)
+        {
+            if (system is TECTypical typical)
+            {
+                UpdateConnectionVM = new UpdateConnectionVM(subScope, typical);
+            }
+            else
+            {
+                throw new InvalidOperationException("Can not update when system is not typical.");
+            }
         }
 
         private bool selectedControllerCanSwitch()
@@ -201,36 +226,10 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (connection is TECSubScopeConnection ssConnect)
                     {
-                        if (system is TECTypical typical)
-                        {
-                            ssItems.Add(new SubScopeConnectionItem(ssConnect.SubScope, typical.TypicalInstanceDictionary.GetInstancesOfType(ssConnect.SubScope)));
-                        }
-                        else
-                        {
-                            ssItems.Add(new SubScopeConnectionItem(ssConnect.SubScope));
-                        }
+                        ssItems.Add(new SubScopeConnectionItem(ssConnect.SubScope));
                     }
                 }
                 SubScope = ssItems;
-                subscribeToItems(SubScope);
-            }
-        }
-
-        private void subscribeToItems(IEnumerable<SubScopeConnectionItem> items)
-        {
-            foreach(SubScopeConnectionItem item in items)
-            {
-                item.Update += updateItem;
-            }
-        }
-        private void subScopeItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            foreach(object newItem in e.NewItems)
-            {
-                if (newItem is SubScopeConnectionItem item)
-                {
-                    item.Update += updateItem;
-                }
             }
         }
     }

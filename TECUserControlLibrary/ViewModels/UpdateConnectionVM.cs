@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
@@ -16,11 +17,21 @@ namespace TECUserControlLibrary.ViewModels
     public class UpdateConnectionVM : ViewModelBase
     {
         #region Fields
-        private Dictionary<SubScopeUpdatedWrapper, SubScopeConnectionItem> typicalDictionary;
+        private TECTypical typical;
 
         private readonly List<SubScopeUpdatedWrapper> _subScope;
+        
+        #region SelectedFields
         private SubScopeUpdatedWrapper _selectedInstance;
-        private SubScopeConnectionItem _selectedTypical;
+
+        private TECSubScope _selectedTypical;
+
+        private TECController instanceController;
+        private TECController typicalController;
+        private TECController equivalentInstanceController;
+
+        private bool instanceCanUpdate;
+        #endregion
         #endregion
 
         #region Properties
@@ -28,6 +39,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return _subScope; }
         }
+        
         public SubScopeUpdatedWrapper SelectedInstance
         {
             get { return _selectedInstance; }
@@ -38,7 +50,7 @@ namespace TECUserControlLibrary.ViewModels
                 handleNewSelectedInstance(value);
             }
         }
-        public SubScopeConnectionItem SelectedTypical
+        public TECSubScope SelectedTypical
         {
             get { return _selectedTypical; }
             set
@@ -51,17 +63,16 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UpdateCommand { get; private set; }
         #endregion
 
-        public UpdateConnectionVM(IEnumerable<SubScopeConnectionItem> subScope)
+        public UpdateConnectionVM(IEnumerable<SubScopeConnectionItem> subScope, TECTypical typical)
         {
-            initializeCollections();
+            this.typical = typical;
             List<SubScopeUpdatedWrapper> instances = new List<SubScopeUpdatedWrapper>();
             foreach(SubScopeConnectionItem typ in subScope)
             {
-                foreach(TECSubScope instance in typ.Instances)
+                foreach(TECSubScope instance in typical.TypicalInstanceDictionary.GetInstancesOfType(typ.SubScope))
                 {
                     SubScopeUpdatedWrapper wrapped = new SubScopeUpdatedWrapper(instance);
                     instances.Add(wrapped);
-                    typicalDictionary.Add(wrapped, typ);
                 }
             }
             _subScope = instances;
@@ -69,31 +80,115 @@ namespace TECUserControlLibrary.ViewModels
             UpdateCommand = new RelayCommand(updateExecute, canUpdate);
         }
 
-        private void initializeCollections()
-        {
-            typicalDictionary = new Dictionary<SubScopeUpdatedWrapper, SubScopeConnectionItem>();
-        }
-
         private void handleNewSelectedInstance(SubScopeUpdatedWrapper subScope)
         {
-            SelectedTypical = typicalDictionary[subScope];
+            //Set equivalent typical
+            SelectedTypical = typical.TypicalInstanceDictionary.GetTypical(subScope.SubScope);
+            //Set controller of SelectedInstance
+            instanceController = null;
+            if (SelectedInstance.SubScope.Connection != null)
+            {
+                instanceController = SelectedInstance.SubScope.Connection.ParentController;
+            }
+            //Set controller of SelectedTypical
+            typicalController = null;
+            if (SelectedTypical.Connection != null)
+            {
+                typicalController = SelectedTypical.Connection.ParentController;
+            }
+            //Set equivalent instance controller for the typical controller of this instance.
+            if (typical.TypicalInstanceDictionary.GetTypical(instanceController) == typicalController)
+            {
+                equivalentInstanceController = instanceController;
+            }
+            else
+            {
+                TECController newInstanceController = null;
+                foreach (TECSystem instance in typical.Instances)
+                {
+                    if (instance.GetAllSubScope().Contains(SelectedInstance.SubScope))
+                    {
+                        foreach (TECController controller in instance.Controllers)
+                        {
+                            if (typical.TypicalInstanceDictionary.GetTypical(controller) == typicalController)
+                            {
+                                newInstanceController = controller;
+                                break;
+                            }
+                        }
+                    }
+                    if (newInstanceController != null) { break; }
+                }
+                equivalentInstanceController = newInstanceController;
+            }
+            //Set instanceCanUpdate bool
+            if (SelectedInstance == null)
+            {
+                instanceCanUpdate = false;
+            }
+            else
+            {
+                if (SelectedInstance.Updated)
+                {
+                    instanceCanUpdate = false;
+                }
+                else
+                {
+                    if (instanceController == equivalentInstanceController)
+                    {
+                        bool propertiesEqual = true;
+                        if (SelectedInstance.SubScope.Connection != null)
+                        {
+                            TECConnection instanceConnection = SelectedInstance.SubScope.Connection;
+                            TECConnection typicalConnection = SelectedTypical.Connection;
+                            if ((instanceConnection.Length != typicalConnection.Length) ||
+                                (instanceConnection.ConduitLength != typicalConnection.ConduitLength) ||
+                                (instanceConnection.ConduitType != typicalConnection.ConduitType))
+                            {
+                                propertiesEqual = false;
+                            }
+                        }
+                        else
+                        {
+                            propertiesEqual = false;
+                        }
+                        instanceCanUpdate = !propertiesEqual;
+                    }
+                    else
+                    {
+                        instanceCanUpdate = equivalentInstanceController.CanConnectSubScope(SelectedInstance.SubScope);
+                    }
+                }
+            }
         }
 
         private void updateExecute()
         {
-            SelectedTypical.UpdateInstance(SelectedInstance.SubScope);
-            SelectedInstance.Updated = true;
-        }
-        private bool canUpdate()
-        {
-            if (SelectedInstance == null)
+            bool sameController = (instanceController == equivalentInstanceController);
+
+            if (sameController)
             {
-                return false;
+                updateProperties(SelectedTypical, SelectedInstance.SubScope);
             }
             else
             {
-                return !SelectedInstance.Updated;
+                equivalentInstanceController.AddSubScope(SelectedInstance.SubScope);
+                updateProperties(SelectedTypical, SelectedInstance.SubScope);
             }
+
+            SelectedInstance.Updated = true;
+            instanceCanUpdate = false;
+
+            void updateProperties(TECSubScope typical, TECSubScope toUpdate)
+            {
+                toUpdate.Connection.Length = typical.Connection.Length;
+                toUpdate.Connection.ConduitLength = typical.Connection.ConduitLength;
+                toUpdate.Connection.ConduitType = typical.Connection.ConduitType;
+            }
+        }
+        private bool canUpdate()
+        {
+            return instanceCanUpdate;
         }
     }
 
