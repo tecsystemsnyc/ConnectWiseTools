@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         public PanelSummaryVM PanelVM { get; private set; }
         public LocationSummaryVM LocationVM { get; private set; }
 
-        public ItemizedSummaryVM(TECBid bid)
+        public ItemizedSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
-            SystemVM = new SystemSummaryVM(bid);
+            SystemVM = new SystemSummaryVM(bid, watcher);
             PanelVM = new PanelSummaryVM(bid);
             LocationVM = new LocationSummaryVM(bid);
         }

@@ -118,6 +118,10 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand UpdateAllCommand { get; private set; }
+        public bool CanLeave
+        {
+            get { return selectedControllerCanSwitch(); }
+        }
         #endregion
 
         public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)

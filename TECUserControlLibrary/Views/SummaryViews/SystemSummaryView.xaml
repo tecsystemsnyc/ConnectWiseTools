@@ -4,9 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views.SummaryViews"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             x:Name="systemSummaryView"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid DataContext="{Binding ElementName=systemSummaryView, Path=ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <!--List-->
+        <Grid Grid.Column="0">
+            <listControls:SystemListControl Source="{Binding Systems}"
+                                            SelectedItem="{Binding Selected}"/>
+        </Grid>
+        <!--Details-->
+        <Grid Grid.Column="1">
+            <Label Content="{Binding Selected.CostBatch}"/>
+        </Grid>
     </Grid>
 </UserControl>
