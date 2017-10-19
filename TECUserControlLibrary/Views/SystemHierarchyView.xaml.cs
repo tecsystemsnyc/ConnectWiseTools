@@ -274,13 +274,20 @@ namespace TECUserControlLibrary.Views
             SystemComponentIndex selectedValue = (SystemComponentIndex)comboBox.SelectedValue;
             if (selectedValue == SystemComponentIndex.Electrical ||
                 selectedValue == SystemComponentIndex.Misc ||
-                selectedValue == SystemComponentIndex.Proposal)
+                selectedValue == SystemComponentIndex.Proposal ||
+                selectedValue == SystemComponentIndex.Controllers)
             {
                 Storyboard move = (Storyboard)FindResource("systemMove");
                 move.Begin();
             }
             
             
+        }
+
+        private void Add_Clicked(object sender, RoutedEventArgs e)
+        {
+            Storyboard moveBack = (Storyboard)FindResource("modalIn");
+            moveBack.Begin();
         }
     }
 }

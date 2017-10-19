@@ -151,16 +151,9 @@
                                                               SelectedItem ="{Binding Selected}"/>
                         </Grid>
                     </DataTemplate>
-                    <DataTemplate x:Key="PanelTemplate">
-                        <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                            <listControls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
-                                                              SelectedItem ="{Binding Selected}"/>
-                        </Grid>
-                    </DataTemplate>
                     <utilities:SystemComponentSelector x:Key="ComponentSelector"
                                              EquipmentTemplate="{StaticResource EquipmentTemplate}"
-                                             ControllerTemplate="{StaticResource ControllerTemplate}"
-                                             PanelTemplate="{StaticResource PanelTemplate}"/>
+                                             ControllerTemplate="{StaticResource ControllerTemplate}"/>
                 </ResourceDictionary>
             </Grid.Resources>
             <Grid.RowDefinitions>
@@ -168,7 +161,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <ComboBox Name="componentComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:SystemComponentIndex}}}"
-                                              Margin="2" Grid.Row="0" FontSize="12"
+                                              Margin="2,5,2,5" Grid.Row="0" FontSize="12"
                                               VerticalContentAlignment="Center"
                                               SelectedIndex="0"/>
             <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  

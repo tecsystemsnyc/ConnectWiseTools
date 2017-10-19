@@ -103,6 +103,9 @@
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemControls\BaseItemControl.cs" />
+    <Compile Include="UserControls\ItemControls\ControllerInPanelControl.xaml.cs">
+      <DependentUpon>ControllerInPanelControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\MiscControl.xaml.cs">
       <DependentUpon>MiscControl.xaml</DependentUpon>
     </Compile>
@@ -155,6 +158,9 @@
     </Compile>
     <Compile Include="UserControls\ItemControls\ValveControl.xaml.cs">
       <DependentUpon>ValveControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListControls\ControllerInPanelListControl.xaml.cs">
+      <DependentUpon>ControllerInPanelListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\MiscListControl.xaml.cs">
       <DependentUpon>MiscListControl.xaml</DependentUpon>
@@ -467,6 +473,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ItemControls\ControllerInPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ItemControls\MiscControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -516,6 +526,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\ValveControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\ControllerInPanelListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
