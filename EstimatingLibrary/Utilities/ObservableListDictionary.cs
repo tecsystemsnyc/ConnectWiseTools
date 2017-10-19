@@ -40,6 +40,32 @@ namespace EstimatingLibrary.Utilities
             CollectionChanged?.Invoke(new Tuple<Change, T, T>(Change.Remove, key, value));
         }
 
+        public Y GetTypical<Y>(Y instance) where Y : class
+        {
+            if (instance is T tInstance)
+            {
+                foreach (KeyValuePair<T, List<T>> pair in dictionary)
+                {
+                    if (pair.Value.Contains(tInstance))
+                    {
+                        if (pair.Key is Y yKey)
+                        {
+                            return yKey;
+                        }
+                        else
+                        {
+                            throw new TypeLoadException("Key type doesn't match value type.");
+                        }
+                    }
+                }
+                return null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public List<T> GetInstances(T key)
         {
             return dictionary[key];
