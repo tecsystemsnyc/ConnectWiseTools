@@ -112,7 +112,7 @@ namespace TECUserControlLibrary.ViewModels
             private set
             {
                 _updateConnectionVM = value;
-                RaisePropertyChanged("UpdateVM");
+                RaisePropertyChanged("UpdateConnectionVM");
                 UpdateVM?.Invoke(value);
             }
         }

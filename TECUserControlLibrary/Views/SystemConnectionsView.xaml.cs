@@ -48,7 +48,7 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty UpdateConnectionVMProperty =
             DependencyProperty.Register("UpdateConnectionVM", typeof(UpdateConnectionVM), 
                 typeof(SystemConnectionsView), new PropertyMetadata(new PropertyChangedCallback(OnUpdateConnectionVMChanged)));
-
+        
         private static void OnUpdateConnectionVMChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
             if ((e.NewValue as UpdateConnectionVM) != null)
@@ -60,7 +60,6 @@ namespace TECUserControlLibrary.Views
                 }
             }
         }
-
 
         public event RoutedEventHandler Update
         {

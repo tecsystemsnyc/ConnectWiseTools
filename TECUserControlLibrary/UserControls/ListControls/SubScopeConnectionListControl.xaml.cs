@@ -53,7 +53,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
 
         // Using a DependencyProperty as the backing store for UpdateCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UpdateCommandProperty =
-            DependencyProperty.Register("UpdateCommand", typeof(Action<SubScopeConnectionItem>), typeof(SubScopeConnectionListControl));
+            DependencyProperty.Register("UpdateCommand", typeof(ICommand), typeof(SubScopeConnectionListControl));
 
 
 
