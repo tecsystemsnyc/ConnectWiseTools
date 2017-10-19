@@ -20,30 +20,51 @@
         <ResourceDictionary>
             <DataTemplate x:Key="EquipmentTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
                     <listControls:EquipmentListControl x:Name="equipmentList"
                                                        Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
                                                        SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment}"
                                                        DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
                                                        DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteEquipmentCommand}"
                                                        IsDragSource="True"/>
+                    <Button x:Name="addEquipment" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddEquipmentCommand}"
+                            CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"
+                            Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ControllerTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
                     <listControls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
                                                         SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedController}"
                                                         DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
                                                         DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteControllerCommand}"
                                                         IsDragSource="True"/>
+                    <Button x:Name="addController" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddControllerCommand}"
+                            CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"/>
+
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="PanelTemplate">
                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
                     <listControls:PanelListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Panels}"
                                                    SelectedItem ="{Binding ElementName=systemHierarchyView, Path=SelectedPanel}"
                                                    DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
                                                    DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeletePanelCommand}"
                                                    IsDragSource="True"/>
+                    <Button x:Name="addPanel" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddPanelCommand}"
+                            CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"/>
+
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ElectricalTemplate">
@@ -130,7 +151,7 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="Button.Click" SourceName="addComponent">
+            <EventTrigger RoutedEvent="Button.Click" SourceName="componentGrid">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
@@ -204,7 +225,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
@@ -212,91 +232,90 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
                 <TextBlock Grid.Column="1" Text="Typical Systems"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Content="Add" x:Name="addSystem" Grid.Column="2" 
-                        Command="{Binding ViewModel.AddSystemCommand}"/>
-            </Grid>
-            <listControls:SystemListControl x:Name="systemList" Grid.Column="0" Grid.Row="1" Source="{Binding SystemSource}"
+                <listControls:SystemListControl x:Name="systemList" Grid.Row="1" Grid.ColumnSpan="3" Source="{Binding SystemSource}"
                                         SelectedItem="{Binding ViewModel.SelectedSystem}"
                                         DropHandler="{Binding ViewModel}"
                                             DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSystemCommand}"
                                             IsDragSource="True"/>
+                <Button Width="50" Content="Add" x:Name="addSystem" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right"
+                        Command="{Binding ViewModel.AddSystemCommand}"/>
+            </Grid>
+            
             <!--Column 1-->
             <Grid Grid.Column="1" Grid.ColumnSpan="{Binding ElementName=componentComboBox, Path=SelectedItem, 
-            Converter={utilities:SelectedComponentToSpanConverter}}" Panel.ZIndex="10">
+                  Converter={utilities:SelectedComponentToSpanConverter}}" Panel.ZIndex="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
                 <Button x:Name="systemBack" 
                         Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
-                        Click="systemBack_Click">
+                        Click="systemBack_Click" Margin="2">
                     <Button.Content>
                         &lt;-
                     </Button.Content>
                 </Button>
-                <TextBlock Grid.Column="1" Text="{Binding SelectedSystem.Name, StringFormat='Components of {0}'}"
+                <TextBlock Grid.Column="1" 
+                           Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.Name, StringFormat='Components of {0}'}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Content="Add" x:Name="addComponent" Grid.Column="2" 
-                        Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"
-                        CommandParameter="{Binding ViewModel.SelectedSystem}">
-                    <Button.Command>
-                        <MultiBinding Converter="{utilities:SelectedComponentToCommandConverter}">
-                            <Binding ElementName="componentComboBox" Path="SelectedItem"/>
-                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddEquipmentCommand"/>
-                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddControllerCommand"/>
-                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddPanelCommand"/>
-                            <Binding ElementName="systemHierarchyView" Path="ViewModel.AddControllerCommand"/>
-                        </MultiBinding>
-                    </Button.Command>
-                </Button>
-                <Button Content="->" x:Name="equipmentDetails" Grid.Column="3"
+                <Button Content="->" x:Name="equipmentDetails" Grid.Column="2" Margin="2"
                         Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"/>
-            </Grid>
-        <Grid  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="{Binding ElementName=componentComboBox, Path=SelectedItem, 
-            Converter={utilities:SelectedComponentToSpanConverter}}" Panel.ZIndex="10">
-            <Grid.Resources>
-                    <ResourceDictionary>
-                        <utilities:SystemComponentSelector x:Key="ComponentSelector"
+                <Grid  Grid.Row="1" Grid.ColumnSpan="3" Name="componentGrid"> 
+                    <Grid.Resources>
+                        <ResourceDictionary>
+                            <utilities:SystemComponentSelector x:Key="ComponentSelector"
                                                            EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                                            ControllerTemplate="{StaticResource ControllerTemplate}"
                                                            PanelTemplate="{StaticResource PanelTemplate}"
                                                            ConnectionTemplate="{StaticResource ElectricalTemplate}"
                                                            MiscTemplate="{StaticResource MiscTemplate}"
                                                            ProposalTemplate="{StaticResource ProposalTemplate}"/>
-                </ResourceDictionary>
-            </Grid.Resources>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <ComboBox Name="componentComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:SystemComponentIndex}}}"
+                        </ResourceDictionary>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="componentComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:SystemComponentIndex}}}"
                                               Margin="2" Grid.Row="0" FontSize="12"
                                               VerticalContentAlignment="Center"
                                               SelectedIndex="0"
                       SelectionChanged="componentComboBox_Selected"
                       Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
-            <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  
+                    <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  
                                                       ContentTemplateSelector="{StaticResource ComponentSelector}"
                                                       Grid.Row="1"/>
-            
-        </Grid>
-
-        <!--Column 2-->
-        <Grid Grid.Column="2" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="equipmentBack"
+                </Grid>
+            </Grid>
+        
+            <!--Column 2-->
+            <Grid Grid.Column="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="equipmentBack" Margin="2"
                     Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
                     Command="{Binding ViewModel.BackCommand}"
                     CommandParameter="{Binding ViewModel.SelectedSubScope}"
@@ -305,36 +324,37 @@
                         &lt;-
                     </Button.Content>
                 </Button>
-            <TextBlock Grid.Column="1" Text="{Binding SelectedEquipment.Name, StringFormat='Points in {0}'}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button Content="Add" x:Name="addSubScope" Grid.Column="2" 
-                    Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"
-                    Command="{Binding ViewModel.AddSubScopeCommand}"
-                    CommandParameter="{Binding ViewModel.SelectedEquipment}"/>
-                <Button Content="->" x:Name="subScopeDetails" Grid.Column="3"
-                        Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"/>
-            </Grid>
+                <TextBlock Grid.Column="1" Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.Name, StringFormat='Points in {0}'}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="->" x:Name="subScopeDetails" Grid.Column="2"
+                    Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"/>
 
-            <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
-                                      SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
-                                      Grid.Column="2" Grid.Row="1"
-                                      DropHandler="{Binding ViewModel}"
-                                      DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
-                                              IsDragSource="True"/>
-        <!--Column 3-->
-        <Grid Grid.Column="3" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Devices" Grid.Row="0"/>
+                <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
+                                    SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
+                                    Grid.ColumnSpan="3" Grid.Row="1"
+                                    DropHandler="{Binding ViewModel}"
+                                    DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
+                                            IsDragSource="True"/>
+                <Button Content="Add" x:Name="addSubScope" Grid.Row="2" 
+                        Grid.Column="2"
+                        Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"
+                        Command="{Binding ViewModel.AddSubScopeCommand}"
+                        CommandParameter="{Binding ViewModel.SelectedEquipment}"/>
+            </Grid>
+            <!--Column 3-->
+            <Grid Grid.Column="3" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Devices" Grid.Row="0"/>
                 <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
-                                               SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
-                                               DropHandler="{Binding ViewModel}"
-                                                   DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
-                                                   IsDragSource="True"/>
+                                                SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
+                                                DropHandler="{Binding ViewModel}"
+                                                    DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
+                                                    IsDragSource="True"/>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -347,13 +367,13 @@
                             CommandParameter="{Binding ViewModel.SelectedSubScope}"/>
                 </Grid>
                 <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                               Grid.Row="3"
-                                               SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedPoint}"
-                                               DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeletePointCommand}"
-                                               IsDragSource="True"/>
-        </Grid>
+                                                Grid.Row="3"
+                                                SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedPoint}"
+                                                DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeletePointCommand}"
+                                                   IsDragSource="True"/>
+            </Grid>
 
-    </Grid>
+        </Grid>
         <!--Add Modal-->
         <Grid Width="{Binding ElementName=systemHierarchyView, Path=ActualWidth}"
               Height="{Binding ElementName=systemHierarchyView, Path=ActualHeight}">
