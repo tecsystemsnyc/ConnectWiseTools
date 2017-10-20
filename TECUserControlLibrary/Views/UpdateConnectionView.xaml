@@ -104,7 +104,7 @@
             <Label Grid.Column="1" Grid.Row="5">
                 <Label.Content>
                     <MultiBinding Converter="{converters:NullChoiceConverter}">
-                        <Binding Path="SelectedInstance.SubScope.Connection.ParentController.Name"/>
+                        <Binding Path="SelectedInstance.SubScope.Connection.ConduitType.Name"/>
                         <Binding Source="{StaticResource NoneString}"/>
                         <Binding Path="SelectedInstance.SubScope.Connection"/>
                         <Binding Path="SelectedInstance.SubScope.Connection.ConduitType"/>
@@ -114,25 +114,25 @@
 
             <!--Typical-->
             <Label Content="Typical" Grid.Column="2"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Name}" Grid.Column="2" Grid.Row="1"/>
+            <Label Content="{Binding SelectedTypical.Name}" Grid.Column="2" Grid.Row="1"/>
             <Label Grid.Column="2" Grid.Row="2">
                 <Label.Content>
                     <MultiBinding Converter="{converters:NullChoiceConverter}">
-                        <Binding Path="SelectedTypical.SubScope.Connection.ParentController.Name"/>
+                        <Binding Path="SelectedTypical.Connection.ParentController.Name"/>
                         <Binding Source="{StaticResource NoneString}"/>
-                        <Binding Path="SelectedTypical.SubScope.Connection"/>
+                        <Binding Path="SelectedTypical.Connection"/>
                     </MultiBinding>
                 </Label.Content>
             </Label>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.Length}" Grid.Column="2" Grid.Row="3"/>
-            <Label Content="{Binding SelectedTypical.SubScope.Connection.ConduitLength}" Grid.Column="2" Grid.Row="4"/>
+            <Label Content="{Binding SelectedTypical.Connection.Length}" Grid.Column="2" Grid.Row="3"/>
+            <Label Content="{Binding SelectedTypical.Connection.ConduitLength}" Grid.Column="2" Grid.Row="4"/>
             <Label Grid.Column="2" Grid.Row="5">
                 <Label.Content>
                     <MultiBinding Converter="{converters:NullChoiceConverter}">
-                        <Binding Path="SelectedTypical.SubScope.Connection.ConduitType.Name"/>
+                        <Binding Path="SelectedTypical.Connection.ConduitType.Name"/>
                         <Binding Source="{StaticResource NoneString}"/>
-                        <Binding Path="SelectedTypical.SubScope.Connection"/>
-                        <Binding Path="SelectedTypical.SubScope.Connection.ConduitType"/>
+                        <Binding Path="SelectedTypical.Connection"/>
+                        <Binding Path="SelectedTypical.Connection.ConduitType"/>
                     </MultiBinding>
                 </Label.Content>
             </Label>
