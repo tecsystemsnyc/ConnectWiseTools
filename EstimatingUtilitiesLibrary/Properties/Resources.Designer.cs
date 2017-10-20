@@ -93,7 +93,7 @@ namespace EstimatingUtilitiesLibrary.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Table 1,Field 1,Table 2,Field 2
-        ///TECBidInfo,DBVersion,BidInfo,DBVersion
+        ///TECBidInfo,DBVersion,NONE,NONE
         ///TECBidInfo,BidName,BidInfo,Name
         ///TECBidInfo,BidID,BidInfo,ID
         ///TECBidInfo,BidNumber,BidInfo,Number
@@ -101,10 +101,11 @@ namespace EstimatingUtilitiesLibrary.Properties {
         ///TECBidInfo,Salesperson,BidInfo,SalesPerson
         ///TECBidInfo,Estimator,BidInfo,Estimator
         ///TECTemplatesInfo,TemplateID,TemplatesInfo,ID
-        ///TECTemplatesInfo,DBVersion,TemplatesInfo,DBVersion
-        ///TECParameters,ParametersID,Parameters,ID
-        ///TECParameters,Escalation,Parameters,Escalation
-        ///TECParameters,Overhead, [rest of string was truncated]&quot;;.
+        ///TECBidParameters,ParametersID,NONE,NONE
+        ///TECBidParameters,Escalation,Parameters,Escalation
+        ///TECBidParameters,Overhead,Parameters,Overhead
+        ///TECBidParameters,Profit,Parameters,Profit
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionDefinition {
             get {
