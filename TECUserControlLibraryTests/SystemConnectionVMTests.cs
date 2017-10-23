@@ -38,8 +38,8 @@ namespace TECUserControlLibraryTests
             //Arrange
             Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
             confirmable
-                .Setup(x => x.Show(""))
-                .Callback(() => Assert.Fail("Confirmable shouldn't be shown."))
+                .Setup(x => x.Show(It.IsAny<string>()))
+                .Callback(() => Assert.Fail("Confirmable should not have been shown."))
                 .Returns((bool?)null);
 
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
@@ -55,7 +55,7 @@ namespace TECUserControlLibraryTests
             ssItem1.SetupGet(x => x.NeedsUpdate).Returns(false);
 
             Mock<ISubScopeConnectionItem> ssItem2 = new Mock<ISubScopeConnectionItem>();
-            ssItem2.SetupGet(x => x.NeedsUpdate).Returns(true);
+            ssItem2.SetupGet(x => x.NeedsUpdate).Returns(false);
 
             vm.SubScope.Add(ssItem1.Object);
             vm.SubScope.Add(ssItem2.Object);
@@ -73,7 +73,7 @@ namespace TECUserControlLibraryTests
             //Arrange
             Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
             confirmable
-                .Setup(x => x.Show(""))
+                .Setup(x => x.Show(It.IsAny<string>()))
                 .Returns((bool?)null);
 
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
