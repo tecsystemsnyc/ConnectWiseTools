@@ -55,10 +55,10 @@ namespace TECUserControlLibraryTests
             vm.ConfirmationObject = confirmable.Object;
 
             Mock<SubScopeConnectionItem> ssItem1 = new Mock<SubScopeConnectionItem>();
-            ssItem1.Setup(x => x.NeedsUpdate).Returns(false);
+            ssItem1.SetupGet(x => x.NeedsUpdate).Returns(false);
 
             Mock<SubScopeConnectionItem> ssItem2 = new Mock<SubScopeConnectionItem>();
-            ssItem2.Setup(x => x.NeedsUpdate).Returns(true);
+            ssItem2.SetupGet(x => x.NeedsUpdate).Returns(true);
 
             vm.SubScope.Add(ssItem1.Object);
             vm.SubScope.Add(ssItem2.Object);
