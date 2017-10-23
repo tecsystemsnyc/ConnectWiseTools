@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
+    <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
     <Compile Include="Models\SystemSummaryItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">

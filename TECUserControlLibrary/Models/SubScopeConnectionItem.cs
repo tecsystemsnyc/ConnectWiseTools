@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TECUserControlLibrary.Interfaces;
 
 namespace TECUserControlLibrary.Models
 {
-    public class SubScopeConnectionItem : ViewModelBase
+    public class SubScopeConnectionItem : ViewModelBase, ISubScopeConnectionItem
     {
         private bool _needsUpdate;
 

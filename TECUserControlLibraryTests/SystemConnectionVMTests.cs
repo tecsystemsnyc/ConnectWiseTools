@@ -35,7 +35,36 @@ namespace TECUserControlLibraryTests
         [TestMethod]
         public void TestDoesntNeedUpdateSelectController()
         {
-            throw new NotImplementedException();
+            //Arrange
+            Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
+            confirmable
+                .Setup(x => x.Show(It.IsAny<string>()))
+                .Callback(() => Assert.Fail("Confirmable should not have been shown."))
+                .Returns((bool?)null);
+
+            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+
+            TECTypical typical = new TECTypical();
+            TECController controller = new TECController(catalogs.ControllerTypes[0], true);
+            typical.AddController(controller);
+
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            vm.ConfirmationObject = confirmable.Object;
+
+            Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
+            ssItem1.SetupGet(x => x.NeedsUpdate).Returns(false);
+
+            Mock<ISubScopeConnectionItem> ssItem2 = new Mock<ISubScopeConnectionItem>();
+            ssItem2.SetupGet(x => x.NeedsUpdate).Returns(false);
+
+            vm.SubScope.Add(ssItem1.Object);
+            vm.SubScope.Add(ssItem2.Object);
+
+            //Act
+            vm.SelectedController = controller;
+
+            //Assert
+            Assert.AreEqual(controller, vm.SelectedController, "Selected controller should be set.");
         }
 
         [TestMethod]
@@ -43,7 +72,9 @@ namespace TECUserControlLibraryTests
         {
             //Arrange
             Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
-            confirmable.Setup(x => x.Show("")).Returns((bool?)null);
+            confirmable
+                .Setup(x => x.Show(It.IsAny<string>()))
+                .Returns((bool?)null);
 
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
@@ -54,11 +85,15 @@ namespace TECUserControlLibraryTests
             SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
             vm.ConfirmationObject = confirmable.Object;
 
-            Mock<SubScopeConnectionItem> ssItem1 = new Mock<SubScopeConnectionItem>();
-            ssItem1.SetupGet(x => x.NeedsUpdate).Returns(false);
+            Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
+            ssItem1
+                .SetupGet(x => x.NeedsUpdate)
+                .Returns(false);
 
-            Mock<SubScopeConnectionItem> ssItem2 = new Mock<SubScopeConnectionItem>();
-            ssItem2.SetupGet(x => x.NeedsUpdate).Returns(true);
+            Mock<ISubScopeConnectionItem> ssItem2 = new Mock<ISubScopeConnectionItem>();
+            ssItem2
+                .SetupGet(x => x.NeedsUpdate)
+                .Returns(true);
 
             vm.SubScope.Add(ssItem1.Object);
             vm.SubScope.Add(ssItem2.Object);
