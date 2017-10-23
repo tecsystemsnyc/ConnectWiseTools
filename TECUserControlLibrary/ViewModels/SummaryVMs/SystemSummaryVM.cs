@@ -14,9 +14,10 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
     public class SystemSummaryVM : ViewModelBase
     {
         private ObservableCollection<SystemSummaryItem> systems;
-        private TECTypical selected;
+        private ObservableCollection<ScopeSummaryItem> riser;
+        private ObservableCollection<ScopeSummaryItem> misc;
         private TECBid bid;
-
+        
         public ObservableCollection<SystemSummaryItem> Systems
         {
             get { return systems; }
@@ -26,23 +27,16 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 RaisePropertyChanged("Systems");
             }
         }
-        public TECTypical Selected
-        {
-            get { return selected; }
-            set
-            {
-                selected = value;
-                RaisePropertyChanged("Selected");
-            }
-        }
         
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
             populateSystems(bid.Systems);
+            populateRiser(bid.Controllers, bid.Panels);
+            populateMisc(bid.MiscCosts);
             watcher.Changed += changed;
         }
-
+        
         private void changed(TECChangedEventArgs e)
         {
             if(e.Value is TECTypical typical)
@@ -77,6 +71,18 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 systemItems.Add(new SystemSummaryItem(typical, bid.Parameters));
             }
             Systems = systemItems;
+        }
+        private void populateMisc(ObservableCollection<TECMisc> miscCosts)
+        {
+            ObservableCollection<ScopeSummaryItem> miscItems = new ObservableCollection<ScopeSummaryItem>();
+            foreach(TECMisc misc in miscCosts)
+            {
+                miscItems.Add(new ScopeSummaryItem(misc, bid.Parameters));
+            }
+        }
+        private void populateRiser(ReadOnlyObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,12 +14,6 @@
             <TabItem Header="Systems">
                 <local:SystemSummaryView ViewModel="{Binding SystemVM}"/>
             </TabItem>
-            <TabItem Header="Panels">
-                <local:PanelSummaryView ViewModel="{Binding PanelVM}"/>
-            </TabItem>
-            <TabItem Header="Location">
-                <local:LocationSummaryView ViewModel="{Binding LocationVM}"/>
-            </TabItem>
         </TabControl>
     </Grid>
 </views:BaseView>
