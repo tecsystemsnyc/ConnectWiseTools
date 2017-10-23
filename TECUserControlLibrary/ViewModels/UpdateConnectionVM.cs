@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TECUserControlLibrary.Interfaces;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
@@ -63,7 +64,7 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UpdateCommand { get; private set; }
         #endregion
 
-        public UpdateConnectionVM(IEnumerable<SubScopeConnectionItem> subScope, TECTypical typical)
+        public UpdateConnectionVM(IEnumerable<ISubScopeConnectionItem> subScope, TECTypical typical)
         {
             this.typical = typical;
             List<SubScopeUpdatedWrapper> instances = new List<SubScopeUpdatedWrapper>();

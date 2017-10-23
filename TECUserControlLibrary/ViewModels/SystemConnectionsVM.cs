@@ -24,7 +24,7 @@ namespace TECUserControlLibrary.ViewModels
         private readonly ObservableCollection<TECElectricalMaterial> _conduitTypes;
 
         private ObservableCollection<TECController> _controllers;
-        private ObservableCollection<SubScopeConnectionItem> _subScope;
+        private ObservableCollection<ISubScopeConnectionItem> _subScope;
         private ObservableCollection<TECSubScope> _unconnectedSubScope;
         private TECController _selectedController;
 
@@ -48,7 +48,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Controllers");
             }
         }
-        public ObservableCollection<SubScopeConnectionItem> SubScope
+        public ObservableCollection<ISubScopeConnectionItem> SubScope
         {
             get { return _subScope; }
             set
@@ -183,7 +183,7 @@ namespace TECUserControlLibrary.ViewModels
         private void initializeCollections()
         {
             _controllers = new ObservableCollection<TECController>();
-            _subScope = new ObservableCollection<SubScopeConnectionItem>();
+            _subScope = new ObservableCollection<ISubScopeConnectionItem>();
             _unconnectedSubScope = new ObservableCollection<TECSubScope>();
         }
 
@@ -207,7 +207,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             updateSubScope(new List<SubScopeConnectionItem>() { item });
         }
-        private void updateSubScope(IEnumerable<SubScopeConnectionItem> subScope)
+        private void updateSubScope(IEnumerable<ISubScopeConnectionItem> subScope)
         {
             if (system is TECTypical typical)
             {
@@ -221,7 +221,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool anItemNeedsUpdate()
         {
-            foreach (SubScopeConnectionItem item in SubScope)
+            foreach (ISubScopeConnectionItem item in SubScope)
             {
                 if (item.NeedsUpdate)
                 {
@@ -232,7 +232,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void handleControllerSelected(TECController controller)
         {
-            ObservableCollection<SubScopeConnectionItem> ssItems = new ObservableCollection<SubScopeConnectionItem>();
+            ObservableCollection<ISubScopeConnectionItem> ssItems = new ObservableCollection<ISubScopeConnectionItem>();
             if(controller != null)
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)

@@ -54,10 +54,10 @@ namespace TECUserControlLibraryTests
             SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
             vm.ConfirmationObject = confirmable.Object;
 
-            Mock<SubScopeConnectionItem> ssItem1 = new Mock<SubScopeConnectionItem>();
+            Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
             ssItem1.SetupGet(x => x.NeedsUpdate).Returns(false);
 
-            Mock<SubScopeConnectionItem> ssItem2 = new Mock<SubScopeConnectionItem>();
+            Mock<ISubScopeConnectionItem> ssItem2 = new Mock<ISubScopeConnectionItem>();
             ssItem2.SetupGet(x => x.NeedsUpdate).Returns(true);
 
             vm.SubScope.Add(ssItem1.Object);
