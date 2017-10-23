@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels.SummaryVMs;
 
 namespace TECUserControlLibrary.Views.SummaryViews
 {
     /// <summary>
     /// Interaction logic for ItemizedSummaryView.xaml
     /// </summary>
-    public partial class ItemizedSummaryView : UserControl
+    public partial class ItemizedSummaryView : BaseView<ItemizedSummaryVM>
     {
         public ItemizedSummaryView()
         {

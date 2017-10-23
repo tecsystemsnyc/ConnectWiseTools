@@ -89,7 +89,9 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\LCPContainer.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
+    <Compile Include="Models\SystemSummaryItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
@@ -260,6 +262,7 @@
     <Compile Include="Views\AddViews\AddSystemView.xaml.cs">
       <DependentUpon>AddSystemView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
     </Compile>

@@ -15,4 +15,5 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
 
         }
     }
+    
 }

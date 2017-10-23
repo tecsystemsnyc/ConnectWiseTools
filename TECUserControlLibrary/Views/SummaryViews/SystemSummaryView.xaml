@@ -1,26 +1,39 @@
-﻿<UserControl x:Class="TECUserControlLibrary.Views.SummaryViews.SystemSummaryView"
+﻿<views:BaseView x:TypeArguments="vms:SystemSummaryVM"  x:Class="TECUserControlLibrary.Views.SummaryViews.SystemSummaryView"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:vms="clr-namespace:TECUserControlLibrary.ViewModels.SummaryVMs"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views.SummaryViews"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+                xmlns:propertyControls="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
              x:Name="systemSummaryView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid DataContext="{Binding ElementName=systemSummaryView, Path=ViewModel}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--List-->
         <Grid Grid.Column="0">
-            <listControls:SystemListControl Source="{Binding Systems}"
-                                            SelectedItem="{Binding Selected}"/>
-        </Grid>
-        <!--Details-->
-        <Grid Grid.Column="1">
-            <Label Content="{Binding Selected.CostBatch}"/>
+            <ListView ItemsSource="{Binding Systems}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="{Binding Name}"/>
+                            <Label Content="{Binding Quantity}" Grid.Column="1"/>
+                            <Label Content="{Binding Total}" Grid.Column="2"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                
+            </ListView>
         </Grid>
     </Grid>
-</UserControl>
+</views:BaseView>

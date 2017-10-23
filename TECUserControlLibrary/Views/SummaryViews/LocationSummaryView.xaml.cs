@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels.SummaryVMs;
 
 namespace TECUserControlLibrary.Views.SummaryViews
 {
     /// <summary>
     /// Interaction logic for LocationSummaryView.xaml
     /// </summary>
-    public partial class LocationSummaryView : UserControl
+    public partial class LocationSummaryView : BaseView<LocationSummaryVM>
     {
         public LocationSummaryView()
         {

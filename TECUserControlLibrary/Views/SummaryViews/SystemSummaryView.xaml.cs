@@ -19,20 +19,9 @@ namespace TECUserControlLibrary.Views.SummaryViews
     /// <summary>
     /// Interaction logic for SystemSummaryView.xaml
     /// </summary>
-    public partial class SystemSummaryView : UserControl
+    public partial class SystemSummaryView : BaseView<SystemSummaryVM>
     {
-        
-        public SystemSummaryVM ViewModel
-        {
-            get { return (SystemSummaryVM)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(SystemSummaryVM), typeof(SystemSummaryView));
-
-
+      
         public SystemSummaryView()
         {
             InitializeComponent();

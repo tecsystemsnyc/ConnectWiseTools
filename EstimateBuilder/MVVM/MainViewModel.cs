@@ -14,6 +14,7 @@ using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight;
 using TECUserControlLibrary.Debug;
 using EstimatingUtilitiesLibrary.Exports;
+using TECUserControlLibrary.ViewModels.SummaryVMs;
 
 namespace EstimateBuilder.MVVM
 {
@@ -53,6 +54,7 @@ namespace EstimateBuilder.MVVM
         public ProposalVM ProposalVM { get; set; }
         public ElectricalVM ElectricalVM { get; set; }
         public NetworkVM NetworkVM { get; set; }
+        public ItemizedSummaryVM ItemizedSummaryVM { get; private set; }
         public ICommand ToggleTemplatesCommand { get; private set; }
         public ICommand DocumentCommand { get; private set; }
         public ICommand LoadTemplatesCommand { get; private set; }
@@ -209,6 +211,7 @@ namespace EstimateBuilder.MVVM
             setupProposalVM(Bid);
             setupElectricalVM(Bid);
             setupNetworkVM(Bid, watcher);
+            setupItemizedSummaryVM(Bid, watcher);
         }
         protected override void setupCommands()
         {
@@ -337,6 +340,10 @@ namespace EstimateBuilder.MVVM
         private void setupNetworkVM(TECBid bid, ChangeWatcher cw)
         {
             NetworkVM = new NetworkVM(bid, cw);
+        }
+        private void setupItemizedSummaryVM(TECBid bid, ChangeWatcher cw)
+        {
+            ItemizedSummaryVM = new ItemizedSummaryVM(bid, cw);
         }
         private void setupData(string templatesPath, string bidPath = "")
         {
@@ -533,6 +540,7 @@ namespace EstimateBuilder.MVVM
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
                 NetworkVM.Refresh(Bid, watcher);
+                ItemizedSummaryVM.Refresh(Bid, watcher);
             }
         }
         private void updateBidWithTemplates()
