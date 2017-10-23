@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TECUserControlLibrary.Interfaces;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 
@@ -31,6 +32,8 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Properties
+        public IUserConfirmable ConfirmationObject { get; set; }
+
         public ObservableCollection<TECElectricalMaterial> ConduitTypes { get { return _conduitTypes; } }
 
         public ObservableCollection<TECController> Controllers
@@ -75,21 +78,24 @@ namespace TECUserControlLibrary.ViewModels
             }
             set
             {
-                if (selectedControllerCanSwitch())
+                if (!anItemNeedsUpdate())
                 {
                     setController();
                 }
                 else
                 {
                     string checkUpdateString = "Some connections haven't been updated. Would you like to update these connections?";
-                    MessageBoxResult result = MessageBox.Show(checkUpdateString, "Update?", MessageBoxButton.YesNoCancel);
-                    if (result == MessageBoxResult.Yes)
+                    bool? result = ConfirmationObject.Show(checkUpdateString);
+                    if (result.HasValue)
                     {
-                        updateNeedsUpdate();
-                    }
-                    else if (result == MessageBoxResult.No)
-                    {
-                        setController();
+                        if (result.Value)
+                        {
+                            updateNeedsUpdate();
+                        }
+                        else
+                        {
+                            setController();
+                        }
                     }
                     else
                     {
@@ -121,13 +127,14 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand UpdateItemCommand { get; private set; }
         public bool CanLeave
         {
-            get { return selectedControllerCanSwitch(); }
+            get { return !anItemNeedsUpdate(); }
         }
         #endregion
 
         public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             this.system = system;
+            this.ConfirmationObject = new MessageBoxService();
             _conduitTypes = new ObservableCollection<TECElectricalMaterial>(conduitTypes);
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
@@ -212,16 +219,16 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private bool selectedControllerCanSwitch()
+        private bool anItemNeedsUpdate()
         {
             foreach (SubScopeConnectionItem item in SubScope)
             {
                 if (item.NeedsUpdate)
                 {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
         private void handleControllerSelected(TECController controller)
         {
@@ -242,6 +249,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 SubScope = ssItems;
             }
+            RaisePropertyChanged("CanLeave");
         }
     }
 }

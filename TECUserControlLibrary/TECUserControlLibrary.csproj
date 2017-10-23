@@ -98,6 +98,7 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
@@ -226,6 +227,7 @@
       <DependentUpon>SystemListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\InterfaceDataTemplateSelector.cs" />
+    <Compile Include="Utilities\MessageBoxService.cs" />
     <Compile Include="ViewModels\AddVMs\AddControllerVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddEquipmentVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddMiscVM.cs" />
