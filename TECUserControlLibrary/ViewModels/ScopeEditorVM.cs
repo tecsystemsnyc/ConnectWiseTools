@@ -37,11 +37,13 @@ namespace TECUserControlLibrary.ViewModels
             setupScopeCollection();
             setupControllersPanelsTab();
             setupMiscVM();
-            TypicalEditVM = new SystemHierarchyVM(Bid);
+            TypicalEditVM = new SystemHierarchyVM(bid);
             TypicalEditVM.Selected += item =>
             {
                 Selected = item;
             };
+            InstanceEditVM = new TypicalHierarchyVM(bid);
+            InstanceEditVM.Selected += item => { Selected = item; };
             DGTabIndex = GridIndex.Systems;
             TemplatesVisibility = Visibility.Visible;
         }
@@ -74,6 +76,7 @@ namespace TECUserControlLibrary.ViewModels
         public ControllersPanelsVM ControllersPanelsTab { get; set; }
         public MiscCostsVM MiscVM { get; set; }
         public SystemHierarchyVM TypicalEditVM { get; set; }
+        public TypicalHierarchyVM InstanceEditVM { get; set; }
         #endregion
 
         #region Interface Properties

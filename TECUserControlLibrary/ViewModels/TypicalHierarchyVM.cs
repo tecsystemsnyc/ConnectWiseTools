@@ -4,26 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EstimatingLibrary;
+using GalaSoft.MvvmLight;
+using System.Collections.ObjectModel;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class TypicalHierarchyVM : SystemHierarchyVM
+    public class TypicalHierarchyVM : ViewModelBase
     {
-        private TECTypical selectedTypical;
+        private TECTypical _selectedTypical;
 
+        public SystemHierarchyVM SystemHierarchyVM { get; }
+        public ReadOnlyObservableCollection<TECTypical> TypicalSystems { get; }
         public TECTypical SelectedTypical
         {
-            get { return selectedTypical; }
+            get { return _selectedTypical; }
             set
             {
-                selectedTypical = value;
+                _selectedTypical = value;
                 RaisePropertyChanged("SelectedTypical");
-                NotifySelected(value);
+                Selected?.Invoke(value);
             }
         }
 
-        public TypicalHierarchyVM(TECScopeManager scopeManager) : base(scopeManager)
+        public TypicalHierarchyVM(TECBid bid)
         {
+            SystemHierarchyVM = new SystemHierarchyVM(bid);
+            SystemHierarchyVM.Selected += this.Selected;
+            TypicalSystems = new ReadOnlyObservableCollection<TECTypical>(bid.Systems);
         }
+
+        public event Action<TECObject> Selected;
     }
 }

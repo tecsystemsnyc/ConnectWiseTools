@@ -13,36 +13,9 @@
              d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
-            <Storyboard x:Key="typicalMove">
-                <DoubleAnimation Storyboard.TargetName="parent"
-                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.TypicalWidth)" 
-                                     To="0" From="{Binding ElementName=parent, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
-            <Storyboard x:Key="typicalMoveBack">
-                <DoubleAnimation Storyboard.TargetName="parent"
-                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.TypicalWidth)" 
-                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
-            <Storyboard x:Key="systemMove">
-                <DoubleAnimation Storyboard.TargetName="parent"
-                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.SystemWidth)" 
-                                     To="0" From="{Binding ElementName=parent, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
-            <Storyboard x:Key="systemMoveBack">
-                <DoubleAnimation Storyboard.TargetName="parent"
-                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.SystemWidth)" 
-                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
-            <Storyboard x:Key="equipmentMove">
-                <DoubleAnimation Storyboard.TargetName="parent"
-                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.EquipmentWidth)" 
-                                     To="0" From="{Binding ElementName=parent, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
-            <Storyboard x:Key="equipmentMoveBack">
-                <DoubleAnimation Storyboard.TargetName="parent"
-                                     Storyboard.TargetProperty="(local:TypicalHierarchyView.EquipmentWidth)" 
-                                     To="{Binding ElementName=parent, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
                 <Style.Setters>
                     <Setter Property="Foreground" Value="Black"/>
@@ -50,156 +23,20 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding TypicalWidth}"/>
-            <ColumnDefinition Width="{Binding SystemWidth}"/>
-            <ColumnDefinition Width="{Binding EquipmentWidth}"/>
-            <ColumnDefinition Width="{Binding HalfWidth}"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.Triggers>
-            <EventTrigger RoutedEvent="listControls:SystemListControl.Selected">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource typicalMove}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="Button.Click" SourceName="instanceBack">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource typicalMoveBack}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:EquipmentListControl.Selected">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="Button.Click" SourceName="systemBack">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Selected">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="Button.Click" SourceName="equipmentBack">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource equipmentMoveBack}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-        </Grid.Triggers>
-        <!--Column 0-->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="1" Text="Typical Systems"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-        <listControls:TypicalListControl x:Name="typicalList" Grid.Column="0" Grid.Row="1" Source="{Binding TypicalSource}"
-                                    SelectedItem="{Binding SelectedTypical}"
-                                     DropHandler="{Binding DropHandler}"/>
-        <!--Column 1-->
-        <Grid Grid.Column="1" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Back" Click="BackToTypical_Click" x:Name="instanceBack" 
-                Visibility="{Binding TypicalWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"/>
-            <TextBlock Grid.Column="1" Text="{Binding SelectedTypical.Name, StringFormat='Instances of {0}'}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-        <listControls:SystemListControl x:Name="systemList" Grid.Column="1" Grid.Row="1" Source="{Binding ElementName=typicalList, Path=SelectedItem.Instances}"
-                                    SelectedItem="{Binding SelectedSystem}"
-                                    DropHandler="{Binding DropHandler}"/>
 
-        <!--Column 2-->
-        <Grid Grid.Column="2" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Back" Click="BackToSystem_Click" x:Name="systemBack"
-                    Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"/>
-            <TextBlock Grid.Column="1" Text="{Binding SelectedTypical.Name, StringFormat='Components of {0}'}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-        <Grid  Grid.Column="2" Grid.Row="1">
-            <Grid.Resources>
-                <ResourceDictionary>
-                    <DataTemplate x:Key="EquipmentTemplate">
-                        <Grid DataContext="{Binding ElementName=parent}">
-                            <listControls:EquipmentListControl x:Name="equipmentList"
-                                       Source="{Binding ElementName=systemList, Path=SelectedItem.Equipment}"
-                                       SelectedItem="{Binding SelectedEquipment}"/>
-                        </Grid>
-                    </DataTemplate>
-                    <DataTemplate x:Key="ControllerTemplate">
-                        <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                            <listControls:ControllerListControl Source="{Binding ElementName=systemList, Path=SelectedItem.Controllers}"
-                                                              SelectedItem ="{Binding Selected}"/>
-                        </Grid>
-                    </DataTemplate>
-                    <utilities:SystemComponentSelector x:Key="ComponentSelector"
-                                             EquipmentTemplate="{StaticResource EquipmentTemplate}"
-                                             ControllerTemplate="{StaticResource ControllerTemplate}"/>
-                </ResourceDictionary>
-            </Grid.Resources>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <ComboBox Name="componentComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:SystemComponentIndex}}}"
-                                              Margin="2,5,2,5" Grid.Row="0" FontSize="12"
-                                              VerticalContentAlignment="Center"
-                                              SelectedIndex="0"/>
-            <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  
-                                                      ContentTemplateSelector="{StaticResource ComponentSelector}"
-                                                      Grid.Row="1"/>
+        <listControls:TypicalListControl
+            Source="{Binding TypicalSystems}"
+            SelectedItem="{Binding SelectedTypical}"
+            />
 
-        </Grid>
-
-        <!--Column 3-->
-        <Grid Grid.Column="3" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Back" Click="BackToEquipment_Click" x:Name="equipmentBack"
-                    Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}" />
-            <TextBlock Grid.Column="1" Text="{Binding SelectedEquipment.Name, StringFormat='Points in {0}'}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-        <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=parent, Path=SelectedEquipment.SubScope}"
-                                      SelectedItem ="{Binding SelectedSubScope}" 
-                                      Grid.Column="3" Grid.Row="1"/>
-        <!--Column 4-->
-        <Grid Grid.Column="4" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Devices" Grid.Row="0"/>
-            <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
-                                    SelectedItem="{Binding SelectedDevice}" Grid.Row="1"/>
-            <Label Content="Points" Grid.Row="2"/>
-            <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                           Grid.Row="3"/>
-        </Grid>
-
+        <local:SystemHierarchyView
+            ViewModel="{Binding SystemHierarchyVM}"
+            SystemSource="{Binding SelectedTypical.Instances}"
+            Grid.Column="1"/>
     </Grid>
 </UserControl>
