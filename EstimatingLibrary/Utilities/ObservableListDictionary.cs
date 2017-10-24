@@ -87,7 +87,7 @@ namespace EstimatingLibrary.Utilities
             }
             else
             {
-                return null;
+                return outList;
             }
         }
 

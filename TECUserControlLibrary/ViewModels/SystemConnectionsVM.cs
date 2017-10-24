@@ -193,8 +193,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void updateNeedsUpdate()
         {
-            List<SubScopeConnectionItem> ssNeedsUpdate = new List<SubScopeConnectionItem>();
-            foreach (SubScopeConnectionItem item in SubScope)
+            List<ISubScopeConnectionItem> ssNeedsUpdate = new List<ISubScopeConnectionItem>();
+            foreach (ISubScopeConnectionItem item in SubScope)
             {
                 if (item.NeedsUpdate)
                 {
@@ -203,14 +203,18 @@ namespace TECUserControlLibrary.ViewModels
             }
             updateSubScope(ssNeedsUpdate);
         }
-        private void updateItem(SubScopeConnectionItem item)
+        private void updateItem(ISubScopeConnectionItem item)
         {
-            updateSubScope(new List<SubScopeConnectionItem>() { item });
+            updateSubScope(new List<ISubScopeConnectionItem>() { item });
         }
         private void updateSubScope(IEnumerable<ISubScopeConnectionItem> subScope)
         {
             if (system is TECTypical typical)
             {
+                foreach(ISubScopeConnectionItem item in subScope)
+                {
+                    item.NeedsUpdate = false;
+                }
                 UpdateConnectionVM = new UpdateConnectionVM(subScope, typical);
             }
             else

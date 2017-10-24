@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.Models
         public bool NeedsUpdate
         {
             get { return _needsUpdate; }
-            private set
+            set
             {
                 _needsUpdate = value;
                 RaisePropertyChanged("NeedsUpdate");
