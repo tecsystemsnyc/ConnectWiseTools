@@ -11,25 +11,18 @@ namespace TECUserControlLibrary.Models
 {
     public class ScopeSummaryItem : ViewModelBase
     {
-        public TECScope scope;
-        private TECEstimator estimate;
         private ChangeWatcher watcher;
 
-        public string Name
-        {
-            get { return scope.Name; }
-        }
-        public double Total
-        {
-            get { return estimate.TotalPrice; }
-        }
+        public TECScope Scope { get; private set; }
+        public TECEstimator Estimate { get; private set; }
 
         public ScopeSummaryItem(TECScope scope, TECParameters parameters)
         {
-            this.scope = scope;
+            this.Scope = scope;
             watcher = new ChangeWatcher(scope);
-            estimate = new TECEstimator(scope, parameters, watcher);
+            Estimate = new TECEstimator(scope, parameters, watcher);
         }
+        
 
     }
 }

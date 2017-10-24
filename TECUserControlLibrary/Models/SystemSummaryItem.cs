@@ -11,28 +11,17 @@ namespace TECUserControlLibrary.Models
 {
     public class SystemSummaryItem : ViewModelBase
     {
-        public TECTypical typical;
-        private TECEstimator estimate;
+        
         private ChangeWatcher watcher;
 
-        public string Name
-        {
-            get { return typical.Name; }
-        }
-        public int Quantity
-        {
-            get { return typical.Instances.Count; }
-        }
-        public double Total
-        {
-            get { return estimate.TotalPrice; }
-        }
-        
+        public TECTypical Typical { get; private set; }
+        public TECEstimator Estimate { get; private set; }
+
         public SystemSummaryItem(TECTypical typical, TECParameters parameters)
         {
-            this.typical = typical;
+            this.Typical = typical;
             watcher = new ChangeWatcher(typical);
-            estimate = new TECEstimator(typical, parameters, watcher);
+            Estimate = new TECEstimator(typical, parameters, watcher);
         }
         
     }
