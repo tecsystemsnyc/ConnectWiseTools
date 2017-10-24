@@ -47,11 +47,11 @@ namespace TECUserControlLibrary.ViewModels
                 selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
                 Selected?.Invoke(value);
-                SystemSelected(value as TECTypical);
+                SystemSelected(value);
             }
         }
 
-        private void SystemSelected(TECTypical value)
+        private void SystemSelected(TECSystem value)
         {
             if(value != null)
             {

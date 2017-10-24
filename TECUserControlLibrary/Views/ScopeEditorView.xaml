@@ -23,12 +23,7 @@
                                            ViewModel="{Binding ElementName=scopeEditorView, Path=ViewModel.TypicalEditVM}"/>
             </DataTemplate>
             <DataTemplate x:Key="instances">
-                <views:TypicalHierarchyView TypicalSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
-                                            SelectedTypical="{Binding ElementName=scopeEditorView, Path=ViewModel.Selected, Mode=OneWayToSource}"
-                                            SelectedSystem="{Binding ElementName=scopeEditorView, Path=ViewModel.Selected, Mode=OneWayToSource}"
-                                            SelectedEquipment="{Binding ElementName=scopeEditorView, Path=ViewModel.Selected, Mode=OneWayToSource}"
-                                            SelectedSubScope="{Binding ElementName=scopeEditorView, Path=ViewModel.Selected, Mode=OneWayToSource}"
-                                            SelectedDevice="{Binding ElementName=scopeEditorView, Path=ViewModel.Selected, Mode=OneWayToSource}"/>
+                <views:TypicalHierarchyView ViewModel="{Binding ElementName=scopeEditorView, Path=ViewModel.InstanceEditVM}"/>
             </DataTemplate>
             <utilities:TypicalInstancesSelector x:Key="typicalInstanceSelector"
                                                 TypicalTemplate="{StaticResource typical}"
