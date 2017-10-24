@@ -5,7 +5,7 @@ namespace TECUserControlLibrary.Interfaces
 {
     public interface ISubScopeConnectionItem
     {
-        bool NeedsUpdate { get; }
+        bool NeedsUpdate { get; set; }
         TECSubScope SubScope { get; }
 
         event Action NeedsUpdateChanged;

@@ -52,10 +52,12 @@ namespace TECUserControlLibraryTests
             vm.ConfirmationObject = confirmable.Object;
 
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
-            ssItem1.SetupGet(x => x.NeedsUpdate).Returns(false);
+            ssItem1.SetupAllProperties();
+            ssItem1.Object.NeedsUpdate = false;
 
             Mock<ISubScopeConnectionItem> ssItem2 = new Mock<ISubScopeConnectionItem>();
-            ssItem2.SetupGet(x => x.NeedsUpdate).Returns(false);
+            ssItem2.SetupAllProperties();
+            ssItem2.Object.NeedsUpdate = false;
 
             vm.SubScope.Add(ssItem1.Object);
             vm.SubScope.Add(ssItem2.Object);
@@ -86,14 +88,12 @@ namespace TECUserControlLibraryTests
             vm.ConfirmationObject = confirmable.Object;
 
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
-            ssItem1
-                .SetupGet(x => x.NeedsUpdate)
-                .Returns(false);
+            ssItem1.SetupAllProperties();
+            ssItem1.Object.NeedsUpdate = false;
 
             Mock<ISubScopeConnectionItem> ssItem2 = new Mock<ISubScopeConnectionItem>();
-            ssItem2
-                .SetupGet(x => x.NeedsUpdate)
-                .Returns(true);
+            ssItem2.SetupAllProperties();
+            ssItem2.Object.NeedsUpdate = true;
 
             vm.SubScope.Add(ssItem1.Object);
             vm.SubScope.Add(ssItem2.Object);
@@ -108,7 +108,38 @@ namespace TECUserControlLibraryTests
         [TestMethod]
         public void TestNeedsUpdateSelectControllerYes()
         {
-            throw new NotImplementedException();
+            //Arrange
+            Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
+            confirmable
+                .Setup(x => x.Show(It.IsAny<string>()))
+                .Returns(true);
+
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+
+            TECTypical typical = new TECTypical();
+            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            typical.AddController(controller);
+
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            vm.ConfirmationObject = confirmable.Object;
+            
+            Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
+            ssItem1.SetupAllProperties();
+            ssItem1.Object.NeedsUpdate = false;
+
+            Mock<ISubScopeConnectionItem> ssItem2 = new Mock<ISubScopeConnectionItem>();
+            ssItem2.SetupAllProperties();
+            ssItem2.Object.NeedsUpdate = true;
+
+            vm.SubScope.Add(ssItem1.Object);
+            vm.SubScope.Add(ssItem2.Object);
+
+            //Act
+            vm.SelectedController = controller;
+
+            //Assert
+            Assert.IsFalse(ssItem1.Object.NeedsUpdate, "Items should be updated.");
+            Assert.IsFalse(ssItem2.Object.NeedsUpdate, "Items should be updated.");
         }
 
         [TestMethod]

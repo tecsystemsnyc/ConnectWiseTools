@@ -68,9 +68,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.typical = typical;
             List<SubScopeUpdatedWrapper> instances = new List<SubScopeUpdatedWrapper>();
-            foreach(SubScopeConnectionItem typ in subScope)
+            foreach(ISubScopeConnectionItem typ in subScope)
             {
-                foreach(TECSubScope instance in typical.TypicalInstanceDictionary.GetInstancesOfType(typ.SubScope))
+                List<TECSubScope> ssInstances = typical.TypicalInstanceDictionary.GetInstancesOfType(typ.SubScope);
+                foreach(TECSubScope instance in ssInstances)
                 {
                     SubScopeUpdatedWrapper wrapped = new SubScopeUpdatedWrapper(instance);
                     instances.Add(wrapped);
