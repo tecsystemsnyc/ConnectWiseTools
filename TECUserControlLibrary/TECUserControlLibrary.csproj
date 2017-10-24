@@ -90,8 +90,8 @@
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IUserConfirmable.cs" />
+    <Compile Include="Models\ScopeSummaryItem.cs" />
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
-    <Compile Include="Models\LCPContainer.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
     <Compile Include="Models\SystemSummaryItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
@@ -236,8 +236,6 @@
     <Compile Include="ViewModels\SplashVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\ItemizedSummaryVM.cs" />
-    <Compile Include="ViewModels\SummaryVMs\LocationSummaryVM.cs" />
-    <Compile Include="ViewModels\SummaryVMs\PanelSummaryVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\SystemSummaryVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
     <Compile Include="ViewModels\SystemConnectionsVM.cs" />
@@ -418,12 +416,6 @@
     <Compile Include="ViewModels\SettingsVM.cs" />
     <Compile Include="Views\SummaryViews\ItemizedSummaryView.xaml.cs">
       <DependentUpon>ItemizedSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SummaryViews\LocationSummaryView.xaml.cs">
-      <DependentUpon>LocationSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SummaryViews\PanelSummaryView.xaml.cs">
-      <DependentUpon>PanelSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SummaryViews\SystemSummaryView.xaml.cs">
       <DependentUpon>SystemSummaryView.xaml</DependentUpon>
@@ -839,14 +831,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SummaryViews\ItemizedSummaryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SummaryViews\LocationSummaryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SummaryViews\PanelSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -12,8 +12,6 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
     public class ItemizedSummaryVM : ViewModelBase
     {
         private SystemSummaryVM systemVM;
-        private PanelSummaryVM panelVM;
-        private LocationSummaryVM locationVM;
 
         public SystemSummaryVM SystemVM
         {
@@ -24,37 +22,15 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 RaisePropertyChanged("SystemVM");
             }
         }
-        public PanelSummaryVM PanelVM
-        {
-            get { return panelVM; }
-            set
-            {
-                panelVM = value;
-                RaisePropertyChanged("PanelVM");
-            }
-        }
-        public LocationSummaryVM LocationVM
-        {
-            get { return locationVM; }
-            set
-            {
-                locationVM = value;
-                RaisePropertyChanged("LocationVM");
-            }
-        }
 
         public ItemizedSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
             SystemVM = new SystemSummaryVM(bid, watcher);
-            PanelVM = new PanelSummaryVM(bid);
-            LocationVM = new LocationSummaryVM(bid);
         }
 
         public void Refresh(TECBid bid, ChangeWatcher watcher)
         {
             SystemVM = new SystemSummaryVM(bid, watcher);
-            PanelVM = new PanelSummaryVM(bid);
-            LocationVM = new LocationSummaryVM(bid);
         }
     }
 }

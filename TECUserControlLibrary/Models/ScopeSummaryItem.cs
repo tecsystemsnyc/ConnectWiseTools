@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
 {
-    public class SystemSummaryItem : ViewModelBase
+    public class ScopeSummaryItem : ViewModelBase
     {
-        
         private ChangeWatcher watcher;
 
-        public TECTypical Typical { get; private set; }
+        public TECScope Scope { get; private set; }
         public TECEstimator Estimate { get; private set; }
 
-        public SystemSummaryItem(TECTypical typical, TECParameters parameters)
+        public ScopeSummaryItem(TECScope scope, TECParameters parameters)
         {
-            this.Typical = typical;
-            watcher = new ChangeWatcher(typical);
-            Estimate = new TECEstimator(typical, parameters, watcher);
+            this.Scope = scope;
+            watcher = new ChangeWatcher(scope);
+            Estimate = new TECEstimator(scope, parameters, watcher);
         }
         
+
     }
 }
