@@ -10,7 +10,7 @@
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="parent"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <Storyboard x:Key="typicalMove">
