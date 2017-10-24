@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLibrary", "TestLibrary\
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Setup", "SetupProject1\Setup.wixproj", "{4C45FC47-F19A-4BCD-913F-5B06309EECD0}"
 EndProject
+Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "LaborAnalysis", "LaborAnalysis\LaborAnalysis.rxproj", "{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -252,6 +254,24 @@ Global
 		{4C45FC47-F19A-4BCD-913F-5B06309EECD0}.Working|x64.Build.0 = Release|x86
 		{4C45FC47-F19A-4BCD-913F-5B06309EECD0}.Working|x86.ActiveCfg = Release|x86
 		{4C45FC47-F19A-4BCD-913F-5B06309EECD0}.Working|x86.Build.0 = Release|x86
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Debug|x64.Build.0 = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Debug|x86.Build.0 = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Release|x64.ActiveCfg = Release|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Release|x64.Build.0 = Release|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Release|x86.Build.0 = Release|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Working|Any CPU.ActiveCfg = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Working|Any CPU.Build.0 = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Working|x64.ActiveCfg = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Working|x64.Build.0 = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Working|x86.ActiveCfg = Debug|Any CPU
+		{45FC89B7-CEB0-4B67-BDEC-B86735BA7F2C}.Working|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
