@@ -2,6 +2,7 @@ laborData = read.csv("LaborData.csv")
 
 #Remove Outliers
 #laborData <- laborData[-c(358, 364, 368, 399, 405, 410, 430, 442, 443, 473, 474, 476, 481, 506),]
+#laborData <- laborData[-c(430, 476, 506),]
 
 #Prepare Data
 #laborData$above100k <- ifelse(laborData$tot_mat + laborData$tot_sub > 100000, 1, 0)
