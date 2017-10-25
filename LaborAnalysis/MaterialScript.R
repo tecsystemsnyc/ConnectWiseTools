@@ -34,23 +34,5 @@ abline(a = 0, b = 1)
 par(mfrow = c(2, 2))
 plot(belowEngModel)
 
-#sub100LaborData <- with(laborData, laborData[(tot_mat + tot_sub) < 1e5,])
-#over100LaborData <- with(laborData, laborData[(tot_mat + tot_sub) >= 1e5, ])
 
-#subEngModel <- lm(En_hours ~ sum(tot_mat, tot_sub), data = sub100LaborData)
-#overEngModel <- lm(En_hours ~ sum(tot_mat, tot_sub), data = over100LaborData)
-
-#summary(subEngModel)
-#summary(overEngModel)
-
-#par(mfrow = c(1, 2))
-#plot(predict(subEngModel), sub100LaborData$En_hours, xlab = "predicted", ylab = "actual", title="Under 100k")
-#abline(a = 0, b=1)
-#plot(predict(overEngModel), over100LaborData$En_hours, xlab = "predicted", ylab = "actual", title="Over 100k")
-#abline(a = 0, b = 1)
-
-#par(mfrow = c(2, 2))
-#plot(subEngModel)
-#par(mfrow = c(2, 2))
-#plot(overEngModel)
 

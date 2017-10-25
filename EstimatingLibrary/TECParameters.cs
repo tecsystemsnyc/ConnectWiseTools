@@ -26,7 +26,7 @@ namespace EstimatingLibrary
         private bool _requiresBond;
         private bool _requiresWrapUp;
         private bool _hasBMS;
-       
+
         public double Escalation
         {
             get { return _escalation; }
@@ -180,6 +180,8 @@ namespace EstimatingLibrary
         }
         #endregion
         #region Labor
+
+        
         #region PM
         private double _pmCoef;
         public double PMCoef
@@ -190,6 +192,18 @@ namespace EstimatingLibrary
                 var old = PMCoef;
                 _pmCoef = value;
                 notifyCombinedChanged(Change.Edit, "PMCoef", this, value, old);
+            }
+        }
+
+        private double _pmCoefStdError;
+        public double PMCoefStdError
+        {
+            get { return _pmCoefStdError; }
+            set
+            {
+                var old = PMCoefStdError;
+                _pmCoefStdError = value;
+                notifyCombinedChanged(Change.Edit, "PMCoefStdError", this, value, old);
             }
         }
 
@@ -220,6 +234,18 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "ENGCoef", this, value, old);
 
 
+            }
+        }
+
+        private double _engCoefStdError;
+        public double ENGCoefStdError
+        {
+            get { return _engCoefStdError; }
+            set
+            {
+                var old = ENGCoefStdError;
+                _engCoefStdError = value;
+                notifyCombinedChanged(Change.Edit, "ENGCoefStdError", this, value, old);
             }
         }
 
@@ -255,6 +281,18 @@ namespace EstimatingLibrary
             }
         }
 
+        private double _commCoefStdError;
+        public double CommCoefStdError
+        {
+            get { return _commCoefStdError; }
+            set
+            {
+                var old = CommCoefStdError;
+                _commCoefStdError = value;
+                notifyCombinedChanged(Change.Edit, "CommCoefStdError", this, value, old);
+            }
+        }
+
         private double _commRate;
         public double CommRate
         {
@@ -286,7 +324,19 @@ namespace EstimatingLibrary
 
             }
         }
-        
+
+        private double _softCoefStdError;
+        public double SoftCoefStdError
+        {
+            get { return _softCoefStdError; }
+            set
+            {
+                var old = SoftCoefStdError;
+                _softCoefStdError = value;
+                notifyCombinedChanged(Change.Edit, "SoftCoefStdError", this, value, old);
+            }
+        }
+
         private double _softRate;
         public double SoftRate
         {
@@ -315,7 +365,19 @@ namespace EstimatingLibrary
 
             }
         }
-        
+
+        private double _graphCoefStdError;
+        public double GraphCoefStdError
+        {
+            get { return _graphCoefStdError; }
+            set
+            {
+                var old = GraphCoefStdError;
+                _graphCoefStdError = value;
+                notifyCombinedChanged(Change.Edit, "GraphCoefStdError", this, value, old);
+            }
+        }
+
         private double _graphRate;
         public double GraphRate
         {
@@ -582,5 +644,30 @@ namespace EstimatingLibrary
             raisePropertyChanged("ElectricalEffectiveRate");
             raisePropertyChanged("ElectricalSuperEffectiveRate");
         }
+
+        private double effectiveCoef(double coefficient, double stdError, Confidence confidence)
+        {
+            return coefficient + (stdError * zValues[confidence]);
+        }
+
+        private static Dictionary<Confidence, double> zValues = new Dictionary<EstimatingLibrary.Confidence, double>()
+        {
+            { Confidence.ThirtyThree, -0.44},
+            { Confidence.Fifty, 0.0 },
+            { Confidence.SixtySix, 0.43 },
+            { Confidence.Eighty, 0.85 },
+            { Confidence.Ninety, 1.29 },
+            { Confidence.NinetyFive, 1.65 }
+        };
+    }
+
+    public enum Confidence
+    {
+        ThirtyThree,
+        Fifty,
+        SixtySix,
+        Eighty,
+        Ninety,
+        NinetyFive
     }
 }
