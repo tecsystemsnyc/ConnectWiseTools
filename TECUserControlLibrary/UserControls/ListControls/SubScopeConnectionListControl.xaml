@@ -34,7 +34,8 @@
                         SubScopeConnectionItem="{Binding}"
                         ConduitTypes="{Binding ElementName=subScopeConnectionListControl, Path=ConduitTypes}"
                         ReadOnly="{Binding ElementName=subScopeConnectionListControl, Path=ReadOnly}"
-                        UpdateCommand="{Binding ElementName=subScopeConnectionListControl, Path=UpdateCommand}"/>
+                        UpdateCommand="{Binding ElementName=subScopeConnectionListControl, Path=UpdateCommand}"
+                        UpdateButtonVisibility="{Binding ElementName=subScopeConnectionListControl, Path=UpdateButtonVisibility}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

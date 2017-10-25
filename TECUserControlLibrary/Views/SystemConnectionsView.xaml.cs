@@ -38,6 +38,18 @@ namespace TECUserControlLibrary.Views
 
 
 
+        public bool IsTypical
+        {
+            get { return (bool)GetValue(IsTypicalProperty); }
+            set { SetValue(IsTypicalProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsTypical.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsTypicalProperty =
+            DependencyProperty.Register("IsTypical", typeof(bool), typeof(SystemConnectionsView), new PropertyMetadata(false));
+
+
+
         public UpdateConnectionVM UpdateConnectionVM
         {
             get { return (UpdateConnectionVM)GetValue(UpdateConnectionVMProperty); }

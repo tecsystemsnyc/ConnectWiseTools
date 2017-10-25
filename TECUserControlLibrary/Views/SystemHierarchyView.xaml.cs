@@ -34,6 +34,22 @@ namespace TECUserControlLibrary.Views
             set { SetValue(ModalHeightProperty, value); }
         }
 
+
+
+
+        public bool IsTypical
+        {
+            get { return (bool)GetValue(IsTypicalProperty); }
+            set { SetValue(IsTypicalProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsTypical.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsTypicalProperty =
+            DependencyProperty.Register("IsTypical", typeof(bool), typeof(SystemHierarchyView), new PropertyMetadata(false));
+
+
+
+
         public static readonly DependencyProperty ModalHeightProperty =
             DependencyProperty.Register("ModalHeight", typeof(double),
               typeof(SystemHierarchyView), new PropertyMetadata(0.0));
