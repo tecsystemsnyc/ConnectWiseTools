@@ -36,6 +36,7 @@
 
         <local:SystemHierarchyView
             ViewModel="{Binding SystemHierarchyVM}"
+            IsTypical="True"
             SystemSource="{Binding SelectedTypical.Instances}"
             Grid.Column="1"/>
     </Grid>

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="systemConnectionsView"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -63,16 +64,37 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button Content="Update All"
-                Command="{Binding UpdateAllCommand}"
-                Margin="5"
-                Click="updateStarted"/>
+                        Command="{Binding UpdateAllCommand}"
+                        Margin="5"
+                        Click="updateStarted"
+                        Visibility="{Binding 
+                    ElementName=systemConnectionsView, 
+                    Path=IsTypical, 
+                    Converter={utilities:BooleanToVisibilityConverter}}"/>
                 <listControls:SubScopeConnectionListControl
                     Source="{Binding SubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
                     UpdateCommand="{Binding UpdateItemCommand}"
                     DropHandler="{Binding}"
                     ReadOnly="False"
-                    Grid.Row="1"/>
+                    Grid.Row="1">
+                    <listControls:SubScopeConnectionListControl.Resources>
+                        <Visibility x:Key="Visible">
+                            Visible
+                        </Visibility>
+                        <Visibility x:Key="Collapsed">
+                            Collapsed
+                        </Visibility>
+                    </listControls:SubScopeConnectionListControl.Resources>
+                    <listControls:SubScopeConnectionListControl.UpdateButtonVisibility>
+                        <MultiBinding Converter="{utilities:BooleanChoiceConverter}">
+                            <Binding ElementName="systemConnectionsView" Path="IsTypical"/>
+                            <Binding Source="{StaticResource Visible}"/>
+                            <Binding Source="{StaticResource Collapsed}"/>
+                            <Binding Source="{StaticResource Visible}"/>
+                        </MultiBinding>
+                    </listControls:SubScopeConnectionListControl.UpdateButtonVisibility>
+                </listControls:SubScopeConnectionListControl>
             </Grid>
         </Border>
     </Grid>

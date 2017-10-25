@@ -68,6 +68,19 @@ namespace TECUserControlLibrary.UserControls.ItemControls
 
 
 
+        public Visibility UpdateButtonVisibility
+        {
+            get { return (Visibility)GetValue(UpdateButtonVisibilityProperty); }
+            set { SetValue(UpdateButtonVisibilityProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UpdateButtonVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UpdateButtonVisibilityProperty =
+            DependencyProperty.Register("UpdateButtonVisibility", typeof(Visibility), typeof(SubScopeConnectionItemControl));
+
+
+
+
         public SubScopeConnectionItemControl()
         {
             InitializeComponent();
