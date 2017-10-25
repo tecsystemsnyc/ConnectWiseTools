@@ -252,7 +252,8 @@
                             </DataTemplate>
                             <DataTemplate x:Key="ProposalTemplate">
                                 <Grid>
-                                    <controls:ScopeTreeGridControl ScopeTreeSource="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.ScopeBranches}"/>
+                                    <controls:ScopeTreeGridControl ScopeTreeSource="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.ScopeBranches}"
+                                                                   AddCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddScopeBranchCommand}"/>
                                 </Grid>
                             </DataTemplate>
                             <utilities:SystemComponentSelector x:Key="ComponentSelector"
