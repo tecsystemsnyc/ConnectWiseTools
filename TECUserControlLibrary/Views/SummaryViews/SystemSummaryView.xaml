@@ -41,17 +41,20 @@
             <ListView ItemsSource="{Binding Systems}" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Typical.Name}"/>
-                            <TextBlock Text="{Binding Typical.Instances.Count, StringFormat=Qty. {0}}" Grid.Column="1"/>
-                            <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}}" Grid.Column="2"
+                        <Border BorderThickness="0,0,0,2" BorderBrush="Gray">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Typical.Name}"/>
+                                <TextBlock Text="{Binding Typical.Instances.Count, StringFormat=Qty. {0}}" Grid.Column="1"/>
+                                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}}" Grid.Column="2"
                                        HorizontalAlignment="Right"/>
-                        </Grid>
+                            </Grid>
+                        </Border>
+                        
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -69,15 +72,17 @@
             <ListView ItemsSource="{Binding Riser}" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Scope.Name}"/>
-                            <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}}" Grid.Column="1"
+                        <Border BorderThickness="0,0,0,2" BorderBrush="Gray">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Scope.Name}"/>
+                                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}}" Grid.Column="1"
                                        HorizontalAlignment="Right"/>
-                        </Grid>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -95,15 +100,17 @@
             <ListView ItemsSource="{Binding Misc}" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Scope.Name}"/>
-                            <TextBlock Text="{Binding Estiamte.TotalPrice, StringFormat={}{0:C}}" Grid.Column="1"
+                        <Border BorderThickness="0,0,0,2" BorderBrush="Gray">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Scope.Name}"/>
+                                <TextBlock Text="{Binding Estiamte.TotalPrice, StringFormat={}{0:C}}" Grid.Column="1"
                                        HorizontalAlignment="Right"/>
-                        </Grid>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

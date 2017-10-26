@@ -28,15 +28,13 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class SystemHierarchyView : UserControl
     {
+        
         public double ModalHeight
         {
             get { return (double)GetValue(ModalHeightProperty); }
             set { SetValue(ModalHeightProperty, value); }
         }
-
-
-
-
+        
         public bool IsTypical
         {
             get { return (bool)GetValue(IsTypicalProperty); }
@@ -46,13 +44,17 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for IsTypical.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsTypicalProperty =
             DependencyProperty.Register("IsTypical", typeof(bool), typeof(SystemHierarchyView), new PropertyMetadata(false));
-
-
-
-
+        
         public static readonly DependencyProperty ModalHeightProperty =
             DependencyProperty.Register("ModalHeight", typeof(double),
-              typeof(SystemHierarchyView), new PropertyMetadata(0.0));
+              typeof(SystemHierarchyView), new PropertyMetadata(0.0, new PropertyChangedCallback(OnUpdateConnectionVMChanged)));
+        
+        private static void OnUpdateConnectionVMChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            SystemHierarchyView thisView = dependencyObject as SystemHierarchyView;
+            Grid grid = (Grid)thisView.FindName("mainGrid");
+            grid.IsEnabled = (double)e.NewValue >= thisView.ActualHeight;
+        }
 
         public double HalfWidth
         {
@@ -296,7 +298,6 @@ namespace TECUserControlLibrary.Views
                 Storyboard move = (Storyboard)FindResource("systemMove");
                 move.Begin();
             }
-            
             
         }
 

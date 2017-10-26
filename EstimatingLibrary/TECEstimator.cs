@@ -223,6 +223,11 @@ namespace EstimatingLibrary
         {
             get { return getTotalCost(); }
         }
+
+        public double Markup
+        {
+            get { return TotalPrice - TotalCost; }
+        }
         #endregion
 
         public TECEstimator(TECBid Bid, ChangeWatcher watcher) : base(Guid.NewGuid())
@@ -774,6 +779,7 @@ namespace EstimatingLibrary
             raisePropertyChanged("TotalPrice");
             raisePropertyChanged("PricePerPoint");
             raisePropertyChanged("Margin");
+            raisePropertyChanged("Markup");
         }
         private void raiseAll()
         {
