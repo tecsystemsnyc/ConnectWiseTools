@@ -46,11 +46,13 @@
                     Content="Done"
                     Margin="2"
                     Command="{Binding Path=ViewModel.EndSearchCommand}"/>
-            <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:AllSearchableObjects}}}"
-                      SelectedItem="{Binding Path=ViewModel.ChosenType}"
+            <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.SearchSelectorList}}"
+                      DisplayMemberPath="Item1"    
+                  SelectedValuePath="Item2"
+                  SelectedIndex="0"
+                      SelectedValue="{Binding Path=ViewModel.ChosenType}"
                                               Margin="2" Grid.Row="1" FontSize="12"
-                                              VerticalContentAlignment="Center"
-                                              SelectedIndex="0">
+                                              VerticalContentAlignment="Center">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding ElementName=parent, Path=ViewModel.SearchCollectionCommand}"/>

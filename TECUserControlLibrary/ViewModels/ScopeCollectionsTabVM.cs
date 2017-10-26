@@ -145,6 +145,12 @@ namespace TECUserControlLibrary.ViewModels
                 case AllSearchableObjects.Wires:
                     ResultCollection = getResultCollection(Templates.Catalogs.ConnectionTypes, searchCriteria);
                     break;
+                case AllSearchableObjects.Conduits:
+                    ResultCollection = getResultCollection(Templates.Catalogs.ConduitTypes, searchCriteria);
+                    break;
+                case AllSearchableObjects.Valves:
+                    ResultCollection = getResultCollection(Templates.Catalogs.Valves, searchCriteria);
+                    break;
                 default:
                     break;
 
