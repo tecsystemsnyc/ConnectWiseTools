@@ -447,6 +447,16 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, MaterialType>("Tag", MaterialType.Tag)
         };
 
+        public static List<Tuple<string, Confidence>> ConfidenceSelectorList = new List<Tuple<string, Confidence>>
+        {
+            new Tuple<string, Confidence>("33%", Confidence.ThirtyThree),
+            new Tuple<string, Confidence>("50%", Confidence.Fifty),
+            new Tuple<string, Confidence>("66%", Confidence.SixtySix),
+            new Tuple<string, Confidence>("80%", Confidence.Eighty),
+            new Tuple<string, Confidence>("90%", Confidence.Ninety),
+            new Tuple<string, Confidence>("95%", Confidence.NinetyFive)
+        };
+
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
        where T : DependencyObject
         {
