@@ -36,7 +36,7 @@
 
         <!--Controllers-->
         <Border Grid.RowSpan="2">
-            <Grid>
+            <Grid x:Name="controllerList">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
@@ -44,8 +44,9 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.Resources>
+                    <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=systemConnectionsView, Path=ViewModel}"/>
                     <DataTemplate x:Key="cannotConnectAdorner">
-                        <Label Content="{Binding ElementName=systemConnectionsView, Path=ViewModel.CannotConnectMessage}"/>
+                        <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
                     </DataTemplate>
                 </Grid.Resources>
                 <Label Content="Controllers"/>
