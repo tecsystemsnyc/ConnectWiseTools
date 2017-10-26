@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Interfaces;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.UserControls.ListControls
@@ -21,7 +22,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
     /// <summary>
     /// Interaction logic for TypicalSubScopeListControl.xaml
     /// </summary>
-    public partial class SubScopeConnectionListControl : BaseListControl<SubScopeConnectionItem>
+    public partial class SubScopeConnectionListControl : BaseListControl<ISubScopeConnectionItem>
     {
         public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {

@@ -1,5 +1,5 @@
 ﻿<local:BaseListControl 
-    x:TypeArguments="models:SubScopeConnectionItem"
+    x:TypeArguments="interfaces:ISubScopeConnectionItem"
     x:Class="TECUserControlLibrary.UserControls.ListControls.SubScopeConnectionListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,6 +7,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
     xmlns:models="clr-namespace:TECUserControlLibrary.Models"
+    xmlns:interfaces="clr-namespace:TECUserControlLibrary.Interfaces"
     xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
