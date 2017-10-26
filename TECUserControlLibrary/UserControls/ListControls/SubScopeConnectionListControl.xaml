@@ -27,6 +27,7 @@
                   SelectedItem="{Binding SelectedItem}"
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
+                  dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   AllowDrop="True"
                   Drop="ListView_Dropped">
             <ListView.ItemTemplate>
