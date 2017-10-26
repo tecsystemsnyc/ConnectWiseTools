@@ -179,7 +179,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (!SelectedController.CanConnectSubScope(subScope))
                 {
-                    CannotConnectMessage = "Subscope incompatible with Controller.";
+                    CannotConnectMessage = "Available Controller IO incompatible with SubScope.";
                 }
                 else if (UIHelpers.TargetCollectionIsType(dropInfo, typeof(ISubScopeConnectionItem)))
                 {
