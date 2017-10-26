@@ -230,7 +230,8 @@
 
 
             <!--SubContractor-->
-            <Border BorderBrush="Gray" BorderThickness="1,0,0,0"  Grid.Row="4" Grid.RowSpan="8" Grid.Column="2" Grid.ColumnSpan="2">
+            <Border BorderBrush="Gray" BorderThickness="1,0,0,0"  Grid.Row="4" Grid.RowSpan="8" Grid.Column="2" Grid.ColumnSpan="2"
+                    Margin="5,0,0,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -330,6 +331,9 @@
                 <TextBlock Text="{Binding Estimate.PricePerPoint, StringFormat= {} {0:C}}" 
                Grid.Row="1" Grid.Column="1"
                TextAlignment="Right"/>
+                <Label Content="Margin: " Grid.Row="2"/>
+                <TextBlock Text="{Binding Estimate.Margin, StringFormat={}{0}%, Converter={utilities:PercentageToNumberConverter}}"
+                           Grid.Row="2" Grid.Column="1"/>
                 <Label Content="Set Price:" 
             Grid.Row="3" Grid.Column="0"/>
                 <TextBox Text="{Binding UserPrice, StringFormat= {} {0:C}}"
