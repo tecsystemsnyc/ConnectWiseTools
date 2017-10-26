@@ -134,7 +134,7 @@
                 </EventTrigger.Actions>
             </EventTrigger>
         </Grid.Triggers>
-        <Grid DataContext="{Binding ElementName=systemHierarchyView}">
+        <Grid DataContext="{Binding ElementName=systemHierarchyView}" x:Name="mainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding SystemWidth}"/>
                 <ColumnDefinition Width="{Binding EquipmentWidth}"/>

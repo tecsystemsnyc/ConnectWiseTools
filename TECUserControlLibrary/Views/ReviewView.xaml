@@ -113,12 +113,33 @@
                Grid.Row="2" Grid.Column="1"
                TextAlignment="Right" />
 
-                <Label Content="Shipping (3%):" Grid.Row="3"/>
+                <Grid  Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Shipping:"/>
+                    <TextBox Text="{Binding Bid.Parameters.Shipping, StringFormat={}{0}%}"
+                             Grid.Column="1" Margin="2"
+                             HorizontalContentAlignment="Right"/>
+                </Grid>
                 <TextBlock Text="{Binding Estimate.TECShipping, StringFormat= {} {0:C}}"
                    Grid.Row="3" Grid.Column="1"
                    TextAlignment="Right"/>
+                <Grid  Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Warranty:"/>
+                    <TextBox Text="{Binding Bid.Parameters.Warranty, StringFormat={}{0}%}"
+                             Grid.Column="1" Margin="2"
+                             HorizontalContentAlignment="Right"/>
+                </Grid>
+                <TextBlock Text="{Binding Estimate.TECWarranty, StringFormat= {} {0:C}}"
+                   Grid.Row="4" Grid.Column="1"
+                   TextAlignment="Right"/>
 
-                <Label Content="Warranty (5%):" Grid.Row="4"/>
                 <TextBlock Text="{Binding Estimate.TECWarranty, StringFormat= {} {0:C}}"
                    Grid.Row="4" Grid.Column="1"
                    TextAlignment="Right"/>
@@ -165,26 +186,36 @@
             
             
 
-            <Grid  Grid.Column="4" Grid.Row="1">
+            <Grid  Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Content="Tax Exempt:"/>
                 <CheckBox IsChecked="{Binding Bid.Parameters.IsTaxExempt}"
                   HorizontalAlignment="Right" VerticalAlignment="Center"
                  Grid.Column="1" Margin="0,0,5,0"/>
+                <Label Content="Tax Rate:" Grid.Column="2"/>
+                <TextBox Text="{Binding Bid.Parameters.Tax, StringFormat={}{0}%}"
+                         Grid.Column="3" Margin="2"/>
             </Grid>
 
-            <Grid  Grid.Column="4" Grid.Row="2">
+            <Grid  Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Bond:" />
                 <CheckBox IsChecked="{Binding Bid.Parameters.RequiresBond}"
                                     HorizontalAlignment="Right" VerticalAlignment="Center"
                  Grid.Column="1" Margin="0,0,5,0"/>
+                <Label Content="Bond Rate:" Grid.Column="2"/>
+                <TextBox Text="{Binding Bid.Parameters.BondRate, StringFormat={}{0}%}"
+                         Grid.Column="3" Margin="2"/>
             </Grid>
             <!--<Grid  Grid.Column="5" Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -221,12 +252,30 @@
                Grid.Row="1" Grid.Column="1"
                TextAlignment="Right"/>
 
-                <Label Content="Shipping (3%):" Grid.Row="2"/>
+                <Grid  Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Shipping:"/>
+                    <TextBox Text="{Binding Bid.Parameters.SubcontractorShipping, StringFormat={}{0}%}"
+                             Grid.Column="1" Margin="2"
+                             HorizontalContentAlignment="Right"/>
+                </Grid>
                 <TextBlock Text="{Binding Estimate.ElectricalShipping, StringFormat= {} {0:C}}"
                    Grid.Row="2" Grid.Column="1"
                    TextAlignment="Right"/>
 
-                <Label Content="Warranty (5%):" Grid.Row="3"/>
+                <Grid  Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Warranty:"/>
+                    <TextBox Text="{Binding Bid.Parameters.SubcontractorWarranty, StringFormat={}{0}%}"
+                             Grid.Column="1" Margin="2"
+                             HorizontalContentAlignment="Right"/>
+                </Grid>
                 <TextBlock Text="{Binding Estimate.ElectricalWarranty, StringFormat= {} {0:C}}"
                    Grid.Row="3" Grid.Column="1"
                    TextAlignment="Right"/>
@@ -295,7 +344,7 @@
             TextAlignment="Right"/>
                 <Label Content="Total Markup:" 
             Grid.Row="2" Grid.Column="2"/>
-                <TextBlock Text="{Binding Markup, StringFormat=' \{0:C\}'}"
+                <TextBlock Text="{Binding Estimate.Markup, StringFormat=' \{0:C\}'}"
             Grid.Row="2"
             Grid.Column="3"
             TextAlignment="Right"/>
