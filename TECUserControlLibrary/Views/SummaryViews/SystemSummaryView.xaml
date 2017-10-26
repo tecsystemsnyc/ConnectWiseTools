@@ -21,7 +21,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=systemSummaryView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=systemSummaryView, Path=ViewModel}" Background="{StaticResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -37,7 +37,10 @@
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Label Content="Systems"/>
+            <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+                <Label Content="Systems"/>
+
+            </Border>
             <ListView ItemsSource="{Binding Systems}" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -58,8 +61,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="{Binding SystemTotal, StringFormat={}{0:C}}" Grid.Row="2"
-                       HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding SystemTotal, StringFormat=Total: {0:C}}" Grid.Row="2"
+                       HorizontalAlignment="Right" FontWeight="Bold"/>
         </Grid>
         <!--Riser List-->
         <Grid Grid.Column="1">
@@ -68,7 +71,10 @@
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Label Content="Bid Controllers and Panels"/>
+            <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+
+                <Label Content="Bid Controllers and Panels"/>
+            </Border>
             <ListView ItemsSource="{Binding Riser}" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -86,8 +92,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="{Binding RiserTotal, StringFormat={}{0:C}}" Grid.Row="2"
-                       HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding RiserTotal, StringFormat=Total: {0:C}}" Grid.Row="2"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold"/>
         </Grid>
         <!--Misc List-->
         <Grid Grid.Column="1" Grid.Row="1">
@@ -96,7 +103,10 @@
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Label Content="Bid Misc."/>
+            <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+
+                <Label Content="Bid Misc."/>
+            </Border>
             <ListView ItemsSource="{Binding Misc}" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -114,8 +124,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="{Binding MiscTotal, StringFormat={}{0:C}}" Grid.Row="2"
-                       HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding MiscTotal, StringFormat=Total: {0:C}}" Grid.Row="2"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold"/>
         </Grid>
     </Grid>
 </views:BaseView>

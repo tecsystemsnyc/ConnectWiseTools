@@ -233,7 +233,15 @@ namespace EstimatingLibrary
         public TECEstimator(TECBid Bid, ChangeWatcher watcher) : base(Guid.NewGuid())
         {
             parameters = Bid.Parameters;
+            parameters.PropertyChanged += (sender, e) =>
+            {
+                raiseAll();
+            };
             extraLabor = Bid.ExtraLabor;
+            extraLabor.PropertyChanged += (sender, e) =>
+            {
+                raiseAll();
+            };
             getInitialValues(Bid);
             watcher.CostChanged += CostChanged;
             watcher.PointChanged += PointChanged;
@@ -241,6 +249,10 @@ namespace EstimatingLibrary
         public TECEstimator(TECObject initalObject, TECParameters parameters, ChangeWatcher watcher) : base(Guid.NewGuid())
         {
             this.parameters = parameters;
+            parameters.PropertyChanged += (sender, e) =>
+            {
+                raiseAll();
+            };
             extraLabor = new TECExtraLabor(Guid.NewGuid());
             getInitialValues(initalObject);
             watcher.CostChanged += CostChanged;
