@@ -8,12 +8,14 @@
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
+             xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="systemConnectionsView"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <Style TargetType="local:SystemConnectionsView">
             <Setter Property="UpdateConnectionVM" Value="{Binding ElementName=systemConnectionsView, Path=ViewModel.UpdateConnectionVM}"/>
         </Style>
+        
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=systemConnectionsView, Path=ViewModel}">
         <Grid.Resources>
@@ -51,7 +53,8 @@
                 <Label Content="Unconnected Points" Grid.Row="2"/>
                 <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
                                                   IsDragSource="True"
-                                                  DropHandler="{Binding}" Grid.Row="3"/>
+                                                  DropHandler="{Binding}" Grid.Row="3"
+                                                  />
                 <Border Grid.Row="2" Grid.RowSpan="2"/>
             </Grid>
         </Border>
