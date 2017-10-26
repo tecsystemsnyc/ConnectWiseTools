@@ -15,9 +15,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate x:Key="connectionAdorner">
-                <Label Content="Hello!"/>
-            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -27,7 +24,7 @@
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
-                  dd:DragDrop.DragAdornerTemplate="{StaticResource connectionAdorner}"
+                  dd:DragDrop.DragAdornerTemplate="{Binding DragAdornerTemplate}"
                   AllowDrop="True"
                   Drop="ListView_Dropped"
                   MouseUp="ListView_MouseUp"

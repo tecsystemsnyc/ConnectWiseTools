@@ -108,7 +108,21 @@ namespace TECUserControlLibrary.UserControls.ListControls
         // Using a DependencyProperty as the backing store for DeleteCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(BaseListControl<T>));
-        
+
+
+
+        public DataTemplate DragAdornerTemplate
+        {
+            get { return (DataTemplate)GetValue(DragAdornerTemplateProperty); }
+            set { SetValue(DragAdornerTemplateProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DragAdornerTemplate.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DragAdornerTemplateProperty =
+            DependencyProperty.Register("DragAdornerTemplate", typeof(DataTemplate), typeof(BaseListControl<T>));
+
+
+
         protected void ListView_Selected(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
