@@ -24,15 +24,15 @@ namespace TECUserControlLibrary.UserControls.ListControls
     /// </summary>
     public partial class SubScopeConnectionListControl : BaseListControl<ISubScopeConnectionItem>
     {
-        public ObservableCollection<TECElectricalMaterial> ConduitTypes
+        public IEnumerable<TECElectricalMaterial> ConduitTypes
         {
-            get { return (ObservableCollection<TECElectricalMaterial>)GetValue(ConduitTypesProperty); }
+            get { return (IEnumerable<TECElectricalMaterial>)GetValue(ConduitTypesProperty); }
             set { SetValue(ConduitTypesProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ConduitTypes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConduitTypesProperty =
-            DependencyProperty.Register("ConduitTypes", typeof(ObservableCollection<TECElectricalMaterial>), typeof(SubScopeConnectionListControl), new PropertyMetadata(default(ObservableCollection<TECElectricalMaterial>)));
+            DependencyProperty.Register("ConduitTypes", typeof(IEnumerable<TECElectricalMaterial>), typeof(SubScopeConnectionListControl));
 
         public bool ReadOnly
         {

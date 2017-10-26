@@ -175,7 +175,11 @@ namespace TECUserControlLibrary.ViewModels
         {
             bool sameController = (instanceController == equivalentInstanceController);
 
-            if (!sameController)
+            if (sameController)
+            {
+                updateProperties(SelectedTypical, SelectedInstance.SubScope);
+            }
+            else
             {
                 if (instanceController != null)
                 {
@@ -185,10 +189,10 @@ namespace TECUserControlLibrary.ViewModels
                 if (equivalentInstanceController != null)
                 {
                     equivalentInstanceController.AddSubScope(SelectedInstance.SubScope);
+                    updateProperties(SelectedTypical, SelectedInstance.SubScope);
                 }
-                
             }
-            updateProperties(SelectedTypical, SelectedInstance.SubScope);
+            
 
             SelectedInstance.Updated = true;
             instanceCanUpdate = false;
