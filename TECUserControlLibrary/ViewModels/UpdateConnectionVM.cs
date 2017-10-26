@@ -158,7 +158,14 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        instanceCanUpdate = equivalentInstanceController.CanConnectSubScope(SelectedInstance.SubScope);
+                        if (equivalentInstanceController == null)
+                        {
+                            instanceCanUpdate = true;
+                        }
+                        else
+                        {
+                            instanceCanUpdate = equivalentInstanceController.CanConnectSubScope(SelectedInstance.SubScope);
+                        }
                     }
                 }
             }
@@ -168,15 +175,20 @@ namespace TECUserControlLibrary.ViewModels
         {
             bool sameController = (instanceController == equivalentInstanceController);
 
-            if (sameController)
+            if (!sameController)
             {
-                updateProperties(SelectedTypical, SelectedInstance.SubScope);
+                if (instanceController != null)
+                {
+                    instanceController.RemoveSubScope(SelectedInstance.SubScope);
+                }
+
+                if (equivalentInstanceController != null)
+                {
+                    equivalentInstanceController.AddSubScope(SelectedInstance.SubScope);
+                }
+                
             }
-            else
-            {
-                equivalentInstanceController.AddSubScope(SelectedInstance.SubScope);
-                updateProperties(SelectedTypical, SelectedInstance.SubScope);
-            }
+            updateProperties(SelectedTypical, SelectedInstance.SubScope);
 
             SelectedInstance.Updated = true;
             instanceCanUpdate = false;

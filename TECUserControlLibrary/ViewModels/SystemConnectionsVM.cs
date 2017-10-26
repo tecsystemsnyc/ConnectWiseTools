@@ -231,6 +231,7 @@ namespace TECUserControlLibrary.ViewModels
                             updateItem(ssConnectItem);
                         }
                         SubScope.Remove(ssConnectItem);
+                        UnconnectedSubScope.Add(ssConnectItem.SubScope);
                     }
                 }
                 else
