@@ -83,6 +83,7 @@
                     Source="{Binding SubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
                     UpdateCommand="{Binding UpdateItemCommand}"
+                    IsDragSource="True"
                     DropHandler="{Binding}"
                     ReadOnly="False"
                     Grid.Row="1">

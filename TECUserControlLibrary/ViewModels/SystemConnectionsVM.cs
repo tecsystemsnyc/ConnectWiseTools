@@ -170,6 +170,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             CannotConnectMessage = "";
             TECSubScope subScope = dropInfo.Data as TECSubScope;
+            ISubScopeConnectionItem ssConnectItem = dropInfo.Data as ISubScopeConnectionItem;
 
             if (subScope != null)
             {
@@ -187,26 +188,55 @@ namespace TECUserControlLibrary.ViewModels
                     dropInfo.Effects = DragDropEffects.Copy;
                 }
             }
+            else if (ssConnectItem != null && UIHelpers.TargetCollectionIsType(dropInfo, typeof(TECSubScope)))
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
         }
 
         public void Drop(IDropInfo dropInfo)
         {
             TECSubScope subScope = dropInfo.Data as TECSubScope;
-            SelectedController.AddSubScope(subScope);
-            UnconnectedSubScope.Remove(subScope);
-            if (system is TECTypical)
+            ISubScopeConnectionItem ssConnectItem = dropInfo.Data as ISubScopeConnectionItem;
+
+            if (subScope != null)
             {
-                SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(subScope, needsUpdate: true);
-                SubScope.Add(ssConnectItem);
-                ssConnectItem.NeedsUpdateChanged += () =>
+                SelectedController.AddSubScope(subScope);
+                UnconnectedSubScope.Remove(subScope);
+                if (system is TECTypical)
                 {
+                    SubScopeConnectionItem newSSConnectItem = new SubScopeConnectionItem(subScope, needsUpdate: true);
+                    SubScope.Add(newSSConnectItem);
+                    newSSConnectItem.NeedsUpdateChanged += () =>
+                    {
+                        RaisePropertyChanged("CanLeave");
+                    };
                     RaisePropertyChanged("CanLeave");
-                };
-                RaisePropertyChanged("CanLeave");
+                }
+                else
+                {
+                    SubScope.Add(new SubScopeConnectionItem(subScope));
+                }
             }
-            else
+            else if (ssConnectItem != null)
             {
-                SubScope.Add(new SubScopeConnectionItem(subScope));
+                if (SelectedController != null)
+                {
+                    if (dropInfo.TargetCollection == UnconnectedSubScope)
+                    {
+                        SelectedController.RemoveSubScope(ssConnectItem.SubScope);
+                        if (system is TECTypical)
+                        {
+                            updateItem(ssConnectItem);
+                        }
+                        SubScope.Remove(ssConnectItem);
+                    }
+                }
+                else
+                {
+                    throw new DataMisalignedException("Selected Controller is null but SubScopeConnectionItems exist in the collection.");
+                }
             }
         }
 
