@@ -130,6 +130,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECSystem> AddPanelCommand { get; private set; }
         public RelayCommand<TECSystem> AddMiscCommand { get; private set; }
         public RelayCommand<object> BackCommand { get; private set; }
+        public RelayCommand<TECScopeBranch> AddScopeBranchCommand { get; private set; }
 
         public RelayCommand<TECSystem> DeleteSystemCommand { get; private set; }
         public RelayCommand<TECEquipment> DeleteEquipmentCommand { get; private set; }
@@ -189,6 +190,7 @@ namespace TECUserControlLibrary.ViewModels
             AddPanelCommand = new RelayCommand<TECSystem>(addPanelExecute, canAddPanel);
             AddMiscCommand = new RelayCommand<TECSystem>(addMiscExecute, canAddMisc);
             BackCommand = new RelayCommand<object>(backExecute);
+            AddScopeBranchCommand = new RelayCommand<TECScopeBranch>(addBranchExecute);
 
             DeleteSystemCommand = new RelayCommand<TECSystem>(deleteSystemExecute, canDeleteSystem);
             DeleteEquipmentCommand = new RelayCommand<TECEquipment>(deleteEquipmentExecute, canDeleteEquipment);
@@ -200,7 +202,8 @@ namespace TECUserControlLibrary.ViewModels
             catalogs = scopeManager.Catalogs;
             this.scopeManager = scopeManager;
         }
-        
+
+
         public event Action<TECObject> Selected;
 
         private void backExecute(object obj)
@@ -281,7 +284,19 @@ namespace TECUserControlLibrary.ViewModels
         {
             return true;
         }
-        
+
+
+        private void addBranchExecute(TECScopeBranch obj)
+        {
+            if(obj == null)
+            {
+                SelectedSystem.ScopeBranches.Add(new TECScopeBranch(SelectedSystem.IsTypical));
+            } else
+            {
+                obj.Branches.Add(new TECScopeBranch(obj.IsTypical));
+            }
+        }
+
         private void deleteSystemExecute(TECSystem obj)
         {
             if(scopeManager is TECBid bid)

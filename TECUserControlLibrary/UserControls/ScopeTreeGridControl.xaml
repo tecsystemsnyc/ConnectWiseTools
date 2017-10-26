@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d"
-             x:Name="parent"
+             x:Name="scopeTreeGridControl"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
@@ -16,10 +16,17 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=scopeTreeGridControl}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="Branches"/>
+        <Button Width="40" Content="Add" HorizontalAlignment="Right"
+                Command="{Binding AddCommand}"/>
         <DataGrid  ItemsSource="{Binding Path=ScopeTreeSource}"
                            AutoGenerateColumns="False"
-                   IsReadOnly="False">
+                   Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True" />
                 <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto"  MinWidth="40"/>
@@ -28,7 +35,18 @@
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <HierarchicalDataTemplate>
-                    <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Branches"/>
+                        <Button Width="40" Content="Add" HorizontalAlignment="Right"
+                                Command="{Binding ElementName=scopeTreeGridControl, Path=AddCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                              AncestorType={x:Type DataGridRow}},
+                              Path=DataContext}"/>
+                        <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
                               AncestorType={x:Type DataGrid}},
                               Path=RowDetailsTemplate}"
                               ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
@@ -36,13 +54,16 @@
                               Path=DataContext.Branches}"
                               AutoGenerateColumns="False"
                               VirtualizingPanel.ScrollUnit="Pixel"
-                              Margin="20,5,5,5">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True"/>
-                            <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto" MinWidth="100"/>
-                            <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                              Margin="20,5,5,5"
+                                  Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True"/>
+                                <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto" MinWidth="100"/>
+                                <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    
                 </HierarchicalDataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>

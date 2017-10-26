@@ -181,7 +181,23 @@ namespace EstimatingLibrary
         #endregion
         #region Labor
 
-        
+        private Confidence _desiredConfidence;
+        public Confidence DesiredConfidence
+        {
+            get { return _desiredConfidence; }
+            set
+            {
+                var old = _desiredConfidence;
+                _desiredConfidence = value;
+                notifyCombinedChanged(Change.Edit, "DesiredConfidence", this, value, old);
+                raisePropertyChanged("PMExtenedCoef");
+                raisePropertyChanged("EngExtenedCoef");
+                raisePropertyChanged("SoftExtenedCoef");
+                raisePropertyChanged("GraphExtenedCoef");
+                raisePropertyChanged("CommExtenedCoef");
+            }
+        }
+
         #region PM
         private double _pmCoef;
         public double PMCoef
@@ -218,6 +234,11 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "PMRate", this, value, old);
 
             }
+        }
+
+        public double PMExtenedCoef
+        {
+            get { return effectiveCoef(PMCoef, PMCoefStdError, DesiredConfidence); }
         }
 
         #endregion PM
@@ -263,6 +284,11 @@ namespace EstimatingLibrary
 
             }
         }
+
+        public double ENGExtenedCoef
+        {
+            get { return effectiveCoef(ENGCoef, ENGCoefStdError, DesiredConfidence); }
+        }
         #endregion ENG
 
         #region Comm
@@ -307,6 +333,11 @@ namespace EstimatingLibrary
 
             }
         }
+
+        public double CommExtenedCoef
+        {
+            get { return effectiveCoef(CommCoef, CommCoefStdError, DesiredConfidence); }
+        }
         #endregion Comm
 
         #region Soft
@@ -350,6 +381,10 @@ namespace EstimatingLibrary
             }
         }
 
+        public double SoftExtenedCoef
+        {
+            get { return effectiveCoef(SoftCoef, SoftCoefStdError, DesiredConfidence); }
+        }
         #endregion Soft
 
         #region Graph
@@ -389,6 +424,11 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "GraphRate", this, value, old);
 
             }
+        }
+
+        public double GraphExtenedCoef
+        {
+            get { return effectiveCoef(GraphCoef, GraphCoefStdError, DesiredConfidence); }
         }
         #endregion Graph
 
@@ -543,6 +583,8 @@ namespace EstimatingLibrary
             _requiresWrapUp = false;
             _hasBMS = true;
 
+            _desiredConfidence = Confidence.NinetyFive;
+
             _escalation = 0;
             _overhead = 0;
             _profit = 0;
@@ -553,18 +595,23 @@ namespace EstimatingLibrary
             _tax = 0.0875;
 
             _pmCoef = 1.0;
+            _pmCoefStdError = 1.0;
             _pmRate = 0;
 
             _engCoef = 1.0;
+            _engCoefStdError = 1.0;
             _engRate = 0;
 
             _commCoef = 1.0;
+            _commCoefStdError = 1.0;
             _commRate = 0;
 
             _softCoef = 1.0;
+            _softCoefStdError = 1.0;
             _softRate = 0;
 
             _graphCoef = 1.0;
+            _graphCoefStdError = 1.0;
             _graphRate = 0;
 
             _electricalRate = 0;

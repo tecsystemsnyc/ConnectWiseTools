@@ -374,7 +374,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getPMPointHours()
         {
-            double hours = pointNumber * parameters.PMCoef;
+            double hours = pointNumber * parameters.PMExtenedCoef;
 
             return hours;
         }
@@ -403,7 +403,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getENGPointHours()
         {
-            double hours = pointNumber * parameters.ENGCoef;
+            double hours = pointNumber * parameters.ENGExtenedCoef;
 
             return hours;
         }
@@ -432,7 +432,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getCommPointHours()
         {
-            double hours = pointNumber * parameters.CommCoef;
+            double hours = pointNumber * parameters.CommExtenedCoef;
 
             return hours;
         }
@@ -461,7 +461,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getSoftPointHours()
         {
-            double hours = pointNumber * parameters.SoftCoef;
+            double hours = pointNumber * parameters.SoftExtenedCoef;
 
             return hours;
         }
@@ -490,7 +490,7 @@ namespace EstimatingLibrary
         /// </summary>
         private double getGraphPointHours()
         {
-            double hours = pointNumber * parameters.GraphCoef;
+            double hours = pointNumber * parameters.GraphExtenedCoef;
 
             return hours;
         }

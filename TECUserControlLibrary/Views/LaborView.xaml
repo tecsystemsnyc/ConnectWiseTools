@@ -4,6 +4,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ignore="http://www.galasoft.ch/ignore"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d ignore"
              x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
@@ -75,7 +77,7 @@
         <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="1"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.PMCoef, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Parameters.PMExtenedCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="2"
                  />
         <TextBlock Text="{Binding Estimate.PMPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
@@ -100,7 +102,7 @@
         <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="1"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.ENGCoef, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Parameters.ENGExtenedCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="2"
                  />
         <TextBlock Text="{Binding Estimate.ENGPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
@@ -125,7 +127,7 @@
         <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="1"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.SoftCoef, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Parameters.SoftExtenedCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="2"
                  />
         <TextBlock Text="{Binding Estimate.SoftPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
@@ -150,7 +152,7 @@
         <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="1"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.GraphCoef, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Parameters.GraphExtenedCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="2"
                  />
         <TextBlock Text="{Binding Estimate.GraphPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
@@ -175,7 +177,7 @@
         <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="1"
                  />
-        <TextBlock Text="{Binding Bid.Parameters.CommCoef, StringFormat= {} {0:F2}}"
+        <TextBlock Text="{Binding Bid.Parameters.CommExtenedCoef, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="2"
                  />
         <TextBlock Text="{Binding Estimate.CommPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
@@ -203,6 +205,19 @@
                  Grid.Row="6" Grid.Column="6"/>
         <TextBlock Text="{Binding Estimate.TECFieldLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
                    Grid.Row="6" Grid.Column="7"/>
+        
+        <!--Confidence-->
+        
+        <TextBlock Text="Confidence Level: " Grid.Row="7"/>
+        <ComboBox Name="componentComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.ConfidenceSelectorList}}"
+                    DisplayMemberPath="Item1"    
+                    SelectedValuePath="Item2"
+                    Margin="2" FontSize="12"
+                    VerticalContentAlignment="Center"
+                    SelectedIndex="0"
+                    SelectedValue="{Binding Bid.Parameters.DesiredConfidence}"
+                    Grid.Row="7" Grid.Column="1"/>
+
 
         <!--TEC Labor Subtotal-->
         <TextBlock Text="TEC Labor Total:"
