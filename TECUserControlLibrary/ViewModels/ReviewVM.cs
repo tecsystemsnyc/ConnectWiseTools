@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.ObjectModel;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -47,24 +48,53 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("UserPrice");
             }
         }
-        
+
+        public ObservableCollection<CostContainer> Costs
+        {
+            get { return getCosts(); }
+        }
+
         public ReviewVM()
         {
             _bid = new TECBid();
             _estimate = new TECEstimator(_bid, new EstimatingLibrary.Utilities.ChangeWatcher(_bid));
         }
-        
+
         public void Refresh(TECEstimator estimate, TECBid bid)
         {
             Estimate = estimate;
+            Estimate.PropertyChanged += (sender, e) =>
+            {
+                if(e.PropertyName == "TECMaterialCost" ||
+                e.PropertyName == "TECLaborCost" ||
+                e.PropertyName == "SubcontractorLaborCost" ||
+                e.PropertyName == "ElectricalMaterialCost")
+                {
+                    RaisePropertyChanged("Costs");
+                }
+            };
             Bid = bid;
         }
-         
-        
+        private ObservableCollection<CostContainer> getCosts()
+        {
+            return new ObservableCollection<CostContainer>() 
+            {
+                new CostContainer("Material Cost", Estimate.TECMaterialCost),
+                new CostContainer("Labor Cost", Estimate.TECLaborCost),
+                new CostContainer("Sub. Labor Cost", Estimate.SubcontractorLaborCost),
+                new CostContainer("Sub. Material Cost", Estimate.ElectricalMaterialCost)
+            };
+        }
     }
 
-    //class CostContainer
-    //{
-    //    CostContainer(string name, )
-    //}
+    public class CostContainer
+    {
+        public string Name { get; set; }
+        public double Cost { get; set; }
+        public CostContainer(string name, double cost)
+        {
+            Name = name;
+            Cost = cost;
+        }
+    }
 }

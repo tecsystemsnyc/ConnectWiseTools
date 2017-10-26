@@ -327,7 +327,7 @@ namespace EstimateBuilder.MVVM
         private void setupReviewVM(TECBid bid)
         {
             ReviewVM = new ReviewVM();
-            ReviewVM.Bid = bid;
+            ReviewVM.Refresh(Estimate, bid);
         }
         private void setupProposalVM(TECBid bid)
         {
@@ -536,7 +536,7 @@ namespace EstimateBuilder.MVVM
             {
                 ScopeEditorVM.Refresh(Bid, Templates);
                 LaborVM.Refresh(Bid, Estimate, Templates);
-                //ReviewVM.Refresh(Bid);
+                ReviewVM.Refresh(Estimate, Bid);
                 ProposalVM.Refresh(Bid);
                 ElectricalVM.Refresh(Bid);
                 NetworkVM.Refresh(Bid, watcher);
