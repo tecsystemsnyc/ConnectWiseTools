@@ -458,6 +458,25 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, Confidence>("95%", Confidence.NinetyFive)
         };
 
+        public static List<Tuple<string, AllSearchableObjects>> SearchSelectorList = new List<Tuple<string, AllSearchableObjects>>
+        {
+            new Tuple<string, AllSearchableObjects>("Systems", AllSearchableObjects.System),
+            new Tuple<string, AllSearchableObjects>("Equipment", AllSearchableObjects.Equipment),
+            new Tuple<string, AllSearchableObjects>("Points", AllSearchableObjects.SubScope),
+            new Tuple<string, AllSearchableObjects>("Devices", AllSearchableObjects.Devices),
+            new Tuple<string, AllSearchableObjects>("Controllers", AllSearchableObjects.Controllers),
+            new Tuple<string, AllSearchableObjects>("Panels", AllSearchableObjects.Panels),
+            new Tuple<string, AllSearchableObjects>("Valves", AllSearchableObjects.Valves),
+            new Tuple<string, AllSearchableObjects>("Wire Types", AllSearchableObjects.Wires),
+            new Tuple<string, AllSearchableObjects>("Conduit Types", AllSearchableObjects.Conduits),
+            new Tuple<string, AllSearchableObjects>("Associatd Costs", AllSearchableObjects.AssociatedCosts),
+            new Tuple<string, AllSearchableObjects>("Misc. Costs", AllSearchableObjects.MiscCosts),
+            new Tuple<string, AllSearchableObjects>("Misc. Wiring", AllSearchableObjects.MiscWiring),
+            new Tuple<string, AllSearchableObjects>("Tags", AllSearchableObjects.Tags),
+            new Tuple<string, AllSearchableObjects>("Controller Types", AllSearchableObjects.ControllerTypes),
+            new Tuple<string, AllSearchableObjects>("Panel Types", AllSearchableObjects.PanelTypes)
+        };
+
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
        where T : DependencyObject
         {
