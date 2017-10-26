@@ -158,7 +158,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             TECSubScope subScope = dropInfo.Data as TECSubScope;
             if (subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope)
-                && UIHelpers.TargetCollectionIsType(dropInfo, typeof(SubScopeConnectionItem)))
+                && UIHelpers.TargetCollectionIsType(dropInfo, typeof(ISubScopeConnectionItem)))
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                 dropInfo.Effects = DragDropEffects.Copy;
