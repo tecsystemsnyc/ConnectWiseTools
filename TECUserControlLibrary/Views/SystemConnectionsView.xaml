@@ -45,7 +45,7 @@
                 </Grid.RowDefinitions>
                 <Grid.Resources>
                     <DataTemplate x:Key="cannotConnectAdorner">
-                        <Label Content="Test"/>
+                        <Label Content="{Binding ElementName=systemConnectionsView, Path=ViewModel.CannotConnectMessage}"/>
                     </DataTemplate>
                 </Grid.Resources>
                 <Label Content="Controllers"/>

@@ -29,6 +29,8 @@ namespace TECUserControlLibrary.ViewModels
         private TECController _selectedController;
 
         private UpdateConnectionVM _updateConnectionVM;
+
+        private string _cannotConnectMessage;
         #endregion
 
         #region Properties
@@ -129,6 +131,16 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return !anItemNeedsUpdate(); }
         }
+
+        public string CannotConnectMessage
+        {
+            get { return _cannotConnectMessage; }
+            set
+            {
+                _cannotConnectMessage = value;
+                RaisePropertyChanged("CannotConnectMessage");
+            }
+        }
         #endregion
 
         public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)
@@ -156,12 +168,24 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
+            CannotConnectMessage = "";
             TECSubScope subScope = dropInfo.Data as TECSubScope;
-            if (subScope != null && SelectedController != null && SelectedController.CanConnectSubScope(subScope)
-                && UIHelpers.TargetCollectionIsType(dropInfo, typeof(ISubScopeConnectionItem)))
+
+            if (subScope != null)
             {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Copy;
+                if (SelectedController == null)
+                {
+                    CannotConnectMessage = "No Controller to connect to.";
+                }
+                else if (!SelectedController.CanConnectSubScope(subScope))
+                {
+                    CannotConnectMessage = "Subscope incompatible with Controller.";
+                }
+                else if (UIHelpers.TargetCollectionIsType(dropInfo, typeof(ISubScopeConnectionItem)))
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
             }
         }
 
