@@ -72,7 +72,6 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
-
                 <Label Content="Bid Controllers and Panels"/>
             </Border>
             <ListView ItemsSource="{Binding Riser}" Grid.Row="1">
