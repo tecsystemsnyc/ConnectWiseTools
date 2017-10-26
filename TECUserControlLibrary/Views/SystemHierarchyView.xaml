@@ -118,7 +118,7 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped" SourceName="subScopeList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>

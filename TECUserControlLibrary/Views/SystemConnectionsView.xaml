@@ -75,7 +75,6 @@
                 <Button Content="Update All"
                         Command="{Binding UpdateAllCommand}"
                         Margin="5"
-                        Click="updateStarted"
                         Visibility="{Binding 
                     ElementName=systemConnectionsView, 
                     Path=IsTypical, 

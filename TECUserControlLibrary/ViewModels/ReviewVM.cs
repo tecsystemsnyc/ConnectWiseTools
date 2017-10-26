@@ -59,6 +59,12 @@ namespace TECUserControlLibrary.ViewModels
             Estimate = estimate;
             Bid = bid;
         }
+         
         
     }
+
+    //class CostContainer
+    //{
+    //    CostContainer(string name, )
+    //}
 }
