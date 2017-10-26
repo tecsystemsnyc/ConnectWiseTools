@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -106,199 +107,43 @@ namespace TECUserControlLibrary.ViewModels
             switch (ChosenType)
             {
                 case AllSearchableObjects.System:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECSystem item in Templates.SystemTemplates)
-                    {
-                        if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                        {
-                            ResultCollection.Add(item);
-                        }
-                        else
-                        {
-                            foreach (TECLabeled tag in item.Tags)
-                            {
-                                if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                {
-                                    ResultCollection.Add(item);
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.SystemTemplates, searchCriteria);
                     break;
                 case AllSearchableObjects.Equipment:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECEquipment item in Templates.EquipmentTemplates)
-                    {
-                        if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                        {
-                            ResultCollection.Add(item);
-                        }
-                        else
-                        {
-                            foreach (TECLabeled tag in item.Tags)
-                            {
-                                if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                {
-                                    ResultCollection.Add(item);
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.EquipmentTemplates, searchCriteria);
                     break;
                 case AllSearchableObjects.SubScope:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECSubScope item in Templates.SubScopeTemplates)
-                    {
-                        if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                        {
-                            ResultCollection.Add(item);
-                        }
-                        else
-                        {
-                            foreach (TECLabeled tag in item.Tags)
-                            {
-                                if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                {
-                                    ResultCollection.Add(item);
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.SubScopeTemplates, searchCriteria);
                     break;
                 case AllSearchableObjects.Devices:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECDevice item in Templates.Catalogs.Devices)
-                    {
-                        if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                        {
-                            ResultCollection.Add(item);
-                        }
-                        else
-                        {
-                            foreach (TECLabeled tag in item.Tags)
-                            {
-                                if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                {
-                                    ResultCollection.Add(item);
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.Catalogs.Devices, searchCriteria);
                     break;
                 case AllSearchableObjects.Controllers:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECController item in Templates.ControllerTemplates)
-                    {
-                        if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                        {
-                            ResultCollection.Add(item);
-                        }
-                        else
-                        {
-                            foreach (TECLabeled tag in item.Tags)
-                            {
-                                if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                {
-                                    ResultCollection.Add(item);
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.ControllerTemplates, searchCriteria);
                     break;
                 case AllSearchableObjects.AssociatedCosts:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECCost item in Templates.Catalogs.AssociatedCosts)
-                    {
-                        if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                        {
-                            ResultCollection.Add(item);
-                        }
-                        else
-                        {
-                            foreach (TECLabeled tag in item.Tags)
-                            {
-                                if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                {
-                                    ResultCollection.Add(item);
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.Catalogs.AssociatedCosts, searchCriteria);
                     break;
                 case AllSearchableObjects.Panels:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECPanel item in Templates.PanelTemplates)
-                    {
-                        if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                        {
-                            ResultCollection.Add(item);
-                        }
-                        else
-                        {
-                            foreach (TECLabeled tag in item.Tags)
-                            {
-                                if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                {
-                                    ResultCollection.Add(item);
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.PanelTemplates, searchCriteria);
                     break;
                 case AllSearchableObjects.MiscCosts:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECMisc item in Templates.MiscCostTemplates)
-                    {
-                        if (item.Type == CostType.TEC)
-                        {
-                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                            {
-                                ResultCollection.Add(item);
-                            }
-                            else
-                            {
-                                foreach (TECLabeled tag in item.Tags)
-                                {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                    {
-                                        ResultCollection.Add(item);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.TEC), searchCriteria);
                     break;
                 case AllSearchableObjects.MiscWiring:
-                    ResultCollection = new ObservableCollection<TECObject>();
-                    foreach (TECMisc item in Templates.MiscCostTemplates)
-                    {
-                        if(item.Type == CostType.Electrical)
-                        {
-                            if (UtilitiesMethods.StringContainsStrings(item.Name.ToUpper(), searchCriteria) ||
-                                                            UtilitiesMethods.StringContainsStrings(item.Description.ToUpper(), searchCriteria))
-                            {
-                                ResultCollection.Add(item);
-                            }
-                            else
-                            {
-                                foreach (TECLabeled tag in item.Tags)
-                                {
-                                    if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                                    {
-                                        ResultCollection.Add(item);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.Electrical), searchCriteria);
+                    break;
+                case AllSearchableObjects.ControllerTypes:
+                    ResultCollection = getResultCollection(Templates.Catalogs.ControllerTypes, searchCriteria);
+                    break;
+                case AllSearchableObjects.PanelTypes:
+                    ResultCollection = getResultCollection(Templates.Catalogs.PanelTypes, searchCriteria);
+                    break;
+                case AllSearchableObjects.Tags:
+                    ResultCollection = getResultCollection(Templates.Catalogs.Tags, searchCriteria);
+                    break;
+                case AllSearchableObjects.Wires:
+                    ResultCollection = getResultCollection(Templates.Catalogs.ConnectionTypes, searchCriteria);
                     break;
                 default:
                     break;
@@ -433,6 +278,48 @@ namespace TECUserControlLibrary.ViewModels
             DropHandler(dropInfo);
         }
 
+
+        private ObservableCollection<TECObject> getResultCollection(IEnumerable<TECObject> source, string[] searchCriteria)
+        {
+            var outCollection = new ObservableCollection<TECObject>();
+            foreach (TECObject item in source)
+            {
+                if(item is TECScope scope)
+                {
+                    if (UtilitiesMethods.StringContainsStrings(scope.Name.ToUpper(), searchCriteria) ||
+                                        UtilitiesMethods.StringContainsStrings(scope.Description.ToUpper(), searchCriteria))
+                    {
+                        outCollection.Add(item);
+                    }
+                    else if(scope is TECHardware hardware)
+                    {
+                        if(UtilitiesMethods.StringContainsStrings(hardware.Manufacturer.Label.ToUpper(), searchCriteria))
+                        {
+                            outCollection.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        foreach (TECLabeled tag in scope.Tags)
+                        {
+                            if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
+                            {
+                                outCollection.Add(item);
+                            }
+                        }
+                    }
+                    
+                }
+                else if (item is TECLabeled labeled)
+                {
+                    if (UtilitiesMethods.StringContainsStrings(labeled.Label.ToUpper(), searchCriteria))
+                    {
+                        outCollection.Add(item);
+                    }
+                }
+            }
+            return outCollection;
+        }
         #endregion
 
        
