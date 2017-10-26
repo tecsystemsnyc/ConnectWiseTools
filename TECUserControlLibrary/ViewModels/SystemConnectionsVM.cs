@@ -196,7 +196,13 @@ namespace TECUserControlLibrary.ViewModels
             UnconnectedSubScope.Remove(subScope);
             if (system is TECTypical)
             {
-                SubScope.Add(new SubScopeConnectionItem(subScope, needsUpdate: true));
+                SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(subScope, needsUpdate: true);
+                SubScope.Add(ssConnectItem);
+                ssConnectItem.NeedsUpdateChanged += () =>
+                {
+                    RaisePropertyChanged("CanLeave");
+                };
+                RaisePropertyChanged("CanLeave");
             }
             else
             {
@@ -276,6 +282,10 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
                 SubScope = ssItems;
+            }
+            else
+            {
+                SubScope = new ObservableCollection<ISubScopeConnectionItem>();
             }
             RaisePropertyChanged("CanLeave");
         }
