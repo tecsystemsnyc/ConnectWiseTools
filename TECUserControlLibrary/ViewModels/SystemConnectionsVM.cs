@@ -143,11 +143,16 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)
+        public SystemConnectionsVM(TECSystem system, ObservableCollection<TECElectricalMaterial> conduitTypes)
         {
             this.system = system;
             this.ConfirmationObject = new MessageBoxService();
-            _conduitTypes = new ObservableCollection<TECElectricalMaterial>(conduitTypes);
+            ObservableCollection<TECElectricalMaterial> tempConduit = new ObservableCollection<TECElectricalMaterial>();
+            foreach(TECElectricalMaterial type in conduitTypes)
+            {
+                tempConduit.Add(type);
+            }
+            _conduitTypes = conduitTypes;
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
             {
@@ -317,6 +322,7 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 SubScope = new ObservableCollection<ISubScopeConnectionItem>();
+                UpdateConnectionVM = null;
             }
             RaisePropertyChanged("CanLeave");
         }

@@ -138,6 +138,7 @@ namespace TECUserControlLibrary.Debug
             TECConnection connection = controller.AddSubScope(connected);
             connection.Length = 10;
             connection.ConduitLength = 20;
+            connection.ConduitType = bid.Catalogs.ConduitTypes[1];
 
             TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), true);
             panel.Name = "Test Panel";
