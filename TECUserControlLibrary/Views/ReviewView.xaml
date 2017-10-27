@@ -369,13 +369,18 @@
             
             <!--Dashboard-->
             <Grid Grid.Row="4" Grid.Column="4" Grid.RowSpan="12" Grid.ColumnSpan="3">
-                <oxy:Plot Title="Cost Distribution" Grid.Row="1" x:Name="costPlot" Background="{StaticResource SectionBackgroundBrush}">
+                <oxy:Plot Title="Cost Distribution" Grid.Row="1" x:Name="costPlot" 
+                          Background="{StaticResource SectionBackgroundBrush}"
+                          LegendTextColor="Black"
+                          TextColor="Black"
+                          Foreground="Black">
                     <oxy:PieSeries
                         ExplodedDistance="0"
                         Stroke="Black" StrokeThickness="1"
                         StartAngle="0" AngleSpan="360"
                         ItemsSource="{Binding Costs}"
-                        LabelField="Name" ValueField="Cost"/>
+                        LabelField="Name" ValueField="Cost">
+                    </oxy:PieSeries>
                 </oxy:Plot>
             </Grid>
             
