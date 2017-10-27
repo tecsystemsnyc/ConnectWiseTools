@@ -47,7 +47,7 @@ namespace TECUserControlLibrary.Views
         
         public static readonly DependencyProperty ModalHeightProperty =
             DependencyProperty.Register("ModalHeight", typeof(double),
-              typeof(SystemHierarchyView), new PropertyMetadata(0.0, new PropertyChangedCallback(OnUpdateConnectionVMChanged)));
+              typeof(SystemHierarchyView), new PropertyMetadata(1.0, new PropertyChangedCallback(OnUpdateConnectionVMChanged)));
         
         private static void OnUpdateConnectionVMChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
@@ -228,7 +228,6 @@ namespace TECUserControlLibrary.Views
                 {
                     SystemWidth = e.NewSize.Width / 2;
                     EquipmentWidth = e.NewSize.Width / 2;
-                    ModalHeight = e.NewSize.Height;
                 }
                 else if (SystemWidth != 0)
                 {
@@ -244,7 +243,7 @@ namespace TECUserControlLibrary.Views
             }
             if (e.HeightChanged)
             {
-                if (ModalHeight != 0)
+                if (ModalHeight != 0.0)
                 {
                     ModalHeight = e.NewSize.Height;
                 }
@@ -305,6 +304,36 @@ namespace TECUserControlLibrary.Views
         {
             Storyboard moveBack = (Storyboard)FindResource("modalIn");
             moveBack.Begin();
+        }
+
+        private void systemMove_Completed(object sender, EventArgs e)
+        {
+            SystemWidth = 0.0;
+        }
+
+        private void systemMoveBack_Completed(object sender, EventArgs e)
+        {
+            SystemWidth = this.ActualWidth / 2;
+        }
+
+        private void modalOut_Completed(object sender, EventArgs e)
+        {
+            ModalHeight = this.ActualHeight;
+        }
+
+        private void modalIn_Completed(object sender, EventArgs e)
+        {
+            ModalHeight = 0;
+        }
+
+        private void equipmentMove_Completed(object sender, EventArgs e)
+        {
+            EquipmentWidth = 0;
+        }
+
+        private void equipmentMoveBack_Completed(object sender, EventArgs e)
+        {
+            EquipmentWidth = this.ActualWidth / 2;
         }
     }
 }

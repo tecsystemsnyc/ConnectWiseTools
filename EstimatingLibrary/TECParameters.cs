@@ -586,13 +586,16 @@ namespace EstimatingLibrary
             _desiredConfidence = Confidence.NinetyFive;
 
             _escalation = 0;
-            _overhead = 0;
-            _profit = 0;
+            _overhead = 10;
+            _profit = 20;
             _subcontractorMarkup = 0;
             _subcontractorEscalation = 0;
-            _warranty = 0.05;
-            _shipping = 0.03;
-            _tax = 0.0875;
+            _warranty = 5.0;
+            _shipping = 3.0;
+            _tax = 8.75;
+
+            _subcontractorShipping = 5.0;
+            _subcontractorWarranty = 3.0;
 
             _pmCoef = 1.0;
             _pmCoefStdError = 1.0;

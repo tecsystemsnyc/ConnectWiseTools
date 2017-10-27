@@ -20,32 +20,44 @@
         <ResourceDictionary>
             <Storyboard x:Key="systemMove">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
-                                 Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)" 
+                                 Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)"
+                                 Completed="systemMove_Completed"
+                                 FillBehavior="Stop"
                                  To="0" From="{Binding ElementName=systemHierarchyView, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="systemMoveBack">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                  Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)" 
+                                 Completed="systemMoveBack_Completed"
+                                 FillBehavior="Stop"
                                  To="{Binding ElementName=systemHierarchyView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="equipmentMove">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                  Storyboard.TargetProperty="(local:SystemHierarchyView.EquipmentWidth)" 
+                                 Completed="equipmentMove_Completed"
+                                 FillBehavior="Stop"
                                  To="0" From="{Binding ElementName=systemHierarchyView, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="equipmentMoveBack">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                  Storyboard.TargetProperty="(local:SystemHierarchyView.EquipmentWidth)" 
+                                 Completed="equipmentMoveBack_Completed"
+                                 FillBehavior="Stop"
                                  To="{Binding ElementName=systemHierarchyView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="modalIn">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                  Storyboard.TargetProperty="(local:SystemHierarchyView.ModalHeight)" 
+                                 Completed="modalIn_Completed"
+                                 FillBehavior="Stop"
                                  From="{Binding ElementName=systemHierarchyView, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="modalOut">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                      Storyboard.TargetProperty="(local:SystemHierarchyView.ModalHeight)" 
+                                 Completed="modalOut_Completed"
+                                 FillBehavior="Stop"
                                      From="0" To="{Binding ElementName=systemHierarchyView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             
@@ -60,6 +72,8 @@
         <Grid.Resources>
             <Style x:Key="AddButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                 <EventSetter Event="Click" Handler="Add_Clicked"/>
+                <Setter Property="Visibility" Value="{Binding ElementName=systemHierarchyView,Path=IsTypical, 
+                    Converter={utilities:BooleanToVisibilityConverter}}"/>
             </Style>
         </Grid.Resources>
         <Grid.Triggers>
@@ -168,7 +182,7 @@
                                             DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSystemCommand}"
                                             IsDragSource="True"/>
                 <Button Width="50" Content="Add" Style="{StaticResource AddButtonStyle}" x:Name="addSystem" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right"
-                        Command="{Binding ViewModel.AddSystemCommand}"/>
+                        Command="{Binding ViewModel.AddSystemCommand}" />
             </Grid>
             
             <!--Column 1-->
@@ -218,10 +232,13 @@
                                                        DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
                                                        DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteEquipmentCommand}"
                                                        IsDragSource="True"/>
-                                    <Button x:Name="addEquipment" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddEquipmentCommand}"
-                            CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"
-                            Style="{StaticResource AddButtonStyle}"
-                            Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
+                                    <Grid Grid.Row="1" Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}">
+                                        <Button x:Name="addEquipment" Content="Add" Width="50" HorizontalAlignment="Right"  
+                                                Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddEquipmentCommand}"
+                                                CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"
+                                                Style="{StaticResource AddButtonStyle}"/>
+                                    </Grid>
+                                    
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="ControllerTemplate">
@@ -236,10 +253,12 @@
                                     </Grid.ColumnDefinitions>
 
                                     <local:ControllersPanelsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ControllersPanelsVM}" Grid.ColumnSpan="2"/>
-                                    <Button x:Name="addController" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddControllerCommand}"
+                                    <Button x:Name="addController" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" 
+                                            Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddControllerCommand}"
                             CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"
                                             Style="{StaticResource AddButtonStyle}" />
-                                    <Button x:Name="addPanel" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddPanelCommand}"
+                                    <Button x:Name="addPanel" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" 
+                                            Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddPanelCommand}"
                             CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"
                                             Style="{StaticResource AddButtonStyle}" />
 
@@ -322,12 +341,15 @@
                                     DropHandler="{Binding ViewModel}"
                                     DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
                                             IsDragSource="True"/>
-                <Button Content="Add" x:Name="addSubScope" Grid.Row="2" 
-                        Grid.Column="2"
+                <Grid Grid.Row="2" Grid.Column="2"
+                      Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}">
+                    <Button Content="Add" x:Name="addSubScope" 
                         Style="{StaticResource AddButtonStyle}" 
-                        Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"
+                        
                         Command="{Binding ViewModel.AddSubScopeCommand}"
                         CommandParameter="{Binding ViewModel.SelectedEquipment}"/>
+                </Grid>
+                
             </Grid>
             <!--Column 3-->
             <Grid Grid.Column="3" Grid.Row="1">
@@ -349,11 +371,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Points"/>
-                    <Button Content="Add" x:Name="addPoint" Grid.Column="1" 
-                            Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"
+                    <Grid  Grid.Column="1" 
+                           Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
+                        <Button Content="Add" x:Name="addPoint"
                             Command="{Binding ViewModel.AddPointCommand}"
                             CommandParameter="{Binding ViewModel.SelectedSubScope}"
                             Style="{StaticResource AddButtonStyle}" />
+                    </Grid>
+                    
                 </Grid>
                 <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                                Grid.Row="3"

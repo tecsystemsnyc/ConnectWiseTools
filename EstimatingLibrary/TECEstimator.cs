@@ -140,6 +140,18 @@ namespace EstimatingLibrary
             get
             { return getTax(); }
         }
+        public double Escalation
+        {
+            get { return getTECEscalation(); }
+        }
+        public double Overhead
+        {
+            get { return getTECOverhead(); }
+        }
+        public double Profit
+        {
+            get { return getTECProfit(); }
+        }
         public double TECSubtotal
         {
             get
@@ -186,6 +198,14 @@ namespace EstimatingLibrary
         public double ElectricalWarranty
         {
             get { return getElectricalWarranty(); }
+        }
+        public double ElectricalEscalation
+        {
+            get { return getSubcontractorEscalation(); }
+        }
+        public double ElectricalMarkup
+        {
+            get { return getSubcontractorMarkup(); }
         }
         public double SubcontractorSubtotal
         {
@@ -338,10 +358,31 @@ namespace EstimatingLibrary
 
             if (!parameters.IsTaxExempt)
             {
-                outTax += parameters.Tax * TECMaterialCost;
+                outTax += parameters.Tax / 100 * TECMaterialCost;
             }
 
             return outTax;
+        }
+
+        private double getTECEscalation()
+        {
+            double outCost = getTECLaborCost();
+            outCost += getExtendedMaterialCost();
+            return outCost * parameters.Escalation / 100; ;
+        }
+
+        private double getTECOverhead()
+        {
+            return getTECCost() * parameters.Overhead / 100;
+        }
+
+        private double getTECProfit()
+        {
+            double outCost = 0;
+            outCost += getTECCost();
+            outCost += outCost * parameters.Overhead / 100;
+            return outCost * parameters.Profit / 100;
+             
         }
 
         /// <summary>
@@ -372,12 +413,12 @@ namespace EstimatingLibrary
 
         private double getElectricalShipping()
         {
-            return (ElectricalMaterialCost * parameters.SubcontractorShipping);
+            return (ElectricalMaterialCost * parameters.SubcontractorShipping / 100);
         }
 
         private double getElectricalWarranty()
         {
-            return (ElectricalMaterialCost * parameters.SubcontractorWarranty);
+            return (ElectricalMaterialCost * parameters.SubcontractorWarranty / 100);
         }
 
         private double getExtendedElectricalMaterialCost()
@@ -647,6 +688,14 @@ namespace EstimatingLibrary
 
             return outCost;
         }
+        private double getSubcontractorEscalation()
+        {
+            return (getSubcontractorLaborCost() + getExtendedElectricalMaterialCost()) * (parameters.SubcontractorEscalation / 100);
+        }
+        private double getSubcontractorMarkup()
+        {
+            return getSubcontractorCost() * (parameters.SubcontractorMarkup / 100);
+        }
         /// <summary>
         /// Returns the electrical total with markup 
         /// </summary>
@@ -774,11 +823,16 @@ namespace EstimatingLibrary
         private void raiseTECTotals()
         {
             raisePropertyChanged("TECSubtotal");
+            raisePropertyChanged("Escalation");
+            raisePropertyChanged("Overhead");
+            raisePropertyChanged("Profit");
             raiseTotals();
         }
         private void raiseSubcontractorTotals()
         {
             raisePropertyChanged("SubcontractorSubtotal");
+            raisePropertyChanged("ElectricalEscalation");
+            raisePropertyChanged("ElectricalMarkup");
             raiseTotals();
         }
         private void raiseLabor()
@@ -822,6 +876,9 @@ namespace EstimatingLibrary
             raisePropertyChanged("TECLaborHours");
             raisePropertyChanged("TECLaborCost");
             raisePropertyChanged("TECSubtotal");
+            raisePropertyChanged("Escalation");
+            raisePropertyChanged("Overhead");
+            raisePropertyChanged("Profit");
             raisePropertyChanged("ElectricalLaborHours");
             raisePropertyChanged("ElectricalLaborCost");
             raisePropertyChanged("ElectricalSuperLaborHours");
@@ -830,11 +887,14 @@ namespace EstimatingLibrary
             raisePropertyChanged("SubcontractorLaborCost");
             raisePropertyChanged("TECSubtotal");
             raisePropertyChanged("SubcontractorSubtotal");
+            raisePropertyChanged("ElectricalEscalation");
+            raisePropertyChanged("ElectricalMarkup");
             raisePropertyChanged("TotalLaborCost");
             raisePropertyChanged("TotalCost");
             raisePropertyChanged("TotalPrice");
             raisePropertyChanged("PricePerPoint");
             raisePropertyChanged("Margin");
+            raisePropertyChanged("Markup");
         }
         #endregion
         
