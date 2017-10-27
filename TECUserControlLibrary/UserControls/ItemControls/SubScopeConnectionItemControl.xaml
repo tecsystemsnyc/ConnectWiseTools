@@ -78,7 +78,8 @@
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
                 <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length}"
                      Visibility="{Binding ReadOnly,
-                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
+                Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
+                         Margin="2"/>
             </Grid>
             <Border Grid.Row="4" Grid.ColumnSpan="2"/>
 
@@ -89,22 +90,47 @@
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
                 <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
                          Visibility="{Binding ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
+                         Margin="2"/>
             </Grid>
             <Border Grid.Row="5" Grid.ColumnSpan="2"/>
 
-            <Label Content="Conduit Type:" Grid.Row="3" Grid.Column="2"/>
-            <Grid Grid.Row="4" Grid.Column="2">
-                <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType}"
+            <Grid Grid.Row="3" Grid.Column="2" Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Conduit Type:" />
+                <Label Grid.Column="1" Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType.Name}"
+                       Visibility="{Binding ReadOnly,
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
+                <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                    <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType}"
                        Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                <ComboBox SelectedItem="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType}" 
-                          ItemsSource="{Binding ConduitTypes}"
+                    <Grid Visibility="{Binding ReadOnly,
+                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox SelectedItem="{Binding SubScopeConnectionItem.SelectedConduitType}"
+                          ItemsSource="{Binding ConduitTypes, Mode=OneWay}" 
+                          SelectionChanged="ComboBox_SelectionChanged"
                           DisplayMemberPath="Name"
                           Margin="5"
-                          Visibility="{Binding ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
+                          />
+                        <Button Grid.Column="1" Margin="5" 
+                                Content="Change" Command="{Binding SubScopeConnectionItem.ChangeConduitCommand}" CommandParameter="{Binding}"/>
+                    </Grid>
+                    
+                </Grid>
             </Grid>
+            
             <Border Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"/>
 
             <Grid Grid.Column="2" Grid.Row="5">
