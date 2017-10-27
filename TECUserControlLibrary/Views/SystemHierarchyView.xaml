@@ -196,9 +196,13 @@
                     <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.Name, StringFormat='Components of {0}'}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
+                <Grid Grid.Column="2" Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
+                    <Button Content="->" x:Name="equipmentDetails" Margin="2"
+                        Visibility="{Binding ElementName=systemHierarchyView, 
+                        Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"/>
+                </Grid>
+                    
                 
-                <Button Content="->" x:Name="equipmentDetails" Grid.Column="2" Margin="2"
-                        Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}"/>
                 <Grid  Grid.Row="1" Grid.ColumnSpan="3"> 
                     <Grid.Resources>
                         <ResourceDictionary>
@@ -307,10 +311,11 @@
                     <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.Name, StringFormat='Points in {0}'}"
                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
-                
-                <Button Content="->" x:Name="subScopeDetails" Grid.Column="2"
-                    Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"/>
+                <Grid Grid.Column="2" Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
 
+                    <Button Content="->" x:Name="subScopeDetails" 
+                    Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"/>
+                </Grid>
                 <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
                                     SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
                                     Grid.ColumnSpan="3" Grid.Row="1"

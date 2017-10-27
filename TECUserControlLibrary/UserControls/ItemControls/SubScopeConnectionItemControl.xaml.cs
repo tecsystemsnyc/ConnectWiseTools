@@ -32,7 +32,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
         // Using a DependencyProperty as the backing store for SubScopeConnection.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SubScopeConnectionItemProperty =
             DependencyProperty.Register("SubScopeConnectionItem", typeof(SubScopeConnectionItem), typeof(SubScopeConnectionItemControl));
-        
+
         public IEnumerable<TECElectricalMaterial> ConduitTypes
         {
             get { return (IEnumerable<TECElectricalMaterial>)GetValue(ConduitTypesProperty); }
@@ -43,7 +43,7 @@ namespace TECUserControlLibrary.UserControls.ItemControls
         public static readonly DependencyProperty ConduitTypesProperty =
             DependencyProperty.Register("ConduitTypes", typeof(IEnumerable<TECElectricalMaterial>),
                 typeof(SubScopeConnectionItemControl));
-        
+
         public bool ReadOnly
         {
             get { return (bool)GetValue(ReadOnlyProperty); }
@@ -84,6 +84,11 @@ namespace TECUserControlLibrary.UserControls.ItemControls
         public SubScopeConnectionItemControl()
         {
             InitializeComponent();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Console.WriteLine("Changed");
         }
     }
 }

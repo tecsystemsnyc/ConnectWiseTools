@@ -15,6 +15,7 @@ namespace TECUserControlLibrary.Models
     public class SubScopeConnectionItem : ViewModelBase, ISubScopeConnectionItem
     {
         private bool _needsUpdate;
+        private TECElectricalMaterial _selectedConduitType;
 
         public TECSubScope SubScope { get; private set; }
         public bool NeedsUpdate
@@ -27,6 +28,18 @@ namespace TECUserControlLibrary.Models
                 NeedsUpdateChanged?.Invoke();
             }
         }
+
+        public TECElectricalMaterial SelectedConduitType
+        {
+            get { return _selectedConduitType; }
+            set
+            {
+                _selectedConduitType = value;
+                RaisePropertyChanged("SelectedConduitType");
+            }
+        }
+        public ICommand ChangeConduitCommand { get; private set; }
+
         public event Action NeedsUpdateChanged;
 
         public SubScopeConnectionItem(TECSubScope subScope, bool needsUpdate = false)
@@ -37,6 +50,21 @@ namespace TECUserControlLibrary.Models
             {
                 subScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
+            ChangeConduitCommand = new RelayCommand(UpdateConduitExecute, CanUpdateConduit);
+        }
+
+        private bool CanUpdateConduit()
+        {
+            if(SelectedConduitType == SubScope.Connection.ConduitType)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void UpdateConduitExecute()
+        {
+            SubScope.Connection.ConduitType = SelectedConduitType;
         }
 
         private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -47,5 +75,8 @@ namespace TECUserControlLibrary.Models
                 NeedsUpdate = true;
             }
         }
+
+
+
     }
 }
