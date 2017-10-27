@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.HardwareSummaryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             x:Name="hardwareSummaryView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=hardwareSummaryView, Path=ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--Hardware Items-->
+        <Border Grid.RowSpan="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="{Binding ElementName=hardwareSummaryView, Path=HardwareItemType}" FontSize="16"/>
+
+                <Border Grid.Row="1">
+                    <DataGrid ItemsSource="{Binding HardwareItems}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type" 
+                                            Binding="{Binding Hardware.Name}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Manufacturer"
+                                            Binding="{Binding Hardware.Manufacturer.Label}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Cost per Item"
+                                            Binding="{Binding Hardware.Cost}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Labor per Item"
+                                            Binding="{Binding Hardware.Labor}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Quantity"
+                                            Binding="{Binding Quantity}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Total Cost"
+                                            Binding="{Binding TotalCost}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Total Labor"
+                                            Binding="{Binding TotalLabor}"
+                                            Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <Border Grid.Row="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding ElementName=hardwareSummaryView, Path=HardwareItemType, StringFormat={}{0} (TEC) Cost:}"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Foreground="Black"/>
+                        <Label Grid.Column="1" 
+                               Content="{Binding HardwareCost}"
+                               HorizontalAlignment="Left"/>
+
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding ElementName=hardwareSummaryView, Path=HardwareItemType, StringFormat={}{0} (TEC) Labor:}"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Foreground="Black"/>
+                        <Label Grid.Column="3"
+                               Content="{Binding HardwareLabor}"
+                               HorizontalAlignment="Left"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!--Associated TEC Items-->
+        <Border Grid.Column="1">
+            
+        </Border>
+    </Grid>
+</UserControl>
