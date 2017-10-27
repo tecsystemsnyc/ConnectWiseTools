@@ -55,6 +55,7 @@ namespace EstimateBuilder.MVVM
         public ElectricalVM ElectricalVM { get; set; }
         public NetworkVM NetworkVM { get; set; }
         public ItemizedSummaryVM ItemizedSummaryVM { get; private set; }
+        public MaterialSummaryVM MaterialSummaryVM { get; private set; }
         public ICommand ToggleTemplatesCommand { get; private set; }
         public ICommand DocumentCommand { get; private set; }
         public ICommand LoadTemplatesCommand { get; private set; }
@@ -212,6 +213,7 @@ namespace EstimateBuilder.MVVM
             setupElectricalVM(Bid);
             setupNetworkVM(Bid, watcher);
             setupItemizedSummaryVM(Bid, watcher);
+            setupMaterialSummaryVM(Bid, watcher);
         }
         protected override void setupCommands()
         {
@@ -344,6 +346,10 @@ namespace EstimateBuilder.MVVM
         private void setupItemizedSummaryVM(TECBid bid, ChangeWatcher cw)
         {
             ItemizedSummaryVM = new ItemizedSummaryVM(bid, cw);
+        }
+        private void setupMaterialSummaryVM(TECBid bid, ChangeWatcher cw)
+        {
+            MaterialSummaryVM = new MaterialSummaryVM(bid, cw);
         }
         private void setupData(string templatesPath, string bidPath = "")
         {

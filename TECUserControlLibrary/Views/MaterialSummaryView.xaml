@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.MaterialSummaryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             x:Name="materialSummaryView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=materialSummaryView, Path=ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <!--Subtotals-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Content="Subtotals:" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+
+            <Label Content="TEC Cost Subtotal:" Grid.Row="1" HorizontalAlignment="Right"/>
+            <Label Content="{Binding TotalTECCost}" Grid.Row="1" Grid.Column="1"/>
+
+            <Label Content="TEC Labor Subtotal:" Grid.Row="2" HorizontalAlignment="Right"/>
+            <Label Content="{Binding TotalTECLabor}" Grid.Row="2" Grid.Column="1"/>
+
+            <Label Content="Electrical Cost Subtotal:" Grid.Row="3" HorizontalAlignment="Right"/>
+            <Label Content="{Binding TotalElecCost}" Grid.Row="3" Grid.Column="1"/>
+
+            <Label Content="Electrical Labor Subtotal:" Grid.Row="4" HorizontalAlignment="Right"/>
+            <Label Content="{Binding TotalElecLabor}" Grid.Row="4" Grid.Column="1"/>
+
+        </Grid>
+        
+        <!--Chilren Views-->
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <ComboBox Width="Auto" Margin="5"
+                      ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:MaterialSummaryIndex}}}"
+                      SelectedItem="{Binding ElementName=materialSummaryView, Path=SelectedIndex}"/>
+
+            <TabControl Grid.ColumnSpan="2" Grid.Row="1"
+                        SelectedIndex="{Binding ElementName=materialSummaryView, Path=SelectedIndex, Converter={utilities:MaterialSummaryIndexToIntegerConverter}}">
+
+                <!--Device Summary-->
+                <TabItem Visibility="Collapsed">
+                    <Label Content="Devices"/>
+                </TabItem>
+                
+                <!--Controller Summary-->
+                <TabItem Visibility="Collapsed">
+                    <Label Content="Controllers"/>
+                </TabItem>
+                
+                <!--Panel Summary-->
+                <TabItem Visibility="Collapsed">
+                    
+                </TabItem>
+                
+                <!--Wire Summary-->
+                <TabItem Visibility="Collapsed">
+                    
+                </TabItem>
+                
+                <!--Conduit Summary-->
+                <TabItem Visibility="Collapsed">
+                    
+                </TabItem>
+                
+                <!--Misc Summary-->
+                <TabItem Visibility="Collapsed">
+                    
+                </TabItem>
+            </TabControl>
+
+        </Grid>
+    </Grid>
+</UserControl>

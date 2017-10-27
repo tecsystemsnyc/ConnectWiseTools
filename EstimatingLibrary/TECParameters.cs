@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECParameters : TECObject
+    public class TECParameters : TECLabeled
     {
         #region Properties
         private double _escalation;

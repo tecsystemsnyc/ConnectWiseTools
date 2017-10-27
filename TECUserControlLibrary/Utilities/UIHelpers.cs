@@ -520,8 +520,6 @@ namespace TECUserControlLibrary.Utilities
         PanelType, AssociatedCost, IOModule, Valve, Manufacturer, Tag};
     public enum TypicalSystemIndex { Edit, Instances };
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
-    public enum TECMaterialIndex { Devices, Controllers, Panels, MiscCosts }
-    public enum ElectricalMaterialIndex { Wire, Conduit, MiscCosts }
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
     public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel, Misc }
@@ -544,8 +542,8 @@ namespace TECUserControlLibrary.Utilities
         Conduits
     }
     public enum TypicalInstanceEnum { Typical, Instance }
+    public enum MaterialSummaryIndex { Devices, Controllers, Panels, Wire, Conduit, Misc }
 
-    
 
 
 }

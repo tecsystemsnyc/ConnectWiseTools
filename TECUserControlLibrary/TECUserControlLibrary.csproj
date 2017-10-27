@@ -332,6 +332,9 @@
     <Compile Include="ViewModels\DevicesPointsVM.cs" />
     <Compile Include="ViewModels\EquipmentVM.cs" />
     <Compile Include="ViewModels\SubScopeVM.cs" />
+    <Compile Include="Views\MaterialSummaryView.xaml.cs">
+      <DependentUpon>MaterialSummaryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MiscCostsSummaryView.xaml.cs">
       <DependentUpon>MiscCostsSummaryView.xaml</DependentUpon>
     </Compile>
@@ -735,6 +738,10 @@
     <Page Include="Views\DevicesPointsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MaterialSummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MiscCostsSummaryView.xaml">
       <SubType>Designer</SubType>

@@ -32,6 +32,9 @@
                 <views:LaborView
                         ViewModel="{Binding LaborVM}"/>
             </TabItem>
+            <TabItem Header="Material">
+                <views:MaterialSummaryView ViewModel="{Binding MaterialSummaryVM}"/>
+            </TabItem>
             <TabItem Header="Summary">
                 <views:ReviewView ViewModel="{Binding ReviewVM}"/>
             </TabItem>
