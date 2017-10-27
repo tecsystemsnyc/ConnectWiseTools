@@ -109,7 +109,7 @@
                        Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
                 <Grid Grid.Row="1" Grid.ColumnSpan="2">
-                    <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType}"
+                    <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType.Name}"
                        Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
                     <Grid Visibility="{Binding ReadOnly,
