@@ -103,6 +103,9 @@
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CostSummaryItemGridControl.xaml.cs">
+      <DependentUpon>CostSummaryItemGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\BaseItemControl.cs" />
     <Compile Include="UserControls\ItemControls\ControllerInPanelControl.xaml.cs">
       <DependentUpon>ControllerInPanelControl.xaml</DependentUpon>
@@ -270,6 +273,9 @@
       <DependentUpon>AddSystemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BaseView.cs" />
+    <Compile Include="Views\HardwareSummaryView.xaml.cs">
+      <DependentUpon>HardwareSummaryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
     </Compile>
@@ -487,6 +493,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\CostSummaryItemGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ItemControls\ControllerInPanelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -656,6 +666,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddViews\AddSystemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HardwareSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -65,17 +65,20 @@
 
                 <!--Device Summary-->
                 <TabItem Visibility="Collapsed">
-                    <Label Content="Devices"/>
+                    <local:HardwareSummaryView ViewModel="{Binding DeviceSummaryVM}"
+                                               HardwareItemType="Devices"/>
                 </TabItem>
                 
                 <!--Controller Summary-->
                 <TabItem Visibility="Collapsed">
-                    <Label Content="Controllers"/>
+                    <local:HardwareSummaryView ViewModel="{Binding ControllerSummaryVM}"
+                                               HardwareItemType="Controller Types"/>
                 </TabItem>
                 
                 <!--Panel Summary-->
                 <TabItem Visibility="Collapsed">
-                    
+                    <local:HardwareSummaryView ViewModel="{Binding PanelSummaryVM}"
+                                               HardwareItemType="Panel Types"/>
                 </TabItem>
                 
                 <!--Wire Summary-->
