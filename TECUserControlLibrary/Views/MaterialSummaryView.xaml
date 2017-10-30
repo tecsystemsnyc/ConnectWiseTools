@@ -104,7 +104,8 @@
                 
                 <!--Wire Summary-->
                 <TabItem Visibility="Collapsed">
-                    
+                    <local:LengthSummaryView ViewModel="{Binding WireSummaryVM}"
+                                             LengthItemType="Wire Types"/>
                 </TabItem>
                 
                 <!--Conduit Summary-->

@@ -233,6 +233,9 @@
     <Compile Include="UserControls\ListControls\SystemListControl.xaml.cs">
       <DependentUpon>SystemListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\SummaryDataGrid.xaml.cs">
+      <DependentUpon>SummaryDataGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\InterfaceDataTemplateSelector.cs" />
     <Compile Include="Utilities\MessageBoxService.cs" />
     <Compile Include="ViewModels\AddVMs\AddControllerVM.cs" />
@@ -641,6 +644,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\SystemListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SummaryDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
