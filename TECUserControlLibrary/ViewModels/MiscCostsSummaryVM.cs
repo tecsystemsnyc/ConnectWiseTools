@@ -80,6 +80,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _miscTECCostTotal = value;
                 RaisePropertyChanged("MiscTECCostTotal");
+                RaisePropertyChanged("TotalTECCost");
             }
         }
         public double MiscTECLaborTotal
@@ -89,6 +90,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _miscTECLaborTotal = value;
                 RaisePropertyChanged("MiscTECLaborTotal");
+                RaisePropertyChanged("TotalTECLabor");
             }
         }
         public double MiscElecCostTotal
@@ -98,6 +100,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _miscElecCostTotal = value;
                 RaisePropertyChanged("MiscElecCostTotal");
+                RaisePropertyChanged("TotalElecCost");
             }
         }
         public double MiscElecLaborTotal
@@ -107,6 +110,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _miscElecLaborTotal = value;
                 RaisePropertyChanged("MiscElecLaborTotal");
+                RaisePropertyChanged("TotalElecLabor");
             }
         }
         public double AssocTECCostTotal
@@ -116,6 +120,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocTECCostTotal = value;
                 RaisePropertyChanged("AssocTECCostTotal");
+                RaisePropertyChanged("TotalTECCost");
             }
         }
         public double AssocTECLaborTotal
@@ -125,6 +130,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocTECLaborTotal = value;
                 RaisePropertyChanged("AssocTECLaborTotal");
+                RaisePropertyChanged("TotalTECLabor");
             }
         }
         public double AssocElecCostTotal
@@ -134,6 +140,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocElecCostTotal = value;
                 RaisePropertyChanged("AssocElecCostTotal");
+                RaisePropertyChanged("TotalElecCost");
             }
         }
         public double AssocElecLaborTotal
@@ -143,16 +150,38 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocElecLaborTotal = value;
                 RaisePropertyChanged("AssocElecLaborTotal");
+                RaisePropertyChanged("TotalElecLabor");
             }
         }
 
-        public double TotalTECCost => throw new NotImplementedException();
-
-        public double TotalTECLabor => throw new NotImplementedException();
-
-        public double TotalElecCost => throw new NotImplementedException();
-
-        public double TotalElecLabor => throw new NotImplementedException();
+        public double TotalTECCost
+        {
+            get
+            {
+                return (MiscTECCostTotal + AssocTECCostTotal);
+            }
+        }
+        public double TotalTECLabor
+        {
+            get
+            {
+                return (MiscTECLaborTotal + AssocTECLaborTotal);
+            }
+        }
+        public double TotalElecCost
+        {
+            get
+            {
+                return (MiscElecCostTotal + AssocElecCostTotal);
+            }
+        }
+        public double TotalElecLabor
+        {
+            get
+            {
+                return (MiscElecLaborTotal + AssocElecLaborTotal);
+            }
+        }
         #endregion
 
         #region Methods

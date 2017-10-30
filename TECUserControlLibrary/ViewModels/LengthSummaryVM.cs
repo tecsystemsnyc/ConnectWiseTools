@@ -98,6 +98,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _lengthCostTotal = value;
                 RaisePropertyChanged("LengthCostTotal");
+                RaisePropertyChanged("TotalElecCost");
             }
         }
         public double LengthLaborTotal
@@ -107,6 +108,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _lengthLaborTotal = value;
                 RaisePropertyChanged("LengthLaborTotal");
+                RaisePropertyChanged("TotalElecLabor");
             }
         }
         public double AssocTECCostTotal
@@ -116,6 +118,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocTECCostTotal = value;
                 RaisePropertyChanged("AssocTECCostTotal");
+                RaisePropertyChanged("TotalTECCost");
             }
         }
         public double AssocTECLaborTotal
@@ -125,6 +128,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocTECLaborTotal = value;
                 RaisePropertyChanged("AssocTECLaborTotal");
+                RaisePropertyChanged("TotalTECLabor");
             }
         }
         public double AssocElecCostTotal
@@ -134,6 +138,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocElecCostTotal = value;
                 RaisePropertyChanged("AssocElecCostTotal");
+                RaisePropertyChanged("TotalElecCost");
             }
         }
         public double AssocElecLaborTotal
@@ -143,6 +148,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocElecLaborTotal = value;
                 RaisePropertyChanged("AssocElecLaborTotal");
+                RaisePropertyChanged("TotalElecLabor");
             }
         }
         public double RatedTECCostTotal
@@ -152,6 +158,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _ratedTECCostTotal = value;
                 RaisePropertyChanged("RatedTECCostTotal");
+                RaisePropertyChanged("TotalTECCost");
             }
         }
         public double RatedTECLaborTotal
@@ -161,6 +168,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _ratedTECLaborTotal = value;
                 RaisePropertyChanged("RatedTECLaborTotal");
+                RaisePropertyChanged("TotalTECLabor");
             }
         }
         public double RatedElecCostTotal
@@ -170,6 +178,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _ratedElecCostTotal = value;
                 RaisePropertyChanged("RatedElecCostTotal");
+                RaisePropertyChanged("TotalElecCost");
             }
         }
         public double RatedElecLaborTotal
@@ -179,16 +188,38 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _ratedElecLaborTotal = value;
                 RaisePropertyChanged("RatedElecLaborTotal");
+                RaisePropertyChanged("TotalElecLabor");
             }
         }
 
-        public double TotalTECCost => throw new NotImplementedException();
-
-        public double TotalTECLabor => throw new NotImplementedException();
-
-        public double TotalElecCost => throw new NotImplementedException();
-
-        public double TotalElecLabor => throw new NotImplementedException();
+        public double TotalTECCost
+        {
+            get
+            {
+                return (AssocTECCostTotal + RatedTECCostTotal);
+            }
+        }
+        public double TotalTECLabor
+        {
+            get
+            {
+                return (AssocTECLaborTotal + RatedTECLaborTotal);
+            }
+        }
+        public double TotalElecCost
+        {
+            get
+            {
+                return (LengthCostTotal + AssocElecCostTotal + RatedElecCostTotal);
+            }
+        }
+        public double TotalElecLabor
+        {
+            get
+            {
+                return (LengthLaborTotal + AssocElecLaborTotal + RatedElecLaborTotal);
+            }
+        }
         #endregion
 
         #region Methods
