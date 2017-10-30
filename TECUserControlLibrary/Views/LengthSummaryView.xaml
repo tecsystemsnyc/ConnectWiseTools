@@ -55,7 +55,12 @@
                     </DataGrid>
                 </DataTemplate>
             </Border.Resources>
-            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource lengthKey}}"/>
+            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource lengthKey}}"
+                                      Title="{Binding ElementName=lengthSummaryView, Path=LengthItemType}"
+                                      CostString="{Binding ElementName=lengthSummaryView, Path=LengthItemType, StringFormat={}{0} (Electrical) Cost}"
+                                      CostValue="{Binding LengthCostTotal}"
+                                      LaborString="{Binding ElementName=lengthSummaryView, Path=LengthItemType, StringFormat={}{0} (Electrical) Labor}"
+                                      LaborValue="{Binding LengthLaborTotal}"/>
             <!--<Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

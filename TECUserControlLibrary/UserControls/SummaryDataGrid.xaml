@@ -7,15 +7,54 @@
              x:Name="summaryDataGrid"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <UserControl.Resources>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=summaryDataGrid}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="Test"/>
-        <ContentPresenter ContentTemplate="{Binding ElementName=summaryDataGrid, Path=GridTemplate}"
-                          Grid.Row="1"/>
-        <Label Content="Bottom test" Grid.Row="2"/>
+        <Label Content="{Binding Title}" FontSize="16"/>
+
+        <Border Grid.Row="1">
+            <ContentPresenter ContentTemplate="{Binding ElementName=summaryDataGrid, Path=GridTemplate}"/>
+        </Border>
+
+        <Border Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="Black">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}: {1:C}">
+                            <Binding Path="CostString"/>
+                            <Binding Path="CostValue"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <TextBlock Grid.Column="1"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="Black">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}: {1:F2}">
+                            <Binding Path="LaborString"/>
+                            <Binding Path="LaborValue"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
