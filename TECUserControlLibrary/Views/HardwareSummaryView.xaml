@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
              x:Name="hardwareSummaryView"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="600">
     <UserControl.Resources>
         <Style TargetType="Border">
             <Setter Property="BorderBrush" Value="Black"/>
@@ -97,6 +98,46 @@
 
         <!--Associated TEC Items-->
         <Border Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Associated TEC Cost and Labor Items" FontSize="16"/>
+
+                <Border Grid.Row="1">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding AssocTECItems}"/>
+                </Border>
+
+                <Border Grid.Row="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="Total Associated TEC Cost:"
+                               HorizontalAlignment="Right"/>
+                        <Label Grid.Column="1"
+                               Content="{Binding AssocTECCostTotal}"
+                               HorizontalAlignment="Left"/>
+                        <Label Grid.Column="2"
+                               Content="Total Associated TEC Labor:"
+                               HorizontalAlignment="Right"/>
+                        <Label Grid.Column="3"
+                               Content="{Binding AssocTECLaborTotal}"
+                               HorizontalAlignment="Left"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!--Associated Elec Items-->
+        <Border Grid.Column="1" Grid.Row="1">
             
         </Border>
     </Grid>

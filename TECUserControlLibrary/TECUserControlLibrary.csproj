@@ -276,9 +276,6 @@
     <Compile Include="Views\HardwareSummaryView.xaml.cs">
       <DependentUpon>HardwareSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LengthSummaryView.xaml.cs">
-      <DependentUpon>LengthSummaryView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\SystemProposalGridControl.xaml.cs">
       <DependentUpon>SystemProposalGridControl.xaml</DependentUpon>
     </Compile>
@@ -289,9 +286,6 @@
     <Compile Include="ViewModels\SystemComponentVM.cs" />
     <Compile Include="Views\LocationView.xaml.cs">
       <DependentUpon>LocationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\CostsSummaryGridControl.xaml.cs">
-      <DependentUpon>CostsSummaryGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
@@ -340,9 +334,6 @@
     <Compile Include="ViewModels\SubScopeVM.cs" />
     <Compile Include="Views\MaterialSummaryView.xaml.cs">
       <DependentUpon>MaterialSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MiscCostsSummaryView.xaml.cs">
-      <DependentUpon>MiscCostsSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MiscCostsSummaryVM.cs" />
     <Compile Include="Views\MiscCostsView.xaml.cs">
@@ -673,19 +664,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LengthSummaryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\SystemProposalGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LocationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\CostsSummaryGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -754,10 +737,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MaterialSummaryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MiscCostsSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
