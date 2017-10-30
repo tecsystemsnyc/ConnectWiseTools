@@ -96,6 +96,7 @@
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IUserConfirmable.cs" />
+    <Compile Include="Models\ControllerPropertiesItem.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
@@ -174,6 +175,9 @@
     </Compile>
     <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
       <DependentUpon>ControllerListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyControls\ControllerPropertiesControl.xaml.cs">
+      <DependentUpon>ControllerPropertiesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PropertyControls\CostPropertiesControl.xaml.cs">
       <DependentUpon>CostPropertiesControl.xaml</DependentUpon>
@@ -558,6 +562,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\ListControls\ControllerListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\ControllerPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
