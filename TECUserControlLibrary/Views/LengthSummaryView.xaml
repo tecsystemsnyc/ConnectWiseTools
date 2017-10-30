@@ -40,9 +40,54 @@
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
-                            
+                            <DataGridTextColumn Header="Type"
+                                                Binding="{Binding Material.Name}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Cost per Foot"
+                                                Binding="{Binding Material.Cost}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Labor per Foot"
+                                                Binding="{Binding Material.Labor}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Length"
+                                                Binding="{Binding Length}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Total Cost"
+                                                Binding="{Binding TotalCost}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Total Labor"
+                                                Binding="{Binding TotalLabor}"
+                                                Width="Auto"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                </Border>
+
+                <Border Grid.Row="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding ElementName=lengthSummaryView, Path=LengthItemType, StringFormat={}{0} (Electrical) Cost:}"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Foreground="Black"/>
+                        <Label Grid.Column="1"
+                               Content="{Binding LengthCostTotal}"
+                               HorizontalAlignment="Left"/>
+
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding ElementName=lengthSummaryView, Path=LengthItemType, StringFormat={}{0} (Electrical) Labor:}"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Foreground="Black"/>
+                        <Label Grid.Column="3"
+                               Content="{Binding LengthLaborTotal}"
+                               HorizontalAlignment="Left"/>
+                    </Grid>
                 </Border>
             </Grid>
         </Border>
