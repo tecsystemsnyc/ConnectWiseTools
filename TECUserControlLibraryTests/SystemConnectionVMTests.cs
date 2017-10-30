@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace TECUserControlLibraryTests
             TECController controller = new TECController(catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
 
-            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new ObservableCollection<TECElectricalMaterial>());
             
             //Act
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
@@ -55,7 +56,7 @@ namespace TECUserControlLibraryTests
             TECController controller = new TECController(catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
 
-            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new ObservableCollection<TECElectricalMaterial>());
 
             //Act
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
@@ -88,7 +89,7 @@ namespace TECUserControlLibraryTests
             TECController controller = new TECController(catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
 
-            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new ObservableCollection<TECElectricalMaterial>());
             vm.ConfirmationObject = confirmable.Object;
 
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
@@ -124,7 +125,7 @@ namespace TECUserControlLibraryTests
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
 
-            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new ObservableCollection<TECElectricalMaterial>());
             vm.ConfirmationObject = confirmable.Object;
 
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
@@ -160,7 +161,7 @@ namespace TECUserControlLibraryTests
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
 
-            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new ObservableCollection<TECElectricalMaterial>());
             vm.ConfirmationObject = confirmable.Object;
             
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
@@ -197,7 +198,7 @@ namespace TECUserControlLibraryTests
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
 
-            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new List<TECElectricalMaterial>());
+            SystemConnectionsVM vm = new SystemConnectionsVM(typical, new ObservableCollection<TECElectricalMaterial>());
             vm.ConfirmationObject = confirmable.Object;
 
             Mock<ISubScopeConnectionItem> ssItem1 = new Mock<ISubScopeConnectionItem>();
