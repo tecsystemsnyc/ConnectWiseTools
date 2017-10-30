@@ -26,8 +26,6 @@ namespace TECUserControlLibrary.UserControls
             InitializeComponent();
         }
 
-
-
         public IEnumerable<CostSummaryItem> ItemsSource
         {
             get { return (IEnumerable<CostSummaryItem>)GetValue(ItemsSourceProperty); }
@@ -36,7 +34,7 @@ namespace TECUserControlLibrary.UserControls
 
         // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<CostSummaryItem>), typeof(CostSummaryItemGridControl), new PropertyMetadata(new List<CostSummaryItem>()));
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<CostSummaryItem>), typeof(CostSummaryItemGridControl));
 
 
     }

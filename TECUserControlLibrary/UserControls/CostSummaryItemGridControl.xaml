@@ -11,7 +11,26 @@
         <DataGrid ItemsSource="{Binding ItemsSource}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
-            
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding Cost.Name}"
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Cost per Item"
+                                    Binding="{Binding Cost.Cost}"
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Labor per Item"
+                                    Binding="{Binding Cost.Labor}"
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Quantity"
+                                    Binding="{Binding Quantity}"
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Total Cost"
+                                    Binding="{Binding TotalCost}"
+                                    Width="Auto"/>
+                <DataGridTextColumn Header="Total Labor"
+                                    Binding="{Binding TotalLabor}"
+                                    Width="Auto"/>
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>
