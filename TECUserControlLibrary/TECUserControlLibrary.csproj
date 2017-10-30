@@ -240,6 +240,7 @@
     <Compile Include="ViewModels\AddVMs\AddSystemVM.cs" />
     <Compile Include="ViewModels\AddVMs\IAddVM.cs" />
     <Compile Include="ViewModels\HardwareSummaryVM.cs" />
+    <Compile Include="ViewModels\Interfaces\IComponentSummaryVM.cs" />
     <Compile Include="ViewModels\LengthSummaryVM.cs" />
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
     <Compile Include="ViewModels\SplashVM.cs" />

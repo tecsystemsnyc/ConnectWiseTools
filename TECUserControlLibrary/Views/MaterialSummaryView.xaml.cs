@@ -38,20 +38,5 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(MaterialSummaryVM), typeof(MaterialSummaryView));
-
-
-
-        public MaterialSummaryIndex SelectedIndex
-        {
-            get { return (MaterialSummaryIndex)GetValue(SelectedIndexProperty); }
-            set { SetValue(SelectedIndexProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for SelectedIndex.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedIndexProperty =
-            DependencyProperty.Register("SelectedIndex", typeof(MaterialSummaryIndex), typeof(MaterialSummaryView), new PropertyMetadata(MaterialSummaryIndex.Devices));
-        
-
-        
     }
 }
