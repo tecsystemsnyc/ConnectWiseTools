@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.ViewModels.Interfaces;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class MiscCostsSummaryVM : ViewModelBase
+    public class MiscCostsSummaryVM : ViewModelBase, IComponentSummaryVM
     {
         #region Fields
         private Dictionary<Guid, CostSummaryItem> costDictionary;
@@ -144,6 +145,14 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("AssocElecLaborTotal");
             }
         }
+
+        public double TotalTECCost => throw new NotImplementedException();
+
+        public double TotalTECLabor => throw new NotImplementedException();
+
+        public double TotalElecCost => throw new NotImplementedException();
+
+        public double TotalElecLabor => throw new NotImplementedException();
         #endregion
 
         #region Methods

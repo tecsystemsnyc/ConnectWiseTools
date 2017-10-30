@@ -138,7 +138,42 @@
         
         <!--Associated Elec Items-->
         <Border Grid.Column="1" Grid.Row="1">
-            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Associated Electrical Cost and Labor Items" FontSize="16"/>
+
+                <Border Grid.Row="1">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding AssocElecItems}"/>
+                </Border>
+
+                <Border Grid.Row="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="Total Associated Electrial Cost:"
+                               HorizontalAlignment="Right"/>
+                        <Label Grid.Column="1"
+                               Content="{Binding AssocElecCostTotal}"
+                               HorizontalAlignment="Left"/>
+                        <Label Grid.Column="2"
+                               Content="Total Associated Electrical Labor:"
+                               HorizontalAlignment="Right"/>
+                        <Label Grid.Column="3"
+                               Content="{Binding AssocElecLaborTotal}"
+                               HorizontalAlignment="Left"/>
+                    </Grid>
+                </Border>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

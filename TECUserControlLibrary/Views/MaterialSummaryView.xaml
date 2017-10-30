@@ -27,8 +27,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
+            <!--Grand Subtotals-->
             <Label Content="Subtotals:" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
 
             <Label Content="TEC Cost Subtotal:" Grid.Row="1" HorizontalAlignment="Right"/>
@@ -43,6 +50,20 @@
             <Label Content="Electrical Labor Subtotal:" Grid.Row="4" HorizontalAlignment="Right"/>
             <Label Content="{Binding TotalElecLabor}" Grid.Row="4" Grid.Column="1"/>
 
+            <!--Type Subtotals-->
+            <Label Content="Type Subtotals:" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+
+            <Label Content="Type TEC Cost Subtotal:" Grid.Row="7" HorizontalAlignment="Right"/>
+            <Label Content="{Binding CurrentVM.TotalTECCost}" Grid.Row="7" Grid.Column="1"/>
+
+            <Label Content="Type TEC Labor Subtotal:" Grid.Row="8" HorizontalAlignment="Right"/>
+            <Label Content="{Binding CurrentVM.TotalTECLabor}" Grid.Row="8" Grid.Column="1"/>
+
+            <Label Content="Type Elec Cost Subtotal:" Grid.Row="9" HorizontalAlignment="Right"/>
+            <Label Content="{Binding CurrentVM.TotalElecCost}" Grid.Row="9" Grid.Column="1"/>
+
+            <Label Content="Type Elec Labor Subtotal:" Grid.Row="10" HorizontalAlignment="Right"/>
+            <Label Content="{Binding CurrentVM.TotalElecLabor}" Grid.Row="10" Grid.Column="1"/>
         </Grid>
         
         <!--Chilren Views-->
@@ -58,10 +79,10 @@
 
             <ComboBox Width="Auto" Margin="5"
                       ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:MaterialSummaryIndex}}}"
-                      SelectedItem="{Binding ElementName=materialSummaryView, Path=SelectedIndex}"/>
+                      SelectedItem="{Binding SelectedIndex}"/>
 
             <TabControl Grid.ColumnSpan="2" Grid.Row="1"
-                        SelectedIndex="{Binding ElementName=materialSummaryView, Path=SelectedIndex, Converter={utilities:MaterialSummaryIndexToIntegerConverter}}">
+                        SelectedIndex="{Binding SelectedIndex, Converter={utilities:MaterialSummaryIndexToIntegerConverter}}">
 
                 <!--Device Summary-->
                 <TabItem Visibility="Collapsed">

@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.ViewModels.Interfaces;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class HardwareSummaryVM : ViewModelBase
+    public class HardwareSummaryVM : ViewModelBase, IComponentSummaryVM
     {
         #region Fields
         private Dictionary<Guid, HardwareSummaryItem> hardwareDictionary;
@@ -71,6 +72,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _hardwareCost = value;
                 RaisePropertyChanged("HardwareCost");
+                RaisePropertyChanged("TotalTECCost");
             }
         }
         public double HardwareLabor
@@ -80,6 +82,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _hardwareLabor = value;
                 RaisePropertyChanged("HardwareLabor");
+                RaisePropertyChanged("TotalTECLabor");
             }
         }
         public double AssocTECCostTotal
@@ -89,6 +92,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocTECCostTotal = value;
                 RaisePropertyChanged("AssocTECCostTotal");
+                RaisePropertyChanged("TotalTECCost");
             }
         }
         public double AssocTECLaborTotal
@@ -98,6 +102,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocTECLaborTotal = value;
                 RaisePropertyChanged("AssocTECLaborTotal");
+                RaisePropertyChanged("TotalTECLabor");
             }
         }
         public double AssocElecCostTotal
@@ -107,6 +112,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocElecCostTotal = value;
                 RaisePropertyChanged("AssocElecCostTotal");
+                RaisePropertyChanged("TotalElecCost");
             }
         }
         public double AssocElecLaborTotal
@@ -116,6 +122,36 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _assocElecLaborTotal = value;
                 RaisePropertyChanged("AssocElecLaborTotal");
+                RaisePropertyChanged("TotalElecLabor");
+            }
+        }
+
+        public double TotalTECCost
+        {
+            get
+            {
+                return (HardwareCost + AssocTECCostTotal);
+            }
+        }
+        public double TotalTECLabor
+        {
+            get
+            {
+                return (HardwareLabor + AssocTECLaborTotal);
+            }
+        }
+        public double TotalElecCost
+        {
+            get
+            {
+                return AssocElecCostTotal;
+            }
+        }
+        public double TotalElecLabor
+        {
+            get
+            {
+                return AssocElecLaborTotal;
             }
         }
         #endregion

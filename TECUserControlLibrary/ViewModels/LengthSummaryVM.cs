@@ -9,10 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.ViewModels.Interfaces;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class LengthSummaryVM : ViewModelBase
+    public class LengthSummaryVM : ViewModelBase, IComponentSummaryVM
     {
         #region Fields
         private Dictionary<Guid, LengthSummaryItem> lengthDictionary;
@@ -180,6 +181,14 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("RatedElecLaborTotal");
             }
         }
+
+        public double TotalTECCost => throw new NotImplementedException();
+
+        public double TotalTECLabor => throw new NotImplementedException();
+
+        public double TotalElecCost => throw new NotImplementedException();
+
+        public double TotalElecLabor => throw new NotImplementedException();
         #endregion
 
         #region Methods

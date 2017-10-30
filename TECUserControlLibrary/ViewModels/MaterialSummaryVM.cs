@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.ViewModels.Interfaces;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -16,6 +18,10 @@ namespace TECUserControlLibrary.ViewModels
         private double _totalTECLabor;
         private double _totalElecCost;
         private double _totalElecLabor;
+
+        private IComponentSummaryVM _currentVM;
+
+        private MaterialSummaryIndex _selectedIndex;
         #endregion
 
         //Constructor
@@ -25,6 +31,7 @@ namespace TECUserControlLibrary.ViewModels
             initializeVMs();
             loadBid(bid);
             resubscribe(changeWatcher);
+            SelectedIndex = MaterialSummaryIndex.Devices;
         }
 
         #region Properties
@@ -71,6 +78,55 @@ namespace TECUserControlLibrary.ViewModels
         public LengthSummaryVM WireSummaryVM { get; private set; }
         public LengthSummaryVM ConduitSummaryVM { get; private set; }
         public MiscCostsSummaryVM MiscSummaryVM { get; private set; }
+
+        public IComponentSummaryVM CurrentVM
+        {
+            get
+            {
+                return _currentVM;
+            }
+            private set
+            {
+                _currentVM = value;
+                RaisePropertyChanged("CurrentVM");
+            }
+        }
+
+        public MaterialSummaryIndex SelectedIndex
+        {
+            set
+            {
+                switch (value)
+                {
+                    case MaterialSummaryIndex.Devices:
+                        CurrentVM = DeviceSummaryVM;
+                        break;
+                    case MaterialSummaryIndex.Controllers:
+                        CurrentVM = ControllerSummaryVM;
+                        break;
+                    case MaterialSummaryIndex.Panels:
+                        CurrentVM = PanelSummaryVM;
+                        break;
+                    case MaterialSummaryIndex.Wire:
+                        CurrentVM = WireSummaryVM;
+                        break;
+                    case MaterialSummaryIndex.Conduit:
+                        CurrentVM = ConduitSummaryVM;
+                        break;
+                    case MaterialSummaryIndex.Misc:
+                        CurrentVM = MiscSummaryVM;
+                        break;
+                    default:
+                        throw new InvalidOperationException("Material Summary Index not found.");
+                }
+                _selectedIndex = value;
+                RaisePropertyChanged("SelectedIndex");
+            }
+            get
+            {
+                return _selectedIndex;
+            }
+        }
         #endregion
 
         #region Methods
