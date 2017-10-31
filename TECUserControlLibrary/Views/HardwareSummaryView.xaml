@@ -74,7 +74,7 @@
         <Border Grid.Column="1">
             <Border.Resources>
                 <DataTemplate x:Key="assocTECItemGrid">
-                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding ElementName=hardwareSummaryView, Path=ViewModel.AssocTECItems}"/>
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocTECItems, Source={StaticResource proxy}}"/>
                 </DataTemplate>
             </Border.Resources>
             <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocTECItemGrid}}"
@@ -89,7 +89,7 @@
         <Border Grid.Column="1" Grid.Row="1">
             <Border.Resources>
                 <DataTemplate x:Key="assocElecItemGrid">
-                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding ElementName=hardwareSummaryView, Path=ViewModel.AssocElecItems}"/>
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocElecItems, Source={StaticResource proxy}}"/>
                 </DataTemplate>
             </Border.Resources>
             <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocElecItemGrid}}"
