@@ -281,7 +281,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(TECIOModule module in controller.IOModules)
             {
-                addIOModule(module);
+                deltas += (addIOModule(module));
             }
             return deltas;
         }
@@ -395,7 +395,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             foreach(TECIOModule module in controller.IOModules)
             {
-                removeIOModule(module);
+                deltas += (removeIOModule(module));
             }
             return deltas;
         }
