@@ -32,6 +32,7 @@ namespace TECUserControlLibrary.Utilities
     public class HardwareSelector : InterfaceDataTemplateSelector<TECHardware> { }
     public class LocatedSelector : InterfaceDataTemplateSelector<TECLocated> { }
     public class LabeledSelector : InterfaceDataTemplateSelector<TECLabeled> { }
+    public class ControllerSelector : InterfaceDataTemplateSelector<TECController> { }
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }

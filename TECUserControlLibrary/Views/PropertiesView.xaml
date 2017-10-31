@@ -18,39 +18,28 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="scope">
-                <!--<Expander Header="Scope" >-->
-                    <pControls:ScopePropertiesControl Selected="{Binding}"/>
-                <!--</Expander>-->
+                <pControls:ScopePropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="cost">
-                <!--<Expander Header="Cost" >-->
-                    <pControls:CostPropertiesControl Selected="{Binding}"/>
-                <!--</Expander>-->
+                <pControls:CostPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="costBatchInterface">
-                <!--<Expander Header="Cost batch" >-->
-                    <pControls:CostBatchPropertiesControl Selected="{Binding}"/>
-                <!--</Expander>-->
+                <pControls:CostBatchPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="pointInterface">
-                <!--<Expander Header="Points" >-->
-                    <pControls:PointPropetiesControl Selected="{Binding}"/>
-                <!--</Expander>-->
+                <pControls:PointPropetiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="hardware">
-                <!--<Expander Header="Hardware" >-->
-                    <pControls:HardwarePropertiesControl Selected="{Binding}"/>
-                <!--</Expander>-->
+                <pControls:HardwarePropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="located">
-                <!--<Expander Header="Located">-->
-                    <pControls:LocatedPropertiesControl Selected="{Binding}"/>
-                <!--</Expander>-->
+                <pControls:LocatedPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="labeled">
-                <!--<Expander Header="Labeled">-->
-                    <pControls:LabeledPropertiesControl Selected="{Binding}"/>
-                <!--</Expander>-->
+                <pControls:LabeledPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="controller">
+                <pControls:ControllerPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
@@ -74,6 +63,9 @@
             <utilities:LabeledSelector x:Key="LabeledSelector"
                                        InterfaceTemplate="{StaticResource labeled}"
                                        DefaultTemplate="{StaticResource default}"/>
+            <utilities:ControllerSelector x:Key="ControllerSelector"
+                                          InterfaceTemplate="{StaticResource controller}"
+                                          DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -87,6 +79,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LocatedSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ControllerSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

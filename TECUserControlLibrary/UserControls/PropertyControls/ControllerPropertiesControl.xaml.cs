@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.UserControls.PropertyControls
 {
@@ -37,5 +39,29 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
         {
             InitializeComponent();
         }
+    }
+
+    public class ControllerToPropertiesItemConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if(value != null)
+            {
+                return new ControllerPropertiesItem(value as TECController);
+
+            } else
+            {
+                return null;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+
+        }
+        #endregion
     }
 }

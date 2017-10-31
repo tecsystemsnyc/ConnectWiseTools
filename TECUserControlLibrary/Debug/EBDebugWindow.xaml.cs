@@ -126,9 +126,11 @@ namespace TECUserControlLibrary.Debug
             equipment.SubScope.Add(toConnect);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
+            controllerType.IOModules.Add(bid.Catalogs.IOModules[0]);
             TECIO io = new TECIO(IOType.AI);
             io.Quantity = 10;
             controllerType.IO.Add(io);
+
             TECController controller = new TECController(controllerType, true);
             controller.Name = "Test Controller";
             typical.AddController(controller);

@@ -98,6 +98,14 @@ namespace EstimatingLibrary
                 return getNetworkConnections();
             }
         }
+        public IOCollection TotalIO
+        {
+            get { return getTotalIO(); }
+        }
+        public IOCollection AvailableIO
+        {
+            get { return getAvailableIO(); }
+        }
         #endregion
 
         #region Constructors
