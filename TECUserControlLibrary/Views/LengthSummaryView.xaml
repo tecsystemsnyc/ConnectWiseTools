@@ -28,7 +28,7 @@
         <!--Length Items-->
         <Border Grid.RowSpan="2">
             <Border.Resources>
-                <DataTemplate x:Key="lengthKey">
+                <DataTemplate x:Key="lengthItemGrid">
                     <DataGrid ItemsSource="{Binding LengthSummaryItems}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
@@ -55,70 +55,13 @@
                     </DataGrid>
                 </DataTemplate>
             </Border.Resources>
-            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource lengthKey}}"/>
-            <!--<Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="{Binding ElementName=lengthSummaryView, Path=LengthItemType}" FontSize="16"/>
-
-                <Border Grid.Row="1">
-                    <DataGrid ItemsSource="{Binding LengthSummaryItems}"
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Type"
-                                                Binding="{Binding Material.Name}"
-                                                Width="Auto"/>
-                            <DataGridTextColumn Header="Cost per Foot"
-                                                Binding="{Binding Material.Cost}"
-                                                Width="Auto"/>
-                            <DataGridTextColumn Header="Labor per Foot"
-                                                Binding="{Binding Material.Labor}"
-                                                Width="Auto"/>
-                            <DataGridTextColumn Header="Length"
-                                                Binding="{Binding Length}"
-                                                Width="Auto"/>
-                            <DataGridTextColumn Header="Total Cost"
-                                                Binding="{Binding TotalCost}"
-                                                Width="Auto"/>
-                            <DataGridTextColumn Header="Total Labor"
-                                                Binding="{Binding TotalLabor}"
-                                                Width="Auto"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Border>-->
-
-                <!--<Border Grid.Row="2">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="{Binding ElementName=lengthSummaryView, Path=LengthItemType, StringFormat={}{0} (Electrical) Cost:}"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"
-                                   Foreground="Black"/>
-                        <Label Grid.Column="1"
-                               Content="{Binding LengthCostTotal}"
-                               HorizontalAlignment="Left"/>
-
-                        <TextBlock Grid.Column="2"
-                                   Text="{Binding ElementName=lengthSummaryView, Path=LengthItemType, StringFormat={}{0} (Electrical) Labor:}"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"
-                                   Foreground="Black"/>
-                        <Label Grid.Column="3"
-                               Content="{Binding LengthLaborTotal}"
-                               HorizontalAlignment="Left"/>
-                    </Grid>
-                </Border>-->
+            <controls:SummaryDataGrid DataContext="{Binding ElementName=lengthSummaryView}" 
+                                      GridTemplate="{Binding Source={StaticResource lengthItemGrid}}"
+                                      Title="{Binding LengthItemType}"
+                                      CostString="{Binding LengthItemType, StringFormat={}{0} (Electrical) Cost}"
+                                      CostValue="{Binding ViewModel.LengthCostTotal}"
+                                      LaborString="{Binding LengthItemType, StringFormat={}{0} (Electrical) Labor}"
+                                      LaborValue="{Binding ViewModel.LengthLaborTotal}"/>
         </Border>
     </Grid>
 </UserControl>
