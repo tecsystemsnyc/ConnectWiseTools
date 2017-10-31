@@ -55,6 +55,7 @@ namespace Tests
             parameters.SoftCoef = 0.37;
             parameters.GraphCoef = 0.53;
             parameters.CommCoef = 1.34;
+            parameters.DesiredConfidence = Confidence.Fifty;
         }
         //
         // Use ClassCleanup to run code after all tests in a class have run
@@ -1681,7 +1682,10 @@ namespace Tests
         [TestMethod]
         public void Estimate_ElectricalWarranty()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
+
 
             var system = new TECTypical();
             var equipment = new TECEquipment(true);
@@ -1766,8 +1770,10 @@ namespace Tests
         [TestMethod]
         public void Estimate_TECLaborHoursFromPoints()
         {
-            var bid = new TECBid(); var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var bid = new TECBid();
             bid.Parameters = parameters;
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
             var system = new TECTypical();
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
