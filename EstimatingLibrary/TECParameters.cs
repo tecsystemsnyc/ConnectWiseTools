@@ -594,8 +594,8 @@ namespace EstimatingLibrary
             _shipping = 3.0;
             _tax = 8.75;
 
-            _subcontractorShipping = 5.0;
-            _subcontractorWarranty = 3.0;
+            _subcontractorShipping = 3.0;
+            _subcontractorWarranty = 5.0;
 
             _pmCoef = 1.0;
             _pmCoefStdError = 1.0;

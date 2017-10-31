@@ -362,6 +362,9 @@
     <Compile Include="Views\NetworkView.xaml.cs">
       <DependentUpon>NetworkView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ParametersView.xaml.cs">
+      <DependentUpon>ParametersView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PropertiesView.xaml.cs">
       <DependentUpon>PropertiesView.xaml</DependentUpon>
     </Compile>
@@ -789,6 +792,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NetworkView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ParametersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

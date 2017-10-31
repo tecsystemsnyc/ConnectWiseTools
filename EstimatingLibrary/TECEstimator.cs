@@ -325,12 +325,12 @@ namespace EstimatingLibrary
         #region Calculate Derivatives
         private double getTECShipping()
         {
-            return (TECMaterialCost * parameters.Shipping);
+            return (TECMaterialCost * parameters.Shipping / 100);
         }
 
         private double getTECWarranty()
         {
-            return (TECMaterialCost * parameters.Warranty);
+            return (TECMaterialCost * parameters.Warranty / 100);
         }
 
         /// <summary>
