@@ -33,6 +33,7 @@ namespace TECUserControlLibrary.Utilities
     public class LocatedSelector : InterfaceDataTemplateSelector<TECLocated> { }
     public class LabeledSelector : InterfaceDataTemplateSelector<TECLabeled> { }
     public class ControllerSelector : InterfaceDataTemplateSelector<TECController> { }
+    public class PanelSelector : InterfaceDataTemplateSelector<TECPanel> { }
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }

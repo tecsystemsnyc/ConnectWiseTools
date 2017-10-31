@@ -221,6 +221,9 @@
     <Compile Include="UserControls\PropertyControls\LocatedPropertiesControl.xaml.cs">
       <DependentUpon>LocatedPropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\PanelPropertiesControl.xaml.cs">
+      <DependentUpon>PanelPropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\PointPropetiesControl.xaml.cs">
       <DependentUpon>PointPropetiesControl.xaml</DependentUpon>
     </Compile>
@@ -634,6 +637,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\LocatedPropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\PanelPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
