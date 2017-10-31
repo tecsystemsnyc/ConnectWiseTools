@@ -69,6 +69,7 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECBid bid, TECEstimator estimate, TECTemplates templates)
         {
             Bid = bid;
+            Estimate = estimate;
             Templates = templates;
         }
 
