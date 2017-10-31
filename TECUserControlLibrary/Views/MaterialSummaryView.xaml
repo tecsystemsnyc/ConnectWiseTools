@@ -110,12 +110,13 @@
                 
                 <!--Conduit Summary-->
                 <TabItem Visibility="Collapsed">
-                    
+                    <local:LengthSummaryView ViewModel="{Binding ConduitSummaryVM}"
+                                             LengthItemType="Conduit Types"/>
                 </TabItem>
                 
                 <!--Misc Summary-->
                 <TabItem Visibility="Collapsed">
-                    
+                    <local:MiscCostSummaryView ViewModel="{Binding MiscSummaryVM}"/>
                 </TabItem>
             </TabControl>
 
