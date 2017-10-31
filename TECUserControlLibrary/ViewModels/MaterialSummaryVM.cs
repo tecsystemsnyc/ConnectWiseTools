@@ -271,9 +271,28 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (ControllerSummaryVM.AddCost(cost));
             }
+            foreach(TECCost cost in controller.Type.AssociatedCosts)
+            {
+                deltas += (ControllerSummaryVM.AddCost(cost));
+            }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 deltas += (addConnection(connection));
+            }
+            foreach(TECIOModule module in controller.IOModules)
+            {
+                addIOModule(module);
+            }
+            return deltas;
+        }
+        private CostBatch addIOModule(TECIOModule module)
+        {
+            //Costs associated with IO Modules will fall under controller associated costs.
+            CostBatch deltas = new CostBatch();
+            deltas += (ControllerSummaryVM.AddCost(module));
+            foreach(TECCost cost in module.AssociatedCosts)
+            {
+                deltas += (ControllerSummaryVM.AddCost(cost));
             }
             return deltas;
         }
@@ -366,9 +385,28 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (ControllerSummaryVM.RemoveCost(cost));
             }
+            foreach(TECCost cost in controller.Type.AssociatedCosts)
+            {
+                deltas += (ControllerSummaryVM.RemoveCost(cost));
+            }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 deltas += (removeConnection(connection));
+            }
+            foreach(TECIOModule module in controller.IOModules)
+            {
+                removeIOModule(module);
+            }
+            return deltas;
+        }
+        private CostBatch removeIOModule(TECIOModule module)
+        {
+            //Costs associated with IO Modules will fall under controller associated costs.
+            CostBatch deltas = new CostBatch();
+            deltas += (ControllerSummaryVM.RemoveCost(module));
+            foreach(TECCost cost in module.AssociatedCosts)
+            {
+                deltas += (ControllerSummaryVM.RemoveCost(cost));
             }
             return deltas;
         }
@@ -416,6 +454,10 @@ namespace TECUserControlLibrary.ViewModels
                 else if (args.Value is TECController controller)
                 {
                     updateTotals(addController(controller));
+                }
+                else if (args.Value is TECIOModule module)
+                {
+                    updateTotals(addIOModule(module));
                 }
                 else if (args.Value is TECPanel panel)
                 {
@@ -469,6 +511,10 @@ namespace TECUserControlLibrary.ViewModels
                 else if (args.Value is TECController controller)
                 {
                     updateTotals(removeController(controller));
+                }
+                else if (args.Value is TECIOModule module)
+                {
+                    updateTotals(removeIOModule(module));
                 }
                 else if (args.Value is TECPanel panel)
                 {

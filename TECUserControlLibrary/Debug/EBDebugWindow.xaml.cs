@@ -134,6 +134,7 @@ namespace TECUserControlLibrary.Debug
             controllerType.Name = "Test Type";
 
             TECController controller = new TECController(controllerType, true);
+            controller.IOModules.Add(bid.Catalogs.IOModules[0]);
             controller.Name = "Test Controller";
             typical.AddController(controller);
             TECController otherController = new TECController(controllerType, true);
