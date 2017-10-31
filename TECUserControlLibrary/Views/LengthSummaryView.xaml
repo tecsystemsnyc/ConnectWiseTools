@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="lengthSummaryView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -14,7 +15,10 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=lengthSummaryView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=lengthSummaryView}">
+        <Grid.Resources>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=lengthSummaryView, Path=ViewModel}"/>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -29,7 +33,7 @@
         <Border Grid.RowSpan="2">
             <Border.Resources>
                 <DataTemplate x:Key="lengthItemGrid">
-                    <DataGrid ItemsSource="{Binding LengthSummaryItems}"
+                    <DataGrid ItemsSource="{Binding Data.LengthSummaryItems, Source={StaticResource proxy}}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
@@ -55,13 +59,72 @@
                     </DataGrid>
                 </DataTemplate>
             </Border.Resources>
-            <controls:SummaryDataGrid DataContext="{Binding ElementName=lengthSummaryView}" 
-                                      GridTemplate="{Binding Source={StaticResource lengthItemGrid}}"
+            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource lengthItemGrid}}"
                                       Title="{Binding LengthItemType}"
                                       CostString="{Binding LengthItemType, StringFormat={}{0} (Electrical) Cost}"
                                       CostValue="{Binding ViewModel.LengthCostTotal}"
                                       LaborString="{Binding LengthItemType, StringFormat={}{0} (Electrical) Labor}"
                                       LaborValue="{Binding ViewModel.LengthLaborTotal}"/>
+        </Border>
+        
+        <!--Associated TEC Items-->
+        <Border Grid.Column="1">
+            <Border.Resources>
+                <DataTemplate x:Key="assocTECItemGrid">
+                    <controls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocTECItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocTECItemGrid}}"
+                                      Title="Associated TEC Cost and Labor Items"
+                                      CostString="Total Associated TEC Cost"
+                                      CostValue="{Binding ViewModel.AssocTECCostTotal}"
+                                      LaborString="Total Associated TEC Labor"
+                                      LaborValue="{Binding ViewModel.AssocTECLaborTotal}"/>
+        </Border>
+        
+        <!--Associated Elec Items-->
+        <Border Grid.Column="1" Grid.Row="1">
+            <Border.Resources>
+                <DataTemplate x:Key="assocElecItemGrid">
+                    <controls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocElecItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocElecItemGrid}}"
+                                      Title="Associated Electrical Cost and Labor Items"
+                                      CostString="Total Associated Electrical Cost"
+                                      CostValue="{Binding ViewModel.AssocElecCostTotal}"
+                                      LaborString="Total Associated Electrical Labor"
+                                      LaborValue="{Binding ViewModel.AssocElecLaborTotal}"/>
+        </Border>
+        
+        <!--Rated TEC Items-->
+        <Border Grid.Column="2">
+            <Border.Resources>
+                <DataTemplate x:Key="ratedTECItemGrid">
+                    <controls:RatedCostSummaryItemGridControl ItemsSource="{Binding Data.RatedTECItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource ratedTECItemGrid}}"
+                                      Title="Rated TEC Cost and Labor Items"
+                                      CostString="Total Rated TEC Cost"
+                                      CostValue="{Binding ViewModel.RatedTECCostTotal}"
+                                      LaborString="Total Rated TEC Labor"
+                                      LaborValue="{Binding ViewModel.RatedTECLaborTotal}"/>
+        </Border>
+        
+        <!--Rated Elec Items-->
+        <Border Grid.Column="2" Grid.Row="1">
+            <Border.Resources>
+                <DataTemplate x:Key="ratedElecItemGrid">
+                    <controls:RatedCostSummaryItemGridControl ItemsSource="{Binding Data.RatedElecItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <controls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource ratedElecItemGrid}}"
+                                      Title="Rated Electrical Cost and Labor Items"
+                                      CostString="Total Rated Electrical Cost"
+                                      CostValue="{Binding ViewModel.RatedElecCostTotal}"
+                                      LaborString="Total Rated Electrical Labor"
+                                      LaborValue="{Binding ViewModel.RatedElecLaborTotal}"/>
         </Border>
     </Grid>
 </UserControl>
