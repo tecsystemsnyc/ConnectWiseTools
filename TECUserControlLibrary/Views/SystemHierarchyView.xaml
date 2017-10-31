@@ -112,6 +112,11 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:MiscListControl.Dropped">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
             <EventTrigger RoutedEvent="listControls:SystemListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
@@ -272,7 +277,8 @@
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="MiscTemplate">
-                                <local:MiscCostsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.MiscVM}"/>
+                                <local:MiscCostsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.MiscVM}"
+                                                     DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"/>
                             </DataTemplate>
                             <DataTemplate x:Key="ProposalTemplate">
                                 <Grid>
