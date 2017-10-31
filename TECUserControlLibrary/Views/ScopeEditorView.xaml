@@ -130,7 +130,8 @@
                 <TabItem Visibility="Collapsed"/>
                 <TabItem Visibility="Collapsed"/>
                 <TabItem Header="Misc.">
-                    <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
+                    <views:MiscCostsView ViewModel="{Binding MiscVM}"
+                                         DropHandler="{Binding MiscVM}"/>
                 </TabItem>
             </TabControl>
             <!--Right Tab Control-->

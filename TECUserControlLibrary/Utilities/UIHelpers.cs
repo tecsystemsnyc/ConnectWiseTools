@@ -24,7 +24,7 @@ namespace TECUserControlLibrary.Utilities
 
         public static void StandardDragOver(IDropInfo dropInfo)
         {
-            if (dropInfo.IsSameDragDropContextAsSource)
+            if (dropInfo.TargetCollection == dropInfo.DragInfo.SourceCollection)
             {
                 return;
             }

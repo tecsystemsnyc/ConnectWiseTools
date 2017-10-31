@@ -8,7 +8,7 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
-             x:Name="parent"
+             x:Name="miscCostsView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.Resources>
@@ -18,7 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+    <Grid DataContext="{Binding ElementName=miscCostsView, Path=ViewModel}"
           Background="{StaticResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -40,7 +40,7 @@
             </Border>
             
             <listControls:MiscListControl Source="{Binding TECCostCollection}"
-                                          DropHandler="{Binding}"
+                                          DropHandler="{Binding ElementName=miscCostsView, Path=DropHandler}"
                                           Grid.Row="1" Grid.Column="1"
                                           DeleteCommand="{Binding DeleteCommand}"
                 Margin="5,0,5,0"/>
@@ -63,7 +63,7 @@
             </Border>
             
             <listControls:MiscListControl Source="{Binding ElectricalCostCollection}"
-                                          DropHandler="{Binding}"
+                                          DropHandler="{Binding ElementName=miscCostsView, Path=DropHandler}"
                                           Grid.Row="1" Grid.Column="1"
                                           DeleteCommand="{Binding DeleteCommand}"
                 Margin="5,0,5,0"/>

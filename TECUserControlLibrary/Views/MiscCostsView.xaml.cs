@@ -30,6 +30,16 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(MiscCostsVM),
                 typeof(MiscCostsView));
+        
+        public object DropHandler
+        {
+            get { return (object)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DropHandler.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(object), typeof(MiscCostsView));
 
         public MiscCostsView()
         {

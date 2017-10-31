@@ -202,8 +202,7 @@ namespace TECUserControlLibrary.ViewModels
             catalogs = scopeManager.Catalogs;
             this.scopeManager = scopeManager;
         }
-
-
+        
         public event Action<TECObject> Selected;
 
         private void backExecute(object obj)
@@ -284,8 +283,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             return true;
         }
-
-
+        
         private void addBranchExecute(TECScopeBranch obj)
         {
             if(obj == null)
