@@ -14,7 +14,7 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=hardwareSummaryView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=hardwareSummaryView}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -26,17 +26,9 @@
 
         <!--Hardware Items-->
         <Border Grid.RowSpan="2">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="{Binding ElementName=hardwareSummaryView, Path=HardwareItemType}" FontSize="16"/>
-
-                <Border Grid.Row="1">
-                    <DataGrid ItemsSource="{Binding HardwareItems}"
+            <Border.Resources>
+                <DataTemplate x:Key="hardwareItemGrid">
+                    <DataGrid ItemsSource="{Binding ElementName=hardwareSummaryView, Path=ViewModel.HardwareItems}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True">
                         <DataGrid.Columns>
@@ -63,116 +55,44 @@
                                             Width="Auto"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                </Border>
-
-                <Border Grid.Row="2">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="{Binding ElementName=hardwareSummaryView, Path=HardwareItemType, StringFormat={}{0} (TEC) Cost:}"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"
-                                   Foreground="Black"/>
-                        <Label Grid.Column="1" 
-                               Content="{Binding HardwareCost}"
-                               HorizontalAlignment="Left"/>
-
-                        <TextBlock Grid.Column="2"
-                                   Text="{Binding ElementName=hardwareSummaryView, Path=HardwareItemType, StringFormat={}{0} (TEC) Labor:}"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"
-                                   Foreground="Black"/>
-                        <Label Grid.Column="3"
-                               Content="{Binding HardwareLabor}"
-                               HorizontalAlignment="Left"/>
-                    </Grid>
-                </Border>
-            </Grid>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource hardwareItemGrid}}"
+                                          Title="{Binding HardwareItemType}"
+                                          CostString="{Binding HardwareItemType, StringFormat={}{0} (TEC) Cost}"
+                                          CostValue="{Binding ViewModel.HardwareCost}"
+                                          LaborString="{Binding HardwareItemType, StringFormat={}{0} (TEC) Labor}"
+                                          LaborValue="{Binding ViewModel.HardwareLabor}"/>
         </Border>
 
         <!--Associated TEC Items-->
         <Border Grid.Column="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="Associated TEC Cost and Labor Items" FontSize="16"/>
-
-                <Border Grid.Row="1">
-                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding AssocTECItems}"/>
-                </Border>
-
-                <Border Grid.Row="2">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label Content="Total Associated TEC Cost:"
-                               HorizontalAlignment="Right"/>
-                        <Label Grid.Column="1"
-                               Content="{Binding AssocTECCostTotal}"
-                               HorizontalAlignment="Left"/>
-                        <Label Grid.Column="2"
-                               Content="Total Associated TEC Labor:"
-                               HorizontalAlignment="Right"/>
-                        <Label Grid.Column="3"
-                               Content="{Binding AssocTECLaborTotal}"
-                               HorizontalAlignment="Left"/>
-                    </Grid>
-                </Border>
-            </Grid>
+            <Border.Resources>
+                <DataTemplate x:Key="assocTECItemGrid">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding ElementName=hardwareSummaryView, Path=ViewModel.AssocTECItems}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocTECItemGrid}}"
+                                          Title="Associated TEC Cost and Labor Items"
+                                          CostString="Total Associated TEC Cost"
+                                          CostValue="{Binding ViewModel.AssocTECCostTotal}"
+                                          LaborString="Total Assosciated Labor Cost"
+                                          LaborValue="{Binding ViewModel.AssocTECLaborTotal}"/>
         </Border>
         
         <!--Associated Elec Items-->
         <Border Grid.Column="1" Grid.Row="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="Associated Electrical Cost and Labor Items" FontSize="16"/>
-
-                <Border Grid.Row="1">
-                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding AssocElecItems}"/>
-                </Border>
-
-                <Border Grid.Row="2">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label Content="Total Associated Electrial Cost:"
-                               HorizontalAlignment="Right"/>
-                        <Label Grid.Column="1"
-                               Content="{Binding AssocElecCostTotal}"
-                               HorizontalAlignment="Left"/>
-                        <Label Grid.Column="2"
-                               Content="Total Associated Electrical Labor:"
-                               HorizontalAlignment="Right"/>
-                        <Label Grid.Column="3"
-                               Content="{Binding AssocElecLaborTotal}"
-                               HorizontalAlignment="Left"/>
-                    </Grid>
-                </Border>
-            </Grid>
+            <Border.Resources>
+                <DataTemplate x:Key="assocElecItemGrid">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding ElementName=hardwareSummaryView, Path=ViewModel.AssocElecItems}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocElecItemGrid}}"
+                                          Title="Associated Electrical Cost and Labor Items"
+                                          CostString="Total Associated Electrical Cost"
+                                          CostValue="{Binding ViewModel.AssocElecCostTotal}"
+                                          LaborString="Total Associated Electrical Labor"
+                                          LaborValue="{Binding ViewModel.AssocElecLaborTotal}"/>
         </Border>
     </Grid>
 </UserControl>
