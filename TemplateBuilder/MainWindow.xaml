@@ -161,7 +161,8 @@
                                 <views:MaterialView ViewModel="{Binding MaterialsTab}" Selected="{Binding EditTab.Selected}"/>
                             </TabItem>
                             <TabItem Header="Parameters">
-                                <views:ParametersView Source="{Binding Templates.Parameters}"/>
+                                <views:ParametersView Source="{Binding Templates.Parameters}"
+                                                      AddCommand="{Binding AddParameterCommand}"/>
                             </TabItem>
                             <TabItem Header="Settings">
                                 <views:SettingsView ViewModel="{Binding SettingsVM}"/>

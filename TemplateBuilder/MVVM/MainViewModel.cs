@@ -76,6 +76,7 @@ namespace TemplateBuilder.MVVM
             }
         }
         public ICommand RefreshCommand { get; private set; }
+        public ICommand AddParameterCommand { get; private set; }
         public object Selected
         {
             get { return _selected; }
@@ -187,6 +188,7 @@ namespace TemplateBuilder.MVVM
         {
             base.setupCommands();
             RefreshCommand = new RelayCommand(RefreshTemplatesExecute, RefreshCanExecute);
+            AddParameterCommand = new RelayCommand(AddParametersExecute);
         }
         protected override void setupExtensions(MenuType menuType)
         {
@@ -365,6 +367,10 @@ namespace TemplateBuilder.MVVM
         private bool RefreshCanExecute()
         {
             return !(TemplatesFilePath == "");
+        }
+        private void AddParametersExecute()
+        {
+            Templates.Parameters.Add(new TECParameters(Guid.NewGuid()));
         }
         private void buildTitleString()
         {
