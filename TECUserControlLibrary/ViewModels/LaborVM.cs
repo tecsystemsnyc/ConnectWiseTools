@@ -48,6 +48,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public bool TemplatesLoaded;
         public ICommand ReloadCommand { get; private set; }
+        public RelayCommand<TECParameters> SetParametersCommand { get; private set; }
 
         public Action LoadTemplates;
 
@@ -62,8 +63,9 @@ namespace TECUserControlLibrary.ViewModels
             Estimate = new TECEstimator(Bid, new ChangeWatcher(Bid));
 
             ReloadCommand = new RelayCommand(ReloadExecute);
+            SetParametersCommand = new RelayCommand<TECParameters>(SetParametersExecute);
         }
-
+        
         public void Refresh(TECBid bid, TECEstimator estimate, TECTemplates templates)
         {
             Bid = bid;
@@ -84,6 +86,9 @@ namespace TECUserControlLibrary.ViewModels
                 //Bid.Labor.UpdateConstants(Templates.Labor);
             }
         }
-
+        private void SetParametersExecute(TECParameters obj)
+        {
+            Bid.Parameters = obj;
+        }
     }
 }
