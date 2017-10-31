@@ -8,6 +8,13 @@
              x:Name="materialSummaryView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=materialSummaryView, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -36,34 +43,34 @@
             </Grid.RowDefinitions>
 
             <!--Grand Subtotals-->
-            <Label Content="Subtotals:" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+            <TextBlock Text="Subtotals:" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16"/>
 
-            <Label Content="TEC Cost Subtotal:" Grid.Row="1" HorizontalAlignment="Right"/>
-            <Label Content="{Binding TotalTECCost}" Grid.Row="1" Grid.Column="1"/>
+            <TextBlock Text="TEC Cost Subtotal:" Grid.Row="1" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding TotalTECCost, StringFormat={}{0:C}}" Grid.Row="1" Grid.Column="1"/>
 
-            <Label Content="TEC Labor Subtotal:" Grid.Row="2" HorizontalAlignment="Right"/>
-            <Label Content="{Binding TotalTECLabor}" Grid.Row="2" Grid.Column="1"/>
+            <TextBlock Text="TEC Labor Subtotal:" Grid.Row="2" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding TotalTECLabor, StringFormat={}{0:F2}}" Grid.Row="2" Grid.Column="1"/>
 
-            <Label Content="Electrical Cost Subtotal:" Grid.Row="3" HorizontalAlignment="Right"/>
-            <Label Content="{Binding TotalElecCost}" Grid.Row="3" Grid.Column="1"/>
+            <TextBlock Text="Electrical Cost Subtotal:" Grid.Row="3" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding TotalElecCost, StringFormat={}{0:C}}" Grid.Row="3" Grid.Column="1"/>
 
-            <Label Content="Electrical Labor Subtotal:" Grid.Row="4" HorizontalAlignment="Right"/>
-            <Label Content="{Binding TotalElecLabor}" Grid.Row="4" Grid.Column="1"/>
+            <TextBlock Text="Electrical Labor Subtotal:" Grid.Row="4" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding TotalElecLabor, StringFormat={}{0:F2}}" Grid.Row="4" Grid.Column="1"/>
 
             <!--Type Subtotals-->
-            <Label Content="Type Subtotals:" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} Subtotals:}" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16"/>
 
-            <Label Content="Type TEC Cost Subtotal:" Grid.Row="7" HorizontalAlignment="Right"/>
-            <Label Content="{Binding CurrentVM.TotalTECCost}" Grid.Row="7" Grid.Column="1"/>
+            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} TEC Cost Subtotal:}" Grid.Row="7" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding CurrentVM.TotalTECCost, StringFormat={}{0:C}}" Grid.Row="7" Grid.Column="1"/>
 
-            <Label Content="Type TEC Labor Subtotal:" Grid.Row="8" HorizontalAlignment="Right"/>
-            <Label Content="{Binding CurrentVM.TotalTECLabor}" Grid.Row="8" Grid.Column="1"/>
+            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} TEC Labor Subtotal:}" Grid.Row="8" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding CurrentVM.TotalTECLabor, StringFormat={}{0:F2}}" Grid.Row="8" Grid.Column="1"/>
 
-            <Label Content="Type Elec Cost Subtotal:" Grid.Row="9" HorizontalAlignment="Right"/>
-            <Label Content="{Binding CurrentVM.TotalElecCost}" Grid.Row="9" Grid.Column="1"/>
+            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} Electrical Cost Subtotal:}" Grid.Row="9" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding CurrentVM.TotalElecCost, StringFormat={}{0:C}}" Grid.Row="9" Grid.Column="1"/>
 
-            <Label Content="Type Elec Labor Subtotal:" Grid.Row="10" HorizontalAlignment="Right"/>
-            <Label Content="{Binding CurrentVM.TotalElecLabor}" Grid.Row="10" Grid.Column="1"/>
+            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} Electrical Labor Subtotal:}" Grid.Row="10" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding CurrentVM.TotalElecLabor, StringFormat={}{0:F2}}" Grid.Row="10" Grid.Column="1"/>
         </Grid>
         
         <!--Chilren Views-->
@@ -89,37 +96,36 @@
                     <local:HardwareSummaryView ViewModel="{Binding DeviceSummaryVM}"
                                                HardwareItemType="Devices"/>
                 </TabItem>
-                
+
                 <!--Controller Summary-->
                 <TabItem Visibility="Collapsed">
                     <local:HardwareSummaryView ViewModel="{Binding ControllerSummaryVM}"
                                                HardwareItemType="Controller Types"/>
                 </TabItem>
-                
+
                 <!--Panel Summary-->
                 <TabItem Visibility="Collapsed">
                     <local:HardwareSummaryView ViewModel="{Binding PanelSummaryVM}"
                                                HardwareItemType="Panel Types"/>
                 </TabItem>
-                
+
                 <!--Wire Summary-->
                 <TabItem Visibility="Collapsed">
                     <local:LengthSummaryView ViewModel="{Binding WireSummaryVM}"
                                              LengthItemType="Wire Types"/>
                 </TabItem>
-                
+
                 <!--Conduit Summary-->
                 <TabItem Visibility="Collapsed">
                     <local:LengthSummaryView ViewModel="{Binding ConduitSummaryVM}"
                                              LengthItemType="Conduit Types"/>
                 </TabItem>
-                
+
                 <!--Misc Summary-->
                 <TabItem Visibility="Collapsed">
                     <local:MiscCostSummaryView ViewModel="{Binding MiscSummaryVM}"/>
                 </TabItem>
             </TabControl>
-
         </Grid>
     </Grid>
 </UserControl>

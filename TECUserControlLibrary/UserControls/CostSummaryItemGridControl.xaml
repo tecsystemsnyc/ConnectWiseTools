@@ -16,19 +16,19 @@
                                     Binding="{Binding Cost.Name}"
                                     Width="Auto"/>
                 <DataGridTextColumn Header="Cost per Item"
-                                    Binding="{Binding Cost.Cost}"
+                                    Binding="{Binding Cost.Cost, StringFormat={}{0:C}}"
                                     Width="Auto"/>
                 <DataGridTextColumn Header="Labor per Item"
-                                    Binding="{Binding Cost.Labor}"
+                                    Binding="{Binding Cost.Labor, StringFormat={}{0:F2}}"
                                     Width="Auto"/>
                 <DataGridTextColumn Header="Quantity"
                                     Binding="{Binding Quantity}"
                                     Width="Auto"/>
                 <DataGridTextColumn Header="Total Cost"
-                                    Binding="{Binding TotalCost}"
+                                    Binding="{Binding TotalCost, StringFormat={}{0:C}}"
                                     Width="Auto"/>
                 <DataGridTextColumn Header="Total Labor"
-                                    Binding="{Binding TotalLabor}"
+                                    Binding="{Binding TotalLabor, StringFormat={}{0:F2}}"
                                     Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>

@@ -20,8 +20,8 @@ namespace TECUserControlLibrary.ViewModels
         private double _totalElecLabor;
 
         private IComponentSummaryVM _currentVM;
-
         private MaterialSummaryIndex _selectedIndex;
+        private string _currentType;
         #endregion
 
         //Constructor
@@ -91,7 +91,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("CurrentVM");
             }
         }
-
         public MaterialSummaryIndex SelectedIndex
         {
             set
@@ -100,21 +99,27 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     case MaterialSummaryIndex.Devices:
                         CurrentVM = DeviceSummaryVM;
+                        CurrentType = "Device";
                         break;
                     case MaterialSummaryIndex.Controllers:
                         CurrentVM = ControllerSummaryVM;
+                        CurrentType = "Controller";
                         break;
                     case MaterialSummaryIndex.Panels:
                         CurrentVM = PanelSummaryVM;
+                        CurrentType = "Panel";
                         break;
                     case MaterialSummaryIndex.Wire:
                         CurrentVM = WireSummaryVM;
+                        CurrentType = "Wire";
                         break;
                     case MaterialSummaryIndex.Conduit:
                         CurrentVM = ConduitSummaryVM;
+                        CurrentType = "Conduit";
                         break;
                     case MaterialSummaryIndex.Misc:
                         CurrentVM = MiscSummaryVM;
+                        CurrentType = "Misc";
                         break;
                     default:
                         throw new InvalidOperationException("Material Summary Index not found.");
@@ -125,6 +130,15 @@ namespace TECUserControlLibrary.ViewModels
             get
             {
                 return _selectedIndex;
+            }
+        }
+        public string CurrentType
+        {
+            get { return _currentType; }
+            set
+            {
+                _currentType = value;
+                RaisePropertyChanged("CurrentType");
             }
         }
         #endregion
