@@ -13,6 +13,7 @@ namespace TECUserControlLibrary.Models
     public class ControllerPropertiesItem : ViewModelBase
     {
         private List<TECIO> _io;
+        private List<TECIO> _availableIO;
         private ObservableCollection<ModuleGroup> _modules;
 
         public TECController Controller
@@ -27,6 +28,15 @@ namespace TECUserControlLibrary.Models
             {
                 _io = value;
                 RaisePropertyChanged("IO");
+            }
+        }
+        public List<TECIO> AvailableIO
+        {
+            get { return _availableIO; }
+            set
+            {
+                _availableIO = value;
+                RaisePropertyChanged("AvailableIO");
             }
         }
         public ObservableCollection<ModuleGroup> Modules
@@ -62,7 +72,8 @@ namespace TECUserControlLibrary.Models
 
         private bool canAddModule(TECIOModule arg)
         {
-            return true;
+            return Controller.Type.IOModules.Where(item => item == arg).Count() >
+                Controller.IOModules.Where(item => item == arg).Count();
         }
 
         private void removeModuleExecute(TECIOModule obj)
@@ -74,12 +85,14 @@ namespace TECUserControlLibrary.Models
 
         private bool canRemoveModule(TECIOModule arg)
         {
-            return (Controller.IOModules.Contains(arg));
+            bool hasModule = Controller.IOModules.Contains(arg);
+            return hasModule;
         }
 
         private void populateIO()
         {
             IO = Controller.TotalIO.ListIO();
+            AvailableIO = Controller.AvailableIO.ListIO();
         }
         private void populateModules()
         {

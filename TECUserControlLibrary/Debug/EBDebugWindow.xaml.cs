@@ -130,6 +130,7 @@ namespace TECUserControlLibrary.Debug
             TECIO io = new TECIO(IOType.AI);
             io.Quantity = 10;
             controllerType.IO.Add(io);
+            controllerType.Name = "Test Type";
 
             TECController controller = new TECController(controllerType, true);
             controller.Name = "Test Controller";

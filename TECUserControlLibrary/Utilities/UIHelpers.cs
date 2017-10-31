@@ -24,6 +24,10 @@ namespace TECUserControlLibrary.Utilities
 
         public static void StandardDragOver(IDropInfo dropInfo)
         {
+            if (dropInfo.IsSameDragDropContextAsSource)
+            {
+                return;
+            }
             var sourceItem = dropInfo.Data;
             Type sourceType;
             if (sourceItem is IList && ((IList)sourceItem).Count > 0)
