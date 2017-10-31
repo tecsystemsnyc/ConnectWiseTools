@@ -142,6 +142,10 @@ namespace EstimatingLibrary
                     _childrenConnections.Add(connectionToAdd);
                 }
             }
+            foreach (TECIOModule module in controllerSource.IOModules)
+            {
+                this.IOModules.Add(module);
+            }
         }
         #endregion
 
