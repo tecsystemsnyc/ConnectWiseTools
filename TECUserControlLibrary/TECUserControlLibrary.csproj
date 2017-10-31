@@ -350,6 +350,9 @@
       <DependentUpon>MaterialSummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MiscCostsSummaryVM.cs" />
+    <Compile Include="Views\MiscCostSummaryView.xaml.cs">
+      <DependentUpon>MiscCostSummaryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MiscCostsView.xaml.cs">
       <DependentUpon>MiscCostsView.xaml</DependentUpon>
     </Compile>
@@ -767,6 +770,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MaterialSummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MiscCostSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
