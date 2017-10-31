@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="hardwareSummaryView"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
@@ -15,6 +16,9 @@
         </Style>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=hardwareSummaryView}">
+        <Grid.Resources>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=hardwareSummaryView, Path=ViewModel}"/>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -23,12 +27,13 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        
 
         <!--Hardware Items-->
         <Border Grid.RowSpan="2">
             <Border.Resources>
                 <DataTemplate x:Key="hardwareItemGrid">
-                    <DataGrid ItemsSource="{Binding ElementName=hardwareSummaryView, Path=ViewModel.HardwareItems}"
+                    <DataGrid ItemsSource="{Binding Data.HardwareItems, Source={StaticResource proxy}}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True">
                         <DataGrid.Columns>
