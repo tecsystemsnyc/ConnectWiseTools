@@ -130,6 +130,7 @@ namespace TECUserControlLibrary.Debug
             TECIO io = new TECIO(IOType.AI);
             io.Quantity = 10;
             controllerType.IO.Add(io);
+            bid.Catalogs.IOModules[0].IO.Add(io);
             controllerType.Name = "Test Type";
 
             TECController controller = new TECController(controllerType, true);
@@ -143,7 +144,10 @@ namespace TECUserControlLibrary.Debug
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];
 
-            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), true);
+            TECPanelType panelType = new TECPanelType(new TECManufacturer());
+            panelType.Name = "test type";
+
+            TECPanel panel = new TECPanel(panelType, true);
             panel.Name = "Test Panel";
             typical.Panels.Add(panel);
 

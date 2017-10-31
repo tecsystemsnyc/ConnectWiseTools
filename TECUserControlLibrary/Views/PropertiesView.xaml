@@ -41,6 +41,9 @@
             <DataTemplate x:Key="controller">
                 <pControls:ControllerPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
+            <DataTemplate x:Key="panel">
+                <pControls:PanelPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -66,6 +69,9 @@
             <utilities:ControllerSelector x:Key="ControllerSelector"
                                           InterfaceTemplate="{StaticResource controller}"
                                           DefaultTemplate="{StaticResource default}"/>
+            <utilities:PanelSelector x:Key="PanelSelector"
+                                     InterfaceTemplate="{StaticResource panel}"
+                                     DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -80,6 +86,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LocatedSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ControllerSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PanelSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
