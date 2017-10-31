@@ -233,6 +233,9 @@
     <Compile Include="UserControls\ListControls\SystemListControl.xaml.cs">
       <DependentUpon>SystemListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\RatedCostSummaryItemGridControl.xaml.cs">
+      <DependentUpon>RatedCostSummaryItemGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\SummaryDataGrid.xaml.cs">
       <DependentUpon>SummaryDataGrid.xaml</DependentUpon>
     </Compile>
@@ -644,6 +647,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\SystemListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\RatedCostSummaryItemGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
