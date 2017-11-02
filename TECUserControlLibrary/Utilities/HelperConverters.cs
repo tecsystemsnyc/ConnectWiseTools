@@ -759,6 +759,30 @@ namespace TECUserControlLibrary.Utilities
         }
     }
 
+    public class InvertBoolConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is bool boolVal)
+            {
+                return !boolVal;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter
