@@ -246,6 +246,7 @@
     <Compile Include="Utilities\MessageBoxService.cs" />
     <Compile Include="ViewModels\AddVMs\AddControllerVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddEquipmentVM.cs" />
+    <Compile Include="ViewModels\AddVMs\AddInstanceVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddMiscVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddPanelVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddPointVM.cs" />
@@ -270,6 +271,9 @@
     </Compile>
     <Compile Include="Views\AddViews\AddEquipmentView.xaml.cs">
       <DependentUpon>AddEquipmentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddViews\AddInstanceView.xaml.cs">
+      <DependentUpon>AddInstanceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddViews\AddMiscView.xaml.cs">
       <DependentUpon>AddMiscView.xaml</DependentUpon>
@@ -676,6 +680,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddViews\AddEquipmentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddViews\AddInstanceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

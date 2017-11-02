@@ -213,7 +213,21 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(SystemHierarchyVM), typeof(SystemHierarchyView), new PropertyMetadata(default(SystemHierarchyVM)));
-        
+
+
+
+        public ICommand AddInstanceCommand
+        {
+            get { return (ICommand)GetValue(AddInstanceCommandProperty); }
+            set { SetValue(AddInstanceCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for AddInstanceCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AddInstanceCommandProperty =
+            DependencyProperty.Register("AddInstanceCommand", typeof(ICommand), typeof(SystemHierarchyView));
+
+
+
         public SystemHierarchyView()
         {
             InitializeComponent();

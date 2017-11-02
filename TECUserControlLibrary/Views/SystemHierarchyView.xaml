@@ -18,6 +18,12 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
+            <sys:Boolean x:Key="true">
+                true
+            </sys:Boolean>
+            <sys:Boolean x:Key="false">
+                false
+            </sys:Boolean>
             <Storyboard x:Key="systemMove">
                 <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
                                  Storyboard.TargetProperty="(local:SystemHierarchyView.SystemWidth)"
@@ -188,6 +194,10 @@
                                             IsDragSource="True"/>
                 <Button Width="50" Content="Add" Style="{StaticResource AddButtonStyle}" x:Name="addSystem" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right"
                         Command="{Binding ViewModel.AddSystemCommand}" />
+                <Button Width="50" Content="Add" Style="{StaticResource AddButtonStyle}" x:Name="addInstance" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right"
+                        Command="{Binding ElementName=systemHierarchyView, Path=AddInstanceCommand}" 
+                        Visibility="{Binding ElementName=systemHierarchyView,Path=IsTypical, 
+                    Converter={utilities:BooleanToVisibilityConverter}, ConverterParameter={StaticResource false}}"/>
             </Grid>
             
             <!--Column 1-->
@@ -434,6 +444,9 @@
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type addVMs:AddMiscVM}">
                             <addViews:AddMiscView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddInstanceVM}">
+                            <addViews:AddInstanceView ViewModel="{Binding}"/>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vms:UpdateConnectionVM}">
                             <local:UpdateConnectionView ViewModel="{Binding}"/>

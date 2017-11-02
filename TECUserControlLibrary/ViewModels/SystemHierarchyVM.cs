@@ -295,6 +295,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        
+
         private void deleteSystemExecute(TECSystem obj)
         {
             if(scopeManager is TECBid bid)
