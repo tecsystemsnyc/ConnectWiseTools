@@ -41,6 +41,18 @@ namespace TECUserControlLibrary.Views
         public static readonly DependencyProperty DropHandlerProperty =
             DependencyProperty.Register("DropHandler", typeof(object), typeof(MiscCostsView));
 
+        public bool ReadOnly
+        {
+            get { return (bool)GetValue(ReadOnlyProperty); }
+            set { SetValue(ReadOnlyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ReadOnly.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReadOnlyProperty =
+            DependencyProperty.Register("ReadOnly", typeof(bool), typeof(MiscCostsView), new PropertyMetadata(false));
+
+
+
         public MiscCostsView()
         {
             InitializeComponent();

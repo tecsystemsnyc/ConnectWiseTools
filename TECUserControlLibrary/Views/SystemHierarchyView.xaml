@@ -288,7 +288,8 @@
                             </DataTemplate>
                             <DataTemplate x:Key="MiscTemplate">
                                 <local:MiscCostsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.MiscVM}"
-                                                     DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"/>
+                                                     DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
+                                                     ReadOnly="{Binding ElementName=systemHierarchyView, Path=IsTypical, Converter={utilities:InvertBoolConverter}}"/>
                             </DataTemplate>
                             <DataTemplate x:Key="ProposalTemplate">
                                 <Grid>

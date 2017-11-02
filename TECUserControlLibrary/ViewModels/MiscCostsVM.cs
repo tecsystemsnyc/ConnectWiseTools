@@ -181,7 +181,6 @@ namespace TECUserControlLibrary.ViewModels
             _system = system;
             sourceCollection = system.MiscCosts;
             populateCollections();
-            
         }
 
         private void setup()
@@ -197,14 +196,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool addNewCanExecute()
         {
-            if(MiscName != "")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (MiscName != "");
         }
         private void addNewExecute()
         {
