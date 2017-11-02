@@ -513,6 +513,17 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            else if (value is TECIOModule && sender is TECController)
+            {
+                var characteristicController = sender as TECController;
+                if (TypicalInstanceDictionary.ContainsKey(characteristicController))
+                {
+                    foreach (TECController instance in TypicalInstanceDictionary.GetInstances(characteristicController))
+                    {
+                        instance.IOModules.Add(value as TECIOModule);
+                    }
+                }
+            }
             else if (value is TECCost && sender is TECScope && !(value is TECMisc)
                 && !(value is TECController) && !(value is TECDevice))
             {
@@ -535,7 +546,6 @@ namespace EstimatingLibrary
                         }
                     }
                 }
-
             }
         }
         private void handleRemove(TECObject value, TECObject sender)
@@ -730,6 +740,17 @@ namespace EstimatingLibrary
                             }
                         }
 
+                    }
+                }
+            }
+            else if (value is TECIOModule && sender is TECController)
+            {
+                var characteristicController = sender as TECController;
+                if (TypicalInstanceDictionary.ContainsKey(characteristicController))
+                {
+                    foreach (TECController instance in TypicalInstanceDictionary.GetInstances(characteristicController))
+                    {
+                        instance.IOModules.Remove(value as TECIOModule);
                     }
                 }
             }
