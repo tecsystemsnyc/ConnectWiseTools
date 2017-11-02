@@ -26,7 +26,7 @@
                   SelectionChanged="ListView_Selected">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid MouseUp="ItemControl_MouseUp">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>

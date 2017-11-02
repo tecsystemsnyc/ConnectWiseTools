@@ -30,10 +30,12 @@
                     <ContentPresenter Content="{Binding}">
                         <ContentPresenter.Resources>
                             <DataTemplate DataType="{x:Type models:TECController}">
-                                <itemControls:ControllerItemControl Controller="{Binding}"/>
+                                <itemControls:ControllerItemControl Controller="{Binding}"
+                                                                    MouseUp="ItemControl_MouseUp"/>
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type models:TECSubScope}">
-                                <itemControls:SubScopeItemControl SubScope="{Binding}"/>
+                                <itemControls:SubScopeItemControl SubScope="{Binding}"
+                                                                  MouseUp="ItemControl_MouseUp"/>
                             </DataTemplate>
                         </ContentPresenter.Resources>
                     </ContentPresenter>

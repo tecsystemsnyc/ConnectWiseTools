@@ -24,7 +24,8 @@
                 <DataTemplate>
                     <itemControls:ControllerInPanelControl Controller="{Binding}"
                                                         ViewModel="{Binding ElementName=controllerInPanelListControl, Path=ViewModel}"
-                                                        DeleteCommand="{Binding ElementName=controllerInPanelListControl, Path=DeleteCommand}"/>
+                                                        DeleteCommand="{Binding ElementName=controllerInPanelListControl, Path=DeleteCommand}"
+                                                           MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

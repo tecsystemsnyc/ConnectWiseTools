@@ -20,7 +20,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:PointControl Point="{Binding}"
-                                               DeleteCommand="{Binding ElementName=pointListControl, Path=DeleteCommand}"/>
+                                               DeleteCommand="{Binding ElementName=pointListControl, Path=DeleteCommand}"
+                                               MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

@@ -135,5 +135,9 @@ namespace TECUserControlLibrary.UserControls.ListControls
         {
             RaiseEvent(new RoutedEventArgs(DroppedEvent, this));
         }
+        protected void ItemControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
+        }
     }
 }

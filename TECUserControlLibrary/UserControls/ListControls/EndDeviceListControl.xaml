@@ -27,11 +27,13 @@
                         <ContentPresenter.Resources>
                             <DataTemplate DataType="{x:Type models:TECDevice}">
                                 <itemControls:DeviceControl Device="{Binding}"
-                                                            DeleteCommand="{Binding ElementName=endDeviceListControl, Path=DeleteCommand}"/>
+                                                            DeleteCommand="{Binding ElementName=endDeviceListControl, Path=DeleteCommand}"
+                                                            MouseUp="ItemControl_MouseUp"/>
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type models:TECValve}">
                                 <itemControls:ValveControl Valve="{Binding}"
-                                                           DeleteCommand="{Binding ElementName=endDeviceListControl, Path=DeleteCommand}"/>
+                                                           DeleteCommand="{Binding ElementName=endDeviceListControl, Path=DeleteCommand}"
+                                                           MouseUp="ItemControl_MouseUp"/>
                             </DataTemplate>
                         </ContentPresenter.Resources>
                     </ContentPresenter>

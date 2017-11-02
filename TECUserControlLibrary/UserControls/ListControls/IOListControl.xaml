@@ -26,7 +26,7 @@
                 <DataTemplate>
                     <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
 
-                        <Grid>
+                        <Grid MouseUp="ItemControl_MouseUp">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>

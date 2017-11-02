@@ -23,7 +23,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:EquipmentControl Equipment="{Binding}"
-                                                   DeleteCommand="{Binding ElementName=equipmentListControl, Path=DeleteCommand}"/>
+                                                   DeleteCommand="{Binding ElementName=equipmentListControl, Path=DeleteCommand}"
+                                                   MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

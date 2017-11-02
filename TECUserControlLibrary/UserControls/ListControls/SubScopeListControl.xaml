@@ -32,7 +32,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemsControls:SubScopeItemControl SubScope="{Binding}"
-                                                       DeleteCommand="{Binding ElementName=subScopeListControl, Path=DeleteCommand}"/>
+                                                       DeleteCommand="{Binding ElementName=subScopeListControl, Path=DeleteCommand}"
+                                                       MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

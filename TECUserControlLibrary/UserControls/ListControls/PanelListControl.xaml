@@ -31,7 +31,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:PanelControl Panel="{Binding}"
-                                               DeleteCommand="{Binding ElementName=panelListControl, Path=DeleteCommand}"/>
+                                               DeleteCommand="{Binding ElementName=panelListControl, Path=DeleteCommand}"
+                                               MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

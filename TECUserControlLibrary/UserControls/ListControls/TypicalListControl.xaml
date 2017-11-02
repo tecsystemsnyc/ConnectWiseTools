@@ -21,7 +21,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:TypicalControl Typical="{Binding}"
-                                                 DeleteCommand="{Binding ElementName=typicalListControl, Path=DeleteCommand}"/>
+                                                 DeleteCommand="{Binding ElementName=typicalListControl, Path=DeleteCommand}"
+                                                 MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
