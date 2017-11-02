@@ -54,7 +54,8 @@ namespace TECUserControlLibrary.ViewModels
                 SplashVM = new SplashVM(splashTitle, splashSubtitle, TemplatesFilePath, defaultDirectory, isEstimate);
                 SplashVM.Started += startUp;
                 CurrentVM = SplashVM;
-            } else
+            }
+            else
             {
                 startFromFile();
             }
