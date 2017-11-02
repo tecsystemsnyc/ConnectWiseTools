@@ -6,6 +6,7 @@ using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 using Microsoft.Win32;
 using System.Windows;
+using TECUserControlLibrary.BaseVMs;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -17,7 +18,7 @@ namespace TECUserControlLibrary.ViewModels
         private Visibility _bidVisibility;
         private string _titleText;
         private string _subtitleText;
-        private bool _isEstimate;
+        private BuilderType _type;
         private string _loadingText;
 
         public string BidPath
@@ -88,7 +89,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<string, string> Started;
 
-        public SplashVM(string titleText, string subtitleText, string initialTemplates, string defaultDirectory, bool isEstimate)
+        public SplashVM(string titleText, string subtitleText, string initialTemplates, string defaultDirectory, BuilderType type)
         {
             GetBidPathCommand = new RelayCommand(getBidPathExecute);
             GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
@@ -100,8 +101,19 @@ namespace TECUserControlLibrary.ViewModels
             _templatesPath = initialTemplates;
             _titleText = titleText;
             _subtitleText = subtitleText;
-            _isEstimate = isEstimate;
-            _bidVisibility = isEstimate ? Visibility.Visible : Visibility.Collapsed;
+            _type = type;
+            if (_type == BuilderType.EB)
+            {
+                _bidVisibility = Visibility.Visible;
+            }
+            else if (_type == BuilderType.TB)
+            {
+                _bidVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private void getBidPathExecute()
@@ -121,18 +133,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool openExistingCanExecute()
         {
-            if(BidPath != "" && TemplatesPath != "")
-            {
-                return true;
-            }
-            else if (!_isEstimate && TemplatesPath != "")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ((BidPath != "" && TemplatesPath != "") ||
+                ((_type == BuilderType.TB) && TemplatesPath != ""));
         }
 
         private void createNewExecute()
@@ -142,14 +144,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool createNewCanExecute()
         {
-            if (TemplatesPath != "" || !_isEstimate)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (TemplatesPath != "" || (_type == BuilderType.TB));
         }
 
         protected string getPath(FileDialogParameters fileParams, string initialDirectory = null)
