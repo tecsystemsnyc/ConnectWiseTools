@@ -8,7 +8,7 @@ using TECUserControlLibrary.ViewModels;
 
 namespace EstimateBuilder.MVVM
 {
-    public class EBMenuVM : MenuVM
+    public class EstimateMenuVM : MenuVM
     {
         private const bool DEBUG = true;
 
@@ -19,7 +19,7 @@ namespace EstimateBuilder.MVVM
         public ICommand LoadTemplatesCommand { set { setCommand("Load Templates", value); } }
         public ICommand DebugWindowCommand { set { setCommand("Debug Window", value); } }
 
-        public EBMenuVM() : base()
+        public EstimateMenuVM() : base()
         {
             setupMenu();
         }

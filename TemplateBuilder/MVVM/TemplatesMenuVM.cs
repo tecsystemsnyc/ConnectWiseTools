@@ -7,9 +7,9 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.MVVM
 {
-    public class TBMenuVM : MenuVM
+    public class TemplatesMenuVM : MenuVM
     {
-        public TBMenuVM() : base()
+        public TemplatesMenuVM() : base()
         {
 
         }

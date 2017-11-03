@@ -182,7 +182,7 @@
     <Compile Include="MVVM\TemplatesEditorVM.cs" />
     <Compile Include="MVVM\TemplatesMainVM.cs" />
     <Compile Include="MVVM\TemplatesSplashVM.cs" />
-    <Compile Include="MVVM\TBMenuVM.cs" />
+    <Compile Include="MVVM\TemplatesMenuVM.cs" />
     <Compile Include="MVVM\ViewModelLocator.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

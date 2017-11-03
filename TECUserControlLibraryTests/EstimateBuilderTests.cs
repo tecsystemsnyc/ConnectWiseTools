@@ -13,7 +13,7 @@ namespace Tests
     [TestClass]
     public class EstimateBuilderTests
     {
-        static EstimateBuilder.MVVM.MainViewModel mainVM;
+        static EstimateBuilder.MVVM.OLD_MainViewModel mainVM;
 
         public EstimateBuilderTests()
         {
@@ -48,7 +48,7 @@ namespace Tests
         [ClassInitialize()]
         public static void MyClassInitialize(TestContext testContext)
         {
-            mainVM = new EstimateBuilder.MVVM.MainViewModel();
+            mainVM = new EstimateBuilder.MVVM.OLD_MainViewModel();
         }
         //
         // Use ClassCleanup to run code after all tests in a class have run

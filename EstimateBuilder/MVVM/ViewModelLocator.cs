@@ -39,7 +39,7 @@ namespace EstimateBuilder.MVVM
             }
             */
 
-            SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<EstimateManager>();
             SimpleIoc.Default.Register<SplashVM>();
             SimpleIoc.Default.Register<ScopeEditorVM>();
             SimpleIoc.Default.Register<LaborVM>();
@@ -53,11 +53,11 @@ namespace EstimateBuilder.MVVM
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public MainViewModel Main
+        public EstimateManager Main
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return ServiceLocator.Current.GetInstance<EstimateManager>();
             }
         }
 

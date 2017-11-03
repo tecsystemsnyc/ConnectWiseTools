@@ -24,7 +24,7 @@ namespace EstimateBuilder.MVVM
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : BuilderViewModel
+    public class OLD_MainViewModel : BuilderViewModel
     {
         #region Constants
         const string SPLASH_TITLE = "Welcome to Estimate Builder";
@@ -39,7 +39,7 @@ namespace EstimateBuilder.MVVM
 
         #endregion
         #region Constructors
-        public MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, true)
+        public OLD_MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, true)
         {
             
         }
