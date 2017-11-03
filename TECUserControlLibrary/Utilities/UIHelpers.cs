@@ -321,16 +321,6 @@ namespace TECUserControlLibrary.Utilities
         }
 
         #region File Parameters
-        public static FileDialogParameters BidFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
-                fileParams.DefaultExtension = "bdb";
-                return fileParams;
-            }
-        }
         public static FileDialogParameters EstimateFileParameters
         {
             get
@@ -385,10 +375,10 @@ namespace TECUserControlLibrary.Utilities
 
         #region Get Path Methods
         public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string defaultDirectory,
-            string initialDirectory = null, bool isNew = false)
+            string initialDirectory = null)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (initialDirectory != null && !isNew)
+            if (initialDirectory != null)
             {
                 saveFileDialog.InitialDirectory = initialDirectory;
             }

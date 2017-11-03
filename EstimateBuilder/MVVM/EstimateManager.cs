@@ -40,5 +40,27 @@ namespace EstimateBuilder.MVVM
         {
 
         }
+
+        private void setupCommands()
+        {
+
+        }
+        private void saveDeltaExecute()
+        {
+            if (databaseManager != null)
+            {
+                databaseManager.Save(deltaStack.CleansedStack());
+            }
+            else
+            {
+                UIHelpers.GetSavePath(workingFileParameters, )
+            }
+
+            throw new NotImplementedException("Need a method for clearing the delta stack.");
+        }
+        private bool canSaveDelta()
+        {
+            return deltaStack.CleansedStack().Count > 0;
+        }
     }
 }
