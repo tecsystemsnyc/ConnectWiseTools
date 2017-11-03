@@ -8,7 +8,7 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.BaseVMs
 {
-    public class MainViewModel
+    public abstract class MainViewModel
     {
         private BuilderType builderType;
 
@@ -19,11 +19,12 @@ namespace TECUserControlLibrary.BaseVMs
         public StatusBarVM StatusBarVM { get; private set; }
         #endregion
 
-        public MainViewModel(string titleText, string subtitleText, string initialTemplates, string defaultDirectory, BuilderType type)
+        public MainViewModel(SplashVM splashVM, MenuVM menuVM, EditorVM editorVM)
         {
-            builderType = type;
-            SplashVM = new SplashVM(titleText, subtitleText, initialTemplates, defaultDirectory, builderType);
-            SplashVM.Started += EditorStarted;
+            SplashVM = splashVM;
+            MenuVM = menuVM;
+            EditorVM = editorVM;
+            StatusBarVM = new StatusBarVM();
         }
 
         public event Action<string, string> EditorStarted;

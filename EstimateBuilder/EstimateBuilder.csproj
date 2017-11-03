@@ -164,6 +164,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MVVM\EstimateEditorVM.cs" />
+    <Compile Include="MVVM\EstimateMainVM.cs" />
+    <Compile Include="MVVM\EstimateManager.cs" />
+    <Compile Include="MVVM\EstimateSplashVM.cs" />
     <Compile Include="MVVM\EBMenuVM.cs" />
     <Compile Include="MVVM\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
