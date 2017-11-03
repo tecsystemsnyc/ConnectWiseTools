@@ -180,7 +180,6 @@
     <Compile Include="MVVM\OLD_MainViewModel.cs" />
     <Compile Include="MVVM\TemplatesManager.cs" />
     <Compile Include="MVVM\TemplatesEditorVM.cs" />
-    <Compile Include="MVVM\TemplatesMainVM.cs" />
     <Compile Include="MVVM\TemplatesSplashVM.cs" />
     <Compile Include="MVVM\TemplatesMenuVM.cs" />
     <Compile Include="MVVM\ViewModelLocator.cs" />
