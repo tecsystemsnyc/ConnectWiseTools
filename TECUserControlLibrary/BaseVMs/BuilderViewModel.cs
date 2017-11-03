@@ -26,21 +26,13 @@ namespace TECUserControlLibrary.ViewModels
         protected string DEFAULT_STATUS_TEXT = "Ready";
         #endregion
         #region Fields 
-        public SplashVM SplashVM;
         
         protected bool isNew;
         protected bool _isReady;
         protected int loadedStackLength;
         protected bool _userCanInteract;
-        protected DatabaseManager workingDB;
         protected FileDialogParameters workingFileParameters;
-        protected ChangeWatcher watcher;
 
-        private string _titleString;
-        private TECScopeManager _workingScopeManager;
-        private ViewModelBase _currentVM;
-        private DoStacker doStack;
-        private DeltaStacker deltaStack;
         #endregion
         #region Constructors
         public BuilderViewModel(string splashTitle, string splashSubtitle, bool isEstimate)
@@ -63,64 +55,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #region Properties
-        public ViewModelBase CurrentVM
-        {
-            get { return _currentVM; }
-            set
-            {
-                _currentVM = value;
-                RaisePropertyChanged("CurrentVM");
-            }
-        }
-
-        public abstract Visibility TemplatesVisibility { get; set; }
-        public bool IsReady
-        {
-            get { return _isReady; }
-            set
-            {
-                _isReady = value;
-                RaisePropertyChanged("IsReady");
-            }
-        }
-        public string TECLogo { get; set; }
-        public string TitleString
-        {
-            get { return _titleString; }
-            set
-            {
-                _titleString = value;
-                RaisePropertyChanged("TitleString");
-            }
-        }
-        public bool UserCanInteract
-        {
-            get { return _userCanInteract; }
-            set
-            {
-                _userCanInteract = value;
-                RaisePropertyChanged("UserCanInteract");
-                if (UserCanInteract)
-                {
-                    Mouse.OverrideCursor = null;
-                }
-                else
-                {
-                    Mouse.OverrideCursor = Cursors.Wait;
-                }
-            }
-        }
-        public string Version { get; set; }
-        public ICommand LoadCommand { get; private set; }
-        public ICommand NewCommand { get; private set; }
-        public ICommand SaveCommand { get; private set; }
-        public ICommand SaveAsCommand { get; private set; }
-        public ICommand UndoCommand { get; private set; }
-        public ICommand RedoCommand { get; private set; }
-        public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
-        public MenuVM MenuVM { get; set; }
-        public StatusBarVM StatusBarVM { get; set; }
-        public SettingsVM SettingsVM { get; set; }
+        
         
         protected abstract string defaultSaveFileName { get; }
         protected abstract string ScopeDirectoryPath { get; set; }
