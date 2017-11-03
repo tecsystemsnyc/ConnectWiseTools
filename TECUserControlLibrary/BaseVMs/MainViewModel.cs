@@ -33,28 +33,5 @@ namespace TECUserControlLibrary.BaseVMs
             EditorVM = editorVM;
             StatusBarVM = new StatusBarVM();
         }
-
-        public event Action<string, string> EditorStarted;
-
-        public void StartEditor(TECTemplates templates, TECBid bid)
-        {
-            if (builderType != BuilderType.EB)
-            {
-                throw new InvalidOperationException("EB BuilderType method called for non EB instnce.");
-            }
-        }
-
-        public void StartEditor(TECTemplates templates)
-        {
-            if (builderType != BuilderType.TB)
-            {
-                throw new InvalidOperationException("TB BuilderType method called for non TB instance.");
-            }
-        }
-
-        private void setupVMs(BuilderType type)
-        {
-            MenuVM = new MenuVM(type);
-        }
     }
 }
