@@ -67,6 +67,12 @@ namespace TECUserControlLibrary.BaseVMs
             MenuVM = menuVM;
             EditorVM = editorVM;
             StatusBarVM = new StatusBarVM();
+            
+        }
+
+        private void setupCommands()
+        {
+            //MenuVM.SetUndoCommand
         }
     }
 }
