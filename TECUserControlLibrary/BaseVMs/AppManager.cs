@@ -19,10 +19,9 @@ namespace TECUserControlLibrary.BaseVMs
 
         public MainViewModel MainVM { get; protected set; }
         
-        public AppManager(string splashTitle, string splashSubtitle, BuilderType type)
+        public AppManager(string splashTitle, string splashSubtitle, string templatesPath, string defaultPath, BuilderType type)
         {
-            MainVM = MainViewModel(splashTitle, splashSubtitle);
-
+            MainVM = new MainViewModel(splashTitle, splashSubtitle, templatesPath, defaultPath, type);
         }
     }
 }
