@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +8,6 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.BaseVMs
 {
-    public enum BuilderType { EB, TB };
-
     public class MainViewModel
     {
         private BuilderType builderType;
@@ -29,9 +28,25 @@ namespace TECUserControlLibrary.BaseVMs
 
         public event Action<string, string> EditorStarted;
 
-        public void StartEditor()
+        public void StartEditor(TECTemplates templates, TECBid bid)
         {
+            if (builderType != BuilderType.EB)
+            {
+                throw new InvalidOperationException("EB BuilderType method called for non EB instnce.");
+            }
+        }
 
+        public void StartEditor(TECTemplates templates)
+        {
+            if (builderType != BuilderType.TB)
+            {
+                throw new InvalidOperationException("TB BuilderType method called for non TB instance.");
+            }
+        }
+
+        private void setupVMs(BuilderType type)
+        {
+            MenuVM = new MenuVM(type);
         }
     }
 }

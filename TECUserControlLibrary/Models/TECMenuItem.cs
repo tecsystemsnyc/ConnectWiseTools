@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,27 +13,56 @@ using System.Windows.Media;
 
 namespace TECUserControlLibrary.Models
 {
-    public class TECMenuItem : TECObject
+    public class TECMenuItem : INotifyPropertyChanged
     {
-        private string _name;
+        private readonly string _name;
+        private readonly bool _isMainMenu;
+        private readonly ObservableCollection<TECMenuItem> _items;
+        private ICommand _command;
+
         public string Name
         {
             get { return _name; }
-            set
+        }
+        public bool IsMainMenu
+        {
+            get { return _isMainMenu; }
+        }
+        public ReadOnlyObservableCollection<TECMenuItem> Items
+        {
+            get
             {
-                _name = value;
-                raisePropertyChanged("Name");
+                return new ReadOnlyObservableCollection<TECMenuItem>(_items);
             }
         }
-        public SolidColorBrush TextBrush { get; set; }
-        public ICommand Command { get; set; }
-        public ObservableCollection<TECMenuItem> Items { get; set; }
-
-        public TECMenuItem(string name, SolidColorBrush textBrush) : base(Guid.NewGuid())
+        public ICommand Command
         {
-            Name = name;
-            TextBrush = textBrush;
-            Items = new ObservableCollection<TECMenuItem>();
+            get { return _command; }
+            set
+            {
+                _command = value;
+                raisePropertyChanged("Command");
+            }
+        }
+
+        public TECMenuItem(string name, bool isMainMenu)
+        {
+            _name = name;
+            _isMainMenu = isMainMenu;
+            _items = new ObservableCollection<TECMenuItem>();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void AddMenuItem(TECMenuItem item)
+        {
+            _items.Add(item);
+        }
+
+        private void raisePropertyChanged(string propertyName)
+        {
+            PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
+            PropertyChanged?.Invoke(this, e);
         }
     }
 }
