@@ -6,16 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.BaseVMs;
 
-namespace EstimateBuilder.MVVM
+namespace TemplateBuilder.MVVM
 {
-    public class EstimateManager : AppManager
+    public class TemplatesManager : AppManager
     {
-        private TECBid bid;
         private TECTemplates templates;
 
-        public EstimateManager() : base(new EstimateMainVM())
+        public TemplatesManager() : base(new TemplatesMainVM())
         {
-
         }
     }
 }

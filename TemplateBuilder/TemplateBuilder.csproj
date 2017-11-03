@@ -178,10 +178,10 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="MVVM\MainViewModel.cs" />
-    <Compile Include="MVVM\TemplateManager.cs" />
+    <Compile Include="MVVM\TemplatesManager.cs" />
     <Compile Include="MVVM\TemplatesEditorVM.cs" />
     <Compile Include="MVVM\TemplatesMainVM.cs" />
-    <Compile Include="MVVM\TemplateSplashVM.cs" />
+    <Compile Include="MVVM\TemplatesSplashVM.cs" />
     <Compile Include="MVVM\ViewModelLocator.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

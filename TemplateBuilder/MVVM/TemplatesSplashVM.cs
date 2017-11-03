@@ -10,7 +10,7 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.MVVM
 {
-    public class TemplateSplashVM : SplashVM
+    public class TemplatesSplashVM : SplashVM
     {
         const string SPLASH_TITLE = "Welcome to Template Builder";
         const string SPLASH_SUBTITLE = "Please select object templates or create new templates";
@@ -32,7 +32,7 @@ namespace TemplateBuilder.MVVM
         
         public event Action<string> Started;
 
-        public TemplateSplashVM(string templatesPath, string defaultDirectory) :
+        public TemplatesSplashVM(string templatesPath, string defaultDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)
         {
             _templatesPath = templatesPath;

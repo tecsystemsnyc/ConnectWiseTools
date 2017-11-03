@@ -8,7 +8,7 @@ namespace TemplateBuilder.MVVM
 {
     public class TemplatesMainVM : TECUserControlLibrary.BaseVMs.MainViewModel
     {
-        public TemplatesMainVM() : base (new TemplateSplashVM(), new TemplatesMenuVM(), new TemplatesEditorVM())
+        public TemplatesMainVM() : base (new TemplatesSplashVM(), new TemplatesMenuVM(), new TemplatesEditorVM())
         {
 
         }
