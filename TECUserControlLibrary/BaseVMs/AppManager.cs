@@ -17,11 +17,28 @@ namespace TECUserControlLibrary.BaseVMs
         protected ChangeWatcher watcher;
         private string _titleString;
 
-        public MainViewModel MainVM { get; protected set; }
+        #region Properties
+        /// <summary>
+        /// Generic for presentation purposes.
+        /// </summary>
+        public EditorVM EditorVM { get; }
+        /// <summary>
+        /// Generic for presentation purposes.
+        /// </summary>
+        public SplashVM SplashVM { get; }
+        /// <summary>
+        /// Generic for presentation purposes.
+        /// </summary>
+        public MenuVM MenuVM { get; }
+        public StatusBarVM StatusBarVM { get; }
+        #endregion
         
-        public AppManager(MainViewModel mainVM)
+        public AppManager(SplashVM splashVM, MenuVM menuVM, EditorVM editorVM)
         {
-            MainVM = mainVM;
+            SplashVM = splashVM;
+            MenuVM = menuVM;
+            EditorVM = editorVM;
+            StatusBarVM = new StatusBarVM();
         }
     }
 }

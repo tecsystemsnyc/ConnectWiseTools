@@ -94,7 +94,6 @@
   <ItemGroup>
     <Compile Include="BaseVMs\AppManager.cs" />
     <Compile Include="BaseVMs\EditorVM.cs" />
-    <Compile Include="BaseVMs\MainViewModel.cs" />
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
