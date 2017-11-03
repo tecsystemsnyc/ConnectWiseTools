@@ -10,13 +10,20 @@ namespace TECUserControlLibrary.BaseVMs
 {
     public abstract class MainViewModel
     {
-        private BuilderType builderType;
-
         #region Properties
-        public EditorVM EditorVM { get; private set; }
-        public SplashVM SplashVM { get; private set; }
-        public MenuVM MenuVM { get; private set; }
-        public StatusBarVM StatusBarVM { get; private set; }
+        /// <summary>
+        /// Generic for presentation purposes.
+        /// </summary>
+        public EditorVM EditorVM { get; }
+        /// <summary>
+        /// Generic for presentation purposes.
+        /// </summary>
+        public SplashVM SplashVM { get; }
+        /// <summary>
+        /// Generic for presentation purposes.
+        /// </summary>
+        public MenuVM MenuVM { get; }
+        public StatusBarVM StatusBarVM { get; }
         #endregion
 
         public MainViewModel(SplashVM splashVM, MenuVM menuVM, EditorVM editorVM)

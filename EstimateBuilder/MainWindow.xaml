@@ -19,7 +19,7 @@
         Width="1024"
         WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
-        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        DataContext="{Binding Main.MainVM, Source={StaticResource Locator}}"
         x:Name="parent">
     <Window.Resources>
         <ResourceDictionary>

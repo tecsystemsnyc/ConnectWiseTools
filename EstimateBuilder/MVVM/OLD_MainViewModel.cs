@@ -48,14 +48,7 @@ namespace EstimateBuilder.MVVM
         #region Events
         #endregion
         #region Properties
-        public ScopeEditorVM ScopeEditorVM { get; set; }
-        public LaborVM LaborVM { get; set; }
-        public ReviewVM ReviewVM { get; set; }
-        public ProposalVM ProposalVM { get; set; }
-        public ElectricalVM ElectricalVM { get; set; }
-        public NetworkVM NetworkVM { get; set; }
-        public ItemizedSummaryVM ItemizedSummaryVM { get; private set; }
-        public MaterialSummaryVM MaterialSummaryVM { get; private set; }
+        
         public ICommand ToggleTemplatesCommand { get; private set; }
         public ICommand DocumentCommand { get; private set; }
         public ICommand LoadTemplatesCommand { get; private set; }
