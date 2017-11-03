@@ -39,7 +39,7 @@ namespace TemplateBuilder.MVVM
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
 
-            SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<OLD_MainViewModel>();
             SimpleIoc.Default.Register<SplashVM>();
 
         }
@@ -50,11 +50,11 @@ namespace TemplateBuilder.MVVM
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public MainViewModel MainViewModel
+        public OLD_MainViewModel MainViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return ServiceLocator.Current.GetInstance<OLD_MainViewModel>();
             }
         }
 

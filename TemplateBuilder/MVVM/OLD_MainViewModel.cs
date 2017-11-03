@@ -13,7 +13,7 @@ using System;
 
 namespace TemplateBuilder.MVVM
 {
-    public class MainViewModel : BuilderViewModel, IDropTarget
+    public class OLD_MainViewModel : BuilderViewModel, IDropTarget
     {
         #region Constants
         const string APPDATA_FOLDER = @"TECSystems\";
@@ -32,7 +32,7 @@ namespace TemplateBuilder.MVVM
         public event Action<Object> SelectionChanged;
         #endregion
         #region Constructors
-        public MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, false)
+        public OLD_MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, false)
         {
 
         }
