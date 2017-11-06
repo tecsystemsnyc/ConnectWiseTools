@@ -143,23 +143,27 @@ namespace EstimateBuilder.MVVM
         //New
         private void newExecute()
         {
-            string message = "Would you like to save your changed before loading?";
+            string message = "Would you like to save your changed before creating a new bid?";
             checkForChanges(message, () => {
                 databaseManager_bidLoaded(new TECBid());
             });
         }
         private bool newCanExecute()
         {
-            throw new NotImplementedException();
+            return true;
         }
         //Load
         private void loadExecute()
         {
-            throw new NotImplementedException();
+            string message = "Would you like to save your changed before loading?";
+            checkForChanges(message, () =>
+            {
+                
+            });
         }
         private bool loadCanExecute()
         {
-            throw new NotImplementedException();
+            return true;
         }
         //Save Delta
         private void saveDeltaExecute()
@@ -295,21 +299,14 @@ namespace EstimateBuilder.MVVM
                 }
             }
             else
-            {
                 onComplete();
-            }
-
-
+            
             void saveComplete(bool success)
             {
                 if (success)
-                {
                     onComplete();
-                }
                 else
-                {
                     return;
-                }
                 databaseManager.SaveComplete -= saveComplete;
             }
         }
