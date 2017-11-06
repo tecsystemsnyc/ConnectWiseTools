@@ -438,7 +438,6 @@
     <Compile Include="ViewModels\EditTabVM.cs" />
     <Compile Include="ViewModels\LocationVM.cs" />
     <Compile Include="ViewModels\MaterialVM.cs" />
-    <Compile Include="BaseVMs\BuilderViewModel.cs" />
     <Compile Include="ViewModels\ElectricalVM.cs" />
     <Compile Include="ViewModels\LaborVM.cs" />
     <Compile Include="ViewModels\ScopeCollectionsTabVM.cs" />

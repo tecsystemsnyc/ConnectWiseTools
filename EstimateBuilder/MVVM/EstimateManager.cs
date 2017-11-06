@@ -108,6 +108,7 @@ namespace EstimateBuilder.MVVM
             CurrentVM = EditorVM;
         }
 
+        #region Menu Commands Methods
         private void setupCommands()
         {
 
@@ -116,7 +117,7 @@ namespace EstimateBuilder.MVVM
         {
             if (databaseManager != null)
             {
-                databaseManager.Save(deltaStack.CleansedStack());
+                databaseManager.AsyncSave(deltaStack.CleansedStack());
             }
             else
             {
@@ -130,6 +131,8 @@ namespace EstimateBuilder.MVVM
         {
             return deltaStack.CleansedStack().Count > 0;
         }
+        #endregion
+
         private void buildTitleString(string filePath)
         {
             string title = Path.GetFileNameWithoutExtension(filePath);

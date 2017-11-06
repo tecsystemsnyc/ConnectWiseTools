@@ -28,23 +28,8 @@ namespace EstimateBuilder.MVVM
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            /*
-            if (ViewModelBase.IsInDesignModeStatic)
-            {
-                SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
-            }
-            else
-            {
-                SimpleIoc.Default.Register<IDataService, DataService>();
-            }
-            */
 
             SimpleIoc.Default.Register<EstimateManager>();
-            SimpleIoc.Default.Register<SplashVM>();
-            SimpleIoc.Default.Register<ScopeEditorVM>();
-            SimpleIoc.Default.Register<LaborVM>();
-            SimpleIoc.Default.Register<ReviewVM>();
-            SimpleIoc.Default.Register<SettingsVM>();
         }
 
         /// <summary>
@@ -60,80 +45,6 @@ namespace EstimateBuilder.MVVM
                 return ServiceLocator.Current.GetInstance<EstimateManager>();
             }
         }
-
-        /// <summary>
-        /// Gets the Splash property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public SplashVM Splash
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<SplashVM>();
-            }
-        }
-
-        /// <summary>
-        /// Gets the ScopeEditor property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public ScopeEditorVM ScopeEditor
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<ScopeEditorVM>();
-            }
-        }
-        
-        /// <summary>
-        /// Gets the Labor property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public LaborVM Labor
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<LaborVM>();
-            }
-        }
-
-        /// <summary>
-        /// Gets the Review property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public ReviewVM Review
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<ReviewVM>();
-            }
-        }
-
-        /// <summary>
-        /// Gets the Settings property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public SettingsVM Settings
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<SettingsVM>();
-            }
-        }
-
-        /// <summary>
-        /// Cleans up all the resources.
-        /// </summary>
         public static void Cleanup()
         {
         }

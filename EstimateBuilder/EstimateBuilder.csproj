@@ -168,7 +168,6 @@
     <Compile Include="MVVM\EstimateManager.cs" />
     <Compile Include="MVVM\EstimateSplashVM.cs" />
     <Compile Include="MVVM\EstimateMenuVM.cs" />
-    <Compile Include="MVVM\OLD_MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

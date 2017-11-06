@@ -19,7 +19,7 @@
         Width="1024"
         WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
-        DataContext="{Binding Main.MainVM, Source={StaticResource Locator}}"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
         x:Name="parent">
     <Window.Resources>
         <ResourceDictionary>
@@ -52,7 +52,7 @@
 
     <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}">
         <ContentControl.Resources>
-            <DataTemplate DataType="{x:Type localMVVM:OLD_MainViewModel}">
+            <DataTemplate DataType="{x:Type localMVVM:EstimateEditorVM}">
                 <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
             <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                             DockPanel.Dock="Top"/>

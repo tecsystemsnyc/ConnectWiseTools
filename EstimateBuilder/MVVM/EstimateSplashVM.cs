@@ -68,7 +68,7 @@ namespace EstimateBuilder.MVVM
 
         private void openExistingExecute()
         {
-            Started?.Invoke(BidPath, TemplatesPath);
+            EditorStarted?.Invoke(BidPath, TemplatesPath);
         }
         private bool openExistingCanExecute()
         {
@@ -77,7 +77,7 @@ namespace EstimateBuilder.MVVM
     
         private void createNewExecute()
         {
-            Started?.Invoke("", TemplatesPath);
+            EditorStarted?.Invoke("", TemplatesPath);
         }
         private bool createNewCanExecute()
         {

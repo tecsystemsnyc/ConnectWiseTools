@@ -13,13 +13,6 @@ namespace EstimateBuilder.MVVM
     {
         private const bool DEBUG = true;
 
-        public ICommand RefreshBidCommand { set { setCommand("Refresh Bid", value); } }
-        public ICommand ExportProposalCommand { set { setCommand("Proposal", value); } }
-        public ICommand ExportPointsListCommand { set { setCommand("Points List", value); } }
-        public ICommand ExportEngineeringCommand { set { setCommand("Engineering", value); } }
-        public ICommand LoadTemplatesCommand { set { setCommand("Load Templates", value); } }
-        public ICommand DebugWindowCommand { set { setCommand("Debug Window", value); } }
-
         public EstimateMenuVM() : base()
         {
             setupMenu();
