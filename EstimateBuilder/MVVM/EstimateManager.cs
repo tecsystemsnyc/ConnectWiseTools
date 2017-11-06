@@ -16,6 +16,7 @@ namespace EstimateBuilder.MVVM
 {
     public class EstimateManager : AppManager
     {
+        #region Fields and Properties
         private TECBid bid;
         private TECTemplates templates;
 
@@ -78,6 +79,7 @@ namespace EstimateBuilder.MVVM
                 Properties.Settings.Default.Save();
             }
         }
+        #endregion
 
         public EstimateManager() : base(new EstimateSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new EstimateMenuVM())
         {
@@ -146,19 +148,32 @@ namespace EstimateBuilder.MVVM
         {
             if (databaseManager != null)
             {
+                StatusBarVM.CurrentStatusText = "Saving...";
+                databaseManager.SaveComplete += handleSaveDeltaComplete;
                 databaseManager.AsyncSave(deltaStack.CleansedStack());
+                deltaStack = new DeltaStacker(watcher);
             }
             else
             {
-                string savePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
-                throw new NotImplementedException("Need to handle save path return.");
+                saveNewExecute();
             }
-
-            throw new NotImplementedException("Need a method for clearing the delta stack.");
         }
         private bool canSaveDelta()
         {
             return deltaStack.CleansedStack().Count > 0;
+        }
+        private void handleSaveDeltaComplete(bool success)
+        {
+            if (success)
+            {
+                StatusBarVM.CurrentStatusText = "Ready";
+            }
+            else
+            {
+                databaseManager.SaveComplete += handleSaveNewComplete;
+                databaseManager.AsyncNew(bid);
+            }
+            databaseManager.SaveComplete -= handleSaveDeltaComplete;
         }
         //Save New
         private void saveNewExecute()
@@ -166,6 +181,10 @@ namespace EstimateBuilder.MVVM
             throw new NotImplementedException();
         }
         private bool canSaveNew()
+        {
+            throw new NotImplementedException();
+        }
+        private void handleSaveNewComplete(bool success)
         {
             throw new NotImplementedException();
         }
