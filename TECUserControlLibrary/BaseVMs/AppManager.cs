@@ -22,6 +22,7 @@ namespace TECUserControlLibrary.BaseVMs
         protected DoStacker doStack;
         protected DeltaStacker deltaStack;
         protected ChangeWatcher watcher;
+        protected string workingFileDirectory;
         private string _titleString;
         private ViewModelBase _currentVM;
 
@@ -62,6 +63,10 @@ namespace TECUserControlLibrary.BaseVMs
         }
         public string Version { get; set; }
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
+
+        abstract protected FileDialogParameters workingFileParameters { get; }
+        abstract protected string defaultDirectory { get; set; }
+        abstract protected string defaultFileName { get; }
         #endregion
 
         public AppManager(SplashVM splashVM, MenuVM menuVM, EditorVM editorVM)
