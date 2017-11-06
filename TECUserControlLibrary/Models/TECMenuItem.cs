@@ -16,7 +16,7 @@ namespace TECUserControlLibrary.Models
     public class TECMenuItem : INotifyPropertyChanged
     {
         private readonly ObservableCollection<TECMenuItem> _items;
-        private ICommand _command;
+        private RelayCommand _command;
 
         public string Name
         {
@@ -33,7 +33,7 @@ namespace TECUserControlLibrary.Models
                 return new ReadOnlyObservableCollection<TECMenuItem>(_items);
             }
         }
-        public ICommand Command
+        public RelayCommand Command
         {
             get { return _command; }
             set

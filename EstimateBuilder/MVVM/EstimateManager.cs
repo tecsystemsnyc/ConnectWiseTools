@@ -12,6 +12,7 @@ using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using System.IO;
 using System.Windows;
+using System.ComponentModel;
 
 namespace EstimateBuilder.MVVM
 {
@@ -88,7 +89,7 @@ namespace EstimateBuilder.MVVM
             TitleString = "Estimate Builder";
             setupCommands();
         }
-
+        
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
         {
             buildTitleString(bidFilePath);
@@ -205,7 +206,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canSaveNew()
         {
-            throw new NotImplementedException();
+            return true;
         }
         private void handleSaveNewComplete(bool success)
         {
@@ -218,7 +219,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canLoadTemplates()
         {
-            throw new NotImplementedException();
+            return true;
         }
         //Refresh Bid
         private void refreshBidExecute()
@@ -227,7 +228,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canRefreshBid()
         {
-            throw new NotImplementedException();
+            return true;
         }
         //Refresh Templates
         private void refreshTemplatesExecute()
@@ -236,7 +237,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canRefreshTemplates()
         {
-            throw new NotImplementedException();
+            return true;
         }
         //Export Proposal
         private void exportProposalExecute()
@@ -245,7 +246,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canExportProposal()
         {
-            throw new NotImplementedException();
+            return true;
         }
         //Export Points List
         private void exportPointsListExecute()
@@ -254,7 +255,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canExportPointsList()
         {
-            throw new NotImplementedException();
+            return true;
         }
         //Export Engineering
         private void exportEngineeringExecute()
@@ -263,7 +264,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canExportEngineering()
         {
-            throw new NotImplementedException();
+            return true; 
         }
         //Debug Window
         private void debugWindowExecute()
@@ -272,7 +273,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canDebugWindow()
         {
-            throw new NotImplementedException();
+            return true;
         }
         #endregion
 
