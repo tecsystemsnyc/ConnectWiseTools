@@ -22,7 +22,7 @@
                 <Setter Property="Foreground">
                     <Setter.Value>
                         <MultiBinding Converter="{utilities:BooleanChoiceConverter}">
-                            <Binding ElementName="IsMainMenu"/>
+                            <Binding Path="IsMainMenu"/>
                             <Binding Source="{StaticResource LightTextBrush}"/>
                             <Binding Source="{StaticResource DarkTextBrush}"/>
                             <Binding Source="{StaticResource DarkTextBrush}"/>
@@ -32,10 +32,9 @@
             </Style>
         </Menu.ItemContainerStyle>
         <Menu.ItemTemplate>
-            <!--<HierarchicalDataTemplate ItemsSource="{Binding Path=Items}">-->
-            <DataTemplate>
+            <HierarchicalDataTemplate ItemsSource="{Binding Path=Items}">
                 <TextBlock Text="{Binding Name}"/>
-            </DataTemplate>
+            </HierarchicalDataTemplate>
         </Menu.ItemTemplate>
     </Menu>
     

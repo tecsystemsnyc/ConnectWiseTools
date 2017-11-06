@@ -97,7 +97,7 @@ namespace TECUserControlLibrary.ViewModels
                 return newChildItem;
             }
         }
-        protected void setCommand(string itemName, ICommand command)
+        protected void setCommand(string itemName, RelayCommand command)
         {
             if (!menuItemDictionary.ContainsKey(itemName))
             {
