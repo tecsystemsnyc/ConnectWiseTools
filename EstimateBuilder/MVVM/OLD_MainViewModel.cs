@@ -26,65 +26,6 @@ namespace EstimateBuilder.MVVM
     /// </summary>
     public class OLD_MainViewModel : BuilderViewModel
     {
-        #region Fields
-
-        private DatabaseManager templatesDB;
-        private bool _templatesLoaded;
-        private TECEstimator _estimate;
-        private TECTemplates _templates;
-
-        #endregion
-        #region Constructors
-        public OLD_MainViewModel() : base(SPLASH_TITLE, SPLASH_SUBTITLE, true)
-        {
-            
-        }
-
-        #endregion
-        #region Properties
-        
-        public TECBid Bid
-        {
-            get { return workingScopeManager as TECBid; }
-            set
-            {
-                workingScopeManager = value;
-                Estimate = new TECEstimator(Bid, watcher);
-            }
-        }
-        public TECTemplates Templates
-        {
-            get { return _templates; }
-            set
-            {
-                _templates = value;
-                RaisePropertyChanged("Templates");
-            }
-        }
-        public TECEstimator Estimate
-        {
-            get { return _estimate; }
-            set
-            {
-                _estimate = value;
-                RaisePropertyChanged("Estimate");
-            }
-        }
-        
-        
-        private bool templatesLoaded
-        {
-            get { return _templatesLoaded; }
-            set
-            {
-                _templatesLoaded = value;
-                if (LaborVM != null)
-                {
-                    LaborVM.TemplatesLoaded = templatesLoaded;
-                }
-            }
-        }
-        #endregion
         #region Methods
         
         
@@ -144,48 +85,7 @@ namespace EstimateBuilder.MVVM
             throw new NotImplementedException();
         }
 
-        private void setupScopeEditorVM(TECBid bid, TECTemplates templates)
-        {
-            ScopeEditorVM = new ScopeEditorVM(bid, templates);
-            ScopeEditorVM.PropertyChanged += scopeEditorVM_PropertyChanged;
-            if (TemplatesHidden)
-            { ScopeEditorVM.TemplatesVisibility = Visibility.Hidden; }
-            else
-            { ScopeEditorVM.TemplatesVisibility = Visibility.Visible; }
-        }
-        private void setupLaborVM(TECBid bid, TECTemplates templates)
-        {
-            LaborVM = new LaborVM();
-            LaborVM.Bid = bid;
-            LaborVM.Templates = templates;
-            LaborVM.LoadTemplates += LoadTemplatesExecute;
-            LaborVM.TemplatesLoaded = templatesLoaded;
-        }
-        private void setupReviewVM(TECBid bid)
-        {
-            ReviewVM = new ReviewVM();
-            ReviewVM.Refresh(Estimate, bid);
-        }
-        private void setupProposalVM(TECBid bid)
-        {
-            ProposalVM = new ProposalVM(bid);
-        }
-        private void setupElectricalVM(TECBid bid)
-        {
-            ElectricalVM = new ElectricalVM(bid);
-        }
-        private void setupNetworkVM(TECBid bid, ChangeWatcher cw)
-        {
-            NetworkVM = new NetworkVM(bid, cw);
-        }
-        private void setupItemizedSummaryVM(TECBid bid, ChangeWatcher cw)
-        {
-            ItemizedSummaryVM = new ItemizedSummaryVM(bid, cw);
-        }
-        private void setupMaterialSummaryVM(TECBid bid, ChangeWatcher cw)
-        {
-            MaterialSummaryVM = new MaterialSummaryVM(bid, cw);
-        }
+        
         private void setupData(string templatesPath, string bidPath = "")
         {
             if (isNew)
