@@ -32,10 +32,10 @@
             </Style>
         </Menu.ItemContainerStyle>
         <Menu.ItemTemplate>
-            <HierarchicalDataTemplate ItemsSource="{Binding Path=Items}">
-                <TextBlock Text="{Binding Name}"
-                           Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type MenuItem}}}"/>
-            </HierarchicalDataTemplate>
+            <!--<HierarchicalDataTemplate ItemsSource="{Binding Path=Items}">-->
+            <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
         </Menu.ItemTemplate>
     </Menu>
     
