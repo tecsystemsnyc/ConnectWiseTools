@@ -19,18 +19,18 @@ namespace TECUserControlLibrary.BaseVMs
     abstract public class AppManager : ViewModelBase
     {
         protected DatabaseManager databaseManager;
+        protected ChangeWatcher watcher;
         protected DoStacker doStack;
         protected DeltaStacker deltaStack;
-        protected ChangeWatcher watcher;
         protected string workingFileDirectory;
         private string _titleString;
-        private ViewModelBase _currentVM;
+        private object _currentVM;
 
         #region Properties
         /// <summary>
         /// Generic for presentation purposes.
         /// </summary>
-        public EditorVM EditorVM { get; }
+        public EditorVM EditorVM { get; protected set; }
         /// <summary>
         /// Generic for presentation purposes.
         /// </summary>
@@ -41,7 +41,7 @@ namespace TECUserControlLibrary.BaseVMs
         public MenuVM MenuVM { get; }
         public StatusBarVM StatusBarVM { get; }
 
-        public ViewModelBase CurrentVM
+        public object CurrentVM
         {
             get { return _currentVM; }
             set
@@ -74,8 +74,8 @@ namespace TECUserControlLibrary.BaseVMs
             SplashVM = splashVM;
             MenuVM = menuVM;
             StatusBarVM = new StatusBarVM();
-
             setupCommands();
+            CurrentVM = SplashVM;
         }
 
         private void setupCommands()

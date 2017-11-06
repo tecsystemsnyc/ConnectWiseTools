@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using System.Threading.Tasks;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
+using EstimatingUtilitiesLibrary;
+using EstimatingUtilitiesLibrary.Database;
 
 namespace EstimateBuilder.MVVM
 {
@@ -76,7 +79,29 @@ namespace EstimateBuilder.MVVM
 
         public EstimateManager() : base(new EstimateSplashVM(), new EstimateMenuVM())
         {
+            splashVM.Started += splashVM_Started;
+        }
 
+        private void splashVM_Started(string arg1, string arg2)
+        {
+            DatabaseManager templatesManager = new DatabaseManager(arg2);
+            templates = templatesManager.Load() as TECTemplates;
+            databaseManager = new DatabaseManager(arg1);
+            databaseManager.LoadComplete += databaseManager_bidLoaded;
+            databaseManager.AsyncLoad();
+        }
+
+        private void databaseManager_bidLoaded(TECScopeManager obj)
+        {
+            bid = obj as TECBid;
+            watcher = new ChangeWatcher(bid);
+            doStack = new DoStacker(watcher);
+            deltaStack = new DeltaStacker(watcher);
+
+            TECEstimator estimate = new TECEstimator(bid, watcher);
+
+            EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
+            CurrentVM = EditorVM;
         }
 
         private void setupCommands()

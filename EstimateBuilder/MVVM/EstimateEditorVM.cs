@@ -31,5 +31,16 @@ namespace EstimateBuilder.MVVM
             ItemizedSummaryVM = new ItemizedSummaryVM(bid, watcher);
             MaterialSummaryVM = new MaterialSummaryVM(bid, watcher);
         }
+
+        public void Refresh(TECBid bid, TECTemplates templates, ChangeWatcher watcher, TECEstimator estimate)
+        {
+            ScopeEditorVM.Refresh(bid, templates);
+            LaborVM.Refresh(bid, estimate, templates);
+            ReviewVM.Refresh(estimate, bid);
+            ProposalVM.Refresh(bid);
+            NetworkVM.Refresh(bid, watcher);
+            ItemizedSummaryVM.Refresh(bid, watcher);
+            MaterialSummaryVM.Refresh(bid, watcher);
+        }
     }
 }
