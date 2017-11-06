@@ -10,6 +10,7 @@ using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
+using System.IO;
 
 namespace EstimateBuilder.MVVM
 {
@@ -80,10 +81,12 @@ namespace EstimateBuilder.MVVM
         public EstimateManager() : base(new EstimateSplashVM(), new EstimateMenuVM())
         {
             splashVM.Started += splashVM_Started;
+            TitleString = "Estimate Builder";
         }
 
         private void splashVM_Started(string arg1, string arg2)
         {
+            buildTitleString(arg1);
             DatabaseManager templatesManager = new DatabaseManager(arg2);
             templates = templatesManager.Load() as TECTemplates;
             databaseManager = new DatabaseManager(arg1);
@@ -125,6 +128,11 @@ namespace EstimateBuilder.MVVM
         private bool canSaveDelta()
         {
             return deltaStack.CleansedStack().Count > 0;
+        }
+        private void buildTitleString(string filePath)
+        {
+            string title = Path.GetFileNameWithoutExtension(filePath);
+            TitleString = title + " - Estimate Builder";
         }
     }
 }
