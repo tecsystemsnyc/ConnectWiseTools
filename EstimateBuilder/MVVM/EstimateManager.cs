@@ -23,6 +23,8 @@ namespace EstimateBuilder.MVVM
         private TECBid bid;
         private TECTemplates templates;
 
+        private DatabaseManager templatesDatabaseManager;
+
         /// <summary>
         /// Estimate-typed splash vm for manipulation
         /// </summary>
@@ -93,8 +95,8 @@ namespace EstimateBuilder.MVVM
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
         {
             buildTitleString(bidFilePath);
-            DatabaseManager templatesManager = new DatabaseManager(templatesFilePath);
-            templatesManager.LoadComplete += scopeManager =>
+            templatesDatabaseManager = new DatabaseManager(templatesFilePath);
+            templatesDatabaseManager.LoadComplete += scopeManager =>
             {
                 templates = scopeManager as TECTemplates;
                 if(bidFilePath != "")
@@ -110,7 +112,7 @@ namespace EstimateBuilder.MVVM
                 
             };
             ViewEnabled = false;
-            templatesManager.AsyncLoad();
+            templatesDatabaseManager.AsyncLoad();
         }
 
         private void handleLoadedBid(TECScopeManager loadedBid)
@@ -126,6 +128,10 @@ namespace EstimateBuilder.MVVM
             EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
             CurrentVM = EditorVM;
             ViewEnabled = true;
+        }
+        private void handleLoadedTemplates(TECTemplates templates)
+        {
+            throw new NotImplementedException();
         }
 
         #region Menu Commands Methods
@@ -158,7 +164,7 @@ namespace EstimateBuilder.MVVM
         //Load
         private void loadExecute()
         {
-            string message = "Would you like to save your changed before loading?";
+            string message = "Would you like to save your changes before loading?";
             ViewEnabled = false;
             string loadFilePath;
             checkForChanges(message, () =>
@@ -239,15 +245,27 @@ namespace EstimateBuilder.MVVM
         //Load Templates
         private void loadTemplatesExecute()
         {
-            throw new NotImplementedException();
+            ViewEnabled = false;
+            string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            StatusBarVM.CurrentStatusText = "Loading Templates...";
+            templatesDatabaseManager = new DatabaseManager(loadFilePath);
+            templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
+            templatesDatabaseManager.AsyncLoad();
         }
         private bool canLoadTemplates()
         {
             return true;
         }
+        private void handleTemplatesLoadComplete(TECScopeManager templates)
+        {
+            handleLoadedTemplates(templates as TECTemplates);
+            StatusBarVM.CurrentStatusText = "Ready";
+            ViewEnabled = true;
+        }
         //Refresh Bid
         private void refreshBidExecute()
         {
+            string message = "Would you like to save your changes before refreshing?";
             throw new NotImplementedException();
         }
         private bool canRefreshBid()
