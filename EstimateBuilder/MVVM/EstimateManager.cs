@@ -69,8 +69,7 @@ namespace EstimateBuilder.MVVM
                 throw new NotImplementedException("Need to construct file name from bid.");
             }
         }
-
-        private string bidFilePath;
+        
         private string templatesFilePath
         {
             get { return Properties.Settings.Default.TemplatesFilePath; }
@@ -99,12 +98,12 @@ namespace EstimateBuilder.MVVM
                 if(bidFilePath != "")
                 {
                     databaseManager = new DatabaseManager(bidFilePath);
-                    databaseManager.LoadComplete += databaseManager_bidLoaded;
+                    databaseManager.LoadComplete += handleLoadedBid;
                     databaseManager.AsyncLoad();
                 } 
                 else
                 {
-                    databaseManager_bidLoaded(new TECBid());
+                    handleLoadedBid(new TECBid());
                 }
                 
             };
@@ -112,7 +111,7 @@ namespace EstimateBuilder.MVVM
             templatesManager.AsyncLoad();
         }
 
-        private void databaseManager_bidLoaded(TECScopeManager loadedBid)
+        private void handleLoadedBid(TECScopeManager loadedBid)
         {
             bid = loadedBid as TECBid;
             watcher = new ChangeWatcher(bid);
@@ -146,7 +145,7 @@ namespace EstimateBuilder.MVVM
         {
             string message = "Would you like to save your changed before creating a new bid?";
             checkForChanges(message, () => {
-                databaseManager_bidLoaded(new TECBid());
+                handleLoadedBid(new TECBid());
             });
         }
         private bool newCanExecute()
@@ -157,14 +156,26 @@ namespace EstimateBuilder.MVVM
         private void loadExecute()
         {
             string message = "Would you like to save your changed before loading?";
+            ViewEnabled = false;
+            string loadFilePath;
             checkForChanges(message, () =>
             {
-                
+                loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.EstimateFileParameters, defaultDirectory, workingFileDirectory);
+                StatusBarVM.CurrentStatusText = "Loading...";
+                databaseManager = new DatabaseManager(loadFilePath);
+                databaseManager.LoadComplete += handleLoadComplete;
+                databaseManager.AsyncLoad();
             });
         }
         private bool loadCanExecute()
         {
             return true;
+        }
+        private void handleLoadComplete(TECScopeManager bid)
+        {
+            handleLoadedBid(bid);
+            StatusBarVM.CurrentStatusText = "Ready";
+            ViewEnabled = true;
         }
         //Save Delta
         private void saveDeltaExecute()
@@ -187,6 +198,7 @@ namespace EstimateBuilder.MVVM
         }
         private void handleSaveDeltaComplete(bool success)
         {
+            databaseManager.SaveComplete -= handleSaveDeltaComplete;
             if (success)
             {
                 StatusBarVM.CurrentStatusText = "Ready";
@@ -196,20 +208,30 @@ namespace EstimateBuilder.MVVM
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(bid);
             }
-            databaseManager.SaveComplete -= handleSaveDeltaComplete;
         }
         //Save New
         private void saveNewExecute()
         {
-            throw new NotImplementedException();
+            string saveFilePath = UIHelpers.GetSavePath(FileDialogParameters.EstimateFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
+            StatusBarVM.CurrentStatusText = "Saving...";
+            databaseManager = new DatabaseManager(saveFilePath);
+            databaseManager.SaveComplete += handleSaveNewComplete;
+            databaseManager.AsyncNew(bid);
         }
         private bool canSaveNew()
         {
-            throw new NotImplementedException();
+            return true;
         }
         private void handleSaveNewComplete(bool success)
         {
-            throw new NotImplementedException();
+            if (success)
+            {
+                StatusBarVM.CurrentStatusText = "Ready";
+            }
+            else
+            {
+                MessageBox.Show("File failed to save. Contact technical support.");
+            }
         }
         //Load Templates
         private void loadTemplatesExecute()
@@ -304,11 +326,11 @@ namespace EstimateBuilder.MVVM
             
             void saveComplete(bool success)
             {
+                databaseManager.SaveComplete -= saveComplete;
                 if (success)
                     onComplete();
                 else
                     return;
-                databaseManager.SaveComplete -= saveComplete;
             }
         }
     }
