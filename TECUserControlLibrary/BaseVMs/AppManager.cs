@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight;
@@ -9,6 +10,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.BaseVMs
@@ -19,6 +22,7 @@ namespace TECUserControlLibrary.BaseVMs
         protected DoStacker doStack;
         protected DeltaStacker deltaStack;
         protected ChangeWatcher watcher;
+        protected string workingFileDirectory;
         private string _titleString;
         private ViewModelBase _currentVM;
 
@@ -59,6 +63,10 @@ namespace TECUserControlLibrary.BaseVMs
         }
         public string Version { get; set; }
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
+
+        abstract protected FileDialogParameters workingFileParameters { get; }
+        abstract protected string defaultDirectory { get; set; }
+        abstract protected string defaultFileName { get; }
         #endregion
 
         public AppManager(SplashVM splashVM, MenuVM menuVM, EditorVM editorVM)
@@ -67,6 +75,31 @@ namespace TECUserControlLibrary.BaseVMs
             MenuVM = menuVM;
             EditorVM = editorVM;
             StatusBarVM = new StatusBarVM();
+
+            setupCommands();
+        }
+
+        private void setupCommands()
+        {
+            MenuVM.SetUndoCommand(undoExecute, canUndo);
+            MenuVM.SetRedoCommand(redoExecute, canRedo);
+        }
+        
+        private void undoExecute()
+        {
+            doStack.Undo();
+        }
+        private bool canUndo()
+        {
+            return doStack.UndoCount() > 0;
+        }
+        private void redoExecute()
+        {
+            doStack.Redo();
+        }
+        private bool canRedo()
+        {
+            return doStack.RedoCount() > 0;
         }
     }
 }

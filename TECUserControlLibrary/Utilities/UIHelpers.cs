@@ -320,75 +320,12 @@ namespace TECUserControlLibrary.Utilities
             }
         }
 
-        #region File Parameters
-        public static FileDialogParameters BidFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Bid Database Files (*.bdb)|*.bdb" + "|All Files (*.*)|*.*";
-                fileParams.DefaultExtension = "bdb";
-                return fileParams;
-            }
-        }
-        public static FileDialogParameters EstimateFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Estimate Database Files (*.edb)|*.edb" + "|All Files (*.*)|*.*";
-                fileParams.DefaultExtension = "edb";
-                return fileParams;
-            }
-        }
-        public static FileDialogParameters TemplatesFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Templates Database Files (*.tdb)|*.tdb" + "|All Files (*.*)|*.*";
-                fileParams.DefaultExtension = "tdb";
-                return fileParams;
-            }
-        }
-        public static FileDialogParameters DocumentFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Rich Text Files (*.rtf)|*.rtf";
-                fileParams.DefaultExtension = "rtf";
-                return fileParams;
-            }
-        }
-        public static FileDialogParameters WordDocumentFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Word Documents (*.docx)|*.docx";
-                fileParams.DefaultExtension = "docx";
-                return fileParams;
-            }
-        }
-        public static FileDialogParameters CSVFileParameters
-        {
-            get
-            {
-                FileDialogParameters fileParams;
-                fileParams.Filter = "Comma Separated Values Files (*.csv)|*.csv";
-                fileParams.DefaultExtension = "csv";
-                return fileParams;
-            }
-        }
-        #endregion
-
         #region Get Path Methods
         public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string defaultDirectory,
-            string initialDirectory = null, bool isNew = false)
+            string initialDirectory = null)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (initialDirectory != null && !isNew)
+            if (initialDirectory != null)
             {
                 saveFileDialog.InitialDirectory = initialDirectory;
             }
