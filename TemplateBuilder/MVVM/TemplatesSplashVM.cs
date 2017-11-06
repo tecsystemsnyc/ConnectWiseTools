@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
@@ -44,7 +45,7 @@ namespace TemplateBuilder.MVVM
 
         private void getTemplatesPathExecute()
         {
-            TemplatesPath = getPath(UIHelpers.TemplatesFileParameters, defaultDirectory);
+            TemplatesPath = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
         }
 
         private void openExistingExecute()
