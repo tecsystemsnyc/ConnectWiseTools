@@ -26,10 +26,6 @@ namespace EstimateBuilder.MVVM
     /// </summary>
     public class OLD_MainViewModel : BuilderViewModel
     {
-        #region Constants
-        const string SPLASH_TITLE = "Welcome to Estimate Builder";
-        const string SPLASH_SUBTITLE = "Please select object templates and select and existing file or create a new bid";
-        #endregion
         #region Fields
 
         private DatabaseManager templatesDB;
@@ -44,8 +40,6 @@ namespace EstimateBuilder.MVVM
             
         }
 
-        #endregion
-        #region Events
         #endregion
         #region Properties
         
@@ -85,45 +79,7 @@ namespace EstimateBuilder.MVVM
                 RaisePropertyChanged("Estimate");
             }
         }
-        public override Visibility TemplatesVisibility
-        {
-            get
-            {
-                return ScopeEditorVM.TemplatesVisibility;
-            }
-            set
-            {
-                ScopeEditorVM.TemplatesVisibility = value;
-                RaisePropertyChanged("TemplatesVisibility");
-            }
-        }
-
-        protected override bool TemplatesHidden
-        {
-            get
-            {
-                return Properties.Settings.Default.TemplatesHidden;
-            }
-            set
-            {
-                if (Properties.Settings.Default.TemplatesHidden != value)
-                {
-                    Properties.Settings.Default.TemplatesHidden = value;
-                    RaisePropertyChanged("TemplatesHidden");
-                    TemplatesHiddenChanged();
-                    Properties.Settings.Default.Save();
-                }
-            }
-        }
-        protected override string ScopeDirectoryPath
-        {
-            get { return Properties.Settings.Default.ScopeDirectoryPath; }
-            set
-            {
-                Properties.Settings.Default.ScopeDirectoryPath = value;
-                Properties.Settings.Default.Save();
-            }
-        }
+        
         protected override string TemplatesFilePath
         {
             get { return Properties.Settings.Default.TemplatesFilePath; }
@@ -222,30 +178,6 @@ namespace EstimateBuilder.MVVM
             ToggleTemplatesCommand = new RelayCommand(toggleTemplatesExecute);
         }
         
-        protected override void setupMenu(MenuType menuType)
-        {
-            MenuVM = new MenuVM(MenuType.EB);
-
-            MenuVM.NewCommand = NewCommand;
-            MenuVM.LoadCommand = LoadCommand;
-            MenuVM.SaveCommand = SaveCommand;
-            MenuVM.SaveAsCommand = SaveAsCommand;
-            MenuVM.ExportProposalCommand = DocumentCommand;
-            MenuVM.ExportEngineeringCommand = EngineeringExportCommand;
-            MenuVM.LoadTemplatesCommand = LoadTemplatesCommand;
-            MenuVM.ExportPointsListCommand = CSVExportCommand;
-            MenuVM.UndoCommand = UndoCommand;
-            MenuVM.RedoCommand = RedoCommand;
-            //MenuVM.ExportExcelCommand = ExcelExportCommand;
-
-            MenuVM.RefreshTemplatesCommand = RefreshTemplatesCommand;
-            MenuVM.RefreshBidCommand = RefreshBidCommand;
-
-            MenuVM.TemplatesHidden = TemplatesHidden;
-            MenuVM.ToggleTemplatesCommand = ToggleTemplatesCommand;
-
-            MenuVM.DebugWindowCommand = new RelayCommand(debugMenuExecute);
-        }
         protected void LoadTemplatesExecute()
         {
             if (!IsReady)

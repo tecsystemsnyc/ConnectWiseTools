@@ -13,6 +13,16 @@ namespace EstimateBuilder.MVVM
         private TECBid bid;
         private TECTemplates templates;
 
+        protected string BidDirectoryPath
+        {
+            get { return Properties.Settings.Default.ScopeDirectoryPath; }
+            set
+            {
+                Properties.Settings.Default.ScopeDirectoryPath = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         /// <summary>
         /// Estimate-typed splash vm for manipulation
         /// </summary>
