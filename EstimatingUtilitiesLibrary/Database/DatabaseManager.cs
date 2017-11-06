@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
-    public class DatabaseManager<T> where T:TECScope 
+    public class DatabaseManager<T> where T:TECScopeManager
     {
         private string path;
 
