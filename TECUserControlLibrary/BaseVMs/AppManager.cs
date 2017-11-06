@@ -7,6 +7,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Deployment.Application;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +28,7 @@ namespace TECUserControlLibrary.BaseVMs
         protected string workingFileDirectory;
         private string _titleString;
         private object _currentVM;
+        private bool _viewEnabled;
 
         #region Properties
         /// <summary>
@@ -51,7 +55,16 @@ namespace TECUserControlLibrary.BaseVMs
             }
         }
 
-        public string TECLogo { get; set; }
+        public bool ViewEnabled
+        {
+            get { return _viewEnabled; }
+            set
+            {
+                _viewEnabled = value;
+                RaisePropertyChanged("ViewEnabled");
+            }
+        }
+        public string TECLogo { get; }
         public string TitleString
         {
             get { return _titleString; }
@@ -61,7 +74,7 @@ namespace TECUserControlLibrary.BaseVMs
                 RaisePropertyChanged("TitleString");
             }
         }
-        public string Version { get; set; }
+        public string Version { get; }
         public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
         abstract protected FileDialogParameters workingFileParameters { get; }
@@ -71,6 +84,10 @@ namespace TECUserControlLibrary.BaseVMs
 
         public AppManager(SplashVM splashVM, MenuVM menuVM)
         {
+            ViewEnabled = true;
+            Version = getVersion();
+            TECLogo = getLogo();
+
             SplashVM = splashVM;
             MenuVM = menuVM;
             StatusBarVM = new StatusBarVM();
@@ -99,6 +116,23 @@ namespace TECUserControlLibrary.BaseVMs
         private bool canRedo()
         {
             return doStack.RedoCount() > 0;
+        }
+
+        private string getVersion()
+        {
+            String version = "";
+            if (ApplicationDeployment.IsNetworkDeployed)
+            { version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
+            else
+            { version = "Undeployed Version"; }
+            return version;
+        }
+        private string getLogo()
+        {
+            String path = Path.GetTempFileName();
+
+            (Properties.Resources.TECLogo).Save(path, ImageFormat.Png);
+            return path;
         }
     }
 }

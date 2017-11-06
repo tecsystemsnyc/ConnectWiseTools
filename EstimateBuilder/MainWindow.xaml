@@ -50,59 +50,59 @@
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}">
+    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}" IsEnabled="{Binding ViewEnabled}">
         <ContentControl.Resources>
             <DataTemplate DataType="{x:Type localMVVM:EstimateEditorVM}">
-                <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
-            <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
-                            DockPanel.Dock="Top"/>
+                <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}">
+                    <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+                                    DockPanel.Dock="Top"/>
 
-            <Grid x:Name="LayoutRoot">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
+                    <Grid x:Name="LayoutRoot">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
 
-                <Image Source="{Binding TECLogo}"
-                   Grid.Column="2"
-                   Grid.RowSpan="2"/>
+                        <Image Source="{Binding TECLogo}"
+                           Grid.Column="2"
+                           Grid.RowSpan="2"/>
 
-                <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
-                    <TabItem Header="Scope Editor">
-                        <views:ScopeEditorView
-                        ViewModel="{Binding ScopeEditorVM}"/>
-                    </TabItem>
-                    <TabItem Header="Review">
-                        <controls:ReviewTabControl
-                        ViewModel="{Binding}"/>
-                    </TabItem>
-                    <TabItem Header="Proposal">
-                        <views:ProposalView
-                        ViewModel="{Binding ProposalVM}"/>
-                    </TabItem>
-                    <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
-                        <views:SettingsView
-                        ViewModel="{Binding SettingsVM}"/>
-                    </TabItem>
-                    <TabItem Header="Network">
-                                <views:NetworkView
-                            ViewModel="{Binding NetworkVM}"/>
+                        <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
+                            <TabItem Header="Scope Editor">
+                                <views:ScopeEditorView
+                                ViewModel="{Binding ScopeEditorVM}"/>
                             </TabItem>
-                </TabControl>
-                <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
-                                           Grid.Row="3" Grid.ColumnSpan="3"
-                                           dd:DragDrop.IsDropTarget="True"
-                                           dd:DragDrop.DropHandler="{Binding}"/>
-            </Grid>
-        </DockPanel>
+                            <TabItem Header="Review">
+                                <controls:ReviewTabControl
+                                ViewModel="{Binding}"/>
+                            </TabItem>
+                            <TabItem Header="Proposal">
+                                <views:ProposalView
+                                ViewModel="{Binding ProposalVM}"/>
+                            </TabItem>
+                            <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
+                                <views:SettingsView
+                                ViewModel="{Binding SettingsVM}"/>
+                            </TabItem>
+                            <TabItem Header="Network">
+                                        <views:NetworkView
+                                    ViewModel="{Binding NetworkVM}"/>
+                                    </TabItem>
+                        </TabControl>
+                        <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+                                                   Grid.Row="3" Grid.ColumnSpan="3"
+                                                   dd:DragDrop.IsDropTarget="True"
+                                                   dd:DragDrop.DropHandler="{Binding}"/>
+                    </Grid>
+                </DockPanel>
             </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SplashVM}">
             <views:SplashView ViewModel="{Binding}"/>
