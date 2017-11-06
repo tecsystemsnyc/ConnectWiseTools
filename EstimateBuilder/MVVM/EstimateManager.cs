@@ -11,6 +11,7 @@ using TECUserControlLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using System.IO;
+using System.Windows;
 
 namespace EstimateBuilder.MVVM
 {
@@ -142,7 +143,10 @@ namespace EstimateBuilder.MVVM
         //New
         private void newExecute()
         {
-            throw new NotImplementedException();
+            string message = "Would you like to save your changed before loading?";
+            checkForChanges(message, () => {
+                databaseManager_bidLoaded(new TECBid());
+            });
         }
         private bool newCanExecute()
         {
@@ -271,6 +275,43 @@ namespace EstimateBuilder.MVVM
         {
             string title = Path.GetFileNameWithoutExtension(filePath);
             TitleString = title + " - Estimate Builder";
+        }
+        private void checkForChanges(string taskMessage, Action onComplete)
+        {
+            if(deltaStack.CleansedStack().Count > 0)
+            {
+                MessageBoxResult result = MessageBox.Show(taskMessage, "Save", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        databaseManager.SaveComplete += saveComplete;
+                        saveDeltaExecute();
+                        break;
+                    case MessageBoxResult.No:
+                        onComplete();
+                        break;
+                    default:
+                        return;
+                }
+            }
+            else
+            {
+                onComplete();
+            }
+
+
+            void saveComplete(bool success)
+            {
+                if (success)
+                {
+                    onComplete();
+                }
+                else
+                {
+                    return;
+                }
+                databaseManager.SaveComplete -= saveComplete;
+            }
         }
     }
 }
