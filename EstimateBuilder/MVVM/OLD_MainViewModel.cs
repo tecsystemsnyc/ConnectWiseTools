@@ -43,15 +43,6 @@ namespace EstimateBuilder.MVVM
         #endregion
         #region Properties
         
-        public ICommand ToggleTemplatesCommand { get; private set; }
-        public ICommand DocumentCommand { get; private set; }
-        public ICommand LoadTemplatesCommand { get; private set; }
-        public ICommand CSVExportCommand { get; private set; }
-        public ICommand BudgetCommand { get; private set; }
-        public ICommand ExcelExportCommand { get; private set; }
-        public ICommand EngineeringExportCommand { get; private set; }
-        public ICommand RefreshTemplatesCommand { get; private set; }
-        public ICommand RefreshBidCommand { get; private set; }
         public TECBid Bid
         {
             get { return workingScopeManager as TECBid; }
@@ -80,62 +71,6 @@ namespace EstimateBuilder.MVVM
             }
         }
         
-        protected override string TemplatesFilePath
-        {
-            get { return Properties.Settings.Default.TemplatesFilePath; }
-            set
-            {
-                if (Properties.Settings.Default.TemplatesFilePath != value)
-                {
-                    Properties.Settings.Default.TemplatesFilePath = value;
-                    Properties.Settings.Default.Save();
-                    SettingsVM.TemplatesLoadPath = TemplatesFilePath;
-                }
-            }
-        }
-        protected override string startupFilePath
-        {
-            get
-            {
-                return Properties.Settings.Default.StartupFile;
-            }
-            set
-            {
-                Properties.Settings.Default.StartupFile = value;
-                Properties.Settings.Default.Save();
-            }
-        }
-        protected override string defaultDirectory
-        {
-            get
-            {
-                return (Properties.Settings.Default.DefaultDirectory);
-            }
-            set
-            {
-                Properties.Settings.Default.DefaultDirectory = value;
-                Properties.Settings.Default.Save();
-            }
-        }
-        protected override string defaultSaveFileName
-        {
-            get
-            {
-                return (Bid.BidNumber + " " + Bid.Name);
-            }
-        }
-        protected override TECScopeManager workingScopeManager
-        {
-            get
-            { return base.workingScopeManager; }
-            set
-            {
-                base.workingScopeManager = value;
-                RaisePropertyChanged("Bid");
-                updateBidWithTemplates();
-                refresh();
-            }
-        }
         
         private bool templatesLoaded
         {
@@ -152,31 +87,6 @@ namespace EstimateBuilder.MVVM
         #endregion
         #region Methods
         
-        protected override void setupExtensions(MenuType menuType)
-        {
-            base.setupExtensions(menuType);
-            setupScopeEditorVM(Bid, Templates);
-            setupLaborVM(Bid, Templates);
-            setupReviewVM(Bid);
-            setupProposalVM(Bid);
-            setupElectricalVM(Bid);
-            setupNetworkVM(Bid, watcher);
-            setupItemizedSummaryVM(Bid, watcher);
-            setupMaterialSummaryVM(Bid, watcher);
-        }
-        protected override void setupCommands()
-        {
-            base.setupCommands();
-            DocumentCommand = new RelayCommand(documentExecute);
-            CSVExportCommand = new RelayCommand(csvExportExecute);
-            BudgetCommand = new RelayCommand(budgetExecute);
-            LoadTemplatesCommand = new RelayCommand(LoadTemplatesExecute);
-            ExcelExportCommand = new RelayCommand(excelExportExecute);
-            EngineeringExportCommand = new RelayCommand(engineeringExportExecute);
-            RefreshTemplatesCommand = new RelayCommand(refreshTemplatesExecute);
-            RefreshBidCommand = new RelayCommand(refreshBidExecute, refreshBidCanExecute);
-            ToggleTemplatesCommand = new RelayCommand(toggleTemplatesExecute);
-        }
         
         protected void LoadTemplatesExecute()
         {

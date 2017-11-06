@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +17,19 @@ namespace EstimateBuilder.MVVM
         public LaborVM LaborVM { get; }
         public ReviewVM ReviewVM { get; }
         public ProposalVM ProposalVM { get; }
-        public ElectricalVM ElectricalVM { get; }
         public NetworkVM NetworkVM { get; }
         public ItemizedSummaryVM ItemizedSummaryVM { get; }
         public MaterialSummaryVM MaterialSummaryVM { get; }
         
-        public EstimateEditorVM()
+        public EstimateEditorVM(TECBid bid, TECTemplates templates, ChangeWatcher watcher, TECEstimator estimate)
         {
-            ScopeEditorVM = new ScopeEditorVM();
-
+            ScopeEditorVM = new ScopeEditorVM(bid, templates);
+            LaborVM = new LaborVM(bid, templates, estimate);
+            ReviewVM = new ReviewVM(bid, estimate);
+            ProposalVM = new ProposalVM(bid);
+            NetworkVM = new NetworkVM(bid, watcher);
+            ItemizedSummaryVM = new ItemizedSummaryVM(bid, watcher);
+            MaterialSummaryVM = new MaterialSummaryVM(bid, watcher);
         }
     }
 }

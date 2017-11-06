@@ -56,11 +56,11 @@ namespace TECUserControlLibrary.ViewModels
         /// Initializes a new instance of the LaborViewModel class.
         /// </summary>
         /// 
-        public LaborVM()
+        public LaborVM(TECBid bid, TECTemplates templates, TECEstimator estimate)
         {
-            Bid = new TECBid();
-            Templates = new TECTemplates();
-            Estimate = new TECEstimator(Bid, new ChangeWatcher(Bid));
+            Bid = bid;
+            Templates = templates;
+            Estimate = estimate;
 
             ReloadCommand = new RelayCommand(ReloadExecute);
             SetParametersCommand = new RelayCommand<TECParameters>(SetParametersExecute);

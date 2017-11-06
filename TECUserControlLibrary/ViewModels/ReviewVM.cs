@@ -54,10 +54,10 @@ namespace TECUserControlLibrary.ViewModels
             get { return getCosts(); }
         }
 
-        public ReviewVM()
+        public ReviewVM(TECBid bid, TECEstimator estimate)
         {
-            _bid = new TECBid();
-            _estimate = new TECEstimator(_bid, new EstimatingLibrary.Utilities.ChangeWatcher(_bid));
+            _bid = bid;
+            _estimate = estimate;
         }
 
         public void Refresh(TECEstimator estimate, TECBid bid)

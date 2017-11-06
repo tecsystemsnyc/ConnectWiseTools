@@ -74,7 +74,7 @@ namespace EstimateBuilder.MVVM
             }
         }
 
-        public EstimateManager() : base(new EstimateSplashVM(), new EstimateMenuVM(), new EstimateEditorVM())
+        public EstimateManager() : base(new EstimateSplashVM(), new EstimateMenuVM())
         {
 
         }

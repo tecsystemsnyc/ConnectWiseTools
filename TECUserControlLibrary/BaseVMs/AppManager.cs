@@ -69,11 +69,10 @@ namespace TECUserControlLibrary.BaseVMs
         abstract protected string defaultFileName { get; }
         #endregion
 
-        public AppManager(SplashVM splashVM, MenuVM menuVM, EditorVM editorVM)
+        public AppManager(SplashVM splashVM, MenuVM menuVM)
         {
             SplashVM = splashVM;
             MenuVM = menuVM;
-            EditorVM = editorVM;
             StatusBarVM = new StatusBarVM();
 
             setupCommands();
