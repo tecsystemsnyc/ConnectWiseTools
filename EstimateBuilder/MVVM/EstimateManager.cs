@@ -85,6 +85,7 @@ namespace EstimateBuilder.MVVM
         {
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Estimate Builder";
+            setupCommands();
         }
 
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)

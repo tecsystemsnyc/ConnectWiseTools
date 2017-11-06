@@ -15,18 +15,16 @@ namespace TECUserControlLibrary.Models
 {
     public class TECMenuItem : INotifyPropertyChanged
     {
-        private readonly string _name;
-        private readonly bool _isMainMenu;
         private readonly ObservableCollection<TECMenuItem> _items;
         private ICommand _command;
 
         public string Name
         {
-            get { return _name; }
+            get;
         }
         public bool IsMainMenu
         {
-            get { return _isMainMenu; }
+            get;
         }
         public ReadOnlyObservableCollection<TECMenuItem> Items
         {
@@ -47,8 +45,8 @@ namespace TECUserControlLibrary.Models
 
         public TECMenuItem(string name, bool isMainMenu)
         {
-            _name = name;
-            _isMainMenu = isMainMenu;
+            Name = name;
+            IsMainMenu = isMainMenu;
             _items = new ObservableCollection<TECMenuItem>();
         }
 
