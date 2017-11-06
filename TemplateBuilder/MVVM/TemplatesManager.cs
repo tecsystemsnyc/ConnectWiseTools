@@ -54,8 +54,9 @@ namespace TemplateBuilder.MVVM
             }
         }
 
-        public TemplatesManager() : base(new TemplatesSplashVM(), new TemplatesMenuVM(), new TemplatesEditorVM())
+        public TemplatesManager() : base(new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
         {
+            
         }
     }
 }

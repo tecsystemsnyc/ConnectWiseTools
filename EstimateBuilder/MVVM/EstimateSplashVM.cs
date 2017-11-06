@@ -43,7 +43,7 @@ namespace EstimateBuilder.MVVM
 
         public ICommand GetBidPathCommand { get; private set; }
         
-        public event Action<string, string> Started;
+        public event Action<string, string> EditorStarted;
 
         public EstimateSplashVM(string templatesPath, string defaultDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)

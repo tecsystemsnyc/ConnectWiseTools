@@ -26,42 +26,6 @@ namespace EstimateBuilder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ScopeDirectoryPath {
-            get {
-                return ((string)(this["ScopeDirectoryPath"]));
-            }
-            set {
-                this["ScopeDirectoryPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool TemplatesHidden {
-            get {
-                return ((bool)(this["TemplatesHidden"]));
-            }
-            set {
-                this["TemplatesHidden"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string StartupFile {
-            get {
-                return ((string)(this["StartupFile"]));
-            }
-            set {
-                this["StartupFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DefaultDirectory {
             get {
                 return ((string)(this["DefaultDirectory"]));

@@ -31,7 +31,7 @@ namespace TemplateBuilder.MVVM
             }
         }
         
-        public event Action<string> Started;
+        public event Action<string> EditorStarted;
 
         public TemplatesSplashVM(string templatesPath, string defaultDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)

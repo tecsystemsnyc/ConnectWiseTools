@@ -18,16 +18,6 @@ namespace EstimateBuilder.MVVM
         private TECBid bid;
         private TECTemplates templates;
 
-        protected string BidDirectoryPath
-        {
-            get { return Properties.Settings.Default.ScopeDirectoryPath; }
-            set
-            {
-                Properties.Settings.Default.ScopeDirectoryPath = value;
-                Properties.Settings.Default.Save();
-            }
-        }
-
         /// <summary>
         /// Estimate-typed splash vm for manipulation
         /// </summary>
@@ -77,23 +67,34 @@ namespace EstimateBuilder.MVVM
             }
         }
 
-        public EstimateManager() : base(new EstimateSplashVM(), new EstimateMenuVM())
+        private string bidFilePath;
+        private string templatesFilePath
         {
-            splashVM.Started += splashVM_Started;
+            get { return Properties.Settings.Default.TemplatesFilePath; }
+            set
+            {
+                Properties.Settings.Default.TemplatesFilePath = value;
+                Properties.Settings.Default.Save();
+            }
         }
 
-        private void splashVM_Started(string arg1, string arg2)
+        public EstimateManager() : base(new EstimateSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new EstimateMenuVM())
         {
-            DatabaseManager templatesManager = new DatabaseManager(arg2);
+            splashVM.EditorStarted += userStartedEditorHandler;
+        }
+
+        private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
+        {
+            DatabaseManager templatesManager = new DatabaseManager(templatesFilePath);
             templates = templatesManager.Load() as TECTemplates;
-            databaseManager = new DatabaseManager(arg1);
+            databaseManager = new DatabaseManager(bidFilePath);
             databaseManager.LoadComplete += databaseManager_bidLoaded;
             databaseManager.AsyncLoad();
         }
 
-        private void databaseManager_bidLoaded(TECScopeManager obj)
+        private void databaseManager_bidLoaded(TECScopeManager loadedBid)
         {
-            bid = obj as TECBid;
+            bid = loadedBid as TECBid;
             watcher = new ChangeWatcher(bid);
             doStack = new DoStacker(watcher);
             deltaStack = new DeltaStacker(watcher);
