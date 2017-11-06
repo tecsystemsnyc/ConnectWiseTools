@@ -197,43 +197,7 @@ namespace EstimatingUtilitiesLibrary
             }
             return null;
         }
-
-        public static void UnionizeCatalogs(TECCatalogs bidCatalog, TECCatalogs templateCatalog)
-        {
-            unionizeScope(bidCatalog.Devices, templateCatalog.Devices);
-            unionizeScope(bidCatalog.Manufacturers, templateCatalog.Manufacturers);
-            unionizeScope(bidCatalog.ConnectionTypes, templateCatalog.ConnectionTypes);
-            unionizeScope(bidCatalog.ConduitTypes, templateCatalog.ConduitTypes);
-            unionizeScope(bidCatalog.PanelTypes, templateCatalog.PanelTypes);
-            unionizeScope(bidCatalog.IOModules, templateCatalog.IOModules);
-            unionizeScope(bidCatalog.Tags, templateCatalog.Tags);
-            unionizeScope(bidCatalog.AssociatedCosts, templateCatalog.AssociatedCosts);
-
-        }
-        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
-        {
-            ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
-
-            foreach (T templateItem in templateItems)
-            {
-                foreach (T item in bidItems)
-                {
-                    if ((item as TECObject).Guid == (templateItem as TECObject).Guid)
-                    {
-                        itemsToRemove.Add(item);
-                    }
-                }
-            }
-            foreach (T item in itemsToRemove)
-            {
-                bidItems.Remove(item);
-            }
-            foreach (T item in templateItems)
-            {
-                bidItems.Add(item);
-            }
-        }
-
+        
         public static bool IsLowerVersion(string currentVersion, string sampleVersion)
         {
             var isLowerVersion = false;

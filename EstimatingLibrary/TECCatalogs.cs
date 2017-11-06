@@ -248,5 +248,41 @@ namespace EstimatingLibrary
             SaveableMap relatedList = new SaveableMap();
             return relatedList;
         }
+
+        public void Unionize(TECCatalogs catalogToAdd)
+        {
+            unionizeScope(this.Devices, catalogToAdd.Devices);
+            unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
+            unionizeScope(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
+            unionizeScope(this.ConduitTypes, catalogToAdd.ConduitTypes);
+            unionizeScope(this.PanelTypes, catalogToAdd.PanelTypes);
+            unionizeScope(this.IOModules, catalogToAdd.IOModules);
+            unionizeScope(this.Tags, catalogToAdd.Tags);
+            unionizeScope(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
+
+        }
+        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
+        {
+            ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
+
+            foreach (T templateItem in templateItems)
+            {
+                foreach (T item in bidItems)
+                {
+                    if ((item as TECObject).Guid == (templateItem as TECObject).Guid)
+                    {
+                        itemsToRemove.Add(item);
+                    }
+                }
+            }
+            foreach (T item in itemsToRemove)
+            {
+                bidItems.Remove(item);
+            }
+            foreach (T item in templateItems)
+            {
+                bidItems.Add(item);
+            }
+        }
     }
 }

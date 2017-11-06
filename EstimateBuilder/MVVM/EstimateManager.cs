@@ -119,6 +119,7 @@ namespace EstimateBuilder.MVVM
             watcher = new ChangeWatcher(bid);
             doStack = new DoStacker(watcher);
             deltaStack = new DeltaStacker(watcher);
+            bid.Catalogs.Unionize(templates.Catalogs);
 
             TECEstimator estimate = new TECEstimator(bid, watcher);
 
