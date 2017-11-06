@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
@@ -58,11 +59,11 @@ namespace EstimateBuilder.MVVM
         
         private void getBidPathExecute()
         {
-            BidPath = getPath(UIHelpers.BidFileParameters, defaultDirectory);
+            BidPath = getPath(FileDialogParameters.EstimateFileParameters, defaultDirectory);
         }
         private void getTemplatesPathExecute()
         {
-            TemplatesPath = getPath(UIHelpers.TemplatesFileParameters, defaultDirectory);
+            TemplatesPath = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
         }
 
         private void openExistingExecute()
