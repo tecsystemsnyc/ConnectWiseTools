@@ -91,10 +91,23 @@ namespace EstimateBuilder.MVVM
         {
             buildTitleString(bidFilePath);
             DatabaseManager templatesManager = new DatabaseManager(templatesFilePath);
-            templates = templatesManager.Load() as TECTemplates;
-            databaseManager = new DatabaseManager(bidFilePath);
-            databaseManager.LoadComplete += databaseManager_bidLoaded;
-            databaseManager.AsyncLoad();
+            templatesManager.LoadComplete += scopeManager =>
+            {
+                templates = scopeManager as TECTemplates;
+                if(bidFilePath != "")
+                {
+                    databaseManager = new DatabaseManager(bidFilePath);
+                    databaseManager.LoadComplete += databaseManager_bidLoaded;
+                    databaseManager.AsyncLoad();
+                } 
+                else
+                {
+                    databaseManager_bidLoaded(new TECBid());
+                }
+                
+            };
+            ViewEnabled = false;
+            templatesManager.AsyncLoad();
         }
 
         private void databaseManager_bidLoaded(TECScopeManager loadedBid)
@@ -108,6 +121,7 @@ namespace EstimateBuilder.MVVM
 
             EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
             CurrentVM = EditorVM;
+            ViewEnabled = true;
         }
 
         #region Menu Commands Methods
