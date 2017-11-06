@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
-    public class DatabaseManager
+    public class DatabaseManager<T> where T:TECScopeManager
     {
         private string path;
 
         public event Action<bool> SaveComplete;
-        public event Action<TECScopeManager> LoadComplete;
+        public event Action<T> LoadComplete;
         public bool IsBusy = false;
         
         public DatabaseManager(string databasePath)
@@ -107,16 +107,16 @@ namespace EstimatingUtilitiesLibrary.Database
             worker.RunWorkerAsync();
         }
 
-        public TECScopeManager Load()
+        public T Load()
         {
             DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
             if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
             {
-                return DatabaseLoader.Load(path, true);
+                return DatabaseLoader.Load(path, true) as T;
             }
             else
             {
-                return DatabaseLoader.Load(path);
+                return DatabaseLoader.Load(path) as T;
             }
         }
         public void AsyncLoad()
@@ -128,7 +128,7 @@ namespace EstimatingUtilitiesLibrary.Database
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                if(e.Result is TECScopeManager scopeManager)
+                if(e.Result is T scopeManager)
                 {
                     notifyLoadComplete(scopeManager);
                 } else
@@ -145,7 +145,7 @@ namespace EstimatingUtilitiesLibrary.Database
             IsBusy = false;
             SaveComplete?.Invoke(success);
         }
-        private void notifyLoadComplete(TECScopeManager loaded)
+        private void notifyLoadComplete(T loaded)
         {
             IsBusy = false;
             LoadComplete?.Invoke(loaded);

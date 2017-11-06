@@ -17,7 +17,7 @@ using TECUserControlLibrary.Debug;
 
 namespace EstimateBuilder.MVVM
 {
-    public class EstimateManager : AppManager
+    public class EstimateManager : AppManager<TECBid>
     {
         #region Fields and Properties
         private TECBid bid;

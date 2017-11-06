@@ -19,9 +19,9 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.BaseVMs
 {
-    abstract public class AppManager : ViewModelBase
+    abstract public class AppManager<T>  : ViewModelBase where T : TECScopeManager
     {
-        protected DatabaseManager databaseManager;
+        protected DatabaseManager<T> databaseManager;
         protected ChangeWatcher watcher;
         protected DoStacker doStack;
         protected DeltaStacker deltaStack;
