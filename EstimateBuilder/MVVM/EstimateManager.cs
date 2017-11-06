@@ -13,6 +13,7 @@ using EstimatingUtilitiesLibrary.Database;
 using System.IO;
 using System.Windows;
 using System.ComponentModel;
+using TECUserControlLibrary.Debug;
 
 namespace EstimateBuilder.MVVM
 {
@@ -269,7 +270,9 @@ namespace EstimateBuilder.MVVM
         //Debug Window
         private void debugWindowExecute()
         {
-            throw new NotImplementedException();
+            var dbWindow = new EBDebugWindow(bid);
+            dbWindow.Show();
+
         }
         private bool canDebugWindow()
         {

@@ -17,7 +17,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public event Action<bool> SaveComplete;
         public event Action<TECScopeManager> LoadComplete;
-
+        public bool IsBusy = false;
+        
         public DatabaseManager(string databasePath)
         {
             path = databasePath;
@@ -54,8 +55,9 @@ namespace EstimatingUtilitiesLibrary.Database
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                SaveComplete?.Invoke(true);
+                notifySaveComplete(true);
             };
+            IsBusy = true;
             worker.RunWorkerAsync();
         }
 
@@ -99,8 +101,9 @@ namespace EstimatingUtilitiesLibrary.Database
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                SaveComplete?.Invoke(true);
+                notifySaveComplete(true);
             };
+            IsBusy = true;
             worker.RunWorkerAsync();
         }
 
@@ -127,13 +130,25 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 if(e.Result is TECScopeManager scopeManager)
                 {
-                    LoadComplete?.Invoke(scopeManager);
+                    notifyLoadComplete(scopeManager);
                 } else
                 {
-                    LoadComplete?.Invoke(null);
+                    notifyLoadComplete(null);
                 }
             };
+            IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        private void notifySaveComplete(bool success)
+        {
+            IsBusy = false;
+            SaveComplete?.Invoke(success);
+        }
+        private void notifyLoadComplete(TECScopeManager loaded)
+        {
+            IsBusy = false;
+            LoadComplete?.Invoke(loaded);
         }
     }
 }

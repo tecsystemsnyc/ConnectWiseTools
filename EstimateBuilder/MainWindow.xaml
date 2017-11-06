@@ -71,7 +71,7 @@
                             <ColumnDefinition Width="150"/>
                         </Grid.ColumnDefinitions>
 
-                        <Image Source="{Binding TECLogo}"
+                        <Image Source="{Binding ElementName=parent, Path=DataContext.TECLogo}"
                            Grid.Column="2"
                            Grid.RowSpan="2"/>
 
