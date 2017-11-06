@@ -111,8 +111,37 @@ namespace EstimateBuilder.MVVM
         #region Menu Commands Methods
         private void setupCommands()
         {
-
+            menuVM.SetNewCommand(newExecute, newCanExecute);
+            menuVM.SetLoadCommand(loadExecute, loadCanExecute);
+            menuVM.SetSaveDeltaCommand(saveDeltaExecute, canSaveDelta);
+            menuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
+            menuVM.SetLoadTemplatesCommand(loadTemplatesExecute, canLoadTemplates);
+            menuVM.SetRefreshBidCommand(refreshBidExecute, canRefreshBid);
+            menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
+            menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
+            menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
+            menuVM.SetExportEngineeringCommand(exportEngineeringExecute, canExportEngineering);
+            menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
         }
+        //New
+        private void newExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool newCanExecute()
+        {
+            throw new NotImplementedException();
+        }
+        //Load
+        private void loadExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool loadCanExecute()
+        {
+            throw new NotImplementedException();
+        }
+        //Save Delta
         private void saveDeltaExecute()
         {
             if (databaseManager != null)
@@ -130,6 +159,78 @@ namespace EstimateBuilder.MVVM
         private bool canSaveDelta()
         {
             return deltaStack.CleansedStack().Count > 0;
+        }
+        //Save New
+        private void saveNewExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canSaveNew()
+        {
+            throw new NotImplementedException();
+        }
+        //Load Templates
+        private void loadTemplatesExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canLoadTemplates()
+        {
+            throw new NotImplementedException();
+        }
+        //Refresh Bid
+        private void refreshBidExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canRefreshBid()
+        {
+            throw new NotImplementedException();
+        }
+        //Refresh Templates
+        private void refreshTemplatesExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canRefreshTemplates()
+        {
+            throw new NotImplementedException();
+        }
+        //Export Proposal
+        private void exportProposalExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canExportProposal()
+        {
+            throw new NotImplementedException();
+        }
+        //Export Points List
+        private void exportPointsListExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canExportPointsList()
+        {
+            throw new NotImplementedException();
+        }
+        //Export Engineering
+        private void exportEngineeringExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canExportEngineering()
+        {
+            throw new NotImplementedException();
+        }
+        //Debug Window
+        private void debugWindowExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canDebugWindow()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
