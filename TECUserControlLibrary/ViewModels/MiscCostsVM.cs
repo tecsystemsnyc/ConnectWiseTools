@@ -298,7 +298,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             TECScopeManager scopeManager;
