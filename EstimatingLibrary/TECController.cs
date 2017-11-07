@@ -152,7 +152,8 @@ namespace EstimatingLibrary
         {
             return (AvailableNetworkIO.Contains(ioType));
         }
-        public TECNetworkConnection AddNetworkConnection(bool isTypical, IEnumerable<TECElectricalMaterial> connectionTypes, IOType ioType)
+        public TECNetworkConnection AddNetworkConnection(bool isTypical, 
+            IEnumerable<TECElectricalMaterial> connectionTypes, IOType ioType)
         {
             if (CanAddNetworkConnection(ioType))
             {
@@ -310,7 +311,8 @@ namespace EstimatingLibrary
 
         #region Methods
         #region Event Handlers
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        private void collectionChanged(object sender,
+            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
