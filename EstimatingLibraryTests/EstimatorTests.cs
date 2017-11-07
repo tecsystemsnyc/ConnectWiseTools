@@ -699,8 +699,9 @@ namespace Tests
             {
                 foreach(TECController instanceController in instance.Controllers)
                 {
-                    foreach(TECConnection instanceConnection in instanceController.ChildrenConnections)
+                    foreach(TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
+                        var instanceConnection = instanceController.AddSubScope(instanceSubScope);
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
                         instanceConnection.ConduitType = conduitType;
@@ -1328,6 +1329,8 @@ namespace Tests
 
             connection.RemoveINetworkConnectable(controller2);
 
+            controller1.RemoveNetworkConnection(connection);
+
             Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
@@ -1401,6 +1404,8 @@ namespace Tests
             connection.Length = 50;
 
             connection.RemoveINetworkConnectable(instanceController);
+
+            controller1.RemoveNetworkConnection(connection);
 
             Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");

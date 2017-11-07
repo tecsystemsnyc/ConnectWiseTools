@@ -1,5 +1,4 @@
-﻿using DebugLibrary;
-using EstimatingLibrary.Interfaces;
+﻿using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
 using System.Collections;

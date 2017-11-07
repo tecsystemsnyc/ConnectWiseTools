@@ -36,7 +36,6 @@ namespace EstimatingLibrary
             _scopeBranches = new ObservableCollection<TECScopeBranch>();
 
             _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
-            _controllers.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Controllers");
             _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
             _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
