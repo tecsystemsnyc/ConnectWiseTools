@@ -1,17 +1,16 @@
-﻿using EstimatingLibrary.Utilities;
-using System;
+﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
+using NLog;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EstimatingLibrary;
-using DebugLibrary;
-using System.Collections;
 
 namespace EstimatingUtilitiesLibrary
 {
     public class DoStacker
     {
+        static private Logger logger = LogManager.GetCurrentClassLogger();
+
         private List<TECChangedEventArgs> undoStack;
         private List<TECChangedEventArgs> redoStack;
         private ChangeWatcher watcher;
@@ -39,7 +38,7 @@ namespace EstimatingUtilitiesLibrary
         {
             isDoing = true;
             TECChangedEventArgs item = undoStack.Last();
-            DebugHandler.LogDebugMessage("Undoing:       " + item.Change.ToString() + "    #Undo: " + undoStack.Count() + "    #Redo: " + redoStack.Count(), DebugBooleans.Stack);
+            logger.Trace("Undoing:       " + item.Change.ToString() + "    #Undo: " + undoStack.Count() + "    #Redo: " + redoStack.Count());
             if (item.Change == Change.Add)
             {
                 handleAdd(item);
@@ -66,7 +65,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             string message = "After Undoing: " + item.Change.ToString() + "    #Undo: " + undoStack.Count() + "    #Redo: " + redoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+            logger.Trace(message);
 
             isDoing = false;
         }
@@ -76,7 +75,7 @@ namespace EstimatingUtilitiesLibrary
             TECChangedEventArgs item = redoStack.Last();
 
             string message = "Redoing:       " + item.Change.ToString() + "    #Undo: " + undoStack.Count() + "    #Redo: " + redoStack.Count();
-            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+            logger.Trace(message);
 
             if (item.Change == Change.Add)
             {
@@ -105,7 +104,7 @@ namespace EstimatingUtilitiesLibrary
             }
 
             message = "After Redoing: " + item.Change.ToString() + "    #Undo: " + undoStack.Count() + "    #Redo: " + redoStack.Count() + "\n";
-            DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+            logger.Trace(message);
 
             isDoing = false;
         }
@@ -121,7 +120,7 @@ namespace EstimatingUtilitiesLibrary
             catch
             {
                 string message = "Target object: " + item.Sender + " and reference object " + item.Value + " not handled in add";
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                logger.Trace(message);
             }
         }
         private void handleRemove(TECChangedEventArgs item)
@@ -135,7 +134,7 @@ namespace EstimatingUtilitiesLibrary
             catch
             {
                 string message = "Target object: " + item.Sender + " and reference object " + item.Value + " not handled in remove";
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Stack);
+                logger.Trace(message);
             }
         }
         private void handleEdit(TECChangedEventArgs item)
@@ -149,7 +148,7 @@ namespace EstimatingUtilitiesLibrary
             else
             {
                 string message = "Property could not be set: " + property.Name;
-                DebugHandler.LogDebugMessage(message, DebugBooleans.Properties);
+                logger.Error(message);
             }
         }
 

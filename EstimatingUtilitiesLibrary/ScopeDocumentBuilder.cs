@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using MigraDoc;
+﻿using EstimatingLibrary;
 using MigraDoc.DocumentObjectModel;
-using MigraDoc.DocumentObjectModel.Tables;
-using MigraDoc.Rendering;
-using MigraDoc.RtfRendering;
-using PdfSharp.Pdf;
-using System.Data;
-using System.IO;
 using MigraDoc.DocumentObjectModel.Shapes;
-using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
-using System.Windows;
-using System.Drawing;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.RtfRendering;
+using NLog;
+using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
-using System.Collections.ObjectModel;
-using DebugLibrary;
+using System.IO;
+using System.Linq;
 
 
 namespace EstimatingUtilitiesLibrary
 {
     public static class ScopeDocumentBuilder
     {
+        static private Logger logger = LogManager.GetCurrentClassLogger();
+
         private const string tabSize = "0.5cm";
         private const string beforeParagraphSize = "0.5cm";
         private static List<string> itemLetters = new List<string>(new string[]
@@ -98,7 +91,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch (IOException e)
             {
-                DebugHandler.LogError("Could not load TECLogo. Exception: " + e.Message);
+                logger.Error("Could not load TECLogo. Exception: " + e.Message);
             }
 
 
@@ -119,7 +112,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch (IOException e)
             {
-                DebugHandler.LogError("Could not find TECAddress. Exception: " + e.Message);
+                logger.Error("Could not find TECAddress. Exception: " + e.Message);
             }
         }
         private static void createBidInfo(Document document, string bidName, string bidNo, string salesperson, string estimator)
@@ -340,7 +333,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch (IOException e)
             {
-                DebugHandler.LogError("Could not find TECFooter. Exception: " + e.Message);
+                logger.Error("Could not find TECFooter. Exception: " + e.Message);
             }
         }
         private static void defineStyles(Document document)

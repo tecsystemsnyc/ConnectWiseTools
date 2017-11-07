@@ -1,17 +1,13 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
+using NLog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EstimatingUtilitiesLibrary;
-using System.Windows;
 using System.Collections.ObjectModel;
 using System.Data;
-using DebugLibrary;
-using EstimatingLibrary.Utilities;
 using System.Globalization;
-using EstimatingLibrary.Interfaces;
+using System.Windows;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -20,6 +16,7 @@ namespace EstimatingUtilitiesLibrary.Database
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
         private const string DB_FMT = "O";
 
+        static private Logger logger = LogManager.GetCurrentClassLogger();
         static private SQLiteDatabase SQLiteDB;
 
         static private bool justUpdated;
@@ -340,7 +337,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable bidInfoDT = db.GetDataFromTable(BidInfoTable.TableName);
             if (bidInfoDT.Rows.Count < 1)
             {
-                DebugHandler.LogError("Bid info not found in database. Bid info and labor will be missing.");
+                logger.Error("Bid info not found in database. Bid info and labor will be missing.");
                 return new TECBid();
             }
 
@@ -360,7 +357,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             if (templateInfoDT.Rows.Count < 1)
             {
-                DebugHandler.LogError("Template info not found in database.");
+                logger.Error("Template info not found in database.");
                 return new TECTemplates();
             }
             DataRow templateInfoRow = templateInfoDT.Rows[0];
@@ -374,11 +371,11 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable DT = SQLiteDB.GetDataFromTable(ExtraLaborTable.TableName);
             if (DT.Rows.Count > 1)
             {
-                DebugHandler.LogError("Multiple rows found in extra labor table. Using first found.");
+                logger.Error("Multiple rows found in extra labor table. Using first found.");
             }
             else if (DT.Rows.Count < 1)
             {
-                DebugHandler.LogError("Extra labor not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                logger.Error("Extra labor not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
                 return new TECExtraLabor(bid.Guid);
             }
             return getExtraLaborFromRow(DT.Rows[0]);
@@ -667,11 +664,11 @@ namespace EstimatingUtilitiesLibrary.Database
 
             if (DT.Rows.Count > 1)
             {
-                DebugHandler.LogError("Multiple rows found in bid paramters table. Using first found.");
+                logger.Error("Multiple rows found in bid paramters table. Using first found.");
             }
             else if (DT.Rows.Count < 1)
             {
-                DebugHandler.LogError("Bid paramters not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
+                logger.Error("Bid paramters not found in database, using default values. Reload labor constants from loaded templates in the labor tab.");
                 return new TECParameters(bid.Guid);
             }
             return getBidParametersFromRow(DT.Rows[0]);

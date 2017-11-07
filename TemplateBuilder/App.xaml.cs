@@ -1,9 +1,5 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Threading;
-using System.Windows.Controls;
-using System.Deployment.Application;
-using System;
-using DebugLibrary;
+﻿using GalaSoft.MvvmLight.Threading;
+using System.Windows;
 
 namespace TemplateBuilder
 {
@@ -40,7 +36,7 @@ namespace TemplateBuilder
             //        }
             //        catch (Exception exc)
             //        {
-            //            DebugHandler.LogError("Could not open startup file. Exception: " + exc.Message);
+            //            logger.Error("Could not open startup file. Exception: " + exc.Message);
             //        }
             //    }
             //}
@@ -52,9 +48,9 @@ namespace TemplateBuilder
         {
             //if (DebugHandler.isReleased)
             //{
-            //    DebugHandler.LogError("Exception: " + e.Exception);
-            //    DebugHandler.LogError("Inner Exception: " + e.Exception.InnerException);
-            //    DebugHandler.LogError("Stack Trace: " + e.Exception.StackTrace);
+            //    logger.Error("Exception: " + e.Exception);
+            //    logger.Error("Inner Exception: " + e.Exception.InnerException);
+            //    logger.Error("Stack Trace: " + e.Exception.StackTrace);
             //    e.Handled = true;
             //}
         }
