@@ -15,12 +15,15 @@ using System.Windows;
 using System.ComponentModel;
 using TECUserControlLibrary.Debug;
 using EstimatingUtilitiesLibrary.Exports;
+using NLog;
 
 namespace EstimateBuilder.MVVM
 {
     public class EstimateManager : AppManager<TECBid>
     {
         #region Fields and Properties
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private TECBid bid;
         private TECTemplates templates;
         private TECEstimator estimate;
@@ -195,14 +198,12 @@ namespace EstimateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    //ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
-                    var builder = new ScopeWordDocumentBuilder();
-                    builder.CreateScopeWordDocument(bid, estimate, path);
-                    Console.WriteLine("Scope saved to document.");
+                    ScopeWordDocumentBuilder.CreateScopeWordDocument(bid, estimate, path);
+                    logger.Info("Scope saved to document.");
                 }
                 else
                 {
-                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
                 }
             }
         }
@@ -221,11 +222,11 @@ namespace EstimateBuilder.MVVM
                 {
                     CSVWriter writer = new CSVWriter(path);
                     writer.BidPointsToCSV(bid);
-                    Console.WriteLine("Points saved to csv.");
+                    logger.Info("Points saved to csv.");
                 }
                 else
                 {
-                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
                 }
             }
         }
@@ -243,11 +244,11 @@ namespace EstimateBuilder.MVVM
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     TurnoverExporter.GenerateEngineeringExport(path, bid, estimate);
-                    Console.WriteLine("Exported to engineering turnover document.");
+                    logger.Info("Exported to engineering turnover document.");
                 }
                 else
                 {
-                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
                 }
             }
         }
