@@ -2352,109 +2352,16 @@ namespace Tests
         //[TestMethod]
         //public void Save_Bid_Controller_Add_IO()
         //{
-            //var watchTotal = System.Diagnostics.Stopwatch.StartNew();
-            ////Act
-            //TECController expectedController = bid.Controllers[0];
-            //var testio = new TECIO();
-            //testio.Type = IOType.BACnetIP;
-            //expectedController.IO.Add(testio);
-            //bool hasBACnetIP = false;
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            //DatabaseUpdater.Update(path, testStack.CleansedStack());
-            //watch.Stop();
-            //Console.WriteLine(" UpdateBidToDD: " + watch.ElapsedMilliseconds);
-            //watch = System.Diagnostics.Stopwatch.StartNew();
-            //TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-            //watch.Stop();
-            //Console.WriteLine(" Load: " + watch.ElapsedMilliseconds);
-            //TECController actualController = null;
-            //foreach (TECController controller in actualBid.Controllers)
-            //{
-            //    if (controller.Guid == expectedController.Guid)
-            //    {
-            //        actualController = controller;
-            //        break;
-            //    }
-            //}
-
-            ////Assert
-            //foreach (TECIO io in actualController.IO)
-            //{
-            //    if (io.Type == IOType.BACnetIP)
-            //    {
-            //        hasBACnetIP = true;
-            //    }
-            //}
-            //watchTotal.Stop();
-            //Console.WriteLine(" Test Total: " + watchTotal.ElapsedMilliseconds);
-
-            //Assert.IsTrue(hasBACnetIP);
         //}
 
         //[TestMethod]
         //public void Save_Bid_Controller_Remove_IO()
         //{
-        //    //Act
-        //    TECController expectedController = bid.Controllers[0];
-        //    int oldNumIO = expectedController.IO.Count;
-        //    TECIO ioToRemove = expectedController.IO[0];
-
-        //    expectedController.IO.Remove(ioToRemove);
-
-        //    DatabaseUpdater.Update(path, testStack.CleansedStack());
-
-        //    TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-
-        //    TECController actualController = null;
-        //    foreach (TECController con in actualBid.Controllers)
-        //    {
-        //        if (con.Guid == expectedController.Guid)
-        //        {
-        //            actualController = con;
-        //            break;
-        //        }
-        //    }
-
-        //    //Assert
-        //    foreach (TECIO io in actualController.IO)
-        //    {
-        //        if (io.Type == ioToRemove.Type) { Assert.Fail(); }
-        //    }
-
-        //    Assert.AreEqual((oldNumIO - 1), actualController.IO.Count);
         //}
 
         //[TestMethod]
         //public void Save_Bid_Controller_IO_Quantity()
         //{
-        //    //Act
-        //    TECController expectedController = bid.Controllers[0];
-        //    TECIO ioToChange = expectedController.IO[0];
-        //    ioToChange.Quantity = 69;
-
-        //    DatabaseUpdater.Update(path, testStack.CleansedStack());
-
-        //    TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-
-        //    TECController actualController = null;
-        //    foreach (TECController con in actualBid.Controllers)
-        //    {
-        //        if (con.Guid == expectedController.Guid)
-        //        {
-        //            actualController = con;
-        //            break;
-        //        }
-        //    }
-
-        //    //Assert
-        //    foreach (TECIO io in actualController.IO)
-        //    {
-        //        if (io.Type == ioToChange.Type)
-        //        {
-        //            Assert.AreEqual(ioToChange.Quantity, io.Quantity);
-        //            break;
-        //        }
-        //    }
         //}
         #endregion Controller IO
 

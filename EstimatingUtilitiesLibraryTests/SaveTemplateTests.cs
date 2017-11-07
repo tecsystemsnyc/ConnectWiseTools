@@ -47,15 +47,7 @@ namespace Tests
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
-            if (DEBUG)
-            {
-                Console.WriteLine("SaveTemplates test templates: " + path);
-            }
-            else
-            {
-                File.Delete(path);
-            }
+            File.Delete(path);
         }
 
         [ClassCleanup]
