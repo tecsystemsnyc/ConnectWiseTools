@@ -11,7 +11,6 @@ namespace Tests
     [TestClass]
     public class SaveTemplateTests
     {
-        static bool DEBUG = true;
         static double DELTA = 0.0001;
 
         TECTemplates templates;
@@ -47,15 +46,7 @@ namespace Tests
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
-            if (DEBUG)
-            {
-                Console.WriteLine("SaveTemplates test templates: " + path);
-            }
-            else
-            {
-                File.Delete(path);
-            }
+            File.Delete(path);
         }
 
         [ClassCleanup]

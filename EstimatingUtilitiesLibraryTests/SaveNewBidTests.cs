@@ -16,8 +16,6 @@ namespace Tests
     {
         public static double DELTA = 0.0001;
 
-        private const bool DEBUG = true;
-
         static TECBid expectedBid;
         static TECParameters expectedParameters;
         static TECExtraLabor expectedLabor;
@@ -216,17 +214,7 @@ namespace Tests
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
-            if (DEBUG)
-            {
-                Console.WriteLine("SaveAs test bid saved to: " + path);
-            }
-            else
-            {
-                File.Delete(path);
-            }
-
-
+            File.Delete(path);
         }
 
         [TestMethod]
