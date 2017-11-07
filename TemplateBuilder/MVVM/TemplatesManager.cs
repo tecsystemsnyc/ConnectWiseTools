@@ -69,12 +69,12 @@ namespace TemplateBuilder.MVVM
         {
             buildTitleString(path, "TemplateBuilder");
             databaseManager = new DatabaseManager<TECTemplates>(path);
-            databaseManager.LoadComplete += handleLoadedTemplates;
+            databaseManager.LoadComplete += handleLoaded;
             ViewEnabled = false;
             databaseManager.AsyncLoad();
         }
 
-        private void handleLoadedTemplates(TECTemplates loaded)
+        protected override void handleLoaded(TECTemplates loaded)
         {
             templates = loaded;
             watcher = new ChangeWatcher(templates);
@@ -89,50 +89,7 @@ namespace TemplateBuilder.MVVM
         #region Menu Commands Methods
         private void setupCommands()
         {
-            menuVM.SetNewCommand(newExecute, newCanExecute);
-            menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
-        }
-        //New
-        private void newExecute()
-        {
-            string message = "Would you like to save your changed before creating new templates?";
-            checkForChanges(message, () => {
-                handleLoadedTemplates(new TECTemplates());
-            });
-        }
-        private bool newCanExecute()
-        {
-            return true;
-        }
-        //Load
-        protected override void handleLoadComplete(TECTemplates templates)
-        {
-            handleLoadedTemplates(templates);
-            StatusBarVM.CurrentStatusText = "Ready";
-            ViewEnabled = true;
-        }
-        //Save Delta
-        protected override void handleSaveDeltaComplete(bool success)
-        {
-            databaseManager.SaveComplete -= handleSaveDeltaComplete;
-            if (success)
-            {
-                StatusBarVM.CurrentStatusText = "Ready";
-            }
-            else
-            {
-                databaseManager.SaveComplete += handleSaveNewComplete;
-                databaseManager.AsyncNew(templates);
-            }
-        }
-        //Refresh Templates
-        private void refreshTemplatesExecute()
-        {
-            throw new NotImplementedException();
-        }
-        private bool canRefreshTemplates()
-        {
-            return true;
+            menuVM.SetRefreshTemplatesCommand(refreshExecute, canRefresh);
         }
         #endregion
 

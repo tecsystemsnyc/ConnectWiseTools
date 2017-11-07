@@ -101,9 +101,22 @@ namespace TECUserControlLibrary.BaseVMs
         {
             MenuVM.SetUndoCommand(undoExecute, canUndo);
             MenuVM.SetRedoCommand(redoExecute, canRedo);
+            MenuVM.SetNewCommand(newExecute, newCanExecute);
             MenuVM.SetLoadCommand(loadExecute, loadCanExecute);
             MenuVM.SetSaveDeltaCommand(saveDeltaExecute, canSaveDelta);
             MenuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
+        }
+        //New
+        private void newExecute()
+        {
+            string message = "Would you like to save your current changes?";
+            checkForChanges(message, () => {
+                handleLoaded(default(T));
+            });
+        }
+        private bool newCanExecute()
+        {
+            return true;
         }
         //Load
         private void loadExecute()
@@ -124,7 +137,13 @@ namespace TECUserControlLibrary.BaseVMs
         {
             return true;
         }
-        protected abstract void handleLoadComplete(T scopeManager);
+        protected void handleLoadComplete(T scopeManager)
+        {
+            handleLoaded(scopeManager);
+            StatusBarVM.CurrentStatusText = "Ready";
+            ViewEnabled = true;
+        }
+        protected abstract void handleLoaded(T scopeManager);
         //Save Delta
         private void saveDeltaExecute()
         {
@@ -144,7 +163,19 @@ namespace TECUserControlLibrary.BaseVMs
         {
             return deltaStack.CleansedStack().Count > 0;
         }
-        protected abstract void handleSaveDeltaComplete(bool success);
+        private void handleSaveDeltaComplete(bool success)
+        {
+            databaseManager.SaveComplete -= handleSaveDeltaComplete;
+            if (success)
+            {
+                StatusBarVM.CurrentStatusText = "Ready";
+            }
+            else
+            {
+                databaseManager.SaveComplete += handleSaveNewComplete;
+                databaseManager.AsyncNew(getWorkingScope());
+            }
+        }        
         //Save New
         private void saveNewExecute()
         {
@@ -168,6 +199,24 @@ namespace TECUserControlLibrary.BaseVMs
             {
                 MessageBox.Show("File failed to save. Contact technical support.");
             }
+        }
+        //Refresh
+        protected void refreshExecute()
+        {
+            string message = "Would you like to save your changes before refreshing?";
+            ViewEnabled = false;
+            checkForChanges(message, refresh);
+
+            void refresh()
+            {
+                StatusBarVM.CurrentStatusText = "Loading...";
+                databaseManager.LoadComplete += handleLoadComplete;
+                databaseManager.AsyncLoad();
+            }
+        }
+        protected bool canRefresh()
+        {
+            return databaseManager != null;
         }
         //Undo
         private void undoExecute()
@@ -242,5 +291,6 @@ namespace TECUserControlLibrary.BaseVMs
             }
         }
         protected abstract TECScopeManager getWorkingScope();
+
     }
 }

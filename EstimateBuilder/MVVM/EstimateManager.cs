@@ -104,12 +104,12 @@ namespace EstimateBuilder.MVVM
                 if(bidFilePath != "")
                 {
                     databaseManager = new DatabaseManager<TECBid>(bidFilePath);
-                    databaseManager.LoadComplete += handleLoadedBid;
+                    databaseManager.LoadComplete += handleLoaded;
                     databaseManager.AsyncLoad();
                 } 
                 else
                 {
-                    handleLoadedBid(new TECBid());
+                    handleLoaded(new TECBid());
                 }
                 
             };
@@ -117,7 +117,7 @@ namespace EstimateBuilder.MVVM
             templatesDatabaseManager.AsyncLoad();
         }
 
-        private void handleLoadedBid(TECBid loadedBid)
+        protected override void handleLoaded(TECBid loadedBid)
         {
             bid = loadedBid;
             watcher = new ChangeWatcher(bid);
@@ -139,47 +139,13 @@ namespace EstimateBuilder.MVVM
         #region Menu Commands Methods
         private void setupCommands()
         {
-            menuVM.SetNewCommand(newExecute, newCanExecute);
             menuVM.SetLoadTemplatesCommand(loadTemplatesExecute, canLoadTemplates);
-            menuVM.SetRefreshBidCommand(refreshBidExecute, canRefreshBid);
+            menuVM.SetRefreshBidCommand(refreshExecute, canRefresh);
             menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
             menuVM.SetExportEngineeringCommand(exportEngineeringExecute, canExportEngineering);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
-        }
-        //New
-        private void newExecute()
-        {
-            string message = "Would you like to save your changed before creating a new bid?";
-            checkForChanges(message, () => {
-                handleLoadedBid(new TECBid());
-            });
-        }
-        private bool newCanExecute()
-        {
-            return true;
-        }
-        //Load
-        protected override void handleLoadComplete(TECBid bid)
-        {
-            handleLoadedBid(bid);
-            StatusBarVM.CurrentStatusText = "Ready";
-            ViewEnabled = true;
-        }
-        //Save Delta
-        protected override void handleSaveDeltaComplete(bool success)
-        {
-            databaseManager.SaveComplete -= handleSaveDeltaComplete;
-            if (success)
-            {
-                StatusBarVM.CurrentStatusText = "Ready";
-            }
-            else
-            {
-                databaseManager.SaveComplete += handleSaveNewComplete;
-                databaseManager.AsyncNew(bid);
-            }
         }
         //Load Templates
         private void loadTemplatesExecute()
@@ -200,24 +166,6 @@ namespace EstimateBuilder.MVVM
             handleLoadedTemplates(templates);
             StatusBarVM.CurrentStatusText = "Ready";
             ViewEnabled = true;
-        }
-        //Refresh Bid
-        private void refreshBidExecute()
-        {
-            string message = "Would you like to save your changes before refreshing?";
-            ViewEnabled = false;
-            checkForChanges(message, refreshBid);
-
-            void refreshBid()
-            {
-                StatusBarVM.CurrentStatusText = "Loading...";
-                databaseManager.LoadComplete += handleLoadComplete;
-                databaseManager.AsyncLoad();
-            }
-        }
-        private bool canRefreshBid()
-        {
-            return databaseManager != null;
         }
         //Refresh Templates
         private void refreshTemplatesExecute()
