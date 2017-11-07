@@ -93,9 +93,13 @@ namespace TemplateBuilder.MVVM
         }
         #endregion
 
-        protected override TECScopeManager getWorkingScope()
+        protected override TECTemplates getWorkingScope()
         {
             return templates;
+        }
+        protected override TECTemplates getNewWorkingScope()
+        {
+            return new TECTemplates();
         }
     }
 }

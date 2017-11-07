@@ -111,7 +111,7 @@ namespace TECUserControlLibrary.BaseVMs
         {
             string message = "Would you like to save your current changes?";
             checkForChanges(message, () => {
-                handleLoaded(default(T));
+                handleLoaded(getNewWorkingScope());
             });
         }
         private bool newCanExecute()
@@ -290,7 +290,7 @@ namespace TECUserControlLibrary.BaseVMs
                     return;
             }
         }
-        protected abstract TECScopeManager getWorkingScope();
-
+        protected abstract T getWorkingScope();
+        protected abstract T getNewWorkingScope();
     }
 }

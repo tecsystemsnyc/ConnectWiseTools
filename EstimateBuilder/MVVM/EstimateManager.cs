@@ -267,10 +267,14 @@ namespace EstimateBuilder.MVVM
         }
         #endregion
 
-        protected override TECScopeManager getWorkingScope()
+        protected override TECBid getWorkingScope()
         {
             return bid;
         }
-        
+        protected override TECBid getNewWorkingScope()
+        {
+            return new TECBid();
+        }
+
     }
 }
