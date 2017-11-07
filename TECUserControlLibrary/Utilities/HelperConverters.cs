@@ -286,7 +286,6 @@ namespace TECUserControlLibrary.Utilities
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            Console.WriteLine("Converting");
             if (value == null)
             {
                 return true;

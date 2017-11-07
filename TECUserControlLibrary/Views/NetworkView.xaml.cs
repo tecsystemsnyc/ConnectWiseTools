@@ -42,7 +42,6 @@ namespace TECUserControlLibrary.Views
             {
                 SetValue(ConnectableWidthProperty, value);
                 var width = ConnectableWidth;
-                Console.WriteLine("Value to set: " + value + " Actual: " + width);
             }
         }
 
