@@ -96,7 +96,7 @@ namespace EstimateBuilder.MVVM
         
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
         {
-            buildTitleString(bidFilePath);
+            buildTitleString(bidFilePath, "Estimate Builder");
             templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
             templatesDatabaseManager.LoadComplete += scopeManager =>
             {
@@ -140,9 +140,6 @@ namespace EstimateBuilder.MVVM
         private void setupCommands()
         {
             menuVM.SetNewCommand(newExecute, newCanExecute);
-            menuVM.SetLoadCommand(loadExecute, loadCanExecute);
-            menuVM.SetSaveDeltaCommand(saveDeltaExecute, canSaveDelta);
-            menuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
             menuVM.SetLoadTemplatesCommand(loadTemplatesExecute, canLoadTemplates);
             menuVM.SetRefreshBidCommand(refreshBidExecute, canRefreshBid);
             menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
@@ -164,50 +161,14 @@ namespace EstimateBuilder.MVVM
             return true;
         }
         //Load
-        private void loadExecute()
-        {
-            string message = "Would you like to save your changes before loading?";
-            ViewEnabled = false;
-            string loadFilePath;
-            checkForChanges(message, () =>
-            {
-                loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.EstimateFileParameters, defaultDirectory, workingFileDirectory);
-                StatusBarVM.CurrentStatusText = "Loading...";
-                databaseManager = new DatabaseManager<TECBid>(loadFilePath);
-                databaseManager.LoadComplete += handleLoadComplete;
-                databaseManager.AsyncLoad();
-            });
-        }
-        private bool loadCanExecute()
-        {
-            return true;
-        }
-        private void handleLoadComplete(TECBid bid)
+        protected override void handleLoadComplete(TECBid bid)
         {
             handleLoadedBid(bid);
             StatusBarVM.CurrentStatusText = "Ready";
             ViewEnabled = true;
         }
         //Save Delta
-        private void saveDeltaExecute()
-        {
-            if (databaseManager != null)
-            {
-                StatusBarVM.CurrentStatusText = "Saving...";
-                databaseManager.SaveComplete += handleSaveDeltaComplete;
-                databaseManager.AsyncSave(deltaStack.CleansedStack());
-                deltaStack = new DeltaStacker(watcher);
-            }
-            else
-            {
-                saveNewExecute();
-            }
-        }
-        private bool canSaveDelta()
-        {
-            return deltaStack.CleansedStack().Count > 0;
-        }
-        private void handleSaveDeltaComplete(bool success)
+        protected override void handleSaveDeltaComplete(bool success)
         {
             databaseManager.SaveComplete -= handleSaveDeltaComplete;
             if (success)
@@ -218,30 +179,6 @@ namespace EstimateBuilder.MVVM
             {
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(bid);
-            }
-        }
-        //Save New
-        private void saveNewExecute()
-        {
-            string saveFilePath = UIHelpers.GetSavePath(FileDialogParameters.EstimateFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
-            StatusBarVM.CurrentStatusText = "Saving...";
-            databaseManager = new DatabaseManager<TECBid>(saveFilePath);
-            databaseManager.SaveComplete += handleSaveNewComplete;
-            databaseManager.AsyncNew(bid);
-        }
-        private bool canSaveNew()
-        {
-            return true;
-        }
-        private void handleSaveNewComplete(bool success)
-        {
-            if (success)
-            {
-                StatusBarVM.CurrentStatusText = "Ready";
-            }
-            else
-            {
-                MessageBox.Show("File failed to save. Contact technical support.");
             }
         }
         //Load Templates
@@ -366,40 +303,10 @@ namespace EstimateBuilder.MVVM
         }
         #endregion
 
-        private void buildTitleString(string filePath)
+        protected override TECScopeManager getWorkingScope()
         {
-            string title = Path.GetFileNameWithoutExtension(filePath);
-            TitleString = title + " - Estimate Builder";
+            return bid;
         }
-        private void checkForChanges(string taskMessage, Action onComplete)
-        {
-            if(deltaStack.CleansedStack().Count > 0)
-            {
-                MessageBoxResult result = MessageBox.Show(taskMessage, "Save", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        databaseManager.SaveComplete += saveComplete;
-                        saveDeltaExecute();
-                        break;
-                    case MessageBoxResult.No:
-                        onComplete();
-                        break;
-                    default:
-                        return;
-                }
-            }
-            else
-                onComplete();
-            
-            void saveComplete(bool success)
-            {
-                databaseManager.SaveComplete -= saveComplete;
-                if (success)
-                    onComplete();
-                else
-                    return;
-            }
-        }
+        
     }
 }

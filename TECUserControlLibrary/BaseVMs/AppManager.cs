@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
@@ -94,13 +95,81 @@ namespace TECUserControlLibrary.BaseVMs
             setupCommands();
             CurrentVM = SplashVM;
         }
-
+        
+        #region Menu Commands Methods
         private void setupCommands()
         {
             MenuVM.SetUndoCommand(undoExecute, canUndo);
             MenuVM.SetRedoCommand(redoExecute, canRedo);
+            MenuVM.SetLoadCommand(loadExecute, loadCanExecute);
+            MenuVM.SetSaveDeltaCommand(saveDeltaExecute, canSaveDelta);
+            MenuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
         }
-        
+        //Load
+        private void loadExecute()
+        {
+            string message = "Would you like to save your changes before loading?";
+            ViewEnabled = false;
+            string loadFilePath;
+            checkForChanges(message, () =>
+            {
+                loadFilePath = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory, workingFileDirectory);
+                StatusBarVM.CurrentStatusText = "Loading...";
+                databaseManager = new DatabaseManager<T>(loadFilePath);
+                databaseManager.LoadComplete += handleLoadComplete;
+                databaseManager.AsyncLoad();
+            });
+        }
+        private bool loadCanExecute()
+        {
+            return true;
+        }
+        protected abstract void handleLoadComplete(T scopeManager);
+        //Save Delta
+        private void saveDeltaExecute()
+        {
+            if (databaseManager != null)
+            {
+                StatusBarVM.CurrentStatusText = "Saving...";
+                databaseManager.SaveComplete += handleSaveDeltaComplete;
+                databaseManager.AsyncSave(deltaStack.CleansedStack());
+                deltaStack = new DeltaStacker(watcher);
+            }
+            else
+            {
+                saveNewExecute();
+            }
+        }
+        private bool canSaveDelta()
+        {
+            return deltaStack.CleansedStack().Count > 0;
+        }
+        protected abstract void handleSaveDeltaComplete(bool success);
+        //Save New
+        private void saveNewExecute()
+        {
+            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
+            StatusBarVM.CurrentStatusText = "Saving...";
+            databaseManager = new DatabaseManager<T>(saveFilePath);
+            databaseManager.SaveComplete += handleSaveNewComplete;
+            databaseManager.AsyncNew(getWorkingScope());
+        }
+        private bool canSaveNew()
+        {
+            return true;
+        }
+        protected void handleSaveNewComplete(bool success)
+        {
+            if (success)
+            {
+                StatusBarVM.CurrentStatusText = "Ready";
+            }
+            else
+            {
+                MessageBox.Show("File failed to save. Contact technical support.");
+            }
+        }
+        //Undo
         private void undoExecute()
         {
             doStack.Undo();
@@ -109,6 +178,7 @@ namespace TECUserControlLibrary.BaseVMs
         {
             return doStack.UndoCount() > 0;
         }
+        //Redo
         private void redoExecute()
         {
             doStack.Redo();
@@ -117,6 +187,7 @@ namespace TECUserControlLibrary.BaseVMs
         {
             return doStack.RedoCount() > 0;
         }
+        #endregion
 
         private string getVersion()
         {
@@ -134,5 +205,42 @@ namespace TECUserControlLibrary.BaseVMs
             (Properties.Resources.TECLogo).Save(path, ImageFormat.Png);
             return path;
         }
+        protected void buildTitleString(string filePath, string appName)
+        {
+            string title = Path.GetFileNameWithoutExtension(filePath);
+            TitleString = title + " - " + appName;
+        }
+        protected void checkForChanges(string taskMessage, Action onComplete)
+        {
+            if (deltaStack.CleansedStack().Count > 0)
+            {
+                MessageBoxResult result = MessageBox.Show(taskMessage, "Save", MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Exclamation);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        databaseManager.SaveComplete += saveComplete;
+                        saveDeltaExecute();
+                        break;
+                    case MessageBoxResult.No:
+                        onComplete();
+                        break;
+                    default:
+                        return;
+                }
+            }
+            else
+                onComplete();
+
+            void saveComplete(bool success)
+            {
+                databaseManager.SaveComplete -= saveComplete;
+                if (success)
+                    onComplete();
+                else
+                    return;
+            }
+        }
+        protected abstract TECScopeManager getWorkingScope();
     }
 }
