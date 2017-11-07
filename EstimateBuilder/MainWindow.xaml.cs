@@ -1,6 +1,5 @@
-﻿using System.Windows;
-using System.ComponentModel;
-using EstimateBuilder.MVVM;
+﻿using EstimateBuilder.MVVM;
+using System.Windows;
 
 namespace EstimateBuilder
 {

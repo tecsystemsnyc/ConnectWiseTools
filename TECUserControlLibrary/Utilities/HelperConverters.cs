@@ -1,21 +1,11 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using EstimatingUtilitiesLibrary;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Linq;
-using System.Text;
-using TECUserControlLibrary;
-using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
-using System.Globalization;
-using System.IO;
-using System.Drawing.Imaging;
-using System.Windows.Controls;
-using System.Drawing;
-using System.Windows.Media;
-using TECUserControlLibrary.UserControls;
-using System.Collections.ObjectModel;
-using System.Windows.Forms;
 
 namespace TECUserControlLibrary.Utilities
 {

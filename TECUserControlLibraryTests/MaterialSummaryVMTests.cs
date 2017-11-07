@@ -1,11 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EstimatingLibrary;
-using TECUserControlLibrary.ViewModels;
-using System.Collections.ObjectModel;
+﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.ObjectModel;
+using TECUserControlLibrary.ViewModels;
 using static Tests.CostTestingUtilities;
 
 namespace Tests

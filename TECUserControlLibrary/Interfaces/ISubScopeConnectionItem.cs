@@ -1,5 +1,5 @@
-﻿using System;
-using EstimatingLibrary;
+﻿using EstimatingLibrary;
+using System;
 
 namespace TECUserControlLibrary.Interfaces
 {

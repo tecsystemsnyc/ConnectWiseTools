@@ -1,5 +1,4 @@
-﻿using System;
-using EstimatingLibrary;
+﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 

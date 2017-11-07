@@ -1,6 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace EstimatingLibrary.Utilities

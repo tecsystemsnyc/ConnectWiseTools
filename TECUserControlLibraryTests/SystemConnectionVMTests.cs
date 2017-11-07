@@ -1,14 +1,8 @@
 ﻿using EstimatingLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TECUserControlLibrary.Interfaces;
-using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModels;
 using Tests;
 

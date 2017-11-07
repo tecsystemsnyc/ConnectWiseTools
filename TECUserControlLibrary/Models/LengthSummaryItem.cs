@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EstimatingLibrary.Interfaces;
-using EstimatingLibrary;
+﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
+using System;
 
 namespace TECUserControlLibrary.Models
 {

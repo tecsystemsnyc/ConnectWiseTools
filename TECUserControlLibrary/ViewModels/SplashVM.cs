@@ -1,12 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using System;
+using Microsoft.Win32;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
-using TECUserControlLibrary.Utilities;
-using Microsoft.Win32;
-using System.Windows;
-using TECUserControlLibrary.BaseVMs;
 
 namespace TECUserControlLibrary.ViewModels
 {

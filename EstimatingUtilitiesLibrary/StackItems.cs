@@ -1,13 +1,9 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EstimatingLibrary;
-using EstimatingLibrary.Utilities;
 
 namespace EstimatingUtilitiesLibrary
-{ 
+{
     public class UpdateItem
     {
         public Change Change { get; private set; }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using EstimatingLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EstimatingLibrary;
 
 namespace Tests
 {

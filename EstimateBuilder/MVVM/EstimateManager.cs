@@ -1,21 +1,14 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TECUserControlLibrary.BaseVMs;
-using TECUserControlLibrary.Models;
-using TECUserControlLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
-using System.IO;
-using System.Windows;
-using System.ComponentModel;
-using TECUserControlLibrary.Debug;
 using EstimatingUtilitiesLibrary.Exports;
 using NLog;
+using System;
+using TECUserControlLibrary.BaseVMs;
+using TECUserControlLibrary.Debug;
+using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace EstimateBuilder.MVVM
 {

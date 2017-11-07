@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EstimatingUtilitiesLibrary.Properties {
-    using System;
-    
-    
+namespace EstimatingUtilitiesLibrary.Properties
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

@@ -1,12 +1,8 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using EstimatingLibrary;
-using EstimatingLibrary.Interfaces;
 
 namespace EstimatingUtilitiesLibrary.Database
 {

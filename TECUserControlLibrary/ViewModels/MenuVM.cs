@@ -3,10 +3,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels

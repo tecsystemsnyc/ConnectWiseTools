@@ -3,14 +3,8 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
-using TECUserControlLibrary.Utilities;
-using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.MVVM
 {

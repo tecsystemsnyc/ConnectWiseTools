@@ -1,9 +1,8 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using EstimatingLibrary;
-using System.Collections.ObjectModel;
 
 namespace EstimatingUtilitiesLibrary
 {

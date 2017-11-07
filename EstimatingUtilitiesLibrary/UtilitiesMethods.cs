@@ -1,18 +1,13 @@
-﻿using EstimatingLibrary;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using System.Collections.ObjectModel;
 using System.Reflection;
-using EstimatingLibrary.Interfaces;
-using System.Collections;
+using System.Windows.Media.Imaging;
 
 namespace EstimatingUtilitiesLibrary
 {
