@@ -11,7 +11,6 @@ namespace Tests
     [TestClass]
     public class SaveTemplateTests
     {
-        static bool DEBUG = true;
         static double DELTA = 0.0001;
 
         TECTemplates templates;
