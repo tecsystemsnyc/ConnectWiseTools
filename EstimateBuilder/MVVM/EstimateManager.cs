@@ -203,7 +203,7 @@ namespace EstimateBuilder.MVVM
                 }
                 else
                 {
-                    logger.Warn("Could not open file " + path + " File is open elsewhere.");
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
                 }
             }
         }
@@ -222,11 +222,11 @@ namespace EstimateBuilder.MVVM
                 {
                     CSVWriter writer = new CSVWriter(path);
                     writer.BidPointsToCSV(bid);
-                    Console.WriteLine("Points saved to csv.");
+                    logger.Info("Points saved to csv.");
                 }
                 else
                 {
-                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
                 }
             }
         }
@@ -244,11 +244,11 @@ namespace EstimateBuilder.MVVM
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
                     TurnoverExporter.GenerateEngineeringExport(path, bid, estimate);
-                    Console.WriteLine("Exported to engineering turnover document.");
+                    logger.Info("Exported to engineering turnover document.");
                 }
                 else
                 {
-                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
                 }
             }
         }

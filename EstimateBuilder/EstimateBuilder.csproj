@@ -232,10 +232,6 @@
     <None Include="Resources\TECLogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DebugLibrary\DebugLibrary.csproj">
-      <Project>{b0d11a8a-8ffc-4fb1-9567-dca7f75df1f2}</Project>
-      <Name>DebugLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">
       <Project>{b0f44768-5b48-47b3-bbe8-0dcbd4b0b0c0}</Project>
       <Name>EstimatingLibrary</Name>

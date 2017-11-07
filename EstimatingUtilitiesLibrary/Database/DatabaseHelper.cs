@@ -13,9 +13,9 @@ using System.Windows;
 using System.Drawing;
 using System.Reflection;
 using System.Collections;
-using DebugLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using NLog;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -23,7 +23,6 @@ namespace EstimatingUtilitiesLibrary.Database
 
     internal static class DatabaseHelper
     {
-
         public static List<string> TableNames(SQLiteDatabase db)
         {
             string command = "select name from sqlite_master where type = 'table' order by 1";
@@ -64,15 +63,11 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static void Explain(string command, SQLiteDatabase db)
         {
-            if (DebugBooleans.VerboseSQLite)
+            var explainer = "explain query plan " + command;
+            var explainDT = db.GetDataFromCommand(explainer);
+            foreach (DataRow row in explainDT.Rows)
             {
-                Console.WriteLine("");
-                var explainer = "explain query plan " + command;
-                var explainDT = db.GetDataFromCommand(explainer);
-                foreach (DataRow row in explainDT.Rows)
-                {
-                    Console.WriteLine(row["detail"]);
-                }
+                logger.Debug(row["detail"]);
             }
         }
         public static string AllFieldsInTableString(TableBase table)
@@ -126,7 +121,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static void CreateBackup(string originalPath)
         {
-            DebugHandler.LogDebugMessage("Backing up...");
+            logger.Trace("Backing up...");
 
             var date = DateTime.Now;
 
@@ -152,7 +147,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             File.Copy(originalPath, backupPath);
 
-            DebugHandler.LogDebugMessage("Finished backup. Backup path: " + backupPath);
+            logger.Trace("Finished backup. Backup path: " + backupPath);
         }
 
         public static List<TableBase> GetTables(List<TECObject> items, string propertyName, DBType type = 0)
@@ -371,5 +366,6 @@ namespace EstimatingUtilitiesLibrary.Database
             }
         }
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
     }
 }
