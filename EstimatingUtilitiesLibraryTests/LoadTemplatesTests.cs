@@ -526,7 +526,7 @@ namespace Tests
             string expectedName = "Test IO Module";
             string expectedDescription = "Test IO Module Description";
             double expectedCost = 2233;
-            double expectedIOPerModule = 10;
+            double expectedIOPerModule = 1;
 
             TECIOModule actualModule = null;
             foreach (TECIOModule module in actualTemplates.Catalogs.IOModules)

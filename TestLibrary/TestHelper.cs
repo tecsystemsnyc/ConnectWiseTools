@@ -900,6 +900,14 @@ namespace Tests
             {
                 return bid;
             }
+            if(bid.Catalogs.Guid == guid)
+            {
+                return bid.Catalogs;
+            }
+            if(bid.Parameters.Guid == guid)
+            {
+                return bid.Parameters;
+            }
             foreach(TECTypical typical in bid.Systems)
             {
                 if(typical.Guid == guid)

@@ -85,34 +85,6 @@ namespace Tests
         }
         #endregion
 
-        #region SubScopeConnection
-        [TestMethod]
-        public void SubScopeConnection_AddConnection()
-        {
-            TECSubScope subScope = new TECSubScope(false);
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
-
-            //TypicalSubScopeConnection subScopeConnection = new TypicalSubScopeConnection(subScope, true);
-            //subScopeConnection.Controller = controller;
-
-            Assert.AreEqual(controller.ChildrenConnections.Count, 1, "Connection not added to controller");
-            Assert.AreNotEqual(null, subScope.Connection, "Connection not added to subscope");
-        }
-
-        [TestMethod]
-        public void SubScopeConnection_RemoveConnection()
-        {
-            TECSubScope subScope = new TECSubScope(false);
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
-            controller.AddSubScope(subScope);
-
-            //TypicalSubScopeConnection subScopeConnection = new TypicalSubScopeConnection(subScope, true);
-            //subScopeConnection.Controller = null;
-
-            Assert.AreEqual(controller.ChildrenConnections.Count, 0, "Connection not removed from controller");
-            Assert.AreEqual(null, subScope.Connection, "Connection not removed from subscope");
-        }
-
-        #endregion
+        
     }
 }

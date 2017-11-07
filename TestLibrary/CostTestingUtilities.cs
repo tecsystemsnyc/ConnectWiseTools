@@ -16,6 +16,11 @@ namespace Tests
                 Cost = 0;
                 Labor = 0;
             }
+            public Total(double cost, double labor)
+            {
+                Cost = cost;
+                Labor = labor;
+            }
 
             public static Total operator +(Total left, Total right)
             {

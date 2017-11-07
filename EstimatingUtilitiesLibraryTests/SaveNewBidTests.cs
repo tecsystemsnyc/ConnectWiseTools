@@ -816,7 +816,7 @@ namespace Tests
             double delta = 0.0001;
 
             Dictionary<Guid, CostBatch> saveCostDictionary = new Dictionary<Guid, CostBatch>();
-            addToCost(saveCostDictionary, saveBid);
+            addToCost(saveCostDictionary, saveBid, saveBid);
 
             //Act
             path = Path.GetTempFileName();
@@ -827,11 +827,13 @@ namespace Tests
             TECEstimator loadedEstimate = new TECEstimator(loadedBid, loadedWatcher);
 
             Dictionary<Guid, CostBatch> loadCostDictionary = new Dictionary<Guid, CostBatch>();
-            addToCost(loadCostDictionary, loadedBid);
+            addToCost(loadCostDictionary, loadedBid, loadedBid);
+
+            Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
+
 
             compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
 
-            Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
         }
 
         private void compareCosts(TECBid saveBid, TECBid LoadBid, 
@@ -841,7 +843,7 @@ namespace Tests
                 if (!loadCostDictionary.ContainsKey(pair.Key))
                 {
                     TECObject lost = TestHelper.ObjectWithGuid(pair.Key, saveBid);
-                    Assert.Fail("Guid not found with cost: " + lost);
+                    Assert.Fail("Guid not found with cost: " + lost.Guid);
                 }
                 else
                 {
@@ -854,10 +856,19 @@ namespace Tests
             }
         }
 
-        public void addToCost(Dictionary<Guid, CostBatch> costDictionary, TECObject item)
+        public void addToCost(Dictionary<Guid, CostBatch> costDictionary, TECObject item, TECBid referenceBid)
         {
+            if(item is TECCatalogs)
+            {
+                return;
+            }
             if(item is INotifyCostChanged costItem)
             {
+                if (TestHelper.ObjectWithGuid(item.Guid, referenceBid) == null)
+                {
+                    var errant = item;
+                    throw new Exception();
+                }
                 costDictionary[item.Guid] = costItem.CostBatch;
             }
             if(item is IRelatable saveable)
@@ -866,7 +877,7 @@ namespace Tests
                 {
                     if (!saveable.LinkedObjects.Contains(child))
                     {
-                        addToCost(costDictionary, child);
+                        addToCost(costDictionary, child, referenceBid);
                     }
 
                 }

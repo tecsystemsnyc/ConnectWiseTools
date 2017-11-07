@@ -647,15 +647,24 @@ namespace Tests
             TECEquipment expectedEquipment = new TECEquipment(true);
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Description";
-
+            Guid systemGuid = bid.Systems[0].Guid;
             bid.Systems[0].Equipment.Add(expectedEquipment);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
 
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualBid.Systems)
+            {
+                if (system.Guid == systemGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
             TECEquipment actualEquipment = null;
-            foreach (TECEquipment equip in actualBid.Systems[0].Equipment)
+            foreach (TECEquipment equip in actualSystem.Equipment)
             {
                 if (expectedEquipment.Guid == equip.Guid)
                 {
@@ -1266,7 +1275,20 @@ namespace Tests
         public void Save_Bid_Remove_Point()
         {
             //Act
-            TECSubScope ssToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope ssToModify = null;
+            foreach(TECSystem system in bid.Systems)
+            {
+                foreach(TECSubScope subScope in system.GetAllSubScope())
+                {
+                    if(subScope.Points.Count > 0)
+                    {
+                        ssToModify = subScope;
+                        break;
+                    }
+                }
+                if (ssToModify != null)
+                    break;
+            }
             int oldNumPoints = ssToModify.Points.Count();
             TECPoint pointToRemove = ssToModify.Points[0];
             ssToModify.Points.Remove(pointToRemove);
@@ -1343,7 +1365,22 @@ namespace Tests
         public void Save_Bid_Point_Quantity()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = null;
+            TECSubScope ssToModify = null;
+            foreach (TECSystem system in bid.Systems)
+            {
+                foreach (TECSubScope subScope in system.GetAllSubScope())
+                {
+                    if (subScope.Points.Count > 0)
+                    {
+                        ssToModify = subScope;
+                        expectedPoint = subScope.Points[0];
+                        break;
+                    }
+                }
+                if (ssToModify != null)
+                    break;
+            }
             expectedPoint.Quantity = 7463;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1379,7 +1416,22 @@ namespace Tests
         public void Save_Bid_Point_Type()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = null;
+            TECSubScope ssToModify = null;
+            foreach (TECSystem system in bid.Systems)
+            {
+                foreach (TECSubScope subScope in system.GetAllSubScope())
+                {
+                    if (subScope.Points.Count > 0)
+                    {
+                        ssToModify = subScope;
+                        expectedPoint = subScope.Points[0];
+                        break;
+                    }
+                }
+                if (ssToModify != null)
+                    break;
+            }
             expectedPoint.Type = IOType.DI;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
