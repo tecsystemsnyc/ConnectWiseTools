@@ -1,4 +1,7 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
+using EstimatingUtilitiesLibrary;
+using EstimatingUtilitiesLibrary.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.MVVM
@@ -56,7 +60,46 @@ namespace TemplateBuilder.MVVM
 
         public TemplatesManager() : base(new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
         {
-            
+            splashVM.EditorStarted += userStartedEditorHandler;
+            TitleString = "Template Builder";
+            setupCommands();
+        }
+
+        private void userStartedEditorHandler(string path)
+        {
+            buildTitleString(path, "TemplateBuilder");
+            databaseManager = new DatabaseManager<TECTemplates>(path);
+            databaseManager.LoadComplete += handleLoaded;
+            ViewEnabled = false;
+            databaseManager.AsyncLoad();
+        }
+
+        protected override void handleLoaded(TECTemplates loaded)
+        {
+            templates = loaded;
+            watcher = new ChangeWatcher(templates);
+            doStack = new DoStacker(watcher);
+            deltaStack = new DeltaStacker(watcher);
+
+            EditorVM = new TemplatesEditorVM(templates);
+            CurrentVM = EditorVM;
+            ViewEnabled = true;
+        }
+
+        #region Menu Commands Methods
+        private void setupCommands()
+        {
+            menuVM.SetRefreshTemplatesCommand(refreshExecute, canRefresh);
+        }
+        #endregion
+
+        protected override TECTemplates getWorkingScope()
+        {
+            return templates;
+        }
+        protected override TECTemplates getNewWorkingScope()
+        {
+            return new TECTemplates();
         }
     }
 }

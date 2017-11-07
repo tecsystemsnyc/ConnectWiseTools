@@ -71,7 +71,7 @@ namespace Tests
 
             var path = Path.GetTempFileName();
 
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             bid = manager.Load() as TECBid;
             var watcher = new ChangeWatcher(bid);

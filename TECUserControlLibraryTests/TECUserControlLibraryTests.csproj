@@ -75,7 +75,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EstimateBuilderTests.cs" />
     <Compile Include="ItemSummaryVMTests.cs" />
     <Compile Include="MaterialSummaryVMTests.cs" />
     <Compile Include="NetworkVMTests.cs" />

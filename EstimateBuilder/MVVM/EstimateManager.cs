@@ -99,7 +99,7 @@ namespace EstimateBuilder.MVVM
         
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
         {
-            buildTitleString(bidFilePath);
+            buildTitleString(bidFilePath, "Estimate Builder");
             templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
             templatesDatabaseManager.LoadComplete += scopeManager =>
             {
@@ -107,12 +107,12 @@ namespace EstimateBuilder.MVVM
                 if(bidFilePath != "")
                 {
                     databaseManager = new DatabaseManager<TECBid>(bidFilePath);
-                    databaseManager.LoadComplete += handleLoadedBid;
+                    databaseManager.LoadComplete += handleLoaded;
                     databaseManager.AsyncLoad();
                 } 
                 else
                 {
-                    handleLoadedBid(new TECBid());
+                    handleLoaded(new TECBid());
                 }
                 
             };
@@ -120,7 +120,7 @@ namespace EstimateBuilder.MVVM
             templatesDatabaseManager.AsyncLoad();
         }
 
-        private void handleLoadedBid(TECBid loadedBid)
+        protected override void handleLoaded(TECBid loadedBid)
         {
             bid = loadedBid;
             watcher = new ChangeWatcher(bid);
@@ -142,110 +142,13 @@ namespace EstimateBuilder.MVVM
         #region Menu Commands Methods
         private void setupCommands()
         {
-            menuVM.SetNewCommand(newExecute, newCanExecute);
-            menuVM.SetLoadCommand(loadExecute, loadCanExecute);
-            menuVM.SetSaveDeltaCommand(saveDeltaExecute, canSaveDelta);
-            menuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
             menuVM.SetLoadTemplatesCommand(loadTemplatesExecute, canLoadTemplates);
-            menuVM.SetRefreshBidCommand(refreshBidExecute, canRefreshBid);
+            menuVM.SetRefreshBidCommand(refreshExecute, canRefresh);
             menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
             menuVM.SetExportEngineeringCommand(exportEngineeringExecute, canExportEngineering);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
-        }
-        //New
-        private void newExecute()
-        {
-            string message = "Would you like to save your changed before creating a new bid?";
-            checkForChanges(message, () => {
-                handleLoadedBid(new TECBid());
-            });
-        }
-        private bool newCanExecute()
-        {
-            return true;
-        }
-        //Load
-        private void loadExecute()
-        {
-            string message = "Would you like to save your changes before loading?";
-            ViewEnabled = false;
-            string loadFilePath;
-            checkForChanges(message, () =>
-            {
-                loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.EstimateFileParameters, defaultDirectory, workingFileDirectory);
-                StatusBarVM.CurrentStatusText = "Loading...";
-                databaseManager = new DatabaseManager<TECBid>(loadFilePath);
-                databaseManager.LoadComplete += handleLoadComplete;
-                databaseManager.AsyncLoad();
-            });
-        }
-        private bool loadCanExecute()
-        {
-            return true;
-        }
-        private void handleLoadComplete(TECBid bid)
-        {
-            handleLoadedBid(bid);
-            StatusBarVM.CurrentStatusText = "Ready";
-            ViewEnabled = true;
-        }
-        //Save Delta
-        private void saveDeltaExecute()
-        {
-            if (databaseManager != null)
-            {
-                StatusBarVM.CurrentStatusText = "Saving...";
-                databaseManager.SaveComplete += handleSaveDeltaComplete;
-                databaseManager.AsyncSave(deltaStack.CleansedStack());
-                deltaStack = new DeltaStacker(watcher);
-            }
-            else
-            {
-                saveNewExecute();
-            }
-        }
-        private bool canSaveDelta()
-        {
-            return deltaStack.CleansedStack().Count > 0;
-        }
-        private void handleSaveDeltaComplete(bool success)
-        {
-            databaseManager.SaveComplete -= handleSaveDeltaComplete;
-            if (success)
-            {
-                StatusBarVM.CurrentStatusText = "Ready";
-            }
-            else
-            {
-                databaseManager.SaveComplete += handleSaveNewComplete;
-                databaseManager.AsyncNew(bid);
-            }
-        }
-        //Save New
-        private void saveNewExecute()
-        {
-            string saveFilePath = UIHelpers.GetSavePath(FileDialogParameters.EstimateFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
-            StatusBarVM.CurrentStatusText = "Saving...";
-            databaseManager = new DatabaseManager<TECBid>(saveFilePath);
-            databaseManager.SaveComplete += handleSaveNewComplete;
-            databaseManager.AsyncNew(bid);
-        }
-        private bool canSaveNew()
-        {
-            return true;
-        }
-        private void handleSaveNewComplete(bool success)
-        {
-            if (success)
-            {
-                StatusBarVM.CurrentStatusText = "Ready";
-            }
-            else
-            {
-                MessageBox.Show("File failed to save. Contact technical support.");
-            }
         }
         //Load Templates
         private void loadTemplatesExecute()
@@ -266,24 +169,6 @@ namespace EstimateBuilder.MVVM
             handleLoadedTemplates(templates);
             StatusBarVM.CurrentStatusText = "Ready";
             ViewEnabled = true;
-        }
-        //Refresh Bid
-        private void refreshBidExecute()
-        {
-            string message = "Would you like to save your changes before refreshing?";
-            ViewEnabled = false;
-            checkForChanges(message, refreshBid);
-
-            void refreshBid()
-            {
-                StatusBarVM.CurrentStatusText = "Loading...";
-                databaseManager.LoadComplete += handleLoadComplete;
-                databaseManager.AsyncLoad();
-            }
-        }
-        private bool canRefreshBid()
-        {
-            return databaseManager != null;
         }
         //Refresh Templates
         private void refreshTemplatesExecute()
@@ -383,40 +268,14 @@ namespace EstimateBuilder.MVVM
         }
         #endregion
 
-        private void buildTitleString(string filePath)
+        protected override TECBid getWorkingScope()
         {
-            string title = Path.GetFileNameWithoutExtension(filePath);
-            TitleString = title + " - Estimate Builder";
+            return bid;
         }
-        private void checkForChanges(string taskMessage, Action onComplete)
+        protected override TECBid getNewWorkingScope()
         {
-            if(deltaStack.CleansedStack().Count > 0)
-            {
-                MessageBoxResult result = MessageBox.Show(taskMessage, "Save", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        databaseManager.SaveComplete += saveComplete;
-                        saveDeltaExecute();
-                        break;
-                    case MessageBoxResult.No:
-                        onComplete();
-                        break;
-                    default:
-                        return;
-                }
-            }
-            else
-                onComplete();
-            
-            void saveComplete(bool success)
-            {
-                databaseManager.SaveComplete -= saveComplete;
-                if (success)
-                    onComplete();
-                else
-                    return;
-            }
+            return new TECBid();
         }
+
     }
 }

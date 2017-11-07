@@ -50,7 +50,7 @@ namespace TemplateBuilder.MVVM
 
         private void openExistingExecute()
         {
-            Started?.Invoke(TemplatesPath);
+            EditorStarted?.Invoke(TemplatesPath);
         }
         private bool openExistingCanExecute()
         {
@@ -59,7 +59,7 @@ namespace TemplateBuilder.MVVM
 
         private void createNewExecute()
         {
-            Started?.Invoke("");
+            EditorStarted?.Invoke("");
         }
         private bool createNewCanExecute()
         {

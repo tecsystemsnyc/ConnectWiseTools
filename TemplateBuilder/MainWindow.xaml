@@ -114,7 +114,7 @@
                                              PanelTemplate="{StaticResource PanelTemplate}"
                                              MiscTemplate="{StaticResource MiscTemplate}"/>
 
-            <DataTemplate DataType="{x:Type localMVVM:OLD_MainViewModel}">
+            <DataTemplate DataType="{x:Type localMVVM:TemplatesEditorVM}">
                 <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
                     <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
                                     DockPanel.Dock="Top"/>
