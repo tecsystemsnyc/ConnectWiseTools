@@ -1,9 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
-using EstimatingLibrary;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
 {

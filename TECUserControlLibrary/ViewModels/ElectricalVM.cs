@@ -1,9 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
-using System;
-using System.Collections.ObjectModel;
-using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {

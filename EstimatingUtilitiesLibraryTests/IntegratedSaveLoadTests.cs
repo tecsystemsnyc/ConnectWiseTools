@@ -1,24 +1,18 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
-using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests
 {
     [TestClass]
     public class IntegratedSaveLoadTests
     {
-        const bool DEBUG = true;
-
         TECBid bid;
         DeltaStacker testStack;
         string path;
@@ -40,15 +34,7 @@ namespace Tests
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
-            if (DEBUG)
-            {
-                Console.WriteLine("SaveBid test bid: " + path);
-            }
-            else
-            {
-                File.Delete(path);
-            }
+            File.Delete(path);
         }
 
         [ClassCleanup]

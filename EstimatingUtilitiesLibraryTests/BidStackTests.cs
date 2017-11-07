@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
+using EstimatingUtilitiesLibrary;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.ObjectModel;
 
 namespace Tests
 {

@@ -1,8 +1,6 @@
 ﻿using EstimatingLibrary;
-using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Windows.Input;
 

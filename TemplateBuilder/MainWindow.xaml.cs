@@ -1,8 +1,5 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using TemplateBuilder.MVVM;
-using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight;
 
 namespace TemplateBuilder
 {

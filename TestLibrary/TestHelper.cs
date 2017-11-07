@@ -1,7 +1,7 @@
-﻿using System;
-using EstimatingLibrary;
-using System.Collections.ObjectModel;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Tests
 {

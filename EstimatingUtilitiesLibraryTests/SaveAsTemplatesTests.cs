@@ -1,13 +1,8 @@
 ﻿using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Tests.CostTestingUtilities;
 
 namespace Tests

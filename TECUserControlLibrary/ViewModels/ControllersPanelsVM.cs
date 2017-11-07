@@ -2,10 +2,8 @@
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Reflection;
 using System.Windows;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;

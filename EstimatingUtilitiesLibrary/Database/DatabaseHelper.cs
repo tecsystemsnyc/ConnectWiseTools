@@ -1,21 +1,11 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using NLog;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EstimatingLibrary;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
-using System.Windows;
-using System.Drawing;
-using System.Reflection;
-using System.Collections;
-using EstimatingLibrary.Interfaces;
-using EstimatingLibrary.Utilities;
-using NLog;
 
 namespace EstimatingUtilitiesLibrary.Database
 {

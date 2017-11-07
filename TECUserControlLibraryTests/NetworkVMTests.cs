@@ -3,12 +3,7 @@ using EstimatingLibrary.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModels;
-using static TECUserControlLibrary.ViewModels.NetworkVM;
 
 namespace Tests
 {

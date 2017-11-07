@@ -1,18 +1,17 @@
-﻿using DebugLibrary;
-using EstimatingLibrary;
+﻿using EstimatingLibrary;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
     public class DatabaseManager<T> where T:TECScopeManager
     {
+        static private Logger logger = LogManager.GetCurrentClassLogger();
+
         private string path;
 
         public event Action<bool> SaveComplete;
@@ -33,15 +32,15 @@ namespace EstimatingUtilitiesLibrary.Database
                     DatabaseUpdater.Update(path, updates);
                     return true;
                 }
-                catch (Exception ex) when (DebugBooleans.CatchSaveDelta)
+                catch (Exception ex)
                 {
-                    DebugHandler.LogError("Save delta failed. Exception: " + ex.Message);
+                    logger.Error("Save delta failed. Exception: " + ex.Message);
                     return false;
                 }
             }
             else
             {
-                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                logger.Error("Could not open file " + path + " File is open elsewhere.");
                 return false;
             }
             
@@ -87,7 +86,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             else
             {
-                DebugHandler.LogError("Could not open file " + path + " File is open elsewhere.");
+                logger.Error("Could not open file " + path + " File is open elsewhere.");
                 return false;
             }
             

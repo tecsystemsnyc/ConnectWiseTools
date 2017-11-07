@@ -1,18 +1,17 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
-using System.Windows;
-using DebugLibrary;
+using System.Linq;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
     public class SQLiteDatabase
     {
+        static private Logger logger = LogManager.GetCurrentClassLogger();
+
         const int SQLITE_VERSION = 3;
 
         public SQLiteConnection Connection;
@@ -22,14 +21,14 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             DBPath = dbPath;
 
-            DebugHandler.LogDebugMessage("Connecting to file: " + DBPath);
+            logger.Debug("Connecting to file: " + DBPath);
 
             if (DBPath != null)
             {
                 if (!File.Exists(DBPath))
                 {
                     SQLiteConnection.CreateFile(DBPath);
-                    DebugHandler.LogDebugMessage("Database File Created");
+                    logger.Debug("Database File Created");
                 }
 
                 Connection = buildConnection(DBPath);
@@ -50,7 +49,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             catch
             {
-                DebugHandler.LogDebugMessage("Deconstructing SQLiteDatabase. Connection already closed.");
+                logger.Debug("Deconstructing SQLiteDatabase. Connection already closed.");
             }
         }
 
@@ -137,7 +136,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             catch (Exception fail)
             {
-                DebugHandler.LogError("Replace failed in SQLiteDB. Command: " + command + " Exception: " + fail.Message);
+                logger.Error("Replace failed in SQLiteDB. Command: " + command + " Exception: " + fail.Message);
                 return false;
             }
         }
@@ -164,7 +163,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             catch (Exception e)
             {
-                DebugHandler.LogError("Deletion failed. Command: " + commandString + " Exception: " + e.Message);
+                logger.Error("Deletion failed. Command: " + commandString + " Exception: " + e.Message);
                 return false;
             }
         }
@@ -234,7 +233,7 @@ namespace EstimatingUtilitiesLibrary.Database
             catch (Exception e)
             {
                 //Log SQL error and throw again
-                DebugHandler.LogError(e);
+                logger.Error(e);
                 throw e;
             }
             reader.Close();

@@ -1,21 +1,7 @@
 ﻿using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using GongSolutions.Wpf.DragDrop;
-using Microsoft.Win32;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Reflection;
 using System.Windows;
-using System.Windows.Input;
-using TECUserControlLibrary;
-using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
