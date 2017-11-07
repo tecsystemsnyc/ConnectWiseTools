@@ -40,7 +40,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             var path = Path.GetTempFileName();
             LegacyDBGenerator.CreateTestBid_1_6(path);
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             actualBid = manager.Load() as TECBid;
         }
 

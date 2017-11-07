@@ -75,9 +75,9 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECTemplates> manager = new DatabaseManager<TECTemplates>(path);
             manager.New(expectedTemplates);
-            actualTemplates = manager.Load() as TECTemplates;
+            actualTemplates = manager.Load();
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {

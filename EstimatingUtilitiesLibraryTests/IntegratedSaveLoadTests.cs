@@ -28,7 +28,7 @@ namespace Tests
         {
             path = Path.GetTempFileName();
             bid = TestHelper.CreateTestBid();
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             bid = manager.Load() as TECBid;
             ChangeWatcher watcher = new ChangeWatcher(bid);

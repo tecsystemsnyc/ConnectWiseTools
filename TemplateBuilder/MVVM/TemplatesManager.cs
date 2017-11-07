@@ -10,7 +10,7 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.MVVM
 {
-    public class TemplatesManager : AppManager
+    public class TemplatesManager : AppManager<TECTemplates>
     {
         private TECTemplates templates;
 

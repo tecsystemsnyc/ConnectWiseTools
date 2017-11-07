@@ -14,6 +14,7 @@ using System.IO;
 using System.Windows;
 using System.ComponentModel;
 using TECUserControlLibrary.Debug;
+using EstimatingUtilitiesLibrary.Exports;
 
 namespace EstimateBuilder.MVVM
 {
@@ -22,8 +23,9 @@ namespace EstimateBuilder.MVVM
         #region Fields and Properties
         private TECBid bid;
         private TECTemplates templates;
+        private TECEstimator estimate;
 
-        private DatabaseManager templatesDatabaseManager;
+        private DatabaseManager<TECTemplates> templatesDatabaseManager;
 
         /// <summary>
         /// Estimate-typed splash vm for manipulation
@@ -95,13 +97,13 @@ namespace EstimateBuilder.MVVM
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
         {
             buildTitleString(bidFilePath);
-            templatesDatabaseManager = new DatabaseManager(templatesFilePath);
+            templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
             templatesDatabaseManager.LoadComplete += scopeManager =>
             {
                 templates = scopeManager as TECTemplates;
                 if(bidFilePath != "")
                 {
-                    databaseManager = new DatabaseManager(bidFilePath);
+                    databaseManager = new DatabaseManager<TECBid>(bidFilePath);
                     databaseManager.LoadComplete += handleLoadedBid;
                     databaseManager.AsyncLoad();
                 } 
@@ -115,15 +117,15 @@ namespace EstimateBuilder.MVVM
             templatesDatabaseManager.AsyncLoad();
         }
 
-        private void handleLoadedBid(TECScopeManager loadedBid)
+        private void handleLoadedBid(TECBid loadedBid)
         {
-            bid = loadedBid as TECBid;
+            bid = loadedBid;
             watcher = new ChangeWatcher(bid);
             doStack = new DoStacker(watcher);
             deltaStack = new DeltaStacker(watcher);
             bid.Catalogs.Unionize(templates.Catalogs);
 
-            TECEstimator estimate = new TECEstimator(bid, watcher);
+            estimate = new TECEstimator(bid, watcher);
 
             EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
             CurrentVM = EditorVM;
@@ -171,7 +173,7 @@ namespace EstimateBuilder.MVVM
             {
                 loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.EstimateFileParameters, defaultDirectory, workingFileDirectory);
                 StatusBarVM.CurrentStatusText = "Loading...";
-                databaseManager = new DatabaseManager(loadFilePath);
+                databaseManager = new DatabaseManager<TECBid>(loadFilePath);
                 databaseManager.LoadComplete += handleLoadComplete;
                 databaseManager.AsyncLoad();
             });
@@ -180,7 +182,7 @@ namespace EstimateBuilder.MVVM
         {
             return true;
         }
-        private void handleLoadComplete(TECScopeManager bid)
+        private void handleLoadComplete(TECBid bid)
         {
             handleLoadedBid(bid);
             StatusBarVM.CurrentStatusText = "Ready";
@@ -223,7 +225,7 @@ namespace EstimateBuilder.MVVM
         {
             string saveFilePath = UIHelpers.GetSavePath(FileDialogParameters.EstimateFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
             StatusBarVM.CurrentStatusText = "Saving...";
-            databaseManager = new DatabaseManager(saveFilePath);
+            databaseManager = new DatabaseManager<TECBid>(saveFilePath);
             databaseManager.SaveComplete += handleSaveNewComplete;
             databaseManager.AsyncNew(bid);
         }
@@ -248,7 +250,7 @@ namespace EstimateBuilder.MVVM
             ViewEnabled = false;
             string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
             StatusBarVM.CurrentStatusText = "Loading Templates...";
-            templatesDatabaseManager = new DatabaseManager(loadFilePath);
+            templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
             templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
             templatesDatabaseManager.AsyncLoad();
         }
@@ -256,9 +258,9 @@ namespace EstimateBuilder.MVVM
         {
             return true;
         }
-        private void handleTemplatesLoadComplete(TECScopeManager templates)
+        private void handleTemplatesLoadComplete(TECTemplates templates)
         {
-            handleLoadedTemplates(templates as TECTemplates);
+            handleLoadedTemplates(templates);
             StatusBarVM.CurrentStatusText = "Ready";
             ViewEnabled = true;
         }
@@ -284,7 +286,23 @@ namespace EstimateBuilder.MVVM
         //Export Proposal
         private void exportProposalExecute()
         {
-            throw new NotImplementedException();
+            string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters, 
+                defaultFileName, defaultDirectory, workingFileDirectory);
+
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    //ScopeDocumentBuilder.CreateScopeDocument(Bid, path, isEstimate);
+                    var builder = new ScopeWordDocumentBuilder();
+                    builder.CreateScopeWordDocument(bid, estimate, path);
+                    Console.WriteLine("Scope saved to document.");
+                }
+                else
+                {
+                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
         }
         private bool canExportProposal()
         {
@@ -293,7 +311,21 @@ namespace EstimateBuilder.MVVM
         //Export Points List
         private void exportPointsListExecute()
         {
-            throw new NotImplementedException();
+            string path = UIHelpers.GetSavePath(FileDialogParameters.CSVFileParameters,
+                            defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    CSVWriter writer = new CSVWriter(path);
+                    writer.BidPointsToCSV(bid);
+                    Console.WriteLine("Points saved to csv.");
+                }
+                else
+                {
+                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
         }
         private bool canExportPointsList()
         {
@@ -302,7 +334,20 @@ namespace EstimateBuilder.MVVM
         //Export Engineering
         private void exportEngineeringExecute()
         {
-            throw new NotImplementedException();
+            string path = UIHelpers.GetSavePath(FileDialogParameters.CSVFileParameters,
+                                        defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    TurnoverExporter.GenerateEngineeringExport(path, bid, estimate);
+                    Console.WriteLine("Exported to engineering turnover document.");
+                }
+                else
+                {
+                    Console.WriteLine("Could not open file " + path + " File is open elsewhere.");
+                }
+            }
         }
         private bool canExportEngineering()
         {

@@ -130,7 +130,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(expectedBid);
             actualBid = manager.Load() as TECBid;
             actualLabor = actualBid.ExtraLabor;
@@ -245,7 +245,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
@@ -284,7 +284,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
@@ -330,7 +330,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
@@ -355,7 +355,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
@@ -398,7 +398,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
@@ -427,7 +427,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
@@ -452,7 +452,7 @@ namespace Tests
             path = Path.GetTempFileName();
 
             //Act
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
@@ -800,7 +800,7 @@ namespace Tests
 
             //Act
             path = Path.GetTempFileName();
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(saveBid);
             TECBid loadedBid = manager.Load() as TECBid;
             TECTypical loadedSystem = loadedBid.Systems[0];
@@ -835,7 +835,7 @@ namespace Tests
 
             //Act
             path = Path.GetTempFileName();
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(saveBid);
             TECBid loadedBid = manager.Load() as TECBid;
             var loadedWatcher = new ChangeWatcher(saveBid);

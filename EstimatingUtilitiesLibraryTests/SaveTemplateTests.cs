@@ -43,7 +43,7 @@ namespace Tests
             templates = TestHelper.CreateTestTemplates();
             ChangeWatcher watcher = new ChangeWatcher(templates);
             testStack = new DeltaStacker(watcher, true);
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECTemplates> manager = new DatabaseManager<TECTemplates>(path);
             manager.New(templates);
         }
 

@@ -31,7 +31,7 @@ namespace Tests
             bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(bid);
             testStack = new DeltaStacker(watcher);
-            DatabaseManager manager = new DatabaseManager(path);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
         }
 
