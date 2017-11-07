@@ -85,10 +85,5 @@ namespace TECUserControlLibrary.UserControls.ItemControls
         {
             InitializeComponent();
         }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Console.WriteLine("Changed");
-        }
     }
 }

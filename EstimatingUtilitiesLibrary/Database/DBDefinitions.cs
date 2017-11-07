@@ -815,7 +815,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
-        public static TableField IsServer = new TableField("IsServer", "TEXT", ObjectType.GetProperty("IsServer"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID

@@ -35,7 +35,6 @@ namespace Tests
             data[ControllerTable.ID.Name] = controller.Guid.ToString();
             data[ControllerTable.Name.Name] = controller.Name;
             data[ControllerTable.Description.Name] = controller.Name;
-            data[ControllerTable.IsServer.Name] = controller.IsServer.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1036,7 +1035,6 @@ namespace Tests
             data[ControllerTable.ID.Name] = controller.Guid.ToString();
             data[ControllerTable.Name.Name] = controller.Name.ToString();
             data[ControllerTable.Description.Name] = controller.Description.ToString();
-            data[ControllerTable.IsServer.Name] = controller.IsServer.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
@@ -1083,7 +1081,6 @@ namespace Tests
             data[ControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
             data[ControllerTable.Name.Name] = instance.Controllers[0].Name.ToString();
             data[ControllerTable.Description.Name] = instance.Controllers[0].Description.ToString();
-            data[ControllerTable.IsServer.Name] = instance.Controllers[0].IsServer.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
@@ -1098,7 +1095,6 @@ namespace Tests
             data[ControllerTable.ID.Name] = controller.Guid.ToString();
             data[ControllerTable.Name.Name] = controller.Name.ToString();
             data[ControllerTable.Description.Name] = controller.Description.ToString();
-            data[ControllerTable.IsServer.Name] = controller.IsServer.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
@@ -1152,7 +1148,6 @@ namespace Tests
             data[ControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
             data[ControllerTable.Name.Name] = instance.Controllers[0].Name.ToString();
             data[ControllerTable.Description.Name] = instance.Controllers[0].Description.ToString();
-            data[ControllerTable.IsServer.Name] = instance.Controllers[0].IsServer.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
             data = new Dictionary<string, string>();
 

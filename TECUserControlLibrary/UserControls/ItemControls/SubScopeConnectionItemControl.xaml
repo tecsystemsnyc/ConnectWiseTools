@@ -120,7 +120,6 @@
                         </Grid.ColumnDefinitions>
                         <ComboBox SelectedItem="{Binding SubScopeConnectionItem.SelectedConduitType}"
                           ItemsSource="{Binding ConduitTypes, Mode=OneWay}" 
-                          SelectionChanged="ComboBox_SelectionChanged"
                           DisplayMemberPath="Name"
                           Margin="5"
                           />
