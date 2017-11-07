@@ -1572,16 +1572,16 @@ namespace Tests
             data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionChildrenTable.ChildID.Name] = child.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
             
@@ -1634,15 +1634,15 @@ namespace Tests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionChildrenTable.ChildID.Name] = instanceController.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
-
-            data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = instanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
+            
             int expectedCount = expectedItems.Count;
 
             //Assert
@@ -1700,15 +1700,15 @@ namespace Tests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionChildrenTable.ChildID.Name] = otherInstanceController.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
-
-            data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = otherInstanceController.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
+            
             int expectedCount = expectedItems.Count;
 
             //Assert
@@ -1896,7 +1896,7 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             TECSubScopeConnection connection = controller.AddSubScope(subScope);
-            TECSubScopeConnection instanceConnection = instanceController.ChildrenConnections[0] as TECSubScopeConnection;
+            TECSubScopeConnection instanceConnection = instanceController.AddSubScope(subScope);
 
             Dictionary<string, string> data;
             Tuple<string, string> pkData;
@@ -1917,15 +1917,15 @@ namespace Tests
             data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
-            data = new Dictionary<string, string>();
-            pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
-            data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
-            expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
+            //data = new Dictionary<string, string>();
+            //pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
+            //data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
+            //expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
 
-            data = new Dictionary<string, string>();
-            pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
-            data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
-            expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
+            //data = new Dictionary<string, string>();
+            //pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
+            //data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
+            //expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
 
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
@@ -3681,7 +3681,7 @@ namespace Tests
             TECController instanceController = system.Controllers[0];
 
             TECSubScopeConnection connection = controller.AddSubScope(subScope);
-            TECSubScopeConnection instanceConnection = instanceController.ChildrenConnections[0] as TECSubScopeConnection;
+            TECSubScopeConnection instanceConnection = instanceController.AddSubScope(instanceSubScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -3689,6 +3689,7 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             controller.RemoveSubScope(subScope);
+            instanceController.RemoveSubScope(instanceSubScope);
 
             Dictionary<string, string> data;
 
