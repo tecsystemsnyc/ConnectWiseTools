@@ -268,20 +268,37 @@ namespace EstimateBuilder.MVVM
         private void refreshBidExecute()
         {
             string message = "Would you like to save your changes before refreshing?";
-            throw new NotImplementedException();
+            ViewEnabled = false;
+            checkForChanges(message, refreshBid);
+
+            void refreshBid()
+            {
+                StatusBarVM.CurrentStatusText = "Loading...";
+                databaseManager.LoadComplete += handleLoadComplete;
+                databaseManager.AsyncLoad();
+            }
         }
         private bool canRefreshBid()
         {
-            return true;
+            return databaseManager != null;
         }
         //Refresh Templates
         private void refreshTemplatesExecute()
         {
-            throw new NotImplementedException();
+            string message = "Would you like to save your changes before refreshing?";
+            ViewEnabled = false;
+            checkForChanges(message, refreshTemplates);
+
+            void refreshTemplates()
+            {
+                StatusBarVM.CurrentStatusText = "Loading...";
+                templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
+                templatesDatabaseManager.AsyncLoad();
+            }
         }
         private bool canRefreshTemplates()
         {
-            return true;
+            return templatesDatabaseManager != null;
         }
         //Export Proposal
         private void exportProposalExecute()
@@ -358,7 +375,6 @@ namespace EstimateBuilder.MVVM
         {
             var dbWindow = new EBDebugWindow(bid);
             dbWindow.Show();
-
         }
         private bool canDebugWindow()
         {
