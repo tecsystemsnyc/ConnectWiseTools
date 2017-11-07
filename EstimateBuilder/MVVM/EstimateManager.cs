@@ -68,7 +68,16 @@ namespace EstimateBuilder.MVVM
         {
             get
             {
-                throw new NotImplementedException("Need to construct file name from bid.");
+                string fileName = "";
+                if (bid.Name != null && bid.Name != "")
+                {
+                    fileName += bid.Name;
+                    if (bid.BidNumber != null && bid.BidNumber != "")
+                    {
+                        fileName += (" - " + bid.BidNumber);
+                    }
+                }
+                return fileName;
             }
         }
         

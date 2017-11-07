@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="Estimating Tools" Language="1033" Version="1.0.0.0" Manufacturer="TEC Systems" UpgradeCode="d0e6b955-0b38-40df-bc4d-828faf31e358">
+	<Product Id="*" Name="Estimating Tools" Language="1033" Version="1.0.0.0" Manufacturer="TEC Systems" UpgradeCode="0b979046-37dd-471c-bb9e-4ae53ed0b348">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate />
 
-		<Feature Id="ProductFeature" Title="SetupProject1" Level="1">
+		<Feature Id="ProductFeature" Title="Estimating Tools" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 		</Feature>
 	</Product>
@@ -14,17 +14,19 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="SetupProject1" />
+				<Directory Id="INSTALLFOLDER" Name="Estimating Tools"/>
 			</Directory>
 		</Directory>
 	</Fragment>
 
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
+      <Component Id="EstimateBuilder">
+        <File Source="$(var.EstimateBuilder.TargetPath)"/>
+      </Component>
+      <!--<Component Id="TemplateBuilder">
+        <File Source="$(var.TemplateBuilder.TargetPath)"/>
+      </Component>-->
 		</ComponentGroup>
 	</Fragment>
 </Wix>
