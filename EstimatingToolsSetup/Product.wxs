@@ -6,6 +6,7 @@
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes"/>
 
+    <!--Directory Layout-->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONROOTDIRECTORY" Name="Estimating Tools">
@@ -13,13 +14,39 @@
           <Directory Id="TEMPLATEBUILDERDIRECTORY" Name="Template Builder"/>
         </Directory>
       </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="Estimating Tools"/>
+      </Directory>
     </Directory>
+    
+    <!--Start Menu Shortcuts-->
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="EBShortcut" Guid="aef0b2fb-ee02-4873-9ab5-1794a7f4471d">
+        <Shortcut Id="EBStartMenuShortcut"
+                  Name="Estimate Builder"
+                  Target="[ESTIMATEBUILDERDIRECTORY]EstimateBuilder.exe"
+                  WorkingDirectory="ESTIMATEBUILDERDIRECTORY"/>
+        <RemoveFolder Id="CleanUpEBShortcut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\Microsoft\EstimateBuilder" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+      <Component Id="TBShortcut" Guid="20b0854f-11eb-4ed0-bcda-7f3deb44dfe6">
+        <Shortcut Id="TBStartMenuShortcut"
+                  Name="Template Builder"
+                  Target="[TEMPLATEBUILDERDIRECTORY]TemplateBuilder.exe"
+                  WorkingDirectory="TEMPLATEBUILDERDIRECTORY"/>
+        <RemoveFolder Id="CleanUpTBShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\Microsoft\TemplateBuilder" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
 
+    <!--Install Directions-->
 		<Feature Id="EstimateBuilder" Title="Estimate Builder" Level="1">
 			<ComponentGroupRef Id="EBComponentGroupID"/>
+      <ComponentRef Id="EBShortcut"/>
 		</Feature>
     <Feature Id="TemplateBuilder" Title="Template Builder" Level="1">
       <ComponentGroupRef Id="TBComponentGroupID"/>
+      <ComponentRef Id="TBShortcut"/>
     </Feature>
 	</Product>
 </Wix>

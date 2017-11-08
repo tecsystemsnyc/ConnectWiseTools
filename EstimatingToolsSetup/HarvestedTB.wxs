@@ -10,211 +10,211 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="TBComponentGroupID">
-            <Component Id="cmpD06AAB47FF5D9876C89F3859FA8680B2" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{3BC144D1-A599-4A56-A646-53DC99D1974B}">
+            <Component Id="cmpD06AAB47FF5D9876C89F3859FA8680B2" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{0D32EA33-4EEE-4839-955C-0EE47020F8DD}">
                 <File Id="filE39044A34C537C7D04C95395796EFCF5" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\DocumentFormat.OpenXml.dll" />
             </Component>
-            <Component Id="cmp96EB1DC12F474DBADAC01F79BBD26C2F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{D68388A1-F46E-45EF-B21F-57EF081C8088}">
+            <Component Id="cmp96EB1DC12F474DBADAC01F79BBD26C2F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{6DD1F5E4-BE07-4EF0-A2B6-F861CA96B9BB}">
                 <File Id="filB419571E939A6BE1F15C56077C267F9A" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\DocumentFormat.OpenXml.xml" />
             </Component>
-            <Component Id="cmp3EF975BD5921585EC685C830DA7B091A" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{67CF9E37-FC85-48BF-8CFA-A1883E64EDB1}">
+            <Component Id="cmp3EF975BD5921585EC685C830DA7B091A" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{158AB6E7-1DBF-40AF-A0D8-8CF2A62488BC}">
                 <File Id="filE702F6C9CA302A78C332221120BA809E" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EntityFramework.dll" />
             </Component>
-            <Component Id="cmp57D7E89A69B8706B3464FFF929640ACC" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{DA5291D8-EBB5-4650-8BED-4F7BE967252B}">
+            <Component Id="cmp57D7E89A69B8706B3464FFF929640ACC" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{8996F780-FAE7-47F1-9D57-CE7CFF2E0A0C}">
                 <File Id="filF299D283A2EEDA3643358D5EB90F3BA6" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EntityFramework.SqlServer.dll" />
             </Component>
-            <Component Id="cmp3B7249933CB929FF36463EC8737EA560" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{4B5A34CC-89EC-4A65-8099-878F794CC469}">
+            <Component Id="cmp3B7249933CB929FF36463EC8737EA560" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{6A9CD4D3-33D2-4FC5-AFA8-6C43695636DD}">
                 <File Id="fil7C0C94AF25071B0D03D98D550237961F" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EntityFramework.SqlServer.xml" />
             </Component>
-            <Component Id="cmp5E0E8BD578B14686C99313F6CA4B5E0A" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{B99E2740-58DD-44E3-8126-D9A3669C0AAD}">
+            <Component Id="cmp5E0E8BD578B14686C99313F6CA4B5E0A" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{037FDB5C-0DE5-4990-A779-DE2E224F3CC2}">
                 <File Id="fil06C123C7E3E1A3FB08ADF17282628BF9" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EntityFramework.xml" />
             </Component>
-            <Component Id="cmp9F5B105A02F2AF1E8B8671F3CA75500F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{7C6A1E84-3DDB-4A17-AD09-403C1FBDDA1B}">
+            <Component Id="cmp9F5B105A02F2AF1E8B8671F3CA75500F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{1AC00BF6-831E-4A0D-B2F0-76D661A4FCA1}">
                 <File Id="filF68BC205605898ADF9D623A21C671909" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EstimatingLibrary.dll" />
             </Component>
-            <Component Id="cmpC906EA44D4CD9784DBEE8D4B17B448E4" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{95141D2D-6710-44DB-83BE-DD628BDA355D}">
+            <Component Id="cmpC906EA44D4CD9784DBEE8D4B17B448E4" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{C406F019-1759-44F5-9CD7-2F5672D1EF97}">
                 <File Id="fil249D761E2600D65414D5A59FEBD497ED" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EstimatingLibrary.dll.config" />
             </Component>
-            <Component Id="cmpABA84F2A4080FCBFFA26E2D2155A341D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{69FD3B2C-DB59-4A59-B51C-8D27A787DADD}">
+            <Component Id="cmpABA84F2A4080FCBFFA26E2D2155A341D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{0BBE6330-6D52-4635-B0D9-9AB386AFB05A}">
                 <File Id="fil51A8FDCAABF4EA876E95D67F9433B6B3" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EstimatingLibrary.pdb" />
             </Component>
-            <Component Id="cmp1762D9E2358F4188045C50C70D72C72D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{270E4688-2260-482B-B70B-A5ABC11C5937}">
+            <Component Id="cmp1762D9E2358F4188045C50C70D72C72D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{68B96F51-0E34-4210-9157-D6D25069D677}">
                 <File Id="fil2B6EBAA34414E44AFB70082A533A9428" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EstimatingUtilitiesLibrary.dll" />
             </Component>
-            <Component Id="cmp33E5A020B7FDC2B835C29ACDA17D3464" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{269DC8A5-8B9E-4D7D-8DE5-1F4CDB6A1FE0}">
+            <Component Id="cmp33E5A020B7FDC2B835C29ACDA17D3464" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{5191B651-7F39-4BCD-84D4-E4506E25B476}">
                 <File Id="fil68A841C93D5C41DEC26D1F5F9EFADA46" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EstimatingUtilitiesLibrary.dll.config" />
             </Component>
-            <Component Id="cmpDB809BBE7B25715F30709BFF6F5F1307" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{97328BA0-C731-4009-A281-8762A40644A5}">
+            <Component Id="cmpDB809BBE7B25715F30709BFF6F5F1307" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{FDB0CEAF-6005-42E5-8FFD-3FE1F0BF8B5C}">
                 <File Id="fil4A66C7D11B2486D9C694DA588B7F6316" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\EstimatingUtilitiesLibrary.pdb" />
             </Component>
-            <Component Id="cmpD31DC9D0F1632EDD6E03CD14610D00FD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{F21CF280-71FD-4676-AE4E-D73A9E067C41}">
+            <Component Id="cmpD31DC9D0F1632EDD6E03CD14610D00FD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{98729798-1F20-48A1-8BA7-C966B17B63D4}">
                 <File Id="fil92A04EAB268BCBA44E37273F86E57C2C" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.dll" />
             </Component>
-            <Component Id="cmpEC35DA0DFB9C7E830EBDEAC750105C0D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{7444E984-16DF-44BE-B3EA-A1D4A3CBAA35}">
+            <Component Id="cmpEC35DA0DFB9C7E830EBDEAC750105C0D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{B3390553-2ECC-4568-9D17-D7B224A55143}">
                 <File Id="fil3CBAFAEE4EA49C734421216EB56CC7EB" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.Extras.dll" />
             </Component>
-            <Component Id="cmpA130DD7236F6940E6F4A896BA0DF4DE2" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{35B973EC-468B-4045-8255-A0A976982FC5}">
+            <Component Id="cmpA130DD7236F6940E6F4A896BA0DF4DE2" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{771BD0A0-E089-422D-B8EB-AF371B744CE4}">
                 <File Id="fil4EFBDA01A344CB49D2D48AE8CE51CC3C" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.Extras.pdb" />
             </Component>
-            <Component Id="cmp925C27FC722627E092646BC8E95A7F7F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{14E00F43-DC96-4BAB-8994-4DE480C426FC}">
+            <Component Id="cmp925C27FC722627E092646BC8E95A7F7F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{99D88C13-DF0A-4EBB-9FC9-1B31EB1F8FBF}">
                 <File Id="fil128AC47F9495C4173970E8821B0727D2" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.Extras.xml" />
             </Component>
-            <Component Id="cmpD6D59B7CB3E37B222B2AE54765D4FEBD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{FA5E763C-6DF2-4CC7-A095-21A1F4478C73}">
+            <Component Id="cmpD6D59B7CB3E37B222B2AE54765D4FEBD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{F941DCB2-5B53-4AF5-8FB4-509DE5D28770}">
                 <File Id="filA429D0EC95EEAC9836C57BFB59586DFF" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.pdb" />
             </Component>
-            <Component Id="cmpCA0DE0D98A2DA554195E5B08D4708FD9" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{1B552835-7226-4716-AE7E-8F765EC6823D}">
+            <Component Id="cmpCA0DE0D98A2DA554195E5B08D4708FD9" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{2DC7676B-EE67-4580-8E63-8E7F2F0B93DA}">
                 <File Id="fil7C081DABF2655A4C016553D64B79C124" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.Platform.dll" />
             </Component>
-            <Component Id="cmp9B4BC030E2A5B92D833F93B2F20FF884" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{831AEC9A-1D96-4DCE-B816-3C6BC69CE885}">
+            <Component Id="cmp9B4BC030E2A5B92D833F93B2F20FF884" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{95556025-7E1E-4EA7-B66B-E66D81F8EE12}">
                 <File Id="fil9F5AFC02064970F96DA54F4CB12679F9" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.Platform.pdb" />
             </Component>
-            <Component Id="cmp5A4B0862D400BB4534C15479702BA4B8" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{29CA3A1F-F390-48D9-8BD2-F7B56BA2C2C2}">
+            <Component Id="cmp5A4B0862D400BB4534C15479702BA4B8" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{C97903C9-4D4B-4DDA-808C-82F191001D20}">
                 <File Id="filCFDE4A755C835F833373313BF5ED3A8D" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.Platform.xml" />
             </Component>
-            <Component Id="cmp5B44824304E4BE52C83E5A5D7682F82F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{BA30964F-6492-4DFE-B412-5BEA9F5DD51A}">
+            <Component Id="cmp5B44824304E4BE52C83E5A5D7682F82F" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{45841656-A67E-4D81-9F5D-9A3E2169864F}">
                 <File Id="fil7AA8201B3AAC9D71023A5D2BF7BD8B29" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GalaSoft.MvvmLight.xml" />
             </Component>
-            <Component Id="cmpC2DBE74A67E0334F3F11F6774A17A593" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{E68A72BA-F888-47AC-83B8-E06A056E9FC8}">
+            <Component Id="cmpC2DBE74A67E0334F3F11F6774A17A593" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{204A53DF-B112-42EF-AD3A-B89FDD17A2AC}">
                 <File Id="filF32E4A3E93462936834CED8A312CD52E" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GongSolutions.Wpf.DragDrop.dll" />
             </Component>
-            <Component Id="cmpF6072DEF1521D7FB9EF95DF957C0D632" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{42DA595A-FBA7-4306-9CFC-8A5B9FD6C802}">
+            <Component Id="cmpF6072DEF1521D7FB9EF95DF957C0D632" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{89D21DA3-0289-4A4B-9254-5D0B19D8473E}">
                 <File Id="filC790537CB979FA71F61B0A10071ECB18" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GongSolutions.Wpf.DragDrop.pdb" />
             </Component>
-            <Component Id="cmp9C0300721AA01EAF106A3DB202C894B1" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{BF64E7AE-637D-4B19-9877-212129E1CD76}">
+            <Component Id="cmp9C0300721AA01EAF106A3DB202C894B1" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{E4429042-A97C-4134-A85E-7CEBB4CF424F}">
                 <File Id="fil1CEB14485AB31BDEBAFF92B09D95722A" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\GongSolutions.Wpf.DragDrop.xml" />
             </Component>
-            <Component Id="cmp534DEB8D4F1AA7F317CF2EC2B45312CD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{7F37193E-30DA-4A77-837B-61CB92E82E5E}">
+            <Component Id="cmp534DEB8D4F1AA7F317CF2EC2B45312CD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{0D340DCD-CBFF-449C-8FA5-CFB9252FFC47}">
                 <File Id="filCCFD3557406B26BE1D37F86D565BEBC1" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\Microsoft.Practices.ServiceLocation.dll" />
             </Component>
-            <Component Id="cmpF530273CF317F76BA10CD6109B2569A1" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{BAD01F97-3AF6-4115-96D3-9C439AFED7AF}">
+            <Component Id="cmpF530273CF317F76BA10CD6109B2569A1" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{3A202EEC-5064-466E-8254-5DD274AD9D4D}">
                 <File Id="fil9F30222554F230E2808E34F7E474EA5B" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\Microsoft.Practices.ServiceLocation.pdb" />
             </Component>
-            <Component Id="cmp16A51AB63544B814C1755D36936148BC" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{20880E78-FAB4-4341-B687-DFF3E30A40A4}">
+            <Component Id="cmp16A51AB63544B814C1755D36936148BC" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{664EC5D1-E097-447C-8824-2E83CBEBB4A7}">
                 <File Id="fil15FB7986F425A08B8CE6BD1848FDB6A2" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\Microsoft.Practices.ServiceLocation.xml" />
             </Component>
-            <Component Id="cmp4F1AFBCCF5D8F4054D29ED95B0C436ED" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{E6B74B45-C093-463D-B5FB-66A2C174EA41}">
+            <Component Id="cmp4F1AFBCCF5D8F4054D29ED95B0C436ED" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{2F1694AB-FAAD-4AB4-9A89-299A00C17856}">
                 <File Id="filD235A6ECF334E99AC2F8FCFFCF0917D6" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\MigraDoc.DocumentObjectModel-WPF.dll" />
             </Component>
-            <Component Id="cmp0824849D867FE00B47209BBD67318578" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{AF76C7B0-4D59-49DC-9343-E0D4456B724A}">
+            <Component Id="cmp0824849D867FE00B47209BBD67318578" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{58A88CB5-E10F-4DF1-93BB-DFF8072030D3}">
                 <File Id="fil252E257AF9C51225AD90766A16D2B0D7" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\MigraDoc.Rendering-WPF.dll" />
             </Component>
-            <Component Id="cmpC604D09059164A6C2C9A37511427D959" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{2EAE560A-C376-40C5-832C-177C23D18B9C}">
+            <Component Id="cmpC604D09059164A6C2C9A37511427D959" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{07D3D92D-680F-4221-BFCD-81B9E301519F}">
                 <File Id="filE495D694C40F0F583DC93C35CE8343F9" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\MigraDoc.RtfRendering-WPF.dll" />
             </Component>
-            <Component Id="cmp13D5431BE92CD73646BBB3095DD79863" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{B9A7E6C1-7EC0-4C4F-B19F-EDF8B1386A25}">
+            <Component Id="cmp13D5431BE92CD73646BBB3095DD79863" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{EC3F9C04-CFBC-42D5-B22E-DF9DF694267E}">
                 <File Id="fil9791F92688833C99A26DE5752BEBEF8B" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\NLog.config" />
             </Component>
-            <Component Id="cmp773C0BD9D7810090E92211FA12EC6D36" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{1D132BBA-15D0-4A47-A0AB-D1E98B670820}">
+            <Component Id="cmp773C0BD9D7810090E92211FA12EC6D36" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{DFCD6297-572A-41EB-8D86-CDE9D65BACA4}">
                 <File Id="filF0C08D5FCC5401AF7CDD77377C4D8F95" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\NLog.dll" />
             </Component>
-            <Component Id="cmp1CD38BACAAF0CE2542676762C7861FA7" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{C62B1784-0001-4103-B4DC-5AA25F765878}">
+            <Component Id="cmp1CD38BACAAF0CE2542676762C7861FA7" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{DB7A4BB6-0B68-49EE-AF6E-C10A86DE4959}">
                 <File Id="filD94343426A7142686AA67AA84DBCF762" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\NLog.xml" />
             </Component>
-            <Component Id="cmpF074F625AC442AADC0CA04A8E954F524" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{5FB1AA90-060A-4042-8E4B-5DCEC27AA4AE}">
+            <Component Id="cmpF074F625AC442AADC0CA04A8E954F524" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{FD9969A6-B37F-4305-A0A0-CA1562D91966}">
                 <File Id="filD9ED38BF6D7F01BC0B1D927FACA65F1E" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\OxyPlot.dll" />
             </Component>
-            <Component Id="cmp2763CE6AF7BB0DFBAA151145026504AA" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{12C2ED73-A37C-452C-9BFB-3B33240C3F55}">
+            <Component Id="cmp2763CE6AF7BB0DFBAA151145026504AA" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{15227CA3-EA0D-47C9-A7C5-3DB146D58152}">
                 <File Id="filBAA671AC66008FC539DDCBA3319E520F" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\OxyPlot.pdb" />
             </Component>
-            <Component Id="cmp60142E6D78D68E37C5FABE54A4F9D07B" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{4D506FBA-CDAA-4A67-AA80-78E08774E3D6}">
+            <Component Id="cmp60142E6D78D68E37C5FABE54A4F9D07B" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{584C7044-2DCC-4DEA-B7EA-8F152945DE08}">
                 <File Id="filD2BC74C52F6B26B96BA119C46E20E9FE" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\OxyPlot.Wpf.dll" />
             </Component>
-            <Component Id="cmp61064B7FC8B4061D94FAA9F22911A2E6" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{5E386AAC-1057-47B2-8B58-A1338D5B1C5E}">
+            <Component Id="cmp61064B7FC8B4061D94FAA9F22911A2E6" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{63B98507-8E6F-431B-B2D8-2BFFA24164F0}">
                 <File Id="fil8D2E986C657D4C580B90393598886F68" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\OxyPlot.Wpf.pdb" />
             </Component>
-            <Component Id="cmpA924901D640C82BBFE20DAD2EDD99257" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{231CCA32-550E-4D88-B941-8F88839F59F7}">
+            <Component Id="cmpA924901D640C82BBFE20DAD2EDD99257" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{3C0496EC-AEA2-4577-A683-C41D7A73FF7A}">
                 <File Id="fil12C78D8C39CEC0EC34C9791380C9D8A1" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\OxyPlot.Wpf.xml" />
             </Component>
-            <Component Id="cmp2A7DCC0FD740D8DB084F27DCE4B0E1C3" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{DEC90755-C0D7-43FD-B90D-CC790F24F5F3}">
+            <Component Id="cmp2A7DCC0FD740D8DB084F27DCE4B0E1C3" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{FFCE70D7-CA9D-4F51-9061-550ADC94F108}">
                 <File Id="fil0F5D76C4131BD2936B0F44A8E1E56FA6" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\OxyPlot.xml" />
             </Component>
-            <Component Id="cmp49FF101A83CE1DD251AC1098E1D5836B" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{A06709F3-E018-45A2-A637-CEDC95188F0A}">
+            <Component Id="cmp49FF101A83CE1DD251AC1098E1D5836B" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{28A52D18-F3D0-4FDE-B4FC-AFC7733AD274}">
                 <File Id="filF323ED6AC17813794F432E9BBF8E1BF6" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\PdfSharp-WPF.dll" />
             </Component>
-            <Component Id="cmpB77140508BF74B4823AAB31C2F13628D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{E03D42CB-0550-40FB-B6F6-06012CB46D82}">
+            <Component Id="cmpB77140508BF74B4823AAB31C2F13628D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{CDC681CF-67D7-47FF-899A-BD8B55A8DB7E}">
                 <File Id="fil68E3F1F0E0E1E1625195CE300C0D94E5" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\PdfSharp.Charting-WPF.dll" />
             </Component>
-            <Component Id="cmp0821CF7EBF8678217E91B7FF22112A98" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{5CB369C1-3AD1-4E96-A66E-61FD0E4A25D7}">
+            <Component Id="cmp0821CF7EBF8678217E91B7FF22112A98" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{49D527F7-E6FB-43D6-8B27-176ABA9CC96F}">
                 <File Id="fil7790162F637A6AA7AA57CF026D7C79F9" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\System.Data.SQLite.dll" />
             </Component>
-            <Component Id="cmp3B64707B3475E42778BA80E7E37A0DDF" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{B39DC383-C8D3-465B-9D4F-307DA554C350}">
+            <Component Id="cmp3B64707B3475E42778BA80E7E37A0DDF" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{680CC5A7-0975-4355-9670-465B1AC43EA3}">
                 <File Id="fil0D06BF15376A946945931857C6D510C2" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\System.Data.SQLite.dll.config" />
             </Component>
-            <Component Id="cmp90836BEE3A5F5D9E4E97E70BF2C1FC1E" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{F33A62C8-DDD3-4B8E-A8AD-7945BB64885C}">
+            <Component Id="cmp90836BEE3A5F5D9E4E97E70BF2C1FC1E" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{9856605B-9C64-4C16-A008-36D733861BF9}">
                 <File Id="filF1A49DFC4E9EE75001A232FCE8D39B0B" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\System.Data.SQLite.EF6.dll" />
             </Component>
-            <Component Id="cmpE01519A4C8460CD533FCF8AC47694F98" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{258F2845-E2C1-4007-A8CB-431F5A321BD5}">
+            <Component Id="cmpE01519A4C8460CD533FCF8AC47694F98" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{52E630D6-FF56-412A-83B9-9FFA342ACF78}">
                 <File Id="filB2BA081A63953FA43241894B4715418C" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\System.Data.SQLite.Linq.dll" />
             </Component>
-            <Component Id="cmpC42AD7DC511E5DF8F6D15E9C563D8C03" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{25F37088-5B83-4776-A152-48AF5E0EB62A}">
+            <Component Id="cmpC42AD7DC511E5DF8F6D15E9C563D8C03" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{D05DB9F7-3C45-4320-8C3E-6C9F69C22546}">
                 <File Id="fil9792C456117F719545372795BCB2E6E3" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\System.Data.SQLite.xml" />
             </Component>
-            <Component Id="cmpBA4E4D0D73FB99CCB456D79D1E31FBD0" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{ACAA3B12-B0F3-42BD-9EF2-1649619B6C65}">
+            <Component Id="cmpBA4E4D0D73FB99CCB456D79D1E31FBD0" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{9FA32A7E-1E74-4FF0-8F2B-B95F392B4C87}">
                 <File Id="fil274A6D78A4FFE34D366F5C37357481F8" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\System.Windows.Interactivity.dll" />
             </Component>
-            <Component Id="cmp8AE049F5EA971634BFD2197C9B0CE7FD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{877D7C08-1234-4648-B614-F07CC85D5BDA}">
+            <Component Id="cmp8AE049F5EA971634BFD2197C9B0CE7FD" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{F4B4CDED-CF7F-433A-A4C2-14C4D64EA747}">
                 <File Id="fil4E4361FFC09DB4C9CA337587E3B0319E" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TECUserControlLibrary.dll" />
             </Component>
-            <Component Id="cmp6E85F1480AD696F14E3ACBC486B8D047" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{C0D5D7AE-B42A-46BC-8740-2A7D61BF3000}">
+            <Component Id="cmp6E85F1480AD696F14E3ACBC486B8D047" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{6F8AD0F5-88B8-4056-8467-B021FF26C3BA}">
                 <File Id="filA2716B152CF5E8C27925FFC59B454549" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TECUserControlLibrary.dll.config" />
             </Component>
-            <Component Id="cmp87D099D1AE6058DE058374A2343B9B00" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{C26F4271-311A-4007-AF58-37E207ED0C8D}">
+            <Component Id="cmp87D099D1AE6058DE058374A2343B9B00" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{C2E7CB02-A71F-49C8-AD3F-835581B4253F}">
                 <File Id="filE7345C09547D3A876A455FE88E3A702D" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TECUserControlLibrary.pdb" />
             </Component>
-            <Component Id="cmpE7B1DF8359C19ECCE359894ACE1085C2" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{57FF435F-1622-4989-A4EF-EDEEB40CC117}">
+            <Component Id="cmpE7B1DF8359C19ECCE359894ACE1085C2" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{13669826-7911-4065-A26D-8BB6671A1A08}">
                 <File Id="fil9C63B09EA0CEDC0FC084AA1E8FFDEB83" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.application" />
             </Component>
-            <Component Id="cmp838EF4FE2C07139ECA7049F7E1EE1E65" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{79F0E95F-D45A-4739-BE63-718523C0DB76}">
+            <Component Id="cmp838EF4FE2C07139ECA7049F7E1EE1E65" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{AC6C7009-3140-45EE-9E17-E926B75A7E4B}">
                 <File Id="fil4F1DFF290447D8D3CB4C8F1F20453725" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.exe" />
             </Component>
-            <Component Id="cmp8340AE595A7FEADF0842E891BE4BFDCA" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{9E4DF94B-2C38-4DD7-B808-44C8ABD9928C}">
+            <Component Id="cmp8340AE595A7FEADF0842E891BE4BFDCA" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{37BE5E74-1329-4999-9BF6-87548548E241}">
                 <File Id="filFEDE67BFA87F60658F5D6EE853CF94B3" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.exe.CodeAnalysisLog.xml" />
             </Component>
-            <Component Id="cmp62BAAAEBB1762785A0A20266FE9D8312" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{B0FB60AD-A9A0-4D61-A216-147DC1989946}">
+            <Component Id="cmp62BAAAEBB1762785A0A20266FE9D8312" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{288D1DD9-2C45-47E6-BEEB-060A88715135}">
                 <File Id="fil85DBA595B4DE636905002C3A116657C7" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.exe.config" />
             </Component>
-            <Component Id="cmp5A8E3A9E192BC4580A17DF09212A7F22" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{1DCAAFEC-BF0B-4B5D-8EED-800405C03351}">
+            <Component Id="cmp5A8E3A9E192BC4580A17DF09212A7F22" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{EE3792D1-2687-447F-BB44-FEABA4BFDE3F}">
                 <File Id="fil1B146C69AF810F108EA505B02BB925A1" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.exe.lastcodeanalysissucceeded" />
             </Component>
-            <Component Id="cmp226EE5D505FB241F0944F0A97C6C8AB9" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{D8878E1A-1898-4F96-A4FD-3EB93EA3D4D8}">
+            <Component Id="cmp226EE5D505FB241F0944F0A97C6C8AB9" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{E957739B-A716-4A45-B388-7D379090AD2F}">
                 <File Id="fil89694BD145AE14481C15B4A3FE8DEF65" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.exe.manifest" />
             </Component>
-            <Component Id="cmp4B0360866C6E130FC9F085551D8B8BA1" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{9CEDC181-1154-4196-B624-9622A5A1C8EB}">
+            <Component Id="cmp4B0360866C6E130FC9F085551D8B8BA1" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{CFA006C3-B371-4CBD-926E-5ABFF8428164}">
                 <File Id="fil1AB9180935005255376227BA626A804D" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.pdb" />
             </Component>
-            <Component Id="cmp6CC91E91F15FDD9F37F6438E6D468C9D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{2E329CE5-375B-4BE0-A4C7-8A8C594839E5}">
+            <Component Id="cmp6CC91E91F15FDD9F37F6438E6D468C9D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{EB06946C-8477-4E5F-8538-690765022049}">
                 <File Id="filAFEF35DC3E6D079471F9D2C9C6EA3070" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.vshost.application" />
             </Component>
-            <Component Id="cmp68D72DFDE67E0F98C197A519BFDA755E" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{1A1D3B0B-CDF8-4B8C-A78E-A571C0AE4916}">
+            <Component Id="cmp68D72DFDE67E0F98C197A519BFDA755E" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{EA8075F5-1C35-4527-B5A3-726DC38E749D}">
                 <File Id="fil56EB6201FE34B870928AE504E6BEB947" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.vshost.exe" />
             </Component>
-            <Component Id="cmpE76B47D9B7E3F216D86E641DFFD2E59D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{AF925358-B135-4AD6-929E-B972885B73F6}">
+            <Component Id="cmpE76B47D9B7E3F216D86E641DFFD2E59D" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{3685AF1C-C2DB-42D6-9BC5-B8E22B584065}">
                 <File Id="fil315E192325B57D755A1A303528A18B4B" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.vshost.exe.config" />
             </Component>
-            <Component Id="cmpF7787404FA60BE72F4B55A793FF5116E" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{45720245-15CE-4A93-A9EB-0F9C419E2B70}">
+            <Component Id="cmpF7787404FA60BE72F4B55A793FF5116E" Directory="TEMPLATEBUILDERDIRECTORY" Guid="{421FEDB8-63BA-477B-8B3F-1631AD3D233D}">
                 <File Id="filCEEFF99B98EB42F55AEEBFBC93082314" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\TemplateBuilder.vshost.exe.manifest" />
             </Component>
-            <Component Id="cmp69900D2621920B1088BBBA8D824B2AE7" Directory="dirCB8D33E867E857EDA3B3431D46CFFB5F" Guid="{587D12AD-3F82-4914-A4CA-04CC8115878A}">
+            <Component Id="cmp69900D2621920B1088BBBA8D824B2AE7" Directory="dirCB8D33E867E857EDA3B3431D46CFFB5F" Guid="{E9C71B1B-B404-4243-AC86-DBB2F2AE0F74}">
                 <File Id="fil7D5AB293D55E08C832D0B26388F58CE4" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\app.publish\TemplateBuilder.exe" />
             </Component>
-            <Component Id="cmp09B14FA3D780F11A9D5230C83CD78A27" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{3E2DA007-EBA3-4621-8DD1-5CE492009230}">
+            <Component Id="cmp09B14FA3D780F11A9D5230C83CD78A27" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{6F787A45-BC01-47BF-8FE2-4FDAFE3571D3}">
                 <File Id="filAF8DE729F4F50073A341BC0EBA173B4C" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\de\MigraDoc.DocumentObjectModel-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp61C3595EE3EF08AB05A2A4FD20434144" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{F9F12DB2-23E5-4D21-BE55-E4A53AC5A99E}">
+            <Component Id="cmp61C3595EE3EF08AB05A2A4FD20434144" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{2E9AFDD4-95FB-4F7E-BDE9-7EB22A218C88}">
                 <File Id="fil9177AE075E6AB7DAE5105391A9835702" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\de\MigraDoc.Rendering-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp01547938192F3BB9A5A4F4283D90BE79" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{E285D6DA-AFCC-41D2-8A0C-676597DAE302}">
+            <Component Id="cmp01547938192F3BB9A5A4F4283D90BE79" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{D09C5977-3C87-4498-A6E8-8F546739D94D}">
                 <File Id="filA57C502CD4B5AEA65BBA4E3F686EA3CF" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\de\MigraDoc.RtfRendering-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp9DDA1869798FDA8E045A8B5373ED3A4C" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{25DBAA3C-8B9E-4BD6-8F28-6E59E06AA9B7}">
+            <Component Id="cmp9DDA1869798FDA8E045A8B5373ED3A4C" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{7A0638DA-C99C-49A2-8ACF-E145F2A20BB7}">
                 <File Id="fil5CDDD258DDE02FA130BBFAB20B93F132" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\de\PdfSharp-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp6574C59CC139D625206E666D45009A0C" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{C786ABF0-83D4-4ECD-B5E9-CBA864D1BDCC}">
+            <Component Id="cmp6574C59CC139D625206E666D45009A0C" Directory="dirDCA78D8115A33695CDD65A903C75395B" Guid="{E71F0160-C02B-4694-B164-C9D17C612B77}">
                 <File Id="fil561B4BAA781C1E00CAE376DCC88C3C91" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\de\PdfSharp.Charting-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp1EA2423BFB3D45D807C69F13DD1684B7" Directory="dir027CB98241D7C9362B51B4F407377EB0" Guid="{F9980845-3D5D-4E3C-9198-0A70206BEFF5}">
+            <Component Id="cmp1EA2423BFB3D45D807C69F13DD1684B7" Directory="dir027CB98241D7C9362B51B4F407377EB0" Guid="{534A52E6-A2C3-4511-8664-EEACD40E4029}">
                 <File Id="filC44B0962457A1966355468DBFEA03BFE" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\x64\SQLite.Interop.dll" />
             </Component>
-            <Component Id="cmp6C714EEC2D272FB38ACC171309697ABD" Directory="dirB8D2D6AF53246E5D845F81C611807A44" Guid="{EC84E1C1-5FB8-4640-AFB2-21FC74FEDA42}">
+            <Component Id="cmp6C714EEC2D272FB38ACC171309697ABD" Directory="dirB8D2D6AF53246E5D845F81C611807A44" Guid="{3F5E6795-B9DA-40D2-AEBE-F0D0499A3EFB}">
                 <File Id="fil7BDAC7794F522C1E9383A58A85325D70" KeyPath="yes" Source="$(var.TemplateBuilder.TargetDir)\x86\SQLite.Interop.dll" />
             </Component>
         </ComponentGroup>
