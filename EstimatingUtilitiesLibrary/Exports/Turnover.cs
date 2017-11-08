@@ -5,7 +5,7 @@ using System;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
-    public static class TurnoverExporter
+    public static class Turnover
     {
 
         public static void GenerateEngineeringExport(string path, TECBid bid, TECEstimator estimate)

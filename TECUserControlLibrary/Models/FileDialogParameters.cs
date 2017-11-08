@@ -56,6 +56,16 @@
                 return fileParams;
             }
         }
+        public static FileDialogParameters ExcelFileParameters
+        {
+            get
+            {
+                FileDialogParameters fileParams;
+                fileParams.Filter = "Excel files (*.xlsx)|*.xlsx";
+                fileParams.DefaultExtension = "xlsx";
+                return fileParams;
+            }
+        }
         #endregion
     }
 }

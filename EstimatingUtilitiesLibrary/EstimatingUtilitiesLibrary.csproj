@@ -115,7 +115,8 @@
     <Compile Include="DoStacker.cs" />
     <Compile Include="EstimateSpreadsheetExporter.cs" />
     <Compile Include="Database\DatabaseHelper.cs" />
-    <Compile Include="Exports\TurnoverExporter.cs" />
+    <Compile Include="Exports\Budget.cs" />
+    <Compile Include="Exports\Turnover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

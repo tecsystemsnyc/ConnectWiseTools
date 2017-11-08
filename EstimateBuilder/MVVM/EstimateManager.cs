@@ -154,6 +154,7 @@ namespace EstimateBuilder.MVVM
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
             menuVM.SetExportEngineeringCommand(exportEngineeringExecute, canExportEngineering);
+            menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
         }
         //Load Templates
@@ -246,13 +247,13 @@ namespace EstimateBuilder.MVVM
         //Export Engineering
         private void exportEngineeringExecute()
         {
-            string path = UIHelpers.GetSavePath(FileDialogParameters.CSVFileParameters,
+            string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters,
                                         defaultFileName, defaultDirectory, workingFileDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    TurnoverExporter.GenerateEngineeringExport(path, bid, estimate);
+                    Turnover.GenerateEngineeringExport(path, bid, estimate);
                     logger.Info("Exported to engineering turnover document.");
                 }
                 else
@@ -264,6 +265,28 @@ namespace EstimateBuilder.MVVM
         private bool canExportEngineering()
         {
             return true; 
+        }
+        //Export Budget
+        private void exportBudgetExecute()
+        {
+            string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
+                                        defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Budget.GenerateReport(path, bid);
+                    logger.Info("Exported to budget document.");
+                }
+                else
+                {
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                }
+            }
+        }
+        private bool canExportBudget()
+        {
+            return true;
         }
         //Debug Window
         private void debugWindowExecute()
