@@ -155,6 +155,7 @@ namespace EstimateBuilder.MVVM
             menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
             menuVM.SetExportEngineeringCommand(exportEngineeringExecute, canExportEngineering);
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
+            menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
         }
         //Load Templates
@@ -285,6 +286,28 @@ namespace EstimateBuilder.MVVM
             }
         }
         private bool canExportBudget()
+        {
+            return true;
+        }
+        //Export Budget
+        private void exportBOMExecute()
+        {
+            string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
+                                        defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Turnover.GenerateBOM(path, bid);
+                    logger.Info("Exported to BOM document.");
+                }
+                else
+                {
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                }
+            }
+        }
+        private bool canExportBOM()
         {
             return true;
         }
