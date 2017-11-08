@@ -315,15 +315,6 @@
     <Compile Include="UserControls\ConnectionTypeGridControl.xaml.cs">
       <DependentUpon>ConnectionTypeGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ControlledScopeGridControl.xaml.cs">
-      <DependentUpon>ControlledScopeGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ControllerEditControl.xaml.cs">
-      <DependentUpon>ControllerEditControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ControllerGridControl.xaml.cs">
-      <DependentUpon>ControllerGridControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ControllerInPanelGridControl.xaml.cs">
       <DependentUpon>ControllerInPanelGridControl.xaml</DependentUpon>
     </Compile>
@@ -341,9 +332,6 @@
     </Compile>
     <Compile Include="UserControls\PanelTypeGridControl.xaml.cs">
       <DependentUpon>PanelTypeGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\DeviceEditControl.xaml.cs">
-      <DependentUpon>DeviceEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaterialSummaryView.xaml.cs">
       <DependentUpon>MaterialSummaryView.xaml</DependentUpon>
@@ -367,12 +355,6 @@
     <Compile Include="Views\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditTabView.xaml.cs">
-      <DependentUpon>EditTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\EquipmentEditControl.xaml.cs">
-      <DependentUpon>EquipmentEditControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
@@ -382,15 +364,6 @@
     <Compile Include="Models\FileDialogParameters.cs" />
     <Compile Include="Models\LengthSummaryItem.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
-    <Compile Include="UserControls\PanelEditControl.xaml.cs">
-      <DependentUpon>PanelEditControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PanelTypeEditControl.xaml.cs">
-      <DependentUpon>PanelTypeEditControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PointEditControl.xaml.cs">
-      <DependentUpon>PointEditControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ScopeBranchAsNoteGridControl.xaml.cs">
       <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
     </Compile>
@@ -407,14 +380,8 @@
     <Compile Include="Views\StatusBarView.xaml.cs">
       <DependentUpon>StatusBarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SubScopeEditControl.xaml.cs">
-      <DependentUpon>SubScopeEditControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\SubScopeWiringGridControl.xaml.cs">
       <DependentUpon>SubScopeWiringGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\SystemEditControl.xaml.cs">
-      <DependentUpon>SystemEditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TECResourceDictionary.xaml.cs">
       <DependentUpon>TECResourceDictionary.xaml</DependentUpon>
@@ -425,7 +392,6 @@
     </Compile>
     <Compile Include="Utilities\EnumBindingSourceExtension.cs" />
     <Compile Include="ViewModels\ControllersPanelsVM.cs" />
-    <Compile Include="ViewModels\EditTabVM.cs" />
     <Compile Include="ViewModels\MaterialVM.cs" />
     <Compile Include="ViewModels\LaborVM.cs" />
     <Compile Include="ViewModels\ScopeCollectionsTabVM.cs" />
@@ -715,18 +681,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ControlledScopeGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ControllerEditControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ControllerGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ControllerInPanelGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -748,10 +702,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PanelTypeGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\DeviceEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -787,31 +737,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\EquipmentEditControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ManufacturersGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MaterialView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\PanelEditControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\PanelTypeEditControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\PointEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -843,15 +773,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\SubScopeEditControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\SubScopeWiringGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\SystemEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
