@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -56,22 +57,26 @@ namespace TECUserControlLibrary.ViewModels
         {
             _bid = bid;
             _estimate = estimate;
+            Estimate.PropertyChanged += estimatePropertyChanged;
         }
 
         public void Refresh(TECEstimator estimate, TECBid bid)
         {
+            Estimate.PropertyChanged -= estimatePropertyChanged;
             Estimate = estimate;
-            Estimate.PropertyChanged += (sender, e) =>
-            {
-                if(e.PropertyName == "TECMaterialCost" ||
+            Estimate.PropertyChanged += estimatePropertyChanged;
+            Bid = bid;
+        }
+
+        private void estimatePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TECMaterialCost" ||
                 e.PropertyName == "TECLaborCost" ||
                 e.PropertyName == "SubcontractorLaborCost" ||
                 e.PropertyName == "ElectricalMaterialCost")
-                {
-                    RaisePropertyChanged("Costs");
-                }
-            };
-            Bid = bid;
+            {
+                RaisePropertyChanged("Costs");
+            }
         }
         private ObservableCollection<CostContainer> getCosts()
         {

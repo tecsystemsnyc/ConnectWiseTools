@@ -92,7 +92,8 @@ namespace EstimateBuilder.MVVM
         }
         #endregion
 
-        public EstimateManager() : base(new EstimateSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new EstimateMenuVM())
+        public EstimateManager() : base("Estimate Builder", 
+            new EstimateSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new EstimateMenuVM())
         {
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Estimate Builder";

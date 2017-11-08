@@ -26,6 +26,7 @@ namespace TECUserControlLibrary.BaseVMs
         private string _titleString;
         private object _currentVM;
         private bool _viewEnabled;
+        protected string appName { get; }
 
         #region Properties
         /// <summary>
@@ -79,8 +80,9 @@ namespace TECUserControlLibrary.BaseVMs
         abstract protected string defaultFileName { get; }
         #endregion
 
-        public AppManager(SplashVM splashVM, MenuVM menuVM)
+        public AppManager(string name, SplashVM splashVM, MenuVM menuVM)
         {
+            appName = name;
             ViewEnabled = true;
             Version = getVersion();
             TECLogo = getLogo();
@@ -127,6 +129,7 @@ namespace TECUserControlLibrary.BaseVMs
                 {
                     ViewEnabled = false;
                     StatusBarVM.CurrentStatusText = "Loading...";
+                    buildTitleString(loadFilePath, appName);
                     databaseManager = new DatabaseManager<T>(loadFilePath);
                     databaseManager.LoadComplete += handleLoadComplete;
                     databaseManager.AsyncLoad();
