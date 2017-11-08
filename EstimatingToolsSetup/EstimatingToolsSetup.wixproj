@@ -26,6 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="HarvestedEB.wxs" />
+    <Compile Include="HarvestedTB.wxs" />
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +61,8 @@
     <Error Condition="!Exists('..\packages\WiX.3.11.0\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.0\build\wix.props'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>"%25WIX%25\bin\heat.exe" dir ../../../EstimateBuilder/bin/Debug -o ../../HarvestedEB.wxs -scom -frag -srd -sreg -gg -cg EBComponentGroupID -dr ESTIMATEBUILDERDIRECTORY -var var.EstimateBuilder.TargetDir</PreBuildEvent>
+    <PreBuildEvent>"%25WIX%25\bin\heat.exe" dir ../../../EstimateBuilder/bin/Debug -o ../../HarvestedEB.wxs -scom -frag -srd -sreg -gg -cg EBComponentGroupID -dr ESTIMATEBUILDERDIRECTORY -var var.EstimateBuilder.TargetDir
+"%25WIX%25\bin\heat.exe" dir ../../../TemplateBuilder/bin/Debug -o ../../HarvestedTB.wxs -scom -frag -srd -sreg -gg -cg TBComponentGroupID -dr TEMPLATEBUILDERDIRECTORY -var var.TemplateBuilder.TargetDir</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

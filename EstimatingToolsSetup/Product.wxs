@@ -18,5 +18,8 @@
 		<Feature Id="EstimateBuilder" Title="Estimate Builder" Level="1">
 			<ComponentGroupRef Id="EBComponentGroupID"/>
 		</Feature>
+    <Feature Id="TemplateBuilder" Title="Template Builder" Level="1">
+      <ComponentGroupRef Id="TBComponentGroupID"/>
+    </Feature>
 	</Product>
 </Wix>
