@@ -375,6 +375,7 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.ChildrenConnections, "ChildrenConnections");
+            saveList.AddRange(this.IOModules, "IOModules");
             saveList.Add(this.Type, "Type");
             return saveList;
         }
@@ -382,6 +383,7 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.linkedObjects());
+            saveList.AddRange(this.IOModules, "IOModules");
             saveList.Add(this.Type, "Type");
             return saveList;
         }

@@ -36,17 +36,17 @@
     </i:Interaction.Triggers>
 
     <Window.InputBindings>
-        <KeyBinding Command="{Binding UndoCommand}"
+        <KeyBinding Command="{Binding MenuVM.UndoCommand}"
                     Gesture="CTRL+Z" />
-        <KeyBinding Command="{Binding RedoCommand}"
+        <KeyBinding Command="{Binding MenuVM.RedoCommand}"
                     Gesture="CTRL+SHIFT+Z" />
-        <KeyBinding Command="{Binding SaveCommand}"
+        <KeyBinding Command="{Binding MenuVM.SaveCommand}"
                     Gesture="CTRL+S" />
-        <KeyBinding Command="{Binding SaveAsCommand}"
+        <KeyBinding Command="{Binding MenuVM.SaveAsCommand}"
                     Gesture="CTRL+SHIFT+S" />
-        <KeyBinding Command="{Binding LoadCommand}"
+        <KeyBinding Command="{Binding MenuVM.LoadCommand}"
                     Gesture="CTRL+O" />
-        <KeyBinding Command="{Binding NewCommand}"
+        <KeyBinding Command="{Binding MenuVM.NewCommand}"
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
@@ -105,7 +105,7 @@
                 </DockPanel>
             </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SplashVM}">
-            <views:SplashView ViewModel="{Binding}"/>
+            <views:SplashView ViewModel="{Binding}" BidVisibility="Visible"/>
         </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

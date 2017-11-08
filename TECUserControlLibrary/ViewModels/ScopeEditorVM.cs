@@ -136,7 +136,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllersPanelsTab = new ControllersPanelsVM(Bid);
             ControllersPanelsTab.SelectionChanged += obj =>
             {
-                selected = obj as TECObject;
+                Selected = obj as TECObject;
 
             };
         }

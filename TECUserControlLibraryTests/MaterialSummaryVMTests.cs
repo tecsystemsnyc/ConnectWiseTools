@@ -418,6 +418,10 @@ namespace Tests
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             TECSystem instance = typical.AddInstance(bid);
+            TECConnection instanceConnection = controller.AddSubScope(instance.GetAllSubScope()[0]);
+            instanceConnection.Length = 50;
+            instanceConnection.ConduitLength = 50;
+            instanceConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             Total totalTEC = CalculateTotal(connection, CostType.TEC);
             Total totalElec = CalculateTotal(connection, CostType.Electrical);
@@ -830,13 +834,13 @@ namespace Tests
 
             TECSubScope ss = new TECSubScope(true);
             typEquip.SubScope.Add(ss);
+            
+            TECSystem instance = typical.AddInstance(bid);
 
-            TECConnection connection = controller.AddSubScope(ss);
+            TECConnection connection = controller.AddSubScope(instance.GetAllSubScope()[0]);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
-
-            TECSystem instance = typical.AddInstance(bid);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -846,11 +850,14 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(connection, CostType.TEC);
-            Total totalElec = CalculateTotal(connection, CostType.Electrical);
+            //Total totalTEC = CalculateTotal(connection, CostType.TEC);
+            //Total totalElec = CalculateTotal(connection, CostType.Electrical);
+
+            Total totalTEC = new Total(connection.CostBatch.GetCost(CostType.TEC), connection.CostBatch.GetLabor(CostType.TEC));
+            Total totalElec = new Total(connection.CostBatch.GetCost(CostType.Electrical), connection.CostBatch.GetLabor(CostType.Electrical));
 
             //Act
-            controller.RemoveSubScope(ss);
+            controller.RemoveSubScope(instance.GetAllSubScope()[0]);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");

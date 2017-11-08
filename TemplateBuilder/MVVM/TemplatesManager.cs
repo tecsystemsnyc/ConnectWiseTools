@@ -52,7 +52,8 @@ namespace TemplateBuilder.MVVM
             }
         }
 
-        public TemplatesManager() : base(new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
+        public TemplatesManager() : base("Template Builder",
+            new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
         {
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Template Builder";

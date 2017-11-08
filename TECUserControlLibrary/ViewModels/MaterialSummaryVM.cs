@@ -267,10 +267,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (ControllerSummaryVM.AddCost(cost));
             }
-            foreach(TECCost cost in controller.Type.AssociatedCosts)
-            {
-                deltas += (ControllerSummaryVM.AddCost(cost));
-            }
             foreach(TECConnection connection in controller.ChildrenConnections)
             {
                 deltas += (addConnection(connection));
@@ -378,10 +374,6 @@ namespace TECUserControlLibrary.ViewModels
             CostBatch deltas = new CostBatch();
             deltas += (ControllerSummaryVM.RemoveHardware(controller.Type));
             foreach(TECCost cost in controller.AssociatedCosts)
-            {
-                deltas += (ControllerSummaryVM.RemoveCost(cost));
-            }
-            foreach(TECCost cost in controller.Type.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.RemoveCost(cost));
             }

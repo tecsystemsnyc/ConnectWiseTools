@@ -58,6 +58,7 @@
             </Border>
 
             <listControls:MiscListControl Source="{Binding TECCostCollection}"
+                                          SelectedItem="{Binding Selected}"
                                           Grid.Row="1" Grid.Column="1"
                                           DeleteCommand="{Binding DeleteCommand}"
                                           Margin="5,0,5,0">
@@ -84,6 +85,7 @@
             </Border>
 
             <listControls:MiscListControl Source="{Binding ElectricalCostCollection}"
+                                          SelectedItem="{Binding Selected}"
                                           Grid.Row="1" Grid.Column="1"
                                           DeleteCommand="{Binding DeleteCommand}"
                                           Margin="5,0,5,0">

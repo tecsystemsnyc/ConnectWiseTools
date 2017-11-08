@@ -84,6 +84,7 @@ namespace Tests
             equipment.SubScope.Add(subScope);
             bidController.AddSubScope(subScope);
             var instance = system.AddInstance(bid);
+            bidController.AddSubScope(instance.GetAllSubScope()[0]);
             
             Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
 

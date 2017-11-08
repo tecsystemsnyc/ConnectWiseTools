@@ -26,6 +26,7 @@ namespace TECUserControlLibrary.BaseVMs
         private string _titleString;
         private object _currentVM;
         private bool _viewEnabled;
+        protected string appName { get; }
 
         #region Properties
         /// <summary>
@@ -79,8 +80,9 @@ namespace TECUserControlLibrary.BaseVMs
         abstract protected string defaultFileName { get; }
         #endregion
 
-        public AppManager(SplashVM splashVM, MenuVM menuVM)
+        public AppManager(string name, SplashVM splashVM, MenuVM menuVM)
         {
+            appName = name;
             ViewEnabled = true;
             Version = getVersion();
             TECLogo = getLogo();
@@ -90,6 +92,7 @@ namespace TECUserControlLibrary.BaseVMs
             StatusBarVM = new StatusBarVM();
             setupCommands();
             CurrentVM = SplashVM;
+            ClosingCommand = new RelayCommand<CancelEventArgs>(closingExecute);
         }
         
         #region Menu Commands Methods
@@ -112,26 +115,30 @@ namespace TECUserControlLibrary.BaseVMs
         }
         private bool newCanExecute()
         {
-            return true;
+            return databaseReady();
         }
         //Load
         private void loadExecute()
         {
             string message = "Would you like to save your changes before loading?";
-            ViewEnabled = false;
             string loadFilePath;
             checkForChanges(message, () =>
             {
                 loadFilePath = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory, workingFileDirectory);
-                StatusBarVM.CurrentStatusText = "Loading...";
-                databaseManager = new DatabaseManager<T>(loadFilePath);
-                databaseManager.LoadComplete += handleLoadComplete;
-                databaseManager.AsyncLoad();
+                if(loadFilePath != null)
+                {
+                    ViewEnabled = false;
+                    StatusBarVM.CurrentStatusText = "Loading...";
+                    buildTitleString(loadFilePath, appName);
+                    databaseManager = new DatabaseManager<T>(loadFilePath);
+                    databaseManager.LoadComplete += handleLoadComplete;
+                    databaseManager.AsyncLoad();
+                }
             });
         }
         private bool loadCanExecute()
         {
-            return true;
+            return databaseReady();
         }
         protected void handleLoadComplete(T scopeManager)
         {
@@ -176,14 +183,17 @@ namespace TECUserControlLibrary.BaseVMs
         private void saveNewExecute()
         {
             string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
-            StatusBarVM.CurrentStatusText = "Saving...";
-            databaseManager = new DatabaseManager<T>(saveFilePath);
-            databaseManager.SaveComplete += handleSaveNewComplete;
-            databaseManager.AsyncNew(getWorkingScope());
+            if(saveFilePath != null)
+            {
+                StatusBarVM.CurrentStatusText = "Saving...";
+                databaseManager = new DatabaseManager<T>(saveFilePath);
+                databaseManager.SaveComplete += handleSaveNewComplete;
+                databaseManager.AsyncNew(getWorkingScope());
+            }
         }
         private bool canSaveNew()
         {
-            return true;
+            return databaseReady();
         }
         protected void handleSaveNewComplete(bool success)
         {
@@ -212,7 +222,7 @@ namespace TECUserControlLibrary.BaseVMs
         }
         protected bool canRefresh()
         {
-            return databaseManager != null;
+            return databaseManager != null && databaseReady();
         }
         //Undo
         private void undoExecute()
@@ -286,7 +296,50 @@ namespace TECUserControlLibrary.BaseVMs
                     return;
             }
         }
+        protected bool databaseReady()
+        {
+            if(databaseManager == null || !databaseManager.IsBusy)
+            {
+                return true;
+            }
+            return false;
+        }
+
         protected abstract T getWorkingScope();
         protected abstract T getNewWorkingScope();
+
+        private void closingExecute(CancelEventArgs e)
+        {
+            if (databaseManager == null || !databaseManager.IsBusy)
+            {
+                bool changesExist = (deltaStack?.CleansedStack().Count > 0);
+                if (changesExist)
+                {
+                    MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        if (!databaseManager.Save(deltaStack.CleansedStack()))
+                        {
+                            MessageBox.Show("Save unsuccessful.");
+                            e.Cancel = true;
+                            return;
+                        }
+                    }
+                    else if (result == MessageBoxResult.Cancel)
+                    {
+                        e.Cancel = true;
+                    }
+                }
+                if (!e.Cancel)
+                {
+                    Properties.Settings.Default.Save();
+                }
+            }
+            else
+            {
+                e.Cancel = true;
+                MessageBox.Show("Program is busy. Please wait for current processes to stop.");
+            }
+        }
     }
 }

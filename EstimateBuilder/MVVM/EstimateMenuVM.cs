@@ -47,22 +47,22 @@ namespace EstimateBuilder.MVVM
         private void setupMenu()
         {
             //File menu items
-            addMenuItem("Refresh Bid", "File");
-            addMenuItem("Export", "File");
+            addMenuItem("Refresh Bid", "Can't refresh", parentItemName: "File");
+            addMenuItem("Export", parentItemName: "File");
 
             //Export menu items
-            addMenuItem("Proposal", "Export");
-            addMenuItem("Points List", "Export");
-            addMenuItem("Engineering", "Export");
+            addMenuItem("Proposal", parentItemName: "Export");
+            addMenuItem("Points List", parentItemName: "Export");
+            addMenuItem("Engineering", parentItemName: "Export");
 
             //Templates menu items
-            addMenuItem("Load Templates", "Templates");
+            addMenuItem("Load Templates", busyText, parentItemName: "Templates");
 
             if (DEBUG)
             {
                 addMenuItem("Debug");
 
-                addMenuItem("Debug Window", "Debug");
+                addMenuItem("Debug Window", parentItemName: "Debug");
             }
         }
     }

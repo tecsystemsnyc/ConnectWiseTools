@@ -645,15 +645,22 @@ namespace Tests
             TECEquipment expectedEquipment = new TECEquipment(true);
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Description";
-
+            Guid systemGuid = bid.Systems[0].Guid;
             bid.Systems[0].Equipment.Add(expectedEquipment);
-
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
-
+            TECSystem actualSystem = null;
+            foreach(TECSystem system in actualBid.Systems)
+            {
+                if(system.Guid == systemGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
             TECEquipment actualEquipment = null;
-            foreach (TECEquipment equip in actualBid.Systems[0].Equipment)
+            foreach (TECEquipment equip in actualSystem.Equipment)
             {
                 if (expectedEquipment.Guid == equip.Guid)
                 {

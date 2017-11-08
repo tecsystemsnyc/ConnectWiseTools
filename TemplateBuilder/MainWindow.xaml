@@ -38,82 +38,21 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.InputBindings>
-        <KeyBinding Command="{Binding SaveCommand}"
-                    Gesture="CTRL+S" />
-        <KeyBinding Command="{Binding SaveAsCommand}"
-                    Gesture="SHIFT+CTRL+S" />
-        <KeyBinding Command="{Binding UndoCommand}"
+        <KeyBinding Command="{Binding MenuVM.UndoCommand}"
                     Gesture="CTRL+Z" />
-        <KeyBinding Command="{Binding RedoCommand}"
+        <KeyBinding Command="{Binding MenuVM.RedoCommand}"
                     Gesture="CTRL+SHIFT+Z" />
+        <KeyBinding Command="{Binding MenuVM.SaveCommand}"
+                    Gesture="CTRL+S" />
+        <KeyBinding Command="{Binding MenuVM.SaveAsCommand}"
+                    Gesture="SHIFT+CTRL+S" />
+        <KeyBinding Command="{Binding MenuVM.LoadCommand}"
+                    Gesture="CTRL+O" />
+        <KeyBinding Command="{Binding MenuVM.NewCommand}"
+                    Gesture="CTRL+N" />
     </Window.InputBindings>
-    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}">
+    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}"  IsEnabled="{Binding ViewEnabled}">
         <ContentControl.Resources>
-            <DataTemplate x:Key="SystemTemplate">
-                <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                    <views:SystemHierarchyView SystemSource="{Binding ElementName=parent, Path=DataContext.Templates.SystemTemplates}"
-                                               SelectedSystem="{Binding Selected}"
-                                               SelectedEquipment="{Binding Selected}"
-                                               SelectedSubScope="{Binding Selected}"
-                                               SelectedDevice="{Binding Selected}"
-                                               ViewModel="{Binding ElementName=parent, Path=DataContext.SystemHierarchyVM}"/>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="EquipmentTemplate">
-                <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                    <controls:EquipmentHierarchy EquipmentSource="{Binding Templates.EquipmentTemplates}"
-                                                 SelectedEquipment="{Binding Selected}"
-                                                 SelectedSubScope="{Binding Selected}"
-                                                 SelectedDevice="{Binding Selected}"/>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="SubScopeTemplate">
-                <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding Templates.SubScopeTemplates}"
-                                                              SelectedItem ="{Binding Selected}"/>
-                    <Grid Grid.Column="2" Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Devices" Grid.Row="0"/>
-                        <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
-                                    SelectedItem="{Binding Selected}" Grid.Row="1"/>
-                        <Label Content="Points" Grid.Row="2"/>
-                        <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                    SelectedItem="{Binding Selected}" Grid.Row="3"/>
-                    </Grid>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="ControllerTemplate">
-                <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                    <listControls:ControllerListControl Source="{Binding Templates.ControllerTemplates}"
-                                                              SelectedItem ="{Binding Selected}"/>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="PanelTemplate">
-                <Grid DataContext="{Binding ElementName=parent, Path=DataContext}">
-                    <listControls:PanelListControl Source="{Binding Templates.PanelTemplates}"
-                                                              SelectedItem ="{Binding Selected}"/>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="MiscTemplate">
-                <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
-            </DataTemplate>
-            <utilities:ScopeTemplateSelector x:Key="ScopeSelector"
-                                             SystemTemplate="{StaticResource SystemTemplate}"
-                                             EquipmentTemplate="{StaticResource EquipmentTemplate}"
-                                             SubScopeTemplate="{StaticResource SubScopeTemplate}"
-                                             ControllerTemplate="{StaticResource ControllerTemplate}"
-                                             PanelTemplate="{StaticResource PanelTemplate}"
-                                             MiscTemplate="{StaticResource MiscTemplate}"/>
-
             <DataTemplate DataType="{x:Type localMVVM:TemplatesEditorVM}">
                 <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
                     <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
@@ -130,7 +69,7 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
 
-                        <Image Source="{Binding TECLogo}"
+                        <Image Source="{Binding ElementName=parent, Path=DataContext.TECLogo}"
                                Grid.Column="4"/>
 
                         <views:ScopeCollectionsTabView Grid.RowSpan="2"
@@ -138,11 +77,75 @@
                         <TabControl Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    SelectedIndex="{Binding DGTabIndex, Converter={utilities:TemplateGridIndexToIntegerConverter}}"
+                                    SelectedIndex="0"
                                     Background="{DynamicResource SectionBackgroundBrush}">
-                            <TabItem Header="None" Visibility="Collapsed">
-                            </TabItem>
-                            <TabItem Header="Templates">
+                            <TabItem Header="Templates" Name="templatesTab" DataContext="{Binding}">
+                                <TabItem.Resources>
+                                    <DataTemplate x:Key="SystemTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <views:SystemHierarchyView SystemSource="{Binding ElementName=templatesTab, Path=DataContext.Templates.SystemTemplates}"
+                                               SelectedSystem="{Binding Selected}"
+                                               SelectedEquipment="{Binding Selected}"
+                                               SelectedSubScope="{Binding Selected}"
+                                               SelectedDevice="{Binding Selected}"
+                                               ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="EquipmentTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <controls:EquipmentHierarchy EquipmentSource="{Binding Templates.EquipmentTemplates}"
+                                                 SelectedEquipment="{Binding Selected}"
+                                                 SelectedSubScope="{Binding Selected}"
+                                                 SelectedDevice="{Binding Selected}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="SubScopeTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding Templates.SubScopeTemplates}"
+                                                              SelectedItem ="{Binding Selected}"/>
+                                            <Grid Grid.Column="2" Grid.Row="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="30"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="30"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <Label Content="Devices" Grid.Row="0"/>
+                                                <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+                                    SelectedItem="{Binding Selected}" Grid.Row="1"/>
+                                                <Label Content="Points" Grid.Row="2"/>
+                                                <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                    SelectedItem="{Binding Selected}" Grid.Row="3"/>
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="ControllerTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <listControls:ControllerListControl Source="{Binding Templates.ControllerTemplates}"
+                                                              SelectedItem ="{Binding Selected}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="PanelTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <listControls:PanelListControl Source="{Binding Templates.PanelTemplates}"
+                                                              SelectedItem ="{Binding Selected}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="MiscTemplate">
+                                        <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
+                                    </DataTemplate>
+                                    <utilities:ScopeTemplateSelector x:Key="ScopeSelector"
+                                             SystemTemplate="{StaticResource SystemTemplate}"
+                                             EquipmentTemplate="{StaticResource EquipmentTemplate}"
+                                             SubScopeTemplate="{StaticResource SubScopeTemplate}"
+                                             ControllerTemplate="{StaticResource ControllerTemplate}"
+                                             PanelTemplate="{StaticResource PanelTemplate}"
+                                             MiscTemplate="{StaticResource MiscTemplate}"/>
+                                </TabItem.Resources>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="40"/>
@@ -179,7 +182,7 @@
                 </DockPanel>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:SplashVM}">
-                <views:SplashView ViewModel="{Binding}"/>
+                <views:SplashView ViewModel="{Binding}" BidVisibility="Collapsed"/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

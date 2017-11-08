@@ -9,6 +9,11 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class MenuVM : ViewModelBase
     {
+        #region Constants
+        protected const string busyText = "Please wait for the current process to complete";
+
+        #endregion
+
         #region Fields
         private Dictionary<string, TECMenuItem> menuItemDictionary;
         private readonly ObservableCollection<TECMenuItem> _menu;
@@ -16,6 +21,13 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Properties
         public ReadOnlyObservableCollection<TECMenuItem> Menu { get { return new ReadOnlyObservableCollection<TECMenuItem>(_menu); } }
+
+        public RelayCommand NewCommand { get; private set; }
+        public RelayCommand LoadCommand { get; private set; }
+        public RelayCommand SaveCommand { get; private set; }
+        public RelayCommand SaveAsCommand { get; private set; }
+        public RelayCommand UndoCommand { get; private set; }
+        public RelayCommand RedoCommand { get; private set; }
         #endregion
 
         public MenuVM()
@@ -29,33 +41,33 @@ namespace TECUserControlLibrary.ViewModels
         #region Methods
         public void SetNewCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("New", command);
+            NewCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("New", NewCommand);
         }
         public void SetLoadCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Load", command);
+            LoadCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Load", LoadCommand);
         }
         public void SetSaveDeltaCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Save", command);
+            SaveCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save", SaveCommand);
         }
         public void SetSaveNewCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Save As", command);
+            SaveAsCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save As", SaveAsCommand);
         }
         public void SetUndoCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Undo", command);
+            UndoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Undo", UndoCommand);
         }
         public void SetRedoCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Redo", command);
+            RedoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Redo", RedoCommand);
         }
         public void SetRefreshTemplatesCommand(Action execute, Func<bool> canExecute = null)
         {
@@ -63,7 +75,7 @@ namespace TECUserControlLibrary.ViewModels
             setCommand("Refresh Templates", command);
         }
 
-        protected TECMenuItem addMenuItem(string newItemName, string parentItemName = null)
+        protected TECMenuItem addMenuItem(string newItemName, string disabledText = null, string parentItemName = null)
         {
             if (menuItemDictionary.ContainsKey(newItemName))
             {
@@ -74,6 +86,7 @@ namespace TECUserControlLibrary.ViewModels
             //Add base menu item
             {
                 TECMenuItem newBaseItem = new TECMenuItem(newItemName, true);
+                if(disabledText != null) { newBaseItem.DisabledText = disabledText; }
                 menuItemDictionary.Add(newBaseItem.Name, newBaseItem);
                 _menu.Add(newBaseItem);
                 return newBaseItem;
@@ -88,6 +101,7 @@ namespace TECUserControlLibrary.ViewModels
 
                 TECMenuItem parentItem = menuItemDictionary[parentItemName];
                 TECMenuItem newChildItem = new TECMenuItem(newItemName, false);
+                if (disabledText != null) { newChildItem.DisabledText = disabledText; }
                 menuItemDictionary.Add(newChildItem.Name, newChildItem);
                 parentItem.AddMenuItem(newChildItem);
                 return newChildItem;
@@ -124,17 +138,17 @@ namespace TECUserControlLibrary.ViewModels
             addMenuItem("Templates");
 
             //File menu items
-            addMenuItem("New", "File");
-            addMenuItem("Load", "File");
-            addMenuItem("Save", "File");
-            addMenuItem("Save As", "File");
+            addMenuItem("New", busyText, parentItemName:"File");
+            addMenuItem("Load", busyText, parentItemName: "File");
+            addMenuItem("Save", busyText, parentItemName: "File");
+            addMenuItem("Save As", busyText, parentItemName: "File");
 
             //Edit menu items
-            addMenuItem("Undo", "Edit");
-            addMenuItem("Redo", "Edit");
+            addMenuItem("Undo", "Nothing to undo", parentItemName: "Edit");
+            addMenuItem("Redo", "Nothing to redo", parentItemName: "Edit");
 
             //Templates menu items
-            addMenuItem("Refresh Templates", "Templates");
+            addMenuItem("Refresh Templates", busyText, parentItemName: "Templates");
         }
         #endregion
     }
