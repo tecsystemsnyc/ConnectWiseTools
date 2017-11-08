@@ -19,6 +19,8 @@
                     </Trigger>
                 </Style.Triggers>
                 <Setter Property="Command" Value="{Binding Command}"/>
+                <Setter Property="ToolTip" Value="{Binding ToolTipText}"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
                 <Setter Property="Foreground">
                     <Setter.Value>
                         <MultiBinding Converter="{utilities:BooleanChoiceConverter}">

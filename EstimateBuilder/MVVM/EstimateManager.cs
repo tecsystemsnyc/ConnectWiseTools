@@ -138,7 +138,10 @@ namespace EstimateBuilder.MVVM
         }
         private void handleLoadedTemplates(TECTemplates templates)
         {
-            throw new NotImplementedException();
+            this.templates = templates;
+            bid.Catalogs.Unionize(templates.Catalogs);
+            estimate = new TECEstimator(bid, watcher);
+            editorVM.Refresh(bid, this.templates, watcher, estimate);
         }
 
         #region Menu Commands Methods
@@ -157,14 +160,17 @@ namespace EstimateBuilder.MVVM
         {
             ViewEnabled = false;
             string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
-            StatusBarVM.CurrentStatusText = "Loading Templates...";
-            templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
-            templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
-            templatesDatabaseManager.AsyncLoad();
+            if(loadFilePath != null)
+            {
+                StatusBarVM.CurrentStatusText = "Loading Templates...";
+                templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
+                templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
+                templatesDatabaseManager.AsyncLoad();
+            }
         }
         private bool canLoadTemplates()
         {
-            return true;
+            return databaseReady();
         }
         private void handleTemplatesLoadComplete(TECTemplates templates)
         {
@@ -188,7 +194,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canRefreshTemplates()
         {
-            return templatesDatabaseManager != null;
+            return templatesDatabaseManager != null && databaseReady();
         }
         //Export Proposal
         private void exportProposalExecute()

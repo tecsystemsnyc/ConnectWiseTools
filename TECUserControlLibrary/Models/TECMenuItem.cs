@@ -6,6 +6,7 @@ namespace TECUserControlLibrary.Models
 {
     public class TECMenuItem : INotifyPropertyChanged
     {
+        public string DisabledText = "";
         private readonly ObservableCollection<TECMenuItem> _items;
         private RelayCommand _command;
 
@@ -31,6 +32,21 @@ namespace TECUserControlLibrary.Models
             {
                 _command = value;
                 raisePropertyChanged("Command");
+            }
+        }
+        
+        public string ToolTipText
+        {
+            get
+            {
+                if (Command != null && !Command.CanExecute(null))
+                {
+                    return DisabledText;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 

@@ -38,14 +38,18 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.InputBindings>
-        <KeyBinding Command="{Binding SaveCommand}"
-                    Gesture="CTRL+S" />
-        <KeyBinding Command="{Binding SaveAsCommand}"
-                    Gesture="SHIFT+CTRL+S" />
-        <KeyBinding Command="{Binding UndoCommand}"
+        <KeyBinding Command="{Binding MenuVM.UndoCommand}"
                     Gesture="CTRL+Z" />
-        <KeyBinding Command="{Binding RedoCommand}"
+        <KeyBinding Command="{Binding MenuVM.RedoCommand}"
                     Gesture="CTRL+SHIFT+Z" />
+        <KeyBinding Command="{Binding MenuVM.SaveCommand}"
+                    Gesture="CTRL+S" />
+        <KeyBinding Command="{Binding MenuVM.SaveAsCommand}"
+                    Gesture="SHIFT+CTRL+S" />
+        <KeyBinding Command="{Binding MenuVM.LoadCommand}"
+                    Gesture="CTRL+O" />
+        <KeyBinding Command="{Binding MenuVM.NewCommand}"
+                    Gesture="CTRL+N" />
     </Window.InputBindings>
     <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}"  IsEnabled="{Binding ViewEnabled}">
         <ContentControl.Resources>
