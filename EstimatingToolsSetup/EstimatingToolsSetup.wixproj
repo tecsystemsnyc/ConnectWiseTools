@@ -16,7 +16,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;SourceDir=../../../EstimateBuilder/bin/Debug</DefineConstants>
+    <DefineConstants>Debug;</DefineConstants>
+    <WixVariables>
+    </WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -58,7 +60,7 @@
     <Error Condition="!Exists('..\packages\WiX.3.11.0\build\wix.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WiX.3.11.0\build\wix.props'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>"%25WIX%25\bin\heat.exe" dir ../../../EstimateBuilder/bin/Debug -o ../../HarvestedEB.wxs -scom -frag -srd -sreg -gg -cg EBComponentGroupID -dr ESTIMATEBUILDERDIRECTORY</PreBuildEvent>
+    <PreBuildEvent>"%25WIX%25\bin\heat.exe" dir ../../../EstimateBuilder/bin/Debug -o ../../HarvestedEB.wxs -scom -frag -srd -sreg -gg -cg EBComponentGroupID -dr ESTIMATEBUILDERDIRECTORY -var var.EstimateBuilder.TargetDir</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
