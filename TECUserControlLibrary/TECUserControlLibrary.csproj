@@ -306,12 +306,8 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
-    <Compile Include="ViewModels\SystemComponentVM.cs" />
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LocationView.xaml.cs">
-      <DependentUpon>LocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
       <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
@@ -324,9 +320,6 @@
     </Compile>
     <Compile Include="UserControls\ControllerEditControl.xaml.cs">
       <DependentUpon>ControllerEditControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\TypicalInstancedSystemsGridControl.xaml.cs">
-      <DependentUpon>TypicalInstancedSystemsGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ControllerGridControl.xaml.cs">
       <DependentUpon>ControllerGridControl.xaml</DependentUpon>
@@ -346,18 +339,12 @@
     <Compile Include="UserControls\IOModuleGridControl.xaml.cs">
       <DependentUpon>IOModuleGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PanelsGridControl.xaml.cs">
-      <DependentUpon>PanelsGridControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\PanelTypeGridControl.xaml.cs">
       <DependentUpon>PanelTypeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\DeviceEditControl.xaml.cs">
       <DependentUpon>DeviceEditControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DevicesPointsVM.cs" />
-    <Compile Include="ViewModels\EquipmentVM.cs" />
-    <Compile Include="ViewModels\SubScopeVM.cs" />
     <Compile Include="Views\MaterialSummaryView.xaml.cs">
       <DependentUpon>MaterialSummaryView.xaml</DependentUpon>
     </Compile>
@@ -439,12 +426,9 @@
     <Compile Include="Utilities\EnumBindingSourceExtension.cs" />
     <Compile Include="ViewModels\ControllersPanelsVM.cs" />
     <Compile Include="ViewModels\EditTabVM.cs" />
-    <Compile Include="ViewModels\LocationVM.cs" />
     <Compile Include="ViewModels\MaterialVM.cs" />
-    <Compile Include="ViewModels\ElectricalVM.cs" />
     <Compile Include="ViewModels\LaborVM.cs" />
     <Compile Include="ViewModels\ScopeCollectionsTabVM.cs" />
-    <Compile Include="ViewModels\SystemsVM.cs" />
     <Compile Include="ViewModels\StatusBarVM.cs" />
     <Compile Include="ViewModels\ProposalVM.cs" />
     <Compile Include="ViewModels\MenuVM.cs" />
@@ -723,10 +707,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LocationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ConduitTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -740,10 +720,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ControllerEditControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\TypicalInstancedSystemsGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -771,10 +747,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\PanelsGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\PanelTypeGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -784,10 +756,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\DevicesGridControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\DevicesPointsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -827,10 +795,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EquipmentGridView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UserControls\ManufacturersGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -850,10 +814,6 @@
     <Page Include="UserControls\PointEditControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\PointsGridControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\ScopeBranchAsNoteGridControl.xaml">
       <SubType>Designer</SubType>
@@ -887,10 +847,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SubScopeGridView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UserControls\SubScopeWiringGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -915,10 +871,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SystemsGridView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UserControls\LabeledGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -935,30 +887,15 @@
     <Compile Include="UserControls\DevicesGridControl.xaml.cs">
       <DependentUpon>DevicesGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DevicesPointsView.xaml.cs">
-      <DependentUpon>DevicesPointsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EquipmentGridView.xaml.cs">
-      <DependentUpon>EquipmentGridView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utilities\HelperConverters.cs" />
     <Compile Include="UserControls\ManufacturersGridControl.xaml.cs">
       <DependentUpon>ManufacturersGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PointsGridControl.xaml.cs">
-      <DependentUpon>PointsGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScopeControl.xaml.cs">
       <DependentUpon>ScopeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScopeItemsControl.xaml.cs">
       <DependentUpon>ScopeItemsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SubScopeGridView.xaml.cs">
-      <DependentUpon>SubScopeGridView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SystemsGridView.xaml.cs">
-      <DependentUpon>SystemsGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\LabeledGridControl.xaml.cs">
       <DependentUpon>LabeledGridControl.xaml</DependentUpon>
