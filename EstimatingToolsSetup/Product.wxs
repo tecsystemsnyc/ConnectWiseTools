@@ -9,7 +9,7 @@
     <!--Directory Layout-->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="APPLICATIONROOTDIRECTORY" Name="Estimating Tools">
+        <Directory Id="APPLICATIONFOLDER" Name="Estimating Tools">
           <Directory Id="ESTIMATEBUILDERDIRECTORY" Name="Estimate Builder"/>
           <Directory Id="TEMPLATEBUILDERDIRECTORY" Name="Template Builder"/>
         </Directory>
@@ -18,6 +18,10 @@
         <Directory Id="ApplicationProgramsFolder" Name="Estimating Tools"/>
       </Directory>
     </Directory>
+
+    <!--User Directory Prompt Properties-->
+    <Property Id="ApplicationFolderName" Value="Estimating Tools"/>
+    <Property Id="WixAppFolder" Value="WixPerUserFolder"/>
     
     <!--Start Menu Shortcuts-->
     <DirectoryRef Id="ApplicationProgramsFolder">
@@ -39,7 +43,7 @@
       </Component>
     </DirectoryRef>
 
-    <!--Install Directions-->
+    <!--WIX Install Directions-->
 		<Feature Id="EstimateBuilder" Title="Estimate Builder" Level="1">
 			<ComponentGroupRef Id="EBComponentGroupID"/>
       <ComponentRef Id="EBShortcut"/>
@@ -48,5 +52,6 @@
       <ComponentGroupRef Id="TBComponentGroupID"/>
       <ComponentRef Id="TBShortcut"/>
     </Feature>
+    <UIRef Id="WixUI_Advanced"/>
 	</Product>
 </Wix>
