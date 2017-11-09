@@ -266,7 +266,13 @@ namespace EstimatingLibrary
             {
                 raiseAll();
             };
-            extraLabor = new TECExtraLabor(Guid.NewGuid());
+            if(initalObject is TECExtraLabor laborObject)
+            {
+                extraLabor = laborObject;
+            } else
+            {
+                extraLabor = new TECExtraLabor(Guid.NewGuid());
+            }
             getInitialValues(initalObject);
             watcher.CostChanged += CostChanged;
             watcher.PointChanged += PointChanged;

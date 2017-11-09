@@ -19,7 +19,6 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(1, 3).Value = "Price";
             worksheet.Cell(1, 3).Style.Border.BottomBorder = XLBorderStyleValues.Thick;
             
-
             worksheet.Cell(2, 1).Value = "Systems";
             worksheet.Cell(2, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
             int x = 3;
