@@ -153,7 +153,7 @@ namespace EstimateBuilder.MVVM
             menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
-            menuVM.SetExportEngineeringCommand(exportEngineeringExecute, canExportEngineering);
+            menuVM.SetExportSummaryCommand(exportSummaryExecute, canExportSummary);
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
@@ -245,8 +245,8 @@ namespace EstimateBuilder.MVVM
         {
             return true;
         }
-        //Export Engineering
-        private void exportEngineeringExecute()
+        //Export Summary
+        private void exportSummaryExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters,
                                         defaultFileName, defaultDirectory, workingFileDirectory);
@@ -254,8 +254,8 @@ namespace EstimateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Turnover.GenerateEngineeringExport(path, bid, estimate);
-                    logger.Info("Exported to engineering turnover document.");
+                    Turnover.GenerateSummaryExport(path, bid, estimate);
+                    logger.Info("Exported to summary turnover document.");
                 }
                 else
                 {
@@ -263,7 +263,7 @@ namespace EstimateBuilder.MVVM
                 }
             }
         }
-        private bool canExportEngineering()
+        private bool canExportSummary()
         {
             return true; 
         }

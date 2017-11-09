@@ -28,10 +28,10 @@ namespace EstimateBuilder.MVVM
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
             setCommand("Points List", command);
         }
-        public void SetExportEngineeringCommand(Action execute, Func<bool> canExecute = null)
+        public void SetExportSummaryCommand(Action execute, Func<bool> canExecute = null)
         {
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Engineering", command);
+            setCommand("Summary", command);
         }
         public void SetExportBudgetCommand(Action execute, Func<bool> canExecute = null)
         {
@@ -63,7 +63,7 @@ namespace EstimateBuilder.MVVM
             //Export menu items
             addMenuItem("Proposal", parentItemName: "Export");
             addMenuItem("Points List", parentItemName: "Export");
-            addMenuItem("Engineering", parentItemName: "Export");
+            addMenuItem("Summary", parentItemName: "Export");
             addMenuItem("Budget", parentItemName: "Export");
             addMenuItem("BOM", parentItemName: "Export");
 
