@@ -16,8 +16,6 @@ namespace TemplateBuilder.MVVM
         private object _selected;
 
         public ScopeCollectionsTabVM ScopeCollection { get; set; }
-        public EquipmentVM ScopeDataGrid { get; set; }
-        public EditTabVM EditTab { get; set; }
         public MaterialVM MaterialsTab { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
         public SystemHierarchyVM SystemHierarchyVM { get; set; }
@@ -45,23 +43,15 @@ namespace TemplateBuilder.MVVM
         public TemplatesEditorVM(TECTemplates templates)
         {
             Templates = templates;
-            EditTab = new EditTabVM(templates);
-            SelectionChanged += EditTab.updateSelection;
-            EditTab.DragHandler += DragOver;
-            EditTab.DropHandler += Drop;
             ScopeCollection = new ScopeCollectionsTabVM(templates);
-            ScopeDataGrid = new EquipmentVM(templates);
-            ScopeDataGrid.SelectionChanged += EditTab.updateSelection;
-            ScopeDataGrid.DragHandler += DragOver;
-            ScopeDataGrid.DropHandler += Drop;
             MaterialsTab = new MaterialVM(templates);
-            MaterialsTab.SelectionChanged += EditTab.updateSelection;
+            MaterialsTab.SelectionChanged += obj => { Selected = obj; };
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
             ControllersPanelsVM = new ControllersPanelsVM(templates);
-            ControllersPanelsVM.SelectionChanged += EditTab.updateSelection;
+            ControllersPanelsVM.SelectionChanged += obj => { Selected = obj; };
             SystemHierarchyVM = new SystemHierarchyVM(templates);
-            SystemHierarchyVM.Selected += EditTab.updateSelection;
+            SystemHierarchyVM.Selected += obj => { Selected = obj; };
 
             AddParameterCommand = new RelayCommand(AddParametersExecute);
 
@@ -73,8 +63,6 @@ namespace TemplateBuilder.MVVM
         {
             Templates = templates;
             ScopeCollection.Refresh(templates);
-            ScopeDataGrid.Refresh(templates);
-            EditTab.Refresh(templates);
             MaterialsTab.Refresh(templates);
             ControllersPanelsVM.Refresh(templates);
             SystemHierarchyVM.Refresh(templates);

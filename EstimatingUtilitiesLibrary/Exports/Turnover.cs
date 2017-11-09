@@ -1,7 +1,11 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
@@ -25,7 +29,78 @@ namespace EstimatingUtilitiesLibrary.Exports
                 package.MainDocumentPart.Document.Save();
             }
         }
-        
+
+        public static void GenerateBOM(string path, TECBid bid)
+        {
+            List<String> sheetNames = new List<string>();
+            XLWorkbook workbook = new XLWorkbook();
+            int postfix = 1;
+            foreach(TECTypical typical in bid.Systems.Where(typ => typ.Instances.Count > 0))
+            {
+                string sheetName = typical.Instances.Count > 1 ? typical.Name : typical.Instances[0].Name;
+                if(sheetName == "")
+                {
+                    sheetName = "Untitled";
+                }
+                if (sheetNames.Contains(sheetName))
+                {
+                    sheetName = sheetName + "(" + postfix + ")";
+                    postfix++;
+                }
+                sheetNames.Add(sheetName);
+                IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+                worksheet.Cell(1, 4).Value = sheetName;
+                worksheet.Cell(1, 4).Style.Font.SetBold();
+                if (typical.Instances.Count > 1)
+                {
+                    worksheet.Cell(1, 5).Value = "(Quantity: " + typical.Instances.Count + ")";
+                }
+                int x = 3;
+                worksheet.Cell(x, 4).Value = "FIELD MATERIAL";
+                x++;
+                worksheet.Cell(x, 1).Value = "TAG";
+                worksheet.Cell(x, 1).Style.Font.SetBold();
+                worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 2).Value = "QTY.";
+                worksheet.Cell(x, 2).Style.Font.SetBold();
+                worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 3).Value = "MANUFACTURER";
+                worksheet.Cell(x, 3).Style.Font.SetBold();
+                worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 4).Value = "MODEL NO.";
+                worksheet.Cell(x, 4).Style.Font.SetBold();
+                worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 5).Value = "DESCRIPTION";
+                worksheet.Cell(x, 5).Style.Font.SetBold();
+                worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 6).Value = "REMARKS";
+                worksheet.Cell(x, 6).Style.Font.SetBold();
+                worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                x++;
+                List<IEndDevice> devices = new List<IEndDevice>();
+                foreach(TECSubScope subScope in typical.GetAllSubScope())
+                {
+                    devices.AddRange(subScope.Devices);
+                }
+                foreach(IEndDevice device in devices.Distinct())
+                {
+                    worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 2).Value = devices.Count(item => item == device);
+                    worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 3).Value = device.Manufacturer.Label;
+                    worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 4).Value = device.Name;
+                    worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 5).Value = device.Description;
+                    worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    x++;
+                }
+
+            }
+            workbook.SaveAs(path);
+        }
+
         private static Paragraph introParagraph(TECBid bid)
         {
             Paragraph par = new Paragraph();

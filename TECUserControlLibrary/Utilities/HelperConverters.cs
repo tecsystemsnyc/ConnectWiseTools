@@ -10,34 +10,7 @@ using System.Windows.Data;
 namespace TECUserControlLibrary.Utilities
 {
     [System.Windows.Markup.MarkupExtensionReturnType(typeof(IValueConverter))]
-
-    public class TemplatesVisibilityConverter : BaseConverter, IValueConverter
-    {
-        #region IValueConverter Members
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if ((Visibility)value == Visibility.Visible)
-            {
-                return 400;
-            }
-            else if ((Visibility)value == Visibility.Hidden)
-            {
-                return 0;
-            }
-            else
-            {
-                return 400;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-    }
+    
 
     public class VisbilityToBooleanConverter : BaseConverter, IValueConverter
     {
