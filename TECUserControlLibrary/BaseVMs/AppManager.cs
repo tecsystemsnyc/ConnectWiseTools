@@ -84,7 +84,7 @@ namespace TECUserControlLibrary.BaseVMs
         {
             appName = name;
             ViewEnabled = true;
-            Version = getVersion();
+            Version = getVersionNumber();
             TECLogo = getLogo();
 
             SplashVM = splashVM;
@@ -247,15 +247,7 @@ namespace TECUserControlLibrary.BaseVMs
         }
         #endregion
 
-        private string getVersion()
-        {
-            String version = "";
-            if (ApplicationDeployment.IsNetworkDeployed)
-            { version = "Version " + ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-            else
-            { version = "Undeployed Version"; }
-            return version;
-        }
+        abstract protected string getVersionNumber();
         private string getLogo()
         {
             String path = Path.GetTempFileName();

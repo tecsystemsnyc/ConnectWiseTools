@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EstimateBuilder.Properties
-{
-
-
+namespace EstimateBuilder.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -61,15 +61,6 @@ namespace EstimateBuilder.Properties
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TECSystems\.
-        /// </summary>
-        internal static string ResourcesFolder {
-            get {
-                return ResourceManager.GetString("ResourcesFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap TECLogo {
@@ -80,11 +71,11 @@ namespace EstimateBuilder.Properties
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TECTemplates.tdb.
+        ///   Looks up a localized string similar to 1.7.0.
         /// </summary>
-        internal static string TemplateFile {
+        internal static string Version {
             get {
-                return ResourceManager.GetString("TemplateFile", resourceCulture);
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
     }

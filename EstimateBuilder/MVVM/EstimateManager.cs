@@ -323,6 +323,10 @@ namespace EstimateBuilder.MVVM
         }
         #endregion
 
+        protected override string getVersionNumber()
+        {
+            return Properties.Resources.Version;
+        }
         protected override TECBid getWorkingScope()
         {
             return bid;

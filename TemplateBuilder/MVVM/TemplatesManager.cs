@@ -88,6 +88,10 @@ namespace TemplateBuilder.MVVM
         }
         #endregion
 
+        protected override string getVersionNumber()
+        {
+            return Properties.Resources.Version;
+        }
         protected override TECTemplates getWorkingScope()
         {
             return templates;
