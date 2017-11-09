@@ -21,7 +21,7 @@ namespace EstimateBuilder
             // Check if this was launched by double-clicking a doc. If so, use that as the
             // startup file name.
             if (AppDomain.CurrentDomain.SetupInformation
-                .ActivationArguments.ActivationData != null
+                .ActivationArguments?.ActivationData != null
             && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)
             {

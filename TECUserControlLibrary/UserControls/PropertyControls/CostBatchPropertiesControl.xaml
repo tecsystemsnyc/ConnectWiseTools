@@ -19,14 +19,11 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label FontSize="18" Content="{Binding Type}" 
-                               Grid.ColumnSpan="2"/>
-                        <Label Content="Cost: " Grid.Row="1"/>
-                        <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}" Foreground="Black" Grid.Row="1" Grid.Column="1"/>
-                        <Label Content="Labor" Grid.Row="2" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Labor, StringFormat={}{0:F2}}" Foreground="Black" Grid.Row="2" Grid.Column="1"/>
+                        <TextBlock FontSize="14" Text="{Binding Type, StringFormat={}{0} Costs}" 
+                               Grid.ColumnSpan="2" Foreground="Black"/>
+                        <TextBlock Text="{Binding Cost, StringFormat=Material: {0:C}}" Foreground="Black" Grid.Row="1"/>
+                        <TextBlock Text="{Binding Labor, StringFormat=Labor: {0:F2}}" Foreground="Black" Grid.Row="2"/>eptio
                         <Border Grid.Row="2" BorderThickness="0 0 0 1" Grid.ColumnSpan="2"
                                 BorderBrush="Black"/>
                     </Grid>
