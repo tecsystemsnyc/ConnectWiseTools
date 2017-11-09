@@ -10,7 +10,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
     /// <summary>
     /// Interaction logic for TypicalListControl.xaml
     /// </summary>
-    public partial class BaseListControl<T> : UserControl
+    public partial class BaseListControl<T> : UserControl where T: class
     {
         public IEnumerable<T> Source
         {
@@ -116,7 +116,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
         }
         protected void ListView_MouseUp(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
+            //RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
         protected void ListView_Dropped(object sender, RoutedEventArgs e)
         {
@@ -124,7 +124,10 @@ namespace TECUserControlLibrary.UserControls.ListControls
         }
         protected void ItemControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
+            var item = this.SelectedItem;
+            this.SelectedItem = null;
+            this.SelectedItem = item;
+            //RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
     }
 }

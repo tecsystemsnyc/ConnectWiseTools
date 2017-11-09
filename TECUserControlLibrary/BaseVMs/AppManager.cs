@@ -88,6 +88,7 @@ namespace TECUserControlLibrary.BaseVMs
             TECLogo = getLogo();
 
             SplashVM = splashVM;
+            SplashVM.Version = Version;
             MenuVM = menuVM;
             StatusBarVM = new StatusBarVM();
             StatusBarVM.Version = Version;

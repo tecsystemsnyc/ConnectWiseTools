@@ -55,10 +55,18 @@ namespace EstimateBuilder.MVVM
         private void getBidPathExecute()
         {
             BidPath = getPath(FileDialogParameters.EstimateFileParameters, defaultDirectory);
+            if(BidPath == null)
+            {
+                BidPath = "";
+            }
         }
         private void getTemplatesPathExecute()
         {
             TemplatesPath = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            if(TemplatesPath == null)
+            {
+                TemplatesPath = "";
+            }
         }
 
         private void openExistingExecute()
@@ -76,7 +84,16 @@ namespace EstimateBuilder.MVVM
         }
         private bool createNewCanExecute()
         {
-            return TemplatesPath != "";
+            bool outBool = false;
+            if(TemplatesPath == "")
+            {
+                HintText = "Select Templates file (.tdb) to get started.";
+            } else
+            {
+                HintText = "";
+                outBool = true;
+            }
+            return outBool;
         }
     }
 }

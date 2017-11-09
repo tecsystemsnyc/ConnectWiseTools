@@ -12,6 +12,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private string _titleText;
         private string _subtitleText;
+        private string _hintText;
 
         public string TitleText
         {
@@ -31,6 +32,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SubtitleText");
             }
         }
+        public string HintText
+        {
+            get { return _hintText; }
+            set
+            {
+                _hintText = value;
+                RaisePropertyChanged("HintText");
+            }
+        }
+        public string Version { get; set; }
 
         public ICommand GetTemplatesPathCommand { get; protected set; }
         public ICommand OpenExistingCommand { get; protected set; }
