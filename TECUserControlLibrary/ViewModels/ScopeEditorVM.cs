@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System.Windows;
@@ -15,7 +16,7 @@ namespace TECUserControlLibrary.ViewModels
     public class ScopeEditorVM : ViewModelBase, IDropTarget
     {
         //Initializer
-        public ScopeEditorVM(TECBid bid, TECTemplates templates)
+        public ScopeEditorVM(TECBid bid, TECTemplates templates, ChangeWatcher watcher)
         {
             Bid = bid;
             Templates = templates;
@@ -30,6 +31,7 @@ namespace TECUserControlLibrary.ViewModels
             };
             InstanceEditVM = new TypicalHierarchyVM(bid);
             InstanceEditVM.Selected += item => { Selected = item; };
+            NetworkVM = new NetworkVM(bid, watcher);
             DGTabIndex = GridIndex.Systems;
             TemplatesVisibility = Visibility.Visible;
         }
@@ -63,6 +65,8 @@ namespace TECUserControlLibrary.ViewModels
         public MiscCostsVM MiscVM { get; set; }
         public SystemHierarchyVM TypicalEditVM { get; set; }
         public TypicalHierarchyVM InstanceEditVM { get; set; }
+        public NetworkVM NetworkVM { get; }
+
         #endregion
 
         #region Interface Properties
@@ -111,7 +115,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion //Properties
 
         #region Methods
-        public void Refresh(TECBid bid, TECTemplates templates)
+        public void Refresh(TECBid bid, TECTemplates templates, ChangeWatcher watcher)
         {
             Bid = bid;
             Templates = templates;
@@ -120,11 +124,12 @@ namespace TECUserControlLibrary.ViewModels
             ControllersPanelsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
             TypicalEditVM.Refresh(Bid);
-            
+            NetworkVM.Refresh(bid, watcher);
+
         }
 
         #region Setup Extensions
-        
+
         private void setupScopeCollection()
         {
             ScopeCollection = new ScopeCollectionsTabVM(Templates);

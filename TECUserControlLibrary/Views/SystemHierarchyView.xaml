@@ -223,7 +223,7 @@
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1"  Grid.Column="1" 
                     Margin="5,0,5,0">
                     <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.Name, StringFormat='Components of {0}'}"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                           HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
                 </Border>
                 <Grid Grid.Column="2" Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
                     <Button Content="->" x:Name="equipmentDetails" Margin="2"
@@ -345,7 +345,7 @@
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
                     Margin="5,0,5,0">
                     <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.Name, StringFormat='Points in {0}'}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
                 </Border>
                 <Grid Grid.Column="2" Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
 

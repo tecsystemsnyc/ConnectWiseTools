@@ -151,6 +151,7 @@
     <Style TargetType="TextBlock">
         <Setter Property="Margin" Value="2"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextTrimming" Value="WordEllipsis"/>
     </Style>
     <Style TargetType="ListView">
         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>

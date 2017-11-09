@@ -218,10 +218,10 @@
 
             <Grid  Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition />
                     <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Tax Exempt:"/>
                 <CheckBox IsChecked="{Binding Bid.Parameters.IsTaxExempt}"
