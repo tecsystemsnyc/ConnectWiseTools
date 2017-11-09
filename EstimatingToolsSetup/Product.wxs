@@ -23,6 +23,9 @@
     <Property Id="ApplicationFolderName" Value="Estimating Tools"/>
     <Property Id="WixAppFolder" Value="WixPerUserFolder"/>
     
+    <!--EULA File Variable-->
+    <WixVariable Id="WixUILicenseRtf" Value="EstimatingToolsEULA.rtf"/>
+    
     <!--Start Menu Shortcuts-->
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="EBShortcut" Guid="aef0b2fb-ee02-4873-9ab5-1794a7f4471d">
