@@ -53,7 +53,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Content="{Binding SubScopeConnectionItem.SubScope.Name}" FontWeight="Bold"/>
+            <Label Content="{Binding SubScopeConnectionItem.SubScope.Name}" FontWeight="DemiBold"/>
             <Label Content="{Binding SubScopeConnectionItem.SubScope.Description}" Grid.Row="1"/>
 
             <Label Content="Connection Types" Grid.Column="1"/>

@@ -7,9 +7,10 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="valveControl"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="60" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
         <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=valveControl}"/>
+
     </local:BaseItemControl.Resources>
     <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
 
@@ -23,16 +24,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Label FontSize="12" Content="{Binding Name}"/>
+            <Label FontSize="12" Content="{Binding Name}" FontWeight="DemiBold"/>
             <Label Content="{Binding Description}" Grid.Column="1"/>
-            <Label Content="Cost: " Grid.Column="2"/>
-            <Label Content="{Binding Cost}" Grid.Column="3"/>
+            <TextBlock VerticalAlignment="Center" Text="{Binding Cost, StringFormat=Cost: {0:C}}" Grid.Column="1" Grid.Row="1"/>
+            <TextBlock VerticalAlignment="Center" Text="{Binding Actuator.Name, StringFormat=Actuator: {0}}" Grid.Column="1" Grid.Row="1"/>
         </Grid>
     </Border>
 </local:BaseItemControl>

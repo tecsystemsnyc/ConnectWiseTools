@@ -7,7 +7,7 @@
                        xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="pointControl"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="60" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
         <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=pointControl}"/>
     </local:BaseItemControl.Resources>
@@ -28,10 +28,9 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Label FontSize="14" Content="{Binding Label}"/>
+            <Label FontSize="14" Content="{Binding Label}" FontWeight="DemiBold"/>
             <Label Content="{Binding Type}" Grid.Column="1"/>
-            <Label Content="Qty: " Grid.Row="1"/>
-            <Label Content="{Binding Quantity}" Grid.Row="1" Grid.Column="1"/>
+            <TextBlock Text="{Binding Quantity, StringFormat=Qty: {0}}" Grid.Row="1" />
         </Grid>
     </Border>
 </local:BaseItemControl>

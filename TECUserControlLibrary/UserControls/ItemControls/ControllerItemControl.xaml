@@ -8,7 +8,7 @@
 
              mc:Ignorable="d" 
              x:Name="controllerItemControl"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="60" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
         <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerItemControl}"/>
     </local:BaseItemControl.Resources>
@@ -28,10 +28,9 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <Label FontSize="14" Content="{Binding Name}"  Background="Transparent"/>
+            <Label FontSize="14" Content="{Binding Name}" FontWeight="DemiBold" Background="Transparent"/>
             <Label Content="{Binding Description}" Grid.Column="1"  Background="Transparent"/>
-            <Label Content="Type: " Grid.Row="1"  Background="Transparent"/>
-            <Label Content="{Binding Type.Name}" Grid.Row="1" Grid.Column="1"  Background="Transparent"/>
+            <TextBlock Text="{Binding Type.Name, StringFormat=Text: {0}}" Grid.Row="1" Background="Transparent"/>
         </Grid>
     </Border>
 </local:BaseItemControl>
