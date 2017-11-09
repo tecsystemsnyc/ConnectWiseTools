@@ -69,7 +69,12 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 3).Value = systemEstimate.TotalPrice;
                 worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
             }
-            x++;
+            TECEstimator extraLaborEstimate = new TECEstimator(bid.ExtraLabor, bid.Parameters, new ChangeWatcher(bid.ExtraLabor));
+            worksheet.Cell(x, 1).Value = "Other Labor";
+            worksheet.Cell(x, 2).Value = "1";
+            worksheet.Cell(x, 3).Value = extraLaborEstimate.TotalPrice;
+            worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
+            x+=2;
             worksheet.Cell(x, 2).Value = "Total: ";
             worksheet.Cell(x, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thick;
 

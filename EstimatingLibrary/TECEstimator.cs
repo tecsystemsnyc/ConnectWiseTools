@@ -564,8 +564,7 @@ namespace EstimatingLibrary
 
             return cost;
         }
-
-
+        
         /// <summary>
         /// Returns all TEC labor hours
         /// </summary>

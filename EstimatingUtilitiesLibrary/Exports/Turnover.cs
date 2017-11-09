@@ -37,6 +37,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             int postfix = 1;
             foreach(TECTypical typical in bid.Systems.Where(typ => typ.Instances.Count > 0))
             {
+                List<TECCost> associatedCosts = new List<TECCost>();
                 string sheetName = typical.Instances.Count > 1 ? typical.Name : typical.Instances[0].Name;
                 if(sheetName == "")
                 {
@@ -78,9 +79,15 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 x++;
                 List<IEndDevice> devices = new List<IEndDevice>();
-                foreach(TECSubScope subScope in typical.GetAllSubScope())
+                associatedCosts.AddRange(typical.AssociatedCosts);
+                foreach(TECEquipment equipment in typical.Equipment)
                 {
-                    devices.AddRange(subScope.Devices);
+                    associatedCosts.AddRange(equipment.AssociatedCosts);
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        associatedCosts.AddRange(subScope.AssociatedCosts);
+                        devices.AddRange(subScope.Devices);
+                    }
                 }
                 foreach(IEndDevice device in devices.Distinct())
                 {
@@ -96,9 +103,148 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
                 }
-
+                foreach(TECController controller in typical.Controllers)
+                {
+                    associatedCosts.AddRange(controller.AssociatedCosts);
+                    worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 2).Value = "1";
+                    worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 3).Value = controller.Type.Manufacturer.Label;
+                    worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 4).Value = controller.Type.Name;
+                    worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 5).Value = controller.Type.Description;
+                    worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    x++;
+                }
+                foreach(TECPanel panel in typical.Panels)
+                {
+                    associatedCosts.AddRange(panel.AssociatedCosts);
+                    worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 2).Value = "1";
+                    worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 3).Value = panel.Type.Manufacturer.Label;
+                    worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 4).Value = panel.Type.Name;
+                    worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 5).Value = panel.Type.Description;
+                    worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    x++;
+                }
+                x++;
+                worksheet.Cell(x, 4).Value = "OTHER MATERIAL";
+                x++;
+                worksheet.Cell(x, 1).Value = "Name";
+                worksheet.Cell(x, 1).Style.Font.SetBold();
+                worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 2).Value = "QTY.";
+                worksheet.Cell(x, 2).Style.Font.SetBold();
+                worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 3).Value = "DESCRIPTION";
+                worksheet.Cell(x, 3).Style.Font.SetBold();
+                worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                x++;
+                foreach(TECCost cost in associatedCosts.Distinct())
+                {
+                    worksheet.Cell(x, 1).Value = cost.Name;
+                    worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 2).Value = associatedCosts.Count(item => item == cost);
+                    worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(x, 3).Value = cost.Description;
+                    worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    x++;
+                }
             }
+
+            createMiscBOMSheet(workbook, bid);
+
             workbook.SaveAs(path);
+        }
+
+        private static void createMiscBOMSheet(XLWorkbook workbook, TECBid bid)
+        {
+            List<TECCost> associatedCosts = new List<TECCost>();
+            IXLWorksheet worksheet = workbook.Worksheets.Add("Misc.");
+            worksheet.Cell(1, 4).Value = "Misc.";
+            worksheet.Cell(1, 4).Style.Font.SetBold();
+            int x = 3;
+            worksheet.Cell(x, 4).Value = "FIELD MATERIAL";
+            x++;
+            worksheet.Cell(x, 1).Value = "TAG";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Cell(x, 2).Value = "QTY.";
+            worksheet.Cell(x, 2).Style.Font.SetBold();
+            worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Cell(x, 3).Value = "MANUFACTURER";
+            worksheet.Cell(x, 3).Style.Font.SetBold();
+            worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Cell(x, 4).Value = "MODEL NO.";
+            worksheet.Cell(x, 4).Style.Font.SetBold();
+            worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Cell(x, 5).Value = "DESCRIPTION";
+            worksheet.Cell(x, 5).Style.Font.SetBold();
+            worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Cell(x, 6).Value = "REMARKS";
+            worksheet.Cell(x, 6).Style.Font.SetBold();
+            worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+            
+            foreach (TECController controller in bid.Controllers)
+            {
+                associatedCosts.AddRange(controller.AssociatedCosts);
+                worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 2).Value = "1";
+                worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 3).Value = controller.Type.Manufacturer.Label;
+                worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 4).Value = controller.Type.Name;
+                worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 5).Value = controller.Type.Description;
+                worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                x++;
+            }
+            foreach (TECPanel panel in bid.Panels)
+            {
+                associatedCosts.AddRange(panel.AssociatedCosts);
+                worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 2).Value = "1";
+                worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 3).Value = panel.Type.Manufacturer.Label;
+                worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 4).Value = panel.Type.Name;
+                worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 5).Value = panel.Type.Description;
+                worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                x++;
+            }
+            x++;
+            worksheet.Cell(x, 4).Value = "OTHER MATERIAL";
+            x++;
+            worksheet.Cell(x, 1).Value = "Name";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Cell(x, 2).Value = "QTY.";
+            worksheet.Cell(x, 2).Style.Font.SetBold();
+            worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Cell(x, 3).Value = "DESCRIPTION";
+            worksheet.Cell(x, 3).Style.Font.SetBold();
+            worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+            foreach (TECCost cost in associatedCosts.Distinct())
+            {
+                worksheet.Cell(x, 1).Value = cost.Name;
+                worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 2).Value = associatedCosts.Count(item => item == cost);
+                worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(x, 3).Value = cost.Description;
+                worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                x++;
+            }
         }
 
         private static Paragraph introParagraph(TECBid bid)
