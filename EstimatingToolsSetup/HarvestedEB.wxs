@@ -4,184 +4,221 @@
         <DirectoryRef Id="ESTIMATEBUILDERDIRECTORY">
             <Directory Id="dir590D05023F17A601E8A50C1189CF4F91" Name="app.publish" />
             <Directory Id="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Name="de" />
+            <Directory Id="dirDCAB9E8CEB52D476685F8633F0F57270" Name="logs" />
             <Directory Id="dirFBDD965B90778564FCC06529B632619F" Name="x64" />
             <Directory Id="dir25A43F355DB0C0881EFCA59DD02C9870" Name="x86" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
         <ComponentGroup Id="EBComponentGroupID">
-            <Component Id="cmpFECF228C7F1B3D6D9B505F8C87415FB6" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{406B2312-34D5-47BF-BBA8-205E9C7B22CF}">
-                <File Id="fil65BBDDB26B5DE570FDA125905D527023" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\DebugLibrary.dll" />
+            <Component Id="cmp7D600F318A2A2BB8A9796B8531199424" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{E5D407FF-63A2-49E2-9AC2-3BB19491CDD8}">
+                <File Id="fil6FDDAB7E7DEA38C701F086C27E893599" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\ClosedXML.dll" />
             </Component>
-            <Component Id="cmp6D77878D7F612DD354ABF8071726D98F" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{E946E397-CBFB-4793-B65F-B6DAD287F683}">
-                <File Id="filCCECECC706643C3A03F5024D3D123FF2" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\DebugLibrary.pdb" />
+            <Component Id="cmpC5302AE40248E1E492BD1ABC675A1A8E" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{D2C5B289-EF21-4F91-B9F0-0569F80CE9A3}">
+                <File Id="fil1B56342C0894F1C17F8C219737071843" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\ClosedXML.pdb" />
             </Component>
-            <Component Id="cmp9432676922CC97BBFC526E79C564521A" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{D744F2CC-C894-410A-B8EB-910B5CA26CD0}">
+            <Component Id="cmp18B6E0A911DAE38EED026342322598AB" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{0E91AA97-29D9-44D2-851E-941F8F4D4C5F}">
+                <File Id="filB3A7C2F9D22F989351755B21445AE2B7" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\ClosedXML.xml" />
+            </Component>
+            <Component Id="cmp9432676922CC97BBFC526E79C564521A" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{92EDEF8D-A1B1-45F9-B2D2-CA09EF3C8F2C}">
                 <File Id="fil53603FA787D53FDC73BDD11C7AFCE0FB" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\DocumentFormat.OpenXml.dll" />
             </Component>
-            <Component Id="cmpE30976AC3A2C145E2C919270E1795861" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{42326E4C-F572-4B7A-B424-D4D9F50D73C0}">
+            <Component Id="cmpE30976AC3A2C145E2C919270E1795861" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{79C1855A-1946-4C4D-833B-167DFDB78755}">
                 <File Id="filFDC881C9380D0EFF616BA60D9C3D3EB8" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\DocumentFormat.OpenXml.xml" />
             </Component>
-            <Component Id="cmpE1B2EB997E32EB0F8383A862852C219B" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{25572A48-AD8D-479D-A210-FA5A2F748B9A}">
+            <Component Id="cmpE1B2EB997E32EB0F8383A862852C219B" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{E1E0700E-0A64-4D33-B3F6-4F19A05EEEF9}">
                 <File Id="filBC84FF8F52F0749F723FA33C2E2C05E5" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EntityFramework.dll" />
             </Component>
-            <Component Id="cmpA2C432E298697D95F850E8976006F691" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{D679D324-64E2-4893-BC02-83B3F0E31494}">
+            <Component Id="cmpA2C432E298697D95F850E8976006F691" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{0B83FB69-00EF-41F4-BB12-03217BA2FCBD}">
                 <File Id="fil3B659E319C8F942B85EC77202DB75859" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EntityFramework.SqlServer.dll" />
             </Component>
-            <Component Id="cmp9680D9459E6FF163232B481591B11F26" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{89C4202C-02FE-46D0-AEDD-D84179CC5FE3}">
+            <Component Id="cmp9680D9459E6FF163232B481591B11F26" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{335AFDD3-5CEF-41DF-B559-60CC9327991B}">
                 <File Id="fil8B291C7B80674995E7673A6EAD799B49" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EntityFramework.SqlServer.xml" />
             </Component>
-            <Component Id="cmpAF90A9C76CA5CBA1C8C6A55DEBF7F373" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{1CCC76A5-B092-431E-B2C4-2D56C530E9BF}">
+            <Component Id="cmpAF90A9C76CA5CBA1C8C6A55DEBF7F373" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{5B0699AC-81CD-4BA9-8D95-4A44C9415E3C}">
                 <File Id="filFF1F79C797AEFDA55644A47AFD3B1580" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EntityFramework.xml" />
             </Component>
-            <Component Id="cmpE99052E277C72A4772497043CAD33900" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{4C6FD638-45AD-4584-8E0A-2CC22DD70772}">
+            <Component Id="cmpE99052E277C72A4772497043CAD33900" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{10F1CB2F-23D2-4886-A4E0-9C11D919E8E0}">
                 <File Id="fil3BF033EE05B02FE8EEA2038907E3BC32" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimateBuilder.application" />
             </Component>
-            <Component Id="cmp158F1D733AE429674D578E2460BE0333" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{FB103BCF-D82C-4E81-8724-DCD99B19099F}">
+            <Component Id="cmp158F1D733AE429674D578E2460BE0333" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{15B85EED-93B2-4A28-A275-A18F0ABF1D6A}">
                 <File Id="filB19BB21D86C0130166B00026610FCD49" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimateBuilder.exe" />
             </Component>
-            <Component Id="cmp213CE95AA692058E9D525A8EE12DE5BB" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{E97E8435-53CA-4030-B9D5-A8FEF13FFFB8}">
+            <Component Id="cmp213CE95AA692058E9D525A8EE12DE5BB" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{A649B2EC-9815-40FF-B507-ACA67555FE67}">
                 <File Id="fil722CA7F50EED1AC52E2DE7AE5C1E9692" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimateBuilder.exe.config" />
             </Component>
-            <Component Id="cmpC731048EC5D911E3384D34973D7D4786" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{3549A0C7-D889-4F2F-979A-75E4D1F03CC5}">
+            <Component Id="cmpC731048EC5D911E3384D34973D7D4786" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{AAEAC207-FA81-46DA-85AB-8A76BCD6D1B4}">
                 <File Id="fil7590BF462F93E239FDBA08F57E5CEF8C" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimateBuilder.exe.manifest" />
             </Component>
-            <Component Id="cmpD1B0A3DD6BBACEBE0C4AB20D54814146" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{B3F6A15B-48E2-4A18-BD93-8A673CA85CC3}">
+            <Component Id="cmpD1B0A3DD6BBACEBE0C4AB20D54814146" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{E607CF26-F687-497E-8277-4EFDAFCFE24D}">
                 <File Id="fil4F6B39F3ABAEA0D302D92710B20E7FAA" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimateBuilder.pdb" />
             </Component>
-            <Component Id="cmpBD29E1D634C9299A44E8067118EC2D79" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{1259549E-2B38-4617-B6CE-E74EB07D7BC7}">
+            <Component Id="cmpBD29E1D634C9299A44E8067118EC2D79" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{68845565-A6B3-427F-A312-6EEF974135C2}">
                 <File Id="fil12220E5792D17EF3509557A8E919EF06" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimateBuilder.vshost.exe" />
             </Component>
-            <Component Id="cmp0B2913957648E6379E8C3CF8ABA108C6" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{ED021179-82AB-4D4A-838F-B1C7D65E0CC7}">
+            <Component Id="cmp0B2913957648E6379E8C3CF8ABA108C6" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{6A790448-4B4B-40EE-B64C-C7F8402C7FAD}">
                 <File Id="fil6338411EC5F12B7007C6C76E17E2FA97" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimateBuilder.vshost.exe.config" />
             </Component>
-            <Component Id="cmpC75ECB0ABBA3C3D6C6529318A9ADB4DC" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{3ACFB7F6-F845-42EC-AD77-B9761366D073}">
+            <Component Id="cmpC75ECB0ABBA3C3D6C6529318A9ADB4DC" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{10BA5F0E-CBF1-4341-90FD-D8411F127DB1}">
                 <File Id="fil3402495E3070FD98F46D2141ED639A32" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimatingLibrary.dll" />
             </Component>
-            <Component Id="cmp9ED27A0274A5AC29E24DBDD761C03FEC" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{39A911DC-0499-4AAA-BFFB-92D88D047376}">
+            <Component Id="cmp9ED27A0274A5AC29E24DBDD761C03FEC" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{E41136D2-81A7-4BE5-8A2F-466D343EA72E}">
                 <File Id="fil0350599D0EECD836AF955FEB8B661947" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimatingLibrary.dll.config" />
             </Component>
-            <Component Id="cmp96179E663DD5FD987AD3A632EEDFBE91" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{C3F06A56-A6E0-4D2F-B4FF-7B33D22317E9}">
+            <Component Id="cmp96179E663DD5FD987AD3A632EEDFBE91" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{56E13F93-17FF-4F59-8E80-95230508B468}">
                 <File Id="filC208C8A97C930129FE09338D052CCFC5" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimatingLibrary.pdb" />
             </Component>
-            <Component Id="cmp99C357FBB4CC6C93A1A5F92F5C5FB17A" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{1BF5CD65-3973-4B14-8B63-5F0EC35048FC}">
+            <Component Id="cmp99C357FBB4CC6C93A1A5F92F5C5FB17A" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{C1368752-06AC-447A-BCD4-644DE09887F9}">
                 <File Id="fil0E2330A275823E18984C0F884B87A61B" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimatingUtilitiesLibrary.dll" />
             </Component>
-            <Component Id="cmp1FA9FB4AD951E1E249921853F20B26F3" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{0746EB0E-1F2D-44AB-80E2-6C801CB36920}">
+            <Component Id="cmp1FA9FB4AD951E1E249921853F20B26F3" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{3ADF69B6-CFB3-407E-99C5-7F3157528D57}">
                 <File Id="fil536D59B0EA159DD6D8F8756E351CAEAF" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimatingUtilitiesLibrary.dll.config" />
             </Component>
-            <Component Id="cmp869F10F10A0F316543487C9E910FEE03" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{86550E1C-9294-4AA0-AAE4-313AD55E8A4D}">
+            <Component Id="cmp869F10F10A0F316543487C9E910FEE03" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{AC8E223F-34F0-4966-8E49-78AED445714E}">
                 <File Id="filA635E56CF8C8BB8BB300B296EC0A7DDF" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\EstimatingUtilitiesLibrary.pdb" />
             </Component>
-            <Component Id="cmpE56C67F96519966B5F5E442B8AC9F363" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{17A2EEF3-DB76-499F-8E5C-207594EF2A8F}">
+            <Component Id="cmp2CE36D2D666BCA49B4C4DF065650570A" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{A8318561-C5C1-4811-BA51-C524CBCCE699}">
+                <File Id="fil3253E8244F9A89DCBA512A24117AB417" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\FastMember.Signed.dll" />
+            </Component>
+            <Component Id="cmpE56C67F96519966B5F5E442B8AC9F363" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{DA5F87DB-886C-4F18-91AD-F458EF4276D6}">
                 <File Id="filD435F5FC42D433378E8346D7B477339C" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.dll" />
             </Component>
-            <Component Id="cmpEAE797EF4695DE3F1171CD553F02F5AD" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{42554901-8AB7-460B-9AEE-F9E109FBE697}">
+            <Component Id="cmpEAE797EF4695DE3F1171CD553F02F5AD" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{4D6B345E-B9FB-4780-8BBB-FE0D14C2CB1F}">
                 <File Id="fil8F6983BAB3C09829872DBEC86414B619" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.Extras.dll" />
             </Component>
-            <Component Id="cmp59A1A713F03526838DA67DB8A59787C9" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{407821B0-F932-4C78-89A5-680177D4352B}">
+            <Component Id="cmp59A1A713F03526838DA67DB8A59787C9" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{8C8B89D3-AB24-4BA2-A5D5-0D953B67C078}">
                 <File Id="filC63CB9E717F8FC06B863C4D092AE4623" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.Extras.pdb" />
             </Component>
-            <Component Id="cmp06998284E0AD73BC6888F7E4748FA15C" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{72DC5EB2-B484-4EDC-81B1-796D17F1FB8A}">
+            <Component Id="cmp06998284E0AD73BC6888F7E4748FA15C" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{A9839898-2FCD-4D7B-BE7C-9E921692C2E3}">
                 <File Id="fil5522E95C36A689D3D158083A4BF8DA74" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.Extras.xml" />
             </Component>
-            <Component Id="cmp4937D13E409D2725D01E55F3FD6D0E94" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{EB6C3E08-76E3-46D2-90C7-0522306E6D5F}">
+            <Component Id="cmp4937D13E409D2725D01E55F3FD6D0E94" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{637CE2BB-6CF1-4BA7-9DD3-12DF1B02406D}">
                 <File Id="filD19AC0AB1F28E3C1450F4476C5159345" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.pdb" />
             </Component>
-            <Component Id="cmpF30385895618243FE838927A00FA019E" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{60C6E38D-2B36-4448-9D59-49C166DB3DE2}">
+            <Component Id="cmpF30385895618243FE838927A00FA019E" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{F9659A8F-1F25-4739-8A53-83DB6D06E748}">
                 <File Id="fil416944080655E968E44FDFEF04ABFB8C" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.Platform.dll" />
             </Component>
-            <Component Id="cmp997BA0E4F2DECCD5E2D107D91571C6B6" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{F9A3F74B-7FF8-4BAA-B7DD-F8F90597BD16}">
+            <Component Id="cmp997BA0E4F2DECCD5E2D107D91571C6B6" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{52FBBBDD-6BB6-4E38-97C8-C391224EA480}">
                 <File Id="fil98DC1433D8A04EBD5FAE9C878C80AEEA" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.Platform.pdb" />
             </Component>
-            <Component Id="cmpAF79E4BE1AC897179E3CEEC232CDF037" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{8F98EE5C-6BC8-4112-8DCD-EB1251FCC1FA}">
+            <Component Id="cmpAF79E4BE1AC897179E3CEEC232CDF037" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{6B64BD67-C257-4F94-9973-1C4310A9F582}">
                 <File Id="fil936741169A472CB0A3057774AB2C9C5E" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.Platform.xml" />
             </Component>
-            <Component Id="cmpF11E08D89DCE9439E42A73661BA33A17" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{A0B2627A-C5F3-4E2E-90F2-E80964E05349}">
+            <Component Id="cmpF11E08D89DCE9439E42A73661BA33A17" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{A68A51A4-0278-4984-B626-960536F461D2}">
                 <File Id="fil2E8285706DD4D7B10585FBE6CCD1456F" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GalaSoft.MvvmLight.xml" />
             </Component>
-            <Component Id="cmpCCFB9FC6D2A7EA70813BB73A8F6BAD2B" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{FAA349EB-6512-4D4D-80D0-FFE7FEB1C21E}">
+            <Component Id="cmpCCFB9FC6D2A7EA70813BB73A8F6BAD2B" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{306A2E11-136A-4058-8CA3-91FC5F4052FF}">
                 <File Id="filFA01C0996B8B81CD564C024496408CE2" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GongSolutions.Wpf.DragDrop.dll" />
             </Component>
-            <Component Id="cmp1F5543C9A865EAF84991E9F5B8E00D33" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{6C05758B-ED31-4DCB-8DC9-B01B978D649E}">
+            <Component Id="cmp1F5543C9A865EAF84991E9F5B8E00D33" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{1A89A655-7CEF-4A43-B188-63088078E0FB}">
                 <File Id="fil2E74FB59D212255B8D151C48A6DF6DF4" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GongSolutions.Wpf.DragDrop.pdb" />
             </Component>
-            <Component Id="cmpEABB1A72200E4EB251696954CCD15B69" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{FA4F99C3-DA92-477D-8A78-94086816EE55}">
+            <Component Id="cmpEABB1A72200E4EB251696954CCD15B69" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{D80F4B1D-E0A8-45A9-B261-DEF9AC29B2A1}">
                 <File Id="fil829CA3B2F961BA8584168BF3D5EAC6E9" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\GongSolutions.Wpf.DragDrop.xml" />
             </Component>
-            <Component Id="cmpC994CF2287FA13458EED7C22B7EBB4AF" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{F719F749-1976-4E68-B696-479481CE0C8F}">
+            <Component Id="cmpC994CF2287FA13458EED7C22B7EBB4AF" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{CF36E467-7953-4927-81E6-232DEF050879}">
                 <File Id="fil7DB9D849E43BE8E968DB5D0CA86C6C36" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\Microsoft.Practices.ServiceLocation.dll" />
             </Component>
-            <Component Id="cmp9533569A5F648D19296ED01492C9F7DD" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{CAA935CC-6DC4-45FA-936F-A65A03311E24}">
+            <Component Id="cmp9533569A5F648D19296ED01492C9F7DD" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{8D843501-29BD-4D5B-81CA-4EFB3B1F6AE0}">
                 <File Id="fil9CEE7F2D58FD1BFABE00F6BF22AF3E64" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\Microsoft.Practices.ServiceLocation.pdb" />
             </Component>
-            <Component Id="cmp6DED2F4022C324C3654BDC2559D8EB82" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{4C9D2DA1-1BEE-42B8-99FF-358A3C10C0D4}">
+            <Component Id="cmp6DED2F4022C324C3654BDC2559D8EB82" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{629F8EF4-E101-4ECA-B3C9-1C9E9925E9D0}">
                 <File Id="filFF8B879C87852E94B1F17FD4403C7D89" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\Microsoft.Practices.ServiceLocation.xml" />
             </Component>
-            <Component Id="cmp473871C350CDC4494B819B6A767255E9" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{FEB67585-5360-4442-A462-F6F5321EAB3D}">
+            <Component Id="cmp473871C350CDC4494B819B6A767255E9" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{72202DD3-40AD-442F-AC10-BE86DD8EB14F}">
                 <File Id="fil344AB4FC13B5739F215B384A4AFA34EC" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\MigraDoc.DocumentObjectModel-WPF.dll" />
             </Component>
-            <Component Id="cmp36A0834229EB6B88BDCE2001E79781F8" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{E5474497-C327-44C0-B110-0C3E19DD40E9}">
+            <Component Id="cmp36A0834229EB6B88BDCE2001E79781F8" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{DBA2AA41-F7B2-451B-B9F6-6B0923B2CEC3}">
                 <File Id="fil9F194E38D98CF479176D3F2EE03319B0" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\MigraDoc.Rendering-WPF.dll" />
             </Component>
-            <Component Id="cmp3C064030D9A7C1C032E1BFEC13674B86" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{1D53BF4C-4A4A-4213-94B7-741E42F55D50}">
+            <Component Id="cmp3C064030D9A7C1C032E1BFEC13674B86" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{0066CB67-802F-4875-A05D-74791A148116}">
                 <File Id="fil26FA095F0204984BC173D88CEB7E3FD4" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\MigraDoc.RtfRendering-WPF.dll" />
             </Component>
-            <Component Id="cmp0BA41B589F60C3734756135DFBBCD965" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{1756BE6F-F784-47A5-9259-76BA9C2C0A45}">
+            <Component Id="cmpED502A934EB0F9B9648F571CDB59A1F0" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{5E4F560A-6D7C-4B5F-81F0-D5B6C43E5EE8}">
+                <File Id="fil372A2352475858A0F52438C1A625CBED" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\NLog.config" />
+            </Component>
+            <Component Id="cmpF32A178C70D9CEABD0953CD50B842D00" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{7210B6CD-6DFB-4D67-85EF-C9D760C857F2}">
+                <File Id="fil49E1D7CE3D7A4DEBBAFCC9BF882D3CAD" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\NLog.dll" />
+            </Component>
+            <Component Id="cmp63B9A0D19617BB727B35CA23D44FBF78" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{54D74D70-874B-4805-BC65-3D8801909E86}">
+                <File Id="filFCBDBDA20FED60426C9AE26768F6B95B" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\NLog.xml" />
+            </Component>
+            <Component Id="cmpB8966786BAD15F0DEC24DC7FFD3BDE76" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{35F1C583-C80C-4F15-B27D-FB855C232680}">
+                <File Id="fil5F1DC9A053607EB546C751EF9583EC85" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\OxyPlot.dll" />
+            </Component>
+            <Component Id="cmp8EB909AE573A6283E67AE4B79FBC04A9" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{83A88C13-C9FC-4C84-85C4-924CA09D9805}">
+                <File Id="filC363DE746DC5C433A472C19EBF0951F3" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\OxyPlot.pdb" />
+            </Component>
+            <Component Id="cmp10B2806AB101078EAEC23BA543BAF622" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{6150AE34-6690-4393-844B-44426B7F97F5}">
+                <File Id="fil14166E46805B77E05FAE0B715F57182B" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\OxyPlot.Wpf.dll" />
+            </Component>
+            <Component Id="cmpF019A5EACB128FFD9527FC1AB9A98D94" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{875DC036-3CC2-41FB-9B4C-209037B6282E}">
+                <File Id="fil80D17C3256006233B3B897DC6333AE3F" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\OxyPlot.Wpf.pdb" />
+            </Component>
+            <Component Id="cmpB760D22B58355B7CB58E670FC0137557" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{25E1DF95-012F-4ED0-B17C-A259750BC3AF}">
+                <File Id="fil383201F98FB53400E1EB18C492FDCEE7" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\OxyPlot.Wpf.xml" />
+            </Component>
+            <Component Id="cmpBFF185EC8307EF1DE3C0B839B8A7F26D" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{08DC3625-B600-48E0-B280-4240319D977A}">
+                <File Id="fil3AEE107246D969BA3527B1D6FFB28618" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\OxyPlot.xml" />
+            </Component>
+            <Component Id="cmp0BA41B589F60C3734756135DFBBCD965" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{807359E0-F63A-4AAC-A032-6BF6D0C93036}">
                 <File Id="fil592E318E72275877B09ED35691CE7A2D" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\PdfSharp-WPF.dll" />
             </Component>
-            <Component Id="cmp3DF5D5E8469DEB09ECB8656F335FDC76" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{B60727D6-3BC9-4297-9730-07B5CDA68505}">
+            <Component Id="cmp3DF5D5E8469DEB09ECB8656F335FDC76" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{C0A05971-7723-41DA-AECA-D535E4DBC5FD}">
                 <File Id="fil5BE75B1561C5ADA79714E1E06095EF1F" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\PdfSharp.Charting-WPF.dll" />
             </Component>
-            <Component Id="cmpA02809C8432627B4A305A58EF30C744B" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{82D9819A-D4D9-4D38-9DAB-C0503E415B45}">
+            <Component Id="cmpA02809C8432627B4A305A58EF30C744B" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{49B81578-71FD-468D-9429-FBDFC342115C}">
                 <File Id="filE1F143549819CB0BC148E23A826E1BC1" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\System.Data.SQLite.dll" />
             </Component>
-            <Component Id="cmp052052FC1B3B2FDCD52D1458567A5946" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{AFEE3A4F-C102-41E8-BF28-7F544E865BFC}">
+            <Component Id="cmp052052FC1B3B2FDCD52D1458567A5946" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{EBFD1728-FA68-4736-8B72-E32A5D54A1B9}">
                 <File Id="filC80840FBB1F80464C246657C68AEF6D9" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\System.Data.SQLite.dll.config" />
             </Component>
-            <Component Id="cmpB5F780A6113A290F64B723B023A916F5" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{5E70903C-87AE-4365-AD60-DC42EC6E5024}">
+            <Component Id="cmpB5F780A6113A290F64B723B023A916F5" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{F12E5A83-7C28-4E74-BFA5-A1B68B16FF09}">
                 <File Id="fil45DB73A5B6363BCDD35771171890734E" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\System.Data.SQLite.EF6.dll" />
             </Component>
-            <Component Id="cmp93731588C074ECFE35659FFDA0016873" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{D1E3540B-61D4-4D97-84D2-D7423613EA1A}">
+            <Component Id="cmp93731588C074ECFE35659FFDA0016873" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{58FFEE70-7730-4975-82CC-362DEB80AD93}">
                 <File Id="fil78ED62AF536B6A8FAACE5862034F295A" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\System.Data.SQLite.Linq.dll" />
             </Component>
-            <Component Id="cmp1EC869A800659552E1D1C1D720C7E0F1" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{52DC44A9-11EA-47F8-AC8E-20C90CCD151E}">
+            <Component Id="cmp1EC869A800659552E1D1C1D720C7E0F1" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{096F5848-8CC5-4CE8-8B36-5EFC58239D67}">
                 <File Id="fil18D6DD5042AC8336BF6BFDAE6B22CC17" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\System.Data.SQLite.xml" />
             </Component>
-            <Component Id="cmp5575FCF0813863C859B8B5DCD357A6CB" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{F0F3EBE2-728C-408C-A5AE-46F8B7565260}">
+            <Component Id="cmp5575FCF0813863C859B8B5DCD357A6CB" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{912D40BB-6B68-41DB-B951-43C30F5FEEA1}">
                 <File Id="fil50A43BB319AFDBE82B7B4B7869D9442A" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\System.Windows.Interactivity.dll" />
             </Component>
-            <Component Id="cmpB0FD68E83355789D176374DC88407C87" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{780015CD-FF9C-490A-8400-9B0ED350589A}">
+            <Component Id="cmpB0FD68E83355789D176374DC88407C87" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{A1B6A16B-D26D-4525-9DB8-42BAC56C28E3}">
                 <File Id="filD706E9EE5A71F84D0E130823CFB8B8F9" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\TECUserControlLibrary.dll" />
             </Component>
-            <Component Id="cmpE45CAD6FF2C6BDF06099542222CB2B42" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{910DD29F-B7A6-4762-9EEC-3889F1628109}">
+            <Component Id="cmpE45CAD6FF2C6BDF06099542222CB2B42" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{4228F9EA-1D30-4590-8CF0-F9379C69FFAC}">
                 <File Id="fil1F23D4DFFCCDF4F9BE9F6CB1F6C6E37F" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\TECUserControlLibrary.dll.config" />
             </Component>
-            <Component Id="cmp90F8874DEE5B023EE037563B287F576A" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{41181546-61D0-4B6F-B113-E741CE72CC64}">
+            <Component Id="cmp90F8874DEE5B023EE037563B287F576A" Directory="ESTIMATEBUILDERDIRECTORY" Guid="{45310CBD-B5D0-4C98-ADC6-960C20569748}">
                 <File Id="fil2E6E6646C571100796FD0B4376294BEE" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\TECUserControlLibrary.pdb" />
             </Component>
-            <Component Id="cmpFBEABB992C602FC42BEA739761CA3D98" Directory="dir590D05023F17A601E8A50C1189CF4F91" Guid="{99A4AEB2-4DD7-44BC-AF00-E0D27809C8D7}">
+            <Component Id="cmpFBEABB992C602FC42BEA739761CA3D98" Directory="dir590D05023F17A601E8A50C1189CF4F91" Guid="{EF613116-6053-4ABA-9102-98AEEFAD5B29}">
                 <File Id="fil9A3C311E6AE19CA747A44824C91FD028" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\app.publish\EstimateBuilder.exe" />
             </Component>
-            <Component Id="cmp0B56B2AC427CCF18D66F55A7393BD548" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{98A5B084-0EB6-4112-B882-D9D60D49E24A}">
+            <Component Id="cmp0B56B2AC427CCF18D66F55A7393BD548" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{D58EAD3F-DF48-4921-A3DC-869DE4ED4BA9}">
                 <File Id="fil72D8B7D49F75F53C1CDA4FB7DDEE722C" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\de\MigraDoc.DocumentObjectModel-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp20DAB3E03113EF39A77709ED0BA9703C" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{34F1C7D2-26F1-4504-899B-9DA8A8460DDA}">
+            <Component Id="cmp20DAB3E03113EF39A77709ED0BA9703C" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{950C5B9E-0773-48CF-8850-00CA87416A35}">
                 <File Id="fil8B668C8BF3954E70FA3F9CF9DD8FAD4C" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\de\MigraDoc.Rendering-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp491D9AE2F99D76A6E3978DB64E5AFEF5" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{69785784-F074-4C9A-874B-22913B6B0D43}">
+            <Component Id="cmp491D9AE2F99D76A6E3978DB64E5AFEF5" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{2B72CCAE-E2A0-4D45-9E5B-49BB7955B91C}">
                 <File Id="filB769D17FE9D4646E9FFF2910844FF58D" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\de\MigraDoc.RtfRendering-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp65AFF0F763B37582111ECB1BA6CA9D64" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{E18120CB-6556-488C-BAC1-DCBBB26A40FD}">
+            <Component Id="cmp65AFF0F763B37582111ECB1BA6CA9D64" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{179809E4-D5C8-4CB8-A27B-6AC7D0BD1210}">
                 <File Id="fil511E1D784D988C7189A5CFC2391539B7" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\de\PdfSharp-WPF.resources.dll" />
             </Component>
-            <Component Id="cmpC8D04ED2FA859EEEACE5564B80C6F480" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{7D6C8111-7D72-43A0-BA13-06A61D8E01C9}">
+            <Component Id="cmpC8D04ED2FA859EEEACE5564B80C6F480" Directory="dirF1CCA9A31F81AD4AAFB74E033497CF5F" Guid="{0583AE14-A2FE-44E7-B385-58773D5D2E90}">
                 <File Id="filC713EEBBA936635F29D739AFDF1CA410" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\de\PdfSharp.Charting-WPF.resources.dll" />
             </Component>
-            <Component Id="cmp3CB384B5B501B8DE65B1725FA939BF83" Directory="dirFBDD965B90778564FCC06529B632619F" Guid="{EAF87271-43C7-4CB9-AFED-89497BA186BA}">
+            <Component Id="cmp428B1C4A6C19C230724285041E88FE09" Directory="dirDCAB9E8CEB52D476685F8633F0F57270" Guid="{7B74C03C-BFE6-4230-A152-1EADE516412D}">
+                <File Id="fil252EF56471E7FD6D10784DE88BD99EC3" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\logs\2017-11-09.log" />
+            </Component>
+            <Component Id="cmp3CB384B5B501B8DE65B1725FA939BF83" Directory="dirFBDD965B90778564FCC06529B632619F" Guid="{2BD601DA-C055-45AC-972A-AC6A8BFACF59}">
                 <File Id="filF4DC49A7B4399EF5E7FF6D5ACFE26EE1" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\x64\SQLite.Interop.dll" />
             </Component>
-            <Component Id="cmpD398FC68AFC82516662DC77B3B35F1FE" Directory="dir25A43F355DB0C0881EFCA59DD02C9870" Guid="{B51EDF10-34BE-4117-B15D-62CE1592145F}">
+            <Component Id="cmpD398FC68AFC82516662DC77B3B35F1FE" Directory="dir25A43F355DB0C0881EFCA59DD02C9870" Guid="{EB59044A-B319-48FA-A5C0-DB0D49D6EDD2}">
                 <File Id="fil2138133507D3775BF4EFD41E995A7396" KeyPath="yes" Source="$(var.EstimateBuilder.TargetDir)\x86\SQLite.Interop.dll" />
             </Component>
         </ComponentGroup>
