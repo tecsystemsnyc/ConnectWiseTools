@@ -127,9 +127,6 @@
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\AddPanelControl.xaml.cs">
-      <DependentUpon>AddPanelControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\AddTagControl.xaml.cs">
       <DependentUpon>AddTagControl.xaml</DependentUpon>
     </Compile>
@@ -450,10 +447,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\AddEquipmentControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\AddPanelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
