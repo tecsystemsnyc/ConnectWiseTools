@@ -90,6 +90,8 @@ namespace TECUserControlLibrary.BaseVMs
             SplashVM = splashVM;
             MenuVM = menuVM;
             StatusBarVM = new StatusBarVM();
+            StatusBarVM.Version = Version;
+            StatusBarVM.CurrentStatusText = "Ready";
             setupCommands();
             CurrentVM = SplashVM;
             ClosingCommand = new RelayCommand<CancelEventArgs>(closingExecute);
