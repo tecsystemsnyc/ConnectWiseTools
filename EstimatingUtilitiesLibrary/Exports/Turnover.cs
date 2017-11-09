@@ -12,7 +12,7 @@ namespace EstimatingUtilitiesLibrary.Exports
     public static class Turnover
     {
 
-        public static void GenerateEngineeringExport(string path, TECBid bid, TECEstimator estimate)
+        public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate)
         {
             using (WordprocessingDocument package = WordprocessingDocument.Create(path, 
                 DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
@@ -24,7 +24,9 @@ namespace EstimatingUtilitiesLibrary.Exports
                 package.MainDocumentPart.Document = document;
 
                 body.Append(introParagraph(bid));
-                body.Append(engSummary(estimate));
+                body.Append(laborSummary(estimate));
+                body.Append(costSummary(estimate));
+                body.Append(saleSummary(estimate));
 
                 package.MainDocumentPart.Document.Save();
             }
@@ -265,20 +267,55 @@ namespace EstimatingUtilitiesLibrary.Exports
             return par;
         }
 
-        private static Paragraph engSummary(TECEstimator estimate)
+        private static Paragraph laborSummary(TECEstimator estimate)
         {
             Paragraph par = new Paragraph();
-            Text laborText = new Text(String.Format("Engineering Labor: {0}", estimate.ENGLaborHours));
-            Text materialText = new Text(String.Format("Material Cost: {0}", estimate.TECMaterialCost));
-            Text subLaborText = new Text(String.Format("SubContractor Labor: {0}", estimate.SubcontractorLaborHours));
-            Text subMaterialText = new Text(String.Format("SubContractor Material: {0}", estimate.ElectricalMaterialCost));
-            par.Append(new Run(laborText));
+            Text pmLaborText = new Text(String.Format("Project Management Labor: {0}", estimate.PMLaborHours));
+            Text engLaborText = new Text(String.Format("Engineering Labor: {0}", estimate.ENGLaborHours));
+            Text softLaborText = new Text(String.Format("Software Labor: {0}", estimate.SoftLaborHours));
+            Text commLaborText = new Text(String.Format("Commissioning Labor: {0}", estimate.CommLaborHours));
+            Text graphLaborText = new Text(String.Format("Graphics Labor: {0}", estimate.GraphLaborHours));
+        
+            par.Append(new Run(pmLaborText));
+            par.Append(new Break());
+            par.Append(new Run(engLaborText));
+            par.Append(new Break());
+            par.Append(new Run(softLaborText));
+            par.Append(new Break());
+            par.Append(new Run(commLaborText));
+            par.Append(new Break());
+            par.Append(new Run(graphLaborText));
+
+            return par;
+        }
+
+        private static Paragraph costSummary(TECEstimator estimate)
+        {
+            Paragraph par = new Paragraph();
+            Text materialText = new Text(String.Format("Material Cost: {0:C}", estimate.TECMaterialCost));
+            Text subLaborText = new Text(String.Format("Subcontractor Labor: {0:C}", estimate.SubcontractorLaborHours));
+            Text subMaterialText = new Text(String.Format("Subcontractor Material: {0:C}", estimate.ElectricalMaterialCost));
+            
             par.Append(new Break());
             par.Append(new Run(materialText));
             par.Append(new Break());
             par.Append(new Run(subLaborText));
             par.Append(new Break());
             par.Append(new Run(subMaterialText));
+
+            return par;
+        }
+
+        private static Paragraph saleSummary(TECEstimator estimate)
+        {
+            Paragraph par = new Paragraph();
+            Text saleText = new Text(String.Format("Sale Price: {0:C}", estimate.TECMaterialCost));
+            Text marginText = new Text(String.Format("Margin: %{0F2}", estimate.Margin));
+
+            par.Append(new Break());
+            par.Append(new Run(saleText));
+            par.Append(new Break());
+            par.Append(new Run(marginText));
 
             return par;
         }
