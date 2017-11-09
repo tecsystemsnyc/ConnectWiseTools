@@ -29,6 +29,7 @@ namespace TECUserControlLibrary.Utilities
     public class LabeledSelector : InterfaceDataTemplateSelector<TECLabeled> { }
     public class ControllerSelector : InterfaceDataTemplateSelector<TECController> { }
     public class PanelSelector : InterfaceDataTemplateSelector<TECPanel> { }
+    public class MiscSelector : InterfaceDataTemplateSelector<TECMisc> { }
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }
