@@ -635,19 +635,26 @@ namespace EstimatingLibrary
             _subcontractorMarkup = parametersSource.SubcontractorMarkup;
             _subcontractorEscalation = parametersSource.SubcontractorEscalation;
 
+            _desiredConfidence = parametersSource.DesiredConfidence;
+
             _pmCoef = parametersSource.PMCoef;
+            _pmCoefStdError = parametersSource.PMCoefStdError;
             _pmRate = parametersSource.PMRate;
 
             _engCoef = parametersSource.ENGCoef;
+            _engCoefStdError = parametersSource.ENGCoefStdError;
             _engRate = parametersSource.ENGRate;
 
             _commCoef = parametersSource.CommCoef;
+            _commCoefStdError = parametersSource.CommCoefStdError;
             _commRate = parametersSource.CommRate;
 
             _softCoef = parametersSource.SoftCoef;
+            _softCoefStdError = parametersSource.SoftCoefStdError;
             _softRate = parametersSource.SoftRate;
 
             _graphCoef = parametersSource.GraphCoef;
+            _graphCoefStdError = parametersSource.CommCoefStdError;
             _graphRate = parametersSource.GraphRate;
 
             _electricalRate = parametersSource.ElectricalRate;
@@ -663,18 +670,23 @@ namespace EstimatingLibrary
         public void UpdateConstants(TECParameters labor)
         {
             PMCoef = labor.PMCoef;
+            PMCoefStdError = labor.PMCoefStdError;
             PMRate = labor.PMRate;
 
             ENGCoef = labor.ENGCoef;
+            ENGCoefStdError = labor.ENGCoefStdError;
             ENGRate = labor.ENGRate;
 
             SoftCoef = labor.SoftCoef;
+            SoftCoefStdError = labor.SoftCoefStdError;
             SoftRate = labor.SoftRate;
 
             GraphCoef = labor.GraphCoef;
+            GraphCoefStdError = labor.GraphCoefStdError;
             GraphRate = labor.GraphRate;
 
             CommCoef = labor.CommCoef;
+            CommCoefStdError = labor.CommCoefStdError;
             CommRate = labor.CommRate;
 
             ElectricalRate = labor.ElectricalRate;
