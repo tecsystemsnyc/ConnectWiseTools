@@ -61,13 +61,9 @@ namespace EstimateBuilder
 
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            //if (DebugHandler.isReleased)
-            //{
-            //    logger.Error("Exception: " + e.Exception);
-            //    logger.Error("Inner Exception: " + e.Exception.InnerException);
-            //    logger.Error("Stack Trace: " + e.Exception.StackTrace);
-            //    e.Handled = true;
-            //}
+            logger.Fatal(e.Exception, "Unhandled exception!");
+            logger.Fatal("Stack Trace: {0}", e.Exception.StackTrace);
+            MessageBox.Show(string.Format("Fatal error occured: {0}", e.Exception));
         }
     }
 }
