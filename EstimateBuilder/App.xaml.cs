@@ -12,15 +12,15 @@ namespace EstimateBuilder
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        static App()
+        public App() : base()
         {
+            this.Dispatcher.UnhandledException += logUnhandledException;
             DispatcherHelper.Initialize();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             logger.Debug("Estimate Builder starting up.");
-            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
 
             // Check if this was launched by double-clicking a doc. If so, use that as the
             // startup file name.
@@ -59,11 +59,11 @@ namespace EstimateBuilder
             base.OnStartup(e);
         }
 
-        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void logUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            logger.Fatal(e.Exception, "Unhandled exception!");
-            logger.Fatal("Stack Trace: {0}", e.Exception.StackTrace);
-            MessageBox.Show(string.Format("Fatal error occured: {0}", e.Exception));
+            logger.Fatal("Unhandled exception: {0}", e.Exception.Message);
+            logger.Fatal("Stack trace: {0}", e.Exception.StackTrace);
+            MessageBox.Show("Fatal error occured, view logs for more information.", "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
