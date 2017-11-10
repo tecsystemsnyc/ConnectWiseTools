@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Threading;
+using NLog;
 using System;
 using System.Windows;
 
@@ -9,6 +10,8 @@ namespace EstimateBuilder
     /// </summary>
     public partial class App : Application
     {
+        static Logger logger = LogManager.GetCurrentClassLogger();
+
         static App()
         {
             DispatcherHelper.Initialize();
@@ -35,13 +38,15 @@ namespace EstimateBuilder
                     Uri uri = new Uri(fname);
                     fname = uri.LocalPath;
 
-                    this.Properties["StartupFile"] = fname;
-
+                    EstimateBuilder.Properties.Settings.Default.StartUpFilePath = fname;
                 }
                 catch (Exception ex)
                 {
                     // For some reason, this couldn't be read as a URI.
-                    // Do what you must...
+                    logger.Error(ex, "StartUp file could not be read.");
+                    string message = "File could not be read by Estimate Builder.";
+                    MessageBox.Show(message);
+                    return;
                 }
             }
 
