@@ -22,9 +22,13 @@ namespace EstimateBuilder
         {
             logger.Debug("Estimate Builder starting up.");
 
-            // Check if this was launched by double-clicking a doc. If so, use that as the
-            // startup file name.
-            if (AppDomain.CurrentDomain.SetupInformation
+            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null 
+                && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
+
+
+                // Check if this was launched by double-clicking a doc. If so, use that as the
+                // startup file name.
+                if (AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments?.ActivationData != null
             && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)

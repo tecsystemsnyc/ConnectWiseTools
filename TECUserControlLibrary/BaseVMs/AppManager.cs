@@ -208,6 +208,7 @@ namespace TECUserControlLibrary.BaseVMs
             if (success)
             {
                 StatusBarVM.CurrentStatusText = "Ready";
+                deltaStack = new DeltaStacker(watcher, isTemplates);
             }
             else
             {

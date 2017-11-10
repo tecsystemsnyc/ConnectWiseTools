@@ -208,7 +208,7 @@
                         </Grid>
                         <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
                                          ElectricalMaterialSource="{Binding Templates.Catalogs.ConnectionTypes}"
-                                                            Selected="{Binding Selected}"
+                                                            Selected="{Binding Selected, Mode=OneWayToSource}"
                                          ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
                     </Grid>
                 </DataTemplate>

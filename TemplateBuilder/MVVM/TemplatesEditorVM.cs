@@ -35,6 +35,7 @@ namespace TemplateBuilder.MVVM
             set
             {
                 _selected = value;
+                RaisePropertyChanged("Selected");
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -45,7 +46,9 @@ namespace TemplateBuilder.MVVM
             Templates = templates;
             ScopeCollection = new ScopeCollectionsTabVM(templates);
             MaterialsTab = new MaterialVM(templates);
-            MaterialsTab.SelectionChanged += obj => { Selected = obj; };
+            MaterialsTab.SelectionChanged += obj => {
+                Selected = obj;
+            };
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
             ControllersPanelsVM = new ControllersPanelsVM(templates);
