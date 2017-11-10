@@ -176,17 +176,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Design\DesignDataService.cs" />
-    <Compile Include="Model\DataItem.cs" />
-    <Compile Include="Model\DataService.cs" />
-    <Compile Include="Model\IDataService.cs" />
     <Compile Include="MVVM\TemplatesManager.cs" />
     <Compile Include="MVVM\TemplatesEditorVM.cs" />
     <Compile Include="MVVM\TemplatesSplashVM.cs" />
     <Compile Include="MVVM\TemplatesMenuVM.cs" />
     <Compile Include="MVVM\ViewModelLocator.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -247,9 +241,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="TBLogo.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TECLogo.png" />
