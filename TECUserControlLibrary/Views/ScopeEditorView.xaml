@@ -60,7 +60,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="220"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
@@ -124,11 +124,9 @@
                 <TabItem Header="Controllers and Panels">
                     <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
                 </TabItem>
-                <!--Old Location-->
-                <TabItem Visibility="Collapsed"/>
-                <!--Proposal And Budget-->
-                <TabItem Visibility="Collapsed"/>
-                <TabItem Visibility="Collapsed"/>
+                <TabItem Header="Network">
+                    <views:NetworkView ViewModel="{Binding NetworkVM}"/>
+                </TabItem>
                 <TabItem Header="Misc.">
                     <views:MiscCostsView ViewModel="{Binding MiscVM}"
                                          DropHandler="{Binding MiscVM}"/>

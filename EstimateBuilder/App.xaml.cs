@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Threading;
+using System;
 using System.Windows;
 
 namespace EstimateBuilder
@@ -19,27 +20,30 @@ namespace EstimateBuilder
 
             // Check if this was launched by double-clicking a doc. If so, use that as the
             // startup file name.
+            if (AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments?.ActivationData != null
+            && AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments.ActivationData.Length > 0)
+            {
+                string fname = "No filename given";
+                try
+                {
+                    fname = AppDomain.CurrentDomain.SetupInformation
+             .ActivationArguments.ActivationData[0];
 
-            //if (ApplicationDeployment.IsNetworkDeployed)
-            //{
-            //    if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
-            //    {
-            //        string fname = "No filename given";
-            //        try
-            //        {
-            //            fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
-            //            // It comes in as a URI; this helps to convert it to a path.
-            //            Uri uri = new Uri(fname);
-            //            fname = uri.LocalPath;
+                    // It comes in as a URI; this helps to convert it to a path.
+                    Uri uri = new Uri(fname);
+                    fname = uri.LocalPath;
 
-            //            EstimateBuilder.Properties.Settings.Default.StartupFile = fname;
-            //        }
-            //        catch (Exception exc)
-            //        {
-            //            logger.Error("Could not open startup file. Exception: " + exc.Message);
-            //        }
-            //    }
-            //}
+                    this.Properties["StartupFile"] = fname;
+
+                }
+                catch (Exception ex)
+                {
+                    // For some reason, this couldn't be read as a URI.
+                    // Do what you must...
+                }
+            }
 
             base.OnStartup(e);
         }

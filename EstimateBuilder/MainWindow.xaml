@@ -88,14 +88,7 @@
                                 <views:ProposalView
                                 ViewModel="{Binding ProposalVM}"/>
                             </TabItem>
-                            <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
-                                <views:SettingsView
-                                ViewModel="{Binding SettingsVM}"/>
-                            </TabItem>
-                            <TabItem Header="Network">
-                                        <views:NetworkView
-                                    ViewModel="{Binding NetworkVM}"/>
-                                    </TabItem>
+                            
                         </TabControl>
                         <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
                                                    Grid.Row="3" Grid.ColumnSpan="3"

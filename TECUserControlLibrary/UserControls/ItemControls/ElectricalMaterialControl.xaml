@@ -7,7 +7,7 @@
                        xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="electricalMaterialControl"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="30" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
         <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=electricalMaterialControl}"/>
     </local:BaseItemControl.Resources>
@@ -24,7 +24,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label FontSize="10" Content="{Binding Name}"/>
+            <Label FontSize="10" Content="{Binding Name}" FontWeight="DemiBold"/>
             <Label FontSize="10" Content="{Binding Description}" Grid.Column="1"/>
         </Grid>
     </Border>
