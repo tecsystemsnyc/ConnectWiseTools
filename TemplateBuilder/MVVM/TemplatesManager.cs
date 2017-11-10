@@ -64,10 +64,18 @@ namespace TemplateBuilder.MVVM
         private void userStartedEditorHandler(string path)
         {
             buildTitleString(path, "TemplateBuilder");
-            databaseManager = new DatabaseManager<TECTemplates>(path);
-            databaseManager.LoadComplete += handleLoaded;
-            ViewEnabled = false;
-            databaseManager.AsyncLoad();
+            if(path != "")
+            {
+                databaseManager = new DatabaseManager<TECTemplates>(path);
+                databaseManager.LoadComplete += handleLoaded;
+                ViewEnabled = false;
+                databaseManager.AsyncLoad();
+            } else
+            {
+                handleLoaded(new TECTemplates());
+
+            }
+            
         }
 
         protected override void handleLoaded(TECTemplates loaded)
@@ -75,7 +83,7 @@ namespace TemplateBuilder.MVVM
             templates = loaded;
             watcher = new ChangeWatcher(templates);
             doStack = new DoStacker(watcher);
-            deltaStack = new DeltaStacker(watcher);
+            deltaStack = new DeltaStacker(watcher, true);
 
             EditorVM = new TemplatesEditorVM(templates);
             CurrentVM = EditorVM;

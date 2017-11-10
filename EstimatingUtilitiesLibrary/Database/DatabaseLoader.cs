@@ -1106,6 +1106,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[ParametersTable.ID.Name].ToString());
             TECParameters paramters = new TECParameters(guid);
+            paramters.DesiredConfidence = UtilitiesMethods.StringToEnum<Confidence>(row[ParametersTable.DesiredConfidence.Name].ToString());
             assignValuePropertiesFromTable(paramters, new ParametersTable(), row);
             return paramters;
         }

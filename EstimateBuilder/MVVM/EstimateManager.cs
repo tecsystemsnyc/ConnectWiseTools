@@ -116,7 +116,7 @@ namespace EstimateBuilder.MVVM
                 } 
                 else
                 {
-                    handleLoaded(new TECBid());
+                    handleLoaded(getNewWorkingScope());
                 }
                 
             };
@@ -341,7 +341,12 @@ namespace EstimateBuilder.MVVM
         }
         protected override TECBid getNewWorkingScope()
         {
-            return new TECBid();
+            TECBid outBid = new TECBid();
+            if(templates!= null && templates.Parameters.Count > 0)
+            {
+                outBid.Parameters = templates.Parameters[0];
+            }
+            return outBid;
         }
 
     }

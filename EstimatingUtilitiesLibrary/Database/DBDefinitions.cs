@@ -104,6 +104,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type ParameterType = typeof(TECParameters);
 
         public static TableField ID = new TableField("ID", "TEXT", ParameterType.GetProperty("Guid"));
+        public static TableField Label = new TableField("Label", "TEXT", ParameterType.GetProperty("Label"));
 
         public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"));
         public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"));
@@ -122,18 +123,25 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField RequiresWrapUp = new TableField("RequiresWrapUp", "INTEGER", ParameterType.GetProperty("RequiresWrapUp"));
 
         #region Labor
+        public static TableField DesiredConfidence = new TableField("DesiredConfidence", "TEXT", ParameterType.GetProperty("DesiredConfidence"));
+
+        public static TableField PMCoefStdError = new TableField("PMCoefStdError", "REAL", ParameterType.GetProperty("PMCoefStdError"));
         public static TableField PMCoef = new TableField("PMCoef", "REAL", ParameterType.GetProperty("PMCoef"));
         public static TableField PMRate = new TableField("PMRate", "REAL", ParameterType.GetProperty("PMRate"));
 
+        public static TableField ENGCoefStdError = new TableField("ENGCoefStdError", "REAL", ParameterType.GetProperty("ENGCoefStdError"));
         public static TableField ENGCoef = new TableField("ENGCoef", "REAL", ParameterType.GetProperty("ENGCoef"));
         public static TableField ENGRate = new TableField("ENGRate", "REAL", ParameterType.GetProperty("ENGRate"));
 
+        public static TableField CommCoefStdError = new TableField("CommCoefStdError", "REAL", ParameterType.GetProperty("CommCoefStdError"));
         public static TableField CommCoef = new TableField("CommCoef", "REAL", ParameterType.GetProperty("CommCoef"));
         public static TableField CommRate = new TableField("CommRate", "REAL", ParameterType.GetProperty("CommRate"));
 
+        public static TableField SoftCoefStdError = new TableField("SoftCoefStdError", "REAL", ParameterType.GetProperty("SoftCoefStdError"));
         public static TableField SoftCoef = new TableField("SoftCoef", "REAL", ParameterType.GetProperty("SoftCoef"));
         public static TableField SoftRate = new TableField("SoftRate", "REAL", ParameterType.GetProperty("SoftRate"));
 
+        public static TableField GraphCoefStdError = new TableField("GraphCoefStdError", "REAL", ParameterType.GetProperty("GraphCoefStdError"));
         public static TableField GraphCoef = new TableField("GraphCoef", "REAL", ParameterType.GetProperty("GraphCoef"));
         public static TableField GraphRate = new TableField("GraphRate", "REAL", ParameterType.GetProperty("GraphRate"));
         #endregion
@@ -159,6 +167,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<TableField> fields = new List<TableField>()
         {
+            Label,
             ID,
             Escalation,
             Overhead,
@@ -174,15 +183,21 @@ namespace EstimatingUtilitiesLibrary.Database
             IsTaxExempt,
             RequiresBond,
             RequiresWrapUp,
+            DesiredConfidence,
             PMCoef,
+            PMCoefStdError,
             PMRate,
             ENGCoef,
+            ENGCoefStdError,
             ENGRate,
             CommCoef,
+            CommCoefStdError,
             CommRate,
             SoftCoef,
+            SoftCoefStdError,
             SoftRate,
             GraphCoef,
+            GraphCoefStdError,
             GraphRate,
             ElectricalRate,
             ElectricalSuperRate,
@@ -252,8 +267,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "Note";
         public static Type ObjectType = typeof(TECLabeled);
-
-
+        
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField NoteText = new TableField("Label", "TEXT", ObjectType.GetProperty("Label"));
 
