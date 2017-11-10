@@ -49,7 +49,13 @@
     <!--File Associations-->
     <DirectoryRef Id="TARGETDIR">
       <Component Id="EBRegistryEntries" Guid="2d5ca767-8f18-406c-a347-8400c5afb885">
-        <RegistryValue Root="HKMU" Key="Software\Classes\.edb" Name="" Value="" Type="string" />
+        <ProgId Id="EstimateBuilder"
+                Description="Estimate">
+          <Extension Id="edb" >
+            <Verb Id="open" Argument="&quot;%1&quot;"
+               Target="[ESTIMATEBUILDERDIRECTORY]EstimateBuilder.exe" />
+          </Extension>
+        </ProgId>
       </Component>
     </DirectoryRef>
 
@@ -57,6 +63,7 @@
 		<Feature Id="EstimateBuilder" Title="Estimate Builder" Level="1">
 			<ComponentGroupRef Id="EBComponentGroupID"/>
       <ComponentRef Id="EBShortcut"/>
+      <ComponentRef Id="EBRegistryEntries"/>
 		</Feature>
     <Feature Id="TemplateBuilder" Title="Template Builder" Level="1">
       <ComponentGroupRef Id="TBComponentGroupID"/>
