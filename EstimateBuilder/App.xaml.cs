@@ -22,50 +22,24 @@ namespace EstimateBuilder
         {
             logger.Debug("Estimate Builder starting up.");
 
-            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null 
-                && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
-
-
-                // Check if this was launched by double-clicking a doc. If so, use that as the
-                // startup file name.
-                if (AppDomain.CurrentDomain.SetupInformation
-                .ActivationArguments?.ActivationData != null
-            && AppDomain.CurrentDomain.SetupInformation
-                .ActivationArguments.ActivationData.Length > 0)
+            if (e.Args.Length > 0)
             {
-                string fname = "No filename given";
-                try
-                {
-                    fname = AppDomain.CurrentDomain.SetupInformation
-             .ActivationArguments.ActivationData[0];
-
-                    // It comes in as a URI; this helps to convert it to a path.
-                    Uri uri = new Uri(fname);
-                    fname = uri.LocalPath;
-
-                    EstimateBuilder.Properties.Settings.Default.StartUpFilePath = fname;
-                    EstimateBuilder.Properties.Settings.Default.Save();
-                }
-                catch (Exception ex)
-                {
-                    // For some reason, this couldn't be read as a URI.
-                    logger.Error(ex, "StartUp file could not be read.");
-                    string message = "File could not be read by Estimate Builder.";
-                    MessageBox.Show(message);
-                    return;
-                }
+                string startUpFilePath = e.Args[0];
+                logger.Debug("StartUp file path: {0}", startUpFilePath);
+                EstimateBuilder.Properties.Settings.Default.StartUpFilePath = startUpFilePath;
+                EstimateBuilder.Properties.Settings.Default.Save();
             }
             else
             {
-                logger.Debug("No activation arguments passed.");
+                logger.Debug("No startup arguments passed.");
             }
-
             base.OnStartup(e);
         }
 
         private void logUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             logger.Fatal("Unhandled exception: {0}", e.Exception.Message);
+            logger.Fatal("Inner exception: {0}", e.Exception.InnerException.Message);
             logger.Fatal("Stack trace: {0}", e.Exception.StackTrace);
             MessageBox.Show("Fatal error occured, view logs for more information.", "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
             System.Environment.Exit(0);
