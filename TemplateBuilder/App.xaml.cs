@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Threading;
+using NLog;
+using System;
 using System.Windows;
 
 namespace TemplateBuilder
@@ -8,6 +10,8 @@ namespace TemplateBuilder
     /// </summary>
     public partial class App : Application
     {
+        static Logger logger = LogManager.GetCurrentClassLogger();
+
         static App()
         {
             DispatcherHelper.Initialize();
@@ -15,44 +19,51 @@ namespace TemplateBuilder
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            logger.Debug("Template Builder starting up.");
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
 
             // Check if this was launched by double-clicking a doc. If so, use that as the
             // startup file name.
+            if (AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments?.ActivationData != null
+            && AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments.ActivationData.Length > 0)
+            {
+                string fname = "No filename given";
+                try
+                {
+                    fname = AppDomain.CurrentDomain.SetupInformation
+             .ActivationArguments.ActivationData[0];
 
-            //if (ApplicationDeployment.IsNetworkDeployed)
-            //{
-            //    if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
-            //    {
-            //        string fname = "No filename given";
-            //        try
-            //        {
-            //            fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
-            //            // It comes in as a URI; this helps to convert it to a path.
-            //            Uri uri = new Uri(fname);
-            //            fname = uri.LocalPath;
+                    // It comes in as a URI; this helps to convert it to a path.
+                    Uri uri = new Uri(fname);
+                    fname = uri.LocalPath;
 
-            //            TemplateBuilder.Properties.Settings.Default.StartupFile = fname;
-            //        }
-            //        catch (Exception exc)
-            //        {
-            //            logger.Error("Could not open startup file. Exception: " + exc.Message);
-            //        }
-            //    }
-            //}
+                    TemplateBuilder.Properties.Settings.Default.StartUpFilePath = fname;
+                    TemplateBuilder.Properties.Settings.Default.Save();
+                }
+                catch (Exception ex)
+                {
+                    // For some reason, this couldn't be read as a URI.
+                    logger.Error(ex, "StartUp file could not be read.");
+                    string message = "File could not be read by Template Builder.";
+                    MessageBox.Show(message);
+                    return;
+                }
+            }
+            else
+            {
+                logger.Debug("No activation arguments passed.");
+            }
 
             base.OnStartup(e);
         }
 
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            //if (DebugHandler.isReleased)
-            //{
-            //    logger.Error("Exception: " + e.Exception);
-            //    logger.Error("Inner Exception: " + e.Exception.InnerException);
-            //    logger.Error("Stack Trace: " + e.Exception.StackTrace);
-            //    e.Handled = true;
-            //}
+            logger.Fatal(e.Exception, "Unhandled exception!");
+            logger.Fatal("Stack Trace: {0}", e.Exception.StackTrace);
+            MessageBox.Show(string.Format("Fatal error occured: {0}", e.Exception));
         }
     }
 }
