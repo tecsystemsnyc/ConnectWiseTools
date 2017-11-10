@@ -103,6 +103,7 @@ namespace EstimateBuilder.MVVM
         
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
         {
+            this.templatesFilePath = templatesFilePath;
             buildTitleString(bidFilePath, "Estimate Builder");
             templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
             templatesDatabaseManager.LoadComplete += scopeManager =>
