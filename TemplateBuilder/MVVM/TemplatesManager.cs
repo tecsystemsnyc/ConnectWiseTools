@@ -55,6 +55,7 @@ namespace TemplateBuilder.MVVM
         public TemplatesManager() : base("Template Builder",
             new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
         {
+            splashVM.TemplatesPath = getStartUpFilePath();
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Template Builder";
             setupCommands();
@@ -99,6 +100,12 @@ namespace TemplateBuilder.MVVM
         protected override string getVersionNumber()
         {
             return Properties.Resources.Version;
+        }
+        private string getStartUpFilePath()
+        {
+            string startUpFilePath = Properties.Settings.Default.StartUpFilePath;
+            Properties.Settings.Default.StartUpFilePath = null;
+            return startUpFilePath;
         }
         protected override TECTemplates getWorkingScope()
         {

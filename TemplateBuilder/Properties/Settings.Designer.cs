@@ -8,10 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TemplateBuilder.Properties
-{
-
-
+namespace TemplateBuilder.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
@@ -45,6 +44,18 @@ namespace TemplateBuilder.Properties
             }
             set {
                 this["DefaultDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartUpFilePath {
+            get {
+                return ((string)(this["StartUpFilePath"]));
+            }
+            set {
+                this["StartUpFilePath"] = value;
             }
         }
     }

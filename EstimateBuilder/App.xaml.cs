@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Threading;
+using NLog;
 using System;
 using System.Windows;
 
@@ -9,6 +10,8 @@ namespace EstimateBuilder
     /// </summary>
     public partial class App : Application
     {
+        static Logger logger = LogManager.GetCurrentClassLogger();
+
         static App()
         {
             DispatcherHelper.Initialize();
@@ -16,6 +19,7 @@ namespace EstimateBuilder
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            logger.Debug("Estimate Builder starting up.");
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
 
             // Check if this was launched by double-clicking a doc. If so, use that as the
@@ -35,14 +39,21 @@ namespace EstimateBuilder
                     Uri uri = new Uri(fname);
                     fname = uri.LocalPath;
 
-                    this.Properties["StartupFile"] = fname;
-
+                    EstimateBuilder.Properties.Settings.Default.StartUpFilePath = fname;
+                    EstimateBuilder.Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
                 {
                     // For some reason, this couldn't be read as a URI.
-                    // Do what you must...
+                    logger.Error(ex, "StartUp file could not be read.");
+                    string message = "File could not be read by Estimate Builder.";
+                    MessageBox.Show(message);
+                    return;
                 }
+            }
+            else
+            {
+                logger.Debug("No activation arguments passed.");
             }
 
             base.OnStartup(e);

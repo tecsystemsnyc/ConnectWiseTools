@@ -95,6 +95,7 @@ namespace EstimateBuilder.MVVM
         public EstimateManager() : base("Estimate Builder", 
             new EstimateSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new EstimateMenuVM())
         {
+            splashVM.BidPath = getStartUpFilePath();
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Estimate Builder";
             setupCommands();
@@ -326,6 +327,13 @@ namespace EstimateBuilder.MVVM
         protected override string getVersionNumber()
         {
             return Properties.Resources.Version;
+        }
+        private string getStartUpFilePath()
+        {
+            string startUpFilePath = Properties.Settings.Default.StartUpFilePath;
+            Properties.Settings.Default.StartUpFilePath = null;
+            Properties.Settings.Default.Save();
+            return startUpFilePath;
         }
         protected override TECBid getWorkingScope()
         {
