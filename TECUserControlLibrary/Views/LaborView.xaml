@@ -218,6 +218,7 @@
                     SelectedIndex="0"
                     SelectedValue="{Binding Bid.Parameters.DesiredConfidence}"
                     Grid.Row="7" Grid.Column="1"/>
+        <Button Content="Set" Grid.Row="7" Grid.Column="2" Margin="2" Command="{Binding SetDesiredConfidenceCommand}"/>
 
 
         <!--TEC Labor Subtotal-->

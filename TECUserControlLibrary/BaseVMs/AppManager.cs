@@ -26,6 +26,10 @@ namespace TECUserControlLibrary.BaseVMs
         private string _titleString;
         private object _currentVM;
         private bool _viewEnabled;
+        /// <summary>
+        /// Exclusively for use instantiating the delta stacker
+        /// </summary>
+        private bool isTemplates = false;
         protected string appName { get; }
 
         #region Properties
@@ -82,6 +86,7 @@ namespace TECUserControlLibrary.BaseVMs
 
         public AppManager(string name, SplashVM splashVM, MenuVM menuVM)
         {
+            if(typeof(T) == typeof(TECTemplates)) { isTemplates = true; }
             appName = name;
             ViewEnabled = true;
             Version = getVersionNumber();
@@ -158,7 +163,7 @@ namespace TECUserControlLibrary.BaseVMs
                 StatusBarVM.CurrentStatusText = "Saving...";
                 databaseManager.SaveComplete += handleSaveDeltaComplete;
                 databaseManager.AsyncSave(deltaStack.CleansedStack());
-                deltaStack = new DeltaStacker(watcher);
+                deltaStack = new DeltaStacker(watcher, isTemplates);
             }
             else
             {

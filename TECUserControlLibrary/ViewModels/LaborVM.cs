@@ -47,6 +47,18 @@ namespace TECUserControlLibrary.ViewModels
         public bool TemplatesLoaded;
         public ICommand ReloadCommand { get; private set; }
         public RelayCommand<TECParameters> SetParametersCommand { get; private set; }
+        public RelayCommand SetDesiredConfidenceCommand { get; private set; }
+
+        private Confidence _desiredConfidence;
+        public Confidence DesiredConfidence
+        {
+            get { return _desiredConfidence; }
+            set
+            {
+                _desiredConfidence = value;
+                RaisePropertyChanged("DesiredConfidence");
+            }
+        }
 
         public Action LoadTemplates;
 
@@ -59,11 +71,23 @@ namespace TECUserControlLibrary.ViewModels
             Bid = bid;
             Templates = templates;
             Estimate = estimate;
+            DesiredConfidence = bid.Parameters.DesiredConfidence;
 
             ReloadCommand = new RelayCommand(ReloadExecute);
             SetParametersCommand = new RelayCommand<TECParameters>(SetParametersExecute);
+            SetDesiredConfidenceCommand = new RelayCommand(SetConfidenceExecute, CanSetConfidence);
         }
-        
+
+        private void SetConfidenceExecute()
+        {
+            Bid.Parameters.DesiredConfidence = DesiredConfidence;
+        }
+
+        private bool CanSetConfidence()
+        {
+            return DesiredConfidence != Bid.Parameters.DesiredConfidence;
+        }
+
         public void Refresh(TECBid bid, TECEstimator estimate, TECTemplates templates)
         {
             Bid = bid;

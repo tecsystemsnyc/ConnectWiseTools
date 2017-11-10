@@ -27,16 +27,16 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
-                try
-                {
+                //try
+                //{
                     DatabaseUpdater.Update(path, updates);
                     return true;
-                }
-                catch (Exception ex)
-                {
-                    logger.Error("Save delta failed. Exception: " + ex.Message);
-                    return false;
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    logger.Error("Save delta failed. Exception: " + ex.Message);
+                //    return false;
+                //}
             }
             else
             {

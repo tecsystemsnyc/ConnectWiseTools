@@ -53,7 +53,7 @@
                             <Grid Grid.Row="1" Grid.ColumnSpan="17">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="30"/>
@@ -65,7 +65,7 @@
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="30"/>
-                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="TEC: "/>
