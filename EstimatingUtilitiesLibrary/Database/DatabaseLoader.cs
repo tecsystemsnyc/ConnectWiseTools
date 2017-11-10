@@ -681,7 +681,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable DT = SQLiteDB.GetDataFromCommand(constsCommand);
             foreach(DataRow row in DT.Rows)
             {
-                outParameters.Add(getBidParametersFromRow(DT.Rows[0]));
+                outParameters.Add(getBidParametersFromRow(row));
             }
             return outParameters;
         }
