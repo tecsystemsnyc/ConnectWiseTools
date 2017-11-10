@@ -63,10 +63,18 @@ namespace TemplateBuilder.MVVM
         private void userStartedEditorHandler(string path)
         {
             buildTitleString(path, "TemplateBuilder");
-            databaseManager = new DatabaseManager<TECTemplates>(path);
-            databaseManager.LoadComplete += handleLoaded;
-            ViewEnabled = false;
-            databaseManager.AsyncLoad();
+            if(path != "")
+            {
+                databaseManager = new DatabaseManager<TECTemplates>(path);
+                databaseManager.LoadComplete += handleLoaded;
+                ViewEnabled = false;
+                databaseManager.AsyncLoad();
+            } else
+            {
+                handleLoaded(new TECTemplates());
+
+            }
+            
         }
 
         protected override void handleLoaded(TECTemplates loaded)
