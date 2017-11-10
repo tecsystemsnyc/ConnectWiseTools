@@ -25,5 +25,9 @@
                 Grid.Column="1">
             <TextBlock VerticalAlignment="Center">Add Typical</TextBlock>
         </Button>
+        <Button Command="{DynamicResource ThrowExceptionCommand}" Margin="5"
+                Grid.Row="1">
+            <TextBlock VerticalAlignment="Center">Throw Exception</TextBlock>
+        </Button>
     </Grid>
 </Window>

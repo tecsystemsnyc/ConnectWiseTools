@@ -27,11 +27,10 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
-                catchOnRelease("Save delta failed. Exception: ", () =>
+                return catchOnRelease("Save delta failed. Exception: ", () =>
                 {
                     DatabaseUpdater.Update(path, updates);
                 });
-                return true;
             }
             else
             {
@@ -145,18 +144,21 @@ namespace EstimatingUtilitiesLibrary.Database
             LoadComplete?.Invoke(loaded);
         }
 
-        private void catchOnRelease(string message, Action action)
+        private bool catchOnRelease(string message, Action action)
         {
 #if DEBUG
             action();
+            return true;
 #else
             try
             {
                 action();
+                return true;
             }
             catch (Exception ex)
             {
                 logger.Error(message + ex.Message);
+                return false;
             }
 #endif
 

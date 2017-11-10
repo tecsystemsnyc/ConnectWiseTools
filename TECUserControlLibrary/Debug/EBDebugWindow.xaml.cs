@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
@@ -14,6 +15,7 @@ namespace TECUserControlLibrary.Debug
         private TECBid bid;
         private ICommand testNetwork;
         private ICommand addTypical;
+        private ICommand throwException;
 
         public EBDebugWindow(TECBid bid)
         {
@@ -27,12 +29,14 @@ namespace TECUserControlLibrary.Debug
         {
             testNetwork = new RelayCommand(testNetworkExecute);
             addTypical = new RelayCommand(addTypicalExecute);
+            throwException = new RelayCommand(throwExceptionExecute);
         }
         
         private void addResources()
         {
             this.Resources.Add("TestNetworkCommand", testNetwork);
             this.Resources.Add("AddTypicalCommand", addTypical);
+            this.Resources.Add("ThrowExceptionCommand", throwException);
         }
 
         private void testNetworkExecute()
@@ -148,6 +152,11 @@ namespace TECUserControlLibrary.Debug
 
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
+        }
+
+        private void throwExceptionExecute()
+        {
+            throw new Exception("Test Exception.");
         }
     }
 }

@@ -3,13 +3,9 @@
     <!--Global View Model Locator-->
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml">
-        </ResourceDictionary>
-        <ResourceDictionary Source="/TECUserControlLibrary;component/TECControlTemplateDictionary.xaml">
-        </ResourceDictionary>
-        <ResourceDictionary Source="ResourceDictionary.xaml">
-          <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:TemplateBuilder.ViewModel" />
-        </ResourceDictionary>
+        <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
+        <ResourceDictionary Source="/TECUserControlLibrary;component/TECControlTemplateDictionary.xaml"/>
+        <ResourceDictionary Source="ResourceDictionary.xaml"/>
       </ResourceDictionary.MergedDictionaries>
       <localMVVM:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
     </ResourceDictionary>
