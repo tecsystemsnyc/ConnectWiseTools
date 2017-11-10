@@ -27,16 +27,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
-                //try
-                //{
+                catchOnRelease("Save delta failed. Exception: ", () =>
+                {
                     DatabaseUpdater.Update(path, updates);
-                    return true;
-                //}
-                //catch (Exception ex)
-                //{
-                //    logger.Error("Save delta failed. Exception: " + ex.Message);
-                //    return false;
-                //}
+                });
+                return true;
             }
             else
             {
@@ -148,6 +143,23 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             IsBusy = false;
             LoadComplete?.Invoke(loaded);
+        }
+
+        private void catchOnRelease(string message, Action action)
+        {
+#if DEBUG
+            action();
+#else
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(message + ex.Message);
+            }
+#endif
+
         }
     }
 }
