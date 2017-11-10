@@ -19,6 +19,7 @@ namespace EstimateBuilder
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            logger.Debug("Estimate Builder starting up.");
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
 
             // Check if this was launched by double-clicking a doc. If so, use that as the
@@ -39,6 +40,7 @@ namespace EstimateBuilder
                     fname = uri.LocalPath;
 
                     EstimateBuilder.Properties.Settings.Default.StartUpFilePath = fname;
+                    EstimateBuilder.Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
                 {
@@ -48,6 +50,10 @@ namespace EstimateBuilder
                     MessageBox.Show(message);
                     return;
                 }
+            }
+            else
+            {
+                logger.Debug("No activation arguments passed.");
             }
 
             base.OnStartup(e);

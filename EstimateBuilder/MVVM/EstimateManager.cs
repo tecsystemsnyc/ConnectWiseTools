@@ -332,6 +332,7 @@ namespace EstimateBuilder.MVVM
         {
             string startUpFilePath = Properties.Settings.Default.StartUpFilePath;
             Properties.Settings.Default.StartUpFilePath = null;
+            Properties.Settings.Default.Save();
             return startUpFilePath;
         }
         protected override TECBid getWorkingScope()
