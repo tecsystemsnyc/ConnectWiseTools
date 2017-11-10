@@ -29,6 +29,18 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private TECObject _selected;
+        public TECObject Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
+                SelectionChanged?.Invoke(value);
+            }
+        }
+
         #region Connection Types
         private string _connectionTypeName;
         public string ConnectionTypeName
@@ -389,19 +401,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-
-        private TECPanelType _selectedPanelType;
-        public TECPanelType SelectedPanelType
-        {
-            get { return _selectedPanelType; }
-            set
-            {
-                _selectedPanelType = value;
-                RaisePropertyChanged("SelectedPanelType");
-                SelectionChanged?.Invoke(value);
-            }
-        }
-        
+       
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }

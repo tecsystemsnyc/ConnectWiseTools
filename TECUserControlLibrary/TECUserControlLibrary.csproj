@@ -309,11 +309,8 @@
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ConduitTypeGridControl.xaml.cs">
-      <DependentUpon>ConduitTypeGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ConnectionTypeGridControl.xaml.cs">
-      <DependentUpon>ConnectionTypeGridControl.xaml</DependentUpon>
+    <Compile Include="UserControls\ElectricalMaterialGridControl.xaml.cs">
+      <DependentUpon>ElectricalMaterialGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ControllerInPanelGridControl.xaml.cs">
       <DependentUpon>ControllerInPanelGridControl.xaml</DependentUpon>
@@ -326,12 +323,6 @@
     </Compile>
     <Compile Include="UserControls\IOGridControl.xaml.cs">
       <DependentUpon>IOGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\IOModuleGridControl.xaml.cs">
-      <DependentUpon>IOModuleGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PanelTypeGridControl.xaml.cs">
-      <DependentUpon>PanelTypeGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaterialSummaryView.xaml.cs">
       <DependentUpon>MaterialSummaryView.xaml</DependentUpon>
@@ -673,11 +664,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ConduitTypeGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ConnectionTypeGridControl.xaml">
+    <Page Include="UserControls\ElectricalMaterialGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -697,15 +684,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\IOModuleGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\PanelTypeGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\DevicesGridControl.xaml">
+    <Page Include="UserControls\HardwareGridControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -806,8 +785,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="Utilities\BaseConverter.cs" />
-    <Compile Include="UserControls\DevicesGridControl.xaml.cs">
-      <DependentUpon>DevicesGridControl.xaml</DependentUpon>
+    <Compile Include="UserControls\HardwareGridControl.xaml.cs">
+      <DependentUpon>HardwareGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\HelperConverters.cs" />
     <Compile Include="UserControls\ManufacturersGridControl.xaml.cs">

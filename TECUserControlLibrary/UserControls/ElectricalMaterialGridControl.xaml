@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TECUserControlLibrary.UserControls.ConduitTypeGridControl"
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.ElectricalMaterialGridControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              mc:Ignorable="d" 
-             x:Name="parent"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="electricalMaterialGridControl">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,13 +15,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent}">
-        <DataGrid ItemsSource="{Binding Path=ConduitTypesSource}"
+    <Grid DataContext="{Binding ElementName=electricalMaterialGridControl}">
+        <DataGrid ItemsSource="{Binding Path=ElectricalMaterialSource}"
+                  SelectedItem="{Binding Selected}"
                   AutoGenerateColumns="False"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
-
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
                                     Header="Cost" Width="Auto" MinWidth="40"
@@ -42,11 +43,11 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="Associated Costs"/>
                         <controls:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
-                                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                          ViewModel="{Binding ElementName=electricalMaterialGridControl, Path=ViewModel}"
                                                           Grid.Row="1"/>
                         <Label Content="Rated Costs" Grid.Column="1"/>
                         <controls:AssociatedCostsGridControl CostsSource="{Binding RatedCosts}"
-                                                          ViewModel="{Binding ElementName=parent, Path=ViewModel}"
+                                                          ViewModel="{Binding ElementName=electricalMaterialGridControl, Path=ViewModel}"
                                                           Grid.Row="1" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>

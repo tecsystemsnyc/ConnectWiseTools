@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TECUserControlLibrary.UserControls.DevicesGridControl"
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.HardwareGridControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500"
-             x:Name="parent"
+             x:Name="hardwareGridControl"
              xmlns:dd="urn:gong-wpf-dragdrop">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -15,12 +15,12 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent}">
-        <DataGrid ItemsSource="{Binding Path=DevicesSource}"
+    <Grid DataContext="{Binding ElementName=hardwareGridControl}">
+        <DataGrid ItemsSource="{Binding HardwareSource}"
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding SelectedDevice, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                  x:Name="DeviceGrid"
-                  dd:DragDrop.DropHandler="{Binding Path=ViewModel}"
+                  SelectedItem="{Binding Selected}"
+                  x:Name="hardwareGrid"
+                  dd:DragDrop.DropHandler="{Binding DropHandler}"
                   CanUserAddRows="False"
                   CanUserSortColumns="True">
             <DataGrid.Columns>
