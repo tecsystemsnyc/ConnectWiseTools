@@ -34,7 +34,7 @@
                   Target="[ESTIMATEBUILDERDIRECTORY]EstimateBuilder.exe"
                   WorkingDirectory="ESTIMATEBUILDERDIRECTORY"/>
         <RemoveFolder Id="CleanUpEBShortcut" Directory="ApplicationProgramsFolder" On="uninstall"/>
-        <RegistryValue Root="HKCU" Key="Software\Microsoft\EstimateBuilder" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RegistryValue Root="HKMU" Key="Software\Microsoft\EstimateBuilder" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
       </Component>
       <Component Id="TBShortcut" Guid="20b0854f-11eb-4ed0-bcda-7f3deb44dfe6">
         <Shortcut Id="TBStartMenuShortcut"
@@ -42,7 +42,14 @@
                   Target="[TEMPLATEBUILDERDIRECTORY]TemplateBuilder.exe"
                   WorkingDirectory="TEMPLATEBUILDERDIRECTORY"/>
         <RemoveFolder Id="CleanUpTBShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
-        <RegistryValue Root="HKCU" Key="Software\Microsoft\TemplateBuilder" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RegistryValue Root="HKMU" Key="Software\Microsoft\TemplateBuilder" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+    
+    <!--File Associations-->
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="EBRegistryEntries" Guid="2d5ca767-8f18-406c-a347-8400c5afb885">
+        <RegistryValue Root="HKMU" Key="Software\Classes\.edb" Name="" Value="" Type="string" />
       </Component>
     </DirectoryRef>
 
