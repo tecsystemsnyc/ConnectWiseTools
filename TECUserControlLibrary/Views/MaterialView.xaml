@@ -97,8 +97,9 @@
                         <Button Grid.Row="3" Grid.Column="2" 
                                 Content="Add" Margin="2"
                                 Command="{Binding AddDeviceCommand}"/>
-                        <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
-                                                 ViewModel="{Binding ElementName=materialView, Path=ViewModel}"
+                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.Devices}"
+                                                     Selected="{Binding Selected}"
+                                                 DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
                                                  Grid.Row="4"/>
                     </Grid>
                 </DataTemplate>
@@ -119,6 +120,8 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
@@ -128,6 +131,10 @@
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding ValveListPrice}"/>
+                            <TextBlock Text="Labor:" Margin="5,0,0,0"
+                       VerticalAlignment="Center" Grid.Column="4"/>
+                            <TextBox  Grid.Column="5" Margin="2"
+                      Text="{Binding ValveLabor}"/>
                         </Grid>
                         <Grid Grid.Row="1" >
                             <Grid.ColumnDefinitions>
@@ -136,22 +143,25 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ValveLabor}"/>
+                            
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="2"/>
+                                       VerticalAlignment="Center" Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding ValveManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="3"/>
+                                      DisplayMemberPath="Label" Grid.Column="1"/>
+                            <TextBlock Text="Actuator:" Margin="5,0,0,0"
+                                       VerticalAlignment="Center" Grid.Column="2"/>
+                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Devices}"
+                                      SelectedItem="{Binding ValveActuator}"
+                                      DisplayMemberPath="Name" Grid.Column="3"/>
 
                         </Grid>
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
                                 Content="Add" Margin="2"
                                 Command="{Binding AddValveCommand}"/>
-                        <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Valves}"
-                                                 ViewModel="{Binding ElementName=materialView, Path=ViewModel}"
+                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.Valves}"
+                                                 DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
+                                                     Selected="{Binding Selected}"
                                                  Grid.Row="3"/>
                     </Grid>
                 </DataTemplate>
@@ -196,8 +206,9 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddConnectionTypeCommand}"/>
                         </Grid>
-                        <controls:ConnectionTypeGridControl Grid.Row="2" Margin="5"
-                                         ConnectionTypesSource="{Binding Templates.Catalogs.ConnectionTypes}"
+                        <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
+                                         ElectricalMaterialSource="{Binding Templates.Catalogs.ConnectionTypes}"
+                                                            Selected="{Binding Selected}"
                                          ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
                     </Grid>
                 </DataTemplate>
@@ -243,8 +254,9 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddConduitTypeCommand}"/>
                         </Grid>
-                        <controls:ConduitTypeGridControl Grid.Row="2" Margin="5"
-                                      ConduitTypesSource="{Binding Templates.Catalogs.ConduitTypes}"
+                        <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
+                                      ElectricalMaterialSource="{Binding Templates.Catalogs.ConduitTypes}"
+                                                                Selected="{Binding Selected}"
                                       ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
                     </Grid>
                 </DataTemplate>
@@ -296,9 +308,10 @@
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
                                     Content="Add" Margin="2"
                                     Command="{Binding AddControllerTypeCommand}"/>
-                        <!--<controls:ControllerTypeGridControl ControllerTypeSource="{Binding Templates.Catalogs.ControllerTypes}"
-                                                Grid.Row="2" Margin="5"
-                                                ViewModel="{Binding}"/>-->
+                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.ControllerTypes}"
+                                                Grid.Row="3" Margin="5"
+                                                DropHandler="{Binding}"
+                                                            Selected="{Binding Selected}"/>
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="PanelTypeTemplate">
@@ -349,9 +362,10 @@
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
                                 Content="Add" Margin="2"
                                 Command="{Binding AddPanelTypeCommand}"/>
-                        <controls:PanelTypeGridControl PanelTypeSource="{Binding Templates.Catalogs.PanelTypes}"
+                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.PanelTypes}"
+                                                      Selected="{Binding Selected}"
                                                 Grid.Row="3" Margin="5"
-                                                ViewModel="{Binding}"/>
+                                                DropHandler="{Binding}"/>
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="AssociatedCostTemplate">
@@ -473,7 +487,8 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                         </Grid>
-                        <controls:IOModuleGridControl IOModuleSource="{Binding Templates.Catalogs.IOModules}"
+                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.IOModules}"
+                                                      Selected="{Binding Selected}"
                                                Grid.Row="2" Margin="5"
                                                       />
                     </Grid>
@@ -531,7 +546,7 @@
                             <TextBox Text="{Binding TagToAdd.Label}" Grid.Row="0" Grid.Column="1"/>
                             <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"/>
                         </Grid>
-                        <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Manufacturers}"
+                        <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Tags}"
                                                            Grid.Row="1"/>
                     </Grid>
                 </DataTemplate>

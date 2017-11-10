@@ -9,14 +9,14 @@ namespace TECUserControlLibrary.UserControls
     /// <summary>
     /// Interaction logic for ConnectionTypeGridControl.xaml
     /// </summary>
-    public partial class ConnectionTypeGridControl : UserControl
+    public partial class ElectricalMaterialGridControl : UserControl
     {
         #region DPs
 
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypesSource
+        public ObservableCollection<TECElectricalMaterial> ElectricalMaterialSource
         {
             get { return (ObservableCollection<TECElectricalMaterial>)GetValue(ConnectionTypesSourceProperty); }
             set { SetValue(ConnectionTypesSourceProperty, value); }
@@ -27,7 +27,7 @@ namespace TECUserControlLibrary.UserControls
         /// </summary>
         public static readonly DependencyProperty ConnectionTypesSourceProperty =
             DependencyProperty.Register("ConnectionTypesSource", typeof(ObservableCollection<TECElectricalMaterial>),
-              typeof(ConnectionTypeGridControl), new PropertyMetadata(default(ObservableCollection<TECElectricalMaterial>)));
+              typeof(ElectricalMaterialGridControl), new PropertyMetadata(default(ObservableCollection<TECElectricalMaterial>)));
 
 
         /// <summary>
@@ -44,10 +44,24 @@ namespace TECUserControlLibrary.UserControls
         /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(ConnectionTypeGridControl));
+              typeof(ElectricalMaterialGridControl));
+
+
+
+        public TECElectricalMaterial Selected
+        {
+            get { return (TECElectricalMaterial)GetValue(SelectedProperty); }
+            set { SetValue(SelectedProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Selected.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedProperty =
+            DependencyProperty.Register("Selected", typeof(TECElectricalMaterial), typeof(ElectricalMaterialGridControl));
+
+
         #endregion
 
-        public ConnectionTypeGridControl()
+        public ElectricalMaterialGridControl()
         {
             InitializeComponent();
         }
