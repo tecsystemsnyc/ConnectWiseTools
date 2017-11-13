@@ -136,7 +136,9 @@
             <!--<views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
                              Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>-->
             <views:PropertiesView Selected="{Binding Selected}"
-                             Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"/>
+                             Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                                  ViewModel="{Binding PropertiesVM}"
+                                  DropHandler="{Binding PropertiesVM}"/>
         </Grid>
     </Border>
     

@@ -19,6 +19,7 @@ namespace TemplateBuilder.MVVM
         public MaterialVM MaterialsTab { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
         public SystemHierarchyVM SystemHierarchyVM { get; set; }
+        public PropertiesVM PropertiesVM { get; set; }
 
         public TECTemplates Templates
         {
@@ -56,6 +57,8 @@ namespace TemplateBuilder.MVVM
             SystemHierarchyVM = new SystemHierarchyVM(templates);
             SystemHierarchyVM.Selected += obj => { Selected = obj; };
 
+            PropertiesVM = new PropertiesVM(templates.Catalogs, templates);
+
             AddParameterCommand = new RelayCommand(AddParametersExecute);
 
         }
@@ -69,6 +72,7 @@ namespace TemplateBuilder.MVVM
             MaterialsTab.Refresh(templates);
             ControllersPanelsVM.Refresh(templates);
             SystemHierarchyVM.Refresh(templates);
+            PropertiesVM.Refresh(templates.Catalogs, templates);
         }
 
         public void DragOver(IDropInfo dropInfo)

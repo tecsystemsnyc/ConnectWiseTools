@@ -43,11 +43,11 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="Associated Costs"/>
                         <controls:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
-                                                          ViewModel="{Binding ElementName=electricalMaterialGridControl, Path=ViewModel}"
+                                                          DropHandler="{Binding ElementName=electricalMaterialGridControl, Path=ViewModel}"
                                                           Grid.Row="1"/>
                         <Label Content="Rated Costs" Grid.Column="1"/>
                         <controls:AssociatedCostsGridControl CostsSource="{Binding RatedCosts}"
-                                                          ViewModel="{Binding ElementName=electricalMaterialGridControl, Path=ViewModel}"
+                                                          DropHandler="{Binding ElementName=electricalMaterialGridControl, Path=ViewModel}"
                                                           Grid.Row="1" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>

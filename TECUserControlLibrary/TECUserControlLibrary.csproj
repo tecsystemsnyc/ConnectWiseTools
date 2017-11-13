@@ -262,6 +262,7 @@
     <Compile Include="ViewModels\Interfaces\IComponentSummaryVM.cs" />
     <Compile Include="ViewModels\LengthSummaryVM.cs" />
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
+    <Compile Include="ViewModels\PropertiesVM.cs" />
     <Compile Include="ViewModels\SplashVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\ItemizedSummaryVM.cs" />
