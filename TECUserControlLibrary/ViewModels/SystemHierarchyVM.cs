@@ -289,9 +289,7 @@ namespace TECUserControlLibrary.ViewModels
                 obj.Branches.Add(new TECScopeBranch(obj.IsTypical));
             }
         }
-
         
-
         private void deleteSystemExecute(TECSystem obj)
         {
             if(scopeManager is TECBid bid)

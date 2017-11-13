@@ -15,11 +15,13 @@ namespace TemplateBuilder.MVVM
         private TECTemplates _templates;
         private object _selected;
 
-        public ScopeCollectionsTabVM ScopeCollection { get; set; }
-        public MaterialVM MaterialsTab { get; set; }
-        public ControllersPanelsVM ControllersPanelsVM { get; set; }
-        public SystemHierarchyVM SystemHierarchyVM { get; set; }
-        public PropertiesVM PropertiesVM { get; set; }
+        public ScopeCollectionsTabVM ScopeCollection { get; }
+        public MaterialVM MaterialsTab { get; }
+        public ControllersPanelsVM ControllersPanelsVM { get; }
+        public SystemHierarchyVM SystemHierarchyVM { get; }
+        public EquipmentHierarchyVM EquipmentHierarchyVM { get; }
+        public SubScopeHierarchyVM SubScopeHierarchyVM { get; }
+        public PropertiesVM PropertiesVM { get; }
 
         public TECTemplates Templates
         {
@@ -56,7 +58,11 @@ namespace TemplateBuilder.MVVM
             ControllersPanelsVM.SelectionChanged += obj => { Selected = obj; };
             SystemHierarchyVM = new SystemHierarchyVM(templates);
             SystemHierarchyVM.Selected += obj => { Selected = obj; };
-
+            EquipmentHierarchyVM = new EquipmentHierarchyVM(templates);
+            EquipmentHierarchyVM.Selected += obj => { Selected = obj; };
+            SubScopeHierarchyVM = new SubScopeHierarchyVM(templates);
+            SubScopeHierarchyVM.Selected += obj => { Selected = obj; };
+            
             PropertiesVM = new PropertiesVM(templates.Catalogs, templates);
 
             AddParameterCommand = new RelayCommand(AddParametersExecute);
@@ -72,6 +78,8 @@ namespace TemplateBuilder.MVVM
             MaterialsTab.Refresh(templates);
             ControllersPanelsVM.Refresh(templates);
             SystemHierarchyVM.Refresh(templates);
+            EquipmentHierarchyVM.Refresh(templates);
+            SubScopeHierarchyVM.Refresh(templates);
             PropertiesVM.Refresh(templates.Catalogs, templates);
         }
 
