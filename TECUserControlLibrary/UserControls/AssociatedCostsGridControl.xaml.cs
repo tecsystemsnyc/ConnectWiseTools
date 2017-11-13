@@ -56,6 +56,16 @@ namespace TECUserControlLibrary.UserControls
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
+
+        public bool ReadOnly
+        {
+            get { return (bool)GetValue(ReadOnlyProperty); }
+            set { SetValue(ReadOnlyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanEdit.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReadOnlyProperty =
+            DependencyProperty.Register("ReadOnly", typeof(bool), typeof(AssociatedCostsGridControl), new PropertyMetadata(false));
         #endregion
         public AssociatedCostsGridControl()
         {

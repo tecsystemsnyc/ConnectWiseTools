@@ -20,6 +20,7 @@
         <DataGrid ItemsSource="{Binding Path=LabeledSource}"
                   AutoGenerateColumns="False"
                   x:Name="TagsGrid"
+                  IsReadOnly="{Binding ReadOnly}"
                   CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Label}" Header="{Binding Data.LabelName, 
