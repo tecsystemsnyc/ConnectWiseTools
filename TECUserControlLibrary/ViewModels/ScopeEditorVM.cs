@@ -121,7 +121,7 @@ namespace TECUserControlLibrary.ViewModels
             Bid = bid;
             Templates = templates;
 
-            ScopeCollection.Refresh(Templates);
+            ScopeCollection.Refresh(Templates, bid.Catalogs);
             ControllersPanelsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
             TypicalEditVM.Refresh(Bid);
@@ -133,7 +133,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionsTabVM(Templates);
+            ScopeCollection = new ScopeCollectionsTabVM(Templates, Bid.Catalogs);
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }

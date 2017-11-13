@@ -45,7 +45,7 @@ namespace TemplateBuilder.MVVM
         public TemplatesEditorVM(TECTemplates templates)
         {
             Templates = templates;
-            ScopeCollection = new ScopeCollectionsTabVM(templates);
+            ScopeCollection = new ScopeCollectionsTabVM(templates, templates.Catalogs);
             MaterialsTab = new MaterialVM(templates);
             MaterialsTab.SelectionChanged += obj => {
                 Selected = obj;
@@ -68,7 +68,7 @@ namespace TemplateBuilder.MVVM
         public void Refresh(TECTemplates templates)
         {
             Templates = templates;
-            ScopeCollection.Refresh(templates);
+            ScopeCollection.Refresh(templates, templates.Catalogs);
             MaterialsTab.Refresh(templates);
             ControllersPanelsVM.Refresh(templates);
             SystemHierarchyVM.Refresh(templates);

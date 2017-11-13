@@ -50,6 +50,7 @@ namespace TECUserControlLibrary.ViewModels
         private ObservableCollection<TECObject> _resultCollection;
         private TECTemplates _templates;
         private AllSearchableObjects _chosenType;
+        private TECCatalogs catalogs;
 
         public ICommand SearchCollectionCommand { get; private set; }
         public ICommand EndSearchCommand { get; private set; }
@@ -75,9 +76,10 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Intializers
-        public ScopeCollectionsTabVM(TECTemplates templates)
+        public ScopeCollectionsTabVM(TECTemplates templates, TECCatalogs catalogs)
         {
             Templates = templates;
+            this.catalogs = catalogs; 
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             populateItemsCollections();
@@ -87,9 +89,10 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Methods
 
-        public void Refresh(TECTemplates templates)
+        public void Refresh(TECTemplates templates, TECCatalogs catalogs)
         {
             Templates = templates;
+            this.catalogs = catalogs;
             populateItemsCollections();
         }
 
@@ -111,13 +114,13 @@ namespace TECUserControlLibrary.ViewModels
                     ResultCollection = getResultCollection(Templates.SubScopeTemplates, searchCriteria);
                     break;
                 case AllSearchableObjects.Devices:
-                    ResultCollection = getResultCollection(Templates.Catalogs.Devices, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.Devices, searchCriteria);
                     break;
                 case AllSearchableObjects.Controllers:
                     ResultCollection = getResultCollection(Templates.ControllerTemplates, searchCriteria);
                     break;
                 case AllSearchableObjects.AssociatedCosts:
-                    ResultCollection = getResultCollection(Templates.Catalogs.AssociatedCosts, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.AssociatedCosts, searchCriteria);
                     break;
                 case AllSearchableObjects.Panels:
                     ResultCollection = getResultCollection(Templates.PanelTemplates, searchCriteria);
@@ -129,22 +132,22 @@ namespace TECUserControlLibrary.ViewModels
                     ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.Electrical), searchCriteria);
                     break;
                 case AllSearchableObjects.ControllerTypes:
-                    ResultCollection = getResultCollection(Templates.Catalogs.ControllerTypes, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.ControllerTypes, searchCriteria);
                     break;
                 case AllSearchableObjects.PanelTypes:
-                    ResultCollection = getResultCollection(Templates.Catalogs.PanelTypes, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.PanelTypes, searchCriteria);
                     break;
                 case AllSearchableObjects.Tags:
-                    ResultCollection = getResultCollection(Templates.Catalogs.Tags, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.Tags, searchCriteria);
                     break;
                 case AllSearchableObjects.Wires:
-                    ResultCollection = getResultCollection(Templates.Catalogs.ConnectionTypes, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.ConnectionTypes, searchCriteria);
                     break;
                 case AllSearchableObjects.Conduits:
-                    ResultCollection = getResultCollection(Templates.Catalogs.ConduitTypes, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.ConduitTypes, searchCriteria);
                     break;
                 case AllSearchableObjects.Valves:
-                    ResultCollection = getResultCollection(Templates.Catalogs.Valves, searchCriteria);
+                    ResultCollection = getResultCollection(catalogs.Valves, searchCriteria);
                     break;
                 default:
                     break;
@@ -188,7 +191,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     break;
                 case AllSearchableObjects.Devices:
-                    foreach (TECDevice dev in Templates.Catalogs.Devices)
+                    foreach (TECDevice dev in catalogs.Devices)
                     {
                         ResultCollection.Add(dev);
                     }
@@ -224,13 +227,13 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     break;
                 case AllSearchableObjects.Wires:
-                    foreach(TECElectricalMaterial wire in Templates.Catalogs.ConnectionTypes)
+                    foreach(TECElectricalMaterial wire in catalogs.ConnectionTypes)
                     {
                         ResultCollection.Add(wire);
                     }
                     break;
                 case AllSearchableObjects.Conduits:
-                    foreach (TECElectricalMaterial conduit in Templates.Catalogs.ConduitTypes)
+                    foreach (TECElectricalMaterial conduit in catalogs.ConduitTypes)
                     {
                         ResultCollection.Add(conduit);
                     }
@@ -250,9 +253,9 @@ namespace TECUserControlLibrary.ViewModels
             //    Templates.SystemTemplates.CollectionChanged -= SystemTemplates_CollectionChanged;
             //    Templates.EquipmentTemplates.CollectionChanged -= EquipmentTemplates_CollectionChanged;
             //    Templates.SubScopeTemplates.CollectionChanged -= SubScopeTemplates_CollectionChanged;
-            //    Templates.Catalogs.Devices.CollectionChanged -= Devices_CollectionChanged;
+            //    catalogs.Devices.CollectionChanged -= Devices_CollectionChanged;
             //    Templates.ControllerTemplates.CollectionChanged -= ControllerTemplates_CollectionChanged;
-            //    Templates.Catalogs.AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
+            //    catalogs.AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
             //    Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
             //    Templates.MiscCostTemplates.CollectionChanged -= MiscCostTemplates_CollectionChanged;
             //}
@@ -263,9 +266,9 @@ namespace TECUserControlLibrary.ViewModels
             //Templates.SystemTemplates.CollectionChanged += SystemTemplates_CollectionChanged;
             //Templates.EquipmentTemplates.CollectionChanged += EquipmentTemplates_CollectionChanged;
             //Templates.SubScopeTemplates.CollectionChanged += SubScopeTemplates_CollectionChanged;
-            //Templates.Catalogs.Devices.CollectionChanged += Devices_CollectionChanged;
+            //catalogs.Devices.CollectionChanged += Devices_CollectionChanged;
             //Templates.ControllerTemplates.CollectionChanged += ControllerTemplates_CollectionChanged;
-            //Templates.Catalogs.AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
+            //catalogs.AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
             //Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
             //Templates.MiscCostTemplates.CollectionChanged += MiscCostTemplates_CollectionChanged;
         }
@@ -322,7 +325,6 @@ namespace TECUserControlLibrary.ViewModels
             return outCollection;
         }
         #endregion
-
-       
+        
     }
 }
