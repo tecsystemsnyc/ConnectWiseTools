@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Bundle Name="EstimatingToolsBootstrapper" Version="1.7.0" Manufacturer="" UpgradeCode="32287ad8-c8c8-494f-a18b-ad4b3a840963">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+
+		<Chain>
+			<PackageGroupRef Id="NetFx471Redist"/>
+      <MsiPackage Id="EstimatingTools" SourceFile="$(var.EstimatingTools.TargetPath)"/>
+		</Chain>
+	</Bundle>
+</Wix>
