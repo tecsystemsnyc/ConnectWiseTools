@@ -50,6 +50,9 @@
             <DataTemplate x:Key="misc">
                 <pControls:MiscPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
+            <DataTemplate x:Key="ioModule">
+                <pControls:IOModulePropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -81,6 +84,9 @@
             <utilities:MiscSelector x:Key="miscSelector"
                                     InterfaceTemplate="{StaticResource misc}"
                                     DefaultTemplate="{StaticResource default}"/>
+            <utilities:IOModuleSelector x:Key="ioModuleSelector"
+                                        InterfaceTemplate="{StaticResource ioModule}"
+                                        DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -97,6 +103,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ControllerSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PanelSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource miscSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ioModuleSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

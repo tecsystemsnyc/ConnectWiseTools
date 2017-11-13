@@ -410,7 +410,23 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, AllSearchableObjects>("Misc. Wiring", AllSearchableObjects.MiscWiring),
             new Tuple<string, AllSearchableObjects>("Tags", AllSearchableObjects.Tags),
             new Tuple<string, AllSearchableObjects>("Controller Types", AllSearchableObjects.ControllerTypes),
-            new Tuple<string, AllSearchableObjects>("Panel Types", AllSearchableObjects.PanelTypes)
+            new Tuple<string, AllSearchableObjects>("Panel Types", AllSearchableObjects.PanelTypes),
+            new Tuple<string, AllSearchableObjects>("IO Modules", AllSearchableObjects.IOModules)
+        };
+
+        public static List<Tuple<string, IOType>> IOSelectorList = new List<Tuple<string, IOType>>
+        {
+            new Tuple<string, IOType>("AI", IOType.AI),
+            new Tuple<string, IOType>("AO", IOType.AO),
+            new Tuple<string, IOType>("DI", IOType.DI),
+            new Tuple<string, IOType>("DO", IOType.AO),
+            new Tuple<string, IOType>("UI", IOType.UI),
+            new Tuple<string, IOType>("UO", IOType.UO),
+            new Tuple<string, IOType>("BACnetIP", IOType.BACnetIP),
+            new Tuple<string, IOType>("BACnetMSTP", IOType.BACnetMSTP),
+            new Tuple<string, IOType>("LonWorks", IOType.LonWorks),
+            new Tuple<string, IOType>("ModbusRTU", IOType.ModbusRTU),
+            new Tuple<string, IOType>("ModbusTCP", IOType.ModbusTCP)
         };
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
@@ -475,7 +491,8 @@ namespace TECUserControlLibrary.Utilities
         Tags,
         AssociatedCosts,
         Wires,
-        Conduits
+        Conduits,
+        IOModules
     }
     public enum TypicalInstanceEnum { Typical, Instance }
     public enum MaterialSummaryIndex { Devices, Controllers, Panels, Wire, Conduit, Misc }

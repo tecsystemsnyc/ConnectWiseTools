@@ -268,6 +268,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
+                            <RowDefinition Height="120"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -305,14 +306,52 @@
                                       SelectedItem="{Binding ControllerTypeManufacturer}"
                                       DisplayMemberPath="Label" Grid.Column="3"/>
                         </Grid>
-                        <Button Grid.Row="2" Grid.ColumnSpan="4"
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="IO: "/>
+                                <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
+                                      SelectedValue="{Binding SelectedIO}"
+                                      DisplayMemberPath="Item1"
+                                      SelectedValuePath="Item2"
+                                      Grid.Column="1"/>
+                                <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="2"/>
+                                <controls:IOGridControl IOSource="{Binding ControllerTypeIO}"
+                                                    Grid.Row="1" Grid.ColumnSpan="3"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Max IO Modules: "/>
+                                <controls:HardwareGridControl HardwareSource="{Binding ControllerTypeModules}"
+                                                          Grid.Row="1" 
+                                                              DropHandler="{Binding}"/>
+                            </Grid>
+                            
+                        </Grid>
+                        <Button Grid.Row="3" Grid.ColumnSpan="4"
                                     Content="Add" Margin="2"
                                     Command="{Binding AddControllerTypeCommand}"/>
                         <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.ControllerTypes}"
-                                                Grid.Row="3" Margin="5"
+                                                Grid.Row="4" Margin="5"
                                                 DropHandler="{Binding}"
                                                             Selected="{Binding Selected}"/>
                     </Grid>
+                        
                 </DataTemplate>
                 <DataTemplate x:Key="PanelTypeTemplate">
                     <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
@@ -445,6 +484,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
+                            <RowDefinition Height="120"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
@@ -489,10 +529,31 @@
                     Content="Add" Margin="2"
                     Command="{Binding AddIOModuleCommand}"/>
                         </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="IO: "/>
+                            <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
+                                    SelectedValue="{Binding SelectedIO}"
+                                    DisplayMemberPath="Item1"
+                                    SelectedValuePath="Item2"
+                                    Grid.Column="1"/>
+                            <Button Content="Add" Command="{Binding AddIOToModuleCommand}" Grid.Column="2"/>
+                            <controls:IOGridControl IOSource="{Binding ModuleIO}"
+                                                Grid.Row="1" Grid.ColumnSpan="3"/>
+                        </Grid>
                         <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.IOModules}"
-                                                      Selected="{Binding Selected}"
-                                               Grid.Row="2" Margin="5"
-                                                      />
+                                                    Selected="{Binding Selected}"
+                                            Grid.Row="3" Margin="5"
+                                                    />
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="ManufacturerTemplate">

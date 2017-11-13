@@ -230,6 +230,18 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("IOModuleManufacturer");
             }
         }
+        private ObservableCollection<TECIO> _moduleIO;
+        public ObservableCollection<TECIO> ModuleIO
+        {
+            get { return _moduleIO; }
+            set
+            {
+                _moduleIO = value;
+                RaisePropertyChanged("ModuleIO");
+            }
+        }
+        public ICommand AddIOToModuleCommand { get; private set; }
+
         #endregion
         #region Devices
         private string _deviceName;
@@ -376,6 +388,37 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ControllerTypeManufacturer");
             }
         }
+        private IOType _selectedIO;
+        public IOType SelectedIO
+        {
+            get { return _selectedIO; }
+            set
+            {
+                _selectedIO = value;
+                RaisePropertyChanged("SelectedIO");
+            }
+        }
+        private ObservableCollection<TECIO> _controllerTypeIO;
+        public ObservableCollection<TECIO> ControllerTypeIO
+        {
+            get { return _controllerTypeIO; }
+            set
+            {
+                _controllerTypeIO = value;
+                RaisePropertyChanged("ControllerTypeIO");
+            }
+        }
+        private ObservableCollection<TECIOModule> _controllerTypeModules;
+        public ObservableCollection<TECIOModule> ControllerTypeModules
+        {
+            get { return _controllerTypeModules; }
+            set
+            {
+                _controllerTypeModules = value;
+                RaisePropertyChanged("ControllerTypeModules");
+            }
+        } 
+        public ICommand AddIOCommand { get; private set; }
         #endregion
         #region Manufacturer
         private TECManufacturer _manufacturerToAdd;
@@ -456,8 +499,54 @@ namespace TECUserControlLibrary.ViewModels
             AddDeviceCommand = new RelayCommand(addDeviceExecute, canAddDevice);
             AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
+            AddIOCommand = new RelayCommand(addIOToControllerTypeExecute, canAddIOToControllerType);
+            AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
         }
-        
+
+        private void addIOToControllerTypeExecute()
+        {
+            bool wasAdded = false;
+            foreach(TECIO io in ControllerTypeIO)
+            {
+                if(io.Type == SelectedIO)
+                {
+                    io.Quantity++;
+                    wasAdded = true;
+                    break;
+                }
+            }
+            if (!wasAdded)
+            {
+                ControllerTypeIO.Add(new TECIO(SelectedIO));
+            }
+        }
+        private bool canAddIOToControllerType()
+        {
+            return true;
+        }
+
+        private void addIOToModuleExecute()
+        {
+            bool wasAdded = false;
+            foreach (TECIO io in ModuleIO)
+            {
+                if (io.Type == SelectedIO)
+                {
+                    io.Quantity++;
+                    wasAdded = true;
+                    break;
+                }
+            }
+            if (!wasAdded)
+            {
+                ModuleIO.Add(new TECIO(SelectedIO));
+            }
+        }
+        private bool canAddIOToModule()
+        {
+            return true;
+        }
+
         private void addDeviceExecute()
         {
             TECDevice toAdd = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
@@ -556,8 +645,10 @@ namespace TECUserControlLibrary.ViewModels
             ioModule.Name = IOModuleName;
             ioModule.Price = IOModuleCost;
             ioModule.Description = IOModuleDescription;
+            ioModule.IO = ModuleIO;
 
             Templates.Catalogs.IOModules.Add(ioModule);
+            ModuleIO = new ObservableCollection<TECIO>();
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;
@@ -580,8 +671,12 @@ namespace TECUserControlLibrary.ViewModels
             toAdd.Name = ControllerTypeName;
             toAdd.Price = ControllerTypeCost;
             toAdd.Labor = ControllerTypeLabor;
+            toAdd.IOModules = ControllerTypeModules;
+            toAdd.IO = ControllerTypeIO;
 
             Templates.Catalogs.ControllerTypes.Add(toAdd);
+            ControllerTypeIO = new ObservableCollection<TECIO>();
+            ControllerTypeModules = new ObservableCollection<TECIOModule>();
             ControllerTypeName = "";
             ControllerTypeCost = 0;
             ControllerTypeLabor = 0;
@@ -687,6 +782,7 @@ namespace TECUserControlLibrary.ViewModels
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;
+            ModuleIO = new ObservableCollection<TECIO>();
 
             DeviceName = "";
             DeviceListPrice = 0;
@@ -698,6 +794,9 @@ namespace TECUserControlLibrary.ViewModels
             ManufacturerToAdd = new TECManufacturer();
 
             TagToAdd = new TECLabeled();
+
+            ControllerTypeIO = new ObservableCollection<TECIO>();
+            ControllerTypeModules = new ObservableCollection<TECIOModule>();
         }
 
         private void setupVMs()
