@@ -310,6 +310,19 @@ namespace TECUserControlLibrary.BaseVMs
         protected abstract T getWorkingScope();
         protected abstract T getNewWorkingScope();
 
+        private bool saveNewBeforeClosing()
+        {
+            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
+            try
+            {
+                databaseManager = new DatabaseManager<T>(saveFilePath);
+                return databaseManager.New(getWorkingScope());
+            }
+            catch
+            {
+                return false;
+            }
+        }
         private void closingExecute(CancelEventArgs e)
         {
             if (databaseManager == null || !databaseManager.IsBusy)
@@ -322,8 +335,14 @@ namespace TECUserControlLibrary.BaseVMs
                     {
                         if(databaseManager == null)
                         {
-                            saveNewExecute();
+                            if (!saveNewBeforeClosing())
+                            {
+                                MessageBox.Show("Save unsuccessful.");
+                                e.Cancel = true;
+                                return;
+                            }
                         }
+
                         else if (!databaseManager.Save(deltaStack.CleansedStack()))
                         {
                             MessageBox.Show("Save unsuccessful.");
