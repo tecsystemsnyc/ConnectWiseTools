@@ -118,6 +118,7 @@ namespace TECUserControlLibrary.BaseVMs
         {
             string message = "Would you like to save your current changes?";
             checkForChanges(message, () => {
+                databaseManager = null;
                 handleLoaded(getNewWorkingScope());
             });
         }
@@ -319,7 +320,11 @@ namespace TECUserControlLibrary.BaseVMs
                     MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                     if (result == MessageBoxResult.Yes)
                     {
-                        if (!databaseManager.Save(deltaStack.CleansedStack()))
+                        if(databaseManager == null)
+                        {
+                            saveNewExecute();
+                        }
+                        else if (!databaseManager.Save(deltaStack.CleansedStack()))
                         {
                             MessageBox.Show("Save unsuccessful.");
                             e.Cancel = true;
