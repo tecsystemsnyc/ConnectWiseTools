@@ -10,7 +10,7 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:pControls="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
              mc:Ignorable="d" 
-             x:Name="parent"
+             x:Name="propertiesView"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,7 +18,8 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="scope">
-                <pControls:ScopePropertiesControl Selected="{Binding}"/>
+                <pControls:ScopePropertiesControl Selected="{Binding}"
+                                                  DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
             </DataTemplate>
             <DataTemplate x:Key="cost">
                 <pControls:CostPropertiesControl Selected="{Binding}"/>
@@ -81,7 +82,7 @@
         </ResourceDictionary>
         
     </UserControl.Resources>
-    <ScrollViewer DataContext="{Binding ElementName=parent, Path=Selected}"
+    <ScrollViewer DataContext="{Binding ElementName=propertiesView, Path=Selected}"
                   Background="{DynamicResource SectionBackgroundBrush}">
         <StackPanel>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>

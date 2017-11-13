@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using GongSolutions.Wpf.DragDrop;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,6 +39,19 @@ namespace TECUserControlLibrary.UserControls
         public static readonly DependencyProperty LabelNameProperty =
             DependencyProperty.Register("LabelName", typeof(string),
               typeof(LabeledGridControl), new PropertyMetadata("Label"));
+
+
+
+        public IDropTarget DropHandler
+        {
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DropHandler.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget), typeof(LabeledGridControl));
+
 
         #endregion
 

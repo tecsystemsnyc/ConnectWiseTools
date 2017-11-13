@@ -32,6 +32,7 @@ namespace TECUserControlLibrary.ViewModels
             InstanceEditVM = new TypicalHierarchyVM(bid);
             InstanceEditVM.Selected += item => { Selected = item; };
             NetworkVM = new NetworkVM(bid, watcher);
+            PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             DGTabIndex = GridIndex.Systems;
             TemplatesVisibility = Visibility.Visible;
         }
@@ -66,7 +67,7 @@ namespace TECUserControlLibrary.ViewModels
         public SystemHierarchyVM TypicalEditVM { get; set; }
         public TypicalHierarchyVM InstanceEditVM { get; set; }
         public NetworkVM NetworkVM { get; }
-
+        public PropertiesVM PropertiesVM { get; }
         #endregion
 
         #region Interface Properties
@@ -120,19 +121,19 @@ namespace TECUserControlLibrary.ViewModels
             Bid = bid;
             Templates = templates;
 
-            ScopeCollection.Refresh(Templates);
+            ScopeCollection.Refresh(Templates, bid.Catalogs);
             ControllersPanelsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
             TypicalEditVM.Refresh(Bid);
             NetworkVM.Refresh(bid, watcher);
-
+            PropertiesVM.Refresh(bid.Catalogs, bid);
         }
 
         #region Setup Extensions
 
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionsTabVM(Templates);
+            ScopeCollection = new ScopeCollectionsTabVM(Templates, Bid.Catalogs);
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }

@@ -7,16 +7,16 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             x:Name="parent">
+             x:Name="labeledGridControl">
     <UserControl.Resources>
         <ResourceDictionary>
-            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent}"/>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=labeledGridControl}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=labeledGridControl}">
         <DataGrid ItemsSource="{Binding Path=LabeledSource}"
                   AutoGenerateColumns="False"
                   x:Name="TagsGrid"

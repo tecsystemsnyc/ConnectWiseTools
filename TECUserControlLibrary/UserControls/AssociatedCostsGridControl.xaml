@@ -7,7 +7,7 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
-             x:Name="parent"
+             x:Name="associatedCostsGridControl"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -16,11 +16,12 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent}">
-        <DataGrid ItemsSource="{Binding Path=CostsSource}"
+    <Grid DataContext="{Binding ElementName=associatedCostsGridControl}">
+        <DataGrid ItemsSource="{Binding CostsSource}"
+                  SelectedItem="{Binding Selected}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  dd:DragDrop.DropHandler="{Binding ElementName=parent, Path=ViewModel}">
+                  dd:DragDrop.DropHandler="{Binding DropHandler}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"

@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
-             x:Name="parent"
+             x:Name="scopePropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="220">
 
-    <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
+    <Grid DataContext="{Binding ElementName=scopePropertiesControl, Path=Selected}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -45,6 +45,7 @@
                 <Label Content="Tags:"/>
                 <local:LabeledGridControl LabelName="Label"
                                            LabeledSource="{Binding Tags}"
+                                          DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
                                           Grid.Row="1"/>
             </Grid>
         </Border>
@@ -56,6 +57,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="Associated Costs:"/>
                 <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
+                                                  DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
                                           Grid.Row="1"/>
             </Grid>
         </Border>

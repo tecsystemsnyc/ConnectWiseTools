@@ -14,7 +14,7 @@ namespace TemplateBuilder
 
         public App() : base()
         {
-            this.Dispatcher.UnhandledException += logUnhandledException;
+            //this.Dispatcher.UnhandledException += logUnhandledException;
             DispatcherHelper.Initialize();
         }
 

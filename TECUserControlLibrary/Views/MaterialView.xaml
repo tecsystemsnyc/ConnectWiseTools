@@ -208,7 +208,7 @@
                         </Grid>
                         <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
                                          ElectricalMaterialSource="{Binding Templates.Catalogs.ConnectionTypes}"
-                                                            Selected="{Binding Selected}"
+                                                            Selected="{Binding Selected, Mode=OneWayToSource}"
                                          ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
                     </Grid>
                 </DataTemplate>
@@ -298,7 +298,7 @@
                             <TextBlock Text="Labor:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding PanelTypeLabor}"/>
+                      Text="{Binding ControllerTypeLabor}"/>
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
                                        VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
@@ -431,6 +431,8 @@
                         </Grid>
 
                         <controls:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
+                                                             Selected="{Binding Selected}"
+                                                             DropHandler="{Binding}"
                                           Grid.Row="3"
                                           Margin="5"/>
                     </Grid>

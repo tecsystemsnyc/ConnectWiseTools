@@ -19,6 +19,7 @@ namespace TemplateBuilder.MVVM
         public MaterialVM MaterialsTab { get; set; }
         public ControllersPanelsVM ControllersPanelsVM { get; set; }
         public SystemHierarchyVM SystemHierarchyVM { get; set; }
+        public PropertiesVM PropertiesVM { get; set; }
 
         public TECTemplates Templates
         {
@@ -35,6 +36,7 @@ namespace TemplateBuilder.MVVM
             set
             {
                 _selected = value;
+                RaisePropertyChanged("Selected");
                 SelectionChanged?.Invoke(value);
             }
         }
@@ -43,15 +45,19 @@ namespace TemplateBuilder.MVVM
         public TemplatesEditorVM(TECTemplates templates)
         {
             Templates = templates;
-            ScopeCollection = new ScopeCollectionsTabVM(templates);
+            ScopeCollection = new ScopeCollectionsTabVM(templates, templates.Catalogs);
             MaterialsTab = new MaterialVM(templates);
-            MaterialsTab.SelectionChanged += obj => { Selected = obj; };
+            MaterialsTab.SelectionChanged += obj => {
+                Selected = obj;
+            };
             MaterialsTab.DragHandler += DragOver;
             MaterialsTab.DropHandler += Drop;
             ControllersPanelsVM = new ControllersPanelsVM(templates);
             ControllersPanelsVM.SelectionChanged += obj => { Selected = obj; };
             SystemHierarchyVM = new SystemHierarchyVM(templates);
             SystemHierarchyVM.Selected += obj => { Selected = obj; };
+
+            PropertiesVM = new PropertiesVM(templates.Catalogs, templates);
 
             AddParameterCommand = new RelayCommand(AddParametersExecute);
 
@@ -62,10 +68,11 @@ namespace TemplateBuilder.MVVM
         public void Refresh(TECTemplates templates)
         {
             Templates = templates;
-            ScopeCollection.Refresh(templates);
+            ScopeCollection.Refresh(templates, templates.Catalogs);
             MaterialsTab.Refresh(templates);
             ControllersPanelsVM.Refresh(templates);
             SystemHierarchyVM.Refresh(templates);
+            PropertiesVM.Refresh(templates.Catalogs, templates);
         }
 
         public void DragOver(IDropInfo dropInfo)

@@ -36,7 +36,7 @@ namespace TECUserControlLibrary.UserControls
         }
 
         public static readonly DependencyProperty SelectedHardwareProperty = 
-            DependencyProperty.Register("Selected", typeof(TECDevice), 
+            DependencyProperty.Register("Selected", typeof(TECHardware), 
                 typeof(HardwareGridControl), new FrameworkPropertyMetadata(null)
         {
             BindsTwoWayByDefault = true,

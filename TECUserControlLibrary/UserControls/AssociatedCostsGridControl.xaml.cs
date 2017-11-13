@@ -1,8 +1,10 @@
 ﻿using EstimatingLibrary;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace TECUserControlLibrary.UserControls
 {
@@ -27,19 +29,33 @@ namespace TECUserControlLibrary.UserControls
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public IDropTarget DropHandler
         {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
         }
 
         /// <summary>
         /// Identified the ViewModel dependency property
         /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget),
               typeof(AssociatedCostsGridControl));
 
+
+        public TECCost Selected
+        {
+            get { return (TECCost)GetValue(SelectedProperty); }
+            set { SetValue(SelectedProperty, value); }
+        }
+        
+        public static readonly DependencyProperty SelectedProperty =
+            DependencyProperty.Register("Selected", typeof(TECCost),
+                typeof(AssociatedCostsGridControl), new FrameworkPropertyMetadata(null)
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
         #endregion
         public AssociatedCostsGridControl()
         {
