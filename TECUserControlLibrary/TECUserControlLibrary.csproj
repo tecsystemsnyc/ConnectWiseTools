@@ -265,6 +265,7 @@
     <Compile Include="ViewModels\PropertiesVM.cs" />
     <Compile Include="ViewModels\SplashVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
+    <Compile Include="ViewModels\SubScopeHierarchyVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\ItemizedSummaryVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\SystemSummaryVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
@@ -393,6 +394,9 @@
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\ScopeEditorVM.cs" />
     <Compile Include="ViewModels\SettingsVM.cs" />
+    <Compile Include="Views\SubScopeHierarchyView.xaml.cs">
+      <DependentUpon>SubScopeHierarchyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SummaryViews\ItemizedSummaryView.xaml.cs">
       <DependentUpon>ItemizedSummaryView.xaml</DependentUpon>
     </Compile>
@@ -754,6 +758,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\SubScopeWiringGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubScopeHierarchyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

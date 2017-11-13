@@ -51,7 +51,8 @@
         <KeyBinding Command="{Binding MenuVM.NewCommand}"
                     Gesture="CTRL+N" />
     </Window.InputBindings>
-    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}"  IsEnabled="{Binding ViewEnabled}">
+    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}"  
+                    IsEnabled="{Binding ViewEnabled}">
         <ContentControl.Resources>
             <DataTemplate DataType="{x:Type localMVVM:TemplatesEditorVM}">
                 <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
@@ -84,10 +85,7 @@
                                     <DataTemplate x:Key="SystemTemplate">
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
                                             <views:SystemHierarchyView SystemSource="{Binding ElementName=templatesTab, Path=DataContext.Templates.SystemTemplates}"
-                                               SelectedSystem="{Binding Selected}"
-                                               SelectedEquipment="{Binding Selected}"
-                                               SelectedSubScope="{Binding Selected}"
-                                               SelectedDevice="{Binding Selected}"
+                                               DropHandler="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"
                                                ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"/>
                                         </Grid>
                                     </DataTemplate>
@@ -101,6 +99,12 @@
                                     </DataTemplate>
                                     <DataTemplate x:Key="SubScopeTemplate">
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+
+                                            <views:SubScopeHierarchyView SubScopeSource="{Binding Templates.SubScopeTemplates}"
+                                                                     DropHandler="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"
+                                                                     ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"/>
+                                        </Grid>
+                                        <!--<Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="*"/>
@@ -121,7 +125,7 @@
                                                 <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                     SelectedItem="{Binding Selected}" Grid.Row="3"/>
                                             </Grid>
-                                        </Grid>
+                                        </Grid>-->
                                     </DataTemplate>
                                     <DataTemplate x:Key="ControllerTemplate">
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
