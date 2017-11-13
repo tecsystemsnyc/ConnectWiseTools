@@ -11,6 +11,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECSystem parent;
         private TECEquipment toAdd;
         private int quantity;
+        private Action<TECEquipment> add;
 
         public TECEquipment ToAdd
         {
@@ -36,6 +37,17 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             parent = parentSystem;
             toAdd = new TECEquipment(parentSystem.IsTypical);
+            add = equip =>
+            {
+                parentSystem.Equipment.Add(equip);
+            };
+            AddCommand = new RelayCommand(addExecute, addCanExecute);
+            Quantity = 1;
+        }
+        public AddEquipmentVM(Action<TECEquipment> addMethod)
+        {
+            toAdd = new TECEquipment(false);
+            add = addMethod;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
         }
@@ -51,7 +63,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             for (int x = 0; x < Quantity; x++)
             {
                 var equipment = new TECEquipment(ToAdd, ToAdd.IsTypical);
-                parent.Equipment.Add(equipment);
+                add(equipment);
                 Added?.Invoke(equipment);
             }
         }

@@ -193,8 +193,9 @@
     <Compile Include="UserControls\ListControls\EndDeviceListControl.xaml.cs">
       <DependentUpon>EndDeviceListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\EquipmentHierarchy.xaml.cs">
-      <DependentUpon>EquipmentHierarchy.xaml</DependentUpon>
+    <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
+    <Compile Include="Views\EquipmentHierarchyView.xaml.cs">
+      <DependentUpon>EquipmentHierarchyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\EquipmentListControl.xaml.cs">
       <DependentUpon>EquipmentListControl.xaml</DependentUpon>
@@ -553,7 +554,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\EquipmentHierarchy.xaml">
+    <Page Include="Views\EquipmentHierarchyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

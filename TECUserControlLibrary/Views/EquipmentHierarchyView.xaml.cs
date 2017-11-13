@@ -1,16 +1,28 @@
 ﻿using EstimatingLibrary;
+using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Animation;
+using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibrary.UserControls
+namespace TECUserControlLibrary.Views
 {
     /// <summary>
-    /// Interaction logic for EquipmentHierarchy.xaml
+    /// Interaction logic for EquipmentHierarchyView.xaml
     /// </summary>
-    public partial class EquipmentHierarchy : UserControl
+    public partial class EquipmentHierarchyView : UserControl
     {
+        public double ModalHeight
+        {
+            get { return (double)GetValue(ModalHeightProperty); }
+            set { SetValue(ModalHeightProperty, value); }
+        }
+        public static readonly DependencyProperty ModalHeightProperty =
+            DependencyProperty.Register("ModalHeight", typeof(double),
+              typeof(EquipmentHierarchyView), new PropertyMetadata(1.0));
 
         public double EquipmentWidth
         {
@@ -20,7 +32,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty EquipmentWidthProperty =
             DependencyProperty.Register("EquipmentWidth", typeof(double),
-              typeof(EquipmentHierarchy), new PropertyMetadata(0.0));
+              typeof(EquipmentHierarchyView), new PropertyMetadata(0.0));
 
         public double HalfWidth
         {
@@ -30,7 +42,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty HalfWidthProperty =
             DependencyProperty.Register("HalfWidth", typeof(double),
-              typeof(EquipmentHierarchy), new PropertyMetadata(0.0));
+              typeof(EquipmentHierarchyView), new PropertyMetadata(0.0));
         
         public ObservableCollection<TECEquipment> EquipmentSource
         {
@@ -40,7 +52,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty SourceProperty =
             DependencyProperty.Register("EquipmentSource", typeof(ObservableCollection<TECEquipment>),
-              typeof(EquipmentHierarchy), new PropertyMetadata(default(ObservableCollection<TECEquipment>)));
+              typeof(EquipmentHierarchyView), new PropertyMetadata(default(ObservableCollection<TECEquipment>)));
 
         public TECEquipment SelectedEquipment
         {
@@ -50,7 +62,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty SelectedEquipmentProperty =
             DependencyProperty.Register("SelectedEquipment", typeof(TECEquipment),
-                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECEquipment))
+                typeof(EquipmentHierarchyView), new FrameworkPropertyMetadata(default(TECEquipment))
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
@@ -64,7 +76,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty SelectedSubScopeProperty =
             DependencyProperty.Register("SelectedSubScope", typeof(TECSubScope),
-                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECSubScope))
+                typeof(EquipmentHierarchyView), new FrameworkPropertyMetadata(default(TECSubScope))
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
@@ -78,7 +90,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly DependencyProperty SelectedDeviceProperty =
             DependencyProperty.Register("SelectedDevice", typeof(TECDevice),
-                typeof(EquipmentHierarchy), new FrameworkPropertyMetadata(default(TECDevice))
+                typeof(EquipmentHierarchyView), new FrameworkPropertyMetadata(default(TECDevice))
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
@@ -92,7 +104,7 @@ namespace TECUserControlLibrary.UserControls
 
         public static readonly RoutedEvent SelectedEvent =
         EventManager.RegisterRoutedEvent("EquipmentSelected", RoutingStrategy.Bubble,
-        typeof(RoutedEventHandler), typeof(EquipmentHierarchy));
+        typeof(RoutedEventHandler), typeof(EquipmentHierarchyView));
 
         protected void Equipment_Selected(object sender, RoutedEventArgs e)
         {
@@ -100,7 +112,31 @@ namespace TECUserControlLibrary.UserControls
             RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
 
-        public EquipmentHierarchy()
+        public EquipmentHierarchyVM ViewModel
+        {
+            get { return (EquipmentHierarchyVM)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(EquipmentHierarchyVM), typeof(EquipmentHierarchyView));
+
+
+
+        public IDropTarget DropHandler
+        {
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DropHandler.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget), typeof(EquipmentHierarchyView));
+
+
+
+        public EquipmentHierarchyView()
         {
             InitializeComponent();
             SizeChanged += (sender, e) =>
@@ -113,8 +149,20 @@ namespace TECUserControlLibrary.UserControls
                     }
                     HalfWidth = e.NewSize.Width / 2;
                 }
+                if (e.HeightChanged)
+                {
+                    if (ModalHeight != 0.0)
+                    {
+                        ModalHeight = e.NewSize.Height;
+                    }
+                }
             };
             
+        }
+
+        private void equipmentBack_Click(object sender, RoutedEventArgs e)
+        {
+            subScopeList.SelectedItem = null;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -122,6 +170,29 @@ namespace TECUserControlLibrary.UserControls
             SelectedSubScope = null;
             SelectedEquipment = null;
             SelectedDevice = null;
+        }
+        private void Add_Clicked(object sender, RoutedEventArgs e)
+        {
+            Storyboard moveBack = (Storyboard)FindResource("modalIn");
+            moveBack.Begin();
+        }
+        private void modalOut_Completed(object sender, EventArgs e)
+        {
+            ModalHeight = this.ActualHeight;
+        }
+
+        private void modalIn_Completed(object sender, EventArgs e)
+        {
+            ModalHeight = 0;
+        }
+        private void equipmentMove_Completed(object sender, EventArgs e)
+        {
+            EquipmentWidth = 0;
+        }
+
+        private void equipmentMoveBack_Completed(object sender, EventArgs e)
+        {
+            EquipmentWidth = this.ActualWidth / 2;
         }
     }
 }

@@ -91,10 +91,9 @@
                                     </DataTemplate>
                                     <DataTemplate x:Key="EquipmentTemplate">
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
-                                            <controls:EquipmentHierarchy EquipmentSource="{Binding Templates.EquipmentTemplates}"
-                                                 SelectedEquipment="{Binding Selected}"
-                                                 SelectedSubScope="{Binding Selected}"
-                                                 SelectedDevice="{Binding Selected}"/>
+                                            <views:EquipmentHierarchyView EquipmentSource="{Binding ElementName=templatesTab, Path=DataContext.Templates.EquipmentTemplates}"
+                                               DropHandler="{Binding ElementName=templatesTab, Path=DataContext.EquipmentHierarchyVM}"
+                                                                       ViewModel="{Binding ElementName=templatesTab, Path=DataContext.EquipmentHierarchyVM}"/>
                                         </Grid>
                                     </DataTemplate>
                                     <DataTemplate x:Key="SubScopeTemplate">
@@ -104,28 +103,6 @@
                                                                      DropHandler="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"
                                                                      ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"/>
                                         </Grid>
-                                        <!--<Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding Templates.SubScopeTemplates}"
-                                                              SelectedItem ="{Binding Selected}"/>
-                                            <Grid Grid.Column="2" Grid.Row="1">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="30"/>
-                                                    <RowDefinition Height="*"/>
-                                                    <RowDefinition Height="30"/>
-                                                    <RowDefinition Height="*"/>
-                                                </Grid.RowDefinitions>
-                                                <Label Content="Devices" Grid.Row="0"/>
-                                                <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
-                                    SelectedItem="{Binding Selected}" Grid.Row="1"/>
-                                                <Label Content="Points" Grid.Row="2"/>
-                                                <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                    SelectedItem="{Binding Selected}" Grid.Row="3"/>
-                                            </Grid>
-                                        </Grid>-->
                                     </DataTemplate>
                                     <DataTemplate x:Key="ControllerTemplate">
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
@@ -140,7 +117,10 @@
                                         </Grid>
                                     </DataTemplate>
                                     <DataTemplate x:Key="MiscTemplate">
-                                        <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+
+                                            <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
+                                        </Grid>
                                     </DataTemplate>
                                     <utilities:ScopeTemplateSelector x:Key="ScopeSelector"
                                              SystemTemplate="{StaticResource SystemTemplate}"
