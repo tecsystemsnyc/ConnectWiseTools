@@ -40,10 +40,12 @@
                 <pControls:LabeledPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="controller">
-                <pControls:ControllerPropertiesControl Selected="{Binding}"/>
+                <pControls:ControllerPropertiesControl Selected="{Binding}"
+                                                       TypeSource="{Binding ElementName=propertiesView, Path=ViewModel.Catalogs.ControllerTypes}"/>
             </DataTemplate>
             <DataTemplate x:Key="panel">
-                <pControls:PanelPropertiesControl Selected="{Binding}"/>
+                <pControls:PanelPropertiesControl Selected="{Binding}"
+                                                  TypeSource="{Binding ElementName=propertiesView, Path=ViewModel.Catalogs.PanelTypes}"/>
             </DataTemplate>
             <DataTemplate x:Key="misc">
                 <pControls:MiscPropertiesControl Selected="{Binding}"/>
