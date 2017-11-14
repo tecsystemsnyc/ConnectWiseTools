@@ -254,7 +254,17 @@ namespace TECUserControlLibrary.BaseVMs
         }
         #endregion
 
-        abstract protected string getVersionNumber();
+        protected string getVersionNumber()
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+            }
+            else
+            {
+                return "Undeployed";
+            }
+        }
         private string getLogo()
         {
             String path = Path.GetTempFileName();

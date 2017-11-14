@@ -18,7 +18,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>\\tec-ny-fs01\H - Sales\Software\Development\</PublishUrl>
+    <PublishUrl>\\tec-ny-fs01\F-General\Internal Software\Estimating Tools\Versions\1.7\Estimate Builder\x86\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -31,9 +31,11 @@
     <ProductName>Estimate Builder</ProductName>
     <PublisherName>TEC Systems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
-    <ApplicationRevision>22</ApplicationRevision>
-    <ApplicationVersion>1.6.3.%2a</ApplicationVersion>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>24</ApplicationRevision>
+    <ApplicationVersion>1.7.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -99,7 +101,10 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
