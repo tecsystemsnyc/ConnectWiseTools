@@ -324,11 +324,7 @@ namespace EstimateBuilder.MVVM
             return true;
         }
         #endregion
-
-        protected override string getVersionNumber()
-        {
-            return Properties.Resources.Version;
-        }
+        
         private string getStartUpFilePath()
         {
             string startUpFilePath = Properties.Settings.Default.StartUpFilePath;

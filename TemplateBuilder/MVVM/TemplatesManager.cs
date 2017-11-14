@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using System;
+using System.Deployment.Application;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
 
@@ -96,11 +97,7 @@ namespace TemplateBuilder.MVVM
             menuVM.SetRefreshTemplatesCommand(refreshExecute, canRefresh);
         }
         #endregion
-
-        protected override string getVersionNumber()
-        {
-            return Properties.Resources.Version;
-        }
+        
         private string getStartUpFilePath()
         {
             string startUpFilePath = Properties.Settings.Default.StartUpFilePath;
