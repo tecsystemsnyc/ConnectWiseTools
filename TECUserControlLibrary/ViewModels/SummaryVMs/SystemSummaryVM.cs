@@ -71,7 +71,16 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             {
                 if (e.Change == Change.Add)
                 {
-                    Systems.Add(new SystemSummaryItem(typical, bid.Parameters));
+                    SystemSummaryItem summaryItem = new SystemSummaryItem(typical, bid.Parameters);
+                    summaryItem.PropertyChanged += (sender, args) =>
+                    {
+                        if (args.PropertyName == "TotalPrice")
+                        {
+                            RaisePropertyChanged("SystemTotal");
+                        }
+                    };
+                    Systems.Add(summaryItem);
+
                 }
                 else if (e.Change == Change.Remove)
                 {
@@ -95,11 +104,27 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 {
                     if (e.Value is TECController || e.Value is TECPanel)
                     {
-                        Riser.Add(new ScopeSummaryItem(e.Value as TECScope, bid.Parameters));
+                        ScopeSummaryItem summaryItem = new ScopeSummaryItem(e.Value as TECScope, bid.Parameters);
+                        summaryItem.PropertyChanged += (sender, args) =>
+                        {
+                            if (args.PropertyName == "TotalPrice")
+                            {
+                                RaisePropertyChanged("RiserTotal");
+                            }
+                        };
+                        Riser.Add(summaryItem);
                     }
                     else if (e.Value is TECMisc misc)
                     {
-                        Misc.Add(new ScopeSummaryItem(misc, bid.Parameters));
+                        ScopeSummaryItem summaryItem = new ScopeSummaryItem(misc, bid.Parameters);
+                        summaryItem.PropertyChanged += (sender, args) =>
+                        {
+                            if (args.PropertyName == "TotalPrice")
+                            {
+                                RaisePropertyChanged("MiscTotal");
+                            }
+                        };
+                        Misc.Add(summaryItem);
                     }
                 } else if (e.Change == Change.Remove)
                 {
@@ -140,7 +165,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 SystemSummaryItem summaryItem = new SystemSummaryItem(typical, bid.Parameters);
                 summaryItem.PropertyChanged += (sender, e) =>
                 {
-                    if (e.PropertyName == "Total")
+                    if (e.PropertyName == "TotalPrice")
                     {
                         RaisePropertyChanged("SystemTotal");
                     }
@@ -148,6 +173,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 systemItems.Add(summaryItem);
             }
             Systems = systemItems;
+            RaisePropertyChanged("SystemTotal");
         }
         private void populateMisc(ObservableCollection<TECMisc> miscCosts)
         {
@@ -165,6 +191,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 miscItems.Add(summaryItem);
             }
             misc = miscItems;
+            RaisePropertyChanged("MiscTotal");
         }
         private void populateRiser(ReadOnlyObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
         {
@@ -174,7 +201,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 ScopeSummaryItem summaryItem = new ScopeSummaryItem(controller, bid.Parameters);
                 summaryItem.PropertyChanged += (sender, e) =>
                 {
-                    if (e.PropertyName == "Total")
+                    if (e.PropertyName == "TotalPrice")
                     {
                         RaisePropertyChanged("RiserTotal");
                     }
@@ -186,7 +213,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 ScopeSummaryItem summaryItem = new ScopeSummaryItem(panel, bid.Parameters);
                 summaryItem.PropertyChanged += (sender, e) =>
                 {
-                    if (e.PropertyName == "Total")
+                    if (e.PropertyName == "TotalPrice")
                     {
                         RaisePropertyChanged("RiserTotal");
                     }
@@ -194,6 +221,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 riserItems.Add(summaryItem);
             }
             riser = riserItems;
+            RaisePropertyChanged("RiserTotal");
         }
 
         private double getSystemTotal()

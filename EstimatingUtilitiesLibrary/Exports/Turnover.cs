@@ -310,7 +310,7 @@ namespace EstimatingUtilitiesLibrary.Exports
         {
             Paragraph par = new Paragraph();
             Text saleText = new Text(String.Format("Sale Price: {0:C}", estimate.TECMaterialCost));
-            Text marginText = new Text(String.Format("Margin: %{0F2}", estimate.Margin));
+            Text marginText = new Text(String.Format("Margin: %{0:F2}", estimate.Margin));
 
             par.Append(new Break());
             par.Append(new Run(saleText));

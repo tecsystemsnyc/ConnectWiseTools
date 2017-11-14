@@ -46,7 +46,11 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Label Content="Controllers" FontSize="20"/>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                Margin="5,0,5,0">
+                        <Label Content="Controllers"   Foreground="Black"
+                                VerticalAlignment="Center"/>
+                    </Border>
                     <!--Controller List-->
                     <listControls:ConnectableItemListControl
                         Source="{Binding Parentables}"
@@ -66,7 +70,11 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Label Content="Network Devices" FontSize="20"/>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                Margin="5,0,5,0">
+                        <Label Content="Network Devices"   Foreground="Black"
+                                VerticalAlignment="Center"/>
+                    </Border>
                     <!--Network Devices DataGrid-->
                     <listControls:ConnectableItemListControl
                         Source="{Binding NonParentables}"
@@ -291,7 +299,11 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
 
-                                <Label Content="Network Connections" FontSize="15" FontWeight="Bold"/>
+                                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                Margin="5,0,5,0">
+                                    <Label Content="Network Connections"   Foreground="Black"
+                                VerticalAlignment="Center"/>
+                                </Border>
                                 <listControls:NetworkConnectionListControl  x:Name="Connections"
                                     Source="{Binding ChildNetworkConnections}"
                                     SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedConnection}"

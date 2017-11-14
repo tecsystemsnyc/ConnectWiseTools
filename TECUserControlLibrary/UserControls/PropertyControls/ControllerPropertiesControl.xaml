@@ -23,7 +23,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Controller Type: "/>
-        <ComboBox SelectedItem="{Binding Type}" 
+        <ComboBox SelectedItem="{Binding Controller.Type}" 
                   ItemsSource="{Binding ElementName=controllerPropertiesControl, Path=TypeSource}"
                   DisplayMemberPath="Name"
                   Grid.Column="1" Margin="2"/>
