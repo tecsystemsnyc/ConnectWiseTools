@@ -53,6 +53,20 @@ namespace TECUserControlLibrary.UserControls
             DependencyProperty.Register("DropHandler", typeof(IDropTarget), typeof(LabeledGridControl));
 
 
+
+        public bool ReadOnly
+        {
+            get { return (bool)GetValue(ReadOnlyProperty); }
+            set { SetValue(ReadOnlyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanEdit.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReadOnlyProperty =
+            DependencyProperty.Register("ReadOnly", typeof(bool), typeof(LabeledGridControl), new PropertyMetadata(false));
+
+
+
+
         #endregion
 
         public LabeledGridControl()

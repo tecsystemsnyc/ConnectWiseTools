@@ -21,7 +21,8 @@
                   SelectedItem="{Binding Selected}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  dd:DragDrop.DropHandler="{Binding DropHandler}">
+                  dd:DragDrop.DropHandler="{Binding DropHandler}"
+                  IsReadOnly="{Binding ReadOnly}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"

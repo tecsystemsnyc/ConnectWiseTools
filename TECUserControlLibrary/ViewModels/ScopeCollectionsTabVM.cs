@@ -20,9 +20,7 @@ namespace TECUserControlLibrary.ViewModels
             get { return _templates; }
             set
             {
-                unsubscribeTemplatesCollections();
                 _templates = value;
-                subscribeTemplatesCollections();
                 RaisePropertyChanged("Templates");
             }
         }
@@ -45,8 +43,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ChosenType");
             }
         }
-
-
+        
         private ObservableCollection<TECObject> _resultCollection;
         private TECTemplates _templates;
         private AllSearchableObjects _chosenType;
@@ -149,6 +146,9 @@ namespace TECUserControlLibrary.ViewModels
                 case AllSearchableObjects.Valves:
                     ResultCollection = getResultCollection(catalogs.Valves, searchCriteria);
                     break;
+                case AllSearchableObjects.IOModules:
+                    ResultCollection = getResultCollection(catalogs.IOModules, searchCriteria);
+                    break;
                 default:
                     break;
 
@@ -238,6 +238,24 @@ namespace TECUserControlLibrary.ViewModels
                         ResultCollection.Add(conduit);
                     }
                     break;
+                case AllSearchableObjects.IOModules:
+                    foreach(TECIOModule module in catalogs.IOModules)
+                    {
+                        ResultCollection.Add(module);
+                    }
+                    break;
+                case AllSearchableObjects.PanelTypes:
+                    foreach (TECPanelType type in catalogs.PanelTypes)
+                    {
+                        ResultCollection.Add(type);
+                    }
+                    break;
+                case AllSearchableObjects.ControllerTypes:
+                    foreach (TECPanelType type in catalogs.PanelTypes)
+                    {
+                        ResultCollection.Add(type);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -245,34 +263,7 @@ namespace TECUserControlLibrary.ViewModels
             
             
         }
-
-        private void unsubscribeTemplatesCollections()
-        {
-            //if (Templates != null)
-            //{
-            //    Templates.SystemTemplates.CollectionChanged -= SystemTemplates_CollectionChanged;
-            //    Templates.EquipmentTemplates.CollectionChanged -= EquipmentTemplates_CollectionChanged;
-            //    Templates.SubScopeTemplates.CollectionChanged -= SubScopeTemplates_CollectionChanged;
-            //    catalogs.Devices.CollectionChanged -= Devices_CollectionChanged;
-            //    Templates.ControllerTemplates.CollectionChanged -= ControllerTemplates_CollectionChanged;
-            //    catalogs.AssociatedCosts.CollectionChanged -= AssociatedCosts_CollectionChanged;
-            //    Templates.PanelTemplates.CollectionChanged -= PanelTemplates_CollectionChanged;
-            //    Templates.MiscCostTemplates.CollectionChanged -= MiscCostTemplates_CollectionChanged;
-            //}
-        }
-
-        private void subscribeTemplatesCollections()
-        {
-            //Templates.SystemTemplates.CollectionChanged += SystemTemplates_CollectionChanged;
-            //Templates.EquipmentTemplates.CollectionChanged += EquipmentTemplates_CollectionChanged;
-            //Templates.SubScopeTemplates.CollectionChanged += SubScopeTemplates_CollectionChanged;
-            //catalogs.Devices.CollectionChanged += Devices_CollectionChanged;
-            //Templates.ControllerTemplates.CollectionChanged += ControllerTemplates_CollectionChanged;
-            //catalogs.AssociatedCosts.CollectionChanged += AssociatedCosts_CollectionChanged;
-            //Templates.PanelTemplates.CollectionChanged += PanelTemplates_CollectionChanged;
-            //Templates.MiscCostTemplates.CollectionChanged += MiscCostTemplates_CollectionChanged;
-        }
-
+        
         public void DragOver(IDropInfo dropInfo)
         {
             DragHandler(dropInfo);
@@ -281,8 +272,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             DropHandler(dropInfo);
         }
-
-
+        
         private ObservableCollection<TECObject> getResultCollection(IEnumerable<TECObject> source, string[] searchCriteria)
         {
             var outCollection = new ObservableCollection<TECObject>();

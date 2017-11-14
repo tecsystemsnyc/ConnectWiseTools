@@ -40,13 +40,18 @@
                 <pControls:LabeledPropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="controller">
-                <pControls:ControllerPropertiesControl Selected="{Binding}"/>
+                <pControls:ControllerPropertiesControl Selected="{Binding}"
+                                                       TypeSource="{Binding ElementName=propertiesView, Path=ViewModel.Catalogs.ControllerTypes}"/>
             </DataTemplate>
             <DataTemplate x:Key="panel">
-                <pControls:PanelPropertiesControl Selected="{Binding}"/>
+                <pControls:PanelPropertiesControl Selected="{Binding}"
+                                                  TypeSource="{Binding ElementName=propertiesView, Path=ViewModel.Catalogs.PanelTypes}"/>
             </DataTemplate>
             <DataTemplate x:Key="misc">
                 <pControls:MiscPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="ioModule">
+                <pControls:IOModulePropertiesControl Selected="{Binding}"/>
             </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
@@ -79,6 +84,9 @@
             <utilities:MiscSelector x:Key="miscSelector"
                                     InterfaceTemplate="{StaticResource misc}"
                                     DefaultTemplate="{StaticResource default}"/>
+            <utilities:IOModuleSelector x:Key="ioModuleSelector"
+                                        InterfaceTemplate="{StaticResource ioModule}"
+                                        DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -95,6 +103,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ControllerSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PanelSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource miscSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ioModuleSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -66,11 +66,11 @@
                    HorizontalAlignment="Left"
                    Margin="5"
                    Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}"/>
-        <TextBlock Text="{Binding BidPath}" Margin="5"
-                   Grid.Column="1" ToolTip="{Binding BidPath}" 
+        <TextBlock Text="{Binding ElementName=splashView, Path=BidPath}" Margin="5"
+                   Grid.Column="1" ToolTip="{Binding ElementName=splashView, Path=BidPath}" 
                    VerticalAlignment="Center"
                    Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}"/>
-        <Button Grid.Column="2" Margin="5" Command="{Binding GetBidPathCommand}"
+        <Button Grid.Column="2" Margin="5" Command="{Binding ElementName=splashView, Path=GetBidPathCommand}"
                 Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
             <TextBlock VerticalAlignment="Center">Select...</TextBlock>
         </Button>

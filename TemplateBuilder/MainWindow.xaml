@@ -151,10 +151,7 @@
                                 <views:ParametersView Source="{Binding Templates.Parameters}"
                                                       AddCommand="{Binding AddParameterCommand}"/>
                             </TabItem>
-                            <TabItem Header="Settings">
-                                <views:SettingsView ViewModel="{Binding SettingsVM}"/>
-                            </TabItem>
-                
+
                         </TabControl>
                         <views:PropertiesView Selected="{Binding Selected}"
                                               Grid.Column="2" Grid.Row="1" Grid.RowSpan="1"

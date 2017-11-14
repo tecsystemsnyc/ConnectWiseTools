@@ -46,7 +46,8 @@
                 <local:LabeledGridControl LabelName="Label"
                                            LabeledSource="{Binding Tags}"
                                           DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
-                                          Grid.Row="1"/>
+                                          Grid.Row="1"
+                                          ReadOnly="True"/>
             </Grid>
         </Border>
         <Border BorderBrush="DarkGray" BorderThickness="1" Grid.Row="2" Grid.ColumnSpan="2">
@@ -58,6 +59,7 @@
                 <Label Content="Associated Costs:"/>
                 <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
                                                   DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
+                                                  ReadOnly="True"
                                           Grid.Row="1"/>
             </Grid>
         </Border>

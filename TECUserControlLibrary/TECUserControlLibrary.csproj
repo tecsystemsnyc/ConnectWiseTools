@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
+    <Compile Include="Models\IOModulePropertiesItem.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
@@ -192,6 +193,9 @@
     </Compile>
     <Compile Include="UserControls\ListControls\EndDeviceListControl.xaml.cs">
       <DependentUpon>EndDeviceListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
+      <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="Views\EquipmentHierarchyView.xaml.cs">
@@ -551,6 +555,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\EndDeviceListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

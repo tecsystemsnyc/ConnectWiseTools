@@ -6,9 +6,17 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
              x:Name="panelPropertiesControl"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="30" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=panelPropertiesControl, Path=Selected}">
-        <TextBlock Text="{Binding Type.Name, StringFormat=Type: {0}}" Margin="5,0,0,0"
-                   Foreground="Black"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Panel Type: "/>
+        <ComboBox SelectedItem="{Binding Type}" 
+                  ItemsSource="{Binding ElementName=panelPropertiesControl, Path=TypeSource}" 
+                  DisplayMemberPath="Name"
+                  Grid.Column="1" Margin="2"/>
+
     </Grid>
 </UserControl>

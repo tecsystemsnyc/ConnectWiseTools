@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,6 +20,16 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
         // Using a DependencyProperty as the backing store for Selected.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedProperty =
             DependencyProperty.Register("Selected", typeof(TECPanel), typeof(PanelPropertiesControl));
+    
+        public IEnumerable<TECControllerType> TypeSource
+        {
+            get { return (IEnumerable<TECControllerType>)GetValue(TypeSourceProperty); }
+            set { SetValue(TypeSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TypeSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TypeSourceProperty =
+            DependencyProperty.Register("TypeSource", typeof(IEnumerable<TECControllerType>), typeof(PanelPropertiesControl));
 
 
         public PanelPropertiesControl()

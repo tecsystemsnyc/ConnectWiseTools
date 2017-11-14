@@ -118,6 +118,7 @@ namespace TECUserControlLibrary.BaseVMs
         {
             string message = "Would you like to save your current changes?";
             checkForChanges(message, () => {
+                databaseManager = null;
                 handleLoaded(getNewWorkingScope());
             });
         }
@@ -309,6 +310,19 @@ namespace TECUserControlLibrary.BaseVMs
         protected abstract T getWorkingScope();
         protected abstract T getNewWorkingScope();
 
+        private bool saveNewBeforeClosing()
+        {
+            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
+            try
+            {
+                databaseManager = new DatabaseManager<T>(saveFilePath);
+                return databaseManager.New(getWorkingScope());
+            }
+            catch
+            {
+                return false;
+            }
+        }
         private void closingExecute(CancelEventArgs e)
         {
             if (databaseManager == null || !databaseManager.IsBusy)
@@ -319,7 +333,17 @@ namespace TECUserControlLibrary.BaseVMs
                     MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                     if (result == MessageBoxResult.Yes)
                     {
-                        if (!databaseManager.Save(deltaStack.CleansedStack()))
+                        if(databaseManager == null)
+                        {
+                            if (!saveNewBeforeClosing())
+                            {
+                                MessageBox.Show("Save unsuccessful.");
+                                e.Cancel = true;
+                                return;
+                            }
+                        }
+
+                        else if (!databaseManager.Save(deltaStack.CleansedStack()))
                         {
                             MessageBox.Show("Save unsuccessful.");
                             e.Cancel = true;
