@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using System;
 
 namespace TECUserControlLibrary.Models
 {
@@ -15,7 +16,7 @@ namespace TECUserControlLibrary.Models
         {
             this.Scope = scope;
             watcher = new ChangeWatcher(scope);
-            Estimate = new TECEstimator(scope, parameters, watcher);
+            Estimate = new TECEstimator(scope, parameters, new TECExtraLabor(Guid.NewGuid()), watcher);
         }
         
 

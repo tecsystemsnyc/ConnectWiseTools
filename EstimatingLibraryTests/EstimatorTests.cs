@@ -1894,7 +1894,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             system.AddController(controller);
             bid.Systems.Add(system);
-            TECEstimator systemEstimate = new TECEstimator(system, parameters, new ChangeWatcher(system));
+            TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(system));
 
             var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
