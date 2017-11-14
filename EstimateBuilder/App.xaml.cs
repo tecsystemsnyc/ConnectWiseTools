@@ -21,13 +21,27 @@ namespace EstimateBuilder
         protected override void OnStartup(StartupEventArgs e)
         {
             logger.Debug("Estimate Builder starting up.");
-
-            if (e.Args.Length > 0)
+            if (AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments.ActivationData != null
+                && AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments.ActivationData.Length > 0)
             {
-                string startUpFilePath = e.Args[0];
-                logger.Debug("StartUp file path: {0}", startUpFilePath);
-                EstimateBuilder.Properties.Settings.Default.StartUpFilePath = startUpFilePath;
-                EstimateBuilder.Properties.Settings.Default.Save();
+                try
+                {
+                    string fname = AppDomain.CurrentDomain.SetupInformation
+             .ActivationArguments.ActivationData[0];
+
+                    // It comes in as a URI; this helps to convert it to a path.
+                    Uri uri = new Uri(fname);
+                    string startUpFilePath = uri.LocalPath;
+                    logger.Debug("StartUp file path: {0}", startUpFilePath);
+                    EstimateBuilder.Properties.Settings.Default.StartUpFilePath = startUpFilePath;
+                    EstimateBuilder.Properties.Settings.Default.Save();
+                }
+                catch (Exception)
+                {
+                    logger.Error("Couldn't process startup arguments as a path.");
+                }
             }
             else
             {
