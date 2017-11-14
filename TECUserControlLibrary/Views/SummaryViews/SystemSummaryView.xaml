@@ -91,6 +91,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Button HorizontalAlignment="Left" Content="test" Command="{Binding TestCommand}" Grid.Row="2"/>
             <TextBlock Text="{Binding RiserTotal, StringFormat=Total: {0:C}}" Grid.Row="2"
                        HorizontalAlignment="Right"
                        FontWeight="Bold"/>

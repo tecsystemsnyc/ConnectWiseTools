@@ -1,9 +1,11 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels.SummaryVMs
@@ -42,6 +44,9 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 RaisePropertyChanged("Misc");
             }
         }
+
+        public ICommand TestCommand { get; private set; }
+    
         public double SystemTotal
         {
             get { return getSystemTotal(); }
@@ -59,13 +64,19 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
+            TestCommand = new RelayCommand(testExecute);
             this.bid = bid;
             populateSystems(bid.Systems);
             populateRiser(bid.Controllers, bid.Panels);
             populateMisc(bid.MiscCosts);
             watcher.Changed += changed;
         }
-        
+
+        private void testExecute()
+        {
+            Console.WriteLine("here");
+        }
+
         private void changed(TECChangedEventArgs e)
         {
             if(e.Value is TECTypical typical)
@@ -184,7 +195,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 ScopeSummaryItem summaryItem = new ScopeSummaryItem(misc, bid.Parameters);
                 summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
-                    if (e.PropertyName == "Total")
+                    if (e.PropertyName == "TotalPrice")
                     {
                         RaisePropertyChanged("MiscTotal");
                     }
@@ -229,20 +240,20 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         {
             double total = 0.0;
             Console.WriteLine("Getting System Total");
-            foreach(SystemSummaryItem system in systems)
+            foreach(SystemSummaryItem system in Systems)
             {
-                Console.WriteLine(String.Format("SubTotal for {0}: {1}", system.Typical.Name, system.Estimate.TotalPrice));
+                Console.WriteLine(String.Format("Subtotal for {0}: {1}", system.Typical.Name, system.Estimate.TotalPrice));
                 total += system.Estimate.TotalPrice;
             }
             return total;
         }
         private double getRiserTotal()
         {
-            return riser.Sum(item => item.Estimate.TotalPrice);
+            return Riser.Sum(item => item.Estimate.TotalPrice);
         }
         private double getMiscTotal()
         {
-            return misc.Sum(item => item.Estimate.TotalPrice);
+            return Misc.Sum(item => item.Estimate.TotalPrice);
         }
     }
 }

@@ -263,6 +263,7 @@ namespace EstimatingLibrary
         
         private void CostChanged(CostBatch change)
         {
+            string guidString = this.Guid.ToString();
             addCost(change);
         }
         
