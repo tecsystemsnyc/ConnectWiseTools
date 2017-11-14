@@ -82,7 +82,7 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:EndDeviceListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:PointListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
@@ -204,6 +204,7 @@
 
                 </Grid>
                 <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                               x:Name="pointList"
                                                Grid.Row="3"
                                                SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedPoint}"
                                                DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeletePointCommand}"

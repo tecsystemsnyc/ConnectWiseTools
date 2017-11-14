@@ -414,6 +414,10 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddSystemVM(scopeManager as TECBid);
                 ((AddSystemVM)SelectedVM).ToAdd = new TECSystem(system, false);
             }
+            else if (dropInfo.Data is IEndDevice)
+            {
+                UIHelpers.StandardDrop(dropInfo, scopeManager);
+            }
         }
 
         protected void NotifySelected(TECObject item)

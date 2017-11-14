@@ -22,7 +22,7 @@ namespace EstimateBuilder
         {
             logger.Debug("Estimate Builder starting up.");
             if (AppDomain.CurrentDomain.SetupInformation
-                .ActivationArguments.ActivationData != null
+                .ActivationArguments?.ActivationData != null
                 && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)
             {
