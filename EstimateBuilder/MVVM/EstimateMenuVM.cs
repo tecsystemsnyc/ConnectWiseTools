@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using NLog;
 using System;
 using TECUserControlLibrary.ViewModels;
 
@@ -6,6 +7,7 @@ namespace EstimateBuilder.MVVM
 {
     public class EstimateMenuVM : MenuVM
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private const bool DEBUG = true;
 
         public EstimateMenuVM() : base()
@@ -51,7 +53,14 @@ namespace EstimateBuilder.MVVM
         public void SetDebugWindowCommand(Action execute, Func<bool> canExecute = null)
         {
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Debug Window", command);
+            try
+            {
+                setCommand("Debug Window", command);
+            }
+            catch (Exception)
+            {
+                logger.Debug("No debug window to set command to.");
+            }
         }
 
         private void setupMenu()
@@ -70,12 +79,10 @@ namespace EstimateBuilder.MVVM
             //Templates menu items
             addMenuItem("Load Templates", busyText, parentItemName: "Templates");
 
-            if (DEBUG)
-            {
-                addMenuItem("Debug");
-
-                addMenuItem("Debug Window", parentItemName: "Debug");
-            }
+#if DEBUG
+            addMenuItem("Debug");
+            addMenuItem("Debug Window", parentItemName: "Debug");
+#endif
         }
     }
 }
