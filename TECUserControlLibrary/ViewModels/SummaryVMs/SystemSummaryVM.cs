@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TECUserControlLibrary.Models;
@@ -72,7 +73,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 if (e.Change == Change.Add)
                 {
                     SystemSummaryItem summaryItem = new SystemSummaryItem(typical, bid.Parameters);
-                    summaryItem.PropertyChanged += (sender, args) =>
+                    summaryItem.Estimate.PropertyChanged += (sender, args) =>
                     {
                         if (args.PropertyName == "TotalPrice")
                         {
@@ -105,7 +106,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                     if (e.Value is TECController || e.Value is TECPanel)
                     {
                         ScopeSummaryItem summaryItem = new ScopeSummaryItem(e.Value as TECScope, bid.Parameters);
-                        summaryItem.PropertyChanged += (sender, args) =>
+                        summaryItem.Estimate.PropertyChanged += (sender, args) =>
                         {
                             if (args.PropertyName == "TotalPrice")
                             {
@@ -117,7 +118,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                     else if (e.Value is TECMisc misc)
                     {
                         ScopeSummaryItem summaryItem = new ScopeSummaryItem(misc, bid.Parameters);
-                        summaryItem.PropertyChanged += (sender, args) =>
+                        summaryItem.Estimate.PropertyChanged += (sender, args) =>
                         {
                             if (args.PropertyName == "TotalPrice")
                             {
@@ -163,7 +164,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             foreach(TECTypical typical in typicals)
             {
                 SystemSummaryItem summaryItem = new SystemSummaryItem(typical, bid.Parameters);
-                summaryItem.PropertyChanged += (sender, e) =>
+                summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "TotalPrice")
                     {
@@ -181,7 +182,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             foreach(TECMisc misc in miscCosts)
             {
                 ScopeSummaryItem summaryItem = new ScopeSummaryItem(misc, bid.Parameters);
-                summaryItem.PropertyChanged += (sender, e) =>
+                summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "Total")
                     {
@@ -199,7 +200,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             foreach (TECController controller in controllers)
             {
                 ScopeSummaryItem summaryItem = new ScopeSummaryItem(controller, bid.Parameters);
-                summaryItem.PropertyChanged += (sender, e) =>
+                summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "TotalPrice")
                     {
@@ -211,7 +212,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             foreach(TECPanel panel in panels)
             {
                 ScopeSummaryItem summaryItem = new ScopeSummaryItem(panel, bid.Parameters);
-                summaryItem.PropertyChanged += (sender, e) =>
+                summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "TotalPrice")
                     {
@@ -226,15 +227,22 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
 
         private double getSystemTotal()
         {
-            return systems.Aggregate(0.0, (acc, x) => acc + x.Estimate.TotalPrice);
+            double total = 0.0;
+            Console.WriteLine("Getting System Total");
+            foreach(SystemSummaryItem system in systems)
+            {
+                Console.WriteLine(String.Format("SubTotal for {0}: {1}", system.Typical.Name, system.Estimate.TotalPrice));
+                total += system.Estimate.TotalPrice;
+            }
+            return total;
         }
         private double getRiserTotal()
         {
-            return riser.Aggregate(0.0, (acc, x) => acc + x.Estimate.TotalPrice);
+            return riser.Sum(item => item.Estimate.TotalPrice);
         }
         private double getMiscTotal()
         {
-            return misc.Aggregate(0.0, (acc, x) => acc + x.Estimate.TotalPrice);
+            return misc.Sum(item => item.Estimate.TotalPrice);
         }
     }
 }

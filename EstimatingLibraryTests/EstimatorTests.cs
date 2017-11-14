@@ -49,6 +49,7 @@ namespace Tests
         public static void MyClassInitialize(TestContext testContext)
         {
             parameters = new TECParameters(Guid.NewGuid());
+            parameters.Tax = 8.75;
             parameters.PMCoef = 1.54;
             parameters.ENGCoef = 1.25;
             parameters.SoftCoef = 0.37;
