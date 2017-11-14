@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             
+             xmlns:summaryViews="clr-namespace:TECUserControlLibrary.Views.SummaryViews"
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              
              mc:Ignorable="d"
@@ -19,19 +19,26 @@
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <TabControl>
-            <TabItem Header="TEC Materials">
+            <!--<TabItem Header="TEC Materials">
                 <views:TECMaterialSummaryView ViewModel="{Binding TECMaterialSummaryVM}"/>
             </TabItem>
             <TabItem Header="Electrical Materials">
                 <views:ElectricalMaterialSummaryView ViewModel="{Binding ElectricalMaterialSummaryVM}"/>
+            </TabItem>-->
+            <TabItem Header="Itemized">
+                <summaryViews:ItemizedSummaryView ViewModel="{Binding ItemizedSummaryVM}"/>
             </TabItem>
             <TabItem Header="Labor">
                 <views:LaborView
                         ViewModel="{Binding LaborVM}"/>
             </TabItem>
+            <TabItem Header="Material">
+                <views:MaterialSummaryView ViewModel="{Binding MaterialSummaryVM}"/>
+            </TabItem>
             <TabItem Header="Summary">
                 <views:ReviewView ViewModel="{Binding ReviewVM}"/>
             </TabItem>
+            
         </TabControl>
             
     </Grid>

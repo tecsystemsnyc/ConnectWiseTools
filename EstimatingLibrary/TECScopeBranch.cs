@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECScopeBranch : TECScope
+    public class TECScopeBranch : TECLabeled, IRelatable, ITypicalable
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
         private ObservableCollection<TECScopeBranch> _branches;
@@ -16,71 +13,69 @@ namespace EstimatingLibrary
             get { return _branches; }
             set
             {
-                var temp = this.Copy();
+                var old = Branches;
                 _branches = value;
-                NotifyPropertyChanged("Branches", temp, this);
+                notifyCombinedChanged(Change.Edit, "Branches", this, value, old);
                 Branches.CollectionChanged += Branches_CollectionChanged;
             }
         }
 
+        public SaveableMap PropertyObjects
+        {
+            get { return propertyObjects(); }
+        }
+        public SaveableMap LinkedObjects
+        {
+            get { return new SaveableMap(); }
+        }
+
+        public bool IsTypical { get; private set; }
         #endregion //Properites
 
         #region Constructors
-        public TECScopeBranch(Guid guid) : base(guid)
+        public TECScopeBranch(Guid guid, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
             _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
 
-        public TECScopeBranch() : this(Guid.NewGuid()) { }
+        public TECScopeBranch(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
-        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this()
+        public TECScopeBranch(TECScopeBranch scopeBranchSource, bool isTypical) : this(isTypical)
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
-                Branches.Add(new TECScopeBranch(branch));
+                Branches.Add(new TECScopeBranch(branch, isTypical));
             }
-            this.copyPropertiesFromScope(scopeBranchSource);
+            _label = scopeBranchSource.Label;
         }
         #endregion //Constructors
-
-        public override Object Copy()
-        {
-            TECScopeBranch outScope = new TECScopeBranch();
-            outScope._guid = Guid;
-
-            foreach (TECScopeBranch branch in this.Branches)
-            {
-                outScope.Branches.Add(branch.Copy() as TECScopeBranch);
-            }
-            this.copyPropertiesFromScope(this);
-
-            return outScope;
-        }
-
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            TECScopeBranch outScope = new TECScopeBranch(this);
-            return outScope;
-        }
-
+        
         private void Branches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    notifyCombinedChanged(Change.Add, "Branches", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    notifyCombinedChanged(Change.Remove, "Branches", this, item);
                 }
             }
+        }
+
+        private SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.Branches, "Branches");
+            return saveList;
         }
 
     }

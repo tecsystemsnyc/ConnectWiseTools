@@ -1,84 +1,89 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
 {
     public class RatedCostSummaryItem : TECObject
     {
+        #region Fields
         private TECCost _ratedCost;
+
+        private double _length;
+
+        private double _totalCost;
+        private double _totalLabor;
+        #endregion
+
+        //Constructor
+        public RatedCostSummaryItem(TECCost ratedCost, double length) : base(Guid.NewGuid())
+        {
+            _ratedCost = ratedCost;
+            _length = length;
+            updateTotals();
+        }
+
+        #region Properties
         public TECCost RatedCost
         {
             get { return _ratedCost; }
         }
 
-        private double _length;
         public double Length
         {
             get { return _length; }
-            set
+            private set
             {
                 _length = value;
-                RaisePropertyChanged("Length");
-                updateTotals();
+                raisePropertyChanged("Length");
             }
         }
 
-        private double _totalCost;
         public double TotalCost
         {
             get { return _totalCost; }
-            set
+            private set
             {
-                double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged("TotalCost", old, _totalCost);
+                raisePropertyChanged("TotalCost");
             }
         }
-
-        private double _totalLabor;
         public double TotalLabor
         {
-            get
+            get { return _totalLabor; }
+            private set
             {
-                return _totalLabor;
-            }
-            set
-            {
-                double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged("TotalLabor", old, _totalLabor);
+                raisePropertyChanged("TotalLabor");
             }
         }
+        #endregion
 
-        public RatedCostSummaryItem(TECCost ratedCost, double length)
+        #region Methods
+        public CostBatch AddLength(double length)
         {
-            _ratedCost = ratedCost;
-            _length = length;
-            RatedCost.PropertyChanged += RatedCost_PropertyChanged;
-            updateTotals();
+            Length += length;
+            return updateTotals();
+        }
+        public CostBatch RemoveLength(double length)
+        {
+            Length -= length;
+            return updateTotals();
         }
 
-        private void updateTotals()
+        private CostBatch updateTotals()
         {
-            TotalCost = (RatedCost.Cost * Length);
-            TotalLabor = (RatedCost.Labor * Length);
-        }
+            double newCost = (RatedCost.Cost * Length);
+            double newLabor = (RatedCost.Labor * Length);
 
-        private void RatedCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
-            {
-                updateTotals();
-            }
-        }
+            double deltaCost = newCost - TotalCost;
+            double deltaLabor = newLabor - TotalLabor;
 
-        public override object Copy()
-        {
-            throw new NotImplementedException();
+            TotalCost = newCost;
+            TotalLabor = newLabor;
+
+            return new CostBatch(deltaCost, deltaLabor, RatedCost.Type);
         }
+        #endregion
     }
 }

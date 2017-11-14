@@ -8,6 +8,11 @@
              x:Name="parent"
              d:DesignHeight="50" d:DesignWidth="500">
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
+        </Grid.Resources>
         <StatusBar Grid.Row="3"
                        Grid.ColumnSpan="6">
             <StatusBar.ItemsPanel>

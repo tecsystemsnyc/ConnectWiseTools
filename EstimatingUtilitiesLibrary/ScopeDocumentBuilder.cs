@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using MigraDoc;
+﻿using EstimatingLibrary;
 using MigraDoc.DocumentObjectModel;
-using MigraDoc.DocumentObjectModel.Tables;
-using MigraDoc.Rendering;
-using MigraDoc.RtfRendering;
-using PdfSharp.Pdf;
-using System.Data;
-using System.IO;
 using MigraDoc.DocumentObjectModel.Shapes;
-using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
-using System.Windows;
-using System.Drawing;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.RtfRendering;
+using NLog;
+using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
-using System.Collections.ObjectModel;
-using DebugLibrary;
+using System.IO;
+using System.Linq;
 
 
 namespace EstimatingUtilitiesLibrary
 {
     public static class ScopeDocumentBuilder
     {
+        static private Logger logger = LogManager.GetCurrentClassLogger();
+
         private const string tabSize = "0.5cm";
         private const string beforeParagraphSize = "0.5cm";
         private static List<string> itemLetters = new List<string>(new string[]
@@ -98,7 +91,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch (IOException e)
             {
-                DebugHandler.LogError("Could not load TECLogo. Exception: " + e.Message);
+                logger.Error("Could not load TECLogo. Exception: " + e.Message);
             }
 
 
@@ -119,7 +112,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch (IOException e)
             {
-                DebugHandler.LogError("Could not find TECAddress. Exception: " + e.Message);
+                logger.Error("Could not find TECAddress. Exception: " + e.Message);
             }
         }
         private static void createBidInfo(Document document, string bidName, string bidNo, string salesperson, string estimator)
@@ -160,17 +153,6 @@ namespace EstimatingUtilitiesLibrary
             table.AddColumn(Unit.FromCentimeter(5.5));
             table.AddColumn(Unit.FromCentimeter(5.5));
 
-            foreach (TECDrawing drawing in bid.Drawings)
-            {
-                Row row = table.AddRow();
-                Cell cell = row.Cells[0];
-                cell.AddParagraph("Drawing:");
-                cell = row.Cells[1];
-                cell.AddParagraph(drawing.Name);
-                cell = row.Cells[2];
-                cell.AddParagraph("DATE NOT IMPLEMENTED");
-            }
-
             document.LastSection.Add(table);
         }
         private static void createScope(Document document, TECBid bid)
@@ -197,11 +179,7 @@ namespace EstimatingUtilitiesLibrary
         }
         private static void addScopeBranch(TECScopeBranch branch, Document document, Paragraph paragraph, int tabs, string tabChar = "• ")
         {
-            string scopeString = branch.Name;
-            if (branch.Description != "")
-            {
-                scopeString += ": " + branch.Description;
-            }
+            string scopeString = branch.Label;
             for (int i = 0; i < tabs; i++)
             {
                 paragraph.AddTab();
@@ -223,14 +201,14 @@ namespace EstimatingUtilitiesLibrary
         {
             Paragraph paragraph = new Paragraph();
             int sysNum = 1;
-            foreach (TECSystem system in bid.Systems)
+            foreach (TECTypical system in bid.Systems)
             {
                  paragraph = document.LastSection.AddParagraph();
                 paragraph.AddTab();
                 string systemString = system.Name;
-                if (system.Quantity > 1)
+                if (system.Instances.Count > 1)
                 {
-                    systemString += " (" + system.Quantity.ToString() + ")";
+                    systemString += " (" + system.Instances.Count.ToString() + ")";
                 }
                 if (system.Description != "")
                 {
@@ -252,10 +230,6 @@ namespace EstimatingUtilitiesLibrary
                     paragraph = document.LastSection.AddParagraph();
                     paragraph.AddTab();
                     string equipmentString = equipment.Name;
-                    if (equipment.Quantity > 1)
-                    {
-                        equipmentString += " (" + equipment.Quantity.ToString() + ")";
-                    }
                     if (equipment.Description != "")
                     {
                         equipmentString += ": " + equipment.Description;
@@ -311,25 +285,25 @@ namespace EstimatingUtilitiesLibrary
             cell.Add(paragraph);
             document.LastSection.Add(table);
         }
-        private static void createNotesAndExclusions(Document document, List<TECNote> notes, List<TECExclusion> exclusions)
+        private static void createNotesAndExclusions(Document document, List<TECLabeled> notes, List<TECLabeled> exclusions)
         {
             Paragraph paragraph = document.LastSection.AddParagraph("Notes:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
 
-            foreach (TECNote note in notes)
+            foreach (TECLabeled note in notes)
             {
                 paragraph = document.LastSection.AddParagraph();
-                paragraph.AddFormattedText("•   " + note.Text);
+                paragraph.AddFormattedText("•   " + note.Label);
             }
             paragraph = document.LastSection.AddParagraph("Exclusions:", "Heading2");
             paragraph.Format.SpaceBefore = beforeParagraphSize;
             paragraph.Format.Shading.Color = Colors.LightGray;
 
-            foreach (TECExclusion exclusion in exclusions)
+            foreach (TECLabeled exclusion in exclusions)
             {
                 paragraph = document.LastSection.AddParagraph();
-                paragraph.AddFormattedText("•   " + exclusion.Text);
+                paragraph.AddFormattedText("•   " + exclusion.Label);
                 paragraph.AddLineBreak();
             }
         }
@@ -359,7 +333,7 @@ namespace EstimatingUtilitiesLibrary
             }
             catch (IOException e)
             {
-                DebugHandler.LogError("Could not find TECFooter. Exception: " + e.Message);
+                logger.Error("Could not find TECFooter. Exception: " + e.Message);
             }
         }
         private static void defineStyles(Document document)

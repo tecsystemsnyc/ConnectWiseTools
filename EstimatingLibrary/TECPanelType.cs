@@ -1,28 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanelType : TECCost
+    public class TECPanelType : TECHardware
     {
-        public TECPanelType(Guid guid) : base(guid) {
+        private const CostType COST_TYPE = CostType.TEC;
+
+        public TECPanelType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE) {
             _type = CostType.TEC;
         }
-        public TECPanelType() : this(Guid.NewGuid()) { }
-        public TECPanelType(TECPanelType typeSource) : this()
+        public TECPanelType(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
+        public TECPanelType(TECPanelType typeSource) : this(typeSource.Manufacturer)
         {
             copyPropertiesFromCost(typeSource);
-        }
-
-        public override object Copy()
-        {
-            var outCost = new TECPanelType();
-            outCost.copyPropertiesFromCost(this);
-            outCost._guid = this.Guid;
-            return outCost;
         }
     }
 }

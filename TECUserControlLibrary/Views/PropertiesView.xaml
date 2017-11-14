@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.PropertiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:pControls="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
+             mc:Ignorable="d" 
+             x:Name="propertiesView"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="scope">
+                <pControls:ScopePropertiesControl Selected="{Binding}"
+                                                  DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="cost">
+                <pControls:CostPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="costBatchInterface">
+                <pControls:CostBatchPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="pointInterface">
+                <pControls:PointPropetiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="hardware">
+                <pControls:HardwarePropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="located">
+                <pControls:LocatedPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="labeled">
+                <pControls:LabeledPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="controller">
+                <pControls:ControllerPropertiesControl Selected="{Binding}"
+                                                       TypeSource="{Binding ElementName=propertiesView, Path=ViewModel.Catalogs.ControllerTypes}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="panel">
+                <pControls:PanelPropertiesControl Selected="{Binding}"
+                                                  TypeSource="{Binding ElementName=propertiesView, Path=ViewModel.Catalogs.PanelTypes}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="misc">
+                <pControls:MiscPropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="ioModule">
+                <pControls:IOModulePropertiesControl Selected="{Binding}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="default"/>
+            <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
+                                              InterfaceTemplate="{StaticResource costBatchInterface}" 
+                                              DefaultTemplate="{StaticResource default}"/>
+            <utilities:PointInterfaceSelector x:Key="PointSelector"
+                                              InterfaceTemplate="{StaticResource pointInterface}" 
+                                              DefaultTemplate="{StaticResource default}"/>
+            <utilities:ScopeSelector x:Key="ScopeSelector"
+                                              InterfaceTemplate="{StaticResource scope}" 
+                                              DefaultTemplate="{StaticResource default}"/>
+            <utilities:CostSelector x:Key="CostSelector"
+                                              InterfaceTemplate="{StaticResource cost}" 
+                                              DefaultTemplate="{StaticResource default}"/>
+            <utilities:HardwareSelector x:Key="HardwareSelector"
+                                        InterfaceTemplate="{StaticResource hardware}"
+                                        DefaultTemplate="{StaticResource default}"/>
+            <utilities:LocatedSelector x:Key="LocatedSelector"
+                                       InterfaceTemplate="{StaticResource located}"
+                                       DefaultTemplate="{StaticResource default}"/>
+            <utilities:LabeledSelector x:Key="LabeledSelector"
+                                       InterfaceTemplate="{StaticResource labeled}"
+                                       DefaultTemplate="{StaticResource default}"/>
+            <utilities:ControllerSelector x:Key="ControllerSelector"
+                                          InterfaceTemplate="{StaticResource controller}"
+                                          DefaultTemplate="{StaticResource default}"/>
+            <utilities:PanelSelector x:Key="PanelSelector"
+                                     InterfaceTemplate="{StaticResource panel}"
+                                     DefaultTemplate="{StaticResource default}"/>
+            <utilities:MiscSelector x:Key="miscSelector"
+                                    InterfaceTemplate="{StaticResource misc}"
+                                    DefaultTemplate="{StaticResource default}"/>
+            <utilities:IOModuleSelector x:Key="ioModuleSelector"
+                                        InterfaceTemplate="{StaticResource ioModule}"
+                                        DefaultTemplate="{StaticResource default}"/>
+        </ResourceDictionary>
+        
+    </UserControl.Resources>
+    <ScrollViewer DataContext="{Binding ElementName=propertiesView, Path=Selected}"
+                  Background="{DynamicResource SectionBackgroundBrush}">
+        <StackPanel>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LocatedSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ControllerSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PanelSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource miscSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ioModuleSelector}"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

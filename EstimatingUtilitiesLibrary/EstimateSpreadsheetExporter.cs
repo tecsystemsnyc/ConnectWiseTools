@@ -1,13 +1,10 @@
-﻿using EstimatingLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
+using EstimatingLibrary;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -124,7 +121,7 @@ namespace EstimatingUtilitiesLibrary
             int num = 0;
             foreach (TECPoint point in subScope.SubScope.Points)
             {
-                if (point.Type == PointTypes.AI)
+                if (point.Type == IOType.AI)
                 {
                     num += point.Quantity;
                 }
@@ -136,7 +133,7 @@ namespace EstimatingUtilitiesLibrary
             num = 0;
             foreach (TECPoint point in subScope.SubScope.Points)
             {
-                if (point.Type == PointTypes.BI)
+                if (point.Type == IOType.DI)
                 {
                     num += point.Quantity;
                 }
@@ -148,7 +145,7 @@ namespace EstimatingUtilitiesLibrary
             num = 0;
             foreach (TECPoint point in subScope.SubScope.Points)
             {
-                if (point.Type == PointTypes.AO)
+                if (point.Type == IOType.AO)
                 {
                     num += point.Quantity;
                 }
@@ -161,7 +158,7 @@ namespace EstimatingUtilitiesLibrary
             num = 0;
             foreach (TECPoint point in subScope.SubScope.Points)
             {
-                if (point.Type == PointTypes.BO)
+                if (point.Type == IOType.DO)
                 {
                     num += point.Quantity;
                 }
@@ -173,7 +170,7 @@ namespace EstimatingUtilitiesLibrary
             num = 0;
             foreach (TECPoint point in subScope.SubScope.Points)
             {
-                if (point.Type == PointTypes.Serial)
+                if (TECIO.NetworkIO.Contains(point.Type))
                 {
                     num += point.Quantity;
                 }
@@ -245,7 +242,7 @@ namespace EstimatingUtilitiesLibrary
             cell.DataType = new EnumValue<CellValues>(CellValues.String);
 
             double length = 0;
-            foreach (TECConnectionType type in subScope.SubScope.Connection.ConnectionTypes)
+            foreach (TECElectricalMaterial type in subScope.SubScope.Connection.GetConnectionTypes())
             {
                 length += subScope.SubScope.Connection.Length;
             }

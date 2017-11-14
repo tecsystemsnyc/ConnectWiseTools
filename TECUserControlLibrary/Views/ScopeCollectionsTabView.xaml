@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:TECUserControlLibrary"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              mc:Ignorable="d" 
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="parent"
@@ -19,7 +21,7 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -28,302 +30,36 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
             <TextBox Text="{Binding Path=ViewModel.SearchString}"
                      Height="24"
                      VerticalContentAlignment="Center"
-                     Margin="2"/>
-            <Button Grid.Column="1"
+                     Margin="2" Grid.ColumnSpan="3"/>
+            <Button Grid.Column="1" Grid.Row="1"
                     Content="Search"
                     Margin="2"
                     Command="{Binding Path=ViewModel.SearchCollectionCommand}"/>
-            <Button Grid.Column="2"
+            <Button Grid.Column="2" Grid.Row="1"
                     Content="Done"
                     Margin="2"
                     Command="{Binding Path=ViewModel.EndSearchCommand}"/>
+            <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.SearchSelectorList}}"
+                      DisplayMemberPath="Item1"    
+                  SelectedValuePath="Item2"
+                  SelectedIndex="0"
+                      SelectedValue="{Binding Path=ViewModel.ChosenType}"
+                                              Margin="2" Grid.Row="1" FontSize="12"
+                                              VerticalContentAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding ElementName=parent, Path=ViewModel.SearchCollectionCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
         </Grid>
-        <TabControl Grid.Row="1"
-                    Background="{DynamicResource SectionBackgroundBrush}"
-                    SelectedIndex="{Binding Path=ViewModel.TabIndex, Converter={utilities:ScopeCollectionIndexToIntegerConverter}}">
-            <TabItem Visibility="Collapsed">
-                <TextBlock Text="Choose another tab to display relevant templates."
-                         TextWrapping="Wrap" Foreground="Black"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"/>
-            </TabItem>
-            <TabItem Header="Systems"
-                Visibility="{Binding Path=ViewModel.SystemsVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SystemItemsCollection}"/>
-            </TabItem>
-            <TabItem Header="Equipment"
-                 Visibility="{Binding Path=ViewModel.EquipmentVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.EquipmentItemsCollection}"/>
-            </TabItem>
-            <TabItem Header="Points"
-                 Visibility="{Binding Path=ViewModel.SubScopeVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.SubScopeItemsCollection}"/>
-            </TabItem>
-            <TabItem Header="Devices"
-                     Visibility="{Binding Path=ViewModel.DevicesVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.DevicesItemsCollection}"/>
-            </TabItem>
-            <TabItem Header="Tags"
-                     Visibility="{Binding Path=ViewModel.TagsVisibility}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Name:"/>
-                    <TextBox Text="{Binding Path=ViewModel.TagName}"
-                             Grid.Column="1"
-                             VerticalAlignment="Top"
-                             Margin="5"/>
-                    <Button Content="Add"
-                            Grid.ColumnSpan="2" 
-                            Grid.Row="1"
-                            Command="{Binding Path=ViewModel.AddTagCommand}"
-                                Margin="5"/>
-                    <controls:TagsGridControl TagsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
-                                           Grid.Row="2" Grid.ColumnSpan="2"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Manufacturers"
-                    Visibility="{Binding Path=ViewModel.ManufacturerVisibility}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Manufacturer:"/>
-                    <TextBox Text="{Binding Path=ViewModel.ManufacturerName}"
-                            Grid.Column="1"
-                            VerticalAlignment="Top"
-                            Margin="5"/>
-                    <Label Content="Multiplier:"
-                        Grid.Row="1"/>
-                    <TextBox Text="{Binding Path=ViewModel.ManufacturerMultiplier}"
-                            Grid.Column="1"
-                            Grid.Row="1"
-                            VerticalAlignment="Top"
-                            Margin="5"/>
-                    <Button Content="Add"
-                        Grid.ColumnSpan="2"
-                        Grid.Row="2"
-                            Margin="5"
-                        Command="{Binding Path=ViewModel.AddManufacturerCommand}"/>
-
-                    <controls:ManufacturersGridControl ManufacturersSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
-                                        Grid.Row="3" Grid.ColumnSpan="2"/>
-
-                </Grid>
-            </TabItem>
-            <TabItem Header="Add Devices"
-                    Visibility="{Binding Path=ViewModel.DevicesEditVisibility}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="46*"/>
-                        <ColumnDefinition Width="35*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Column="0"
-                        Grid.Row="0"
-                        Content="Name:"/>
-                    <TextBox Grid.Column="1" Grid.Row="0"
-                            Text="{Binding Path=ViewModel.DeviceName}"
-                            VerticalAlignment="Top"
-                            Margin="5,5,5,0" Grid.ColumnSpan="2"/>
-                    <Label Grid.Column="0"
-                        Grid.Row="1"
-                        Content="Description:"/>
-                    <TextBox Grid.Column="1"
-                            Grid.Row="1"
-                            Text="{Binding Path=ViewModel.DeviceDescription}"
-                            VerticalAlignment="Top"
-                            Margin="5,5,5,0" Grid.ColumnSpan="2"/>
-                    <Label Grid.Column="0"
-                        Grid.Row="2"
-                        Content="Cost:"/>
-                    <TextBox Grid.Column="1"
-                            Grid.Row="2"
-                            Text="{Binding Path=ViewModel.DeviceCost}"
-                            VerticalAlignment="Top"
-                            Margin="5,5,5,0" Grid.ColumnSpan="2"/>
-                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0"
-                        Content="Wire Type:"/>
-                        <ComboBox Grid.Column="1"
-                              ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.ConnectionTypes}"
-                              DisplayMemberPath="Name"
-                              SelectedValue="{Binding ElementName=parent, Path=ViewModel.DeviceConnectionType}"
-                            VerticalAlignment="Top"
-                            Margin="5,5,5,0" />
-                        <Button Content="Add Type" Command="{Binding Path=ViewModel.AddConnectionTypeToDeviceCommand}"
-                                Grid.Column="2" Margin="2"/>
-                    </Grid>
-                    <controls:DeviceConnectionTypeGridControl ConnectionTypesSource="{Binding Path=ViewModel.DeviceConnectionTypes}"
-                                                     Grid.Row="4" Grid.ColumnSpan="2"/>
-                    <Label Grid.Column="0"
-                        Grid.Row="5"
-                        Content="Manufacturer:"/>
-                    <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
-                            DisplayMemberPath="Name"
-                            SelectedItem="{Binding Path=ViewModel.DeviceManufacturer}"
-                            Grid.Row="5" Grid.Column="1"
-                            VerticalAlignment="Top"
-                            Margin="5,5,5,0"/>
-                    <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
-                              SelectedItem="{Binding Path=ViewModel.SelectedTag}"
-                              DisplayMemberPath="Text"/>
-                    <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
-                            Command="{Binding Path=ViewModel.AddTagToDeviceCommand}"
-                            Margin="5"/>
-                    <controls:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
-                                           TagsSource="{Binding Path=ViewModel.DeviceTags}"/>
-                    <Button Grid.Column="0"
-                        Grid.Row="8"
-                        Grid.ColumnSpan="3"
-                        Margin="2"
-                        Content="Add"
-                        Command="{Binding Path=ViewModel.AddDeviceCommand}"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Add Controllers"
-                     Visibility="{Binding Path=ViewModel.ControllerEditVisibility}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Name"
-                           Grid.Row="0"/>
-                    <TextBox Text="{Binding Path=ViewModel.ControllerName}"
-                             Grid.Column="1"
-                             Grid.Row="0"
-                             Margin="5"/>
-                    <Label Content="Description"
-                           Grid.Row="1"/>
-                    <TextBox Text="{Binding Path=ViewModel.ControllerDescription}"
-                             Grid.Column="1"
-                             Grid.Row="1"
-                             Margin="5"/>
-                    <Label Content="Cost"
-                           Grid.Row="2"/>
-                    <TextBox Text="{Binding Path=ViewModel.ControllerCost}"
-                             Grid.Column="1"
-                             Grid.Row="2"
-                             Margin="5"/>
-                    <Label Grid.Column="0"
-                           Grid.Row="3"
-                           Content="Manufacturer:"/>
-                    <ComboBox ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Manufacturers}"
-                              DisplayMemberPath="Name"
-                          Grid.Row="3" Grid.Column="1" Margin="5"
-                         SelectedItem="{Binding Path=ViewModel.ControllerManufacturer, Converter={utilities:ManufacturerConverter}}"/>
-                    <Grid Grid.Row="4" Grid.ColumnSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="50"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Content="IO:"/>
-                        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:IOType}}}"
-                                  SelectedValue="{Binding Path=ViewModel.ControllerIOType}"
-                                  Margin="5" Grid.Column="1"/>
-                        <TextBox Grid.Column="2" Text="{Binding Path=ViewModel.ControllerIOQTY}"
-                                 Margin="5"/>
-                        <Button Content="Add"
-                                Command="{Binding Path=ViewModel.AddIOToControllerCommand}"
-                                Grid.Column="3"
-                                Margin="5"/>
-                    </Grid>
-                    <DataGrid ItemsSource="{Binding Path=ViewModel.ControllerIO}"
-                              Grid.Row="5"
-                              Grid.ColumnSpan="2"
-                              CanUserAddRows="False"
-                              AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Type}" Header="Type"
-                                                IsReadOnly="True"/>
-                            <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <ComboBox Grid.Row="6" Margin="5" ItemsSource="{Binding Path=ViewModel.Templates.Catalogs.Tags}"
-                              SelectedItem="{Binding Path=ViewModel.SelectedTag}"
-                              DisplayMemberPath="Text"/>
-                    <Button Grid.Row="6" Grid.Column="1" Content="Add Tag"
-                            Command="{Binding Path=ViewModel.AddTagToControllerCommand}"
-                            Margin="5"/>
-                    <controls:TagsGridControl Grid.ColumnSpan="2" Grid.Row="7"
-                                           TagsSource="{Binding Path=ViewModel.ControllerTags}"/>
-                    <Button Content="Add Controller"
-                            Command="{Binding Path=ViewModel.AddControllerCommand}"
-                            Grid.Row="8"
-                            Grid.ColumnSpan="2"
-                            Margin="2"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Controllers"
-                     Visibility="{Binding Path=ViewModel.ControllerVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ControllersItemsCollection}"/>
-            </TabItem>
-            <TabItem Header="Asociated Costs"
-                     Visibility="{Binding Path=ViewModel.AssociatedCostsVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.AssociatedCostsItemsCollection}"/>
-            </TabItem>
-            <TabItem Header="Panels"
-                     Visibility="{Binding Path=ViewModel.PanelsVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.PanelsItemsCollection}"/>
-            </TabItem>
-            <TabItem Header="Add Panel"
-                     Visibility="{Binding Path=ViewModel.AddPanelVisibility}">
-                <controls:AddPanelControl ViewModel="{Binding Path=ViewModel}"/>
-            </TabItem>
-            <TabItem Header="Misc. Costs"
-                     Visibility="{Binding Path=ViewModel.MiscCostVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscCostsCollection}"/>
-            </TabItem>
-            <TabItem Header="Misc. Wiring"
-                     Visibility="{Binding Path=ViewModel.MiscWiringVisibility}">
-                <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.MiscWiringCollection}"/>
-            </TabItem>
-        </TabControl>
+        <controls:ScopeItemsControl ScopeSource="{Binding Path=ViewModel.ResultCollection}" Grid.Row="1"/>
     </Grid>
 </UserControl>

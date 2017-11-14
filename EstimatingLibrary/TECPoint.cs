@@ -1,48 +1,47 @@
 ﻿using EstimatingLibrary.Interfaces;
-using EstimatingLibrary.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-
-    public enum PointTypes { AI = 1, AO, BI, BO, Serial };
-
-    public class TECPoint : TECScope, PointComponent
+    public class TECPoint : TECLabeled, INotifyPointChanged, ITypicalable
     {
         #region Properties
-        private PointTypes _type;
+        private IOType _type;
+        private int _quantity;
 
-        public PointTypes Type
+        public event Action<int> PointChanged;
+
+        public IOType Type
         {
             get { return _type; }
             set
             {
-                var temp = this.Copy();
-                _type = value;
-                // Call RaisePropertyChanged whenever the property is updated
-                NotifyPropertyChanged("Type", temp, this);
-            }
-        }
-
-        public string TypeString
-        {
-            get { return convertTypeToString(Type); }
-            set
-            {
-                if (convertStringToType(value) != 0)
+                if (TECIO.PointIO.Contains(value) || TECIO.NetworkIO.Contains(value))
                 {
-                    Type = convertStringToType(value);
+                    var old = Type;
+                    _type = value;
+                    // Call raisePropertyChanged whenever the property is updated
+                    notifyCombinedChanged(Change.Edit, "Type", this, value, old);
                 }
                 else
                 {
-                    string message = "TypeString set failed in TECPoint. Unrecognized TypeString.";
-                    throw new InvalidCastException(message);
+                    throw new InvalidOperationException("TECPoint cannot be non PointIO.");
                 }
+            }
+        }
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                var old = Quantity;
+                if (!IsTypical)
+                {
+                    PointChanged?.Invoke(old - value);
+                }
+                _quantity = value;
+                notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
+
             }
         }
 
@@ -50,67 +49,33 @@ namespace EstimatingLibrary
         {
             get
             {
-                return getPointNumber();
+                return Quantity;
             }
         }
+        
+        public bool IsTypical { get; private set; }
         #endregion //Properties
 
         #region Constructors
-        public TECPoint(Guid guid) : base(guid) { }
-        public TECPoint() : this(Guid.NewGuid()) { }
+        public TECPoint(Guid guid, bool isTypical) : base(guid) { IsTypical = isTypical; }
+        public TECPoint(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
-        public TECPoint(TECPoint pointSource) : this()
+        public TECPoint(TECPoint pointSource, bool isTypical) : this(isTypical)
         {
             _type = pointSource.Type;
-            this.copyPropertiesFromScope(pointSource);
+            _label = pointSource.Label;
+            _quantity = pointSource.Quantity;
         }
         #endregion //Constructors
 
         #region Methods
-        public override Object Copy()
+        public void notifyPointChanged(int numPoints)
         {
-            TECPoint outPoint = new TECPoint(this);
-            outPoint._guid = Guid;
-            return outPoint;
-        }
-
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            TECPoint outPoint = new TECPoint(this);
-            ModelLinkingHelper.LinkScopeItem(outPoint, scopeManager);
-            return outPoint;
-        }
-
-        private int getPointNumber()
-        {
-            return Quantity;
-        }
-        #region Conversion Methods
-        public static PointTypes convertStringToType(string type)
-        {
-            switch (type.ToUpper())
+            if (!IsTypical)
             {
-                case "AI": return PointTypes.AI;
-                case "AO": return PointTypes.AO;
-                case "BI": return PointTypes.BI;
-                case "BO": return PointTypes.BO;
-                case "SERIAL": return PointTypes.Serial;
-                default: return 0;
+                PointChanged?.Invoke(numPoints);
             }
         }
-        public static string convertTypeToString(PointTypes type)
-        {
-            switch (type)
-            {
-                case PointTypes.AI: return "AI";
-                case PointTypes.AO: return "AO";
-                case PointTypes.BI: return "BI";
-                case PointTypes.BO: return "BO";
-                case PointTypes.Serial: return "SERIAL";
-                default: return "";
-            }
-        }
-        #endregion //Conversion Methods
         #endregion
 
     }

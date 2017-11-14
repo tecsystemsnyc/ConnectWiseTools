@@ -1,9 +1,8 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
@@ -11,32 +10,40 @@ namespace EstimatingLibrary
     {
         #region Properties
         //---Stored---
-        private ObservableCollection<TECController> _childrenControllers;
-        private TECConnectionType _connectionType;
+        private ObservableCollection<INetworkConnectable> _children;
+        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
         private IOType _ioType;
 
-        public ObservableCollection<TECController> ChildrenControllers
+        public ObservableCollection<INetworkConnectable> Children
         {
-            get { return _childrenControllers; }
+            get { return _children; }
             set
             {
-                var temp = this.Copy();
-                ChildrenControllers.CollectionChanged -= ChildrenControllers_CollectionChanged;
-                _childrenControllers = value;
-                ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
-                NotifyPropertyChanged("ChildrenControllers", temp, this);
-                RaisePropertyChanged("PossibleIO");
+                var old = Children;
+                Children.CollectionChanged -= Children_CollectionChanged;
+                _children = value;
+                Children.CollectionChanged += Children_CollectionChanged;
+                notifyCombinedChanged(Change.Edit, "Children", this, value, old);
+                raisePropertyChanged("PossibleIO");
             }
         }
-        public TECConnectionType ConnectionType
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
-            get { return _connectionType; }
+            get { return _connectionTypes; }
             set
             {
-                var temp = this.Copy();
-                _connectionType = value;
-                NotifyPropertyChanged("ConnectionType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                if (ConnectionTypes != null)
+                {
+                    ConnectionTypes.CollectionChanged -= (sender, args) =>
+                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
+                }
+                var old = ConnectionTypes;
+                _connectionTypes = value; if (ConnectionTypes != null)
+                {
+                    ConnectionTypes.CollectionChanged += (sender, args) =>
+                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
+                }
+                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
             }
         }
         public IOType IOType
@@ -44,65 +51,20 @@ namespace EstimatingLibrary
             get { return _ioType; }
             set
             {
-                var temp = this.Copy();
+                var old = IOType;
                 _ioType = value;
-                NotifyPropertyChanged("IOType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                notifyCombinedChanged(Change.Edit, "IOType", this, value, old);
             }
         }
 
-        override public List<TECCost> Costs
+        public override IOCollection IO
         {
             get
             {
-                return getCosts();
+                IOCollection io = new IOCollection();
+                io.AddIO(IOType);
+                return io;
             }
-        }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            TECCost thisCost = new TECCost();
-
-            if (ConnectionType != null)
-            {
-                thisCost = new TECCost();
-                thisCost.Type = ConnectionType.Type;
-                thisCost.Cost = ConnectionType.Cost * Length;
-                thisCost.Labor = ConnectionType.Labor * Length;
-                outCosts.Add(thisCost);
-                foreach (TECCost cost in ConnectionType.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-                foreach (TECCost cost in ConnectionType.RatedCosts)
-                {
-                    TECCost ratedCost = new TECCost();
-                    ratedCost.Type = cost.Type;
-                    ratedCost.Cost = cost.Cost * Length;
-                    ratedCost.Labor = cost.Labor * Length;
-                    outCosts.Add(ratedCost);
-                }
-            }
-            if (ConduitType != null)
-            {
-                thisCost = new TECCost();
-                thisCost.Type = ConduitType.Type;
-                thisCost.Cost = ConduitType.Cost * ConduitLength;
-                thisCost.Labor = ConduitType.Labor * ConduitLength;
-                outCosts.Add(thisCost);
-                foreach (TECCost cost in ConduitType.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-                foreach (TECCost cost in ConduitType.RatedCosts)
-                {
-                    TECCost ratedCost = new TECCost();
-                    ratedCost.Cost = cost.Cost * Length;
-                    ratedCost.Labor = cost.Labor * Length;
-                    outCosts.Add(ratedCost);
-                }
-            }
-            return outCosts;
         }
 
         //---Derived---
@@ -114,18 +76,18 @@ namespace EstimatingLibrary
                 if (ParentController != null)
                 {
                     //Start off with all IO in the parent controller
-                    foreach (IOType io in ParentController.NetworkIO)
+                    foreach (TECIO io in ParentController.AvailableNetworkIO.ListIO())
                     {
-                        IO.Add(io);
+                        IO.Add(io.Type);
                     }
 
                     //If any IO aren't in children controllers, remove them.
-                    foreach (TECController child in ChildrenControllers)
+                    foreach (INetworkConnectable child in Children)
                     {
                         List<IOType> ioToRemove = new List<IOType>();
                         foreach (IOType io in IO)
                         {
-                            if (!child.NetworkIO.Contains(io))
+                            if (!child.AvailableNetworkIO.Contains(io))
                             {
                                 ioToRemove.Add(io);
                             }
@@ -142,61 +104,133 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECNetworkConnection(Guid guid) : base(guid)
+        public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
         {
-            _childrenControllers = new ObservableCollection<TECController>();
-            ChildrenControllers.CollectionChanged += ChildrenControllers_CollectionChanged;
+            _children = new ObservableCollection<INetworkConnectable>();
+            _connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            Children.CollectionChanged += Children_CollectionChanged;
+            ConnectionTypes.CollectionChanged += (sender, args) =>
+                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
-        public TECNetworkConnection() : this(Guid.NewGuid()) { }
-        public TECNetworkConnection(TECNetworkConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
+        public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECNetworkConnection(TECNetworkConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
         {
-            _childrenControllers = new ObservableCollection<TECController>();
-            foreach (TECController controller in connectionSource.ChildrenControllers)
+            _children = new ObservableCollection<INetworkConnectable>();
+            foreach (INetworkConnectable item in connectionSource.Children)
             {
-                _childrenControllers.Add(new TECController(controller, guidDictionary));
+                _children.Add(item.Copy(item, isTypical, guidDictionary));
             }
-
-            if (connectionSource.ConnectionType != null)
+            foreach(TECElectricalMaterial type in connectionSource.ConnectionTypes)
             {
-                _connectionType = connectionSource.ConnectionType;
+                _connectionTypes.Add(type);
             }
 
             _ioType = connectionSource.IOType;
         }
         #endregion
 
-        #region Methods
-        public override object Copy()
-        {
-            TECNetworkConnection connection = new TECNetworkConnection(this);
-            connection._guid = this._guid;
-
-            return connection;
-        }
-        #endregion Methods
-
         #region Event Handlers
-        private void ChildrenControllers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("AddRelationship", this, item);
-                    RaisePropertyChanged("PossibleIO");
+                    notifyCombinedChanged(Change.Add, "Children", this, item);
+                    raisePropertyChanged("PossibleIO");
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("RemoveRelationship", this, item);
-                    RaisePropertyChanged("PossibleIO");
+                    notifyCombinedChanged(Change.Remove, "Children", this, item);
+                    raisePropertyChanged("PossibleIO");
                 }
             }
         }
-
-
+        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (TECElectricalMaterial type in e.NewItems)
+                {
+                    CostBatch connectionTypeCost = type.GetCosts(this.Length);
+                    notifyCombinedChanged(Change.Add, propertyName, this, type);
+                    notifyCostChanged(connectionTypeCost);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (TECElectricalMaterial type in e.OldItems)
+                {
+                    CostBatch connectionTypeCost = type.GetCosts(this.Length);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, type);
+                    notifyCostChanged(-connectionTypeCost);
+                }
+            }
+        }
         #endregion
+
+        #region Methods
+        public bool CanAddINetworkConnectable(INetworkConnectable connectable)
+        {
+            return (connectable.CanConnectToNetwork(this));
+        }
+        public void AddINetworkConnectable(INetworkConnectable connectable)
+        {
+            if (CanAddINetworkConnectable(connectable))
+            {
+                connectable.ParentConnection = this;
+                Children.Add(connectable);
+            }
+            else
+            {
+                throw new InvalidOperationException("Connectable not compatible with Network Connection.");
+            }
+        }
+        public void RemoveINetworkConnectable(INetworkConnectable connectable)
+        {
+            if (Children.Contains(connectable))
+            {
+                Children.Remove(connectable);
+                connectable.ParentConnection = null;
+            }
+            else
+            {
+                throw new InvalidOperationException("INetworkConnectable doesn't exist in Network Connection.");
+            }
+        }
+
+        protected override SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.propertyObjects());
+            List<TECObject> objects = new List<TECObject>();
+            foreach(INetworkConnectable netconnect in Children)
+            {
+                objects.Add(netconnect as TECObject);
+            }
+            saveList.AddRange(objects, "Children");
+            return saveList;
+        }
+        protected override SaveableMap linkedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.linkedObjects());
+            List<TECObject> objects = new List<TECObject>();
+            foreach (INetworkConnectable netconnect in Children)
+            {
+                objects.Add(netconnect as TECObject);
+            }
+            saveList.AddRange(objects, "Children");
+            return saveList;
+        }
+        public override ObservableCollection<TECElectricalMaterial> GetConnectionTypes()
+        {
+            return ConnectionTypes;
+        }
+        #endregion 
+
     }
 }

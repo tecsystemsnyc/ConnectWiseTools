@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EstimatingLibrary</RootNamespace>
     <AssemblyName>EstimatingLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Working|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +51,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -70,24 +73,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.105.2\lib\net451\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.106.0\lib\net46\System.Data.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.105.2\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.106.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.106.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -98,36 +102,42 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Defaults.cs" />
-    <Compile Include="Interfaces\CostComponent.cs" />
-    <Compile Include="Interfaces\ElectricalMaterialComponent.cs" />
-    <Compile Include="Interfaces\GuidObject.cs" />
-    <Compile Include="Interfaces\PointComponent.cs" />
-    <Compile Include="ObservableItemToInstanceList.cs" />
+    <Compile Include="Interfaces\IDragDropable.cs" />
+    <Compile Include="Interfaces\INetworkConnectable.cs" />
+    <Compile Include="Interfaces\INetworkParentable.cs" />
+    <Compile Include="Interfaces\INotifyCostChanged.cs" />
+    <Compile Include="Interfaces\INotifyTECChanged.cs" />
+    <Compile Include="Interfaces\INotifyPointChanged.cs" />
+    <Compile Include="Interfaces\IRelatable.cs" />
+    <Compile Include="Interfaces\IEndDevice.cs" />
+    <Compile Include="Interfaces\ITypicalable.cs" />
+    <Compile Include="TECExtraLabor.cs" />
+    <Compile Include="TECTypical.cs" />
+    <Compile Include="TECValve.cs" />
+    <Compile Include="Utilities\ObservableListDictionary.cs" />
     <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECEstimator.cs" />
+    <Compile Include="TECHardware.cs" />
     <Compile Include="TECIOModule.cs" />
+    <Compile Include="TECLocated.cs" />
+    <Compile Include="TECControllerType.cs" />
+    <Compile Include="Utilities\CostBatch.cs" />
     <Compile Include="Utilities\ModelLinkingHelper.cs" />
-    <Compile Include="PropertyChangedExtendedEventArgs.cs" />
+    <Compile Include="TECChangedEventArgs.cs" />
     <Compile Include="TECBid.cs" />
-    <Compile Include="TECBidParameters.cs" />
-    <Compile Include="TECConduitType.cs" />
+    <Compile Include="TECParameters.cs" />
     <Compile Include="TECConnection.cs" />
-    <Compile Include="TECConnectionType.cs" />
+    <Compile Include="TECElectricalMaterial.cs" />
     <Compile Include="TECController.cs" />
     <Compile Include="TECCost.cs" />
     <Compile Include="TECDevice.cs" />
-    <Compile Include="TECDrawing.cs" />
     <Compile Include="TECEquipment.cs" />
-    <Compile Include="TECExclusion.cs" />
     <Compile Include="TECIO.cs" />
-    <Compile Include="TECLabor.cs" />
-    <Compile Include="TECLocation.cs" />
     <Compile Include="TECManufacturer.cs" />
     <Compile Include="TECMisc.cs" />
     <Compile Include="TECNetworkConnection.cs" />
-    <Compile Include="TECNote.cs" />
+    <Compile Include="TECLabeled.cs" />
     <Compile Include="TECObject.cs" />
-    <Compile Include="TECPage.cs" />
     <Compile Include="TECPanel.cs" />
     <Compile Include="TECPanelType.cs" />
     <Compile Include="TECScopeManager.cs" />
@@ -138,29 +148,26 @@
     <Compile Include="TECScopeBranch.cs" />
     <Compile Include="TECSubScopeConnection.cs" />
     <Compile Include="TECSystem.cs" />
-    <Compile Include="TECTag.cs" />
     <Compile Include="TECTemplates.cs" />
-    <Compile Include="TECVisualConnection.cs" />
-    <Compile Include="TECVisualScope.cs" />
     <Compile Include="Utilities\ChangeWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DebugLibrary\DebugLibrary.csproj">
-      <Project>{b0d11a8a-8ffc-4fb1-9567-dca7f75df1f2}</Project>
-      <Name>DebugLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

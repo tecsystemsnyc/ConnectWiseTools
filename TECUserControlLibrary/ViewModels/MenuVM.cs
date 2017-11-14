@@ -1,262 +1,154 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public enum MenuType { TB, SB, EB }
-
     public class MenuVM : ViewModelBase
     {
+        #region Constants
+        protected const string busyText = "Please wait for the current process to complete";
 
-        public MenuVM(MenuType type)
-        {
-            setupMenu(type);
-
-            TemplatesHidden = false;
-        }
-
-        #region Properties
-
-        private ObservableCollection<TECMenuItem> _menu;
-        public ObservableCollection<TECMenuItem> Menu
-        {
-            get { return _menu; }
-            set
-            {
-                _menu = value;
-                RaisePropertyChanged("Menu");
-            }
-        }
-
-        private bool _templatesHidden;
-        public bool TemplatesHidden
-        {
-            get { return _templatesHidden; }
-            set
-            {
-                _templatesHidden = value;
-                setHideTemplatesString();
-            }
-        }
-
-        private TECMenuItem newMenuItem;
-        public ICommand NewCommand
-        {
-            set
-            {
-                newMenuItem.Command = value;
-            }
-        }
-
-        private TECMenuItem loadMenuItem;
-        public ICommand LoadCommand
-        {
-            set
-            {
-                loadMenuItem.Command = value;
-            }
-        }
-
-        private TECMenuItem saveMenuItem;
-        public ICommand SaveCommand
-        {
-            set
-            {
-                saveMenuItem.Command = value;
-            }
-        }
-
-        private TECMenuItem saveAsMenuItem;
-        public ICommand SaveAsCommand
-        {
-            set
-            {
-                saveAsMenuItem.Command = value;
-            }
-        }
-
-        private TECMenuItem exportProposalMenuItem;
-        public ICommand ExportProposalCommand
-        {
-            set { exportProposalMenuItem.Command = value; }
-        }
-
-        private TECMenuItem exportPointsListMenuItem;
-        public ICommand ExportPointsListCommand
-        {
-            set
-            {
-                exportPointsListMenuItem.Command = value;
-            }
-        }
-
-        //private TECMenuItem exportExcelMenuItem;
-        //public ICommand ExportExcelCommand
-        //{
-        //    set
-        //    {
-        //        exportExcelMenuItem.Command = value;
-        //    }
-        //}
-
-        private TECMenuItem undoMenuItem;
-        public ICommand UndoCommand
-        {
-            set { undoMenuItem.Command = value; }
-        }
-
-        private TECMenuItem redoMenuItem;
-        public ICommand RedoCommand
-        {
-            set
-            {
-                redoMenuItem.Command = value;
-            }
-        }
-
-        private TECMenuItem toggleTemplatesMenuItem;
-        public ICommand ToggleTemplatesCommand
-        {
-            set
-            {
-                toggleTemplatesMenuItem.Command = value;
-            }
-        }
-
-        private TECMenuItem loadTemplatesMenuItem;
-        public ICommand LoadTemplatesCommand
-        {
-            set
-            {
-                loadTemplatesMenuItem.Command = value;
-            }
-            get
-            {
-                return loadTemplatesMenuItem.Command;
-            }
-        }
-
-        private TECMenuItem refreshTemplatesMenuItem;
-        public ICommand RefreshTemplatesCommand
-        {
-            set
-            {
-                refreshTemplatesMenuItem.Command = value;
-            }
-        }
-
-        private TECMenuItem refreshBidMenuItem;
-        public ICommand RefreshBidCommand
-        {
-            set
-            {
-                refreshBidMenuItem.Command = value;
-            }
-        }
         #endregion
 
-        #region Methods
-        private void setupMenu(MenuType type)
+        #region Fields
+        private Dictionary<string, TECMenuItem> menuItemDictionary;
+        private readonly ObservableCollection<TECMenuItem> _menu;
+        #endregion
+
+        #region Properties
+        public ReadOnlyObservableCollection<TECMenuItem> Menu { get { return new ReadOnlyObservableCollection<TECMenuItem>(_menu); } }
+
+        public RelayCommand NewCommand { get; private set; }
+        public RelayCommand LoadCommand { get; private set; }
+        public RelayCommand SaveCommand { get; private set; }
+        public RelayCommand SaveAsCommand { get; private set; }
+        public RelayCommand UndoCommand { get; private set; }
+        public RelayCommand RedoCommand { get; private set; }
+        #endregion
+
+        public MenuVM()
         {
-            Menu = new ObservableCollection<TECMenuItem>();
+            menuItemDictionary = new Dictionary<string, TECMenuItem>();
+            _menu = new ObservableCollection<TECMenuItem>();
 
-            SolidColorBrush lightTextBrush = (SolidColorBrush)Application.Current.Resources["LightTextBrush"];
-            SolidColorBrush darkTextBrush = (SolidColorBrush)Application.Current.Resources["DarkTextBrush"];
-
-            //File
-            TECMenuItem FileMenu = new TECMenuItem("File", lightTextBrush);
-
-            newMenuItem = new TECMenuItem("New", darkTextBrush);
-            FileMenu.Items.Add(newMenuItem);
-
-            loadMenuItem = new TECMenuItem("Load", darkTextBrush);
-            FileMenu.Items.Add(loadMenuItem);
-
-            saveMenuItem = new TECMenuItem("Save", darkTextBrush);
-            FileMenu.Items.Add(saveMenuItem);
-
-            saveAsMenuItem = new TECMenuItem("Save As", darkTextBrush);
-            FileMenu.Items.Add(saveAsMenuItem);
-
-            if (type != MenuType.TB)
-            {
-                refreshBidMenuItem = new TECMenuItem("Refresh", darkTextBrush);
-                FileMenu.Items.Add(refreshBidMenuItem);
-
-                //Export
-                TECMenuItem ExportMenu = new TECMenuItem("Export", darkTextBrush);
-
-                exportProposalMenuItem = new TECMenuItem("Proposal", darkTextBrush);
-                ExportMenu.Items.Add(exportProposalMenuItem);
-
-                exportPointsListMenuItem = new TECMenuItem("Points List", darkTextBrush);
-                ExportMenu.Items.Add(exportPointsListMenuItem);
-
-                //exportExcelMenuItem = new TECMenuItem("Excel", darkTextBrush);
-                //ExportMenu.Items.Add(exportExcelMenuItem);
-
-                FileMenu.Items.Add(ExportMenu);
-            }
-
-            Menu.Add(FileMenu);
-
-            //Edit
-            TECMenuItem EditMenu = new TECMenuItem("Edit", lightTextBrush);
-
-            undoMenuItem = new TECMenuItem("Undo", darkTextBrush);
-            EditMenu.Items.Add(undoMenuItem);
-
-            redoMenuItem = new TECMenuItem("Redo", darkTextBrush);
-            EditMenu.Items.Add(redoMenuItem);
-
-            Menu.Add(EditMenu);
-
-            //View
-            if (type != MenuType.TB)
-            {
-                TECMenuItem ViewMenu = new TECMenuItem("View", lightTextBrush);
-
-                toggleTemplatesMenuItem = new TECMenuItem("Show/Hide", darkTextBrush);
-                ViewMenu.Items.Add(toggleTemplatesMenuItem);
-
-                Menu.Add(ViewMenu);
-            }
-
-            //Templates
-            TECMenuItem TemplatesMenu = new TECMenuItem("Templates", lightTextBrush);
-
-            loadTemplatesMenuItem = new TECMenuItem("Load", darkTextBrush);
-
-            if (type != MenuType.TB)
-            {
-                TemplatesMenu.Items.Add(loadTemplatesMenuItem);
-            }
-
-            refreshTemplatesMenuItem = new TECMenuItem("Refresh", darkTextBrush);
-            TemplatesMenu.Items.Add(refreshTemplatesMenuItem);
-
-            Menu.Add(TemplatesMenu);
+            setupMenu();
         }
 
-        private void setHideTemplatesString()
+        #region Methods
+        public void SetNewCommand(Action execute, Func<bool> canExecute = null)
         {
-            if (toggleTemplatesMenuItem != null)
+            NewCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("New", NewCommand);
+        }
+        public void SetLoadCommand(Action execute, Func<bool> canExecute = null)
+        {
+            LoadCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Load", LoadCommand);
+        }
+        public void SetSaveDeltaCommand(Action execute, Func<bool> canExecute = null)
+        {
+            SaveCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save", SaveCommand);
+        }
+        public void SetSaveNewCommand(Action execute, Func<bool> canExecute = null)
+        {
+            SaveAsCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save As", SaveAsCommand);
+        }
+        public void SetUndoCommand(Action execute, Func<bool> canExecute = null)
+        {
+            UndoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Undo", UndoCommand);
+        }
+        public void SetRedoCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RedoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Redo", RedoCommand);
+        }
+        public void SetRefreshTemplatesCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Refresh Templates", command);
+        }
+
+        protected TECMenuItem addMenuItem(string newItemName, string disabledText = null, string parentItemName = null)
+        {
+            if (menuItemDictionary.ContainsKey(newItemName))
             {
-                if (TemplatesHidden)
-                {
-                    toggleTemplatesMenuItem.Name = "Show Templates";
-                }
-                else
-                {
-                    toggleTemplatesMenuItem.Name = "Hide Templates";
-                }
+                throw new InvalidOperationException("A menu item with the name '" + newItemName + "' already exists.");
             }
+
+            if (parentItemName == null)
+            //Add base menu item
+            {
+                TECMenuItem newBaseItem = new TECMenuItem(newItemName, true);
+                if(disabledText != null) { newBaseItem.DisabledText = disabledText; }
+                menuItemDictionary.Add(newBaseItem.Name, newBaseItem);
+                _menu.Add(newBaseItem);
+                return newBaseItem;
+            }
+            else
+            //Add child menu item
+            {
+                if (!menuItemDictionary.ContainsKey(parentItemName))
+                {
+                    throw new InvalidOperationException("Menu item with the name '" + parentItemName + "' doesn't exist.");
+                }
+
+                TECMenuItem parentItem = menuItemDictionary[parentItemName];
+                TECMenuItem newChildItem = new TECMenuItem(newItemName, false);
+                if (disabledText != null) { newChildItem.DisabledText = disabledText; }
+                menuItemDictionary.Add(newChildItem.Name, newChildItem);
+                parentItem.AddMenuItem(newChildItem);
+                return newChildItem;
+            }
+        }
+        protected void setCommand(string itemName, RelayCommand command)
+        {
+            if (!menuItemDictionary.ContainsKey(itemName))
+            {
+                throw new InvalidOperationException("No menu item with the name '" + itemName + "' exists in the menu.");
+            }
+
+            TECMenuItem item = menuItemDictionary[itemName];
+            item.Command = command;
+        }
+
+        protected Func<bool> forceNullToTrue(Func<bool> func)
+        {
+            if (func == null)
+            {
+                return () => true;
+            }
+            else
+            {
+                return func;
+            }
+        }
+
+        private void setupMenu()
+        {
+            //Main menu items
+            addMenuItem("File");
+            addMenuItem("Edit");
+            addMenuItem("Templates");
+
+            //File menu items
+            addMenuItem("New", busyText, parentItemName:"File");
+            addMenuItem("Load", busyText, parentItemName: "File");
+            addMenuItem("Save", busyText, parentItemName: "File");
+            addMenuItem("Save As", busyText, parentItemName: "File");
+
+            //Edit menu items
+            addMenuItem("Undo", "Nothing to undo", parentItemName: "Edit");
+            addMenuItem("Redo", "Nothing to redo", parentItemName: "Edit");
+
+            //Templates menu items
+            addMenuItem("Refresh Templates", busyText, parentItemName: "Templates");
         }
         #endregion
     }

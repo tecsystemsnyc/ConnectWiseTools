@@ -1,59 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EstimatingLibrary.Interfaces;
+using System;
+using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECIOModule : TECCost
+    public class TECIOModule : TECHardware
     {
-        private int _ioPerModule;
-        public int IOPerModule
+        private const CostType COST_TYPE = CostType.TEC;
+
+        private ObservableCollection<TECIO> _io;
+        public ObservableCollection<TECIO> IO
         {
-            get { return _ioPerModule; }
+            get { return _io; }
             set
             {
-                var temp = Copy();
-                _ioPerModule = value;
-                NotifyPropertyChanged("IOPerModule", temp, this);
+                var old = IO;
+                IO.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "IO");
+                _io = value;
+                IO.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IO");
+                notifyCombinedChanged(Change.Edit, "IO", this, value, old);
+            }
+        }
+        
+        public TECIOModule(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
+        {
+            _io = new ObservableCollection<TECIO>();
+        }
+        public TECIOModule(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
+        public TECIOModule(TECIOModule ioModuleSource) : this(ioModuleSource.Manufacturer)
+        {
+            copyPropertiesFromHardware(this);
+            _io = ioModuleSource.IO;
+        }
+
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (object item in e.NewItems)
+                {
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (object item in e.OldItems)
+                {
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
+                }
             }
         }
 
-        private TECManufacturer _manufacturer;
-        public TECManufacturer Manufacturer
+        protected override SaveableMap propertyObjects()
         {
-            get { return _manufacturer; }
-            set
-            {
-                var temp = this.Copy();
-                _manufacturer = value;
-                NotifyPropertyChanged("Manufacturer", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
-            }
+            SaveableMap saveMap = new SaveableMap();
+            saveMap.AddRange(base.propertyObjects());
+            saveMap.AddRange(IO, "IO");
+            return saveMap;
+        }
+        public override object DragDropCopy(TECScopeManager scopeManager)
+        {
+            return this;
         }
 
-
-        public TECIOModule(Guid guid) : base(guid)
-        {
-            _ioPerModule = 0;
-        }
-        public TECIOModule() : this(Guid.NewGuid()) { }
-        public TECIOModule(TECIOModule ioModuleSource) : this()
-        {
-            copyPropertiesFromCost(this);
-            _ioPerModule = ioModuleSource.IOPerModule;
-            _manufacturer = ioModuleSource.Manufacturer;
-        }
-
-
-        public override object Copy()
-        {
-            var outObject = new TECIOModule(this.Guid);
-            outObject.copyPropertiesFromCost(this);
-            outObject._ioPerModule = this.IOPerModule;
-            outObject._manufacturer = this.Manufacturer;
-            return outObject;
-        }
     }
 }

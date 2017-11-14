@@ -18,15 +18,15 @@
             Background="{StaticResource ItemBrush}">
         <Grid DataContext="{Binding ElementName=parent}">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="50"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Text="{Binding Path=NameLabel}" Grid.Row="0"
                        ToolTip="{Binding  Path=NameLabel}"
-                       TextWrapping="Wrap" Margin="2"/>
+                       TextWrapping="Wrap" Margin="2" TextTrimming="WordEllipsis"/>
             <TextBlock Text="{Binding Path=DescriptionLabel}" Grid.Row="1"
                        ToolTip="{Binding  Path=DescriptionLabel}"
-                        FontSize="8" Margin="2" TextWrapping="Wrap"/>
-    </Grid>
+                        FontSize="8" Margin="2" TextWrapping="Wrap" TextTrimming="WordEllipsis"/>
+        </Grid>
     </Border>
 </UserControl>

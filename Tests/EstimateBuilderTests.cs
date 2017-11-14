@@ -1,10 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EstimatingLibrary;
-using System.IO;
-using EstimatingUtilitiesLibrary;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
 {
@@ -14,7 +8,7 @@ namespace Tests
     [TestClass]
     public class EstimateBuilderTests
     {
-        static EstimateBuilder.MVVM.MainViewModel mainVM;
+        static EstimateBuilder.MVVM.EstimateManager mainVM;
 
         public EstimateBuilderTests()
         {
@@ -49,7 +43,7 @@ namespace Tests
         [ClassInitialize()]
         public static void MyClassInitialize(TestContext testContext)
         {
-            mainVM = new EstimateBuilder.MVVM.MainViewModel();
+            mainVM = new EstimateBuilder.MVVM.EstimateManager();
         }
         //
         // Use ClassCleanup to run code after all tests in a class have run

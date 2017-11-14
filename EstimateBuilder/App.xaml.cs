@@ -1,8 +1,7 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Threading;
-using System.Deployment.Application;
+﻿using GalaSoft.MvvmLight.Threading;
+using NLog;
 using System;
-using DebugLibrary;
+using System.Windows;
 
 namespace EstimateBuilder
 {
@@ -11,51 +10,53 @@ namespace EstimateBuilder
     /// </summary>
     public partial class App : Application
     {
-        static App()
+        static Logger logger = LogManager.GetCurrentClassLogger();
+
+        public App() : base()
         {
+            this.Dispatcher.UnhandledException += logUnhandledException;
             DispatcherHelper.Initialize();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
-
-            // Check if this was launched by double-clicking a doc. If so, use that as the
-            // startup file name.
-
-            if (ApplicationDeployment.IsNetworkDeployed)
+            logger.Debug("Estimate Builder starting up.");
+            if (AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments.ActivationData != null
+                && AppDomain.CurrentDomain.SetupInformation
+                .ActivationArguments.ActivationData.Length > 0)
             {
-                if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
+                try
                 {
-                    string fname = "No filename given";
-                    try
-                    {
-                        fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
-                        // It comes in as a URI; this helps to convert it to a path.
-                        Uri uri = new Uri(fname);
-                        fname = uri.LocalPath;
+                    string fname = AppDomain.CurrentDomain.SetupInformation
+             .ActivationArguments.ActivationData[0];
 
-                        EstimateBuilder.Properties.Settings.Default.StartupFile = fname;
-                    }
-                    catch (Exception exc)
-                    {
-                        DebugHandler.LogError("Could not open startup file. Exception: " + exc.Message);
-                    }
+                    // It comes in as a URI; this helps to convert it to a path.
+                    Uri uri = new Uri(fname);
+                    string startUpFilePath = uri.LocalPath;
+                    logger.Debug("StartUp file path: {0}", startUpFilePath);
+                    EstimateBuilder.Properties.Settings.Default.StartUpFilePath = startUpFilePath;
+                    EstimateBuilder.Properties.Settings.Default.Save();
+                }
+                catch (Exception)
+                {
+                    logger.Error("Couldn't process startup arguments as a path.");
                 }
             }
-
+            else
+            {
+                logger.Debug("No startup arguments passed.");
+            }
             base.OnStartup(e);
         }
 
-        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void logUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            if (DebugHandler.isReleased)
-            {
-                DebugHandler.LogError("Exception: " + e.Exception);
-                DebugHandler.LogError("Inner Exception: " + e.Exception.InnerException);
-                DebugHandler.LogError("Stack Trace: " + e.Exception.StackTrace);
-                e.Handled = true;
-            }
+            logger.Fatal("Unhandled exception: {0}", e.Exception.Message);
+            logger.Fatal("Inner exception: {0}", e.Exception.InnerException.Message);
+            logger.Fatal("Stack trace: {0}", e.Exception.StackTrace);
+            MessageBox.Show("Fatal error occured, view logs for more information.", "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Environment.Exit(0);
         }
     }
 }

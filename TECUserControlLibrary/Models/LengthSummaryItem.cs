@@ -1,46 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EstimatingLibrary.Interfaces;
-using EstimatingLibrary;
+﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
+using System;
 
 namespace TECUserControlLibrary.Models
 {
     public class LengthSummaryItem : TECObject
     {
-        private ElectricalMaterialComponent _material;
-        public ElectricalMaterialComponent Material
+        #region Fields
+        private TECElectricalMaterial _material;
+
+        private double _length;
+
+        private double _totalCost;
+        private double _totalLabor;
+        #endregion
+
+        //Cosntructor
+        public LengthSummaryItem(TECElectricalMaterial material, double length) : base(Guid.NewGuid())
+        {
+            _material = material;
+            _length = length;
+            updateTotals();
+        }
+
+        #region Properties
+        public TECElectricalMaterial Material
         {
             get { return _material; }
         }
 
-        private double _length;
         public double Length
         {
             get { return _length; }
-            set
+            private set
             {
                 _length = value;
-                RaisePropertyChanged("Length");
-                updateTotals();
+                raisePropertyChanged("Length");
             }
         }
 
-        private double _totalCost;
         public double TotalCost
         {
             get { return _totalCost; }
-            set
+            private set
             {
-                double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged("TotalCost", old, _totalCost);
+                raisePropertyChanged("TotalCost");
             }
         }
-
-        private double _totalLabor;
         public double TotalLabor
         {
             get { return _totalLabor; }
@@ -48,35 +55,36 @@ namespace TECUserControlLibrary.Models
             {
                 double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged("TotalLabor", old, _totalLabor);
+                raisePropertyChanged("TotalLabor");
             }
         }
+        #endregion
 
-        public LengthSummaryItem(ElectricalMaterialComponent material)
+        #region Methods
+        public CostBatch AddLength(double length)
         {
-            _material = material;
-            _length = 0;
-            material.PropertyChanged += Material_PropertyChanged;
-            updateTotals();
+            Length += length;
+            return updateTotals();
+        }
+        public CostBatch RemoveLength(double length)
+        {
+            Length -= length;
+            return updateTotals();
         }
 
-        private void updateTotals()
+        private CostBatch updateTotals()
         {
-            TotalCost = (Material.Cost * Length);
-            TotalLabor = (Material.Labor * Length);
-        }
+            double newCost = (Material.Cost * Length);
+            double newLabor = (Material.Labor * Length);
 
-        private void Material_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
-            {
-                updateTotals();
-            }
-        }
+            double deltaCost = newCost - TotalCost;
+            double deltaLabor = newLabor - TotalLabor;
 
-        public override object Copy()
-        {
-            throw new NotImplementedException();
+            TotalCost = newCost;
+            TotalLabor = newLabor;
+
+            return new CostBatch(deltaCost, deltaLabor, CostType.Electrical);
         }
+        #endregion
     }
 }

@@ -1,0 +1,33 @@
+﻿<Window x:Class="TECUserControlLibrary.Debug.EBDebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TECUserControlLibrary.Debug"
+        mc:Ignorable="d"
+        Title="EBDebugWindow" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Button Command="{DynamicResource TestNetworkCommand}" Margin="5">
+            <TextBlock VerticalAlignment="Center">Test Network</TextBlock>
+        </Button>
+        <Button Command="{DynamicResource AddTypicalCommand}" Margin="5"
+                Grid.Column="1">
+            <TextBlock VerticalAlignment="Center">Add Typical</TextBlock>
+        </Button>
+        <Button Command="{DynamicResource ThrowExceptionCommand}" Margin="5"
+                Grid.Row="1">
+            <TextBlock VerticalAlignment="Center">Throw Exception</TextBlock>
+        </Button>
+    </Grid>
+</Window>

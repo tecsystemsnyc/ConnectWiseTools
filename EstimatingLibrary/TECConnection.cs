@@ -1,36 +1,30 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
 
-    public abstract class TECConnection : TECObject, CostComponent
+    public abstract class TECConnection : TECObject, INotifyCostChanged, IRelatable, ITypicalable
     {
         #region Properties
-        protected Guid _guid;
         protected double _length;
         protected double _conduitLength;
         protected TECController _parentController;
-        protected TECConduitType _conduitType;
+        protected TECElectricalMaterial _conduitType;
 
-        public Guid Guid
-        {
-            get { return _guid; }
-        }
         public double Length
         {
             get { return _length; }
             set
             {
-                var temp = this.Copy();
+                var old = Length;
+                var originalCost = this.CostBatch;
                 _length = value;
-                NotifyPropertyChanged("Length", temp, this);
+                notifyCombinedChanged(Change.Edit, "Length", this, value, old);
+                notifyCostChanged(CostBatch - originalCost);
             }
         }
         public double ConduitLength
@@ -38,9 +32,12 @@ namespace EstimatingLibrary
             get { return _conduitLength; }
             set
             {
-                var temp = this.Copy();
+                var old = ConduitLength;
                 _conduitLength = value;
-                NotifyPropertyChanged("ConduitLength", temp, this);
+                notifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
+                CostBatch previous = ConduitType != null ? ConduitType.GetCosts(old) : new CostBatch();
+                CostBatch current = ConduitType != null ? ConduitType.GetCosts(value) : new CostBatch();
+                notifyCostChanged(current - previous);
             }
         }
         public TECController ParentController
@@ -49,35 +46,58 @@ namespace EstimatingLibrary
             set
             {
                 _parentController = value;
-                RaisePropertyChanged("ParentController");
+                raisePropertyChanged("ParentController");
             }
         }
-        public TECConduitType ConduitType
+        public TECElectricalMaterial ConduitType
         {
             get { return _conduitType; }
             set
             {
-                var oldNew = Tuple.Create<Object, Object>(_conduitType, value);
-                var temp = Copy();
+                var old = ConduitType;
                 _conduitType = value;
-                NotifyPropertyChanged("ConduitType", temp, this);
-                temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECConnection), typeof(TECConduitType));
+                notifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
+                CostBatch previous = old != null ? old.GetCosts(ConduitLength) : new CostBatch();
+                CostBatch current = value != null ? value.GetCosts(ConduitLength) : new CostBatch();
+                notifyCostChanged(current - previous);
             }
         }
 
-        public abstract List<TECCost> Costs { get; }
+        public CostBatch CostBatch
+        {
+            get { return getCosts(); }
+        }
+
+        public SaveableMap PropertyObjects
+        {
+            get { return propertyObjects(); }
+        }
+        public SaveableMap LinkedObjects
+        {
+            get { return linkedObjects(); }
+        }
+
+        public bool IsTypical { get; private set; }
+
+        public abstract IOCollection IO { get; }
+
+        public List<TECIO> IOList
+        {
+            get { return IO.ListIO(); }
+        }
         #endregion //Properties
 
+        public event Action<CostBatch> CostChanged;
+
         #region Constructors 
-        public TECConnection(Guid guid)
+        public TECConnection(Guid guid, bool isTypical) : base(guid)
         {
-            _guid = guid;
+            IsTypical = isTypical;
             _length = 0;
             _conduitLength = 0;
         }
-        public TECConnection() : this(Guid.NewGuid()) { }
-        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECConnection(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }
@@ -85,8 +105,52 @@ namespace EstimatingLibrary
             _length = connectionSource.Length;
             _conduitLength = connectionSource.ConduitLength;
             if (connectionSource.ConduitType != null)
-            { _conduitType = connectionSource.ConduitType.Copy() as TECConduitType; }
+            { _conduitType = connectionSource.ConduitType; }
         }
         #endregion //Constructors
+
+        public void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                CostChanged?.Invoke(costs);
+            }
+        }
+
+        protected virtual CostBatch getCosts()
+        {
+            CostBatch costs = new CostBatch();
+            foreach (TECElectricalMaterial connectionType in GetConnectionTypes())
+            {
+                costs += connectionType.GetCosts(Length);
+            }
+            if (ConduitType != null)
+            {
+                costs += ConduitType.GetCosts(ConduitLength);
+            }
+            return costs;
+        }
+        protected virtual SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");
+            if(this.ConduitType != null)
+            {
+                saveList.Add(this.ConduitType, "ConduitType");
+            }
+            return saveList;
+        }
+        protected virtual SaveableMap linkedObjects()
+        {
+            SaveableMap relatedList = new SaveableMap();
+            relatedList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");
+            if (this.ConduitType != null)
+            {
+                relatedList.Add(this.ConduitType, "ConduitType");
+            }
+            return relatedList;
+        }
+
+        abstract public ObservableCollection<TECElectricalMaterial> GetConnectionTypes();
     }
 }

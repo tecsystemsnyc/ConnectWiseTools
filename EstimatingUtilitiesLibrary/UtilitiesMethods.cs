@@ -1,18 +1,13 @@
-﻿using EstimatingLibrary;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using System.Collections.ObjectModel;
 using System.Reflection;
-using EstimatingLibrary.Interfaces;
-using System.Collections;
+using System.Windows.Media.Imaging;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -68,13 +63,6 @@ namespace EstimatingUtilitiesLibrary
                 i++;
             }
             return css;
-        }
-
-        public static double getLength(TECVisualScope scope1, TECVisualScope scope2, double scale)
-        {
-            var length = Math.Pow((Math.Pow((scope1.X - scope2.X), 2) + Math.Pow((scope1.Y - scope2.Y), 2)), 0.5) * scale;
-
-            return length;
         }
 
         public static BitmapImage ResizeImage(Image image, int width, int height)
@@ -191,7 +179,7 @@ namespace EstimatingUtilitiesLibrary
 
         #endregion Cast Conversions
 
-        public static object GetChildCollection(Type childType, object parentObject, Type parentType = null)
+        public static IEnumerable GetChildCollection(Type childType, object parentObject, Type parentType = null)
         {
             if(parentType == null)
             {
@@ -200,47 +188,11 @@ namespace EstimatingUtilitiesLibrary
             foreach (PropertyInfo info in parentType.GetProperties())
             {
                 if (info.GetGetMethod() != null && info.PropertyType == typeof(ObservableCollection<>).MakeGenericType(new[] { childType }))
-                    return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null);
+                    return parentObject.GetType().GetProperty(info.Name).GetValue(parentObject, null) as IEnumerable;
             }
             return null;
         }
-
-        public static void UnionizeCatalogs(TECCatalogs bidCatalog, TECCatalogs templateCatalog)
-        {
-            unionizeScope(bidCatalog.Devices, templateCatalog.Devices);
-            unionizeScope(bidCatalog.Manufacturers, templateCatalog.Manufacturers);
-            unionizeScope(bidCatalog.ConnectionTypes, templateCatalog.ConnectionTypes);
-            unionizeScope(bidCatalog.ConduitTypes, templateCatalog.ConduitTypes);
-            unionizeScope(bidCatalog.PanelTypes, templateCatalog.PanelTypes);
-            unionizeScope(bidCatalog.IOModules, templateCatalog.IOModules);
-            unionizeScope(bidCatalog.Tags, templateCatalog.Tags);
-            unionizeScope(bidCatalog.AssociatedCosts, templateCatalog.AssociatedCosts);
-
-        }
-        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
-        {
-            ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
-
-            foreach (T templateItem in templateItems)
-            {
-                foreach (T item in bidItems)
-                {
-                    if ((item as GuidObject).Guid == (templateItem as GuidObject).Guid)
-                    {
-                        itemsToRemove.Add(item);
-                    }
-                }
-            }
-            foreach (T item in itemsToRemove)
-            {
-                bidItems.Remove(item);
-            }
-            foreach (T item in templateItems)
-            {
-                bidItems.Add(item);
-            }
-        }
-
+        
         public static bool IsLowerVersion(string currentVersion, string sampleVersion)
         {
             var isLowerVersion = false;

@@ -7,7 +7,9 @@
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
-             x:Name="parent"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:xaml="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="miscCostsView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.Resources>
@@ -15,57 +17,106 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <GridLength x:Key="addMiscHeight">
+                60
+            </GridLength>
+            <GridLength x:Key="zero">
+                0
+            </GridLength>
+            <xaml:Null x:Key="null"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=miscCostsView, Path=ViewModel}"
+          Background="{StaticResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition>
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{utilities:BooleanChoiceConverter}">
+                        <Binding ElementName="miscCostsView" Path="ReadOnly"/>
+                        <Binding Source="{StaticResource zero}"/>
+                        <Binding Source="{StaticResource addMiscHeight}"/>
+                        <Binding Source="{StaticResource addMiscHeight}"/>
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
         </Grid.RowDefinitions>
+        <!--Misc Costs-->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Content="Misc. Costs" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                Margin="5,0,5,0">
+                <Label Content="Misc. Costs"  Foreground="Black"
                                 VerticalAlignment="Center"/>
-            <controls:MiscCostGridControl CostSource="{Binding TECCostCollection}"
-                                  Grid.Row="1" Grid.Column="1"
-                                  Margin="0,0,5,0"
-                                  ViewModel="{Binding}"
-                                          UserCanAddRows="False"/>
+            </Border>
 
+            <listControls:MiscListControl Source="{Binding TECCostCollection}"
+                                          SelectedItem="{Binding Selected}"
+                                          Grid.Row="1" Grid.Column="1"
+                                          DeleteCommand="{Binding DeleteCommand}"
+                                          Margin="5,0,5,0">
+                <listControls:MiscListControl.DropHandler>
+                    <MultiBinding Converter="{utilities:BooleanChoiceConverter}">
+                        <Binding ElementName="miscCostsView" Path="ReadOnly"/>
+                        <Binding Source="{StaticResource null}"/>
+                        <Binding ElementName="miscCostsView" Path="DropHandler"/>
+                        <Binding ElementName="miscCostsView" Path="DropHandler"/>
+                    </MultiBinding>
+                </listControls:MiscListControl.DropHandler>
+            </listControls:MiscListControl>
         </Grid>
+        <!--Misc Wiring-->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Content="Misc. Wiring" Grid.Row="0"
-                                FontWeight="Bold" Foreground="Black"
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                    Margin="5,0,5,0">
+                <Label Content="Misc. Wiring" Foreground="Black"
                                 VerticalAlignment="Center"/>
-            <controls:MiscCostGridControl CostSource="{Binding ElectricalCostCollection}"
-                                  Grid.Row="1" Grid.Column="1"
-                                  Margin="5,0,0,0"
-                                          UserCanAddRows="False"
-                                  ViewModel="{Binding}"/>
+            </Border>
+
+            <listControls:MiscListControl Source="{Binding ElectricalCostCollection}"
+                                          SelectedItem="{Binding Selected}"
+                                          Grid.Row="1" Grid.Column="1"
+                                          DeleteCommand="{Binding DeleteCommand}"
+                                          Margin="5,0,5,0">
+                <listControls:MiscListControl.DropHandler>
+                    <MultiBinding Converter="{utilities:BooleanChoiceConverter}">
+                        <Binding ElementName="miscCostsView" Path="ReadOnly"/>
+                        <Binding Source="{StaticResource null}"/>
+                        <Binding ElementName="miscCostsView" Path="DropHandler"/>
+                        <Binding ElementName="miscCostsView" Path="DropHandler"/>
+                    </MultiBinding>
+                </listControls:MiscListControl.DropHandler>
+            </listControls:MiscListControl>
         </Grid>
+        <!--Add Misc-->
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.Resources>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="2"/>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="45"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition/>
                 <ColumnDefinition Width="45"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Name:" Grid.Column="0"/>
             <TextBox Text="{Binding MiscName}" Grid.Column="1"/>
@@ -73,8 +124,11 @@
             <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:CostType}}}"
                       SelectedItem="{Binding MiscType}"
                       Grid.Column="3"
-                  VerticalContentAlignment="Center"/>
-            <Button Content="Add" Command="{Binding AddNewCommand}" Grid.Column="4" Grid.RowSpan="2" Margin="4"/>
+                  VerticalContentAlignment="Center"
+                      Margin="2"/>
+            <Label Content="Qty:" Grid.Column="4"/>
+            <TextBox Text="{Binding Quantity}" Grid.Column="5"/>
+            <Button Content="Add" Command="{Binding AddNewCommand}" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Margin="2"/>
             <Label Content="Cost:" Grid.Column="0" Grid.Row="1"/>
             <TextBox Text="{Binding Cost}" Grid.Column="1" Grid.Row="1"/>
             <Label Content="Labor:" Grid.Column="2" Grid.Row="1"/>

@@ -1,50 +1,109 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, CostComponent
+    public class TECMisc : TECCost, IDragDropable, ITypicalable
     {
-        public List<TECCost> Costs
+        #region Fields
+        private int _quantity;
+        #endregion
+
+        #region Constructors
+        public TECMisc(Guid guid, CostType type, bool isTypical) : base(guid, type)
+        {
+            IsTypical = isTypical;
+            _quantity = 1;
+        }
+        public TECMisc(CostType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
+        public TECMisc(TECMisc miscSource, bool isTypical) : this(miscSource.Type, isTypical)
+        {
+            copyPropertiesFromCost(miscSource);
+            _quantity = miscSource.Quantity;
+        }
+        #endregion
+        
+        #region Properties
+        public override double Cost
         {
             get
             {
-                return getCosts();
+                return base.Cost;
             }
-        }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            outCosts.Add(this);
-            foreach(TECCost cost in AssociatedCosts)
+            set
             {
-                outCosts.Add(cost);
+                var old = new TECMisc(this, this.IsTypical);
+                base.Cost = value;
+                NotifyMiscChanged(this, old);
             }
-            return outCosts;
         }
-
-        public TECMisc(Guid guid) : base(guid) { }
-        public TECMisc() : this(Guid.NewGuid()) { }
-        public TECMisc(TECMisc miscSource) : this()
+        public override double Labor
         {
-            copyPropertiesFromCost(miscSource);
+            get
+            {
+                return base.Labor;
+            }
+            set
+            {
+                var old = new TECMisc(this, this.IsTypical);
+                base.Labor = value;
+                NotifyMiscChanged(this, old);
+            }
         }
-
-        public override object Copy()
+        public override CostType Type
         {
-            var outCost = new TECMisc();
-            outCost.copyPropertiesFromCost(this);
-            outCost._guid = this.Guid;
-            return outCost;
+            get
+            {
+                return base.Type;
+            }
+            set
+            {
+                var old = new TECMisc(this, this.IsTypical);
+                base.Type = value;
+                NotifyMiscChanged(this, old);
+            }
         }
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                var oldMisc = this;
+                var old = Quantity;
+                _quantity = value;
+                notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
+                NotifyMiscChanged(this, oldMisc);
+            }
+        }
+        
+        public bool IsTypical { get; private set; }
+        #endregion
 
+        #region Methods
         public override object DragDropCopy(TECScopeManager scopeManager)
         {
-            return new TECMisc(this);
+            return new TECMisc(this, this.IsTypical);
         }
+
+        private void NotifyMiscChanged(TECMisc newMisc, TECMisc oldMisc)
+        {
+            CostBatch delta = newMisc.CostBatch - oldMisc.CostBatch;
+            notifyCostChanged(delta);
+        }
+
+        protected override CostBatch getCosts()
+        {
+            return base.getCosts() * Quantity;
+        }
+
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
+        #endregion
     }
 }

@@ -1,0 +1,249 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.EquipmentHierarchyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:addViews="clr-namespace:TECUserControlLibrary.Views.AddViews"
+                          xmlns:addVMs="clr-namespace:TECUserControlLibrary.ViewModels.AddVMs"
+             mc:Ignorable="d" 
+             x:Name="equipmentHierarchyView"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Storyboard x:Key="equipmentMove">
+                <DoubleAnimation Storyboard.TargetName="equipmentHierarchyView"
+                                 Storyboard.TargetProperty="(local:EquipmentHierarchyView.EquipmentWidth)" 
+                                 Completed="equipmentMove_Completed"
+                                 FillBehavior="Stop"
+                                 To="0" From="{Binding ElementName=equipmentHierarchyView, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="equipmentMoveBack">
+                <DoubleAnimation Storyboard.TargetName="equipmentHierarchyView"
+                                 Storyboard.TargetProperty="(local:EquipmentHierarchyView.EquipmentWidth)" 
+                                 Completed="equipmentMoveBack_Completed"
+                                 FillBehavior="Stop"
+                                 To="{Binding ElementName=equipmentHierarchyView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="modalIn">
+                <DoubleAnimation Storyboard.TargetName="equipmentHierarchyView"
+                                 Storyboard.TargetProperty="(local:EquipmentHierarchyView.ModalHeight)" 
+                                 Completed="modalIn_Completed"
+                                 FillBehavior="Stop"
+                                 From="{Binding ElementName=equipmentHierarchyView, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="modalOut">
+                <DoubleAnimation Storyboard.TargetName="equipmentHierarchyView"
+                                     Storyboard.TargetProperty="(local:EquipmentHierarchyView.ModalHeight)" 
+                                 Completed="modalOut_Completed"
+                                 FillBehavior="Stop"
+                                     From="0" To="{Binding ElementName=equipmentHierarchyView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+
+            <Style TargetType="TextBlock">
+                <Style.Setters>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Style.Setters>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.Resources>
+            <Style x:Key="AddButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <EventSetter Event="Click" Handler="Add_Clicked"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="subScopeDetails">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="equipmentBack">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMoveBack}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="addViews:AddBaseView.Done">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="addViews:AddBaseView.Cancel">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:EquipmentListControl.Dropped">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:EndDeviceListControl.Dropped">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped" SourceName="subScopeList">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid DataContext="{Binding ElementName=equipmentHierarchyView}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding EquipmentWidth}"/>
+                <ColumnDefinition Width="{Binding HalfWidth}"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid DataContext="{Binding ElementName=equipmentHierarchyView}"
+                  Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
+                    Margin="5,0,5,0">
+                    <TextBlock Text="Equipment Templates"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <listControls:EquipmentListControl x:Name="equipmentList"
+                                                       Source="{Binding ElementName=equipmentHierarchyView, Path=EquipmentSource}"
+                                                       SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedEquipment}"
+                                                       DropHandler="{Binding ElementName=equipmentHierarchyView, Path=ViewModel}"
+                                                       DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeleteEquipmentCommand}"
+                                                       IsDragSource="True"
+                                                   Grid.Row="1"/>
+                <Grid Grid.Row="2">
+                    <Button x:Name="addEquipment" Content="Add" Width="50" HorizontalAlignment="Right"  
+                                                Command="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.AddEquipmentCommand}"
+                                                Style="{StaticResource AddButtonStyle}"/>
+                </Grid>
+
+            </Grid>
+            <Grid Grid.Column="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="equipmentBack" Margin="2"
+                    Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
+                    Command="{Binding ViewModel.BackCommand}"
+                    CommandParameter="{Binding ViewModel.SelectedSubScope}"
+                    Click="equipmentBack_Click">
+                    <Button.Content>
+                        &lt;-
+                    </Button.Content>
+                </Button>
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
+                    Margin="5,0,5,0">
+                    <TextBlock Text="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedEquipment.Name, StringFormat='Points in {0}'}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
+                </Border>
+                <Grid Grid.Column="2" Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
+
+                    <Button Content="->" x:Name="subScopeDetails" 
+                    Visibility="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"/>
+                </Grid>
+                <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
+                                    SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
+                                    Grid.ColumnSpan="3" Grid.Row="1"
+                                    DropHandler="{Binding ViewModel}"
+                                    DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
+                                            IsDragSource="True"/>
+                <Grid Grid.Row="2" Grid.Column="2"
+                      Visibility="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}">
+                    <Button Content="Add" x:Name="addSubScope" 
+                        Style="{StaticResource AddButtonStyle}" 
+                        
+                        Command="{Binding ViewModel.AddSubScopeCommand}"
+                        CommandParameter="{Binding ViewModel.SelectedEquipment}"/>
+                </Grid>
+
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Devices" Grid.Row="0"/>
+                <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+                                                SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
+                                                DropHandler="{Binding ViewModel}"
+                                                    DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
+                                                    IsDragSource="True"/>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="IO"/>
+                    <Grid  Grid.Column="1" 
+                           Visibility="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
+                        <Button Content="Add" x:Name="addPoint" Width="50" HorizontalAlignment="Right"
+                            Command="{Binding ViewModel.AddPointCommand}"
+                            CommandParameter="{Binding ViewModel.SelectedSubScope}"
+                            Style="{StaticResource AddButtonStyle}" />
+                    </Grid>
+
+                </Grid>
+                <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                               Grid.Row="3"
+                                               SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedPoint}"
+                                               DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeletePointCommand}"
+                                               IsDragSource="True"/>
+            </Grid>
+
+        </Grid>
+        <!--Add Modal-->
+        <Grid Width="{Binding ElementName=equipmentHierarchyView, Path=ActualWidth}"
+              Height="{Binding ElementName=equipmentHierarchyView, Path=ActualHeight}">
+            <Grid.Resources>
+                <sys:Double x:Key="marginEdge">0.0</sys:Double>
+            </Grid.Resources>
+            <Grid.Margin>
+                <MultiBinding Converter="{utilities:HeightToGridMarginConverter}">
+                    <Binding Source="{StaticResource marginEdge}"/>
+                    <Binding ElementName="equipmentHierarchyView" Path="ModalHeight"/>
+                </MultiBinding>
+            </Grid.Margin>
+            <Border BorderBrush="DarkGray" Background="{StaticResource SectionBackgroundBrush}" 
+                    BorderThickness="2" CornerRadius="8" Margin="20">
+                <Border.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" Softness="1" 
+                                            Opacity="0.5"/>
+                </Border.BitmapEffect>
+                <ContentPresenter Content="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedVM}">
+                    <ContentPresenter.Resources>
+                        <DataTemplate DataType="{x:Type addVMs:AddEquipmentVM}">
+                            <addViews:AddEquipmentView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddSubScopeVM}">
+                            <addViews:AddSubScopeView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddPointVM}">
+                            <addViews:AddPointView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
+            </Border>
+        </Grid>
+    </Grid>
+
+</UserControl>

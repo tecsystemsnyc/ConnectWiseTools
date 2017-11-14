@@ -5,16 +5,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECScope, CostComponent, PointComponent
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, INetworkConnectable
     {
         #region Properties
-        private ObservableCollection<TECDevice> _devices;
-        public ObservableCollection<TECDevice> Devices
+        private ObservableCollection<IEndDevice> _devices;
+        private ObservableCollection<TECPoint> _points;
+        private TECConnection _connection;
+
+        public ObservableCollection<IEndDevice> Devices
         {
             get { return _devices; }
             set
@@ -23,14 +24,12 @@ namespace EstimatingLibrary
                 {
                     Devices.CollectionChanged -= Devices_CollectionChanged;
                 }
-                var temp = this.Copy();
+                var old = Devices;
                 _devices = value;
-                NotifyPropertyChanged("Devices", temp, this);
+                notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
                 Devices.CollectionChanged += Devices_CollectionChanged;
             }
         }
-
-        private ObservableCollection<TECPoint> _points;
         public ObservableCollection<TECPoint> Points
         {
             get { return _points; }
@@ -40,42 +39,48 @@ namespace EstimatingLibrary
                 {
                     Points.CollectionChanged -= PointsCollectionChanged;
                 }
-                var temp = this.Copy();
+                var old = Points;
                 _points = value;
                 Points.CollectionChanged += PointsCollectionChanged;
-                NotifyPropertyChanged("Points", temp, this);
+                notifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
-
-        private TECSubScopeConnection _connection { get; set; }
-        public TECSubScopeConnection Connection
+        public TECConnection Connection
         {
             get { return _connection; }
             set
             {
                 _connection = value;
-                RaisePropertyChanged("Connection");
-                
+                raisePropertyChanged("Connection");
             }
         }
-
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        public TECNetworkConnection ParentConnection
+        {
+            get
+            {
+                if(Connection is TECNetworkConnection netConn)
+                {
+                    return netConn;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                Connection = value;
+            }
+        }
+        
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return getConnectionTypes(); }
         }
-        public List<TECConnectionType> AvailableConnections
+        public List<TECElectricalMaterial> AvailableConnections
         {
             get { return getAvailableConnectionTypes(); }
         }
-        public ObservableCollection<PointTypes> AllPointTypes
-        {
-            get { return getAllPointTypes(); }
-        }
-        public ObservableCollection<IOType> AllIOTypes
-        {
-            get { return getAllIOTypes(); }
-        }
-
         public int PointNumber
         {
             get
@@ -83,63 +88,48 @@ namespace EstimatingLibrary
                 return getPointNumber();
             }
         }
+        
+        public bool IsTypical { get; private set; }
 
-        public List<TECCost> Costs
+        //Derived
+        public List<TECIO> AllNetworkIOList
         {
-            get
-            {
-                return getCosts();
-            }
+            get { return getNetworkIO().ListIO(); }
         }
-        private List<TECCost> getCosts()
+        public IOCollection AvailableNetworkIO
         {
-            var outCosts = new List<TECCost>();
-            foreach(TECDevice dev in Devices)
-            {
-                outCosts.Add(dev);
-                foreach(TECCost cost in dev.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach(TECPoint point in Points)
-            {
-                foreach(TECCost cost in point.AssociatedCosts)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            return outCosts;
+            get { return getNetworkIO(); }
         }
+
+        public bool IsNetwork
+        {
+            get { return isNetwork(); }
+        }
+        
         #endregion //Properties
 
         #region Constructors
-        public TECSubScope(Guid guid) : base(guid)
+        public TECSubScope(Guid guid, bool isTypical) : base(guid)
         {
-            _devices = new ObservableCollection<TECDevice>();
+            IsTypical = isTypical;
+            _devices = new ObservableCollection<IEndDevice>();
             _points = new ObservableCollection<TECPoint>();
-            subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
         }
-        public TECSubScope() : this(Guid.NewGuid()) { }
+        public TECSubScope(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
+        public TECSubScope(TECSubScope sourceSubScope, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
-            foreach (TECDevice device in sourceSubScope.Devices)
-            { _devices.Add(new TECDevice(device)); }
-            var subWatch = System.Diagnostics.Stopwatch.StartNew();
+            foreach (IEndDevice device in sourceSubScope.Devices)
+            { _devices.Add(device); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
-                var toAdd = new TECPoint(point);
+                var toAdd = new TECPoint(point, isTypical);
                 characteristicReference?.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
@@ -147,199 +137,155 @@ namespace EstimatingLibrary
         }
         #endregion //Constructors
 
-        #region Num Point Types
-        //private int _ai;
-        //private int _ao;
-        //private int _bi;
-        //private int _bo;
-        //private int _serial;
-
-        //public int AI { get { return _ai; } }
-        //public int AO { get { return _ao; } }
-        //public int BI { get { return _bi; } }
-        //public int BO { get { return _bo; } }
-        //public int Serial { get { return _serial; } }
-
-        #endregion //Num Point Types
-
+        #region Events
+        public event Action<int> PointChanged;
+        #endregion
+        
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            //_ai = 0;
-            //_ao = 0;
-            //_bi = 0;
-            //_bo = 0;
-            //_serial = 0;
-            //foreach (TECPoint point in Points)
-            //{
-            //    if (point.Type == PointTypes.AI) { _ai++; }
-            //    else if (point.Type == PointTypes.AO) { _ao++; }
-            //    else if (point.Type == PointTypes.BI) { _bi++; }
-            //    else if (point.Type == PointTypes.BO) { _bo++; }
-            //    else if (point.Type == PointTypes.Serial) { _serial++; }
-            //    else
-            //    {
-            //        string message = "Invalid Point Type in PointsColllectionChanged in TECSubScope";
-            //        throw new InvalidCastException(message);
-            //    }
-            //}
-
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (object item in e.NewItems)
+                int pointNumber = 0;
+                foreach (TECPoint item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    pointNumber += item.PointNumber;
+                    notifyCombinedChanged(Change.Add, "Points", this, item);
                 }
-                RaisePropertyChanged("PointNumber");
+                notifyPointChanged(pointNumber);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (object item in e.OldItems)
+                int pointNumber = 0;
+                foreach (TECPoint item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    pointNumber += item.PointNumber;
+                    notifyCombinedChanged(Change.Remove, "Points", this, item);
                 }
-                RaisePropertyChanged("PointNumber");
+                notifyPointChanged(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                notifyCombinedChanged(Change.Edit, "Points", this, sender);
             }
         }
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (object item in e.NewItems)
+                CostBatch costs = new CostBatch();
+                foreach (IEndDevice item in e.NewItems)
                 {
-                    NotifyPropertyChanged("AddCatalog", this, item);
-                    ((TECDevice)item).PropertyChanged += DeviceChanged;
-                    RaisePropertyChanged("TotalDevices");
-                    var old = generateOldCostComponent(Change.Add, item as TECDevice);
-                    NotifyPropertyChanged<object>("CostComponentChanged", old, this);
+                    notifyCombinedChanged(Change.Add, "Devices", this, item);
+                    if(item is INotifyCostChanged costly)
+                    {
+                        costs += costly.CostBatch;
+                    }
                 }
+                notifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (object item in e.OldItems)
+                CostBatch costs = new CostBatch();
+                foreach (TECDevice item in e.OldItems)
                 {
-                    NotifyPropertyChanged("RemoveCatalog", this, item);
-                    ((TECDevice)item).PropertyChanged -= DeviceChanged;
-                    RaisePropertyChanged("TotalDevices");
-                    var old = generateOldCostComponent(Change.Remove, item as TECDevice);
-                    NotifyPropertyChanged<object>("CostComponentChanged", old, this);
+                    notifyCombinedChanged(Change.Remove, "Devices", this, item);
+                    if (item is INotifyCostChanged costly)
+                    {
+                        costs += costly.CostBatch;
+                    }
                 }
+                notifyCostChanged(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
-            }
-        }
-        private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-            if (e.PropertyName == "Quantity")
-            {
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)args.NewValue);
-            }
-            if(args != null)
-            {
-                if(e.PropertyName == "Cost" || e.PropertyName == "Manufacturer")
-                {
-                    var old = this.Copy() as TECSubScope;
-                    old.Devices.Remove(args.NewValue as TECDevice);
-                    old.Devices.Add(args.OldValue as TECDevice);
-                    NotifyPropertyChanged("CostComponentChanged", old, this);
-                }
+                notifyCombinedChanged(Change.Edit, "Devices", this, sender);
             }
         }
         #endregion
 
         #region Methods
-
-        public override Object Copy()
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECSubScope outScope = new TECSubScope();
-            outScope._guid = Guid;
-            var devices = new ObservableCollection<TECDevice>();
-            foreach (TECDevice device in this.Devices)
-            { devices.Add(device); }
-            outScope._devices = devices;
-            var points = new ObservableCollection<TECPoint>();
-            foreach (TECPoint point in this.Points)
-            { points.Add(point.Copy() as TECPoint); }
-            outScope._points = points;
-            outScope.reSubscribeToCollections();
-
-            outScope.copyPropertiesFromScope(this);
-            return outScope;
-        }
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            TECSubScope outScope = new TECSubScope(this);
+            TECSubScope outScope = new TECSubScope(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }
-
-        private ObservableCollection<TECConnectionType> getConnectionTypes()
+        
+        public bool CanAddPoint(TECPoint point)
         {
-            var outTypes = new ObservableCollection<TECConnectionType>();
+            if(Points.Count == 0)
+            {
+                return true;
+            }
+            IOCollection networkIO = getNetworkIO();
+            if(TECIO.NetworkIO.Contains(point.Type) && networkIO.Contains(point.Type))
+            {
+                return true;
+            }
+            else if (TECIO.PointIO.Contains(point.Type) && networkIO.ListIO().Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void AddPoint(TECPoint point)
+        {
+            if (CanAddPoint(point))
+            {
+                Points.Add(point);
+            }
+            else
+            {
+                throw new InvalidOperationException("Point incompatible with SubScope.");
+            }
+        }
+        public void RemovePoint(TECPoint point)
+        {
+            Points.Remove(point);
+        }
+
+        public bool CanConnectToNetwork(TECNetworkConnection netConnect)
+        {
+            if (!this.IsNetwork) return false;
+
+            IOCollection thisIO = new IOCollection(getNetworkIO());
+            IOCollection netConnectIO = netConnect.IO;
+            bool ioMatches = IOCollection.IOTypesMatch(thisIO, netConnectIO);
+
+            bool connectionTypesMatch = (this.ConnectionTypes.Except(netConnect.ConnectionTypes).Count() == 0) 
+                && (netConnect.ConnectionTypes.Except(this.ConnectionTypes).Count() == 0);
+
+            return (ioMatches && connectionTypesMatch);
+        }
+
+        private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
+        {
+            var outTypes = new ObservableCollection<TECElectricalMaterial>();
             foreach (TECDevice device in Devices)
             {
-                foreach(TECConnectionType type in device.ConnectionTypes)
+                foreach(TECElectricalMaterial type in device.ConnectionTypes)
                 {
                     outTypes.Add(type);
                 }
             }
             return outTypes;
         }
-
-        private void subscribeToDevices()
+        
+        private List<TECElectricalMaterial> getAvailableConnectionTypes()
         {
-            foreach (TECDevice item in this._devices)
-            {
-                item.PropertyChanged += DeviceChanged;
-            }
-        }
-        private void unSubscribeToDevices()
-        {
-            foreach (TECDevice item in this._devices)
-            {
-                item.PropertyChanged -= DeviceChanged;
-            }
-        }
-
-        private List<TECConnectionType> getAvailableConnectionTypes()
-        {
-            var availableConnections = new List<TECConnectionType>();
-            foreach (TECConnectionType conType in this.ConnectionTypes)
+            var availableConnections = new List<TECElectricalMaterial>();
+            foreach (TECElectricalMaterial conType in this.ConnectionTypes)
             {
                 availableConnections.Add(conType);
             }
 
             return availableConnections;
         }
-        private ObservableCollection<PointTypes> getAllPointTypes()
-        {
-            var allPointTypes = new ObservableCollection<PointTypes>();
-
-            foreach (TECPoint point in Points)
-            {
-                allPointTypes.Add(point.Type);
-            }
-
-            return allPointTypes;
-        }
-        private ObservableCollection<IOType> getAllIOTypes()
-        {
-            var allIOTypes = new ObservableCollection<IOType>();
-
-            foreach (TECDevice device in Devices)
-            {
-                allIOTypes.Add(device.IOType);
-            }
-            return allIOTypes;
-        }
-
+        
         private int getPointNumber()
         {
             var totalPoints = 0;
@@ -353,32 +299,83 @@ namespace EstimatingLibrary
         private void reSubscribeToCollections()
         {
             Points.CollectionChanged += PointsCollectionChanged;
-            subscribeToDevices();
             Devices.CollectionChanged += Devices_CollectionChanged;
         }
-
-        private TECSubScope generateOldCostComponent(Change change, TECDevice device)
+        private bool isNetwork()
         {
-            var old = this.Copy() as TECSubScope;
-            var oldDevices = new ObservableCollection<TECDevice>();
-            foreach(TECDevice oldDevice in old.Devices)
+            if(Points.Count != 1)
             {
-                oldDevices.Add(oldDevice);
-            }
-            if(change == Change.Add)
-            {
-                oldDevices.Remove(device);
+                return false;
             } else
             {
-                oldDevices.Add(device);
+                return TECIO.NetworkIO.Contains(Points[0].Type);
             }
-            old._devices = oldDevices;
-            return old;
         }
 
-        public void LinkConnection(TECSubScopeConnection connection)
+        protected override CostBatch getCosts()
         {
-            _connection = connection;
+            CostBatch costs = base.getCosts();
+            foreach (TECDevice dev in Devices)
+            {
+                costs += dev.CostBatch;
+            }
+            return costs;
+        }
+        protected override SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.propertyObjects());
+            List<TECObject> deviceList = new List<TECObject>();
+            foreach (IEndDevice item in this.Devices)
+            {
+                deviceList.Add(item as TECObject);
+            }
+            saveList.AddRange(deviceList, "Devices");
+            saveList.AddRange(this.Points, "Points");
+            return saveList;
+        }
+        protected override SaveableMap linkedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.linkedObjects());
+            List<TECObject> deviceList = new List<TECObject>();
+            foreach (IEndDevice item in this.Devices)
+            {
+                deviceList.Add(item as TECObject);
+            }
+            saveList.AddRange(deviceList.Distinct(), "Devices");
+            return saveList;
+        }
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
+        private void notifyPointChanged(int numPoints)
+        {
+            if (!IsTypical)
+            {
+                PointChanged?.Invoke(numPoints);
+            }
+        }
+        private IOCollection getNetworkIO()
+        {
+            IOCollection collection = new IOCollection();
+            foreach (TECPoint point in Points.Where(point => TECIO.NetworkIO.Contains(point.Type)))
+            {
+                for (int i = 0; i < point.Quantity; i++)
+                {
+                    collection.AddIO(point.Type);
+                }
+            }
+            return collection;
+        }
+
+        public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        {
+            return new TECSubScope(item as TECSubScope, isTypical, guidDictionary);
         }
         #endregion
     }

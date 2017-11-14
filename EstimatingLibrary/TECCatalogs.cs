@@ -1,33 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECCatalogs : TECObject
+    public class TECCatalogs : TECObject, IRelatable
     {
-        private ObservableCollection<TECConnectionType> _connectionTypes;
-        private ObservableCollection<TECConduitType> _conduitTypes;
+        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
+        private ObservableCollection<TECElectricalMaterial> _conduitTypes;
         private ObservableCollection<TECCost> _associatedCosts;
         private ObservableCollection<TECPanelType> _panelTypes;
+        private ObservableCollection<TECControllerType> _controllerTypes;
         private ObservableCollection<TECIOModule> _ioModules;
         private ObservableCollection<TECDevice> _devices;
+        private ObservableCollection<TECValve> _valves;
         private ObservableCollection<TECManufacturer> _manufacturers;
-        private ObservableCollection<TECTag> _tags;
+        private ObservableCollection<TECLabeled> _tags;
 
         public ObservableCollection<TECIOModule> IOModules
         {
             get { return _ioModules; }
             set
             {
-                var temp = Copy();
-                IOModules.CollectionChanged -= CollectionChanged;
+                var old = IOModules;
+                IOModules.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "IOModules");
                 _ioModules = value;
-                IOModules.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("IOModules", temp, this);
+                IOModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
+                notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
             }
         }
         public ObservableCollection<TECDevice> Devices
@@ -35,11 +34,23 @@ namespace EstimatingLibrary
             get { return _devices; }
             set
             {
-                var temp = this.Copy();
-                Devices.CollectionChanged -= CollectionChanged;
+                var old = Devices;
+                Devices.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Devices");
                 _devices = value;
-                Devices.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("Devices", temp, this);
+                Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
+                notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
+            }
+        }
+        public ObservableCollection<TECValve> Valves
+        {
+            get { return _valves; }
+            set
+            {
+                var old = Valves;
+                Valves.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Valves");
+                _valves = value;
+                Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
+                notifyCombinedChanged(Change.Edit, "Valves", this, value, old);
             }
         }
         public ObservableCollection<TECManufacturer> Manufacturers
@@ -47,11 +58,11 @@ namespace EstimatingLibrary
             get { return _manufacturers; }
             set
             {
-                var temp = this.Copy();
-                Manufacturers.CollectionChanged -= CollectionChanged;
+                var old = Manufacturers;
+                Manufacturers.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Manufacturers");
                 _manufacturers = value;
-                Manufacturers.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("Manufacturers", temp, this);
+                Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
+                notifyCombinedChanged(Change.Edit, "Manufacturers", this, value, old);
             }
         }
         public ObservableCollection<TECPanelType> PanelTypes
@@ -59,35 +70,48 @@ namespace EstimatingLibrary
             get { return _panelTypes; }
             set
             {
-                var temp = this.Copy();
-                PanelTypes.CollectionChanged -= CollectionChanged;
+                var old = PanelTypes;
+                PanelTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "PanelTypes");
                 _panelTypes = value;
-                PanelTypes.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("PanelTypes", temp, this);
+                PanelTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "PanelTypes");
+                notifyCombinedChanged(Change.Edit, "PanelTypes", this, value, old);
             }
         }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        public ObservableCollection<TECControllerType> ControllerTypes
+        {
+            
+            get { return _controllerTypes; }
+            set
+            {
+                var old = ControllerTypes;
+                PanelTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
+                _controllerTypes = value;
+                ControllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
+                notifyCombinedChanged(Change.Edit, "ControllerTypes", this, value, old);
+            }
+        }
+        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
             {
-                var temp = this.Copy();
-                ConnectionTypes.CollectionChanged -= CollectionChanged;
+                var old = ConnectionTypes;
+                ConnectionTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
                 _connectionTypes = value;
-                ConnectionTypes.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ConnectionTypes", temp, this);
+                ConnectionTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
+                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
             }
         }
-        public ObservableCollection<TECConduitType> ConduitTypes
+        public ObservableCollection<TECElectricalMaterial> ConduitTypes
         {
             get { return _conduitTypes; }
             set
             {
-                var temp = this.Copy();
-                ConduitTypes.CollectionChanged -= CollectionChanged;
+                var old = ConduitTypes;
+                ConduitTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
                 _conduitTypes = value;
-                ConduitTypes.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ConduitTypes", temp, this);
+                ConduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
+                notifyCombinedChanged(Change.Edit, "ConduitTypes", this, value, old);
             }
         }
         public ObservableCollection<TECCost> AssociatedCosts
@@ -95,101 +119,92 @@ namespace EstimatingLibrary
             get { return _associatedCosts; }
             set
             {
-                var temp = this.Copy();
-                AssociatedCosts.CollectionChanged -= CollectionChanged;
+                var old = AssociatedCosts;
+                AssociatedCosts.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
                 AssociatedCosts.CollectionChanged -= ScopeChildren_CollectionChanged;
                 _associatedCosts = value;
-                AssociatedCosts.CollectionChanged += CollectionChanged;
+                AssociatedCosts.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
                 AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
-                NotifyPropertyChanged("AssociatedCosts", temp, this);
+                notifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
             }
         }
-        public ObservableCollection<TECTag> Tags
+        public ObservableCollection<TECLabeled> Tags
         {
             get { return _tags; }
             set
             {
-                var temp = this.Copy();
-                Tags.CollectionChanged -= CollectionChanged;
+                var old = Tags;
+                Tags.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Tags");
                 Tags.CollectionChanged -= ScopeChildren_CollectionChanged;
                 _tags = value;
-                Tags.CollectionChanged += CollectionChanged;
+                Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
                 Tags.CollectionChanged += ScopeChildren_CollectionChanged;
-                NotifyPropertyChanged("Tags", temp, this);
+                notifyCombinedChanged(Change.Edit, "Tags", this, value, old);
             }
+        }
+
+        public SaveableMap PropertyObjects
+        {
+            get { return propertyObjects(); }
+        }
+        public SaveableMap LinkedObjects
+        {
+            get { return linkedObjects(); }
         }
 
         public Action<TECObject> ScopeChildRemoved;
 
-        public TECCatalogs()
+        public TECCatalogs() : base(Guid.NewGuid())
         {
             instantiateCOllections();
         }
 
         private void instantiateCOllections()
         {
-            _conduitTypes = new ObservableCollection<TECConduitType>();
-            _connectionTypes = new ObservableCollection<TECConnectionType>();
+            _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
+            _connectionTypes = new ObservableCollection<TECElectricalMaterial>();
             _associatedCosts = new ObservableCollection<TECCost>();
             _panelTypes = new ObservableCollection<TECPanelType>();
+            _controllerTypes = new ObservableCollection<TECControllerType>();
             _ioModules = new ObservableCollection<TECIOModule>();
             _devices = new ObservableCollection<TECDevice>();
+            _valves = new ObservableCollection<TECValve>();
             _manufacturers = new ObservableCollection<TECManufacturer>();
-            _tags = new ObservableCollection<TECTag>();
+            _tags = new ObservableCollection<TECLabeled>();
 
             registerInitialCollectionChanges();
         }
         private void registerInitialCollectionChanges()
         {
-            ConduitTypes.CollectionChanged += CollectionChanged;
-            ConnectionTypes.CollectionChanged += CollectionChanged;
-            AssociatedCosts.CollectionChanged += CollectionChanged;
-            PanelTypes.CollectionChanged += CollectionChanged;
-            IOModules.CollectionChanged += CollectionChanged;
-            Devices.CollectionChanged += CollectionChanged;
-            Manufacturers.CollectionChanged += CollectionChanged;
-            Tags.CollectionChanged += CollectionChanged;
+            ConduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
+            ConnectionTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
+            AssociatedCosts.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
+            PanelTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "PanelTypes");
+            ControllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
+            IOModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
+            Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
+            Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
+            Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
+            Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
 
             AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
             Tags.CollectionChanged += ScopeChildren_CollectionChanged;
         }
 
-        public override object Copy()
-        {
-            TECCatalogs catalogs = new TECCatalogs();
-            foreach (TECCost cost in this.AssociatedCosts)
-            { catalogs.AssociatedCosts.Add(cost.Copy() as TECCost); }
-            foreach (TECConduitType conduitType in this.ConduitTypes)
-            { catalogs.ConduitTypes.Add(conduitType.Copy() as TECConduitType); }
-            foreach (TECConnectionType connectionType in this.ConnectionTypes)
-            { catalogs.ConnectionTypes.Add(connectionType.Copy() as TECConnectionType); }
-            foreach (TECTag tag in this.Tags)
-            { catalogs.Tags.Add(tag.Copy() as TECTag); }
-            foreach (TECManufacturer manufacturer in this.Manufacturers)
-            { catalogs.Manufacturers.Add(manufacturer.Copy() as TECManufacturer); }
-            foreach (TECDevice device in this.Devices)
-            { catalogs.Devices.Add(device.Copy() as TECDevice); }
-            foreach (TECPanelType panelType in this.PanelTypes)
-            { catalogs.PanelTypes.Add(panelType.Copy() as TECPanelType); }
-            foreach (TECIOModule module in IOModules)
-            { catalogs.IOModules.Add(module.Copy() as TECIOModule); }
-            return catalogs;
-        }
-
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -208,6 +223,61 @@ namespace EstimatingLibrary
                 }
             }
         }
+        private SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.IOModules, "IOModules");
+            saveList.AddRange(this.Devices, "Devices");
+            saveList.AddRange(this.Valves, "Valves");
+            saveList.AddRange(this.Manufacturers, "Manufacturers");
+            saveList.AddRange(this.PanelTypes, "PanelTypes");
+            saveList.AddRange(this.ControllerTypes, "ControllerTypes");
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
+            saveList.AddRange(this.ConduitTypes, "ConduitTypes");
+            saveList.AddRange(this.AssociatedCosts, "AssociatedCosts");
+            saveList.AddRange(this.Tags, "Tags");
+            return saveList;
+        }
+        private SaveableMap linkedObjects()
+        {
+            SaveableMap relatedList = new SaveableMap();
+            return relatedList;
+        }
 
+        public void Unionize(TECCatalogs catalogToAdd)
+        {
+            unionizeScope(this.Devices, catalogToAdd.Devices);
+            unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
+            unionizeScope(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
+            unionizeScope(this.ConduitTypes, catalogToAdd.ConduitTypes);
+            unionizeScope(this.PanelTypes, catalogToAdd.PanelTypes);
+            unionizeScope(this.IOModules, catalogToAdd.IOModules);
+            unionizeScope(this.Tags, catalogToAdd.Tags);
+            unionizeScope(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
+
+        }
+        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
+        {
+            ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
+
+            foreach (T templateItem in templateItems)
+            {
+                foreach (T item in bidItems)
+                {
+                    if ((item as TECObject).Guid == (templateItem as TECObject).Guid)
+                    {
+                        itemsToRemove.Add(item);
+                    }
+                }
+            }
+            foreach (T item in itemsToRemove)
+            {
+                bidItems.Remove(item);
+            }
+            foreach (T item in templateItems)
+            {
+                bidItems.Add(item);
+            }
+        }
     }
 }

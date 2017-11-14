@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
     public enum IOType
     {
-        AI = 1,
+        AI,
         AO,
         DI,
         DO,
@@ -18,28 +15,37 @@ namespace EstimatingLibrary
         BACnetIP,
         LonWorks,
         ModbusTCP,
-        ModbusRTU
+        ModbusRTU,
     }
+
     public class TECIO : TECObject
     {
-        #region Properties
-        private Guid _guid;
-        public Guid Guid
+        public static List<IOType> PointIO = new List<IOType>()
         {
-            get { return _guid; }
-        }
+            IOType.AI, IOType.AO, IOType.DI, IOType.DO
+        };
+        public static List<IOType> NetworkIO = new List<IOType>()
+        {
+            IOType.BACnetMSTP, IOType.BACnetIP, IOType.LonWorks, IOType.ModbusTCP, IOType.ModbusRTU
+        };
+        public static List<IOType> UniversalIO = new List<IOType>()
+        {
+            IOType.UI, IOType.UO
+        };
 
+        #region Properties
         private IOType _type;
         public IOType Type
         {
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old = Type;
                 _type = value;
-                NotifyPropertyChanged("Type", temp, this);
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
             }
         }
+
 
         private int _quantity;
         public int Quantity
@@ -47,91 +53,180 @@ namespace EstimatingLibrary
             get { return _quantity; }
             set
             {
-                var temp = this.Copy();
+                var old = Quantity;
                 _quantity = value;
-                NotifyPropertyChanged("Quantity", temp, this);
-            }
-        }
-
-        private TECIOModule _ioModule;
-        public TECIOModule IOModule
-        {
-            get { return _ioModule; }
-            set
-            {
-                var oldNew = Tuple.Create<Object, Object>(_ioModule, value);
-                var temp = Copy();
-                _ioModule = value;
-                NotifyPropertyChanged("IOModule", temp, this);
-                temp = Copy();
-                NotifyPropertyChanged("ObjectPropertyChanged", temp, oldNew, typeof(TECIO), typeof(TECIOModule));
+                notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
             }
         }
 
         #endregion
 
-        public TECIO(Guid guid)
+        public TECIO(Guid guid, IOType type) : base(guid)
         {
-            _guid = guid;
+            _type = type;
             _quantity = 1;
         }
 
-        public TECIO() : this(Guid.NewGuid()) { }
+        public TECIO(IOType type) : this(Guid.NewGuid(), type) { }
 
-        public TECIO(TECIO ioSource) : this()
+        public TECIO(TECIO ioSource) : this(ioSource.Type)
         {
             _quantity = ioSource.Quantity;
-            _type = ioSource.Type;
-            _ioModule = ioSource.IOModule;
         }
+    }
 
-        public static IOType convertStringToType(string type)
+    public class IOCollection
+    {
+        private Dictionary<IOType, TECIO> ioDictionary;
+
+        public IOCollection()
         {
-            switch (type.ToUpper())
+            ioDictionary = new Dictionary<IOType, TECIO>();
+        }
+        public IOCollection(IEnumerable<TECIO> io) : this()
+        {
+            AddIO(io);
+        }
+        public IOCollection(IOCollection collection) : this()
+        {
+            foreach(TECIO io in collection.ListIO())
             {
-                case "AI": return IOType.AI;
-                case "AO": return IOType.AO;
-                case "DI": return IOType.DI;
-                case "DO": return IOType.DO;
-                case "UI": return IOType.UI;
-                case "UO": return IOType.UO;
-                case "BACNETMSTP": return IOType.BACnetMSTP;
-                case "BACNETIP": return IOType.BACnetIP;
-                case "LONWORKS": return IOType.LonWorks;
-                case "MODBUSTCP": return IOType.ModbusTCP;
-                case "MODBUSRTU": return IOType.ModbusRTU;
-
-                default: return 0;
+                AddIO(io);
             }
         }
 
-        public static string convertTypeToString(IOType type)
+        public List<TECIO> ListIO()
         {
-            switch (type)
+            List<TECIO> list = new List<TECIO>();
+            foreach(KeyValuePair<IOType, TECIO> pair in ioDictionary)
             {
-                case IOType.AI: return "AI";
-                case IOType.AO: return "AO";
-                case IOType.DI: return "DI";
-                case IOType.DO: return "DO";
-                case IOType.UI: return "UI";
-                case IOType.UO: return "UO";
-                case IOType.BACnetMSTP: return "BACnetMSTP";
-                case IOType.BACnetIP: return "BACnetIP";
-                case IOType.LonWorks: return "LonWorks";
-                case IOType.ModbusTCP: return "ModbusTCP";
-                case IOType.ModbusRTU: return "ModbusRTU";
-
-                default: return "";
+                list.Add(pair.Value);
+            }
+            return list;
+        }
+        public bool Contains(IOType type)
+        {
+            return ioDictionary.ContainsKey(type);
+        }
+        public bool Contains(TECIO io)
+        {
+            if(ioDictionary.ContainsKey(io.Type))
+            {
+                TECIO collectionIO = ioDictionary[io.Type];
+                return (collectionIO.Quantity >= io.Quantity);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool Contains(IEnumerable<TECIO> io)
+        {
+            IOCollection ioCollection = new IOCollection(io);
+            foreach (TECIO ioToCheck in ioCollection.ListIO())
+            {
+                if (!this.Contains(ioToCheck)) return false;
+            }
+            return true;
+        }
+        public bool Contains(IOCollection io)
+        {
+            return (this.Contains(io.ListIO()));
+        }
+        public void AddIO(IOType type)
+        {
+            if (ioDictionary.ContainsKey(type))
+            {
+                ioDictionary[type].Quantity++;
+            }
+            else
+            {
+                TECIO io = new TECIO(type);
+                ioDictionary.Add(type, io);
+            }
+        }
+        public void AddIO(TECIO io)
+        {
+            if (ioDictionary.ContainsKey(io.Type))
+            {
+                ioDictionary[io.Type].Quantity += io.Quantity;
+            }
+            else
+            {
+                ioDictionary.Add(io.Type, new TECIO(io));
+            }
+        }
+        public void AddIO(IEnumerable<TECIO> ioList)
+        {
+            foreach(TECIO io in ioList)
+            {
+                AddIO(io);
+            }
+        }
+        public void RemoveIO(IOType type)
+        {
+            if (ioDictionary.ContainsKey(type))
+            {
+                TECIO io = ioDictionary[type];
+                io.Quantity--;
+                if (io.Quantity < 1)
+                {
+                    ioDictionary.Remove(io.Type);
+                }
+            }
+            else
+            {
+                throw new ObjectDisposedException("IOCollection does not contain type.");
+            }
+        }
+        public void RemoveIO(TECIO io)
+        {
+            if (ioDictionary.ContainsKey(io.Type) && ioDictionary[io.Type].Quantity >= io.Quantity)
+            {
+                TECIO collectionIO = ioDictionary[io.Type];
+                collectionIO.Quantity -= io.Quantity;
+                if (collectionIO.Quantity < 1)
+                {
+                    ioDictionary.Remove(collectionIO.Type);
+                }
+            }
+            else
+            {
+                throw new ObjectDisposedException("IOCollection does not contain enough type.");
+            }
+        }
+        public void RemoveIO(IEnumerable<TECIO> ioList)
+        {
+            foreach(TECIO io in ioList)
+            {
+                RemoveIO(io);
             }
         }
 
-        public override object Copy()
+        public static IOCollection operator +(IOCollection left, IOCollection right)
         {
-            var outIO = new TECIO(Guid);
-            outIO._type = Type;
-            outIO._quantity = Quantity;
-            outIO._ioModule = IOModule;
-            return outIO;
+            IOCollection newCollection = new IOCollection(left);
+            newCollection.AddIO(right.ListIO());
+            return newCollection;
+        }
+        public static IOCollection operator -(IOCollection left, IOCollection right)
+        {
+            IOCollection newCollection = new IOCollection(left);
+            newCollection.RemoveIO(right.ListIO());
+            return newCollection;
+        }
+
+        public static bool IOTypesMatch(IOCollection collection1, IOCollection collection2)
+        {
+            foreach(KeyValuePair<IOType, TECIO> pair in collection1.ioDictionary)
+            {
+                if (!collection2.Contains(pair.Key)) return false;
+            }
+            foreach(KeyValuePair<IOType, TECIO> pair in collection2.ioDictionary)
+            {
+                if (!collection1.Contains(pair.Key)) return false;
+            }
+            return true;
         }
     }
 }

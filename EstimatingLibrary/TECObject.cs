@@ -1,36 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECObject : INotifyPropertyChanged
+    public enum Change { Add, Remove, Edit }
+
+    public abstract class TECObject : INotifyPropertyChanged, InotifyTECChanged
     {
+        #region Properties
+        protected Guid _guid;
+        
+        public Guid Guid
+        {
+            get { return _guid; }
+        }
+
+        #endregion
+
         #region Property Changed
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<TECChangedEventArgs> TECChanged;
 
-        protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue)
+        protected void notifyTECChanged(Change change, string propertyName, TECObject sender,
+            object value, object oldValue = null)
         {
-            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
-        }
-        protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue, Type oldType, Type newType)
-        {
-            RaiseExtendedPropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue, oldType, newType));
-        }
-        protected void RaiseExtendedPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(sender, e);
+            TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);
+            TECChanged?.Invoke(args);
         }
 
-        protected void RaisePropertyChanged(string name)
+        protected void notifyCombinedChanged(Change change, string propertyName, TECObject sender,
+            object value, object oldValue = null)
+        {
+            TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);
+            PropertyChanged?.Invoke(sender, args);
+            TECChanged?.Invoke(args);
+        }
+
+        protected void raisePropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        abstract public Object Copy();
         #endregion //Property Changed
+
+        public TECObject(Guid guid)
+        {
+            _guid = guid;
+        }
     }
 }

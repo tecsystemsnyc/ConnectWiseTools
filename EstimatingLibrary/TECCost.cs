@@ -1,83 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
+using System;
 
 namespace EstimatingLibrary
 {
-    public enum CostType { None, TEC, Electrical }
+    public enum CostType { TEC, Electrical }
 
-    public class TECCost : TECScope
+    public class TECCost : TECScope, IDragDropable
     { 
         #region Properties
-
         protected double _cost;
-        public double Cost
+        protected double _labor;
+        protected CostType _type;
+        
+        public virtual double Cost
         {
             get { return _cost; }
             set
             {
-                var temp = this.Copy();
+                var old = Cost;
                 _cost = value;
-                NotifyPropertyChanged("Cost", temp, this);
-                RaisePropertyChanged("TotalCost");
+                notifyCombinedChanged(Change.Edit, "Cost", this, value, old);
+                notifyCostChanged(new CostBatch(value - old, 0, Type));
             }
         }
-
-        virtual public double ExtendedCost
-        {
-            get { return Cost; }
-        }
-
-        protected double _labor;
-        public double Labor
+        public virtual double Labor
         {
             get { return _labor; }
             set
             {
-                var temp = this.Copy();
+                var old = Labor;
                 _labor = value;
-                NotifyPropertyChanged("Labor", temp, this);
-                RaisePropertyChanged("TotalLabor");
+                notifyCombinedChanged(Change.Edit, "Labor", this, value, old);
+                notifyCostChanged(new CostBatch(0, value - old, Type));
             }
         }
-
-        protected CostType _type;
-        public CostType Type
+        public virtual CostType Type
         {
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old = Type;
                 _type = value;
-                NotifyPropertyChanged("Type", temp, this);
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                notifyCostChanged(new CostBatch(-Cost, -Labor, old));
+                notifyCostChanged(new CostBatch(Cost, Labor, value));
             }
         }
-
-        public double TotalCost
-        {
-            get { return Cost * Quantity; }
-        }
-
-        public double TotalLabor
-        {
-            get { return Labor * Quantity; }
-        }
-
+        
         #endregion
 
         #region Constructors
-        public TECCost(Guid guid) : base(guid)
+        public TECCost(Guid guid, CostType type) : base(guid)
         {
             _cost = 0;
             _labor = 0;
-            _type = 0;
-            base.PropertyChanged += TECCost_PropertyChanged;
+            _type = type;
+        }
+        public TECCost(TECCost cost) : this(cost.Type)
+        {
+            copyPropertiesFromCost(cost);
         }
 
-        public TECCost() : this(Guid.NewGuid()) { }
+        public TECCost(CostType type) : this(Guid.NewGuid(), type) { }
         #endregion
+
+        protected override CostBatch getCosts()
+        {
+            return base.getCosts() + new CostBatch(this);
+        }
 
         protected void copyPropertiesFromCost(TECCost cost)
         {
@@ -87,26 +78,17 @@ namespace EstimatingLibrary
             _type = cost.Type;
         }
 
-        public override object Copy()
+        public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
-            var outCost = new TECCost();
-            outCost.copyPropertiesFromCost(this);
-            outCost._guid = this.Guid;
-            return outCost;
+            return new TECCost(this);
         }
 
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public static TECCost operator *(TECCost left, double right)
         {
-            return this.Copy();
-        }
-
-        private void TECCost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Quantity")
-            {
-                RaisePropertyChanged("TotalCost");
-                RaisePropertyChanged("TotalLabor");
-            }
+            TECCost newCost = new TECCost(left);
+            newCost.Cost *= right;
+            newCost.Labor *= right;
+            return newCost;
         }
     }
 }

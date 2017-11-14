@@ -9,6 +9,7 @@
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
              xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
              xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
+             xmlns:local="clr-namespace:EstimateBuilder"
              
              StartupUri="MainWindow.xaml"
              mc:Ignorable="d ignore">
@@ -24,21 +25,6 @@
             <localMVVM:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
 
-            <DataTemplate DataType="{x:Type vm:ScopeEditorVM}">
-                <views:ScopeEditorView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:DrawingVM}">
-                <views:DrawingView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:LaborVM}">
-                <views:LaborView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:ReviewVM}">
-                <views:ReviewView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:SettingsVM}">
-                <views:SettingsView/>
-            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
     

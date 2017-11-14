@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.HardwareSummaryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             x:Name="hardwareSummaryView"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="600">
+    <UserControl.Resources>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=hardwareSummaryView}">
+        <Grid.Resources>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=hardwareSummaryView, Path=ViewModel}"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+
+        <!--Hardware Items-->
+        <Border Grid.RowSpan="2">
+            <Border.Resources>
+                <DataTemplate x:Key="hardwareItemGrid">
+                    <DataGrid ItemsSource="{Binding Data.HardwareItems, Source={StaticResource proxy}}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type" 
+                                            Binding="{Binding Hardware.Name}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Manufacturer"
+                                            Binding="{Binding Hardware.Manufacturer.Label}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Cost per Item"
+                                            Binding="{Binding Hardware.Cost, StringFormat={}{0:C}}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Labor per Item"
+                                            Binding="{Binding Hardware.Labor, StringFormat={}{0:F2}}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Quantity"
+                                            Binding="{Binding Quantity}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Total Cost"
+                                            Binding="{Binding TotalCost, StringFormat={}{0:C}}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Total Labor"
+                                            Binding="{Binding TotalLabor, StringFormat={}{0:F2}}"
+                                            Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource hardwareItemGrid}}"
+                                          Title="{Binding HardwareItemType}"
+                                          CostString="{Binding HardwareItemType, StringFormat={}{0} (TEC) Cost}"
+                                          CostValue="{Binding ViewModel.HardwareCost}"
+                                          LaborString="{Binding HardwareItemType, StringFormat={}{0} (TEC) Labor}"
+                                          LaborValue="{Binding ViewModel.HardwareLabor}"/>
+        </Border>
+
+        <!--Associated TEC Items-->
+        <Border Grid.Column="1">
+            <Border.Resources>
+                <DataTemplate x:Key="assocTECItemGrid">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocTECItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocTECItemGrid}}"
+                                          Title="Associated TEC Cost and Labor Items"
+                                          CostString="Total Associated TEC Cost"
+                                          CostValue="{Binding ViewModel.AssocTECCostTotal}"
+                                          LaborString="Total Assosciated Labor Cost"
+                                          LaborValue="{Binding ViewModel.AssocTECLaborTotal}"/>
+        </Border>
+        
+        <!--Associated Elec Items-->
+        <Border Grid.Column="1" Grid.Row="1">
+            <Border.Resources>
+                <DataTemplate x:Key="assocElecItemGrid">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocElecItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocElecItemGrid}}"
+                                          Title="Associated Electrical Cost and Labor Items"
+                                          CostString="Total Associated Electrical Cost"
+                                          CostValue="{Binding ViewModel.AssocElecCostTotal}"
+                                          LaborString="Total Associated Electrical Labor"
+                                          LaborValue="{Binding ViewModel.AssocElecLaborTotal}"/>
+        </Border>
+    </Grid>
+</UserControl>

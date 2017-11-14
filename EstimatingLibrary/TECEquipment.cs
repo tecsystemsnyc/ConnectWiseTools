@@ -1,95 +1,34 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EstimatingLibrary.Interfaces;
+﻿using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECScope, CostComponent, PointComponent
+    public class TECEquipment : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
+
+        public event Action<int> PointChanged;
+
         public ObservableCollection<TECSubScope> SubScope
         {
             get { return _subScope; }
             set
             {
-                var temp = this.Copy();
+                var old = SubScope;
                 if (SubScope != null)
                 {
                     SubScope.CollectionChanged -= SubScope_CollectionChanged;
                 }
                 _subScope = value;
                 SubScope.CollectionChanged += SubScope_CollectionChanged;
-                NotifyPropertyChanged("SubScope", temp, this);
-                RaisePropertyChanged("SubScopeQuantity");
-                subscribeToSubScope();
+                notifyCombinedChanged(Change.Edit, "SubScope", this, value, old);
             }
         }
-
-        public double BudgetUnitPrice
-        {
-            get { return _budgetUnitPrice; }
-            set
-            {
-                var temp = this.Copy();
-                if (value < 0)
-                {
-                    _budgetUnitPrice = -1;
-                }
-                else
-                {
-                    _budgetUnitPrice = value;
-                }
-                NotifyPropertyChanged("BudgetUnitPrice", temp, this);
-                RaisePropertyChanged("TotalBudgetPrice");
-            }
-        }
-        private double _budgetUnitPrice;
-
-        new public int Quantity
-        {
-            get { return _quantity; }
-            set
-            {
-                var temp = this.Copy();
-                _quantity = value;
-                RaisePropertyChanged("TotalBudgetPrice");
-                NotifyPropertyChanged("Quantity", temp, this);
-            }
-        }
-        public int SubScopeQuantity
-        {
-            get
-            {
-                int quantitySS = 0;
-                foreach (TECSubScope ss in SubScope)
-                {
-                    quantitySS += ss.Quantity;
-                }
-                return quantitySS;
-            }
-        }
-
-        public double TotalBudgetPrice
-        {
-            get
-            {
-                if (Quantity > 0)
-                {
-                    return (Quantity * BudgetUnitPrice);
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-        }
-
+        
         public int PointNumber
         {
             get
@@ -98,158 +37,93 @@ namespace EstimatingLibrary
             }
         }
 
-        public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
-            }
-        }
-
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            foreach(TECSubScope ss in SubScope)
-            {
-                foreach(TECCost cost in ss.Costs)
-                {
-                    outCosts.Add(cost);
-                }
-            }
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            return outCosts;
-        }
-
+        public bool IsTypical { get; private set; }
         #endregion //Properties
 
         #region Constructors
-        public TECEquipment(Guid guid) : base(guid)
+        public TECEquipment(Guid guid, bool isTypical) : base(guid)
         {
-            _budgetUnitPrice = -1;
+            IsTypical = isTypical;
             _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
             base.PropertyChanged += TECEquipment_PropertyChanged;
         }
 
-        public TECEquipment() : this(Guid.NewGuid()) { }
+        public TECEquipment(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableItemToInstanceList<TECScope> characteristicReference = null) : this()
+        public TECEquipment(TECEquipment equipmentSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
-                var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
+                var toAdd = new TECSubScope(subScope, isTypical, guidDictionary, characteristicReference);
                 characteristicReference?.AddItem(subScope,toAdd);
                 SubScope.Add(toAdd);
             }
-            _budgetUnitPrice = equipmentSource.BudgetUnitPrice;
-            this.copyPropertiesFromScope(equipmentSource);
+            copyPropertiesFromScope(equipmentSource);
             
         }
         #endregion //Constructors
 
         #region Methods
-        public override Object Copy()
-        {
-            TECEquipment outEquip = new TECEquipment();
-            outEquip._guid = this.Guid;
-            foreach (TECSubScope subScope in this.SubScope)
-            { outEquip.SubScope.Add(subScope.Copy() as TECSubScope); }
-            outEquip._budgetUnitPrice = this.BudgetUnitPrice;
 
-            outEquip.copyPropertiesFromScope(this);
-            return outEquip;
-        }
-
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECEquipment outEquip = new TECEquipment(this);
+            TECEquipment outEquip = new TECEquipment(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
             return outEquip;
         }
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            RaisePropertyChanged("SubScopeQuantity");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (object item in e.NewItems)
+                int pointNumber = 0;
+                CostBatch costs = new CostBatch();
+                foreach (TECSubScope item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
-                    checkForTotalsInSubScope(item as TECSubScope);
+                    pointNumber += item.PointNumber;
+                    costs += item.CostBatch;
                     if ((item as TECSubScope).Location == null)
                     {
                         (item as TECSubScope).SetLocationFromParent(this.Location);
                     }
+                    notifyCombinedChanged(Change.Add, "SubScope", this, item);
                 }
+                notifyPointChanged(pointNumber);
+                notifyCostChanged(costs);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (object item in e.OldItems)
+                int pointNumber = 0;
+                CostBatch costs = new CostBatch();
+                foreach (TECSubScope item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
-                    NotifyPropertyChanged("RemovedSubScope", this, item);
+                    pointNumber += item.PointNumber;
+                    costs += item.CostBatch;
+                    notifyCombinedChanged(Change.Remove, "SubScope", this, item);
                 }
+                notifyPointChanged(pointNumber * -1);
+                notifyCostChanged(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender, typeof(TECEquipment), typeof(TECSubScope));
-            }
-            subscribeToSubScope();
-        }
-        private void SubScopeChanged(string name)
-        {
-            if (name == "Quantity")
-            {
-                RaisePropertyChanged("SubScopeQuantity");
-            }
-            else if (name == "PointNumber")
-            {
-                RaisePropertyChanged("PointNumber");
-            }
-            else if (name == "TotalDevices")
-            {
-                RaisePropertyChanged("TotalDevices");
-            }
-            else if (name == "Length")
-            {
-                RaisePropertyChanged("SubLength");
+                notifyCombinedChanged(Change.Edit, "SubScope", this, sender);
             }
         }
-        private void subscribeToSubScope()
-        {
-            foreach (TECSubScope scope in this.SubScope)
-            {
-                scope.PropertyChanged += (scopeSender, args) => this.SubScopeChanged(args.PropertyName);
-            }
-        }
-
-        private void checkForTotalsInSubScope(TECSubScope subScope)
-        {
-            if (subScope.Points.Count > 0)
-            {
-                RaisePropertyChanged("PointNumber");
-            }
-            if (subScope.Devices.Count > 0)
-            {
-                RaisePropertyChanged("TotalDevices");
-            }
-        }
+        
         private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "ObjectPropertyChanged")
+            if (e.PropertyName == "Location")
             {
-                var args = e as PropertyChangedExtendedEventArgs<object>;
-                var oldNew = args.NewValue as Tuple<object, object>;
+                var args = e as TECChangedEventArgs;
+                var location = args.Value as TECLabeled;
                 foreach (TECSubScope subScope in this.SubScope)
                 {
-                    if (subScope.Location == oldNew.Item1)
+                    if (subScope.Location == location)
                     {
                         subScope.SetLocationFromParent(this.Location);
                     }
@@ -265,7 +139,37 @@ namespace EstimatingLibrary
             }
             return totalPoints;
         }
-        #endregion
+        protected override CostBatch getCosts()
+        {
+            CostBatch costs = base.getCosts();
+            foreach(TECSubScope subScope in SubScope)
+            {
+                costs += subScope.CostBatch;
+            }
+            return costs;
+        }
+        protected override SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.propertyObjects());
+            saveList.AddRange(this.SubScope, "SubScope");
+            return saveList;
+        }
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
 
+        private void notifyPointChanged(int numPoints)
+        {
+            if (!IsTypical)
+            {
+                PointChanged?.Invoke(numPoints);
+            }
+        }
+        #endregion
     }
 }

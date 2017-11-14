@@ -1,0 +1,44 @@
+﻿<local:BaseListControl x:TypeArguments="models:TECIO"
+    x:Class="TECUserControlLibrary.UserControls.ListControls.IOListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+                       xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+                       x:Name="IOList">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=IOList}">
+        <ListView ItemsSource="{Binding Source}"
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectionChanged="ListView_Selected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+
+                        <Grid MouseUp="ItemControl_MouseUp">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontSize="10" Content="{Binding Type}"/>
+                            <Label FontSize="10" Content="Qty:" Grid.Column="1"/>
+                            <Label FontSize="10" Content="{Binding Quantity}" Grid.Column="2"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</local:BaseListControl>

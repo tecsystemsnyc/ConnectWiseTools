@@ -1,9 +1,8 @@
-﻿using System;
+﻿using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using EstimatingLibrary;
-using System.Collections.ObjectModel;
 
 namespace EstimatingUtilitiesLibrary
 {
@@ -52,7 +51,7 @@ namespace EstimatingUtilitiesLibrary
         public void BidPointsToCSV(TECBid bid)
         {
             StreamWriter writer = new StreamWriter(Path);
-            foreach (TECSystem system in bid.Systems)
+            foreach (TECTypical system in bid.Systems)
             {
                 if (system.Equipment.Count > 0)
                 {
@@ -82,11 +81,11 @@ namespace EstimatingUtilitiesLibrary
 
                                 foreach (TECPoint point in subScope.Points)
                                 {
-                                    if (point.Type == PointTypes.AI) { AI++; }
-                                    else if (point.Type == PointTypes.BI) { BI++; }
-                                    else if (point.Type == PointTypes.AO) { AO++; }
-                                    else if (point.Type == PointTypes.BO) { BO++; }
-                                    else if (point.Type == PointTypes.Serial) { serial++; }
+                                    if (point.Type == IOType.AI) { AI += point.Quantity; }
+                                    else if (point.Type == IOType.DI) { BI += point.Quantity; }
+                                    else if (point.Type == IOType.AO) { AO += point.Quantity; }
+                                    else if (point.Type == IOType.DO) { BO += point.Quantity; }
+                                    else if (TECIO.NetworkIO.Contains(point.Type) ){ serial += point.Quantity; }
                                 }
                                 row.Add(AI.ToString());
                                 row.Add(BI.ToString());
@@ -97,7 +96,7 @@ namespace EstimatingUtilitiesLibrary
                                 {
                                     row.Add("");
                                 }
-                                row.Add((subScope.Quantity * equipment.Quantity * system.SystemInstances.Count).ToString());
+                                row.Add((system.Instances.Count).ToString());
                                 WriteRow(writer, row);
                             }
                         }
@@ -110,7 +109,7 @@ namespace EstimatingUtilitiesLibrary
                             {
                                 row.Add("");
                             }
-                            row.Add((equipment.Quantity * system.Quantity).ToString());
+                            row.Add((system.Instances.Count).ToString());
                             WriteRow(writer, row);
                         }
                     }
@@ -123,7 +122,7 @@ namespace EstimatingUtilitiesLibrary
                     {
                         row.Add("");
                     }
-                    row.Add((system.Quantity).ToString());
+                    row.Add((system.Instances.Count).ToString());
                     WriteRow(writer, row);
                 }
 
@@ -131,140 +130,6 @@ namespace EstimatingUtilitiesLibrary
             writer.Close();
         }
 
-        public void BudgetToCSV(ObservableCollection<TECSystem> systems, double margin)
-        {
-            StreamWriter writer = new StreamWriter(Path);
 
-            List<CsvRow> budgetedRows = new List<CsvRow>();
-            List<CsvRow> unbudgetedRows = new List<CsvRow>();
-
-            CsvRow row;
-            CsvRow blankRow = new CsvRow();
-
-            double totalPrice = 0;
-
-            foreach (TECSystem system in systems)
-            {
-                CsvRow systemRow = new CsvRow();
-                systemRow.Add(system.Name);
-                systemRow.Add("");
-                systemRow.Add("");
-                systemRow.Add(system.Quantity.ToString());
-                if (system.BudgetUnitPrice >= 0)
-                {
-                    systemRow.Add("$" + system.BudgetUnitPrice.ToString());
-                    systemRow.Add("");
-                    systemRow.Add("$" + system.TotalBudgetPrice.ToString());
-                    budgetedRows.Add(systemRow);
-
-                    foreach (TECEquipment equip in system.Equipment)
-                    {
-                        CsvRow equipmentRow = new CsvRow();
-                        equipmentRow.Add("");
-                        equipmentRow.Add(equip.Name);
-                        equipmentRow.Add("");
-                        equipmentRow.Add(equip.Quantity.ToString());
-                        if (equip.BudgetUnitPrice >= 0)
-                        {
-                            equipmentRow.Add("$" + equip.BudgetUnitPrice.ToString());
-                            equipmentRow.Add("$" + equip.TotalBudgetPrice.ToString());
-                        }
-                        else
-                        {
-                            equipmentRow.Add("$0");
-                            equipmentRow.Add("$0");
-                        }
-
-                        budgetedRows.Add(equipmentRow);
-                    }
-
-                    totalPrice += system.TotalBudgetPrice;
-                }
-                else
-                {
-                    unbudgetedRows.Add(systemRow);
-
-                    foreach (TECEquipment equip in system.Equipment)
-                    {
-                        CsvRow equipmentRow = new CsvRow();
-                        equipmentRow.Add("");
-                        equipmentRow.Add(equip.Name);
-                        equipmentRow.Add("");
-                        equipmentRow.Add(equip.Quantity.ToString());
-                        unbudgetedRows.Add(equipmentRow);
-                    }
-                }
-            }
-
-            row = new CsvRow();
-            row.Add("Budgeted Systems");
-            WriteRow(writer, row);
-
-            WriteRow(writer, blankRow);
-
-            row = new CsvRow();
-            row.Add("System");
-            row.Add("Equipment");
-            row.Add("");
-            row.Add("Quantity");
-            row.Add("Unit Price");
-            row.Add("Equipment Subtotal");
-            row.Add("System Subtotal");
-            WriteRow(writer, row);
-
-            foreach (CsvRow budgetedRow in budgetedRows)
-            {
-                WriteRow(writer, budgetedRow);
-            }
-
-            WriteRow(writer, blankRow);
-
-            row = new CsvRow();
-            row.Add("Subtotal: ");
-            row.Add("$" + totalPrice.ToString());
-            WriteRow(writer, row);
-
-            WriteRow(writer, blankRow);
-
-            row = new CsvRow();
-            row.Add("Margin: ");
-            row.Add(margin.ToString() + "%");
-            WriteRow(writer, row);
-
-            WriteRow(writer, blankRow);
-
-            totalPrice = totalPrice / (1 - margin);
-
-            row = new CsvRow();
-            row.Add("Total: ");
-            row.Add("$" + totalPrice.ToString());
-            WriteRow(writer, row);
-
-            WriteRow(writer, blankRow);
-
-
-            row = new CsvRow();
-            row.Add("Unbudgeted Systems");
-            WriteRow(writer, row);
-
-            WriteRow(writer, blankRow);
-
-            row = new CsvRow();
-            row.Add("System");
-            row.Add("Equipment");
-            row.Add("");
-            row.Add("Quantity");
-            WriteRow(writer, row);
-
-            foreach (CsvRow unbudgetedRow in unbudgetedRows)
-            {
-                WriteRow(writer, unbudgetedRow);
-            }
-            WriteRow(writer, blankRow);
-
-            writer.Close();
-
-
-        }
     }
 }

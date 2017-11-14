@@ -1,324 +1,488 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
-using GongSolutions.Wpf.DragDrop;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using TECUserControlLibrary.Models;
-using TECUserControlLibrary.Utilities;
+using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class NetworkVM : ViewModelBase, IDropTarget
+    public class NetworkVM : ViewModelBase
     {
-        public NetworkControllerVM NetworkControllersVM { get; private set; }
-        public NetworkControllerVM UnitaryControllersVM { get; private set; }
+        #region Fields
+        bool isConnecting;
 
-        private ChangeWatcher _changeWatcher;
-        public ChangeWatcher changeWatcher
+        private ObservableCollection<ConnectableItem> _parentables;
+        private ObservableCollection<ConnectableItem> _nonParentables;
+
+        private ConnectableItem _selectedItem;
+        private ConnectableItem _selectedParentable;
+        private ConnectableItem _selectedNonParentable;
+        private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
+
+        private ObservableCollection<TECElectricalMaterial> selectedConnectionTypes;
+        private TECElectricalMaterial _selectedPotentialConnectionType;
+        private TECElectricalMaterial _selectedChosenConnectionType;
+        private IOType _selectedIOType;
+
+        private TECNetworkConnection _selectedConnection;
+
+        private INetworkConnectable _selectedChildConnectable;
+        #endregion
+
+        //Constructor
+        public NetworkVM(TECBid bid, ChangeWatcher cw)
+        {
+            setupCommands();
+            Refresh(bid, cw);
+        }
+
+        #region Properties
+        //Item Properties
+        public ReadOnlyObservableCollection<ConnectableItem> Parentables
+        {
+            get { return new ReadOnlyObservableCollection<ConnectableItem>(_parentables); }
+        }
+        public ReadOnlyObservableCollection<ConnectableItem> NonParentables
+        {
+            get { return new ReadOnlyObservableCollection<ConnectableItem>(_nonParentables); }
+        }
+
+        public ConnectableItem SelectedItem
         {
             get
             {
-                return _changeWatcher;
+                return _selectedItem;
             }
             set
             {
-                if (_changeWatcher != null)
+                _selectedItem = value;
+                RaisePropertyChanged("SelectedItem");
+            }
+        }
+        public ConnectableItem SelectedParentable
+        {
+            get
+            {
+                return _selectedParentable;
+            }
+            set
+            {
+                if (!isConnecting)
                 {
-                    _changeWatcher.InstanceChanged -= instanceChanged;
+                    _selectedParentable = value;
+                    RaisePropertyChanged("SelectedParentable");
+                    _selectedNonParentable = null;
+                    RaisePropertyChanged("SelectedNonParentable");
+                    SelectedItem = SelectedParentable;
                 }
-                _changeWatcher = value;
-                _changeWatcher.InstanceChanged += instanceChanged;
             }
         }
-
-        private TECController noneController;
-
-        public NetworkVM(TECBid bid)
+        public ConnectableItem SelectedNonParentable
         {
-            NetworkControllersVM = new NetworkControllerVM(System.Windows.Visibility.Visible, bid);
-            UnitaryControllersVM = new NetworkControllerVM(System.Windows.Visibility.Collapsed, bid);
-
-            noneController = new TECController(new TECManufacturer());
-            noneController.Name = "None";
-            NetworkControllersVM.NoneController = noneController;
-            UnitaryControllersVM.NoneController = noneController;
-
-            sortAllControllers(bid);
-
-            refreshPossibleParents();
-
-            changeWatcher = new ChangeWatcher(bid);
-
-            NetworkControllersVM.DragHandler = DragOver;
-            NetworkControllersVM.DropHandler = Drop;
-
-            UnitaryControllersVM.DragHandler = DragOver;
-            UnitaryControllersVM.DropHandler = Drop;
-        }
-
-        public void Refresh(TECBid bid)
-        {
-            List<TECController> controllersToRemove = new List<TECController>();
-            foreach(NetworkController netController in NetworkControllersVM.NetworkControllers)
+            get
             {
-                controllersToRemove.Add(netController.Controller);
+                return _selectedNonParentable;
             }
-            foreach(NetworkController unitaryController in UnitaryControllersVM.NetworkControllers)
+            set
             {
-                controllersToRemove.Add(unitaryController.Controller);
-            }
-            foreach(TECController controller in controllersToRemove)
-            {
-                removeController(controller);
-            }
-
-            NetworkControllersVM.Refresh(bid);
-            UnitaryControllersVM.Refresh(bid);
-
-            sortAllControllers(bid);
-
-            refreshPossibleParents();
-
-            changeWatcher = new ChangeWatcher(bid);
-        }
-
-        private void sortAllControllers(TECBid bid)
-        {
-            foreach (TECController control in bid.Controllers)
-            {
-                sortController(control);
-            }
-            foreach (TECSystem typical in bid.Systems)
-            {
-                foreach (TECSystem instance in typical.SystemInstances)
+                if (!isConnecting)
                 {
-                    foreach (TECController control in instance.Controllers)
-                    {
-                        sortController(control);
-                    }
+                    _selectedNonParentable = value;
+                    RaisePropertyChanged("SelectedNonParentable");
+                    _selectedParentable = null;
+                    RaisePropertyChanged("SelectedParentable");
+                    SelectedItem = SelectedNonParentable;
                 }
             }
         }
 
-        private void sortController(TECController controller)
+        public ICommand SetParentAsSelectedCommand { get; private set; }
+
+        //Add Connection Properties
+        public ReadOnlyObservableCollection<TECElectricalMaterial> AllConnectionTypes { get; private set; }
+        public List<IOType> IOTypes { get; private set; }
+        public ReadOnlyObservableCollection<TECElectricalMaterial> SelectedConnectionTypes
         {
-            if (controller.NetworkType == NetworkType.DDC || controller.NetworkType == NetworkType.Server)
-            {
-                NetworkControllersVM.AddController(controller);
-            }
-            else
-            {
-                controller.NetworkType = NetworkType.Unitary;
-                UnitaryControllersVM.AddController(controller);
-            }
-            refreshPossibleParents();
-            controller.PropertyChanged += Controller_PropertyChanged;
+            get { return new ReadOnlyObservableCollection<TECElectricalMaterial>(selectedConnectionTypes); }
         }
 
-        private void removeController(TECController controller)
+        public TECElectricalMaterial SelectedPotentialConnectionType
         {
-            if (controller.NetworkType == NetworkType.DDC || controller.NetworkType == NetworkType.Server)
+            get { return _selectedPotentialConnectionType; }
+            set
             {
-                NetworkControllersVM.RemoveController(controller);
+                _selectedPotentialConnectionType = value;
+                RaisePropertyChanged("SelectedPotentialConnectionType");
             }
-            else
-            {
-                UnitaryControllersVM.RemoveController(controller);
-            }
-            controller.PropertyChanged -= Controller_PropertyChanged;
         }
-
-        private void instanceChanged(object sender, PropertyChangedEventArgs e)
+        public TECElectricalMaterial SelectedChosenConnectionType
         {
-            if (e is PropertyChangedExtendedEventArgs<Object>)
+            get { return _selectedChosenConnectionType; }
+            set
             {
-                PropertyChangedExtendedEventArgs<Object> args = e as PropertyChangedExtendedEventArgs<Object>;
-                var targetObject = args.NewValue;
-                var referenceObject = args.OldValue;
-                if (args.PropertyName == "Add" || args.PropertyName == "AddCatalog")
-                {
-                    if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
-                    {
-                        sortController(targetObject as TECController);
-                    }
-                    else if (targetObject is TECSystem && referenceObject is TECSystem)
-                    {
-                        foreach(TECController controller in (targetObject as TECSystem).Controllers)
-                        {
-                            sortController(controller);
-                        }
-                    }
-                    else if (targetObject is TECIO && referenceObject is TECController)
-                    {
-                        refreshPossibleParents();
-                    }
-                }
-                else if (args.PropertyName == "Remove" || args.PropertyName == "RemoveCatalog")
-                {
-                    if (targetObject is TECController && (referenceObject is TECBid || referenceObject is TECSystem))
-                    {
-                        removeController(targetObject as TECController);
-                        (targetObject as TECController).RemoveAllConnections();
-                    }
-                    else if (targetObject is TECSystem && referenceObject is TECSystem)
-                    {
-                        foreach(TECController controller in (targetObject as TECSystem).Controllers)
-                        {
-                            removeController(controller);
-                            controller.RemoveAllConnections();
-                        }
-                    }
-                    else if (targetObject is TECIO && referenceObject is TECController)
-                    {
-                        refreshPossibleParents();
-                    }
-                }
-                else if ((args.PropertyName == "NetworkType" || args.PropertyName == "ParentConnection") && targetObject is TECController)
-                {
-                    refreshIsConnected();
-                    refreshPossibleParents();
-                }
+                _selectedChosenConnectionType = value;
+                RaisePropertyChanged("SelectedChosenConnectionType");
+            }
+        }
+        public IOType SelectedIOType
+        {
+            get { return _selectedIOType; }
+            set
+            {
+                _selectedIOType = value;
+                RaisePropertyChanged("SelectedIOType");
             }
         }
 
-        private void refreshPossibleParents()
+        public INetworkConnectable SelectedChildConnectable
         {
-            NetworkControllersVM.RefreshPossibleParents(NetworkControllersVM.NetworkControllers);
-            UnitaryControllersVM.RefreshPossibleParents(NetworkControllersVM.NetworkControllers);
-        }
-
-        private void refreshIsConnected()
-        {
-            foreach (NetworkController netController in NetworkControllersVM.NetworkControllers)
+            get
             {
-                netController.RefreshIsConnected();
+                return _selectedChildConnectable;
             }
-            foreach (NetworkController netController in UnitaryControllersVM.NetworkControllers)
+            set
             {
-                netController.RefreshIsConnected();
+                _selectedChildConnectable = value;
+                RaisePropertyChanged("SelectedChildConnectable");
             }
         }
 
-        #region Event Handlers
-        private void Controller_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        public ICommand AddConnectionTypeCommand { get; private set; }
+        public ICommand RemoveConnectionTypeCommand { get; private set; }
+
+        public ICommand AddConnectionCommand { get; private set; }
+
+        public ICommand DoneConnectionCommand { get; private set; }
+
+        public ICommand RemoveConnectableCommand { get; private set; }
+
+        //Add Controller Properties
+        public TECNetworkConnection SelectedConnection
         {
-            if (e.PropertyName == "ParentController")
+            get { return _selectedConnection; }
+            set
             {
-                refreshPossibleParents();
+                _selectedConnection = value;
+                RaisePropertyChanged("SelectedConnection");
+                handleSelectedConnectionChanged(SelectedConnection);
             }
         }
         #endregion
 
-        #region Drag/Drop
-        public void DragOver(IDropInfo dropInfo)
+        #region Methods
+        public void Refresh(TECBid bid, ChangeWatcher cw)
         {
-            var sourceItem = dropInfo.Data;
-            Type sourceType;
-            if (sourceItem is IList && ((IList)sourceItem).Count > 0)
-            { sourceType = ((IList)sourceItem)[0].GetType(); }
+            isConnecting = false;
+            resetCollections(bid);
+            addBid(bid);
+            resubscribe(cw);
+        }
+        private void setupCommands()
+        {
+            SetParentAsSelectedCommand = new RelayCommand(setParentAsSelectedExecute);
+            AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute, canAddConnectionType);
+            RemoveConnectionTypeCommand = new RelayCommand(removeConnectionTypeExecute, canRemoveConnectionType);
+            AddConnectionCommand = new RelayCommand(addConnectionExecute, canAddConnection);
+            DoneConnectionCommand = new RelayCommand(doneConnectionExecute);
+            RemoveConnectableCommand = new RelayCommand(removeConnectableExecute, canRemoveConnectable);
+        }
+        private void resetCollections(TECBid bid)
+        {
+            connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
+            _parentables = new ObservableCollection<ConnectableItem>();
+            _nonParentables = new ObservableCollection<ConnectableItem>();
+            AllConnectionTypes = new ReadOnlyObservableCollection<TECElectricalMaterial>(bid.Catalogs.ConnectionTypes);
+            IOTypes = new List<IOType>(TECIO.NetworkIO);
+            selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            RaisePropertyChanged("Parentables");
+            RaisePropertyChanged("NonParentables");
+            RaisePropertyChanged("AllConnectionTypes");
+            RaisePropertyChanged("IOTypes");
+            RaisePropertyChanged("SelectedConnectionTypes");
+        }
+        private void addBid(TECBid bid)
+        {
+            foreach (TECController controller in bid.Controllers)
+            {
+                addConnectableItem(controller);
+            }
+            foreach (TECTypical typical in bid.Systems)
+            {
+                foreach (TECSystem system in typical.Instances)
+                {
+                    foreach (TECController controller in system.Controllers)
+                    {
+                        addConnectableItem(controller);
+                    }
+                    foreach (TECEquipment equip in system.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            addConnectableItem(ss);
+                        }
+                    }
+                }
+            }
+        }
+        private void resubscribe(ChangeWatcher cw)
+        {
+            cw.InstanceChanged -= handleInstanceChanged;
+            cw.InstanceConstituentChanged -= handleInstanceConstituentChanged;
+
+            cw.InstanceChanged += handleInstanceChanged;
+            cw.InstanceConstituentChanged += handleInstanceConstituentChanged;
+        }
+
+        private void addConnectableItem(INetworkConnectable connectable)
+        {
+            bool parentConnected = false;
+            if (connectable.ParentConnection != null && connectable.ParentConnection.ParentController != null)
+            {
+                INetworkConnectable parentNetConnectable = connectable.ParentConnection.ParentController;
+                parentConnected = connectableDictionary[parentNetConnectable].IsConnected;
+            }
+
+            bool isServer = false;
+            if (connectable is INetworkParentable parent)
+            {
+                isServer = parent.IsServer;
+            }
+
+            bool isConnected = (parentConnected || isServer);
+
+            ConnectableItem item = new ConnectableItem(connectable, isConnected);
+            connectableDictionary.Add(connectable, item);
+            if (connectable is INetworkParentable)
+            {
+                _parentables.Add(item);
+            }
             else
-            { sourceType = sourceItem.GetType(); }
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (sourceType == typeof(NetworkController))
             {
-                if (targetType == typeof(TECController))
+                _nonParentables.Add(item);
+            }
+        }
+        private void removeConnectableItem(INetworkConnectable connectable)
+        {
+            ConnectableItem item = connectableDictionary[connectable];
+            if (connectable is INetworkParentable parentable)
+            {
+                foreach (TECNetworkConnection connection in parentable.ChildNetworkConnections)
                 {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = System.Windows.DragDropEffects.Copy;
+                    foreach (INetworkConnectable child in connection.Children)
+                    {
+                        updateIsConnected(child, false);
+                    }
                 }
-                else
+                _parentables.Remove(item);
+            }
+            else
+            {
+                _nonParentables.Remove(item);
+            }
+
+            connectableDictionary.Remove(connectable);
+        }
+
+        private void handleInstanceConstituentChanged(Change change, TECObject obj)
+        {
+            if (change == Change.Add)
+            {
+                if (obj is INetworkConnectable networkConnectable)
                 {
-                    UIHelpers.StandardDragOver(dropInfo);
+                    addConnectableItem(networkConnectable);
+                }
+            }
+            else if (change == Change.Remove)
+            {
+                if (obj is INetworkConnectable networkConnectable)
+                {
+                    removeConnectableItem(networkConnectable);
+                }
+            }
+        }
+        private void handleInstanceChanged(TECChangedEventArgs e)
+        {
+            if (e.Change == Change.Add)
+            {
+                if (e.Sender is TECNetworkConnection netConnection)
+                {
+                    if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
+                    {
+                        ConnectableItem parentConnectable = connectableDictionary[netConnection.ParentController];
+                        bool parentIsConnected = parentConnectable.IsConnected;
+                        updateIsConnected(childConnectable, parentIsConnected);
+                    }
+                }
+            }
+            else if (e.Change == Change.Remove)
+            {
+                if (e.Sender is TECNetworkConnection netConnection)
+                {
+                    if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
+                    {
+                        updateIsConnected(childConnectable, false);
+                    }
+                }
+            }
+            else if (e.Change == Change.Edit)
+            {
+                if (e.Sender is INetworkConnectable networkConnectable && e.PropertyName == "IsServer" && e.Value is bool isServer)
+                {
+                    updateIsConnected(networkConnectable, isServer);
                 }
             }
         }
 
-        public void Drop(IDropInfo dropInfo)
+        private void updateIsConnected(INetworkConnectable networkConnectable, bool isConnected)
         {
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            ConnectableItem connectableItem = connectableDictionary[networkConnectable];
+            if (connectableItem.IsConnected != isConnected)
             {
-                object sourceItem = dropInfo.Data;
-                object targetCollection = dropInfo.TargetCollection;
-                object sourceCollection = dropInfo.DragInfo.SourceCollection;
-
-                if (sourceItem is IList)
+                if (networkConnectable is INetworkParentable parentable)
                 {
-                    foreach (object item in ((IList)sourceItem))
+                    if (!(parentable.IsServer && !isConnected))
                     {
-                        handleDropItem(item, sourceCollection, targetCollection);
+                        connectableItem.IsConnected = isConnected;
+                        updateChildrenConnected(parentable);
                     }
                 }
                 else
                 {
-                    handleDropItem(sourceItem, sourceCollection, targetCollection);
+                    connectableItem.IsConnected = isConnected;
+                }
+            }
+        }
+        private void updateChildrenConnected(INetworkParentable parentable)
+        {
+            bool isConnected = connectableDictionary[parentable as INetworkConnectable].IsConnected;
+            foreach (TECNetworkConnection netConnect in parentable.ChildNetworkConnections)
+            {
+                foreach (INetworkConnectable child in netConnect.Children)
+                {
+                    updateIsConnected(child, isConnected);
                 }
             }
         }
 
-        private void handleDropItem(object sourceItem, object sourceCollection, object targetCollection)
+        private void setParentAsSelectedExecute()
         {
-            NetworkController netController = sourceItem as NetworkController;
-
-            if (sourceCollection == NetworkControllersVM.NetworkControllers && targetCollection == UnitaryControllersVM.NetworkControllers)
+            INetworkConnectable parent = SelectedItem.Item.ParentConnection.ParentController;
+            ConnectableItem selected = connectableDictionary[parent];
+            if (selected.Item is INetworkParentable)
             {
-                NetworkControllersVM.NetworkControllers.Remove(netController);
-                netController.Controller.NetworkType = NetworkType.Unitary;
-                netController.Controller.RemoveAllConnections();
-                UnitaryControllersVM.NetworkControllers.Add(netController);
-
-                refreshPossibleParents();
+                SelectedParentable = selected;
             }
-            else if (sourceCollection == UnitaryControllersVM.NetworkControllers)
+            else
             {
-                if (targetCollection == NetworkControllersVM.NetworkControllers)
-                {
-                    UnitaryControllersVM.NetworkControllers.Remove(netController);
-                    netController.Controller.NetworkType = NetworkType.DDC;
-                    NetworkControllersVM.NetworkControllers.Add(netController);
+                SelectedNonParentable = selected;
+            }
+        }
+        private void addConnectionTypeExecute()
+        {
+            selectedConnectionTypes.Add(SelectedPotentialConnectionType);
+            SelectedPotentialConnectionType = null;
+        }
+        private void removeConnectionTypeExecute()
+        {
+            selectedConnectionTypes.Remove(SelectedChosenConnectionType);
+            SelectedChosenConnectionType = null;
+        }
+        private void addConnectionExecute()
+        {
+            if (SelectedParentable.Item is INetworkParentable parentable)
+            {
+                parentable.AddNetworkConnection(false, selectedConnectionTypes, SelectedIOType);
+                selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+                RaisePropertyChanged("SelectedConnectionTypes");
+            }
+            else
+            {
+                throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
+            }
+        }
+        private void doneConnectionExecute()
+        {
+            SelectedConnection = null;
+        }
+        private void removeConnectableExecute()
+        {
+            SelectedConnection.RemoveINetworkConnectable(SelectedChildConnectable);
+        }
 
-                    refreshPossibleParents();
-                }
-                else if (targetCollection is ObservableCollection<TECController>)
-                {
-                    //Dragged into a daisy chain
-                    ObservableCollection<TECController> daisyChain = targetCollection as ObservableCollection<TECController>;
+        private bool canAddConnectionType()
+        {
+            return (SelectedPotentialConnectionType != null);
+        }
+        private bool canRemoveConnectionType()
+        {
+            return (SelectedChosenConnectionType != null);
+        }
+        private bool canAddConnection()
+        {
+            if (SelectedParentable.Item is INetworkParentable parentable)
+            {
+                bool parentCanAdd = parentable.CanAddNetworkConnection(SelectedIOType);
+                return parentCanAdd;
+            }
+            else
+            {
+                throw new InvalidOperationException("Item in Parentables is not an INetworkParentable.");
+            }
+        }
+        private bool canRemoveConnectable()
+        {
+            return (SelectedChildConnectable != null);
+        }
 
-                    if (!daisyChain.Contains(netController.Controller))
-                    {
-                        //Find the parent controller and connection
-                        TECController parentController = null;
-                        TECNetworkConnection parentConnection = null;
-                        foreach (NetworkController controller in NetworkControllersVM.NetworkControllers)
-                        {
-                            foreach (TECConnection connection in controller.Controller.ChildrenConnections)
-                            {
-                                if (connection is TECNetworkConnection && (connection as TECNetworkConnection).ChildrenControllers == daisyChain)
-                                {
-                                    parentConnection = (connection as TECNetworkConnection);
-                                    parentController = controller.Controller;
-                                    break;
-                                }
-                            }
-                            if (parentController != null) break;
-                        }
-                        //Check for compatibility and add
-                        if (netController.Controller.NetworkIO.Contains(parentConnection.IOType))
-                        {
-                            parentController.AddController(netController.Controller, parentConnection);
-                        }
-                    }
-                }
+        private void handleSelectedConnectionChanged(TECNetworkConnection selected)
+        {
+            if (selected != null)
+            {
+                isConnecting = true;
+            }
+            else
+            {
+                isConnecting = false;
             }
         }
         #endregion
+    }
+
+    public class ConnectableItem : INotifyPropertyChanged
+    {
+        public INetworkConnectable Item { get; private set; }
+        private bool _isConnected;
+
+        public ConnectableItem(INetworkConnectable item, bool isConnected)
+        {
+            Item = item;
+            _isConnected = isConnected;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool IsConnected
+        {
+            get
+            {
+                return _isConnected;
+            }
+            set
+            {
+                _isConnected = value;
+                notifyPropertyChanged("IsConnected");
+            }
+        }
+
+        private void notifyPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
+            PropertyChanged?.Invoke(this, e);
+        }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EstimatingLibrary;
-using EstimatingUtilitiesLibrary;
-using System.IO;
+﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
+using EstimatingUtilitiesLibrary.Database;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace Tests
 {
@@ -69,16 +66,17 @@ namespace Tests
             TECBid bid = TestHelper.CreateTestBid();
 
             var path = Path.GetTempFileName();
-            
-            DatabaseHelper.SaveNew(path, bid);
-            
-            bid = DatabaseHelper.Load(path) as TECBid;
 
-            ChangeStack stack = new ChangeStack(bid);
-            bid.RandomEquipment().SubScope.Add(new TECSubScope());
-            DatabaseHelper.Update(path, stack, false);
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
+            manager.New(bid);
+            bid = manager.Load() as TECBid;
+            var watcher = new ChangeWatcher(bid);
 
-            bid = DatabaseHelper.Load(path) as TECBid;
+            DeltaStacker stack = new DeltaStacker(watcher);
+            bid.Systems[0].Equipment[0].SubScope.Add(new TECSubScope(true));
+            manager.Save(stack.CleansedStack());
+
+            bid = manager.Load() as TECBid;
         }
     }
 }

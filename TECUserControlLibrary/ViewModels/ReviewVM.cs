@@ -1,7 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
-using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -13,15 +13,24 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class ReviewVM : ViewModelBase
     {
+        private TECEstimator _estimate;
+        public TECEstimator Estimate
+        {
+            get { return _estimate; }
+            set
+            {
+                _estimate = value;
+                RaisePropertyChanged("Estimate");
+            }
+        }
+
         private TECBid _bid;
         public TECBid Bid
         {
             get { return _bid; }
             set
             {
-                Bid.Estimate.PropertyChanged -= Bid_PropertyChanged;
                 _bid = value;
-                Bid.Estimate.PropertyChanged += Bid_PropertyChanged;
                 RaisePropertyChanged("Bid");
             }
         }
@@ -33,170 +42,62 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _userPrice = value;
-                var newProfit = (value - Bid.Estimate.SubcontractorSubtotal) / (Bid.Estimate.TECCost * (1 + Bid.Parameters.Overhead / 100)) - 1;
+                var newProfit = (value - Estimate.SubcontractorSubtotal) / (Estimate.TECCost * (1 + Bid.Parameters.Overhead / 100)) - 1;
                 Bid.Parameters.Profit = newProfit * 100;
                 RaisePropertyChanged("UserPrice");
             }
         }
 
-        #region Margins
-
-        public double MarginM8
+        public ObservableCollection<CostContainer> Costs
         {
-            get { return Bid.Estimate.Margin - 8; }
-        }
-        public double MarginM6
-        {
-            get { return Bid.Estimate.Margin - 6; }
-        }
-        public double MarginM4
-        {
-            get { return Bid.Estimate.Margin - 4; }
-        }
-        public double MarginM2
-        {
-            get { return Bid.Estimate.Margin - 2; }
-        }
-        public double MarginP2
-        {
-            get { return Bid.Estimate.Margin + 2; }
-        }
-        public double MarginP4
-        {
-            get { return Bid.Estimate.Margin + 4; }
-        }
-        public double MarginP6
-        {
-            get { return Bid.Estimate.Margin + 6; }
-        }
-        public double MarginP8
-        {
-            get { return Bid.Estimate.Margin + 8; }
+            get { return getCosts(); }
         }
 
-        #endregion
-        #region Prices
-        public double TotalPriceM8
+        public ReviewVM(TECBid bid, TECEstimator estimate)
         {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM8 / 100); }
-        }
-        public double TotalPriceM6
-        {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM6 / 100); }
-        }
-        public double TotalPriceM4
-        {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM4 / 100); }
-        }
-        public double TotalPriceM2
-        {
-            get { return Bid.Estimate.TotalCost / (1 - MarginM2 / 100); }
-        }
-        public double TotalPriceP2
-        {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP2 / 100); }
-        }
-        public double TotalPriceP4
-        {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP4 / 100); }
-        }
-        public double TotalPriceP6
-        {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP6 / 100); }
-        }
-        public double TotalPriceP8
-        {
-            get { return Bid.Estimate.TotalCost / (1 - MarginP8 / 100); }
-        }
-        #endregion
-        #region Markups
-        public double Markup
-        {
-            get { return Bid.Estimate.TotalPrice - Bid.Estimate.TotalCost; }
+            _bid = bid;
+            _estimate = estimate;
+            Estimate.PropertyChanged += estimatePropertyChanged;
         }
 
-        public double MarkupM8
+        public void Refresh(TECEstimator estimate, TECBid bid)
         {
-            get { return TotalPriceM8 - Bid.Estimate.TotalCost; }
-        }
-        public double MarkupM6
-        {
-            get { return TotalPriceM6 - Bid.Estimate.TotalCost; }
-        }
-        public double MarkupM4
-        {
-            get { return TotalPriceM4 - Bid.Estimate.TotalCost; }
-        }
-        public double MarkupM2
-        {
-            get { return TotalPriceM2 - Bid.Estimate.TotalCost; }
-        }
-        public double MarkupP2
-        {
-            get { return TotalPriceP2 - Bid.Estimate.TotalCost; }
-        }
-        public double MarkupP4
-        {
-            get { return TotalPriceP4 - Bid.Estimate.TotalCost; }
-        }
-        public double MarkupP6
-        {
-            get { return TotalPriceP6 - Bid.Estimate.TotalCost; }
-        }
-        public double MarkupP8
-        {
-            get { return TotalPriceP8 - Bid.Estimate.TotalCost; }
-        }
-        #endregion
-
-        public ReviewVM()
-        {
-            _bid = new TECBid();
+            Estimate.PropertyChanged -= estimatePropertyChanged;
+            Estimate = estimate;
+            Estimate.PropertyChanged += estimatePropertyChanged;
+            Bid = bid;
         }
 
-        private void Bid_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void estimatePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "TotalPrice")
+            if (e.PropertyName == "TECMaterialCost" ||
+                e.PropertyName == "TECLaborCost" ||
+                e.PropertyName == "SubcontractorLaborCost" ||
+                e.PropertyName == "ElectricalMaterialCost")
             {
-                raiseTable();
+                RaisePropertyChanged("Costs");
             }
         }
-
-        public void Refresh(TECBid bid)
+        private ObservableCollection<CostContainer> getCosts()
         {
-            Bid = bid;
-            raiseTable();
+            return new ObservableCollection<CostContainer>() 
+            {
+                new CostContainer("Material Cost", Estimate.TECMaterialCost),
+                new CostContainer("Labor Cost", Estimate.TECLaborCost),
+                new CostContainer("Sub. Labor Cost", Estimate.SubcontractorLaborCost),
+                new CostContainer("Sub. Material Cost", Estimate.ElectricalMaterialCost)
+            };
         }
+    }
 
-        private void raiseTable()
+    public class CostContainer
+    {
+        public string Name { get; set; }
+        public double Cost { get; set; }
+        public CostContainer(string name, double cost)
         {
-            RaisePropertyChanged("MarginM8");
-            RaisePropertyChanged("MarginM6");
-            RaisePropertyChanged("MarginM4");
-            RaisePropertyChanged("MarginM2");
-            RaisePropertyChanged("MarginP2");
-            RaisePropertyChanged("MarginP4");
-            RaisePropertyChanged("MarginP6");
-            RaisePropertyChanged("MarginP8");
-
-            RaisePropertyChanged("TotalPriceM8");
-            RaisePropertyChanged("TotalPriceM6");
-            RaisePropertyChanged("TotalPriceM4");
-            RaisePropertyChanged("TotalPriceM2");
-            RaisePropertyChanged("TotalPriceP2");
-            RaisePropertyChanged("TotalPriceP4");
-            RaisePropertyChanged("TotalPriceP6");
-            RaisePropertyChanged("TotalPriceP8");
-
-            RaisePropertyChanged("Markup");
-            RaisePropertyChanged("MarkupM8");
-            RaisePropertyChanged("MarkupM6");
-            RaisePropertyChanged("MarkupM4");
-            RaisePropertyChanged("MarkupM2");
-            RaisePropertyChanged("MarkupP2");
-            RaisePropertyChanged("MarkupP4");
-            RaisePropertyChanged("MarkupP6");
-            RaisePropertyChanged("MarkupP8");
+            Name = name;
+            Cost = cost;
         }
     }
 }

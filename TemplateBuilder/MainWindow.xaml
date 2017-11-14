@@ -11,15 +11,18 @@
         
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
+        xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls;assembly=TECUserControlLibrary"
         xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
-        
+        xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
+        xmlns:localMVVM="clr-namespace:TemplateBuilder.MVVM"
+
         Title="{Binding TitleString}"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
-        Height="720"
-        Width="1200"
+        Height="640"
+        Width="1024"
         WindowStartupLocation="CenterScreen"
         MinHeight="300" MinWidth="535"
-        x:Name="root">
+        x:Name="parent">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -35,85 +38,135 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.InputBindings>
-        <KeyBinding Command="{Binding SaveCommand}"
-                    Gesture="CTRL+S" />
-        <KeyBinding Command="{Binding SaveAsCommand}"
-                    Gesture="SHIFT+CTRL+S" />
-        <KeyBinding Command="{Binding UndoCommand}"
+        <KeyBinding Command="{Binding MenuVM.UndoCommand}"
                     Gesture="CTRL+Z" />
-        <KeyBinding Command="{Binding RedoCommand}"
+        <KeyBinding Command="{Binding MenuVM.RedoCommand}"
                     Gesture="CTRL+SHIFT+Z" />
+        <KeyBinding Command="{Binding MenuVM.SaveCommand}"
+                    Gesture="CTRL+S" />
+        <KeyBinding Command="{Binding MenuVM.SaveAsCommand}"
+                    Gesture="SHIFT+CTRL+S" />
+        <KeyBinding Command="{Binding MenuVM.LoadCommand}"
+                    Gesture="CTRL+O" />
+        <KeyBinding Command="{Binding MenuVM.NewCommand}"
+                    Gesture="CTRL+N" />
     </Window.InputBindings>
-    <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
-        <views:MenuView ViewModel="{Binding ElementName=root, Path=DataContext.MenuVM}"
-                                  DockPanel.Dock="Top"/>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250" MaxWidth="{Binding TemplatesVisibility, Converter={utilities:TemplatesVisibilityConverter}}"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="250"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*" MinHeight="40"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
+    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}"  
+                    IsEnabled="{Binding ViewEnabled}">
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type localMVVM:TemplatesEditorVM}">
+                <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
+                    <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+                                    DockPanel.Dock="Top"/>
+                    <Grid Background="{StaticResource SectionBackgroundBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*" MinHeight="40"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
 
-            <Image Source="{Binding TECLogo}"
-                   Grid.Column="4"/>
+                        <Image Source="{Binding ElementName=parent, Path=DataContext.TECLogo}"
+                               Grid.Column="4"/>
 
-            <views:ScopeCollectionsTabView Grid.RowSpan="2"
-                                             ViewModel="{Binding ScopeCollection}"/>
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1"/>
-            <TabControl Grid.Row="0"
-                        Grid.Column="2"
-                        Grid.RowSpan="2"
-                        SelectedIndex="{Binding DGTabIndex, Converter={utilities:TemplateGridIndexToIntegerConverter}}"
-                        Background="{DynamicResource SectionBackgroundBrush}"
-                        Margin="0,6,0,0">
-                <TabItem Header="None" Visibility="Collapsed">
-                </TabItem>
-                <TabItem Header="Systems">
-                    <views:TypicalSystemsView ViewModel="{Binding ElementName=root, Path=DataContext.TypicalSystemsTab}"/>
-                </TabItem>
-                <TabItem Header="Equipment">
-                    <views:EquipmentGridView EquipmentSource="{Binding Templates.EquipmentTemplates}"
-                                               ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid}"/>
-                </TabItem>
-                <TabItem Header="Points">
-                    <views:SubScopeGridView SubScopeSource="{Binding Templates.SubScopeTemplates}"
-                                              ViewModel="{Binding ElementName=root, Path=DataContext.ScopeDataGrid.ChildVM}"/>
-                </TabItem>
-                <TabItem Header="Devices">
-                    <controls:DevicesGridControl DevicesSource="{Binding Templates.Catalogs.Devices}"
-                                             ViewModel="{Binding ScopeDataGrid.ChildVM.ChildVM}"
-                                                 SelectedDevice="{Binding ScopeDataGrid.ChildVM.ChildVM.SelectedDevice}"/>
-                </TabItem>
-                <TabItem Header="Controllers and Panels">
-                    <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsVM}"/>
-                </TabItem>
-                <TabItem Header="Materials">
-                    <views:MaterialView ViewModel="{Binding MaterialsTab}"/>
-                </TabItem>
-                <TabItem Header="Constants">
-                    <views:ConstantsView ViewModel="{Binding ConstantsVM}"/>
-                </TabItem>
-                <TabItem Header="Settings">
-                    <views:SettingsView ViewModel="{Binding SettingsVM}"/>
-                </TabItem>
-                
-            </TabControl>
-            <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="1"/>
-            <!--Right Tab Control-->
-            <views:EditTabView Index="{Binding EditTab.TabIndex}"
-                             ViewModel="{Binding ElementName=root, Path=DataContext.EditTab}"
-                             Grid.Column="4" Grid.Row="1" Grid.RowSpan="1" Margin="0,-2,0,0"/>
+                        <views:ScopeCollectionsTabView Grid.RowSpan="2"
+                                                         ViewModel="{Binding ScopeCollection}"/>
+                        <TabControl Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    SelectedIndex="0"
+                                    Background="{DynamicResource SectionBackgroundBrush}">
+                            <TabItem Header="Templates" Name="templatesTab" DataContext="{Binding}">
+                                <TabItem.Resources>
+                                    <DataTemplate x:Key="SystemTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <views:SystemHierarchyView SystemSource="{Binding ElementName=templatesTab, Path=DataContext.Templates.SystemTemplates}"
+                                               DropHandler="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"
+                                               ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="EquipmentTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <views:EquipmentHierarchyView EquipmentSource="{Binding ElementName=templatesTab, Path=DataContext.Templates.EquipmentTemplates}"
+                                               DropHandler="{Binding ElementName=templatesTab, Path=DataContext.EquipmentHierarchyVM}"
+                                                                       ViewModel="{Binding ElementName=templatesTab, Path=DataContext.EquipmentHierarchyVM}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="SubScopeTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
 
-            <views:StatusBarView ViewModel="{Binding ElementName=root, Path=DataContext.StatusBarVM}"
-                Grid.Row="3"
-                       Grid.ColumnSpan="6"/>
-        </Grid>
-    </DockPanel>
+                                            <views:SubScopeHierarchyView SubScopeSource="{Binding Templates.SubScopeTemplates}"
+                                                                     DropHandler="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"
+                                                                     ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="ControllerTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <listControls:ControllerListControl Source="{Binding Templates.ControllerTemplates}"
+                                                              SelectedItem ="{Binding Selected}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="PanelTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+                                            <listControls:PanelListControl Source="{Binding Templates.PanelTemplates}"
+                                                              SelectedItem ="{Binding Selected}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="MiscTemplate">
+                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
+
+                                            <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                    <utilities:ScopeTemplateSelector x:Key="ScopeSelector"
+                                             SystemTemplate="{StaticResource SystemTemplate}"
+                                             EquipmentTemplate="{StaticResource EquipmentTemplate}"
+                                             SubScopeTemplate="{StaticResource SubScopeTemplate}"
+                                             ControllerTemplate="{StaticResource ControllerTemplate}"
+                                             PanelTemplate="{StaticResource PanelTemplate}"
+                                             MiscTemplate="{StaticResource MiscTemplate}"/>
+                                </TabItem.Resources>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ScopeTemplateIndex}}}"
+                                              Margin="5" Grid.Row="0" FontSize="16"
+                                              VerticalContentAlignment="Center"
+                                              SelectedIndex="0"/>
+                                    <ContentPresenter Content="{Binding ElementName=templateComboBox, Path=SelectedItem}"  
+                                                      ContentTemplateSelector="{StaticResource ScopeSelector}"
+                                                      Grid.Row="1"/>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Catalogs">
+                                <views:MaterialView ViewModel="{Binding MaterialsTab}" Selected="{Binding Selected}"/>
+                            </TabItem>
+                            <TabItem Header="Parameters">
+                                <views:ParametersView Source="{Binding Templates.Parameters}"
+                                                      AddCommand="{Binding AddParameterCommand}"/>
+                            </TabItem>
+
+                        </TabControl>
+                        <views:PropertiesView Selected="{Binding Selected}"
+                                              Grid.Column="2" Grid.Row="1" Grid.RowSpan="1"
+                                              ViewModel="{Binding PropertiesVM}"
+                                              DropHandler="{Binding PropertiesVM}"/>
+
+                        <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+                            Grid.Row="3"
+                                   Grid.ColumnSpan="6"/>
+                    </Grid>
+                </DockPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SplashVM}">
+                <views:SplashView ViewModel="{Binding}" BidVisibility="Collapsed"/>
+            </DataTemplate>
+        </ContentControl.Resources>
+    </ContentControl>
 </Window>

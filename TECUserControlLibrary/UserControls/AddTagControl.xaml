@@ -22,7 +22,7 @@
         <Button Grid.Row="0" Grid.Column="1" Content="Add Tag"
                             Command="{Binding ElementName=parent, Path=AddTagCommand}"
                             Margin="5"/>
-        <local:TagsGridControl Grid.ColumnSpan="2" Grid.Row="2"
-                               TagsSource="{Binding ElementName=parent, Path=TagList}"/>
+        <local:LabeledGridControl Grid.ColumnSpan="2" Grid.Row="2"
+                               LabeledSource="{Binding ElementName=parent, Path=TagList}"/>
     </Grid>
 </UserControl>

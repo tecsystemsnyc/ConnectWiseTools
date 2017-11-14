@@ -8,13 +8,15 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cmd ="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:localMVVM="clr-namespace:EstimateBuilder.MVVM"
+        xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
         
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         
         mc:Ignorable="d ignore"
-        Height="720"
-        Width="1200"
+        Height="640"
+        Width="1024"
         WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
@@ -34,72 +36,71 @@
     </i:Interaction.Triggers>
 
     <Window.InputBindings>
-        <KeyBinding Command="{Binding UndoCommand}"
+        <KeyBinding Command="{Binding MenuVM.UndoCommand}"
                     Gesture="CTRL+Z" />
-        <KeyBinding Command="{Binding RedoCommand}"
+        <KeyBinding Command="{Binding MenuVM.RedoCommand}"
                     Gesture="CTRL+SHIFT+Z" />
-        <KeyBinding Command="{Binding SaveCommand}"
+        <KeyBinding Command="{Binding MenuVM.SaveCommand}"
                     Gesture="CTRL+S" />
-        <KeyBinding Command="{Binding SaveAsCommand}"
+        <KeyBinding Command="{Binding MenuVM.SaveAsCommand}"
                     Gesture="CTRL+SHIFT+S" />
-        <KeyBinding Command="{Binding LoadCommand}"
+        <KeyBinding Command="{Binding MenuVM.LoadCommand}"
                     Gesture="CTRL+O" />
-        <KeyBinding Command="{Binding NewCommand}"
+        <KeyBinding Command="{Binding MenuVM.NewCommand}"
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}" IsEnabled="{Binding UserCanInteract}">
-        <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
-                                  DockPanel.Dock="Top"/>
+    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}" IsEnabled="{Binding ViewEnabled}">
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type localMVVM:EstimateEditorVM}">
+                <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}">
+                    <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+                                    DockPanel.Dock="Top"/>
 
-        <Grid x:Name="LayoutRoot">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
+                    <Grid x:Name="LayoutRoot">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="150"/>
-            </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
 
-            <Image Source="{Binding TECLogo}"
-                   Grid.Column="2"
-                   Grid.RowSpan="2"/>
+                        <Image Source="{Binding ElementName=parent, Path=DataContext.TECLogo}"
+                           Grid.Column="2"
+                           Grid.RowSpan="2"/>
 
-            <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
-                <TabItem Header="Scope Editor">
-                    <views:ScopeEditorView
-                        ViewModel="{Binding ScopeEditorVM}"/>
-                </TabItem>
-                <TabItem Header="Network">
-                    <views:NetworkView
-                        ViewModel="{Binding NetworkVM}"/>
-                </TabItem>
-                <TabItem Header="Drawing" Visibility="Collapsed">
-                    <views:DrawingView
-                        ViewModel="{Binding DrawingVM}"/>
-                </TabItem>
-                <TabItem Header="Review">
-                    <controls:ReviewTabControl
-                        ViewModel="{Binding}"/>
-                </TabItem>
-                <TabItem Header="Proposal">
-                    <views:ProposalView
-                        ViewModel="{Binding ProposalVM}"/>
-                </TabItem>
-                <TabItem Header="Settings" Height="21" VerticalAlignment="Top">
-                    <views:SettingsView
-                        ViewModel="{Binding SettingsVM}"/>
-                </TabItem>
-            </TabControl>
-            <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
-                                           Grid.Row="3" Grid.ColumnSpan="3"
-                                           dd:DragDrop.IsDropTarget="True"
-                                           dd:DragDrop.DropHandler="{Binding}"/>
-        </Grid>
-    </DockPanel>
+                        <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
+                            <TabItem Header="Scope Editor">
+                                <views:ScopeEditorView
+                                ViewModel="{Binding ScopeEditorVM}"/>
+                            </TabItem>
+                            <TabItem Header="Review">
+                                <controls:ReviewTabControl
+                                ViewModel="{Binding}"/>
+                            </TabItem>
+                            <TabItem Header="Proposal">
+                                <views:ProposalView
+                                ViewModel="{Binding ProposalVM}"/>
+                            </TabItem>
+                            
+                        </TabControl>
+                        <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+                                                   Grid.Row="3" Grid.ColumnSpan="3"
+                                                   dd:DragDrop.IsDropTarget="True"
+                                                   dd:DragDrop.DropHandler="{Binding}"/>
+                    </Grid>
+                </DockPanel>
+            </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SplashVM}">
+            <views:SplashView ViewModel="{Binding}" BidVisibility="Visible" BidPath="{Binding BidPath}" GetBidPathCommand="{Binding GetBidPathCommand}"/>
+        </DataTemplate>
+        </ContentControl.Resources>
+    </ContentControl>
+
 </Window>

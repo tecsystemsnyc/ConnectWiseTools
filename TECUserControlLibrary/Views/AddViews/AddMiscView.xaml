@@ -1,0 +1,50 @@
+﻿<local:AddBaseView x:Class="TECUserControlLibrary.Views.AddViews.AddMiscView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views.AddViews"
+                   xmlns:views="clr-namespace:TECUserControlLibrary.Views"
+                   x:Name="addMiscView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=addMiscView, Path=DataContext}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" DataContext="{Binding ToAdd}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Misc: "/>
+            <Label Content="{Binding Name}" Grid.Column="1"/>
+            <Label Content="Quantity: " Grid.Row="1"/>
+            <TextBox Text="{Binding Quantity}" Grid.Row="1" Grid.Column="1"
+                     Margin="2"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Review Properties" Grid.ColumnSpan="2"/>
+            <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2"/>
+            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="2"/>
+            <Button Content="Add" x:Name="doneButton" Click="doneButton_Click" Grid.Row="2"
+                    Command="{Binding AddCommand}" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</local:AddBaseView>

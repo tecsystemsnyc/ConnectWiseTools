@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Markup;
 
 namespace TECUserControlLibrary.Utilities
 {
-    class EnumBindingSourceExtension : MarkupExtension
+    public class EnumBindingSourceExtension : MarkupExtension
     {
         private Type _enumType;
         public Type EnumType

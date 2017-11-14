@@ -12,7 +12,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
-using TemplateBuilder.Model;
+using TECUserControlLibrary.ViewModels;
 
 namespace TemplateBuilder.MVVM
 {
@@ -29,16 +29,7 @@ namespace TemplateBuilder.MVVM
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            if (ViewModelBase.IsInDesignModeStatic)
-            {
-                SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
-            }
-            else
-            {
-                SimpleIoc.Default.Register<IDataService, DataService>();
-            }
-
-            SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<TemplatesManager>();
         }
 
         /// <summary>
@@ -47,11 +38,11 @@ namespace TemplateBuilder.MVVM
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public MainViewModel MainViewModel
+        public TemplatesManager MainViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return ServiceLocator.Current.GetInstance<TemplatesManager>();
             }
         }
 

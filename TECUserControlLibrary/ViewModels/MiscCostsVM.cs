@@ -1,13 +1,12 @@
 ﻿using EstimatingLibrary;
-using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System;
 using GongSolutions.Wpf.DragDrop;
-using TECUserControlLibrary.Utilities;
+using System;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -45,6 +44,18 @@ namespace TECUserControlLibrary.ViewModels
 
         public Visibility QuantityVisibility { get; set; }
 
+        private TECMisc _selected;
+        public TECMisc Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
+                SelectionChanged?.Invoke(value);
+            }
+        }
+
         private string _miscName;
         public string MiscName
         {
@@ -78,6 +89,17 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private int _quantity;
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                _quantity = value;
+                RaisePropertyChanged("Quantity");
+            }
+        }
+
         private CostType _miscType;
         public CostType MiscType
         {
@@ -94,6 +116,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECSystem _system;
 
         public ICommand AddNewCommand { get; private set; }
+        public RelayCommand<TECMisc> DeleteCommand { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the MiscCostsVM class.
@@ -101,15 +124,16 @@ namespace TECUserControlLibrary.ViewModels
         public MiscCostsVM(TECScopeManager scopeManager)
         {
             Refresh(scopeManager);
-            AddNewCommand = new RelayCommand(addNewExecute, addNewCanExecute);
-            MiscType = CostType.TEC;
+            setup();
         }
+        
         public MiscCostsVM(TECSystem system)
         {
             Refresh(system);
-            AddNewCommand = new RelayCommand(addNewExecute, addNewCanExecute);
-            MiscType = CostType.TEC;
+            setup();
         }
+
+        public event Action<TECObject> SelectionChanged;
 
         public void Refresh(TECScopeManager scopeManager)
         {
@@ -156,31 +180,43 @@ namespace TECUserControlLibrary.ViewModels
             _system = system;
             sourceCollection = system.MiscCosts;
             populateCollections();
-            
+        }
+
+        private void setup()
+        {
+            AddNewCommand = new RelayCommand(addNewExecute, addNewCanExecute);
+            DeleteCommand = new RelayCommand<TECMisc>(deleteExecute, canDelete);
+            MiscType = CostType.TEC;
+            MiscName = "";
+            Cost = 0;
+            Labor = 0;
+            Quantity = 1;
         }
 
         private bool addNewCanExecute()
         {
-            if(MiscName != "")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (MiscName != "");
         }
         private void addNewExecute()
         {
-            TECMisc newMisc = new TECMisc();
+            TECMisc newMisc = new TECMisc(MiscType, false);
             newMisc.Name = MiscName;
-            newMisc.Type = MiscType;
             newMisc.Cost = Cost;
             newMisc.Labor = Labor;
+            newMisc.Quantity = Quantity;
 
             sourceCollection.Add(newMisc);
         }
-        
+
+        private void deleteExecute(TECMisc obj)
+        {
+            sourceCollection.Remove(obj);
+        }
+        private bool canDelete(TECMisc arg)
+        {
+            return true;
+        }
+
         private void MiscCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -200,7 +236,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void Misc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var args = e as PropertyChangedExtendedEventArgs<object>;
+            var args = e as TECChangedEventArgs;
             if(e.PropertyName == "Type")
             {
                 TECMisc old = args.OldValue as TECMisc;
@@ -262,7 +298,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             UIHelpers.StandardDragOver(dropInfo);
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             TECScopeManager scopeManager;

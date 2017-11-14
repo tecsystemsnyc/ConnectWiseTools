@@ -1,9 +1,6 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
 {
@@ -19,11 +16,10 @@ namespace TECUserControlLibrary.Models
         public int Quantity
         {
             get { return _quantity; }
-            set
+            private set
             {
                 _quantity = value;
-                RaisePropertyChanged("Quantity");
-                updateTotals();
+                raisePropertyChanged("Quantity");
             }
         }
 
@@ -34,11 +30,10 @@ namespace TECUserControlLibrary.Models
             {
                 return _totalCost;
             }
-            set
+            private set
             {
-                double old = _totalCost;
                 _totalCost = value;
-                NotifyPropertyChanged("TotalCost", old, _totalCost);
+                raisePropertyChanged("TotalCost");
             }
         }
 
@@ -49,45 +44,54 @@ namespace TECUserControlLibrary.Models
             {
                 return _totalLabor;
             }
-            set
+            private set
             {
-                double old = _totalLabor;
                 _totalLabor = value;
-                NotifyPropertyChanged("TotalLabor", old, _totalLabor);
+                raisePropertyChanged("TotalLabor");
             }
         }
 
-        public CostSummaryItem(TECCost cost)
+        public CostSummaryItem(TECCost cost) : base(Guid.NewGuid())
         {
             _cost = cost;
-            _quantity = cost.Quantity;
-            Cost.PropertyChanged += Cost_PropertyChanged;
+            if (cost is TECMisc misc)
+            {
+                _quantity = misc.Quantity;
+            }
+            else
+            {
+                _quantity = 1;
+            }
             updateTotals();
         }
 
-        private void updateTotals()
+        public CostBatch AddQuantity(int quantity)
         {
-            TotalCost = (Cost.Cost * Quantity);
-            TotalLabor = (Cost.Labor * Quantity);
+            Quantity += quantity;
+            return updateTotals();
+        }
+        public CostBatch RemoveQuantity(int quantity)
+        {
+            Quantity -= quantity;
+            return updateTotals();
+        }
+        public CostBatch Refresh()
+        {
+            return updateTotals();
         }
 
-        private void Cost_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private CostBatch updateTotals()
         {
-            if (e.PropertyName == "Cost" || e.PropertyName == "Labor")
-            {
-                var old = this.Copy();
-                updateTotals();
-                NotifyPropertyChanged("Total", old, this);
-            }
-        }
+            double newCost = (Cost.Cost * Quantity);
+            double newLabor = (Cost.Labor * Quantity);
 
-        public override object Copy()
-        {
-            CostSummaryItem item = new CostSummaryItem(Cost);
-            item._quantity = Quantity;
-            item._totalCost = TotalCost;
-            item._totalLabor = TotalLabor;
-            return item;
+            double deltaCost = newCost - TotalCost;
+            double deltaLabor = newLabor - TotalLabor;
+
+            TotalCost = newCost;
+            TotalLabor = newLabor;
+
+            return new CostBatch(deltaCost, deltaLabor, Cost.Type);
         }
     }
 }

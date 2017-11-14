@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.SystemConnectionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             mc:Ignorable="d" 
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             x:Name="systemConnectionsView"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="local:SystemConnectionsView">
+            <Setter Property="UpdateConnectionVM" Value="{Binding ElementName=systemConnectionsView, Path=ViewModel.UpdateConnectionVM}"/>
+        </Style>
+        
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=systemConnectionsView, Path=ViewModel}">
+        <Grid.Resources>
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--Controllers-->
+        <Border Grid.RowSpan="2">
+            <Grid x:Name="controllerList">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=systemConnectionsView, Path=ViewModel}"/>
+                    <DataTemplate x:Key="cannotConnectAdorner">
+                        <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
+                    </DataTemplate>
+                </Grid.Resources>
+                <Label Content="Controllers"/>
+                <listControls:ControllerListControl
+                Source="{Binding Controllers}"
+                SelectedItem="{Binding SelectedController}"
+                    Grid.Row="1"/>
+                <Border Grid.RowSpan="2"/>
+
+                <Label Content="Unconnected Points" Grid.Row="2"/>
+                <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
+                                                  IsDragSource="True"
+                                                  DropHandler="{Binding}" Grid.Row="3"
+                                                  DragAdornerTemplate="{StaticResource cannotConnectAdorner}"/>
+                <Border Grid.Row="2" Grid.RowSpan="2"/>
+            </Grid>
+        </Border>
+        
+        <!--SubScope Connections-->
+        <Border Grid.Column="1" Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Content="Update All"
+                        Command="{Binding UpdateAllCommand}"
+                        Margin="5"
+                        Visibility="{Binding 
+                    ElementName=systemConnectionsView, 
+                    Path=IsTypical, 
+                    Converter={utilities:BooleanToVisibilityConverter}}"/>
+                <listControls:SubScopeConnectionListControl
+                    Source="{Binding SubScope}"
+                    ConduitTypes="{Binding ConduitTypes}"
+                    UpdateCommand="{Binding UpdateItemCommand}"
+                    IsDragSource="True"
+                    DropHandler="{Binding}"
+                    ReadOnly="False"
+                    Grid.Row="1">
+                    <listControls:SubScopeConnectionListControl.Resources>
+                        <Visibility x:Key="Visible">
+                            Visible
+                        </Visibility>
+                        <Visibility x:Key="Collapsed">
+                            Collapsed
+                        </Visibility>
+                    </listControls:SubScopeConnectionListControl.Resources>
+                    <listControls:SubScopeConnectionListControl.UpdateButtonVisibility>
+                        <MultiBinding Converter="{utilities:BooleanChoiceConverter}">
+                            <Binding ElementName="systemConnectionsView" Path="IsTypical"/>
+                            <Binding Source="{StaticResource Visible}"/>
+                            <Binding Source="{StaticResource Collapsed}"/>
+                            <Binding Source="{StaticResource Visible}"/>
+                        </MultiBinding>
+                    </listControls:SubScopeConnectionListControl.UpdateButtonVisibility>
+                </listControls:SubScopeConnectionListControl>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

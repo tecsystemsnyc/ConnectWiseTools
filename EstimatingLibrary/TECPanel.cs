@@ -3,13 +3,10 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECScope, CostComponent
+    public class TECPanel : TECLocated, IDragDropable, ITypicalable
     {
         #region Properties
         private TECPanelType _type;
@@ -18,10 +15,10 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var temp = this.Copy();
+                var old= Type;
                 _type = value;
-                NotifyPropertyChanged("Type", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                notifyCostChanged(value.CostBatch - old.CostBatch);
             }
         }
 
@@ -31,84 +28,87 @@ namespace EstimatingLibrary
             get { return _controllers; }
             set
             {
-                var temp = this.Copy();
+                var old = Controllers;
                 _controllers = value;
-                Controllers.CollectionChanged -= collectionChanged;
-                NotifyPropertyChanged("Controllers", temp, this);
-                Controllers.CollectionChanged += collectionChanged;
+                Controllers.CollectionChanged -= controllersCollectionChanged;
+                notifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
+                Controllers.CollectionChanged += controllersCollectionChanged;
             }
         }
-
-        public List<TECCost> Costs
-        {
-            get
-            {
-                return getCosts();
-            }
-        }
-        private List<TECCost> getCosts()
-        {
-            var outCosts = new List<TECCost>();
-            outCosts.Add(Type);
-            foreach(TECCost cost in AssociatedCosts)
-            {
-                outCosts.Add(cost);
-            }
-            return outCosts;
-        }
+        
+        public bool IsTypical { get; private set; }
         #endregion
 
-        public TECPanel(Guid guid, TECPanelType type) : base(guid)
+        public TECPanel(Guid guid, TECPanelType type, bool isTypical) : base(guid)
         {
+            IsTypical = isTypical;
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
             _type = type;
-            Controllers.CollectionChanged += collectionChanged;
+            Controllers.CollectionChanged += controllersCollectionChanged;
         }
-        public TECPanel(TECPanelType type) : this(Guid.NewGuid(), type) { }
-        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type)
+        public TECPanel(TECPanelType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
+        public TECPanel(TECPanel panel, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type, isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }
             copyPropertiesFromScope(panel);
             foreach (TECController controller in panel.Controllers)
             {
-                _controllers.Add(new TECController(controller, guidDictionary));
+                _controllers.Add(new TECController(controller, isTypical, guidDictionary));
             }
         }
-
-        public override object Copy()
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
-            var outPanel = new TECPanel(this);
-            outPanel._controllers = new ObservableCollection<TECController>();
-            foreach (TECController controller in this.Controllers)
-            {
-                outPanel.Controllers.Add(controller.Copy() as TECController);
-            }
-            outPanel._guid = _guid;
-            return outPanel;
-        }
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            var outPanel = new TECPanel(this);
+            var outPanel = new TECPanel(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }
+        
+        protected override CostBatch getCosts()
+        {
+            CostBatch costs = base.getCosts();
+            costs += Type.CostBatch;
+            return costs;
+        }
+        protected override SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.propertyObjects());
+            saveList.Add(this.Type, "Type");
+            saveList.AddRange(this.Controllers, "Controllers");
+            return saveList;
+        }
+        protected override SaveableMap linkedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.linkedObjects());
+            saveList.Add(this.Type, "Type");
+            saveList.AddRange(this.Controllers, "Controllers");
+            return saveList;
+        }
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
 
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void controllersCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("AddRelationship", this, item);
+                    notifyCombinedChanged(Change.Add, "Controllers", this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("RemoveRelationship", this, item);
+                    notifyCombinedChanged(Change.Remove, "Controllers", this, item);
                 }
             }
         }

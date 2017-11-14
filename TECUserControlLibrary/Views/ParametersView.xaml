@@ -1,0 +1,255 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.ParametersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             x:Name="parametersView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=parametersView}">
+        <Grid.Resources>
+            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Margin" Value="2"/>
+            </Style>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="Parameters" HorizontalAlignment="Center"/>
+        <Button Width="40" Content="Add" Command="{Binding ElementName=parametersView, Path=AddCommand}"
+                HorizontalAlignment="Right"/>
+        <ListView ItemsSource="{Binding Source}" HorizontalContentAlignment="Stretch" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="25"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding Label}"/>
+                            <!--Overall TEC-->
+                            <Grid Grid.Row="1" Grid.ColumnSpan="17">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="TEC: "/>
+                                <TextBlock Text="Tax Rate: " Grid.Column="1"/>
+                                <TextBox Text="{Binding Tax}" Grid.Column="2"/>
+                                <TextBlock Text="Escalation: " Grid.Column="3"/>
+                                <TextBox Text="{Binding Escalation}" Grid.Column="4"/>
+                                <TextBlock Text="Overhead: " Grid.Column="5"/>
+                                <TextBox Text="{Binding Overhead}" Grid.Column="6"/>
+                                <TextBlock Text="Profit: " Grid.Column="7"/>
+                                <TextBox Text="{Binding Profit}" Grid.Column="8"/>
+                                <TextBlock Text="Warranty: " Grid.Column="9" />
+                                <TextBox Text="{Binding Warranty}" Grid.Column="10" />
+                                <TextBlock Text="Shipping: " Grid.Column="11"/>
+                                <TextBox Text="{Binding Shipping}" Grid.Column="12" />
+                                <TextBlock Text="Bond Rate: " Grid.Column="13"/>
+                                <TextBox Text="{Binding BondRate}" Grid.Column="14" />
+                            </Grid>
+                            
+                            <!--Overall Subcontractor-->
+                            <Grid Grid.Row="2" Grid.ColumnSpan="17">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Subcontractor: "/>
+                                <TextBlock Text="Escalation: " Grid.Column="1"/>
+                                <TextBox Text="{Binding SubcontractorEscalation}" Grid.Column="2"/>
+                                <TextBlock Text="Markup: " Grid.Column="3"/>
+                                <TextBox Text="{Binding SubcontractorMarkup}" Grid.Column="4"/>
+                                <TextBlock Text="Warranty: " Grid.Column="5"/>
+                                <TextBox Text="{Binding SubcontractorWarranty}" Grid.Column="6"/>
+                                <TextBlock Text="Shipping: " Grid.Column="7"/>
+                                <TextBox Text="{Binding SubcontractorShipping}" Grid.Column="8"/>
+                            </Grid>
+                            
+                            <!--TEC Labor-->
+                            <TextBlock Text="TEC Labor: " Grid.Row="3"/>
+                            <Border BorderThickness="1" BorderBrush="Gray" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Project Management" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
+                                    <TextBlock Text="Rate: " Grid.Column="2"/>
+                                    <TextBox Text="{Binding PMRate, StringFormat={}{0:C}}" Grid.Column="3"/>
+                                    <TextBlock Text="Coefficient: " Grid.Row="1"/>
+                                    <TextBox Text="{Binding PMCoef}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBlock Text="Std. Err.: " Grid.Row="1" Grid.Column="2"/>
+                                    <TextBox Text="{Binding PMCoefStdError}" Grid.Row="1" Grid.Column="3"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderThickness="1" BorderBrush="Gray"  Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="1">
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Engineering" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
+                                    <TextBlock Text="Rate: " Grid.Column="2"/>
+                                    <TextBox Text="{Binding ENGRate, StringFormat={}{0:C}}" Grid.Column="3"/>
+                                    <TextBlock Text="Coefficient: " Grid.Row="1"/>
+                                    <TextBox Text="{Binding ENGCoef}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBlock Text="Std. Err.: " Grid.Row="1" Grid.Column="2"/>
+                                    <TextBox Text="{Binding ENGCoefStdError}" Grid.Row="1" Grid.Column="3"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderThickness="1" BorderBrush="Gray" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="1">
+
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Software" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
+                                    <TextBlock Text="Rate: " Grid.Column="2"/>
+                                    <TextBox Text="{Binding SoftRate, StringFormat={}{0:C}}" Grid.Column="3"/>
+                                    <TextBlock Text="Coefficient: " Grid.Row="1"/>
+                                    <TextBox Text="{Binding SoftCoef}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBlock Text="Std. Err.: " Grid.Row="1" Grid.Column="2"/>
+                                    <TextBox Text="{Binding SoftCoefStdError}" Grid.Row="1" Grid.Column="3"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderThickness="1" BorderBrush="Gray" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Graphics"  FontWeight="DemiBold" Grid.ColumnSpan="2"/>
+                                    <TextBlock Text="Rate: " Grid.Column="2"/>
+                                    <TextBox Text="{Binding GraphRate, StringFormat={}{0:C}}" Grid.Column="3"/>
+                                    <TextBlock Text="Coefficient: " Grid.Row="1"/>
+                                    <TextBox Text="{Binding GraphCoef}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBlock Text="Std. Err.: " Grid.Row="1" Grid.Column="2"/>
+                                    <TextBox Text="{Binding GraphCoefStdError}" Grid.Row="1" Grid.Column="3"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderThickness="1" BorderBrush="Gray" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Commisioning" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
+                                    <TextBlock Text="Rate: " Grid.Column="2"/>
+                                    <TextBox Text="{Binding CommRate, StringFormat={}{0:C}}" Grid.Column="3"/>
+                                    <TextBlock Text="Coefficient: " Grid.Row="1"/>
+                                    <TextBox Text="{Binding CommCoef}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBlock Text="Std. Err.: " Grid.Row="1" Grid.Column="2"/>
+                                    <TextBox Text="{Binding CommCoefStdError}" Grid.Row="1" Grid.Column="3"/>
+                                </Grid>
+                            </Border>
+                            <!--Subcontractor Labor-->
+                            <Grid Grid.Row="5" Grid.ColumnSpan="17">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Electrical Labor: "/>
+                                <TextBlock Text="Rate: " Grid.Column="1"/>
+                                <TextBox Text="{Binding ElectricalRate, StringFormat={}{0:C}}" Grid.Column="2"/>
+                                <TextBlock Text="Supervisor Rate: " Grid.Column="3"/>
+                                <TextBox Text="{Binding ElectricalSuperRate, StringFormat={}{0:C}}" Grid.Column="4"/>
+                                <TextBlock Text="Non-Union Rate: " Grid.Column="5"/>
+                                <TextBox Text="{Binding ElectricalNonUnionRate, StringFormat={}{0:C}}"  Grid.Column="6"/>
+                                <TextBlock Text="Non-Union Super. Rate:" Grid.Column="7"/>
+                                <TextBox Text="{Binding ElectricalSuperNonUnionRate, StringFormat={}{0:C}}"  Grid.Column="8"/>
+                                <TextBlock Text="Supervision Ratio: " Grid.Column="9"/>
+                                <TextBox Text="{Binding ElectricalSuperRatio, StringFormat={}{0:F4}}" Grid.Column="10"/>
+                            </Grid>
+                            
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

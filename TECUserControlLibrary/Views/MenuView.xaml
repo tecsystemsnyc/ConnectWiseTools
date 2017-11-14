@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="parent">
-
     <Menu Background="{Binding ElementName=parent, Path=BackgroundColor}"
           DataContext="{Binding ElementName=parent, Path=ViewModel}"
           ItemsSource="{Binding ElementName=parent, Path=ViewModel.Menu}">
@@ -19,13 +19,23 @@
                     </Trigger>
                 </Style.Triggers>
                 <Setter Property="Command" Value="{Binding Command}"/>
-                <Setter Property="Foreground" Value="{Binding TextBrush}"/>
+                <Setter Property="ToolTip" Value="{Binding ToolTipText}"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <MultiBinding Converter="{utilities:BooleanChoiceConverter}">
+                            <Binding Path="IsMainMenu"/>
+                            <Binding Source="{StaticResource LightTextBrush}"/>
+                            <Binding Source="{StaticResource DarkTextBrush}"/>
+                            <Binding Source="{StaticResource DarkTextBrush}"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </Menu.ItemContainerStyle>
         <Menu.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Items}">
-                <TextBlock Text="{Binding Name}"
-                           Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type MenuItem}}}"/>
+                <TextBlock Text="{Binding Name}"/>
             </HierarchicalDataTemplate>
         </Menu.ItemTemplate>
     </Menu>

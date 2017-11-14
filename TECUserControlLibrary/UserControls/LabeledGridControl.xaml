@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.LabeledGridControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:local="clr-namespace:TECUserControlLibrary"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="labeledGridControl">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=labeledGridControl}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=labeledGridControl}">
+        <DataGrid ItemsSource="{Binding Path=LabeledSource}"
+                  AutoGenerateColumns="False"
+                  x:Name="TagsGrid"
+                  IsReadOnly="{Binding ReadOnly}"
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Label}" Header="{Binding Data.LabelName, 
+                                    Source={StaticResource proxy}}" Width="*"/> 
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

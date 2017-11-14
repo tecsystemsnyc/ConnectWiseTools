@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECTemplates : TECScopeManager
+    public class TECTemplates : TECScopeManager, IRelatable
     {
         #region Properties
         private ObservableCollection<TECSystem> _systemTemplates;
@@ -17,17 +13,18 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllerTemplates;
         private ObservableCollection<TECMisc> _miscCostTemplates;
         private ObservableCollection<TECPanel> _panelTemplates;
+        private ObservableCollection<TECParameters> _parameters;
 
         public ObservableCollection<TECSystem> SystemTemplates
         {
             get { return _systemTemplates; }
             set
             {
-                var temp = this.Copy();
-                SystemTemplates.CollectionChanged -= CollectionChanged;
+                var old = SystemTemplates;
+                SystemTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
                 _systemTemplates = value;
-                SystemTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("SystemTemplates", temp, this);
+                SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
+                notifyCombinedChanged(Change.Edit, "SystemTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECEquipment> EquipmentTemplates
@@ -35,11 +32,11 @@ namespace EstimatingLibrary
             get { return _equipmentTemplates; }
             set
             {
-                var temp = this.Copy();
-                EquipmentTemplates.CollectionChanged -= CollectionChanged;
+                var old = EquipmentTemplates;
+                EquipmentTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
                 _equipmentTemplates = value;
-                EquipmentTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("EquipmentTemplates", temp, this);
+                EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
+                notifyCombinedChanged(Change.Edit, "EquipmentTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECSubScope> SubScopeTemplates
@@ -47,11 +44,11 @@ namespace EstimatingLibrary
             get { return _subScopeTemplates; }
             set
             {
-                var temp = this.Copy();
-                SubScopeTemplates.CollectionChanged -= CollectionChanged;
+                var old = SubScopeTemplates;
+                SubScopeTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
                 _subScopeTemplates = value;
-                SubScopeTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("SubScopeTemplates", temp, this);
+                SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
+                notifyCombinedChanged(Change.Edit, "SubScopeTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECController> ControllerTemplates
@@ -59,11 +56,11 @@ namespace EstimatingLibrary
             get { return _controllerTemplates; }
             set
             {
-                var temp = this.Copy();
-                ControllerTemplates.CollectionChanged -= CollectionChanged;
+                var old = ControllerTemplates;
+                ControllerTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
                 _controllerTemplates = value;
-                ControllerTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("ControllerTemplates", temp, this);
+                ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
+                notifyCombinedChanged(Change.Edit, "ControllerTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECMisc> MiscCostTemplates
@@ -71,11 +68,11 @@ namespace EstimatingLibrary
             get { return _miscCostTemplates; }
             set
             {
-                var temp = this.Copy();
-                MiscCostTemplates.CollectionChanged -= CollectionChanged;
+                var old = MiscCostTemplates;
+                MiscCostTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
                 _miscCostTemplates = value;
-                MiscCostTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("MiscCostTemplates", temp, this);
+                MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
+                notifyCombinedChanged(Change.Edit, "MiscCostTemplates", this, value, old);
             }
         }
         public ObservableCollection<TECPanel> PanelTemplates
@@ -83,11 +80,23 @@ namespace EstimatingLibrary
             get { return _panelTemplates; }
             set
             {
-                var temp = this.Copy();
-                PanelTemplates.CollectionChanged -= CollectionChanged;
+                var old = PanelTemplates;
+                PanelTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
                 _panelTemplates = value;
-                PanelTemplates.CollectionChanged += CollectionChanged;
-                NotifyPropertyChanged("PanelTemplates", temp, this);
+                PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
+                notifyCombinedChanged(Change.Edit, "PanelTemplates", this, value, old);
+            }
+        }
+        public ObservableCollection<TECParameters> Parameters
+        {
+            get { return _parameters; }
+            set
+            {
+                var old = Parameters;
+                Parameters.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Parameters");
+                _parameters = value;
+                Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
+                notifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
             }
         }
         #endregion //Properties
@@ -108,56 +117,55 @@ namespace EstimatingLibrary
             }
         }
 
+        public SaveableMap PropertyObjects { get { return propertyObjects(); } }
+        public SaveableMap LinkedObjects { get { return new SaveableMap(); } }
+
         #region Constructors
         public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
         {
-            _labor = new TECLabor();
-
             _systemTemplates = new ObservableCollection<TECSystem>();
             _equipmentTemplates = new ObservableCollection<TECEquipment>();
             _subScopeTemplates = new ObservableCollection<TECSubScope>();
             _controllerTemplates = new ObservableCollection<TECController>();
             _miscCostTemplates = new ObservableCollection<TECMisc>();
             _panelTemplates = new ObservableCollection<TECPanel>();
+            _parameters = new ObservableCollection<TECParameters>();
 
-            SystemTemplates.CollectionChanged += CollectionChanged;
-            EquipmentTemplates.CollectionChanged += CollectionChanged;
-            SubScopeTemplates.CollectionChanged += CollectionChanged;
-            ControllerTemplates.CollectionChanged += CollectionChanged;
-            MiscCostTemplates.CollectionChanged += CollectionChanged;
-            PanelTemplates.CollectionChanged += CollectionChanged;
+            SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
+            EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
+            SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
+            ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
+            MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
+            PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
+            Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
 
             Catalogs.ScopeChildRemoved += scopeChildRemoved;
         }
         public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
         {
-            if (_labor != null)
-            {
-                _labor = templatesSource.Labor;
-            }
             foreach (TECSystem system in templatesSource.SystemTemplates)
-            { SystemTemplates.Add(new TECSystem(system)); }
+            { SystemTemplates.Add(new TECSystem(system, false)); }
             foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
-            { EquipmentTemplates.Add(new TECEquipment(equip)); }
+            { EquipmentTemplates.Add(new TECEquipment(equip, false)); }
             foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
-            { SubScopeTemplates.Add(new TECSubScope(subScope)); }
+            { SubScopeTemplates.Add(new TECSubScope(subScope, false)); }
             foreach (TECController controller in templatesSource.ControllerTemplates)
-            { ControllerTemplates.Add(new TECController(controller)); }
+            { ControllerTemplates.Add(new TECController(controller, false)); }
             foreach (TECMisc cost in templatesSource.MiscCostTemplates)
             {
-                MiscCostTemplates.Add(new TECMisc(cost));
+                MiscCostTemplates.Add(new TECMisc(cost, false));
             }
             foreach (TECPanel panel in templatesSource.PanelTemplates)
             {
-                PanelTemplates.Add(new TECPanel(panel));
+                PanelTemplates.Add(new TECPanel(panel, false));
             }
         }
         #endregion //Constructors
 
         private void scopeChildRemoved(TECObject child)
         {
-            foreach (TECConnectionType type in Catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial type in Catalogs.ConnectionTypes)
             {
                 removeChildFromScope(type, child);
                 TECCost cost = child as TECCost;
@@ -166,7 +174,7 @@ namespace EstimatingLibrary
                     type.RatedCosts.Remove(cost);
                 }
             }
-            foreach (TECConduitType type in Catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial type in Catalogs.ConduitTypes)
             {
                 removeChildFromScope(type, child);
                 TECCost cost = child as TECCost;
@@ -179,6 +187,10 @@ namespace EstimatingLibrary
             {
                 removeChildFromScope(type, child);
             }
+            foreach (TECControllerType type in Catalogs.ControllerTypes)
+            {
+                removeChildFromScope(type, child);
+            }
             foreach (TECIOModule module in Catalogs.IOModules)
             {
                 removeChildFromScope(module, child);
@@ -186,10 +198,6 @@ namespace EstimatingLibrary
             foreach (TECDevice dev in Catalogs.Devices)
             {
                 removeChildFromScope(dev, child);
-            }
-            foreach (TECManufacturer man in Catalogs.Manufacturers)
-            {
-                removeChildFromScope(man, child);
             }
             foreach (TECSystem sys in SystemTemplates)
             {
@@ -200,26 +208,6 @@ namespace EstimatingLibrary
                     foreach(TECSubScope ss in equip.SubScope)
                     {
                         removeChildFromScope(ss, child);
-                        foreach (TECPoint point in ss.Points)
-                        {
-                            removeChildFromScope(point, child);
-                        }
-                    }
-                }
-                foreach(TECSystem instance in sys.SystemInstances)
-                {
-                    removeChildFromScope(sys, child);
-                    foreach (TECEquipment equip in sys.Equipment)
-                    {
-                        removeChildFromScope(equip, child);
-                        foreach (TECSubScope ss in equip.SubScope)
-                        {
-                            removeChildFromScope(ss, child);
-                            foreach (TECPoint point in ss.Points)
-                            {
-                                removeChildFromScope(point, child);
-                            }
-                        }
                     }
                 }
             }
@@ -229,19 +217,11 @@ namespace EstimatingLibrary
                 foreach (TECSubScope ss in equip.SubScope)
                 {
                     removeChildFromScope(ss, child);
-                    foreach (TECPoint point in ss.Points)
-                    {
-                        removeChildFromScope(point, child);
-                    }
                 }
             }
             foreach(TECSubScope ss in SubScopeTemplates)
             {
                 removeChildFromScope(ss, child);
-                foreach (TECPoint point in ss.Points)
-                {
-                    removeChildFromScope(point, child);
-                }
             }
             foreach(TECController controller in ControllerTemplates)
             {
@@ -256,7 +236,7 @@ namespace EstimatingLibrary
         private void removeChildFromScope(TECScope scope, TECObject child)
         {
             TECCost cost = child as TECCost;
-            TECTag tag = child as TECTag;
+            TECLabeled tag = child as TECLabeled;
             if (cost != null)
             {
                 scope.AssociatedCosts.Remove(cost);
@@ -270,53 +250,42 @@ namespace EstimatingLibrary
                 throw new NotImplementedException("Scope child isn't cost or tag.");
             }
         }
+        private SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.Add(this.Catalogs, "Catalogs");
+            saveList.AddRange(this.SystemTemplates, "SystemTemplates");
+            saveList.AddRange(this.EquipmentTemplates, "EquipmentTemplates");
+            saveList.AddRange(this.SubScopeTemplates, "SubScopeTemplates");
+            saveList.AddRange(this.ControllerTemplates, "ControllerTemplates");
+            saveList.AddRange(this.MiscCostTemplates, "MiscCostTemplates");
+            saveList.AddRange(this.PanelTemplates, "PanelTemplates");
+            saveList.AddRange(this.Parameters, "Parameters");
+            return saveList;
+        }
 
         #region Collection Changed
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 foreach (object item in e.NewItems)
                 {
-                    NotifyPropertyChanged("Add", this, item);
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (object item in e.OldItems)
                 {
-                    NotifyPropertyChanged("Remove", this, item);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                NotifyPropertyChanged("Edit", this, sender);
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender);
             }
         }
         #endregion
-
-        public override object Copy()
-        {
-            var outTemplate = new TECTemplates(Guid);
-            outTemplate._catalogs = this.Catalogs.Copy() as TECCatalogs;
-            if (_labor != null)
-            {
-                outTemplate._labor = this.Labor;
-            }
-            foreach (TECSystem system in this.SystemTemplates)
-            { outTemplate.SystemTemplates.Add(system.Copy() as TECSystem); }
-            foreach (TECEquipment equip in this.EquipmentTemplates)
-            { outTemplate.EquipmentTemplates.Add(equip.Copy() as TECEquipment); }
-            foreach (TECSubScope subScope in this.SubScopeTemplates)
-            { outTemplate.SubScopeTemplates.Add(subScope.Copy() as TECSubScope); }
-            foreach (TECController controller in this.ControllerTemplates)
-            { outTemplate.ControllerTemplates.Add(controller.Copy() as TECController); }
-            foreach (TECMisc cost in this.MiscCostTemplates)
-            { outTemplate.MiscCostTemplates.Add(cost.Copy() as TECMisc); }
-            foreach (TECPanel panel in this.PanelTemplates)
-            { outTemplate.PanelTemplates.Add(panel.Copy() as TECPanel); }
-            outTemplate.Catalogs.ScopeChildRemoved += outTemplate.scopeChildRemoved;
-            return outTemplate;
-        }
     }
 }

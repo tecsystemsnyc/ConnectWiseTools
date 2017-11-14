@@ -1,19 +1,10 @@
 ﻿using EstimatingLibrary;
+using GongSolutions.Wpf.DragDrop;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TECUserControlLibrary.UserControls
 {
@@ -38,19 +29,43 @@ namespace TECUserControlLibrary.UserControls
         /// <summary>
         /// Gets or sets the ViewModel which is used
         /// </summary>
-        public Object ViewModel
+        public IDropTarget DropHandler
         {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
         }
 
         /// <summary>
         /// Identified the ViewModel dependency property
         /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget),
               typeof(AssociatedCostsGridControl));
 
+
+        public TECCost Selected
+        {
+            get { return (TECCost)GetValue(SelectedProperty); }
+            set { SetValue(SelectedProperty, value); }
+        }
+        
+        public static readonly DependencyProperty SelectedProperty =
+            DependencyProperty.Register("Selected", typeof(TECCost),
+                typeof(AssociatedCostsGridControl), new FrameworkPropertyMetadata(null)
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
+
+        public bool ReadOnly
+        {
+            get { return (bool)GetValue(ReadOnlyProperty); }
+            set { SetValue(ReadOnlyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanEdit.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReadOnlyProperty =
+            DependencyProperty.Register("ReadOnly", typeof(bool), typeof(AssociatedCostsGridControl), new PropertyMetadata(false));
         #endregion
         public AssociatedCostsGridControl()
         {

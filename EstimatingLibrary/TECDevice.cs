@@ -2,94 +2,61 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECCost
+    public class TECDevice : TECHardware, IDragDropable, IEndDevice
     {
+        #region Constants
+        private const CostType COST_TYPE = CostType.TEC;
+        #endregion
+
+        #region Fields
+        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
+
+        #endregion
+
         #region Properties
-        private ObservableCollection<TECConnectionType> _connectionTypes;
-        private IOType _ioType;
-        private TECManufacturer _manufacturer;
-        public override double ExtendedCost
-        {
-            get { return Cost * Manufacturer.Multiplier; }
-        }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        virtual public ObservableCollection<TECElectricalMaterial> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
             {
                 if(ConnectionTypes != null)
                 {
-                    ConnectionTypes.CollectionChanged -= ConnectionTypes_CollectionChanged;
+                    ConnectionTypes.CollectionChanged -= (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
-                var temp = this.Copy();
+                var old = ConnectionTypes;
                 _connectionTypes = value; if (ConnectionTypes != null)
                 {
-                    ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
+                    ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
                 }
-                NotifyPropertyChanged("ConnectionTypes", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
-            }
-        }
-        
-        public IOType IOType
-        {
-            get { return _ioType; }
-            set
-            {
-                var temp = this.Copy();
-                _ioType = value;
-                NotifyPropertyChanged("IOType", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
-            }
-        }
-        public TECManufacturer Manufacturer
-        {
-            get { return _manufacturer; }
-            set
-            {
-                var temp = this.Copy();
-                _manufacturer = value;
-                NotifyPropertyChanged("Manufacturer", temp, this);
-                NotifyPropertyChanged("ChildChanged", (object)this, (object)value);
+                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
             }
         }
         #endregion//Properties
 
         #region Constructors
-        public TECDevice(Guid guid, ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : base(guid)
+        public TECDevice(Guid guid,
+            IEnumerable<TECElectricalMaterial> connectionTypes,
+            TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
-            _cost = 0;
-            _connectionTypes = connectionTypes;
-            _manufacturer = manufacturer;
-            _type = CostType.TEC;
-            ConnectionTypes.CollectionChanged += ConnectionTypes_CollectionChanged;
+            _connectionTypes = new ObservableCollection<TECElectricalMaterial>(connectionTypes);
+            ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
-        public TECDevice(ObservableCollection<TECConnectionType> connectionTypes, TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
+        public TECDevice(IEnumerable<TECElectricalMaterial> connectionTypes,
+            TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
 
         //Copy Constructor
         public TECDevice(TECDevice deviceSource)
             : this(deviceSource.Guid, deviceSource.ConnectionTypes, deviceSource.Manufacturer)
         {
-            this.copyPropertiesFromScope(deviceSource);
-            _cost = deviceSource.Cost;
-            _ioType = deviceSource.IOType;
+            this.copyPropertiesFromHardware(deviceSource);
         }
         #endregion //Constructors
 
         #region Methods
-        public override Object Copy()
-        {
-            TECDevice outDevice = new TECDevice(this);
-            return outDevice;
-        }
-
-        public override Object DragDropCopy(TECScopeManager scopeManager)
+        public new Object DragDropCopy(TECScopeManager scopeManager)
         {
             foreach(TECDevice device in scopeManager.Catalogs.Devices)
             {
@@ -101,24 +68,38 @@ namespace EstimatingLibrary
             throw new Exception();
         }
 
-        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (TECConnectionType type in e.NewItems)
+                foreach (TECElectricalMaterial type in e.NewItems)
                 {
-                    NotifyPropertyChanged<object>("AddCatalog", this, type);
+                    notifyCombinedChanged(Change.Add, propertyName, this, type);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (TECConnectionType type in e.OldItems)
+                foreach (TECElectricalMaterial type in e.OldItems)
                 {
-                    NotifyPropertyChanged<object>("RemoveCatalog", this, type);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, type);
                 }
             }
         }
 
+        protected override SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.propertyObjects());
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
+            return saveList;
+        }
+        protected override SaveableMap linkedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.linkedObjects());
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
+            return saveList;
+        }
         #endregion
     }
 }

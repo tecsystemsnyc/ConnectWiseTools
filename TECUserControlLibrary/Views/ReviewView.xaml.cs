@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using TECUserControlLibrary.ViewModels;
 
@@ -32,6 +31,11 @@ namespace TECUserControlLibrary.Views
         public ReviewView()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            costPlot.InvalidatePlot();
         }
     }
 }

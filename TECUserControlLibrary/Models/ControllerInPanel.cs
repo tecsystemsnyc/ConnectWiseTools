@@ -1,9 +1,5 @@
 ﻿using EstimatingLibrary;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
 {
@@ -19,7 +15,7 @@ namespace TECUserControlLibrary.Models
                 {
                     handlePanelSelection(_panel, value);
                     _panel = value;
-                    RaisePropertyChanged("Panel");
+                    raisePropertyChanged("Panel");
                 }
             }
         }
@@ -31,11 +27,11 @@ namespace TECUserControlLibrary.Models
             set
             {
                 _controller = value;
-                RaisePropertyChanged("Controller");
+                raisePropertyChanged("Controller");
             }
         }
 
-        public ControllerInPanel(TECController controller, TECPanel panel)
+        public ControllerInPanel(TECController controller, TECPanel panel) : base(Guid.NewGuid())
         {
             _controller = controller;
             _panel = panel;
@@ -57,12 +53,8 @@ namespace TECUserControlLibrary.Models
         public void UpdatePanel(TECPanel panel)
         {
             _panel = panel;
-            RaisePropertyChanged("Panel");
+            raisePropertyChanged("Panel");
         }
-
-        public override object Copy()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

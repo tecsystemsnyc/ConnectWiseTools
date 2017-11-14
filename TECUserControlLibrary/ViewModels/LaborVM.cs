@@ -1,7 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Windows.Input;
 
@@ -35,8 +34,31 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
+        private TECEstimator _estimate;
+        public TECEstimator Estimate
+        {
+            get { return _estimate; }
+            set
+            {
+                _estimate = value;
+                RaisePropertyChanged("Estimate");
+            }
+        }
         public bool TemplatesLoaded;
         public ICommand ReloadCommand { get; private set; }
+        public RelayCommand<TECParameters> SetParametersCommand { get; private set; }
+        public RelayCommand SetDesiredConfidenceCommand { get; private set; }
+
+        private Confidence _desiredConfidence;
+        public Confidence DesiredConfidence
+        {
+            get { return _desiredConfidence; }
+            set
+            {
+                _desiredConfidence = value;
+                RaisePropertyChanged("DesiredConfidence");
+            }
+        }
 
         public Action LoadTemplates;
 
@@ -44,17 +66,32 @@ namespace TECUserControlLibrary.ViewModels
         /// Initializes a new instance of the LaborViewModel class.
         /// </summary>
         /// 
-        public LaborVM()
-        {
-            Bid = new TECBid();
-            Templates = new TECTemplates();
-
-            ReloadCommand = new RelayCommand(ReloadExecute);
-        }
-
-        public void Refresh(TECBid bid, TECTemplates templates)
+        public LaborVM(TECBid bid, TECTemplates templates, TECEstimator estimate)
         {
             Bid = bid;
+            Templates = templates;
+            Estimate = estimate;
+            DesiredConfidence = bid.Parameters.DesiredConfidence;
+
+            ReloadCommand = new RelayCommand(ReloadExecute);
+            SetParametersCommand = new RelayCommand<TECParameters>(SetParametersExecute);
+            SetDesiredConfidenceCommand = new RelayCommand(SetConfidenceExecute, CanSetConfidence);
+        }
+
+        private void SetConfidenceExecute()
+        {
+            Bid.Parameters.DesiredConfidence = DesiredConfidence;
+        }
+
+        private bool CanSetConfidence()
+        {
+            return DesiredConfidence != Bid.Parameters.DesiredConfidence;
+        }
+
+        public void Refresh(TECBid bid, TECEstimator estimate, TECTemplates templates)
+        {
+            Bid = bid;
+            Estimate = estimate;
             Templates = templates;
         }
 
@@ -68,9 +105,13 @@ namespace TECUserControlLibrary.ViewModels
             //Check again to see if templates are properly loaded after reloading. Should not be else.
             if (TemplatesLoaded)
             {
-                Bid.Labor.UpdateConstants(Templates.Labor);
+                throw new NotImplementedException();
+                //Bid.Labor.UpdateConstants(Templates.Labor);
             }
         }
-
+        private void SetParametersExecute(TECParameters obj)
+        {
+            Bid.Parameters = obj;
+        }
     }
 }

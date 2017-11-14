@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.PropertyControls.CostPropertiesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             x:Name="parent"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="300">
+
+    <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0"
+                           Grid.Row="0"
+                           Content="Cost:"/>
+            <Label Grid.Column="0"
+                           Grid.Row="2"
+                           Content="Labor:"/>
+            <ContentPresenter Content="{Binding}" Grid.Column="1"
+                           Grid.Row="0" VerticalAlignment="Top">
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type models:TECHardware}">
+                        <Label Content="{Binding Cost}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:TECCost}">
+                        <TextBox Text="{Binding Cost}" 
+                             Margin="5"/>
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
+
+            <ContentPresenter Content="{Binding}" Grid.Column="1"
+                           Grid.Row="1" VerticalAlignment="Top" >
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type models:TECHardware}">
+                        <Label Content="{Binding Labor}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:TECCost}">
+                        <TextBox Text="{Binding Labor}" Margin="5"/>
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
+
+        </Grid>
+    </Grid>
+</UserControl>

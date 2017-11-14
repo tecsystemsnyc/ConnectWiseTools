@@ -8,44 +8,107 @@
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"     
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d ignore"
-             x:Name="parent"
+             x:Name="scopeEditorView"
              d:DesignWidth="960" d:DesignHeight="640">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="typical">
+                <views:SystemHierarchyView SystemSource="{Binding ElementName=scopeEditorView, Path=ViewModel.Bid.Systems}"
+                                           DropHandler="{Binding ElementName=scopeEditorView, Path=ViewModel}"
+                                           ViewModel="{Binding ElementName=scopeEditorView, Path=ViewModel.TypicalEditVM}"
+                                           IsTypical="True"/>
+            </DataTemplate>
+            <DataTemplate x:Key="instances">
+                <views:TypicalHierarchyView ViewModel="{Binding ElementName=scopeEditorView, Path=ViewModel.InstanceEditVM}"/>
+            </DataTemplate>
+            <utilities:TypicalInstancesSelector x:Key="typicalInstanceSelector"
+                                                TypicalTemplate="{StaticResource typical}"
+                                                InstancesTemplate="{StaticResource instances}"/>
+            <DataTemplate x:Key="typicalDescription">
+                <Label>
+                    Adding scope to the typical system will add to all instances.
+                </Label>
+            </DataTemplate>
+            <DataTemplate x:Key="instancesDescription">
+                <Label>
+                    View and edit the properties of individual instances.
+                </Label>
+            </DataTemplate>
+            <utilities:TypicalInstancesSelector x:Key="typicalInstanceDescriptionSelector"
+                                                TypicalTemplate="{StaticResource typicalDescription}"
+                                                InstancesTemplate="{StaticResource instancesDescription}"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="{DynamicResource WindowBackgroundBrush}"
-           DataContext="{Binding ElementName=parent, Path=ViewModel}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" MaxWidth="{Binding TemplatesVisibility, Converter={utilities:TemplatesVisibilityConverter}}"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="250"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="*" MinHeight="40"/>
-        </Grid.RowDefinitions>
+    <Border Background="{StaticResource SectionBackgroundBrush}">
+        <Grid DataContext="{Binding ElementName=scopeEditorView, Path=ViewModel}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition>
+                    <ColumnDefinition.Width>
+                        <Binding ElementName="TypicalInstanceCombo" Path="SelectedValue"
+                            Converter="{utilities:TypicalSelectionTemplateWidthConverter}">
+                            <Binding.ConverterParameter>
+                                <sys:Double>200</sys:Double>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </ColumnDefinition.Width>
+                </ColumnDefinition>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*" MinHeight="40"/>
+            </Grid.RowDefinitions>
 
-        <views:ScopeCollectionsTabView Grid.Column="0" Grid.Row="0"
-                                         Grid.RowSpan="2"
-                                         ViewModel="{Binding ScopeCollection}"/>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
-        <TabControl Grid.Row="0"
+            <views:ScopeCollectionsTabView Grid.Column="0" Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           ViewModel="{Binding ScopeCollection}"/>
+            <TabControl Grid.Row="0"
                     Grid.RowSpan="2"
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Grid.ColumnSpan="3"
                     SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
-            <TabItem Header="NoneTab" Visibility="Collapsed"/>
-            <TabItem Header="Systems">
-                <TabControl SelectedIndex="{Binding SystemsSubIndex, Converter={utilities:SystemsSubIndexIntegerConverter}, Mode=OneWayToSource}">
+                <TabItem Header="NoneTab" Visibility="Collapsed"/>
+                <TabItem Header="Systems">
+                    <Border Background="{StaticResource SectionBackgroundBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                            <Grid Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Name="TypicalInstanceCombo" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.TypicalInstanceSelectorList}}"
+                                          DisplayMemberPath="Item1"
+                                          SelectedValuePath="Item2"
+                                          SelectedIndex="0"
+                                          VerticalAlignment="Center"/>
+                                <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
+                                      ContentTemplateSelector="{StaticResource typicalInstanceDescriptionSelector}"
+                                      Grid.Column="1"/>
+                            </Grid>
+                        
+                        <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
+                                      ContentTemplateSelector="{StaticResource typicalInstanceSelector}"
+                                      Grid.Row="1" Grid.ColumnSpan="2"/>
+                    </Grid>
+                    </Border>
+
+                    <!--<TabControl SelectedIndex="{Binding SystemsSubIndex, Converter={utilities:SystemsSubIndexIntegerConverter}, Mode=OneWayToSource}">
                     <TabItem Header="Typical">
                         <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
                     </TabItem>
@@ -53,28 +116,30 @@
                         <views:InstanceSystemView ViewModel="{Binding InstanceSystemVM}"/>
                     </TabItem>
                     <TabItem Header="By Location">
-                        <views:LocationView LocationSource="{Binding Bid.Locations}"
+                        <views:LocationView LabeledSource="{Binding Bid.Locations}"
                                             ViewModel="{Binding LocationDataGrid}"/>
                     </TabItem>
-                </TabControl>
-            </TabItem>
-            <TabItem Header="Controllers and Panels">
-                <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
-            </TabItem>
-            <!--Old Location-->
-            <TabItem Visibility="Collapsed"/>
-            <!--Proposal And Budget-->
-            <TabItem Visibility="Collapsed"/>
-            <TabItem Visibility="Collapsed"/>
-            <TabItem Header="Misc.">
-                <views:MiscCostsView ViewModel="{Binding MiscVM}"/>
-            </TabItem>
-            
-        </TabControl>
-        <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch" Grid.RowSpan="2" Margin="0,-2,0,0"/>
-
-        <!--Right Tab Control-->
-        <views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
-                             Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>
-    </Grid>
+                </TabControl>-->
+                </TabItem>
+                <TabItem Header="Controllers and Panels">
+                    <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
+                </TabItem>
+                <TabItem Header="Network">
+                    <views:NetworkView ViewModel="{Binding NetworkVM}"/>
+                </TabItem>
+                <TabItem Header="Misc.">
+                    <views:MiscCostsView ViewModel="{Binding MiscVM}"
+                                         DropHandler="{Binding MiscVM}"/>
+                </TabItem>
+            </TabControl>
+            <!--Right Tab Control-->
+            <!--<views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
+                             Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>-->
+            <views:PropertiesView Selected="{Binding Selected}"
+                             Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                                  ViewModel="{Binding PropertiesVM}"
+                                  DropHandler="{Binding PropertiesVM}"/>
+        </Grid>
+    </Border>
+    
 </UserControl>
