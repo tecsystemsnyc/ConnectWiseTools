@@ -51,9 +51,9 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Typical.Name}"/>
-                                <TextBlock Text="{Binding Typical.Instances.Count, StringFormat=Qty. {0}}" Grid.Column="1"/>
-                                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}}" Grid.Column="2"
+                                <TextBlock Text="{Binding Typical.Name, Mode=OneWay}"/>
+                                <TextBlock Text="{Binding Typical.Instances.Count, StringFormat=Qty. {0}, Mode=OneWay}" Grid.Column="1"/>
+                                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}, Mode=OneWay}" Grid.Column="2"
                                        HorizontalAlignment="Right"/>
                             </Grid>
                         </Border>
@@ -61,7 +61,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="{Binding SystemTotal, StringFormat=Total: {0:C}}" Grid.Row="2"
+            <TextBlock Text="{Binding SystemTotal, StringFormat=Total: {0:C}, Mode=OneWay}" Grid.Row="2"
                        HorizontalAlignment="Right" FontWeight="Bold"/>
         </Grid>
         <!--Riser List-->

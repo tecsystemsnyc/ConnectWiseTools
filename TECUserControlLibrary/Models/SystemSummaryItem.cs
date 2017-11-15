@@ -14,6 +14,7 @@ namespace TECUserControlLibrary.Models
         {
             this.Typical = typical;
             Estimate = new TECEstimator(Typical, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(Typical));
+            Console.WriteLine(string.Format("New SystemSummaryItem guid: {0}", Typical.Guid));
         }
         
     }
