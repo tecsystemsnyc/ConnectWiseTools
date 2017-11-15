@@ -41,28 +41,6 @@ namespace TECUserControlLibraryTests
             }
         }
 
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
-
         [TestMethod]
         public void TotalMatches()
         {
@@ -77,10 +55,8 @@ namespace TECUserControlLibraryTests
             for (int i = 0; i < x; i++)
             {
                 TECTypical typical1 = createTypical(bid);
-                Console.WriteLine(string.Format("New typical guid: {0}", typical1.Guid));
                 TECEstimator estimate1 = new TECEstimator(typical1, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical1));
                 estimates.Add(new Tuple<TECEstimator, TECTypical>(estimate1, typical1));
-                Console.WriteLine(String.Format("Total price of {0} on add: {1}", typical1.Guid, estimate1.TotalPrice));
             }
 
             double previous = estimates[0].Item1.TotalPrice;
@@ -95,13 +71,9 @@ namespace TECUserControlLibraryTests
             {
                 foreach(SystemSummaryItem system in summaryVM.Systems)
                 {
-                    Console.WriteLine(String.Format("Total price Estimate of {0} after all added: {1}", item.Item2.Guid, item.Item1.TotalPrice));
-                    Console.WriteLine(String.Format("Total price SUmmary of {0} after all added: {1}", system.Typical.Guid, system.Estimate.TotalPrice));
                     Assert.AreEqual(item.Item1.TotalPrice, system.Estimate.TotalPrice);
                     if (system.Typical == item.Item2)
                     {
-                        Console.WriteLine(String.Format("Total price Estimate of {0} after all added: {1}", item.Item2.Guid, item.Item1.TotalPrice));
-                        Console.WriteLine(String.Format("Total price SUmmary of {0} after all added: {1}", system.Typical.Guid, system.Estimate.TotalPrice));
                         Assert.AreEqual(system.Estimate.TotalPrice, item.Item1.TotalPrice);
                         y++;
                         break;
