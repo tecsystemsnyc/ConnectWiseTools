@@ -4,7 +4,7 @@ TECBidInfo,BidName,BidInfo,Name
 TECBidInfo,BidID,BidInfo,ID
 TECBidInfo,BidNumber,BidInfo,Number
 TECBidInfo,DueDate,BidInfo,DueDate
-TECBidInfo,Salesperson,BidInfo,SalesPerson
+TECBidInfo,SalesPerson,BidInfo,Salesperson
 TECBidInfo,Estimator,BidInfo,Estimator
 TECTemplatesInfo,TemplateID,TemplatesInfo,ID
 TECBidParameters,ParametersID,NONE,NONE
@@ -165,7 +165,7 @@ TECEquipmentTECSubScope,ScopeIndex,EquipmentSubScope,ScopeIndex
 TECSubScopeTECDevice,SubScopeID,SubScopeDevice,SubScopeID
 TECSubScopeTECDevice,DeviceID,SubScopeDevice,DeviceID
 TECSubScopeTECDevice,Quantity,SubScopeDevice,Quantity
-TECSubScopeTECDevice,ScopeIndex,NONE,NONE
+TECSubScopeTECDevice,ScopeIndex,SubScopeDevice,ScopeIndex
 TECSubScopeTECPoint,SubScopeID,SubScopePoint,SubScopeID
 TECSubScopeTECPoint,PointID,SubScopePoint,PointID
 TECScopeTECTag,ScopeID,ScopeTag,ScopeID
@@ -200,7 +200,7 @@ TECNetworkConnectionTECController,ControllerID,NetworkConnectionChildren,ChildID
 TECSubScopeConnectionChild,ConnectionID,SubScopeConnectionChild,ConnectionID
 TECSubScopeConnectionChild,ScopeID,SubScopeConnectionChild,ScopeID
 TECPanelTECPanelType,PanelID,PanelPanelType,PanelID
-TECPanelTECPanelType,PaneltypeID,PanelPanelType,PaneltypeID
+TECPanelTECPanelType,PaneltypeID,PanelPanelType,PanelTypeID
 TECPanelTECController,PanelID,PanelController,PanelID
 TECPanelTECController,ControllerID,PanelController,ControllerID
 TECSystemTECController,SystemID,SystemController,SystemID
