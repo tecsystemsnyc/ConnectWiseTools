@@ -1928,21 +1928,7 @@ namespace Tests
 
             checkRefresh(bid, estimate);
         }
-
-        [TestMethod]
-        public void Estimate_Typical()
-        {
-            var bid = TestHelper.CreateTestBid();
-            bid.Parameters = parameters;
-
-            TECTypical typical1 = createTypical(bid);
-            TECEstimator estimate1 = new TECEstimator(typical1, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical1));
-             
-            TECTypical typical2 = createTypical(bid);
-            TECEstimator estimate2 = new TECEstimator(typical2, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical2));
-
-            Assert.AreEqual(estimate1.TotalPrice, estimate2.TotalPrice);
-        }
+        
 
         #region Derived Labor
         [TestMethod]
@@ -2024,75 +2010,6 @@ namespace Tests
             Assert.AreEqual(elecLabor, estimate.ElectricalLaborHours, 0.0001, "Elecrtical labor hours refresh failed.");
             Assert.AreEqual(total, estimate.TotalPrice, 0.0001, "Total price refresh failed.");
         }
-
-        private TECTypical createTypical(TECBid bid)
-        {
-            TECTypical typical = new TECTypical();
-            typical.Name = "test";
-            TECEquipment equipment = new TECEquipment(true);
-            equipment.Name = "test equipment";
-            TECSubScope ss = new TECSubScope(true);
-            ss.Name = "Test Subscope";
-            ss.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
-            point.Quantity = 1;
-            ss.Points.Add(point);
-            equipment.SubScope.Add(ss);
-            typical.Equipment.Add(equipment);
-
-            TECSubScope connected = new TECSubScope(true);
-            connected.Name = "Connected";
-            connected.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point2 = new TECPoint(true);
-            point2.Type = IOType.AI;
-            point2.Quantity = 1;
-            connected.Points.Add(point2);
-            equipment.SubScope.Add(connected);
-
-            TECSubScope toConnect = new TECSubScope(true);
-            toConnect.Name = "To Connect";
-            toConnect.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point3 = new TECPoint(true);
-            point3.Type = IOType.AI;
-            point3.Quantity = 1;
-            toConnect.Points.Add(point3);
-            equipment.SubScope.Add(toConnect);
-
-            TECControllerType controllerType = new TECControllerType(new TECManufacturer());
-            controllerType.IOModules.Add(bid.Catalogs.IOModules[0]);
-            TECIO io = new TECIO(IOType.AI);
-            io.Quantity = 10;
-            controllerType.IO.Add(io);
-            bid.Catalogs.IOModules[0].IO.Add(io);
-            controllerType.Name = "Test Type";
-
-            TECController controller = new TECController(controllerType, true);
-            controller.IOModules.Add(bid.Catalogs.IOModules[0]);
-            controller.Name = "Test Controller";
-            typical.AddController(controller);
-            TECController otherController = new TECController(controllerType, true);
-            otherController.Name = "Other Controller";
-            typical.AddController(otherController);
-            TECConnection connection = controller.AddSubScope(connected);
-            connection.Length = 10;
-            connection.ConduitLength = 20;
-            connection.ConduitType = bid.Catalogs.ConduitTypes[1];
-
-            TECPanelType panelType = new TECPanelType(new TECManufacturer());
-            panelType.Name = "test type";
-
-            TECPanel panel = new TECPanel(panelType, true);
-            panel.Name = "Test Panel";
-            typical.Panels.Add(panel);
-
-            TECMisc misc = new TECMisc(CostType.TEC, true);
-            misc.Name = "test Misc";
-            typical.MiscCosts.Add(misc);
-
-            //bid.Systems.Add(typical);
-            typical.AddInstance(bid);
-            return typical;
-        }
+        
     }
 }
