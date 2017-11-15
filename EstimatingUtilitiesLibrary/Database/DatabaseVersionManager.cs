@@ -110,14 +110,14 @@ namespace EstimatingUtilitiesLibrary.Database
 
                 foreach(TableBase table in AllTables)
                 {
-                    if(table.NameString == map.UpdateTableName)
+                    if(tempMap[table.NameString] == map.UpdateTableName)
                     {
                         foreach(TableField field in table.Fields)
                         {
                             if (!map.UpdateFields.Contains(field.Name))
                             {
                                 string command = String.Format("update {0} set {1} = {2} where *",
-                                    table.NameString, field.Name, field.DefaultValue);
+                                    tempMap[table.NameString], field.Name, field.DefaultValue);
                                 db.NonQueryCommand(command);
                             }
                         }
