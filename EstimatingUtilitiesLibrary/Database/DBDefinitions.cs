@@ -2503,17 +2503,34 @@ namespace EstimatingUtilitiesLibrary.Database
     
     internal class TableField
     {
-        public string Name;
-        public string FieldType;
-        public PropertyInfo Property;
-        public string HelperContext;
+        private string _defaultValue;
 
-        public TableField(string name, string fieldType, PropertyInfo property, string helperContext = "")
+        public string Name { get; }
+        public string FieldType { get; }
+        public PropertyInfo Property { get; }
+        public string HelperContext { get; }
+        public string DefaultValue
+        {
+            get
+            {
+                if (_defaultValue == null)
+                {
+                    throw new NotImplementedException(string.Format("TableField {0} doesn't have a default value.", Name));
+                }
+                else
+                {
+                    return _defaultValue;
+                }
+            }
+        }
+
+        public TableField(string name, string fieldType, PropertyInfo property, string helperContext = "", string defaultValue = null)
         {
             Name = name;
             FieldType = fieldType;
             Property = property;
             HelperContext = helperContext;
+            _defaultValue = defaultValue;
         }
     }
 
