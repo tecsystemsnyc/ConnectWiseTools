@@ -167,8 +167,8 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<TableField> fields = new List<TableField>()
         {
-            Label,
             ID,
+            Label,
             Escalation,
             Overhead,
             Profit,

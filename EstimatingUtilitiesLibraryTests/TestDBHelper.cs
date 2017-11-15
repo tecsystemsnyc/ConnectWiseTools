@@ -182,6 +182,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             List<string> values = new List<string>();
             values.Add("655ed4a6-4ce4-431f-ae4b-7185e28d20ef");
+            values.Add("TEST");
             values.Add("10");
             values.Add("20");
             values.Add("20");
@@ -197,14 +198,20 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("0.03");
             values.Add("0.13");
 
+            values.Add("NinetyFive");
+            values.Add("2");
             values.Add("2");
             values.Add("30");
             values.Add("2");
+            values.Add("2");
             values.Add("40");
+            values.Add("2");
             values.Add("2");
             values.Add("50");
             values.Add("2");
+            values.Add("2");
             values.Add("60");
+            values.Add("2");
             values.Add("2");
             values.Add("70");
 

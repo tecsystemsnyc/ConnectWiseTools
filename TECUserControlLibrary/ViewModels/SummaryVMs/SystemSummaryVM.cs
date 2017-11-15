@@ -12,35 +12,35 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
 {
     public class SystemSummaryVM : ViewModelBase
     {
-        private ObservableCollection<SystemSummaryItem> systems;
-        private ObservableCollection<ScopeSummaryItem> riser;
-        private ObservableCollection<ScopeSummaryItem> misc;
+        private ObservableCollection<SystemSummaryItem> _systems;
+        private ObservableCollection<ScopeSummaryItem> _riser;
+        private ObservableCollection<ScopeSummaryItem> _misc;
         private TECBid bid;
         
         public ObservableCollection<SystemSummaryItem> Systems
         {
-            get { return systems; }
+            get { return _systems; }
             set
             {
-                systems = value;
+                _systems = value;
                 RaisePropertyChanged("Systems");
             }
         }
         public ObservableCollection<ScopeSummaryItem> Riser
         {
-            get { return riser; }
+            get { return _riser; }
             set
             {
-                riser = value;
+                _riser = value;
                 RaisePropertyChanged("Riser");
             }
         }
         public ObservableCollection<ScopeSummaryItem> Misc
         {
-            get { return misc; }
+            get { return _misc; }
             set
             {
-                misc = value;
+                _misc = value;
                 RaisePropertyChanged("Misc");
             }
         }
@@ -202,7 +202,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 };
                 miscItems.Add(summaryItem);
             }
-            misc = miscItems;
+            Misc = miscItems;
             RaisePropertyChanged("MiscTotal");
         }
         private void populateRiser(ReadOnlyObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels)
@@ -232,7 +232,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 };
                 riserItems.Add(summaryItem);
             }
-            riser = riserItems;
+            Riser = riserItems;
             RaisePropertyChanged("RiserTotal");
         }
 

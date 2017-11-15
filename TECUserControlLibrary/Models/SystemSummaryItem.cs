@@ -13,14 +13,8 @@ namespace TECUserControlLibrary.Models
         public SystemSummaryItem(TECTypical typical, TECParameters parameters)
         {
             this.Typical = typical;
-            Estimate = new TECEstimator(typical, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical));
-            Estimate.PropertyChanged += Estimate_PropertyChanged;
+            Estimate = new TECEstimator(Typical, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(Typical));
         }
-
-        private void Estimate_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            string typicalGuid = Typical.Guid.ToString();
-            Console.WriteLine("The estimate for {0} changed: {1}", Typical.Name, e.PropertyName);
-        }
+        
     }
 }
