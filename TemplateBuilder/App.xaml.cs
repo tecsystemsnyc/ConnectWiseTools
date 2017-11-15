@@ -14,7 +14,7 @@ namespace TemplateBuilder
 
         public App() : base()
         {
-            //this.Dispatcher.UnhandledException += logUnhandledException;
+            this.Dispatcher.UnhandledException += logUnhandledException;
             DispatcherHelper.Initialize();
         }
 
@@ -22,7 +22,7 @@ namespace TemplateBuilder
         {
             logger.Debug("Template Builder starting up.");
             if (AppDomain.CurrentDomain.SetupInformation
-                .ActivationArguments.ActivationData != null
+                .ActivationArguments?.ActivationData != null
                 && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)
             {
