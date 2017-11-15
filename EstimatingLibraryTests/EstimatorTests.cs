@@ -1929,6 +1929,63 @@ namespace Tests
             checkRefresh(bid, estimate);
         }
 
+        [TestMethod]
+        public void Estimate_Typical()
+        {
+            var bid = new TECBid();
+            bid.Parameters = parameters;
+            //var watcher = new ChangeWatcher(bid);
+            //var estimate = new TECEstimator(bid, watcher);
+
+            var system = new TECTypical();
+            var equipment = new TECEquipment(true);
+            var subScope = new TECSubScope(true);
+
+            var manufacturer = new TECManufacturer();
+            manufacturer.Multiplier = 1;
+            var controllerType = new TECControllerType(manufacturer);
+
+            var controller = new TECController(controllerType, true);
+
+            equipment.SubScope.Add(subScope);
+            system.Equipment.Add(equipment);
+            system.AddController(controller);
+            bid.Systems.Add(system);
+            TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(system));
+
+            var ratedCost = new TECCost(CostType.TEC);
+            ratedCost.Cost = 1;
+            ratedCost.Labor = 1;
+            ratedCost.Type = CostType.Electrical;
+
+            var connectionType = new TECElectricalMaterial();
+            connectionType.Cost = 1;
+            connectionType.Labor = 1;
+            connectionType.RatedCosts.Add(ratedCost);
+            var conduitType = new TECElectricalMaterial();
+            conduitType.Cost = 1;
+            conduitType.Labor = 1;
+            conduitType.RatedCosts.Add(ratedCost);
+
+            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            bid.Catalogs.Devices.Add(device);
+
+            subScope.Devices.Add(device);
+
+            var connection = controller.AddSubScope(subScope);
+            connection.Length = 10;
+            connection.ConduitLength = 5;
+            connection.ConduitType = conduitType;
+
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
+            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 20 = 60
+            //Assert.AreEqual(estimate.TotalPrice, systemEstimate.TotalPrice);
+
+            //checkRefresh(bid, estimate);
+        }
+
         #region Derived Labor
         [TestMethod]
         public void Estimate_TECLaborHoursFromPoints()
