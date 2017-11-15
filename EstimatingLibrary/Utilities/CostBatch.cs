@@ -50,8 +50,7 @@ namespace EstimatingLibrary.Utilities
             {
                 if (newCostBatch.typeDictionary.ContainsKey(type.Key))
                 {
-                    newCostBatch.typeDictionary[type.Key].Cost += right.typeDictionary[type.Key].Cost;
-                    newCostBatch.typeDictionary[type.Key].Labor += right.typeDictionary[type.Key].Labor;
+                    newCostBatch.typeDictionary[type.Key] += right.typeDictionary[type.Key];
                 }
                 else
                 {
@@ -77,8 +76,7 @@ namespace EstimatingLibrary.Utilities
             {
                 if (newCostBatch.typeDictionary.ContainsKey(type.Key))
                 {
-                    newCostBatch.typeDictionary[type.Key].Cost -= right.typeDictionary[type.Key].Cost;
-                    newCostBatch.typeDictionary[type.Key].Labor -= right.typeDictionary[type.Key].Labor;
+                    newCostBatch.typeDictionary[type.Key] -= right.typeDictionary[type.Key];
                 }
                 else
                 {
@@ -126,8 +124,7 @@ namespace EstimatingLibrary.Utilities
         {
             if (typeDictionary.ContainsKey(cost.Type))
             {
-                typeDictionary[cost.Type].Cost += cost.Cost;
-                typeDictionary[cost.Type].Labor += cost.Labor;
+                typeDictionary[cost.Type] += new CostObject(cost);
             }
             else
             {
@@ -138,8 +135,7 @@ namespace EstimatingLibrary.Utilities
         {
             if (typeDictionary.ContainsKey(cost.Type))
             {
-                typeDictionary[cost.Type].Cost -= cost.Cost;
-                typeDictionary[cost.Type].Labor -= cost.Labor;
+                typeDictionary[cost.Type] -= new CostObject(cost);
             }
             else
             {
@@ -147,7 +143,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private class CostObject
+        private struct CostObject
         {
             public double Cost, Labor;
 
