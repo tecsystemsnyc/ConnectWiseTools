@@ -116,7 +116,7 @@ namespace EstimatingUtilitiesLibrary.Database
                         {
                             if (!map.UpdateFields.Contains(field.Name))
                             {
-                                string command = String.Format("update {0} set {1} = {2} where *",
+                                string command = String.Format("update {0} set {1} = \'{2}\' ",
                                     tempMap[table.NameString], field.Name, field.DefaultValue);
                                 db.NonQueryCommand(command);
                             }

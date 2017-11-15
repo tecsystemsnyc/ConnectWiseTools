@@ -104,19 +104,19 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type ParameterType = typeof(TECParameters);
 
         public static TableField ID = new TableField("ID", "TEXT", ParameterType.GetProperty("Guid"));
-        public static TableField Label = new TableField("Label", "TEXT", ParameterType.GetProperty("Label"));
+        public static TableField Label = new TableField("Label", "TEXT", ParameterType.GetProperty("Label"), defaultValue: "Parameters");
 
         public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"));
         public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"));
         public static TableField Profit = new TableField("Profit", "REAL", ParameterType.GetProperty("Profit"));
         public static TableField SubcontractorMarkup = new TableField("SubcontractorMarkup", "REAL", ParameterType.GetProperty("SubcontractorMarkup"));
         public static TableField SubcontractorEscalation = new TableField("SubcontractorEscalation", "REAL", ParameterType.GetProperty("SubcontractorEscalation"));
-        public static TableField Warranty = new TableField("Warranty", "REAL", ParameterType.GetProperty("Warranty"));
-        public static TableField Shipping = new TableField("Shipping", "REAL", ParameterType.GetProperty("Shipping"));
-        public static TableField Tax = new TableField("Tax", "REAL", ParameterType.GetProperty("Tax"));
-        public static TableField SubcontractorWarranty = new TableField("SubcontractorWarranty", "REAL", ParameterType.GetProperty("SubcontractorWarranty"));
-        public static TableField SubcontractorShipping = new TableField("SubcontractorShipping", "REAL", ParameterType.GetProperty("SubcontractorShipping"));
-        public static TableField BondRate = new TableField("BondRate", "REAL", ParameterType.GetProperty("BondRate"));
+        public static TableField Warranty = new TableField("Warranty", "REAL", ParameterType.GetProperty("Warranty"), defaultValue: "3.0");
+        public static TableField Shipping = new TableField("Shipping", "REAL", ParameterType.GetProperty("Shipping"), defaultValue: "3.0");
+        public static TableField Tax = new TableField("Tax", "REAL", ParameterType.GetProperty("Tax"), defaultValue: "8.75");
+        public static TableField SubcontractorWarranty = new TableField("SubcontractorWarranty", "REAL", ParameterType.GetProperty("SubcontractorWarranty"), defaultValue: "3.0");
+        public static TableField SubcontractorShipping = new TableField("SubcontractorShipping", "REAL", ParameterType.GetProperty("SubcontractorShipping"), defaultValue: "3.0");
+        public static TableField BondRate = new TableField("BondRate", "REAL", ParameterType.GetProperty("BondRate"), defaultValue: "1.5");
 
         public static TableField IsTaxExempt = new TableField("IsTaxExempt", "INTEGER", ParameterType.GetProperty("IsTaxExempt"));
         public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.GetProperty("RequiresBond"));
@@ -125,23 +125,23 @@ namespace EstimatingUtilitiesLibrary.Database
         #region Labor
         public static TableField DesiredConfidence = new TableField("DesiredConfidence", "TEXT", ParameterType.GetProperty("DesiredConfidence"), defaultValue: "NinetyFive");
 
-        public static TableField PMCoefStdError = new TableField("PMCoefStdError", "REAL", ParameterType.GetProperty("PMCoefStdError"));
+        public static TableField PMCoefStdError = new TableField("PMCoefStdError", "REAL", ParameterType.GetProperty("PMCoefStdError"), defaultValue: "1.0");
         public static TableField PMCoef = new TableField("PMCoef", "REAL", ParameterType.GetProperty("PMCoef"));
         public static TableField PMRate = new TableField("PMRate", "REAL", ParameterType.GetProperty("PMRate"));
 
-        public static TableField ENGCoefStdError = new TableField("ENGCoefStdError", "REAL", ParameterType.GetProperty("ENGCoefStdError"));
+        public static TableField ENGCoefStdError = new TableField("ENGCoefStdError", "REAL", ParameterType.GetProperty("ENGCoefStdError"), defaultValue: "1.0");
         public static TableField ENGCoef = new TableField("ENGCoef", "REAL", ParameterType.GetProperty("ENGCoef"));
         public static TableField ENGRate = new TableField("ENGRate", "REAL", ParameterType.GetProperty("ENGRate"));
 
-        public static TableField CommCoefStdError = new TableField("CommCoefStdError", "REAL", ParameterType.GetProperty("CommCoefStdError"));
+        public static TableField CommCoefStdError = new TableField("CommCoefStdError", "REAL", ParameterType.GetProperty("CommCoefStdError"), defaultValue: "1.0");
         public static TableField CommCoef = new TableField("CommCoef", "REAL", ParameterType.GetProperty("CommCoef"));
         public static TableField CommRate = new TableField("CommRate", "REAL", ParameterType.GetProperty("CommRate"));
 
-        public static TableField SoftCoefStdError = new TableField("SoftCoefStdError", "REAL", ParameterType.GetProperty("SoftCoefStdError"));
+        public static TableField SoftCoefStdError = new TableField("SoftCoefStdError", "REAL", ParameterType.GetProperty("SoftCoefStdError"), defaultValue: "1.0");
         public static TableField SoftCoef = new TableField("SoftCoef", "REAL", ParameterType.GetProperty("SoftCoef"));
         public static TableField SoftRate = new TableField("SoftRate", "REAL", ParameterType.GetProperty("SoftRate"));
 
-        public static TableField GraphCoefStdError = new TableField("GraphCoefStdError", "REAL", ParameterType.GetProperty("GraphCoefStdError"));
+        public static TableField GraphCoefStdError = new TableField("GraphCoefStdError", "REAL", ParameterType.GetProperty("GraphCoefStdError"), defaultValue: "1.0");
         public static TableField GraphCoef = new TableField("GraphCoef", "REAL", ParameterType.GetProperty("GraphCoef"));
         public static TableField GraphRate = new TableField("GraphRate", "REAL", ParameterType.GetProperty("GraphRate"));
         #endregion
