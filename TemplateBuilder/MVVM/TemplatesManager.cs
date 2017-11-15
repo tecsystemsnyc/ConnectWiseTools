@@ -49,7 +49,7 @@ namespace TemplateBuilder.MVVM
         {
             get
             {
-                throw new NotImplementedException("Need to construct file name for templates file.");
+                return string.Format("Templates v{0}", Version);
             }
         }
 
