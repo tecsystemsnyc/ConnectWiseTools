@@ -1932,58 +1932,16 @@ namespace Tests
         [TestMethod]
         public void Estimate_Typical()
         {
-            var bid = new TECBid();
+            var bid = TestHelper.CreateTestBid();
             bid.Parameters = parameters;
-            //var watcher = new ChangeWatcher(bid);
-            //var estimate = new TECEstimator(bid, watcher);
 
-            var system = new TECTypical();
-            var equipment = new TECEquipment(true);
-            var subScope = new TECSubScope(true);
+            TECTypical typical1 = createTypical(bid);
+            TECEstimator estimate1 = new TECEstimator(typical1, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical1));
+             
+            TECTypical typical2 = createTypical(bid);
+            TECEstimator estimate2 = new TECEstimator(typical2, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical2));
 
-            var manufacturer = new TECManufacturer();
-            manufacturer.Multiplier = 1;
-            var controllerType = new TECControllerType(manufacturer);
-
-            var controller = new TECController(controllerType, true);
-
-            equipment.SubScope.Add(subScope);
-            system.Equipment.Add(equipment);
-            system.AddController(controller);
-            bid.Systems.Add(system);
-            TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(system));
-
-            var ratedCost = new TECCost(CostType.TEC);
-            ratedCost.Cost = 1;
-            ratedCost.Labor = 1;
-            ratedCost.Type = CostType.Electrical;
-
-            var connectionType = new TECElectricalMaterial();
-            connectionType.Cost = 1;
-            connectionType.Labor = 1;
-            connectionType.RatedCosts.Add(ratedCost);
-            var conduitType = new TECElectricalMaterial();
-            conduitType.Cost = 1;
-            conduitType.Labor = 1;
-            conduitType.RatedCosts.Add(ratedCost);
-
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
-            bid.Catalogs.Devices.Add(device);
-
-            subScope.Devices.Add(device);
-
-            var connection = controller.AddSubScope(subScope);
-            connection.Length = 10;
-            connection.ConduitLength = 5;
-            connection.ConduitType = conduitType;
-
-            system.AddInstance(bid);
-            system.AddInstance(bid);
-
-            //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 20 = 60
-            //Assert.AreEqual(estimate.TotalPrice, systemEstimate.TotalPrice);
-
-            //checkRefresh(bid, estimate);
+            Assert.AreEqual(estimate1.TotalPrice, estimate2.TotalPrice);
         }
 
         #region Derived Labor
@@ -2065,6 +2023,76 @@ namespace Tests
             Assert.AreEqual(elecCost, estimate.ElectricalMaterialCost, 0.0001, "Electrtical material cost refresh failed.");
             Assert.AreEqual(elecLabor, estimate.ElectricalLaborHours, 0.0001, "Elecrtical labor hours refresh failed.");
             Assert.AreEqual(total, estimate.TotalPrice, 0.0001, "Total price refresh failed.");
+        }
+
+        private TECTypical createTypical(TECBid bid)
+        {
+            TECTypical typical = new TECTypical();
+            typical.Name = "test";
+            TECEquipment equipment = new TECEquipment(true);
+            equipment.Name = "test equipment";
+            TECSubScope ss = new TECSubScope(true);
+            ss.Name = "Test Subscope";
+            ss.Devices.Add(bid.Catalogs.Devices[0]);
+            TECPoint point = new TECPoint(true);
+            point.Type = IOType.BACnetIP;
+            point.Quantity = 1;
+            ss.Points.Add(point);
+            equipment.SubScope.Add(ss);
+            typical.Equipment.Add(equipment);
+
+            TECSubScope connected = new TECSubScope(true);
+            connected.Name = "Connected";
+            connected.Devices.Add(bid.Catalogs.Devices[0]);
+            TECPoint point2 = new TECPoint(true);
+            point2.Type = IOType.AI;
+            point2.Quantity = 1;
+            connected.Points.Add(point2);
+            equipment.SubScope.Add(connected);
+
+            TECSubScope toConnect = new TECSubScope(true);
+            toConnect.Name = "To Connect";
+            toConnect.Devices.Add(bid.Catalogs.Devices[0]);
+            TECPoint point3 = new TECPoint(true);
+            point3.Type = IOType.AI;
+            point3.Quantity = 1;
+            toConnect.Points.Add(point3);
+            equipment.SubScope.Add(toConnect);
+
+            TECControllerType controllerType = new TECControllerType(new TECManufacturer());
+            controllerType.IOModules.Add(bid.Catalogs.IOModules[0]);
+            TECIO io = new TECIO(IOType.AI);
+            io.Quantity = 10;
+            controllerType.IO.Add(io);
+            bid.Catalogs.IOModules[0].IO.Add(io);
+            controllerType.Name = "Test Type";
+
+            TECController controller = new TECController(controllerType, true);
+            controller.IOModules.Add(bid.Catalogs.IOModules[0]);
+            controller.Name = "Test Controller";
+            typical.AddController(controller);
+            TECController otherController = new TECController(controllerType, true);
+            otherController.Name = "Other Controller";
+            typical.AddController(otherController);
+            TECConnection connection = controller.AddSubScope(connected);
+            connection.Length = 10;
+            connection.ConduitLength = 20;
+            connection.ConduitType = bid.Catalogs.ConduitTypes[1];
+
+            TECPanelType panelType = new TECPanelType(new TECManufacturer());
+            panelType.Name = "test type";
+
+            TECPanel panel = new TECPanel(panelType, true);
+            panel.Name = "Test Panel";
+            typical.Panels.Add(panel);
+
+            TECMisc misc = new TECMisc(CostType.TEC, true);
+            misc.Name = "test Misc";
+            typical.MiscCosts.Add(misc);
+
+            //bid.Systems.Add(typical);
+            typical.AddInstance(bid);
+            return typical;
         }
     }
 }

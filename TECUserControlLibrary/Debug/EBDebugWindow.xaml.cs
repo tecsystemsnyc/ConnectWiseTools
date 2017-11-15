@@ -83,8 +83,7 @@ namespace TECUserControlLibrary.Debug
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
         }
-
-
+        
         private void addTypicalExecute()
         {
             TECTypical typical = new TECTypical();

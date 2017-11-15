@@ -11,7 +11,7 @@ namespace EstimatingLibrary
         const double ZERO = 0;
 
         #region Cost Base
-        private CostBatch allCosts;
+        public CostBatch allCosts;
         private int pointNumber;
         #endregion
 

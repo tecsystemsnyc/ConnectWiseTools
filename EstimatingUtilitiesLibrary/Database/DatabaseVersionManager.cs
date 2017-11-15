@@ -64,17 +64,36 @@ namespace EstimatingUtilitiesLibrary.Database
             int updateVerison = Properties.Settings.Default.Version;
             DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
             int originalVerion = infoDT.Rows[0][MetadataTable.Version.Name].ToString().ToInt();
-            updateToVersion(versionDefinition, db, originalVerion, updateVerison, tableMap, tableNames);
+            updateToVersion(versionDefinition, db, originalVerion, updateVerison, tableMap, 
+                tableNames, databaseTableList);
             removeOldTables(tableNames, db);
             foreach (TableBase table in databaseTableList.Where(table => table.NameString != MetadataTable.TableName))
             {
                 DatabaseGenerator.CreateTableFromDefinition(table, db);
             }
+            insertDefaults(databaseTableList, versionDefinition, db, originalVerion, updateVerison, tableMap, tableNames);
             migrateFromTempTables(tableMap, db);
             UpdateVersionNumber(db);
 
         }
-        private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
+
+        private static void insertDefaults(List<TableBase> databaseTableList, DataTable versionDefinition, 
+            SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
+        {
+            TableMapList mapList = buildMap(versionDefinition, originalVersion, updateVersion, tempMap, currentTables);
+            foreach(TableBase table in databaseTableList)
+            {
+                
+                foreach(TableField field in table.Fields)
+                {
+                    
+                }
+            }
+
+        }
+
+        private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion,
+            int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables, List<TableBase> AllTables)
         {
             TableMapList mapList = buildMap(dataTable, originalVersion, updateVersion, tempMap, currentTables);
             foreach(TableMap map in mapList)
@@ -105,6 +124,22 @@ namespace EstimatingUtilitiesLibrary.Database
                     }
                     
                 }
+
+                foreach(TableBase table in AllTables)
+                {
+                    if(table.NameString == map.UpdateTableName)
+                    {
+                        foreach(TableField field in table.Fields)
+                        {
+                            if (!map.UpdateFields.Contains(field.Name))
+                            {
+                                string commmand = String.Format("update {0} set {1} = {2} where *",
+                                    table.NameString, field.Name, field.DefaultValue);
+                            }
+                        }
+                    }
+                }
+                
             }
         }
         static private void migrateFromTempTables(Dictionary<string, string> tableMap, SQLiteDatabase db)
@@ -133,9 +168,11 @@ namespace EstimatingUtilitiesLibrary.Database
             string commandString = "update " + MetadataTable.TableName + " set " + MetadataTable.Version.Name + " = '" + Properties.Settings.Default.Version + "' ";
             db.NonQueryCommand(commandString);
         }
-        private static void migrateData(string originalTable, string originalFields, string updateTable, string updateFields, SQLiteDatabase db)
+        private static void migrateData(string originalTable, string originalFields,
+            string updateTable, string updateFields, SQLiteDatabase db)
         {
-            string commandString = String.Format("insert into {0} ({1}) select {2} from '{3}'", updateTable, updateFields, originalFields, originalTable);
+            string commandString = String.Format("insert into {0} ({1}) select {2} from '{3}'", 
+                updateTable, updateFields, originalFields, originalTable);
             db.NonQueryCommand(commandString);
         }
         private static string fieldString(int version)
@@ -193,7 +230,8 @@ namespace EstimatingUtilitiesLibrary.Database
             return outBool;
         }
 
-        private static TableMapList buildMap(DataTable dt, int originalVersion, int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
+        private static TableMapList buildMap(DataTable dt, int originalVersion,
+            int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
         {
             string originalTableColumn = tableString(originalVersion);
             string originalFieldColumn = fieldString(originalVersion);
