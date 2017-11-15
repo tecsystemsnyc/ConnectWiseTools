@@ -28,8 +28,7 @@ namespace TemplateBuilder
             {
                 try
                 {
-                    string fname = AppDomain.CurrentDomain.SetupInformation
-             .ActivationArguments.ActivationData[0];
+                    string fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
 
                     // It comes in as a URI; this helps to convert it to a path.
                     Uri uri = new Uri(fname);
