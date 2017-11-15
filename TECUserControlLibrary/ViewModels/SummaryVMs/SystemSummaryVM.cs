@@ -238,15 +238,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
 
         private double getSystemTotal()
         {
-            double total = 0.0;
-            Console.WriteLine("Getting System Total");
-            foreach(SystemSummaryItem system in Systems)
-            {
-                Console.WriteLine(String.Format("Costs for {0}: TEC: {1}; Electtrical: {2}", system.Typical.Name, system.Estimate.allCosts.GetCost(CostType.TEC), system.Estimate.allCosts.GetCost(CostType.Electrical)));
-                Console.WriteLine(String.Format("Subtotal for {0}: {1}", system.Typical.Name, system.Estimate.TotalPrice));
-                total += system.Estimate.TotalPrice;
-            }
-            return total;
+            return Systems.Sum(item => item.Estimate.TotalPrice);
         }
         private double getRiserTotal()
         {
