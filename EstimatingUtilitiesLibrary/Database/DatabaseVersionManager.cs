@@ -71,25 +71,8 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 DatabaseGenerator.CreateTableFromDefinition(table, db);
             }
-            insertDefaults(databaseTableList, versionDefinition, db, originalVerion, updateVerison, tableMap, tableNames);
             migrateFromTempTables(tableMap, db);
             UpdateVersionNumber(db);
-
-        }
-
-        private static void insertDefaults(List<TableBase> databaseTableList, DataTable versionDefinition, 
-            SQLiteDatabase db, int originalVersion, int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
-        {
-            TableMapList mapList = buildMap(versionDefinition, originalVersion, updateVersion, tempMap, currentTables);
-            foreach(TableBase table in databaseTableList)
-            {
-                
-                foreach(TableField field in table.Fields)
-                {
-                    
-                }
-            }
-
         }
 
         private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion,
@@ -133,8 +116,9 @@ namespace EstimatingUtilitiesLibrary.Database
                         {
                             if (!map.UpdateFields.Contains(field.Name))
                             {
-                                string commmand = String.Format("update {0} set {1} = {2} where *",
+                                string command = String.Format("update {0} set {1} = {2} where *",
                                     table.NameString, field.Name, field.DefaultValue);
+                                db.NonQueryCommand(command);
                             }
                         }
                     }
