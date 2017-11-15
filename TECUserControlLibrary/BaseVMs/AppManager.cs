@@ -96,7 +96,7 @@ namespace TECUserControlLibrary.BaseVMs
             SplashVM.Version = Version;
             MenuVM = menuVM;
             StatusBarVM = new StatusBarVM();
-            StatusBarVM.Version = Version;
+            StatusBarVM.SetVersionNumber(Version);
             StatusBarVM.CurrentStatusText = "Ready";
             setupCommands();
             CurrentVM = SplashVM;
