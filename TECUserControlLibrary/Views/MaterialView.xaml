@@ -503,7 +503,7 @@
                             <TextBlock Text="Name:" />
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding IOModuleName}"/>
-                            <TextBlock Text="Cost:" Grid.Column="2" />
+                            <TextBlock Text="List Price:" Grid.Column="2" />
                             <TextBox  Grid.Column="3" Margin="2"
                       Text="{Binding IOModuleCost}"/>
                             <TextBlock Text="Description:" Grid.Column="4" Margin="5,0,0,0"
