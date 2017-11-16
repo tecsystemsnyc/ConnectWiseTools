@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECControllerType : TECHardware
+    public class TECControllerType : TECHardware, ICatalog<TECControllerType>
     {
         private const CostType COST_TYPE = CostType.TEC;
 
@@ -133,6 +133,16 @@ namespace EstimatingLibrary
             saveList.AddRange(base.linkedObjects());
             saveList.AddRange(this.IOModules, "IOModules");
             return saveList;
+        }
+
+        public override object DragDropCopy(TECScopeManager scopeManager)
+        {
+            return this;
+        }
+
+        public TECControllerType CatalogCopy()
+        {
+            return new TECControllerType(this);
         }
         #endregion
 

@@ -459,9 +459,6 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Delegates
-        public Action<IDropInfo> DragHandler;
-        public Action<IDropInfo> DropHandler;
-
         public Action<Object> SelectionChanged;
         #endregion
 
@@ -758,7 +755,14 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDrop(dropInfo, Templates);
+            object drop(object item)
+            {
+
+                //var outItem = 
+                return item;
+            }
+
+            UIHelpers.StandardDrop(dropInfo, Templates, drop);
             //DropHandler(dropInfo);
         }
 

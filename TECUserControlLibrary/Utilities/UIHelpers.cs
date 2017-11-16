@@ -44,10 +44,18 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static void StandardDrop(IDropInfo dropInfo, TECScopeManager scopeManager, bool newDevice = false)
+        public static void StandardDrop(IDropInfo dropInfo, TECScopeManager scopeManager, Func<object, object> dropMethod = null)
         {
             var sourceItem = dropInfo.Data;
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+
+            if(dropMethod == null)
+            {
+                dropMethod = item =>
+                {
+                    return ((IDragDropable)item).DragDropCopy(scopeManager);
+                };
+            }
 
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
@@ -56,21 +64,14 @@ namespace TECUserControlLibrary.Utilities
                     var outSource = new List<object>();
                     foreach (object item in ((IList)sourceItem))
                     {
-                        var toAdd = ((IDragDropable)item).DragDropCopy(scopeManager);
+                        var toAdd = dropMethod(item);
                         outSource.Add(toAdd);
                      }
                     sourceItem = outSource;
                 }
                 else
                 {
-                    if (newDevice && dropInfo.Data is TECDevice)
-                    {
-                        sourceItem = new TECDevice(dropInfo.Data as TECDevice);
-                    }
-                    else
-                    {
-                        sourceItem = ((IDragDropable)dropInfo.Data).DragDropCopy(scopeManager);
-                    }
+                    sourceItem = dropMethod(dropInfo.Data);
                 }
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
