@@ -25,15 +25,28 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <listControls:TypicalListControl
-            Source="{Binding TypicalSystems}"
-            SelectedItem="{Binding SelectedTypical}"
-            />
-
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
+                    Margin="30,0,30,0">
+                <TextBlock Text="Typical"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <listControls:TypicalListControl
+                Source="{Binding TypicalSystems}"
+                SelectedItem="{Binding SelectedTypical}"
+                 Grid.Row="1"/>
+            <Border BorderThickness="0,0,1,0" BorderBrush="DarkGray" Margin="0,30,0,30" Grid.Row="1">
+                
+            </Border>
+        </Grid>
         <local:SystemHierarchyView
             ViewModel="{Binding SystemHierarchyVM}"
             IsTypical="False"

@@ -189,7 +189,7 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
                     Margin="5,0,5,0">
-                    <TextBlock Text="Typical Systems"
+                    <TextBlock Text="Systems"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <listControls:SystemListControl x:Name="systemList" Grid.Row="1" Grid.ColumnSpan="3" Source="{Binding SystemSource}"
