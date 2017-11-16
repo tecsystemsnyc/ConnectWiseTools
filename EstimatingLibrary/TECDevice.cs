@@ -49,7 +49,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECDevice(TECDevice deviceSource)
-            : this(deviceSource.Guid, deviceSource.ConnectionTypes, deviceSource.Manufacturer)
+            : this(deviceSource.ConnectionTypes, deviceSource.Manufacturer)
         {
             this.copyPropertiesFromHardware(deviceSource);
         }

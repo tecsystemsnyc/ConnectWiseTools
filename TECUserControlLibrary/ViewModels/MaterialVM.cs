@@ -751,24 +751,26 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             UIHelpers.StandardDragOver(dropInfo);
-            //DragHandler(dropInfo);
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            //object drop(object item)
-            //{
-            //    if(item is ICatalog catalogItem)
-            //    {
-            //        return catalogItem.CatalogCopy();
-            //    } else
-            //    {
-            //        return item;
+            object drop<T>(T item)
+            {
+                if (item is ICatalog<T> catalogItem)
+                {
+                    return catalogItem.CatalogCopy();
+                }
+                else if (item is IDragDropable dropable)
+                {
+                    return dropable.DragDropCopy(Templates);
+                } else
+                {
+                    throw new NotImplementedException();
+                }
+            }
 
-            //    }
-            //}
-
-            //UIHelpers.StandardDrop(dropInfo, Templates, drop);
+            UIHelpers.StandardDrop(dropInfo, Templates, drop);
         }
 
         private void setupInterfaceDefaults()
