@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -755,15 +756,19 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            object drop(object item)
-            {
+            //object drop(object item)
+            //{
+            //    if(item is ICatalog catalogItem)
+            //    {
+            //        return catalogItem.CatalogCopy();
+            //    } else
+            //    {
+            //        return item;
 
-                //var outItem = 
-                return item;
-            }
+            //    }
+            //}
 
-            UIHelpers.StandardDrop(dropInfo, Templates, drop);
-            //DropHandler(dropInfo);
+            //UIHelpers.StandardDrop(dropInfo, Templates, drop);
         }
 
         private void setupInterfaceDefaults()

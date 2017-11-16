@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECElectricalMaterial : TECCost
+    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>
     {
         #region Properties
         private ObservableCollection<TECCost> _ratedCosts;
@@ -92,6 +92,10 @@ namespace EstimatingLibrary
                 }
             }
         }
-       
+
+        public TECElectricalMaterial CatalogCopy()
+        {
+            return new TECElectricalMaterial(this);
+        }
     }
 }

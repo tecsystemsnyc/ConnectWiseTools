@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECIOModule : TECHardware
+    public class TECIOModule : TECHardware, ICatalog<TECIOModule>
     {
         private const CostType COST_TYPE = CostType.TEC;
 
@@ -63,5 +63,9 @@ namespace EstimatingLibrary
             return this;
         }
 
+        public TECIOModule CatalogCopy()
+        {
+            return new TECIOModule(this);
+        }
     }
 }

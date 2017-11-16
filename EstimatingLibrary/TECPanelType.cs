@@ -1,8 +1,9 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 
 namespace EstimatingLibrary
 {
-    public class TECPanelType : TECHardware
+    public class TECPanelType : TECHardware, ICatalog<TECPanelType>
     {
         private const CostType COST_TYPE = CostType.TEC;
 
@@ -13,6 +14,11 @@ namespace EstimatingLibrary
         public TECPanelType(TECPanelType typeSource) : this(typeSource.Manufacturer)
         {
             copyPropertiesFromCost(typeSource);
+        }
+
+        public TECPanelType CatalogCopy()
+        {
+            return new TECPanelType(this);
         }
     }
 }
