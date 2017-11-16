@@ -19,10 +19,11 @@
     <Grid DataContext="{Binding ElementName=ConnectableItemList}">
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
-                  SelectionChanged="ListView_Selected">
+                  SelectionChanged="ListView_Selected"
+                  HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1">
+                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
                         <Grid MouseUp="ItemControl_MouseUp">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -34,8 +35,7 @@
                             </Grid.RowDefinitions>
                             <Label FontSize="14" Content="{Binding Item.Name}"/>
                             <Label Content="{Binding Item.Description}" Grid.Column="1"/>
-                            <Label Content="Connected To BMS:" Grid.Row="1"/>
-                            <Label Content="{Binding IsConnected}" Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Text="{Binding IsConnected, StringFormat= Connected to BMS: {0}}" Grid.Row="1"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

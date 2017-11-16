@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.ViewModels.AddVMs;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -19,6 +21,11 @@ namespace TECUserControlLibrary.ViewModels
     public class ControllersPanelsVM : ViewModelBase, IDropTarget
     {
         #region Properties
+        private Action<TECController> addControllerMethod;
+        private Action<TECPanel> addPanelMethod;
+        private Action<TECController> deleteControllerMethod;
+        private Action<TECPanel> deletePanelMethod;
+
         private bool isGlobal;
         private TECBid _bid;
         public TECBid Bid
@@ -161,6 +168,22 @@ namespace TECUserControlLibrary.ViewModels
 
         private Dictionary<TECController, ControllerInPanel> controllersIndex;
 
+        private ViewModelBase selectedVM;
+        public ViewModelBase SelectedVM
+        {
+            get { return selectedVM; }
+            set
+            {
+                selectedVM = value;
+                RaisePropertyChanged("SelectedVM");
+            }
+        }
+
+        public RelayCommand AddControllerCommand { get; private set; }
+        public RelayCommand AddPanelCommand { get; private set; }
+        public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
+        public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
+
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
@@ -179,6 +202,10 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
             PanelsSource = bid.Panels;
             Bid = bid;
+            addControllerMethod = bid.AddController;
+            addPanelMethod = bid.Panels.Add;
+            deleteControllerMethod = bid.RemoveController;
+            deletePanelMethod = panel => { bid.Panels.Remove(panel); };
             setup();
         }
         public ControllersPanelsVM(TECTemplates templates)
@@ -189,6 +216,10 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = templates.ControllerTemplates;
             PanelsSource = templates.PanelTemplates;
             Templates = templates;
+            addControllerMethod = templates.ControllerTemplates.Add;
+            addPanelMethod = templates.PanelTemplates.Add;
+            deleteControllerMethod = controller => { templates.ControllerTemplates.Remove(controller); };
+            deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };
             setup();
 
         }
@@ -207,6 +238,8 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(system.Controllers);
             PanelsSource = system.Panels;
             SelectedSystem = system;
+            deleteControllerMethod = system.RemoveController;
+            deletePanelMethod = panel => { system.Panels.Remove(panel); };
             setup();
         }
         #endregion
@@ -248,8 +281,51 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setup()
         {
+            AddControllerCommand = new RelayCommand(addControllerExecute, canAddController);
+            AddPanelCommand = new RelayCommand(addPanelExecute, canAddPanel);
+            DeleteControllerCommand = new RelayCommand<TECController>(deleteControllerMethod);
+            DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelMethod);
+
             populateControllerCollection();
             populatePanelSelections();
+        }
+
+        private void addControllerExecute()
+        {
+            var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes: Templates.Catalogs.ControllerTypes;
+            if (addPanelMethod != null)
+            {
+                SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes);
+            }
+            else
+            {
+                SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes);
+            }
+        }
+
+        private bool canAddController()
+        {
+            var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+            return controllerTypes.Count > 0;
+        }
+
+        private void addPanelExecute()
+        {
+            var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
+            if(addPanelMethod != null)
+            {
+                SelectedVM = new AddPanelVM(addPanelMethod, panelTypes);
+            } else
+            {
+                SelectedVM = new AddPanelVM(SelectedSystem, panelTypes);
+            }
+            
+        }
+
+        private bool canAddPanel()
+        {
+            var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
+            return panelTypes.Count > 0;
         }
 
         private void populateControllerCollection()

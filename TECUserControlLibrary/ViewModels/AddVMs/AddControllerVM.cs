@@ -12,7 +12,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECSystem parent;
         private TECController toAdd;
         private int quantity;
-
+        private Action<TECController> add;
+        
         public TECController ToAdd
         {
             get { return toAdd; }
@@ -39,8 +40,21 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             Quantity = 1;
             parent = parentSystem;
+            add = controller =>
+            {
+                parent.AddController(controller);
+            };
             ControllerTypes = new List<TECControllerType>(controllerTypes);
             toAdd = new TECController(ControllerTypes[0], parentSystem.IsTypical);
+            AddCommand = new RelayCommand(addExecute, addCanExecute);
+        }
+
+        public AddControllerVM(Action<TECController> addMethod, IEnumerable<TECControllerType> controllerTypes)
+        {
+            Quantity = 1;
+            add = addMethod;
+            ControllerTypes = new List<TECControllerType>(controllerTypes);
+            toAdd = new TECController(ControllerTypes[0], false);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
         
@@ -55,7 +69,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             for(int x = 0; x < Quantity; x++)
             {
                 var controller = new TECController(ToAdd, ToAdd.IsTypical);
-                parent.AddController(controller);
+                add(controller);
                 Added?.Invoke(controller);
             }
         }
