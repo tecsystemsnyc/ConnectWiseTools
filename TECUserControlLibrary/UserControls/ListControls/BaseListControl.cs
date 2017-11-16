@@ -65,7 +65,17 @@ namespace TECUserControlLibrary.UserControls.ListControls
             add { AddHandler(DroppedEvent, value); }
             remove { RemoveHandler(DroppedEvent, value); }
         }
-        
+
+        public static readonly RoutedEvent DoubleClickedEvent =
+        EventManager.RegisterRoutedEvent("DoubleClicked", RoutingStrategy.Bubble,
+        typeof(RoutedEventHandler), typeof(BaseListControl<T>));
+
+        public event RoutedEventHandler DoubleClicked
+        {
+            add { AddHandler(DoubleClickedEvent, value); }
+            remove { RemoveHandler(DoubleClickedEvent, value); }
+        }
+
         public object ScopeParent
         {
             get { return (object)GetValue(ScopeParentProperty); }
@@ -128,6 +138,10 @@ namespace TECUserControlLibrary.UserControls.ListControls
             this.SelectedItem = null;
             this.SelectedItem = item;
             //RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
+        }
+        protected void ListView_MouseDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(DoubleClickedEvent, this));
         }
     }
 }

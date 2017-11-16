@@ -276,7 +276,7 @@
                    Grid.Row="12" Grid.Column="7"/>
 
         <!--Boolean Modifiers-->
-        <Grid Grid.Row="13">
+        <Grid Grid.Row="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -304,7 +304,7 @@
             </Grid>
         </Grid>
         
-        <Grid Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="3">
+        <Grid Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -333,9 +333,9 @@
         
         
         <!--Reload Button-->
-        <ComboBox ItemsSource="{Binding Templates.Parameters}" Name="parametersComboBox" Grid.Row="14" Margin="2"
+        <ComboBox ItemsSource="{Binding Templates.Parameters}" Name="parametersComboBox" Grid.Row="13" Margin="2"
                   DisplayMemberPath="Label"/>
-        <Button Content="Set Parameters" Command="{Binding SetParametersCommand}" CommandParameter="{Binding ElementName=parametersComboBox, Path=SelectedItem}" Grid.Row="15" Margin="2">
+        <Button Content="Set Parameters" Command="{Binding SetParametersCommand}" CommandParameter="{Binding ElementName=parametersComboBox, Path=SelectedItem}" Grid.Row="14" Margin="2">
             <Button.ToolTip>
                 <Label Content="Previous parameter data will be lost"/>
             </Button.ToolTip>

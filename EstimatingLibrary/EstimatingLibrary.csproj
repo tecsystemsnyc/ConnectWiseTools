@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Defaults.cs" />
+    <Compile Include="Interfaces\ICatalog.cs" />
     <Compile Include="Interfaces\IDragDropable.cs" />
     <Compile Include="Interfaces\INetworkConnectable.cs" />
     <Compile Include="Interfaces\INetworkParentable.cs" />

@@ -25,6 +25,7 @@
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   dd:DragDrop.DragAdornerTemplate="{Binding DragAdornerTemplate}"
+                  MouseDoubleClick="ListView_MouseDoubleClicked"
                   AllowDrop="True"
                   Drop="ListView_Dropped"
                   MouseUp="ListView_MouseUp"

@@ -36,7 +36,7 @@
             </StatusBarItem>
             <StatusBarItem Grid.Column="2"
                                HorizontalAlignment="Right">
-                <TextBlock Text="{Binding Version}"/>
+                <TextBlock Text="{Binding VersionString}"/>
             </StatusBarItem>
             <StatusBarItem Grid.Column="3"
                            HorizontalAlignment="Center">

@@ -52,12 +52,12 @@
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:EndDeviceListControl.Dropped">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped" SourceName="subScopeList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped" SourceName="subScopeList">
+            <EventTrigger RoutedEvent="listControls:PointListControl.Dropped" SourceName="pointList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
@@ -109,8 +109,11 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Content="Devices" Grid.Row="0"/>
-            <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                    Margin="5,0,5,0">
+                    <Label Content="Devices"/>
+                </Border>
+                <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                 SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
                                                 DropHandler="{Binding ViewModel}"
                                                     DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
@@ -120,8 +123,11 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Label Content="IO"/>
-                <Grid  Grid.Column="1" >
+                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1"
+                    Margin="5,0,5,0">
+                        <Label Content="IO"/>
+                    </Border>
+                    <Grid  Grid.Column="1" >
                     <Button Content="Add" x:Name="addPoint" Width="50" HorizontalAlignment="Right"
                             Command="{Binding ViewModel.AddPointCommand}"
                             CommandParameter="{Binding ViewModel.SelectedSubScope}"
@@ -130,6 +136,7 @@
 
             </Grid>
             <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                           x:Name="pointList"
                                                Grid.Row="3"
                                                SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedPoint}"
                                                DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeletePointCommand}"

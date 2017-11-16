@@ -16,6 +16,7 @@
                   dd:DragDrop.DropHandler="{Binding ElementName=equipmentListControl, Path=DropHandler}"
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
+                  MouseDoubleClick="ListView_MouseDoubleClicked"
                   AllowDrop="True"
                   Drop="ListView_Dropped"
                   MouseUp="ListView_MouseUp"

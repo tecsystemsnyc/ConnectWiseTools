@@ -33,15 +33,20 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private string _version;
-        public string Version
+        private string _versionString;
+        public string VersionString
         {
-            get { return _version; }
-            set
+            get { return _versionString; }
+            private set
             {
-                _version = value;
-                RaisePropertyChanged("Version");
+                _versionString = value;
+                RaisePropertyChanged("VersionString");
             }
+        }
+
+        public void SetVersionNumber(string versionNumber)
+        {
+            VersionString = string.Format("Version: {0}", versionNumber);
         }
     }
 }

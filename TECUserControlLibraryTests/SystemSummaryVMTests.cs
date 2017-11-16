@@ -1,90 +1,88 @@
-﻿using EstimatingLibrary;
-using GalaSoft.MvvmLight.CommandWpf;
-using System;
+﻿using System;
+using System.Text;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Input;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tests;
+using TECUserControlLibrary.ViewModels.SummaryVMs;
+using EstimatingLibrary.Utilities;
+using EstimatingLibrary;
+using TECUserControlLibrary.Models;
 
-namespace TECUserControlLibrary.Debug
+namespace TECUserControlLibraryTests
 {
     /// <summary>
-    /// Interaction logic for DebugWindow.xaml
+    /// Summary description for SystemSummaryVMTests
     /// </summary>
-    public partial class EBDebugWindow : Window
+    [TestClass]
+    public class SystemSummaryVMTests
     {
-        private TECBid bid;
-        private ICommand testNetwork;
-        private ICommand addTypical;
-        private ICommand throwException;
-
-        public EBDebugWindow(TECBid bid)
+        public SystemSummaryVMTests()
         {
-            InitializeComponent();
-            this.bid = bid;
-            setupCommands();
-            addResources();
+            //
+            // TODO: Add constructor logic here
+            //
         }
 
-        private void setupCommands()
+        private TestContext testContextInstance;
+
+        /// <summary>
+        ///Gets or sets the test context which provides
+        ///information about and functionality for the current test run.
+        ///</summary>
+        public TestContext TestContext
         {
-            testNetwork = new RelayCommand(testNetworkExecute);
-            addTypical = new RelayCommand(addTypicalExecute);
-            throwException = new RelayCommand(throwExceptionExecute);
+            get
+            {
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
+            }
         }
-        
-        private void addResources()
+
+        [TestMethod]
+        public void TotalMatches()
         {
-            this.Resources.Add("TestNetworkCommand", testNetwork);
-            this.Resources.Add("AddTypicalCommand", addTypical);
-            this.Resources.Add("ThrowExceptionCommand", throwException);
+            var bid = TestHelper.CreateEmptyCatalogBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+
+            SystemSummaryVM summaryVM = new SystemSummaryVM(bid, watcher);
+
+            List<Tuple<TECEstimator, TECTypical>> estimates = new List<Tuple<TECEstimator, TECTypical>>();
+
+            int x = 6;
+            for (int i = 0; i < x; i++)
+            {
+                TECTypical typical1 = createTypical(bid);
+                TECEstimator estimate1 = new TECEstimator(typical1, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical1));
+                estimates.Add(new Tuple<TECEstimator, TECTypical>(estimate1, typical1));
+            }
+
+            double previous = estimates[0].Item1.TotalPrice;
+            foreach(var thing in estimates)
+            {
+                Assert.AreEqual(thing.Item1.TotalPrice, previous);
+                previous = thing.Item1.TotalPrice;
+            }
+
+            int y = 0;
+            foreach (var item in estimates)
+            {
+                foreach(SystemSummaryItem system in summaryVM.Systems)
+                {
+                    Assert.AreEqual(item.Item1.TotalPrice, system.Estimate.TotalPrice);
+                    if (system.Typical == item.Item2)
+                    {
+                        Assert.AreEqual(system.Estimate.TotalPrice, item.Item1.TotalPrice);
+                        y++;
+                        break;
+                    }
+                }
+            }
         }
 
-        private void testNetworkExecute()
-        {
-            TECControllerType type = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            type.Name = "Controller Type";
-            type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.BACnetIP) };
-
-            bid.Catalogs.ControllerTypes.Add(type);
-
-            TECController controller = new TECController(type, false);
-            controller.Name = "Test Server";
-            controller.Description = "For testing.";
-            controller.IsServer = true;
-
-            bid.AddController(controller);
-
-            TECController child = new TECController(type, false);
-            child.Name = "Child";
-
-            bid.AddController(child);
-
-            TECController emptyController = new TECController(type, false);
-            emptyController.Name = "EmptyController";
-
-            bid.AddController(emptyController);
-
-            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0], bid.Catalogs.ConnectionTypes[1] }, IOType.BACnetIP);
-
-            connection.AddINetworkConnectable(child);
-
-            TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
-            TECSubScope ss = new TECSubScope(true);
-            ss.Name = "Test Subscope";
-            ss.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
-            point.Quantity = 1;
-            ss.Points.Add(point);
-            equip.SubScope.Add(ss);
-            typical.Equipment.Add(equip);
-
-            bid.Systems.Add(typical);
-            typical.AddInstance(bid);
-        }
-        
-        private void addTypicalExecute()
+        private TECTypical createTypical(TECBid bid)
         {
             TECTypical typical = new TECTypical();
             typical.Name = "test";
@@ -151,11 +149,7 @@ namespace TECUserControlLibrary.Debug
 
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
-        }
-
-        private void throwExceptionExecute()
-        {
-            throw new Exception("Test Exception.");
+            return typical;
         }
     }
 }

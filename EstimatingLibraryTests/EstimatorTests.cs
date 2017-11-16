@@ -49,6 +49,7 @@ namespace Tests
         public static void MyClassInitialize(TestContext testContext)
         {
             parameters = new TECParameters(Guid.NewGuid());
+            parameters.Tax = 8.75;
             parameters.PMCoef = 1.54;
             parameters.ENGCoef = 1.25;
             parameters.SoftCoef = 0.37;
@@ -1893,7 +1894,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             system.AddController(controller);
             bid.Systems.Add(system);
-            TECEstimator systemEstimate = new TECEstimator(system, parameters, new ChangeWatcher(system));
+            TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(system));
 
             var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
@@ -1927,6 +1928,7 @@ namespace Tests
 
             checkRefresh(bid, estimate);
         }
+        
 
         #region Derived Labor
         [TestMethod]
@@ -2008,5 +2010,6 @@ namespace Tests
             Assert.AreEqual(elecLabor, estimate.ElectricalLaborHours, 0.0001, "Elecrtical labor hours refresh failed.");
             Assert.AreEqual(total, estimate.TotalPrice, 0.0001, "Total price refresh failed.");
         }
+        
     }
 }

@@ -65,7 +65,10 @@ namespace EstimatingLibrary
         public TECSubScopeConnection(TECSubScopeConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
         {
             if (connectionSource._subScope != null)
-            { _subScope = new TECSubScope(connectionSource.SubScope, isTypical, guidDictionary); }
+            {
+                _subScope = new TECSubScope(connectionSource.SubScope, isTypical, guidDictionary);
+                _subScope.Connection = this;
+            }
         }
         public TECSubScopeConnection(TECSubScopeConnection linkingSource, TECSubScope actualSubScope, bool isTypical) : base(linkingSource, isTypical)
         {

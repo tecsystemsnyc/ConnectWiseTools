@@ -22,14 +22,13 @@ namespace EstimateBuilder
         {
             logger.Debug("Estimate Builder starting up.");
             if (AppDomain.CurrentDomain.SetupInformation
-                .ActivationArguments.ActivationData != null
+                .ActivationArguments?.ActivationData != null
                 && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)
             {
                 try
                 {
-                    string fname = AppDomain.CurrentDomain.SetupInformation
-             .ActivationArguments.ActivationData[0];
+                    string fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
 
                     // It comes in as a URI; this helps to convert it to a path.
                     Uri uri = new Uri(fname);

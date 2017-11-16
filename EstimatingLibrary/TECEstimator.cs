@@ -243,36 +243,19 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECEstimator(TECBid Bid, ChangeWatcher watcher) : base(Guid.NewGuid())
-        {
-            parameters = Bid.Parameters;
-            parameters.PropertyChanged += (sender, e) =>
-            {
-                raiseAll();
-            };
-            extraLabor = Bid.ExtraLabor;
-            extraLabor.PropertyChanged += (sender, e) =>
-            {
-                raiseAll();
-            };
-            getInitialValues(Bid);
-            watcher.CostChanged += CostChanged;
-            watcher.PointChanged += PointChanged;
-        }
-        public TECEstimator(TECObject initalObject, TECParameters parameters, ChangeWatcher watcher) : base(Guid.NewGuid())
+        public TECEstimator(TECBid Bid, ChangeWatcher watcher) : this(Bid, Bid.Parameters, Bid.ExtraLabor, watcher) { }
+        public TECEstimator(TECObject initalObject, TECParameters parameters, TECExtraLabor extraLabor, ChangeWatcher watcher) : base(Guid.NewGuid())
         {
             this.parameters = parameters;
             parameters.PropertyChanged += (sender, e) =>
             {
                 raiseAll();
             };
-            if(initalObject is TECExtraLabor laborObject)
+            this.extraLabor = extraLabor;
+            extraLabor.PropertyChanged += (sender, e) =>
             {
-                extraLabor = laborObject;
-            } else
-            {
-                extraLabor = new TECExtraLabor(Guid.NewGuid());
-            }
+                raiseAll();
+            };
             getInitialValues(initalObject);
             watcher.CostChanged += CostChanged;
             watcher.PointChanged += PointChanged;
@@ -294,7 +277,6 @@ namespace EstimatingLibrary
             if(obj is INotifyPointChanged pointContainer)
             {
                 addPoints(pointContainer.PointNumber);
-
             }
             if(obj is INotifyCostChanged costContainer)
             {
