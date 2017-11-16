@@ -42,7 +42,6 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate EquipmentTemplate { get; set; }
         public DataTemplate SubScopeTemplate { get; set; }
         public DataTemplate ControllerTemplate { get; set; }
-        public DataTemplate PanelTemplate { get; set; }
         public DataTemplate MiscTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -59,8 +58,6 @@ namespace TECUserControlLibrary.Utilities
                         return SubScopeTemplate;
                     case ScopeTemplateIndex.Controller:
                         return ControllerTemplate;
-                    case ScopeTemplateIndex.Panel:
-                        return PanelTemplate;
                     case ScopeTemplateIndex.Misc:
                         return MiscTemplate;
                     default:

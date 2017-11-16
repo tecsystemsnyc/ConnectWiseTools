@@ -104,16 +104,9 @@
                                                                      ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"/>
                                         </Grid>
                                     </DataTemplate>
-                                    <DataTemplate x:Key="ControllerTemplate">
+                                    <DataTemplate x:Key="ControllerPanelTemplate">
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
-                                            <listControls:ControllerListControl Source="{Binding Templates.ControllerTemplates}"
-                                                              SelectedItem ="{Binding Selected}"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                    <DataTemplate x:Key="PanelTemplate">
-                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
-                                            <listControls:PanelListControl Source="{Binding Templates.PanelTemplates}"
-                                                              SelectedItem ="{Binding Selected}"/>
+                                            <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsVM}"/>
                                         </Grid>
                                     </DataTemplate>
                                     <DataTemplate x:Key="MiscTemplate">
@@ -126,8 +119,7 @@
                                              SystemTemplate="{StaticResource SystemTemplate}"
                                              EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                              SubScopeTemplate="{StaticResource SubScopeTemplate}"
-                                             ControllerTemplate="{StaticResource ControllerTemplate}"
-                                             PanelTemplate="{StaticResource PanelTemplate}"
+                                             ControllerTemplate="{StaticResource ControllerPanelTemplate}"
                                              MiscTemplate="{StaticResource MiscTemplate}"/>
                                 </TabItem.Resources>
                                 <Grid>
@@ -135,11 +127,13 @@
                                         <RowDefinition Height="40"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type utilities:ScopeTemplateIndex}}}"
+                                    <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.ScopeTemplateSelectorList}}"
+                                              DisplayMemberPath="Item1"
+                                              SelectedValuePath="Item2"
+                                              SelectedIndex="0"
                                               Margin="5" Grid.Row="0" FontSize="16"
-                                              VerticalContentAlignment="Center"
-                                              SelectedIndex="0"/>
-                                    <ContentPresenter Content="{Binding ElementName=templateComboBox, Path=SelectedItem}"  
+                                              VerticalContentAlignment="Center"/>
+                                    <ContentPresenter Content="{Binding ElementName=templateComboBox, Path=SelectedValue,Mode=OneWayToSource}"  
                                                       ContentTemplateSelector="{StaticResource ScopeSelector}"
                                                       Grid.Row="1"/>
                                 </Grid>

@@ -430,6 +430,15 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, IOType>("ModbusTCP", IOType.ModbusTCP)
         };
 
+        public static List<Tuple<string, ScopeTemplateIndex>> ScopeTemplateSelectorList = new List<Tuple<string, ScopeTemplateIndex>>
+        {
+            new Tuple<string, ScopeTemplateIndex>("Systems", ScopeTemplateIndex.System),
+            new Tuple<string, ScopeTemplateIndex>("Equipment", ScopeTemplateIndex.Equipment),
+            new Tuple<string, ScopeTemplateIndex>("Points", ScopeTemplateIndex.SubScope),
+            new Tuple<string, ScopeTemplateIndex>("Controlers and Panels", ScopeTemplateIndex.Controller),
+            new Tuple<string, ScopeTemplateIndex>("Miscellaneous", ScopeTemplateIndex.Misc)
+        };
+
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
        where T : DependencyObject
         {
@@ -475,7 +484,7 @@ namespace TECUserControlLibrary.Utilities
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
-    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel, Misc }
+    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Misc }
     public enum AllSearchableObjects
     {
         System,
