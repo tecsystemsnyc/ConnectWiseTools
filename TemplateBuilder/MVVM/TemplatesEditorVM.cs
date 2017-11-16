@@ -52,8 +52,6 @@ namespace TemplateBuilder.MVVM
             MaterialsTab.SelectionChanged += obj => {
                 Selected = obj;
             };
-            MaterialsTab.DragHandler += DragOver;
-            MaterialsTab.DropHandler += Drop;
             ControllersPanelsVM = new ControllersPanelsVM(templates);
             ControllersPanelsVM.SelectionChanged += obj => { Selected = obj; };
             SystemHierarchyVM = new SystemHierarchyVM(templates);

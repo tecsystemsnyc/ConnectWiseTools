@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECValve: TECHardware, IEndDevice
+    public class TECValve: TECHardware, IEndDevice, ICatalog<TECValve>
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;
@@ -78,6 +78,11 @@ namespace EstimatingLibrary
             _cv = 0;
             _actuator = actuator;
         }
+        public TECValve(TECValve valveSource) : this(Guid.NewGuid(), valveSource.Manufacturer, valveSource.Actuator)
+        {
+            this.copyPropertiesFromHardware(valveSource);
+
+        }
         protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
@@ -91,6 +96,11 @@ namespace EstimatingLibrary
             saveList.AddRange(base.linkedObjects());
             saveList.Add(this.Actuator, "Actuator");
             return saveList;
+        }
+
+        public TECValve CatalogCopy()
+        {
+            return new TECValve(this);
         }
     }
 }

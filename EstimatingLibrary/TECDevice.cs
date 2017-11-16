@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECHardware, IDragDropable, IEndDevice
+    public class TECDevice : TECHardware, IDragDropable, IEndDevice, ICatalog<TECDevice>
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;
@@ -99,6 +99,11 @@ namespace EstimatingLibrary
             saveList.AddRange(base.linkedObjects());
             saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
+        }
+
+        public TECDevice CatalogCopy()
+        {
+            return new TECDevice(this);
         }
         #endregion
     }

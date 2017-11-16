@@ -1,8 +1,9 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 
 namespace EstimatingLibrary
 {
-    public class TECManufacturer : TECLabeled
+    public class TECManufacturer : TECLabeled, ICatalog<TECManufacturer>
     {
         #region Properties
         public double Multiplier
@@ -30,6 +31,12 @@ namespace EstimatingLibrary
             _label = manSource.Label;
             _multiplier = manSource.Multiplier;
         }
+
+
         #endregion //Constructors
+        public TECManufacturer CatalogCopy()
+        {
+            return new TECManufacturer(this);
+        }
     }
 }
