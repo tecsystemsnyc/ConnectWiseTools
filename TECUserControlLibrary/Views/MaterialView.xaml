@@ -89,7 +89,7 @@
                             <TextBlock Text="Connection Types:" TextWrapping="Wrap"/>
                             <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
                                 <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
-                                                                        DropHandler="{Binding}"/>
+                                                                        DropHandler="{Binding ReferenceDropHandler}"/>
                             </Border>
                             
                         </Grid>
@@ -320,6 +320,8 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="IO: "/>
                                 <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
@@ -327,9 +329,11 @@
                                       DisplayMemberPath="Item1"
                                       SelectedValuePath="Item2"
                                       Grid.Column="1"/>
-                                <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="2"/>
+                                <Label Content="Qty: " Grid.Column="2"/>
+                                <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3"/>
+                                <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="4"/>
                                 <controls:IOGridControl IOSource="{Binding ControllerTypeIO}"
-                                                    Grid.Row="1" Grid.ColumnSpan="3"/>
+                                                    Grid.Row="1" Grid.ColumnSpan="5"/>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.RowDefinitions>
@@ -339,7 +343,7 @@
                                 <Label Content="Max IO Modules: "/>
                                 <controls:HardwareGridControl HardwareSource="{Binding ControllerTypeModules}"
                                                           Grid.Row="1" 
-                                                              DropHandler="{Binding}"/>
+                                                              DropHandler="{Binding ReferenceDropHandler}"/>
                             </Grid>
                             
                         </Grid>
@@ -539,6 +543,8 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="IO: "/>
                             <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
@@ -546,9 +552,11 @@
                                     DisplayMemberPath="Item1"
                                     SelectedValuePath="Item2"
                                     Grid.Column="1"/>
-                            <Button Content="Add" Command="{Binding AddIOToModuleCommand}" Grid.Column="2"/>
+                            <Label Content="Qty: " Grid.Column="2"/>
+                            <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3"/>
+                            <Button Content="Add" Command="{Binding AddIOToModuleCommand}" Grid.Column="4"/>
                             <controls:IOGridControl IOSource="{Binding ModuleIO}"
-                                                Grid.Row="1" Grid.ColumnSpan="3"/>
+                                                Grid.Row="1" Grid.ColumnSpan="5"/>
                         </Grid>
                         <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.IOModules}"
                                                     Selected="{Binding Selected}"

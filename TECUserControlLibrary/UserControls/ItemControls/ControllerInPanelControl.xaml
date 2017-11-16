@@ -27,19 +27,20 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label FontSize="14" Content="{Binding Controller.Name}" Background="Transparent" FontWeight="DemiBold"/>
             <Label Content="{Binding Controller.Description}" Grid.Column="1"  Background="Transparent"/>
             <Label Content="Type: " Grid.Row="1"  Background="Transparent"/>
             <Label Content="{Binding Controller.Type.Name}" Grid.Row="1" Grid.Column="1"  Background="Transparent"/>
-            <Label Content="Containing Panel: " Grid.Row="2"/>
+            <Label Content="Containing Panel: " Grid.Row="2"
+                    Visibility="{Binding Data.ViewModel.PanelSelectionVisibility, Source={StaticResource proxy}}"/>
             <ComboBox ItemsSource="{Binding Data.ViewModel.PanelSelections, Source={StaticResource proxy}}"
                                         DisplayMemberPath="Name"
                       Grid.Row="2" Grid.Column="1" 
                                         IsReadOnly="{Binding Data.ViewModel.PanelSelectionReadOnly, Source={StaticResource proxy}}"
                                         Visibility="{Binding Data.ViewModel.PanelSelectionVisibility, Source={StaticResource proxy}}"
-                      Margin="2">
+                      Margin="2" Height="30">
                 <ComboBox.SelectedItem>
                     <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
                                       StringFormat="{}{0}">

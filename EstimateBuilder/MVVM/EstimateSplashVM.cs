@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
+using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModels;
@@ -71,24 +73,41 @@ namespace EstimateBuilder.MVVM
 
         private void openExistingExecute()
         {
-            EditorStarted?.Invoke(BidPath, TemplatesPath);
+            if (!File.Exists(BidPath))
+            {
+                MessageBox.Show("Bid file no longer exists at that path.");
+            }else if (!File.Exists(TemplatesPath))
+            {
+                MessageBox.Show("Templates file no longer exist at that path.");
+            } else
+            {
+                EditorStarted?.Invoke(BidPath, TemplatesPath);
+            }
         }
         private bool openExistingCanExecute()
         {
-            return (BidPath != "" && TemplatesPath != "");
+            return (BidPath != "" && TemplatesPath != ""
+                && BidPath != null && TemplatesPath != null);
         }
     
         private void createNewExecute()
         {
-            EditorStarted?.Invoke("", TemplatesPath);
+            if (!File.Exists(TemplatesPath))
+            {
+                MessageBox.Show("Templates file no longer exist at that path.");
+            } else
+            {
+                EditorStarted?.Invoke("", TemplatesPath);
+            }
         }
         private bool createNewCanExecute()
         {
             bool outBool = false;
-            if(TemplatesPath == "")
+            if(TemplatesPath == "" || TemplatesPath == null)
             {
                 HintText = "Select Templates file (.tdb) to get started.";
-            } else
+            }
+            else
             {
                 HintText = "";
                 outBool = true;

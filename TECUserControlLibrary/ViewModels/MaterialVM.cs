@@ -19,6 +19,8 @@ namespace TECUserControlLibrary.ViewModels
     public class MaterialVM : ViewModelBase, IDropTarget
     {
         #region Properties
+        public ReferenceDropper ReferenceDropHandler { get; }
+
         private TECTemplates _templates;
         public TECTemplates Templates
         {
@@ -399,6 +401,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedIO");
             }
         }
+        private int _selectedIOQty;
+        public int SelectedIOQty
+        {
+            get { return _selectedIOQty; }
+            set
+            {
+                _selectedIOQty = value;
+                RaisePropertyChanged("SelectedIOQty");
+            }
+        }
         private ObservableCollection<TECIO> _controllerTypeIO;
         public ObservableCollection<TECIO> ControllerTypeIO
         {
@@ -471,6 +483,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public MaterialVM(TECTemplates templates)
         {
+            ReferenceDropHandler = new ReferenceDropper(templates);
             Templates = templates;
             setupCommands();
             setupInterfaceDefaults();
@@ -504,18 +517,21 @@ namespace TECUserControlLibrary.ViewModels
         private void addIOToControllerTypeExecute()
         {
             bool wasAdded = false;
-            foreach(TECIO io in ControllerTypeIO)
+            for (int x = 0; x < SelectedIOQty; x++)
             {
-                if(io.Type == SelectedIO)
+                foreach (TECIO io in ControllerTypeIO)
                 {
-                    io.Quantity++;
-                    wasAdded = true;
-                    break;
+                    if (io.Type == SelectedIO)
+                    {
+                        io.Quantity++;
+                        wasAdded = true;
+                        break;
+                    }
                 }
-            }
-            if (!wasAdded)
-            {
-                ControllerTypeIO.Add(new TECIO(SelectedIO));
+                if (!wasAdded)
+                {
+                    ControllerTypeIO.Add(new TECIO(SelectedIO));
+                }
             }
         }
         private bool canAddIOToControllerType()
@@ -526,18 +542,21 @@ namespace TECUserControlLibrary.ViewModels
         private void addIOToModuleExecute()
         {
             bool wasAdded = false;
-            foreach (TECIO io in ModuleIO)
+            for(int x = 0; x < SelectedIOQty; x++)
             {
-                if (io.Type == SelectedIO)
+                foreach (TECIO io in ModuleIO)
                 {
-                    io.Quantity++;
-                    wasAdded = true;
-                    break;
+                    if (io.Type == SelectedIO)
+                    {
+                        io.Quantity++;
+                        wasAdded = true;
+                        break;
+                    }
                 }
-            }
-            if (!wasAdded)
-            {
-                ModuleIO.Add(new TECIO(SelectedIO));
+                if (!wasAdded)
+                {
+                    ModuleIO.Add(new TECIO(SelectedIO));
+                }
             }
         }
         private bool canAddIOToModule()
@@ -815,6 +834,26 @@ namespace TECUserControlLibrary.ViewModels
             MiscVM = new MiscCostsVM(Templates);
         }
         #endregion
+
+        public class ReferenceDropper : IDropTarget
+        {
+            private TECTemplates templates;
+
+            public ReferenceDropper(TECTemplates templates)
+            {
+                this.templates = templates;
+            }
+
+            public void DragOver(IDropInfo dropInfo)
+            {
+                UIHelpers.StandardDragOver(dropInfo);
+            }
+
+            public void Drop(IDropInfo dropInfo)
+            {
+                UIHelpers.StandardDrop(dropInfo, templates);
+            }
+        }
     }
 
 }
