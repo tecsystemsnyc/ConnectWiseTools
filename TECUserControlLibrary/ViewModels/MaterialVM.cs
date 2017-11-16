@@ -421,8 +421,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ControllerTypeIO");
             }
         }
-        private ObservableCollection<TECIOModule> _controllerTypeModules;
-        public ObservableCollection<TECIOModule> ControllerTypeModules
+        private QuantityCollection<TECIOModule> _controllerTypeModules;
+        public QuantityCollection<TECIOModule> ControllerTypeModules
         {
             get { return _controllerTypeModules; }
             set
@@ -688,12 +688,20 @@ namespace TECUserControlLibrary.ViewModels
             toAdd.Name = ControllerTypeName;
             toAdd.Price = ControllerTypeCost;
             toAdd.Labor = ControllerTypeLabor;
-            toAdd.IOModules = ControllerTypeModules;
+            ObservableCollection<TECIOModule> ioModules = new ObservableCollection<TECIOModule>();
+            foreach(QuantityItem<TECIOModule> quantItem in ControllerTypeModules)
+            {
+                for(int i = 0; i < quantItem.Quantity; i++)
+                {
+                    ioModules.Add(quantItem.Item);
+                }
+            }
+            toAdd.IOModules = ioModules;
             toAdd.IO = ControllerTypeIO;
 
             Templates.Catalogs.ControllerTypes.Add(toAdd);
             ControllerTypeIO = new ObservableCollection<TECIO>();
-            ControllerTypeModules = new ObservableCollection<TECIOModule>();
+            ControllerTypeModules = new QuantityCollection<TECIOModule>();
             ControllerTypeName = "";
             ControllerTypeCost = 0;
             ControllerTypeLabor = 0;
@@ -826,7 +834,7 @@ namespace TECUserControlLibrary.ViewModels
             TagToAdd = new TECLabeled();
 
             ControllerTypeIO = new ObservableCollection<TECIO>();
-            ControllerTypeModules = new ObservableCollection<TECIOModule>();
+            ControllerTypeModules = new QuantityCollection<TECIOModule>();
         }
 
         private void setupVMs()
@@ -851,7 +859,15 @@ namespace TECUserControlLibrary.ViewModels
 
             public void Drop(IDropInfo dropInfo)
             {
-                UIHelpers.StandardDrop(dropInfo, templates);
+                if (dropInfo.Data is TECIOModule module &&
+                    dropInfo.TargetCollection is QuantityCollection<TECIOModule> collection)
+                {
+                    collection.Add(module);
+                }
+                else
+                {
+                    UIHelpers.StandardDrop(dropInfo, templates);
+                }
             }
         }
     }

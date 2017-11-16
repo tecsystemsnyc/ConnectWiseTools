@@ -10,6 +10,7 @@
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="materialView"
              d:DesignHeight="400" d:DesignWidth="600">
@@ -341,9 +342,24 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Max IO Modules: "/>
-                                <controls:HardwareGridControl HardwareSource="{Binding ControllerTypeModules}"
-                                                          Grid.Row="1" 
-                                                              DropHandler="{Binding ReferenceDropHandler}"/>
+                                <DataGrid Grid.Row="1" 
+                                          ItemsSource="{Binding ControllerTypeModules}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          dd:DragDrop.DropHandler="{Binding ReferenceDropHandler}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Price, StringFormat= {} {0:C}}"
+                                                            Header="Price" Width="Auto" IsReadOnly="True" MinWidth="40"
+                                                            ElementStyle="{StaticResource RightCell}"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Cost, StringFormat= {} {0:C}}"
+                                                            Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
+                                                            ElementStyle="{StaticResource RightCell}"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
+                                        <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" MinWidth="20"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
                             
                         </Grid>
