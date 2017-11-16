@@ -581,20 +581,32 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECIOModule> getIOModuleInController(Guid guid)
         {
             ObservableCollection<TECIOModule> outModules = new ObservableCollection<TECIOModule>();
-            DataTable dt = getChildIDs(new ControllerIOModuleTable(), guid);
-            foreach(DataRow row in dt.Rows)
+            string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
+                ControllerIOModuleTable.ModuleID.Name, ControllerIOModuleTable.TableName,
+                ControllerIOModuleTable.ControllerID.Name, guid, ControllerIOModuleTable.Quantity.Name);
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
+            foreach (DataRow row in dt.Rows)
             {
-                outModules.Add(getPlaceholderIOModuleFromRow(row));
+                var module = getPlaceholderIOModuleFromRow(row);
+                int quantity = row[ControllerIOModuleTable.Quantity.Name].ToString().ToInt(1);
+                for (int x = 0; x < quantity; x++)
+                { outModules.Add(module); }
             }
             return outModules;
         }
         static private ObservableCollection<TECIOModule> getIOModuleInControllerType(Guid guid)
         {
             ObservableCollection<TECIOModule> outModules = new ObservableCollection<TECIOModule>();
-            DataTable dt = getChildIDs(new ControllerTypeIOModuleTable(), guid);
+            string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
+                ControllerTypeIOModuleTable.ModuleID.Name, ControllerTypeIOModuleTable.TableName,
+                ControllerTypeIOModuleTable.TypeID.Name, guid, ControllerTypeIOModuleTable.Quantity.Name);
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
             {
-                outModules.Add(getPlaceholderIOModuleFromRow(row));
+                var module = getPlaceholderIOModuleFromRow(row);
+                int quantity = row[ControllerTypeIOModuleTable.Quantity.Name].ToString().ToInt(1);
+                for (int x = 0; x < quantity; x++)
+                { outModules.Add(module); }
             }
             return outModules;
         }
