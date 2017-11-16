@@ -118,6 +118,11 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:EquipmentListControl.DoubleClicked">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
             <EventTrigger RoutedEvent="listControls:MiscListControl.Dropped">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
@@ -141,6 +146,11 @@
             <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped" SourceName="pointList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.DoubleClicked">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
             <EventTrigger RoutedEvent="local:UpdateConnectionView.Updated">
@@ -255,7 +265,6 @@
                                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
-                                        <!--<RowDefinition Height="30"/>-->
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
@@ -263,15 +272,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <local:ControllersPanelsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ControllersPanelsVM}" Grid.ColumnSpan="2"/>
-                                    <!--<Button x:Name="addController" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" 
-                                            Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddControllerCommand}"
-                            CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"
-                                            Style="{StaticResource AddButtonStyle}" />
-                                    <Button x:Name="addPanel" Content="Add" Width="50" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" 
-                                            Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddPanelCommand}"
-                            CommandParameter="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"
-                                            Style="{StaticResource AddButtonStyle}" />-->
-
+                                    
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="ElectricalTemplate">
