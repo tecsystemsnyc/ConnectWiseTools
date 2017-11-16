@@ -44,8 +44,6 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 RaisePropertyChanged("Misc");
             }
         }
-
-        public ICommand TestCommand { get; private set; }
     
         public double SystemTotal
         {
@@ -64,17 +62,11 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
-            TestCommand = new RelayCommand(testExecute);
             this.bid = bid;
             populateSystems(bid.Systems);
             populateRiser(bid.Controllers, bid.Panels);
             populateMisc(bid.MiscCosts);
             watcher.Changed += changed;
-        }
-
-        private void testExecute()
-        {
-            Console.WriteLine("here");
         }
 
         private void changed(TECChangedEventArgs e)
