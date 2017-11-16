@@ -910,7 +910,16 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
             TECPoint pointToAdd = new TECPoint(pointID, isTypical);
             assignValuePropertiesFromTable(pointToAdd, new PointTable(), row);
-            pointToAdd.Type = UtilitiesMethods.StringToEnum<IOType>(row[PointTable.Type.Name].ToString());
+            string pointType = row[PointTable.Type.Name].ToString();
+            if (pointType == "BO")
+            {
+                pointType = "DO";
+            }
+            else if (pointType == "BI")
+            {
+                pointType = "DI";
+            }
+            pointToAdd.Type = UtilitiesMethods.StringToEnum<IOType>(pointType);
             return pointToAdd;
         }
         #endregion
