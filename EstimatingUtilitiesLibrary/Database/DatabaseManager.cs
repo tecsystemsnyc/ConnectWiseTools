@@ -41,6 +41,8 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         public void AsyncSave(List<UpdateItem> updates)
         {
+            notifySaveComplete(false);
+            return;
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (s, e) =>
             {

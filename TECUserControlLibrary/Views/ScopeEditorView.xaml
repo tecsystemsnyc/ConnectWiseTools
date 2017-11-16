@@ -57,10 +57,11 @@
                         </Binding>
                     </ColumnDefinition.Width>
                 </ColumnDefinition>
+                <ColumnDefinition Width="*" MinWidth="400"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="240"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
@@ -95,7 +96,7 @@
                                 <ComboBox Name="TypicalInstanceCombo" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.TypicalInstanceSelectorList}}"
                                           DisplayMemberPath="Item1"
                                           SelectedValuePath="Item2"
-                                          SelectedIndex="1"
+                                          SelectedIndex="0"
                                           VerticalAlignment="Center"/>
                                 <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceDescriptionSelector}"
@@ -132,11 +133,10 @@
                                          DropHandler="{Binding MiscVM}"/>
                 </TabItem>
             </TabControl>
-            <!--Right Tab Control-->
-            <!--<views:EditTabView ViewModel="{Binding EditTab}" Margin="0,-2,0,0"
-                             Grid.Column="6" Grid.Row="0" Grid.RowSpan="2"/>-->
+            <!--Properties-->
+            <GridSplitter Grid.Column="4" Width="5" Grid.RowSpan="2" HorizontalAlignment="Stretch" />
             <views:PropertiesView Selected="{Binding Selected}"
-                             Grid.Column="4" Grid.Row="0" Grid.RowSpan="2"
+                             Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
                                   ViewModel="{Binding PropertiesVM}"
                                   DropHandler="{Binding PropertiesVM}"/>
         </Grid>

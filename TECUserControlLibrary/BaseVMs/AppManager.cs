@@ -198,6 +198,7 @@ namespace TECUserControlLibrary.BaseVMs
                 databaseManager = new DatabaseManager<T>(saveFilePath);
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(getWorkingScope());
+                buildTitleString(saveFilePath, appName);
             }
         }
         private bool canSaveNew()

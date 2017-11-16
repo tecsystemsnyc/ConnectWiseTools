@@ -1270,9 +1270,11 @@ namespace EstimatingUtilitiesLibrary.Database
         public static string TableName = "ControllerTypeIOModule";
         public static Type ObjectType = typeof(TECControllerType);
         public static Type ReferenceType = typeof(TECIOModule);
+        public static Type HelperType = typeof(HelperProperties);
 
         public static TableField TypeID = new TableField("TypeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ModuleID = new TableField("ModuleID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "IOModules");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             TypeID,
@@ -1286,7 +1288,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TypeID,
-            ModuleID
+            ModuleID,
+            Quantity
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1304,9 +1307,11 @@ namespace EstimatingUtilitiesLibrary.Database
         public static string TableName = "ControllerIOModule";
         public static Type ObjectType = typeof(TECController);
         public static Type ReferenceType = typeof(TECIOModule);
-
+        public static Type HelperType = typeof(HelperProperties);
+        
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ModuleID = new TableField("ModuleID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "IOModules");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ControllerID,
@@ -1320,7 +1325,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ControllerID,
-            ModuleID
+            ModuleID,
+            Quantity
         };
         private List<string> propertyNames = new List<string>()
         {
