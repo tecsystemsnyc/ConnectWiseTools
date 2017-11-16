@@ -197,6 +197,7 @@
     <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="Views\EquipmentHierarchyView.xaml.cs">
       <DependentUpon>EquipmentHierarchyView.xaml</DependentUpon>
