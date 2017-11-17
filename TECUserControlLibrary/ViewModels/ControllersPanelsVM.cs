@@ -202,6 +202,17 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
             PanelsSource = bid.Panels;
             Bid = bid;
+            Bid.TECChanged += args =>
+            {
+                if (args.Change == Change.Add && args.Value is TECController controller)
+                {
+                    sourceControllers.Add(controller);
+                }
+                else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             addControllerMethod = bid.AddController;
             addPanelMethod = bid.Panels.Add;
             deleteControllerMethod = bid.RemoveController;
@@ -236,6 +247,17 @@ namespace TECUserControlLibrary.ViewModels
             PanelSelectionReadOnly = !canSelectPanel;
             PanelSelectionVisibility = Visibility.Visible;
             sourceControllers = new ObservableCollection<TECController>(system.Controllers);
+            system.TECChanged += args =>
+            {
+                if (args.Change == Change.Add && args.Value is TECController controller)
+                {
+                    sourceControllers.Add(controller);
+                }
+                else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             PanelsSource = system.Panels;
             SelectedSystem = system;
             deleteControllerMethod = system.RemoveController;
@@ -250,6 +272,16 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
             PanelsSource = bid.Panels;
             Bid = bid;
+            Bid.TECChanged += args =>
+            {
+                if(args.Change == Change.Add && args.Value is TECController controller)
+                {
+                    sourceControllers.Add(controller);
+                } else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             setup();
         }
         public void Refresh(TECTemplates templates)
@@ -276,6 +308,18 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(system.Controllers);
             PanelsSource = system.Panels;
             SelectedSystem = system;
+
+            system.TECChanged += args =>
+            {
+                if (args.Change == Change.Add && args.Value is TECController controller)
+                {
+                    sourceControllers.Add(controller);
+                }
+                else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             setup();
         }
 

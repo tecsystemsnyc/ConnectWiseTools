@@ -47,6 +47,16 @@
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:ControllerInPanelListControl.Dropped">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:PanelListControl.Dropped">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
         </Grid.Triggers>
         <Grid Background="{StaticResource SectionBackgroundBrush}" DataContext="{Binding ElementName=controllersPanelsView}">
             <Grid.ColumnDefinitions>
