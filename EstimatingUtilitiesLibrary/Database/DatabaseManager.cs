@@ -109,6 +109,15 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 appFolder = "TemplateBuilder";
             }
+            if(!File.Exists(String.Format("{0}\\{1}\\{2}",
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                appFolder,
+                "backups"))){
+                Directory.CreateDirectory(String.Format("{0}\\{1}\\{2}",
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                appFolder,
+                "backups"));
+            }
 
             string backupPath = String.Format("{0}\\{1}\\{2}\\{3} {4}{5}",
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
