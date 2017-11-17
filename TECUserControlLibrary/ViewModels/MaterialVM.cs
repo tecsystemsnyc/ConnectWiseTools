@@ -823,7 +823,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllerTypeCost = 0;
             ControllerTypeLabor = 0;
             ControllerTypeIO = new ObservableCollection<TECIO>();
-            ControllerTypeModules = new ObservableCollection<TECIOModule>();
+            ControllerTypeModules = new QuantityCollection<TECIOModule>();
 
             IOModuleName = "";
             IOModuleDescription = "";
