@@ -14,8 +14,11 @@ namespace TECUserControlLibrary.Utilities
     {
         private Dictionary<T, QuantityItem<T>> itemDictionary;
 
-        public QuantityCollection() { }
-        public QuantityCollection(ObservableCollection<T> items)
+        public QuantityCollection()
+        {
+            itemDictionary = new Dictionary<T, QuantityItem<T>>();
+        }
+        public QuantityCollection(IEnumerable<T> items) : base()
         {
             foreach(T item in items)
             {

@@ -101,7 +101,6 @@ namespace TECUserControlLibrary.Utilities
                     else
                     {
                         ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-
                     }
                 }
             }
