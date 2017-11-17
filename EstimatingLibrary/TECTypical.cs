@@ -77,10 +77,10 @@ namespace EstimatingLibrary
             this.copyPropertiesFromLocated(source);
         }
 
-        public TECTypical(TECSystem system, Dictionary<Guid, Guid> guidDictionary = null) : this()
+        public TECTypical(TECSystem system, TECScopeManager manager) : this()
         {
-            if (guidDictionary != null)
-            { guidDictionary[_guid] = system.Guid; }
+            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
+            guidDictionary[_guid] = system.Guid;
             foreach (TECEquipment equipment in system.Equipment)
             {
                 var toAdd = new TECEquipment(equipment, true, guidDictionary);
@@ -107,6 +107,7 @@ namespace EstimatingLibrary
                 ScopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(system);
+            ModelLinkingHelper.LinkSystem(this, manager, guidDictionary);
         }
         #endregion
 
