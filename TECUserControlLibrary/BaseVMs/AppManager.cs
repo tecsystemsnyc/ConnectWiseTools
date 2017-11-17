@@ -4,6 +4,7 @@ using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using NLog;
 using System;
 using System.ComponentModel;
 using System.Deployment.Application;
@@ -18,6 +19,8 @@ namespace TECUserControlLibrary.BaseVMs
 {
     abstract public class AppManager<T>  : ViewModelBase where T : TECScopeManager
     {
+        static private Logger logger = LogManager.GetCurrentClassLogger();
+
         protected DatabaseManager<T> databaseManager;
         protected ChangeWatcher watcher;
         protected DoStacker doStack;
@@ -116,8 +119,10 @@ namespace TECUserControlLibrary.BaseVMs
         //New
         private void newExecute()
         {
+            logger.Info("User clicked File->New");
             string message = "Would you like to save your current changes?";
             checkForChanges(message, () => {
+                logger.Info("Instantiating new Working Scope.");
                 databaseManager = null;
                 handleLoaded(getNewWorkingScope());
             });
@@ -129,6 +134,7 @@ namespace TECUserControlLibrary.BaseVMs
         //Load
         private void loadExecute()
         {
+            logger.Info("User clicked File->Load");
             string message = "Would you like to save your changes before loading?";
             string loadFilePath;
             checkForChanges(message, () =>
@@ -136,12 +142,17 @@ namespace TECUserControlLibrary.BaseVMs
                 loadFilePath = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory, workingFileDirectory);
                 if(loadFilePath != null)
                 {
+                    logger.Info("User chose load path: {0}, loading...", loadFilePath);
                     ViewEnabled = false;
                     StatusBarVM.CurrentStatusText = "Loading...";
                     buildTitleString(loadFilePath, appName);
                     databaseManager = new DatabaseManager<T>(loadFilePath);
                     databaseManager.LoadComplete += handleLoadComplete;
                     databaseManager.AsyncLoad();
+                }
+                else
+                {
+                    logger.Info("User cancelled load.");
                 }
             });
         }
@@ -151,6 +162,7 @@ namespace TECUserControlLibrary.BaseVMs
         }
         protected void handleLoadComplete(T scopeManager)
         {
+            logger.Info("Load complete.");
             handleLoaded(scopeManager);
             StatusBarVM.CurrentStatusText = "Ready";
             ViewEnabled = true;
@@ -159,8 +171,11 @@ namespace TECUserControlLibrary.BaseVMs
         //Save Delta
         private void saveDeltaExecute()
         {
+            logger.Info("User clicked File->Save");
+
             if (databaseManager != null)
             {
+                logger.Info("Saving deltas...");
                 StatusBarVM.CurrentStatusText = "Saving...";
                 databaseManager.SaveComplete += handleSaveDeltaComplete;
                 databaseManager.AsyncSave(deltaStack.CleansedStack());
@@ -168,6 +183,7 @@ namespace TECUserControlLibrary.BaseVMs
             }
             else
             {
+                logger.Info("Working Scope is new, executing save new.");
                 saveNewExecute();
             }
         }
@@ -180,10 +196,12 @@ namespace TECUserControlLibrary.BaseVMs
             databaseManager.SaveComplete -= handleSaveDeltaComplete;
             if (success)
             {
+                logger.Info("Save Delta successful.");
                 StatusBarVM.CurrentStatusText = "Ready";
             }
             else
             {
+                logger.Info("Save Delta failed, attempting to save as new to the same path.");
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(getWorkingScope());
             }
@@ -191,14 +209,20 @@ namespace TECUserControlLibrary.BaseVMs
         //Save New
         private void saveNewExecute()
         {
+            logger.Info("User clicked File->Save As");
             string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
             if(saveFilePath != null)
             {
+                logger.Info("Saving new file...");
                 StatusBarVM.CurrentStatusText = "Saving...";
                 databaseManager = new DatabaseManager<T>(saveFilePath);
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(getWorkingScope());
                 buildTitleString(saveFilePath, appName);
+            }
+            else
+            {
+                logger.Info("User cancelled save new.");
             }
         }
         private bool canSaveNew()
@@ -210,23 +234,27 @@ namespace TECUserControlLibrary.BaseVMs
             databaseManager.SaveComplete -= handleSaveNewComplete;
             if (success)
             {
+                logger.Info("Save New sucessful.");
                 StatusBarVM.CurrentStatusText = "Ready";
                 deltaStack = new DeltaStacker(watcher, isTemplates);
             }
             else
             {
+                logger.Fatal("Save New failed.");
                 MessageBox.Show("File failed to save. Contact technical support.");
             }
         }
         //Refresh
         protected void refreshExecute()
         {
+            logger.Info("User clicked File->Refresh");
             string message = "Would you like to save your changes before refreshing?";
             ViewEnabled = false;
             checkForChanges(message, refresh);
 
             void refresh()
             {
+                logger.Info("Refreshing Working Manager, Loading...");
                 StatusBarVM.CurrentStatusText = "Loading...";
                 databaseManager.LoadComplete += handleLoadComplete;
                 databaseManager.AsyncLoad();
@@ -281,6 +309,8 @@ namespace TECUserControlLibrary.BaseVMs
         }
         protected void checkForChanges(string taskMessage, Action onComplete)
         {
+            logger.Info("Checking for changes. User prompt: {0}", taskMessage);
+
             if (deltaStack.CleansedStack().Count > 0)
             {
                 MessageBoxResult result = MessageBox.Show(taskMessage, "Save", MessageBoxButton.YesNoCancel,
@@ -288,13 +318,16 @@ namespace TECUserControlLibrary.BaseVMs
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
+                        logger.Info("User responded 'yes', saving delta.");
                         saveDeltaExecute();
                         databaseManager.SaveComplete += saveComplete;
                         break;
                     case MessageBoxResult.No:
-                        onComplete();
+                        logger.Info("User responded 'no'.");
+                        executeOnComplete();
                         break;
                     default:
+                        logger.Info("User cancelled");
                         return;
                 }
             }
@@ -305,9 +338,15 @@ namespace TECUserControlLibrary.BaseVMs
             {
                 databaseManager.SaveComplete -= saveComplete;
                 if (success)
-                    onComplete();
+                    executeOnComplete();
                 else
                     return;
+            }
+
+            void executeOnComplete()
+            {
+                logger.Info("Done checking for changes, executing onComplete.");
+                onComplete();
             }
         }
         protected bool databaseReady()
@@ -324,24 +363,31 @@ namespace TECUserControlLibrary.BaseVMs
 
         private bool saveNewBeforeClosing()
         {
+            logger.Info("Saving new file before closing.");
             string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
             try
             {
                 databaseManager = new DatabaseManager<T>(saveFilePath);
                 return databaseManager.New(getWorkingScope());
             }
-            catch
+            catch (Exception e)
             {
+                logger.Fatal("Save new before closing failed.");
+                logger.Fatal("Exception: {0}", e.Message);
+                logger.Fatal("Inner Exception: {0}", e.InnerException.Message);
+                logger.Fatal("Stack trace: {0}", e.StackTrace);
                 return false;
             }
         }
         private void closingExecute(CancelEventArgs e)
         {
+            logger.Info("App manager recieved command to close.");
             if (databaseManager == null || !databaseManager.IsBusy)
             {
                 bool changesExist = (deltaStack?.CleansedStack().Count > 0);
                 if (changesExist)
                 {
+                    logger.Info("Unsaved changes exist, prompting user action.");
                     MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                     if (result == MessageBoxResult.Yes)
                     {
@@ -351,15 +397,24 @@ namespace TECUserControlLibrary.BaseVMs
                             {
                                 MessageBox.Show("Save unsuccessful.");
                                 e.Cancel = true;
-                                return;
                             }
                         }
 
                         else if (!databaseManager.Save(deltaStack.CleansedStack()))
                         {
-                            MessageBox.Show("Save unsuccessful.");
-                            e.Cancel = true;
-                            return;
+                            MessageBoxResult newResult = MessageBox.Show("Save delta unsuccessful. Would you like to save to a new file?", "Save?", MessageBoxButton.OKCancel);
+                            if (newResult == MessageBoxResult.OK)
+                            {
+                                if (!saveNewBeforeClosing())
+                                {
+                                    MessageBox.Show("Save unsuccessful");
+                                    e.Cancel = true;
+                                }
+                            }
+                            else if (newResult == MessageBoxResult.Cancel)
+                            {
+                                e.Cancel = true;
+                            }
                         }
                     }
                     else if (result == MessageBoxResult.Cancel)
@@ -369,11 +424,17 @@ namespace TECUserControlLibrary.BaseVMs
                 }
                 if (!e.Cancel)
                 {
+                    logger.Info("Closing...");
                     Properties.Settings.Default.Save();
+                }
+                else
+                {
+                    logger.Info("Close cancelled.");
                 }
             }
             else
             {
+                logger.Info("Close cancelled, database manager is busy.");
                 e.Cancel = true;
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
             }
