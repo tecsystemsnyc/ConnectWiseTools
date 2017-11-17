@@ -142,7 +142,7 @@ namespace TECUserControlLibrary.Utilities
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 TECSystem copiedSystem = (sourceItem).DragDropCopy(bid) as TECSystem;
-                sourceItem = new TECTypical(copiedSystem);
+                sourceItem = new TECTypical(copiedSystem, bid);
 
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {

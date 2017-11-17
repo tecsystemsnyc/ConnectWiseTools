@@ -380,41 +380,46 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECEquipment equipment)
+            object dropped = null;
+            if(dropInfo.Data is IDragDropable dropable)
+            {
+                dropped = dropable.DragDropCopy(scopeManager);
+            }
+            if (dropped is TECEquipment equipment)
             {
                 SelectedVM = new AddEquipmentVM(SelectedSystem);
-                ((AddEquipmentVM)SelectedVM).ToAdd = new TECEquipment(equipment, SelectedSystem.IsTypical);
-            } else if (dropInfo.Data is TECSubScope subScope)
+                ((AddEquipmentVM)SelectedVM).ToAdd = equipment;
+            } else if (dropped is TECSubScope subScope)
             {
                 SelectedVM = new AddSubScopeVM(SelectedEquipment);
-                ((AddSubScopeVM)SelectedVM).ToAdd = new TECSubScope(subScope, SelectedSystem.IsTypical);
+                ((AddSubScopeVM)SelectedVM).ToAdd = subScope;
             }
-            else if (dropInfo.Data is TECPoint point)
+            else if (dropped is TECPoint point)
             {
                 SelectedVM = new AddPointVM(SelectedSubScope);
-                ((AddPointVM)SelectedVM).ToAdd = new TECPoint(point, SelectedSystem.IsTypical);
+                ((AddPointVM)SelectedVM).ToAdd = point;
             }
-            else if (dropInfo.Data is TECController controller)
+            else if (dropped is TECController controller)
             {
                 SelectedVM = new AddControllerVM(SelectedSystem, catalogs.ControllerTypes);
-                ((AddControllerVM)SelectedVM).ToAdd = new TECController(controller, SelectedSystem.IsTypical);
+                ((AddControllerVM)SelectedVM).ToAdd = controller;
             }
-            else if (dropInfo.Data is TECPanel panel)
+            else if (dropped is TECPanel panel)
             {
                 SelectedVM = new AddPanelVM(SelectedSystem, catalogs.PanelTypes);
-                ((AddPanelVM)SelectedVM).ToAdd = new TECPanel(panel, SelectedSystem.IsTypical);
+                ((AddPanelVM)SelectedVM).ToAdd = panel;
             }
-            else if (dropInfo.Data is TECMisc misc)
+            else if (dropped is TECMisc misc)
             {
                 SelectedVM = new AddMiscVM(SelectedSystem);
-                ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
+                ((AddMiscVM)SelectedVM).ToAdd = misc;
             }
-            else if (dropInfo.Data is TECSystem system)
+            else if (dropped is TECSystem system)
             {
                 SelectedVM = new AddSystemVM(scopeManager as TECBid);
-                ((AddSystemVM)SelectedVM).ToAdd = new TECSystem(system, false);
+                ((AddSystemVM)SelectedVM).ToAdd = system;
             }
-            else if (dropInfo.Data is IEndDevice)
+            else if (dropped is IEndDevice)
             {
                 UIHelpers.StandardDrop(dropInfo, scopeManager);
             }

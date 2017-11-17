@@ -142,25 +142,6 @@ namespace EstimatingLibrary
 
             Catalogs.ScopeChildRemoved += scopeChildRemoved;
         }
-        public TECTemplates(TECTemplates templatesSource) : this(templatesSource.Guid)
-        {
-            foreach (TECSystem system in templatesSource.SystemTemplates)
-            { SystemTemplates.Add(new TECSystem(system, false)); }
-            foreach (TECEquipment equip in templatesSource.EquipmentTemplates)
-            { EquipmentTemplates.Add(new TECEquipment(equip, false)); }
-            foreach (TECSubScope subScope in templatesSource.SubScopeTemplates)
-            { SubScopeTemplates.Add(new TECSubScope(subScope, false)); }
-            foreach (TECController controller in templatesSource.ControllerTemplates)
-            { ControllerTemplates.Add(new TECController(controller, false)); }
-            foreach (TECMisc cost in templatesSource.MiscCostTemplates)
-            {
-                MiscCostTemplates.Add(new TECMisc(cost, false));
-            }
-            foreach (TECPanel panel in templatesSource.PanelTemplates)
-            {
-                PanelTemplates.Add(new TECPanel(panel, false));
-            }
-        }
         #endregion //Constructors
 
         private void scopeChildRemoved(TECObject child)
