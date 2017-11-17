@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -102,6 +104,20 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public T Load()
         {
+            string appFolder = "EstimateBuilder";
+            if(Path.GetExtension(path) == ".tdb")
+            {
+                appFolder = "TemplateBuilder";
+            }
+
+            string backupPath = String.Format("{0}\\{1}\\{2}\\{3} {4}{5}",
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                appFolder,
+                "backups",
+                Path.GetFileNameWithoutExtension(path),
+                String.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now),
+                Path.GetExtension(path));
+            File.Copy(path, backupPath);
             DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
             if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
             {

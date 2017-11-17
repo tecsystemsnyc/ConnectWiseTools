@@ -62,7 +62,6 @@ namespace EstimatingUtilitiesLibrary.Database
         static private TECBid loadBid()
         {
             TECBid bid = GetBidInfo(SQLiteDB);
-            //updateCatalogs(bid, templates);
 
             getScopeManagerProperties(bid);
 
@@ -79,8 +78,6 @@ namespace EstimatingUtilitiesLibrary.Database
             var placeholderDict = getCharacteristicInstancesList();
 
             ModelLinkingHelper.LinkBid(bid, placeholderDict);
-            //Breaks Visual Scope in a page
-            //populatePageVisualConnections(bid.Drawings, bid.Connections);
 
             return bid;
         }
