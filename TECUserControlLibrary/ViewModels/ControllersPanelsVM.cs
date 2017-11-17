@@ -460,11 +460,27 @@ namespace TECUserControlLibrary.ViewModels
             }
             if (dropInfo.Data is TECController)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers.Add, scopeManager, isGlobal);
+                var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+                if (addPanelMethod != null)
+                {
+                    SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes);
+                }
+                else
+                {
+                    SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes);
+                }
             }
-            else
+            else if (dropInfo.Data is TECPanel)
             {
-                UIHelpers.StandardDrop(dropInfo, scopeManager);
+                var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
+                if (addPanelMethod != null)
+                {
+                    SelectedVM = new AddPanelVM(addPanelMethod, panelTypes);
+                }
+                else
+                {
+                    SelectedVM = new AddPanelVM(SelectedSystem, panelTypes);
+                }
             }
         }
 

@@ -271,7 +271,8 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
-                                    <local:ControllersPanelsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ControllersPanelsVM}" Grid.ColumnSpan="2"/>
+                                    <local:ControllersPanelsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ControllersPanelsVM}"
+                                                                 Grid.ColumnSpan="2"/>
                                     
                                 </Grid>
                             </DataTemplate>

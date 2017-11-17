@@ -69,6 +69,7 @@
                                                            SelectedItem="{Binding ViewModel.SelectedControllerInPanel}"
                                                           DeleteCommand="{Binding ViewModel.DeleteControllerCommand}"
                                                            Grid.Row="1"
+                                                           DropHandler="{Binding ViewModel}"
                                                        Margin="5,0,5,0"/>
                 <Button HorizontalAlignment="Right" Content="Add" Style="{StaticResource AddButtonStyle}"
                         Command="{Binding ViewModel.AddControllerCommand}" Grid.Row="2" Width="50"/>
