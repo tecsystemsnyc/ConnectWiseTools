@@ -309,10 +309,11 @@ namespace TECUserControlLibrary.BaseVMs
         }
         protected void checkForChanges(string taskMessage, Action onComplete)
         {
-            logger.Info("Checking for changes. User prompt: {0}", taskMessage);
+            logger.Info("Checking for changes.");
 
             if (deltaStack.CleansedStack().Count > 0)
             {
+                logger.Info("Changes exist. User prompt: {0}", taskMessage);
                 MessageBoxResult result = MessageBox.Show(taskMessage, "Save", MessageBoxButton.YesNoCancel,
                     MessageBoxImage.Exclamation);
                 switch (result)
@@ -332,7 +333,10 @@ namespace TECUserControlLibrary.BaseVMs
                 }
             }
             else
-                onComplete();
+            {
+                logger.Info("No changes.");
+                executeOnComplete();
+            }
 
             void saveComplete(bool success)
             {
