@@ -161,6 +161,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PanelTypeName");
             }
         }
+        private string _panelTypeDescription;
+        public string PanelTypeDescription
+        {
+            get { return _panelTypeDescription; }
+            set
+            {
+                _panelTypeDescription = value;
+                RaisePropertyChanged("PanelTypeDescription");
+            }
+        }
         private double _panelTypeCost;
         public double PanelTypeCost
         {
@@ -257,6 +267,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DeviceName");
             }
         }
+        private string _deviceDescription;
+        public string DeviceDescription
+        {
+            get { return _deviceDescription; }
+            set
+            {
+                _deviceDescription = value;
+                RaisePropertyChanged("DeviceDescripiton");
+            }
+        }
         private double _deviceListPrice;
         public double DeviceListPrice
         {
@@ -309,6 +329,16 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ValveName");
             }
         }
+        private string _valveDescription;
+        public string ValveDescription
+        {
+            get { return _valveDescription; }
+            set
+            {
+                _valveDescription = value;
+                RaisePropertyChanged("ValveDescripiton");
+            }
+        }
         private double _valveListPrice;
         public double ValveListPrice
         {
@@ -359,6 +389,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _controllerTypeName = value;
                 RaisePropertyChanged("ControllerTypeName");
+            }
+        }
+        private string _controllerTypeDescription;
+        public string ControllerTypeDescription
+        {
+            get { return _controllerTypeDescription; }
+            set
+            {
+                _controllerTypeDescription = value;
+                RaisePropertyChanged("ControllerTypeDescripiton");
             }
         }
         private double _controllerTypeCost;
@@ -568,11 +608,13 @@ namespace TECUserControlLibrary.ViewModels
         {
             TECDevice toAdd = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
             toAdd.Name = DeviceName;
+            toAdd.Description = DeviceDescription;
             toAdd.Price = DeviceListPrice;
             toAdd.Labor = DeviceLabor;
             Templates.Catalogs.Devices.Add(toAdd);
 
             DeviceName = "";
+            DeviceDescription = "";
             DeviceListPrice = 0;
             DeviceLabor = 0;
             DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
@@ -636,11 +678,13 @@ namespace TECUserControlLibrary.ViewModels
         {
             var panelType = new TECPanelType(PanelTypeManufacturer);
             panelType.Name = PanelTypeName;
+            panelType.Description = PanelTypeDescription;
             panelType.Price = PanelTypeCost;
             panelType.Labor = PanelTypeLabor;
 
             Templates.Catalogs.PanelTypes.Add(panelType);
             PanelTypeName = "";
+            PanelTypeDescription = "";
             PanelTypeCost = 0;
             PanelTypeLabor = 0;
             PanelTypeManufacturer = null;
@@ -686,6 +730,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             TECControllerType toAdd = new TECControllerType(ControllerTypeManufacturer);
             toAdd.Name = ControllerTypeName;
+            toAdd.Description = ControllerTypeDescription;
             toAdd.Price = ControllerTypeCost;
             toAdd.Labor = ControllerTypeLabor;
             ObservableCollection<TECIOModule> ioModules = new ObservableCollection<TECIOModule>();
@@ -703,6 +748,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllerTypeIO = new ObservableCollection<TECIO>();
             ControllerTypeModules = new QuantityCollection<TECIOModule>();
             ControllerTypeName = "";
+            ControllerTypeDescription = "";
             ControllerTypeCost = 0;
             ControllerTypeLabor = 0;
             ControllerTypeManufacturer = null;
@@ -721,11 +767,13 @@ namespace TECUserControlLibrary.ViewModels
         {
             TECValve toAdd = new TECValve(ValveManufacturer, ValveActuator);
             toAdd.Name = ValveName;
+            toAdd.Description = ValveDescription;
             toAdd.Price = ValveListPrice;
             toAdd.Labor = ValveLabor;
             Templates.Catalogs.Valves.Add(toAdd);
 
             ValveName = "";
+            ValveDescription = "";
             ValveListPrice = 0;
             ValveLabor = 0;
             ValveActuator = null;
@@ -815,11 +863,12 @@ namespace TECUserControlLibrary.ViewModels
             AssociatedCostLabor = 0;
 
             PanelTypeName = "";
+            PanelTypeDescription = "";
             PanelTypeCost = 0;
             PanelTypeLabor = 0;
             
-
             ControllerTypeName = "";
+            ControllerTypeDescription = "";
             ControllerTypeCost = 0;
             ControllerTypeLabor = 0;
             ControllerTypeIO = new ObservableCollection<TECIO>();
@@ -831,10 +880,12 @@ namespace TECUserControlLibrary.ViewModels
             ModuleIO = new ObservableCollection<TECIO>();
             
             DeviceName = "";
+            DeviceDescription = "";
             DeviceListPrice = 0;
             DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
 
             ValveName = "";
+            ValveDescription = "";
             ValveListPrice = 0;
 
             ManufacturerToAdd = new TECManufacturer();
