@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.Utilities
         }
         public QuantityCollection(IEnumerable<T> items) : base()
         {
-            foreach(T item in items)
+            foreach (T item in items)
             {
                 Add(item);
             }
