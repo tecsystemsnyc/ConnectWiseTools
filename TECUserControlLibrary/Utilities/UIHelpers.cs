@@ -435,7 +435,7 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, ScopeTemplateIndex>("Systems", ScopeTemplateIndex.System),
             new Tuple<string, ScopeTemplateIndex>("Equipment", ScopeTemplateIndex.Equipment),
             new Tuple<string, ScopeTemplateIndex>("Points", ScopeTemplateIndex.SubScope),
-            new Tuple<string, ScopeTemplateIndex>("Controlers and Panels", ScopeTemplateIndex.Controller),
+            new Tuple<string, ScopeTemplateIndex>("Controllers and Panels", ScopeTemplateIndex.Controller),
             new Tuple<string, ScopeTemplateIndex>("Miscellaneous", ScopeTemplateIndex.Misc)
         };
 

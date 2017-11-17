@@ -207,6 +207,7 @@ namespace TECUserControlLibrary.BaseVMs
         }
         protected void handleSaveNewComplete(bool success)
         {
+            databaseManager.SaveComplete -= handleSaveNewComplete;
             if (success)
             {
                 StatusBarVM.CurrentStatusText = "Ready";
@@ -287,8 +288,8 @@ namespace TECUserControlLibrary.BaseVMs
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        databaseManager.SaveComplete += saveComplete;
                         saveDeltaExecute();
+                        databaseManager.SaveComplete += saveComplete;
                         break;
                     case MessageBoxResult.No:
                         onComplete();

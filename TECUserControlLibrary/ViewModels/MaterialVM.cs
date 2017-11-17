@@ -808,12 +808,20 @@ namespace TECUserControlLibrary.ViewModels
 
             PanelTypeName = "";
             PanelTypeCost = 0;
+            PanelTypeLabor = 0;
+            
+
+            ControllerTypeName = "";
+            ControllerTypeCost = 0;
+            ControllerTypeLabor = 0;
+            ControllerTypeIO = new ObservableCollection<TECIO>();
+            ControllerTypeModules = new ObservableCollection<TECIOModule>();
 
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;
             ModuleIO = new ObservableCollection<TECIO>();
-
+            
             DeviceName = "";
             DeviceListPrice = 0;
             DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
@@ -825,8 +833,7 @@ namespace TECUserControlLibrary.ViewModels
 
             TagToAdd = new TECLabeled();
 
-            ControllerTypeIO = new ObservableCollection<TECIO>();
-            ControllerTypeModules = new ObservableCollection<TECIOModule>();
+            
         }
 
         private void setupVMs()
