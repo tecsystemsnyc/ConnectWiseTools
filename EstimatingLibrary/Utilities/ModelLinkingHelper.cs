@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace EstimatingLibrary.Utilities
 {
@@ -70,6 +71,12 @@ namespace EstimatingLibrary.Utilities
             linkNetworkConnections(allControllers, allChildren);
             linkSubScopeConnections(allControllers, allSubScope);
             linkPanelsToControllers(bid.Panels, bid.Controllers);
+
+            foreach(TECController controller in allControllers)
+            {
+                addRequiredIOModules(controller);
+            }
+
             foreach(TECTypical system in bid.Systems)
             {
                 system.RefreshRegistration();
@@ -834,6 +841,61 @@ namespace EstimatingLibrary.Utilities
             scope.Tags = linkedTags;
         }
         #endregion
+
+        private static void addRequiredIOModules(TECController controller)
+        {
+            //The IO needed by the points connected to the controller
+            IOCollection necessaryIO = new IOCollection();
+
+            foreach (TECSubScopeConnection ssConnect in 
+                controller.ChildrenConnections.Where(con => con is TECSubScopeConnection))
+            {
+                foreach (TECIO io in ssConnect.SubScope.IO.ListIO())
+                {
+                    //The point IO that exists on our controller at the moment.
+                    IOCollection totalPointIO = getPointIO(controller);
+                    necessaryIO.AddIO(io);
+                    //Check if our io that exists satisfies the IO that we need.
+                    if (!totalPointIO.Contains(necessaryIO))
+                    {
+                        bool moduleFound = false;
+                        //If it doesn't, we need to add an IO module that will satisfy it.
+                        foreach(TECIOModule module in controller.Type.IOModules)
+                        {
+                            //We only need to check for the type of the last IO that we added.
+                            if (module.IOCollection().Contains(io) && controller.CanAddModule(module))
+                            {
+                                controller.AddModule(module);
+                                moduleFound = true;
+                                break;
+                            }
+                        }
+                        if (!moduleFound)
+                        {
+                            //Handle the case when no IO module can satisfy our necessary IO.
+                            throw new NotImplementedException();
+                        }
+                    }
+                }
+            }
+
+            IOCollection getPointIO(TECController con)
+            {
+                IOCollection pointIOCollection = new IOCollection();
+                foreach (TECIO pointIO in controller.TotalIO.ListIO().Where(io => TECIO.PointIO.Contains(io.Type)))
+                {
+                    pointIOCollection.AddIO(pointIO);
+                }
+                foreach (TECIOModule module in controller.IOModules)
+                {
+                    foreach (TECIO pointIO in module.IO.Where(io => TECIO.PointIO.Contains(io.Type)))
+                    {
+                        pointIOCollection.AddIO(pointIO);
+                    }
+                }
+                return pointIOCollection;
+            }
+        }
         #endregion
     }
 }
