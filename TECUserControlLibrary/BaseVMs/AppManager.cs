@@ -307,7 +307,7 @@ namespace TECUserControlLibrary.BaseVMs
             string title = Path.GetFileNameWithoutExtension(filePath);
             TitleString = title + " - " + appName;
         }
-        protected void checkForChanges(string taskMessage, Action onComplete)
+        protected void checkForChanges(string taskMessage, Action onComplete, Action onCancel = null)
         {
             logger.Info("Checking for changes.");
 
@@ -329,6 +329,7 @@ namespace TECUserControlLibrary.BaseVMs
                         break;
                     default:
                         logger.Info("User cancelled");
+                        onCancel?.Invoke();
                         return;
                 }
             }
