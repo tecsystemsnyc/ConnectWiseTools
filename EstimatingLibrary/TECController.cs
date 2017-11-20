@@ -209,18 +209,40 @@ namespace EstimatingLibrary
                     }
                     else if(getPotentialIO().Contains(subScope.IO))
                     {
-                        foreach(TECIOModule module in Type.IOModules)
+                        foreach(TECIO io in subScope.IO.ListIO())
                         {
-                            if (this.IOModules.Count(item => { return item == module; }) <
-                                Type.IOModules.Count(item => { return item == module; }))
+                            for (int i = 0; i < io.Quantity; i++)
                             {
-                                if(new IOCollection(module.IO).Contains(subScope.IO))
+                                bool foundIO = false;
+                                if (!AvailableIO.Contains(io.Type))
                                 {
-                                    this.IOModules.Add(module);
-                                    return addConnection(subScope, connectionIsTypical);
+                                    foreach (TECIOModule module in Type.IOModules)
+                                    {
+                                        if (this.IOModules.Count(item => { return item == module; }) <
+                                        Type.IOModules.Count(item => { return item == module; }))
+                                        {
+                                            if (new IOCollection(module.IO).Contains(io.Type))
+                                            {
+                                                this.IOModules.Add(module);
+                                                if (getAvailableIO().Contains(subScope.IO))
+                                                {
+                                                    return addConnection(subScope, connectionIsTypical);
+                                                }
+                                                foundIO = true;
+                                                break;
+                                                
+                                            }
+                                        }
+                                    }
+                                    if (foundIO)
+                                    {
+                                        break;
+                                    }
                                 }
+                                
                             }
                         }
+                        
                         foreach (TECIOModule module in Type.IOModules)
                         {
                             if (this.IOModules.Count(item => { return item == module; }) <
