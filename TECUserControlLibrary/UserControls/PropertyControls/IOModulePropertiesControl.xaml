@@ -6,11 +6,13 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+                          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              x:Name="ioModulePropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=ioModulePropertiesControl, Path=Selected, Converter={local:IOModuleToPropertiesItemConverter}}" MinHeight="120">
         <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -18,12 +20,18 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <TextBlock Text="IO: "/>
         <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
                                     SelectedValue="{Binding SelectedIO}"
                                     DisplayMemberPath="Item1"
-                                    SelectedValuePath="Item2"/>
+                                    SelectedValuePath="Item2"
+                  Margin="2" Grid.Row="1"/>
         <Button Content="Add IO" Command="{Binding AddIOCommand}"
-                                    Grid.Column="1"/>
-        <controls:IOGridControl Grid.Row="1" Grid.ColumnSpan="2" IOSource="{Binding IOModule.IO}"/>
+                                   Grid.Row="1" Grid.Column="1" Margin="2"/>
+        <controls:IOGridControl Grid.Row="2" Grid.ColumnSpan="2" IOSource="{Binding IOModule.IO}">
+            <i:Interaction.Behaviors>
+                <utilities:BubbleScrollEvent/>
+            </i:Interaction.Behaviors>
+        </controls:IOGridControl>
     </Grid>
 </UserControl>
