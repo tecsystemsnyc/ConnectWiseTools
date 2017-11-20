@@ -128,14 +128,24 @@ namespace EstimatingUtilitiesLibrary.Database
                 Path.GetExtension(path));
             File.Copy(path, backupPath);
             DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
+
+            bool needsSave;
+            TECScopeManager scopeManager;
             if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
             {
-                return DatabaseLoader.Load(path, true) as T;
+                (scopeManager, needsSave) = DatabaseLoader.Load(path, true);
             }
             else
             {
-                return DatabaseLoader.Load(path) as T;
+                (scopeManager, needsSave) = DatabaseLoader.Load(path);
             }
+
+            if (needsSave)
+            {
+                New(scopeManager);
+            }
+
+            return scopeManager as T;
         }
         public void AsyncLoad()
         {

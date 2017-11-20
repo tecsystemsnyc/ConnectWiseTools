@@ -11,8 +11,10 @@ namespace EstimatingLibrary.Utilities
     public static class ModelLinkingHelper
     {
         #region Public Methods
-        public static void LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> guidDictionary)
+        public static bool LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> guidDictionary)
         {
+            bool needsSave = false;
+
             ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
             ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
 
@@ -75,17 +77,24 @@ namespace EstimatingLibrary.Utilities
 
             foreach(TECController controller in allControllers)
             {
-                addRequiredIOModules(controller);
+                bool controllerNeedsSave = addRequiredIOModules(controller);
+                if (controllerNeedsSave)
+                {
+                    needsSave = true;
+                }
             }
 
             foreach(TECTypical system in bid.Systems)
             {
                 system.RefreshRegistration();
             }
+            return needsSave;
         }
 
-        public static void LinkTemplates(TECTemplates templates)
+        public static bool LinkTemplates(TECTemplates templates)
         {
+            bool needsSave = false;
+
             linkCatalogs(templates.Catalogs);
 
             foreach (TECSystem sys in templates.SystemTemplates)
@@ -120,6 +129,8 @@ namespace EstimatingLibrary.Utilities
             {
                 linkPanelToCatalogs(panel, templates.Catalogs);
             }
+
+            return needsSave;
         }
 
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
@@ -843,10 +854,11 @@ namespace EstimatingLibrary.Utilities
         }
         #endregion
 
-        private static void addRequiredIOModules(TECController controller)
+        private static bool addRequiredIOModules(TECController controller)
         {
             //The IO needed by the points connected to the controller
             IOCollection necessaryIO = new IOCollection();
+            bool needsSave = false;
 
             foreach (TECSubScopeConnection ssConnect in 
                 controller.ChildrenConnections.Where(con => con is TECSubScopeConnection))
@@ -861,6 +873,7 @@ namespace EstimatingLibrary.Utilities
                         //Check if our io that exists satisfies the IO that we need.
                         if (!totalPointIO.Contains(necessaryIO))
                         {
+                            needsSave = true;
                             bool moduleFound = false;
                             //If it doesn't, we need to add an IO module that will satisfy it.
                             foreach (TECIOModule module in controller.Type.IOModules)
@@ -879,12 +892,13 @@ namespace EstimatingLibrary.Utilities
                                 MessageBox.Show(string.Format(
                                     "The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
                                     controller.Name));
-                                return;
+                                return true;
                             }
                         }
                     }
                 }
             }
+            return needsSave;
 
             IOCollection getPointIO(TECController con)
             {
