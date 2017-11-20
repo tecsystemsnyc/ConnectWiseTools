@@ -853,31 +853,34 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECIO io in ssConnect.SubScope.IO.ListIO())
                 {
-                    //The point IO that exists on our controller at the moment.
-                    IOCollection totalPointIO = getPointIO(controller);
-                    necessaryIO.AddIO(io);
-                    //Check if our io that exists satisfies the IO that we need.
-                    if (!totalPointIO.Contains(necessaryIO))
+                    for(int i = 0; i < io.Quantity; i++)
                     {
-                        bool moduleFound = false;
-                        //If it doesn't, we need to add an IO module that will satisfy it.
-                        foreach(TECIOModule module in controller.Type.IOModules)
+                        //The point IO that exists on our controller at the moment.
+                        IOCollection totalPointIO = getPointIO(controller);
+                        necessaryIO.AddIO(io.Type);
+                        //Check if our io that exists satisfies the IO that we need.
+                        if (!totalPointIO.Contains(necessaryIO))
                         {
-                            //We only need to check for the type of the last IO that we added.
-                            if (module.IOCollection().Contains(io) && controller.CanAddModule(module))
+                            bool moduleFound = false;
+                            //If it doesn't, we need to add an IO module that will satisfy it.
+                            foreach (TECIOModule module in controller.Type.IOModules)
                             {
-                                controller.AddModule(module);
-                                moduleFound = true;
-                                break;
+                                //We only need to check for the type of the last IO that we added.
+                                if (module.IOCollection().Contains(io.Type) && controller.CanAddModule(module))
+                                {
+                                    controller.AddModule(module);
+                                    moduleFound = true;
+                                    break;
+                                }
                             }
-                        }
-                        if (!moduleFound)
-                        {
-                            controller.RemoveAllConnections();
-                            MessageBox.Show(string.Format(
-                                "The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
-                                controller.Name));
-                            return;
+                            if (!moduleFound)
+                            {
+                                controller.RemoveAllConnections();
+                                MessageBox.Show(string.Format(
+                                    "The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
+                                    controller.Name));
+                                return;
+                            }
                         }
                     }
                 }
@@ -889,13 +892,6 @@ namespace EstimatingLibrary.Utilities
                 foreach (TECIO pointIO in controller.TotalIO.ListIO().Where(io => TECIO.PointIO.Contains(io.Type)))
                 {
                     pointIOCollection.AddIO(pointIO);
-                }
-                foreach (TECIOModule module in controller.IOModules)
-                {
-                    foreach (TECIO pointIO in module.IO.Where(io => TECIO.PointIO.Contains(io.Type)))
-                    {
-                        pointIOCollection.AddIO(pointIO);
-                    }
                 }
                 return pointIOCollection;
             }

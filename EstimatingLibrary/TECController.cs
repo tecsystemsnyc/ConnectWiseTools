@@ -505,7 +505,9 @@ namespace EstimatingLibrary
         }
         private IOCollection getAvailableIO()
         {
-            return (getTotalIO() - getUsedIO());
+            IOCollection totalIO = getTotalIO();
+            IOCollection usedIO = getUsedIO();
+            return (totalIO - usedIO);
         }
         private IOCollection getAvailableNetworkIO()
         {
