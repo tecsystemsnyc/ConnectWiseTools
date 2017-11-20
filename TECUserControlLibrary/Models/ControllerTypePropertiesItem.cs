@@ -11,8 +11,8 @@ namespace TECUserControlLibrary.Models
 {
     public class ControllerTypePropertiesItem : ViewModelBase
     {
-        TECControllerType ControllerType { get; }
-        QuantityCollection<TECIOModule> IOModules { get; }
+        public TECControllerType ControllerType { get; }
+        public QuantityCollection<TECIOModule> IOModules { get; }
 
         public ControllerTypePropertiesItem(TECControllerType controllerType)
         {

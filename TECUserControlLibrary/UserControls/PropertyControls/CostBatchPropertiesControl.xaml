@@ -8,7 +8,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
-        <ItemsControl ItemsSource="{Binding CostBatch.AllCosts}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border BorderThickness="0,0,0,1" BorderBrush="Black" Margin="0,0,60,0">
+            <TextBlock Text="Costs Summary" FontWeight="DemiBold"/>
+        </Border>
+        <ItemsControl ItemsSource="{Binding CostBatch.AllCosts}" Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -23,9 +30,9 @@
                         <TextBlock FontSize="14" Text="{Binding Type, StringFormat={}{0} Costs}" 
                                Grid.ColumnSpan="2" Foreground="Black"/>
                         <TextBlock Text="{Binding Cost, StringFormat=Material: {0:C}}" Foreground="Black" Grid.Row="1"/>
-                        <TextBlock Text="{Binding Labor, StringFormat=Labor (hrs): {0:F2}}" Foreground="Black" Grid.Row="2"/>
-                        <Border Grid.Row="2" BorderThickness="0 0 0 1" Grid.ColumnSpan="2"
-                                BorderBrush="Black"/>
+                        <TextBlock Text="{Binding Labor, StringFormat=Labor: {0:F2} (hrs)}" Foreground="Black" Grid.Row="2"/>
+                        <Border Grid.Row="2" BorderThickness="0 0 0 1" Grid.ColumnSpan="2" Margin="0,0,80,0"
+                                BorderBrush="DarkGray"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

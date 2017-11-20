@@ -16,7 +16,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Max IO Modules: "/>
-            <DataGrid Grid.Row="1" 
+            <DataGrid Grid.Row="1" MinHeight="120"
                       ItemsSource="{Binding IOModules}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"

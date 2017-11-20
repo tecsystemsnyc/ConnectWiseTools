@@ -102,16 +102,16 @@
         <StackPanel>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>
-            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
-            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
-            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LocatedSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ControllerSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PanelSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource miscSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ioModuleSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource controllerTypeSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
