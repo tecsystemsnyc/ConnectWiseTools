@@ -53,6 +53,10 @@
             <DataTemplate x:Key="ioModule">
                 <pControls:IOModulePropertiesControl Selected="{Binding}"/>
             </DataTemplate>
+            <DataTemplate x:Key="controllerType">
+                <pControls:ControllerTypePropertiesControl Selected="{Binding}"
+                                                           DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
+            </DataTemplate>
             <DataTemplate x:Key="default"/>
             <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -87,6 +91,9 @@
             <utilities:IOModuleSelector x:Key="ioModuleSelector"
                                         InterfaceTemplate="{StaticResource ioModule}"
                                         DefaultTemplate="{StaticResource default}"/>
+            <utilities:ControllerTypeSelector x:Key="controllerTypeSelector"
+                                              InterfaceTemplate="{StaticResource controllerType}"
+                                              DefaultTemplate="{StaticResource default}"/>
         </ResourceDictionary>
         
     </UserControl.Resources>
@@ -104,6 +111,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PanelSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource miscSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ioModuleSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource controllerTypeSelector}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

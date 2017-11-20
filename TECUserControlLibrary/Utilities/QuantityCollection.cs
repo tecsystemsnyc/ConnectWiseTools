@@ -14,11 +14,11 @@ namespace TECUserControlLibrary.Utilities
     {
         private Dictionary<T, QuantityItem<T>> itemDictionary;
 
-        public QuantityCollection()
+        public QuantityCollection() : base()
         {
             itemDictionary = new Dictionary<T, QuantityItem<T>>();
         }
-        public QuantityCollection(IEnumerable<T> items) : base()
+        public QuantityCollection(IEnumerable<T> items) : this()
         {
             foreach (T item in items)
             {
