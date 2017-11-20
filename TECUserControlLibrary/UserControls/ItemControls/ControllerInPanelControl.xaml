@@ -29,8 +29,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label FontSize="14" Content="{Binding Controller.Name}" Background="Transparent" FontWeight="DemiBold"/>
-            <Label Content="{Binding Controller.Description}" Grid.Column="1"  Background="Transparent"/>
+            <TextBlock FontSize="14" Text="{Binding Controller.Name}" Background="Transparent" FontWeight="DemiBold"/>
+            <TextBlock Text="{Binding Controller.Description}" Grid.Column="1"  Background="Transparent"/>
             <Label Content="Type: " Grid.Row="1"  Background="Transparent"/>
             <Label Content="{Binding Controller.Type.Name}" Grid.Row="1" Grid.Column="1"  Background="Transparent"/>
             <Label Content="Containing Panel: " Grid.Row="2"

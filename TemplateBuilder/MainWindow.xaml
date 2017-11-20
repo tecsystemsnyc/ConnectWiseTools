@@ -131,7 +131,7 @@
                                     <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.ScopeTemplateSelectorList}}"
                                               DisplayMemberPath="Item1"
                                               SelectedValuePath="Item2"
-                                              SelectedIndex="0"
+                                              SelectedValue="0"
                                               Margin="5" Grid.Row="0" FontSize="16"
                                               VerticalContentAlignment="Center"/>
                                     <ContentPresenter Content="{Binding ElementName=templateComboBox, Path=SelectedValue}"  

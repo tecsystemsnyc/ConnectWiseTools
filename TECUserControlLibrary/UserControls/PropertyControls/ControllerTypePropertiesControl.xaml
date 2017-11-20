@@ -28,7 +28,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Onboard IO: "/>
+            <TextBlock Text="Onboard IO: " FontWeight="DemiBold"/>
             <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
                                 SelectedValue="{Binding SelectedIO}"
                                 DisplayMemberPath="Item1"
@@ -47,7 +47,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Max IO Modules: "/>
+            <TextBlock Text="Max IO Modules: " FontWeight="DemiBold"/>
             <DataGrid Grid.Row="1" MinHeight="120"
                       ItemsSource="{Binding IOModules}"
                       AutoGenerateColumns="False"
