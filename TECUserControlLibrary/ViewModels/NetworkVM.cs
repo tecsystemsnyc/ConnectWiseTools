@@ -40,6 +40,11 @@ namespace TECUserControlLibrary.ViewModels
             setupCommands();
             Refresh(bid, cw);
         }
+        public NetworkVM(TECSystem system, TECCatalogs catalogs)
+        {
+            setupCommands();
+            Refresh(system, catalogs);
+        }
 
         #region Properties
         //Item Properties
@@ -178,9 +183,16 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECBid bid, ChangeWatcher cw)
         {
             isConnecting = false;
-            resetCollections(bid);
+            resetCollections(bid.Catalogs);
             addBid(bid);
             resubscribe(cw);
+        }
+        public void Refresh(TECSystem system, TECCatalogs catalogs)
+        {
+            isConnecting = false;
+            resetCollections(catalogs);
+            addSystem(system);
+            resubscribe(new ChangeWatcher(system));
         }
         private void setupCommands()
         {
@@ -191,12 +203,12 @@ namespace TECUserControlLibrary.ViewModels
             DoneConnectionCommand = new RelayCommand(doneConnectionExecute);
             RemoveConnectableCommand = new RelayCommand(removeConnectableExecute, canRemoveConnectable);
         }
-        private void resetCollections(TECBid bid)
+        private void resetCollections(TECCatalogs catalogs)
         {
             connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
             _parentables = new ObservableCollection<ConnectableItem>();
             _nonParentables = new ObservableCollection<ConnectableItem>();
-            AllConnectionTypes = new ReadOnlyObservableCollection<TECElectricalMaterial>(bid.Catalogs.ConnectionTypes);
+            AllConnectionTypes = new ReadOnlyObservableCollection<TECElectricalMaterial>(catalogs.ConnectionTypes);
             IOTypes = new List<IOType>(TECIO.NetworkIO);
             selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
             RaisePropertyChanged("Parentables");
@@ -227,6 +239,17 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                 }
+            }
+        }
+        private void addSystem(TECSystem system)
+        {
+            foreach (TECController controller in system.Controllers)
+            {
+                addConnectableItem(controller);
+            }
+            foreach (TECSubScope ss in system.GetAllSubScope())
+            {
+                addConnectableItem(ss);
             }
         }
         private void resubscribe(ChangeWatcher cw)
