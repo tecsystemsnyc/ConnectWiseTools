@@ -17,6 +17,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
             <DataTemplate x:Key="scope">
                 <pControls:ScopePropertiesControl Selected="{Binding}"
                                                   DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
