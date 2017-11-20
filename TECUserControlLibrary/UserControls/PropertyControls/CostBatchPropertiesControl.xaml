@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Border BorderThickness="0,0,0,1" BorderBrush="Black" Margin="0,0,60,0">
