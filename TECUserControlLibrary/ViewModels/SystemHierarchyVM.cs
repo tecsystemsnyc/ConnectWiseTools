@@ -24,6 +24,7 @@ namespace TECUserControlLibrary.ViewModels
         private SystemConnectionsVM connectionsVM;
         private MiscCostsVM miscVM;
         private ControllersPanelsVM controllersPanelsVM;
+        private NetworkVM networkVM;
 
         public ViewModelBase SelectedVM
         {
@@ -53,6 +54,7 @@ namespace TECUserControlLibrary.ViewModels
                 ConnectionsVM = new SystemConnectionsVM(value, catalogs.ConduitTypes);
                 MiscVM = new MiscCostsVM(value);
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
+                NetworkVM = new NetworkVM(value, scopeManager.Catalogs);
             }
         }
 
@@ -172,6 +174,15 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     Selected?.Invoke(item as TECObject);
                 };
+            }
+        }
+        public NetworkVM NetworkVM
+        {
+            get { return networkVM; }
+            set
+            {
+                networkVM = value;
+                RaisePropertyChanged("NetworkVM");
             }
         }
 

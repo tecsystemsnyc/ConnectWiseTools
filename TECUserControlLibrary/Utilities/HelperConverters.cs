@@ -647,6 +647,7 @@ namespace TECUserControlLibrary.Utilities
                 case SystemComponentIndex.Misc:
                 case SystemComponentIndex.Proposal:
                 case SystemComponentIndex.Controllers:
+                case SystemComponentIndex.Network:
                     return 2;
                 default:
                     return 1;
