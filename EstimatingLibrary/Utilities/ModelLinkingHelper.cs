@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace EstimatingLibrary.Utilities
 {
@@ -872,8 +873,11 @@ namespace EstimatingLibrary.Utilities
                         }
                         if (!moduleFound)
                         {
-                            //Handle the case when no IO module can satisfy our necessary IO.
-                            throw new NotImplementedException();
+                            controller.RemoveAllConnections();
+                            MessageBox.Show(string.Format(
+                                "The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
+                                controller.Name));
+                            return;
                         }
                     }
                 }
