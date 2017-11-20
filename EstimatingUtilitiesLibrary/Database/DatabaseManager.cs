@@ -7,6 +7,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -31,7 +32,11 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 return catchOnRelease("Save delta failed. Exception: ", () =>
                 {
-                    DatabaseUpdater.Update(path, updates);
+                    bool success = DatabaseUpdater.Update(path, updates);
+                    if (!success)
+                    {
+                        MessageBox.Show("Not all items saved properly, check logs for more details.");
+                    }
                 });
             }
             else
@@ -77,7 +82,11 @@ namespace EstimatingUtilitiesLibrary.Database
                     throw new Exception("Generator can only reate bid or template DBs");
                 }
                 List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
-                DatabaseUpdater.Update(path, newStack);
+                bool success =DatabaseUpdater.Update(path, newStack);
+                if (!success)
+                {
+                    MessageBox.Show("Not all items saved properly, check logs for more details.");
+                }
                 return true;
             }
             else

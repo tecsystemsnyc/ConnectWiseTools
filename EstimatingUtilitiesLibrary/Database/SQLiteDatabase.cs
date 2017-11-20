@@ -183,7 +183,15 @@ namespace EstimatingUtilitiesLibrary.Database
 
             SQLiteCommand command = new SQLiteCommand(Connection);
             command.CommandText = commandString;
-            return (command.ExecuteNonQuery() > 0);
+            if (command.ExecuteNonQuery() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                logger.Error("Update failed. Command: {0}", command.CommandText);
+                return false;
+            }
         }
 
         public void NonQueryCommand(string commandText)
