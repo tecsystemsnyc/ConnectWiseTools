@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -22,17 +22,17 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <Label Grid.Column="0" Grid.Row="0"
-                   Content="Price:"/>
-            <Label Grid.Column="1" Grid.Row="0"
-                   Content="{Binding Price}"/>
-            <Label Grid.Column="0" Grid.Row="1"
-                   Content="Manufacturer:"/>
-            <Label Grid.Column="1" Grid.Row="1"
-                   Content="{Binding Manufacturer.Label}"/>
+            <TextBlock Grid.Column="0" Grid.Row="0"
+                   Text="List Price:"/>
+            <TextBlock Grid.Column="1" Grid.Row="0"
+                   Text="{Binding Price, StringFormat={}{0:C}}"/>
+            <TextBlock Grid.Column="0" Grid.Row="1"
+                   Text="Manufacturer:"/>
+            <TextBlock Grid.Column="1" Grid.Row="1"
+                   Text="{Binding Manufacturer.Label}"/>
 
         </Grid>
     </Grid>

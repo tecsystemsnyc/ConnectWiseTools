@@ -46,7 +46,6 @@ namespace TECUserControlLibrary.Models
             }
         }
         
-
         public RelayCommand<TECIOModule> AddModuleCommand { get; private set; }
         public RelayCommand<TECIOModule> RemoveModuleCommand { get; private set; }
 

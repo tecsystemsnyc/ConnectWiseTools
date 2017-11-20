@@ -11,14 +11,32 @@ namespace TECUserControlLibrary.Models
 {
     public class ControllerTypePropertiesItem : ViewModelBase
     {
-        TECControllerType ControllerType { get; }
-        QuantityCollection<TECIOModule> IOModules { get; }
+        public TECControllerType ControllerType { get; }
+        public QuantityCollection<TECIOModule> IOModules { get; }
 
         public ControllerTypePropertiesItem(TECControllerType controllerType)
         {
             ControllerType = controllerType;
             IOModules = new QuantityCollection<TECIOModule>(controllerType.IOModules);
-            //IOModules.
+            IOModules.QuantityChanged += ioModules_QuantityChanged;
+        }
+
+        private void ioModules_QuantityChanged(TECIOModule arg1, int arg2, int arg3)
+        {
+            int change = arg3 - arg2;
+            if(change > 0)
+            {
+                for(int x = 0; x < change; x++)
+                {
+                    ControllerType.IOModules.Add(arg1);
+                }
+            } else if (change < 0)
+            {
+                for(int x = 0; x > change; x--)
+                {
+                    ControllerType.IOModules.Remove(arg1);
+                }
+            }
         }
     }
 }

@@ -26,6 +26,8 @@ namespace TECUserControlLibrary.Utilities
             }
         }
 
+        public event Action<T, int, int> QuantityChanged;
+
         public void Add(T item, int quantity = 1)
         {
             if (quantity < 0)
@@ -44,10 +46,17 @@ namespace TECUserControlLibrary.Utilities
             else
             {
                 QuantityItem<T> quantItem = new QuantityItem<T>(item, quantity);
+                quantItem.QuantityChanged += quantityChanged;
                 itemDictionary.Add(item, quantItem);
                 base.Add(quantItem);
             }
         }
+
+        private void quantityChanged(T arg1, int arg2, int arg3)
+        {
+            QuantityChanged?.Invoke(arg1, arg2, arg3);
+        }
+
         public bool Remove(T item, int quantity = 1)
         {
             if (quantity < 0)
@@ -104,6 +113,7 @@ namespace TECUserControlLibrary.Utilities
             }
             set
             {
+                QuantityChanged?.Invoke(Item, _quantity, value);
                 _quantity = value;
                 raisePropertyChanged("Quantity");
             }
@@ -116,6 +126,7 @@ namespace TECUserControlLibrary.Utilities
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<T, int, int> QuantityChanged;
 
         private void raisePropertyChanged(string propertyName)
         {

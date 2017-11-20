@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.UserControls.PropertyControls
@@ -54,19 +55,22 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
             InitializeComponent();
         }
     }
-    public class ModulesToModuleQuantityConverter : BaseConverter, IValueConverter
+    public class ControllerTypeToPropertiesItemConverter : BaseConverter, IValueConverter
     {
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IEnumerable<TECIOModule> modules)
+            if (value is TECControllerType type)
             {
-                return new QuantityCollection<TECIOModule>(modules);
+                return new ControllerTypePropertiesItem(type);
+            } else if(value == null)
+            {
+                return null;
             }
             else
             {
-                throw new InvalidCastException("Value is not a collection of IO modules.");
+                throw new InvalidCastException("Value is not a controller type.");
             }
         }
 

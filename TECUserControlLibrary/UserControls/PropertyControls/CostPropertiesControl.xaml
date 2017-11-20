@@ -5,9 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:TECLib ="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              x:Name="parent"
              mc:Ignorable="d" 
-             d:DesignHeight="60" d:DesignWidth="300">
+             d:DesignHeight="90" d:DesignWidth="300">
 
     <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
         <Grid.ColumnDefinitions>
@@ -15,7 +17,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="75"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -23,36 +25,53 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <Label Grid.Column="0"
+            <TextBlock Grid.Column="0"
                            Grid.Row="0"
-                           Content="Cost:"/>
-            <Label Grid.Column="0"
+                           Text="Cost:"/>
+            <TextBlock Grid.Column="0"
+                           Grid.Row="1"
+                           Text="Labor:"/>
+            <TextBlock Grid.Column="0"
                            Grid.Row="2"
-                           Content="Labor:"/>
+                           Text="Cost Type:"/>
             <ContentPresenter Content="{Binding}" Grid.Column="1"
-                           Grid.Row="0" VerticalAlignment="Top">
+                           Grid.Row="0" VerticalAlignment="Center">
                 <ContentPresenter.Resources>
                     <DataTemplate DataType="{x:Type models:TECHardware}">
-                        <Label Content="{Binding Cost}"/>
+                        <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
-                        <TextBox Text="{Binding Cost}" 
+                        <TextBox Text="{Binding Cost, StringFormat={}{0:C}}" 
                              Margin="5"/>
                     </DataTemplate>
                 </ContentPresenter.Resources>
             </ContentPresenter>
 
             <ContentPresenter Content="{Binding}" Grid.Column="1"
-                           Grid.Row="1" VerticalAlignment="Top" >
+                           Grid.Row="1" VerticalAlignment="Center" >
                 <ContentPresenter.Resources>
                     <DataTemplate DataType="{x:Type models:TECHardware}">
-                        <Label Content="{Binding Labor}"/>
+                        <TextBlock Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
-                        <TextBox Text="{Binding Labor}" Margin="5"/>
+                        <TextBox Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}"/>
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
+
+            <ContentPresenter Content="{Binding}" Grid.Column="1"
+                           Grid.Row="2" VerticalAlignment="Center" >
+                <ContentPresenter.Resources>
+                    <DataTemplate DataType="{x:Type models:TECHardware}">
+                        <TextBlock Text="{Binding Type}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:TECCost}">
+                        <ComboBox SelectedItem="{Binding Type}" Margin="2"
+                                  ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"/>
                     </DataTemplate>
                 </ContentPresenter.Resources>
             </ContentPresenter>
