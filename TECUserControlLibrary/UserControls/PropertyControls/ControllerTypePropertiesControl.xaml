@@ -8,7 +8,8 @@
              x:Name="controllerTypePropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=controllerTypePropertiesControl, Path=Selected}">
+    <Grid DataContext="{Binding ElementName=controllerTypePropertiesControl, Path=Selected, 
+        Converter={local:ControllerTypeToPropertiesItemConverter}}">
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -16,20 +17,13 @@
             </Grid.RowDefinitions>
             <Label Content="Max IO Modules: "/>
             <DataGrid Grid.Row="1" 
-                      ItemsSource="{Binding IOModules, Converter={local:ModulesToModuleQuantityConverter}}"
+                      ItemsSource="{Binding IOModules}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       dd:DragDrop.DropHandler="{Binding ElementName=controllerTypePropertiesControl, Path=DropHandler}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Item.Price, StringFormat= {} {0:C}}"
-                                                            Header="Price" Width="Auto" IsReadOnly="True" MinWidth="40"
-                                                            ElementStyle="{StaticResource RightCell}"/>
-                    <DataGridTextColumn Binding="{Binding Item.Cost, StringFormat= {} {0:C}}"
-                                                            Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
-                                                            ElementStyle="{StaticResource RightCell}"/>
-                    <DataGridTextColumn Binding="{Binding Item.Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
                     <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" MinWidth="20"/>
                 </DataGrid.Columns>
             </DataGrid>
