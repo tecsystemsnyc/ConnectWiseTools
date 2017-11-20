@@ -339,6 +339,25 @@ namespace EstimatingLibrary
         }
         #endregion
 
+        #region Module Methods
+        public bool CanAddModule(TECIOModule module)
+        {
+            return (this.Type.IOModules.Count(mod => (mod == module)) >
+                this.IOModules.Count(mod => (mod == module)));
+        }
+        public void AddModule(TECIOModule module)
+        {
+            if (CanAddModule(module))
+            {
+                IOModules.Add(module);
+            } 
+            else
+            {
+                throw new InvalidOperationException("Controller can't accept IOModule.");
+            }
+        }
+        #endregion
+
         #region Methods
         #region Event Handlers
         private void collectionChanged(object sender,

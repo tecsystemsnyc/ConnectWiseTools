@@ -67,5 +67,10 @@ namespace EstimatingLibrary
         {
             return new TECIOModule(this);
         }
+
+        public IOCollection IOCollection()
+        {
+            return new IOCollection(IO);
+        }
     }
 }
