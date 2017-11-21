@@ -410,16 +410,6 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddPointVM(SelectedSubScope);
                 ((AddPointVM)SelectedVM).ToAdd = point;
             }
-            else if (dropped is TECController controller)
-            {
-                SelectedVM = new AddControllerVM(SelectedSystem, catalogs.ControllerTypes);
-                ((AddControllerVM)SelectedVM).ToAdd = controller;
-            }
-            else if (dropped is TECPanel panel)
-            {
-                SelectedVM = new AddPanelVM(SelectedSystem, catalogs.PanelTypes);
-                ((AddPanelVM)SelectedVM).ToAdd = panel;
-            }
             else if (dropped is TECMisc misc)
             {
                 SelectedVM = new AddMiscVM(SelectedSystem);

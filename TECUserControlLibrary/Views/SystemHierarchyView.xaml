@@ -139,7 +139,7 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.DoubleClicked">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.DoubleClicked" SourceName="subScopeList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>

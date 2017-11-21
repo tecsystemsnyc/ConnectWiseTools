@@ -30,9 +30,11 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock FontSize="14" Text="{Binding Controller.Name}" Background="Transparent" FontWeight="DemiBold"/>
-            <TextBlock Text="{Binding Controller.Description}" Grid.Column="1"  Background="Transparent"/>
-            <Label Content="Type: " Grid.Row="1"  Background="Transparent"/>
-            <Label Content="{Binding Controller.Type.Name}" Grid.Row="1" Grid.Column="1"  Background="Transparent"/>
+            <TextBlock Text="{Binding Controller.Type.Name, StringFormat=Type: {0}}" Grid.Column="1"  Background="Transparent"/>
+
+            <TextBlock Text="{Binding Controller.Description}" Grid.Row="1" Grid.ColumnSpan="2" Background="Transparent"/>
+            
+            
             <Label Content="Containing Panel: " Grid.Row="2"
                     Visibility="{Binding Data.ViewModel.PanelSelectionVisibility, Source={StaticResource proxy}}"/>
             <ComboBox ItemsSource="{Binding Data.ViewModel.PanelSelections, Source={StaticResource proxy}}"
