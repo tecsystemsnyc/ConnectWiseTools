@@ -11,6 +11,9 @@ using System.Deployment.Application;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
@@ -69,7 +72,7 @@ namespace TECUserControlLibrary.BaseVMs
                 RaisePropertyChanged("ViewEnabled");
             }
         }
-        public string TECLogo { get; }
+        public ImageSource TECLogo { get; }
         public string TitleString
         {
             get { return _titleString; }
@@ -105,7 +108,7 @@ namespace TECUserControlLibrary.BaseVMs
             CurrentVM = SplashVM;
             ClosingCommand = new RelayCommand<CancelEventArgs>(closingExecute);
         }
-        
+
         #region Menu Commands Methods
         private void setupCommands()
         {
@@ -295,12 +298,15 @@ namespace TECUserControlLibrary.BaseVMs
                 return "Undeployed";
             }
         }
-        private string getLogo()
+        private ImageSource getLogo()
         {
-            String path = Path.GetTempFileName();
+            //String path = Path.GetTempFileName();
+            //(Properties.Resources.TECLogo).Save(path, ImageFormat.Png);
+            //return path;
 
-            (Properties.Resources.TECLogo).Save(path, ImageFormat.Png);
-            return path;
+            return Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.TECLogo.GetHbitmap(),
+                IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                
         }
         protected void buildTitleString(string filePath, string appName)
         {
@@ -448,5 +454,6 @@ namespace TECUserControlLibrary.BaseVMs
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
             }
         }
+
     }
 }
