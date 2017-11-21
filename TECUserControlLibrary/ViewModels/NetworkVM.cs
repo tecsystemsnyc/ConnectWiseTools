@@ -3,15 +3,18 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class NetworkVM : ViewModelBase
+    public class NetworkVM : ViewModelBase, IDropTarget
     {
         #region Fields
         bool isConnecting;
@@ -471,6 +474,29 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 isConnecting = false;
+            }
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is INetworkConnectable connectable && dropInfo.TargetCollection == SelectedConnection.Children)
+            {
+                if (SelectedConnection.CanAddINetworkConnectable(connectable))
+                {
+                    UIHelpers.StandardDragOver(dropInfo);
+                }
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is INetworkConnectable connectable)
+            {
+                SelectedConnection.AddINetworkConnectable(connectable);
+            }
+            else
+            {
+                throw new DataMisalignedException("Data misalignment between DragOver and Drop.");
             }
         }
         #endregion

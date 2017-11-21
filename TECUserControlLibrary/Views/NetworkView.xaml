@@ -9,6 +9,7 @@
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="networkView"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -324,11 +325,11 @@
                                         </Grid.RowDefinitions>
                                         <Label Content="Add Connectables to Connection" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
                                         <listControls:NetworkConnectableListControl
-                                        Source="{Binding ElementName=Connections, Path=SelectedItem.Children}"
-                                        SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedChildConnectable}"
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="2"
-                                            Margin="5"/>
+                                            Source="{Binding ElementName=Connections, Path=SelectedItem.Children}"
+                                            SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedChildConnectable}"
+                                            Grid.Row="1" Grid.ColumnSpan="2"
+                                            Margin="5"
+                                            dd:DragDrop.IsDropTarget="True"/>
                                         <Button Content="Remove" Grid.Row="2" Margin="5"  Background="{DynamicResource AlertActionBrush}"
                                                 Command="{Binding ElementName=networkView, Path=ViewModel.RemoveConnectableCommand}"/>
                                         <Button x:Name="DoneButton" Content="Done" Grid.Column="1" Grid.Row="2" Margin="5"
