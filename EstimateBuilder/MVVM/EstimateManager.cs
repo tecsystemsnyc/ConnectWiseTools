@@ -105,24 +105,32 @@ namespace EstimateBuilder.MVVM
         {
             this.templatesFilePath = templatesFilePath;
             buildTitleString(bidFilePath, "Estimate Builder");
-            templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
-            templatesDatabaseManager.LoadComplete += scopeManager =>
+            if(templatesFilePath != "")
             {
-                templates = scopeManager as TECTemplates;
-                if(bidFilePath != "")
+                templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
+                templatesDatabaseManager.LoadComplete += assignData;
+                ViewEnabled = false;
+                templatesDatabaseManager.AsyncLoad();
+            } else
+            {
+                assignData(new TECTemplates());
+            }
+            
+
+            void assignData(TECTemplates loadedTemplates)
+            {
+                templates = loadedTemplates;
+                if (bidFilePath != "")
                 {
                     databaseManager = new DatabaseManager<TECBid>(bidFilePath);
                     databaseManager.LoadComplete += handleLoaded;
                     databaseManager.AsyncLoad();
-                } 
+                }
                 else
                 {
                     handleLoaded(getNewWorkingScope());
                 }
-                
-            };
-            ViewEnabled = false;
-            templatesDatabaseManager.AsyncLoad();
+            }
         }
 
         protected override void handleLoaded(TECBid loadedBid)
