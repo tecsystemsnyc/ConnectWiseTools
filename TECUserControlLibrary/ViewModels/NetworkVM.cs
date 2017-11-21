@@ -479,9 +479,9 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is INetworkConnectable connectable && dropInfo.TargetCollection == SelectedConnection.Children)
+            if (dropInfo.Data is ConnectableItem connectable && dropInfo.TargetCollection == SelectedConnection.Children)
             {
-                if (SelectedConnection.CanAddINetworkConnectable(connectable))
+                if (SelectedConnection.CanAddINetworkConnectable(connectable.Item))
                 {
                     UIHelpers.StandardDragOver(dropInfo);
                 }
@@ -490,9 +490,9 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is INetworkConnectable connectable)
+            if (dropInfo.Data is ConnectableItem connectable)
             {
-                SelectedConnection.AddINetworkConnectable(connectable);
+                SelectedConnection.AddINetworkConnectable(connectable.Item);
             }
             else
             {
