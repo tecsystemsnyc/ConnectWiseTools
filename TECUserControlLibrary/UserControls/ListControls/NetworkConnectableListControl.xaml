@@ -25,7 +25,8 @@
                   SelectionChanged="ListView_Selected"
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   dd:DragDrop.IsDropTarget="True"
-                  dd:DragDrop.DropHandler="{Binding DropHandler}">
+                  dd:DragDrop.DropHandler="{Binding DropHandler}"
+                  dd:DragDrop.DragAdornerTemplate="{Binding DragAdornerTemplate}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ContentPresenter Content="{Binding}">

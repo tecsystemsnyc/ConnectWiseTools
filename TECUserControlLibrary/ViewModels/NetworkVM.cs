@@ -35,6 +35,8 @@ namespace TECUserControlLibrary.ViewModels
         private TECNetworkConnection _selectedConnection;
 
         private INetworkConnectable _selectedChildConnectable;
+
+        private string _cannotConnectMessage;
         #endregion
 
         //Constructor
@@ -178,6 +180,16 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedConnection = value;
                 RaisePropertyChanged("SelectedConnection");
                 handleSelectedConnectionChanged(SelectedConnection);
+            }
+        }
+
+        public string CannotConnectMessage
+        {
+            get { return _cannotConnectMessage; }
+            set
+            {
+                _cannotConnectMessage = value;
+                RaisePropertyChanged("CannotConnectMessage");
             }
         }
         #endregion
@@ -479,11 +491,17 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
+            CannotConnectMessage = "";
             if (dropInfo.Data is ConnectableItem connectable && dropInfo.TargetCollection == SelectedConnection.Children)
             {
                 if (SelectedConnection.CanAddINetworkConnectable(connectable.Item))
                 {
-                    UIHelpers.StandardDragOver(dropInfo);
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
+                else
+                {
+                    CannotConnectMessage = "Connectable isn't compatible with connection.";
                 }
             }
         }
