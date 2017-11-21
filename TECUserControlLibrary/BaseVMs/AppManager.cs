@@ -305,6 +305,10 @@ namespace TECUserControlLibrary.BaseVMs
         protected void buildTitleString(string filePath, string appName)
         {
             string title = Path.GetFileNameWithoutExtension(filePath);
+            if(title == "")
+            {
+                title = "New Document";
+            }
             TitleString = title + " - " + appName;
         }
         protected void checkForChanges(string taskMessage, Action onComplete, Action onCancel = null)

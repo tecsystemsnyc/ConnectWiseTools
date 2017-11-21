@@ -274,6 +274,12 @@
                                         IsTypical="{Binding ElementName=systemHierarchyView, Path=IsTypical}"/>
                                 </Grid>
                             </DataTemplate>
+                            <DataTemplate x:Key="NetworkTemplate">
+                                <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
+                                    <local:NetworkView 
+                                        ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.NetworkVM}"/>
+                                </Grid>
+                            </DataTemplate>
                             <DataTemplate x:Key="MiscTemplate">
                                 <local:MiscCostsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.MiscVM}"
                                                      DropHandler="{Binding ElementName=systemHierarchyView, Path=ViewModel}"
@@ -289,6 +295,7 @@
                                                            EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                                            ControllerTemplate="{StaticResource ControllerTemplate}"
                                                            ConnectionTemplate="{StaticResource ElectricalTemplate}"
+                                                               NetworkTemplate="{StaticResource NetworkTemplate}"
                                                            MiscTemplate="{StaticResource MiscTemplate}"
                                                            ProposalTemplate="{StaticResource ProposalTemplate}"/>
                         </ResourceDictionary>
