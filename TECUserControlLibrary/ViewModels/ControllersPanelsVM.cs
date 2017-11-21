@@ -502,10 +502,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 scopeManager = Bid;
             }
-            if (dropInfo.Data is TECController)
+            if (dropInfo.Data is TECController controller)
             {
                 var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
-                if (addPanelMethod != null)
+                if (addControllerMethod != null)
                 {
                     SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes);
                 }
@@ -513,8 +513,11 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes);
                 }
+                TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
+                ((AddControllerVM)SelectedVM).ToAdd = dropped;
+                ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
             }
-            else if (dropInfo.Data is TECPanel)
+            else if (dropInfo.Data is TECPanel panel)
             {
                 var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
                 if (addPanelMethod != null)
@@ -525,6 +528,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     SelectedVM = new AddPanelVM(SelectedSystem, panelTypes);
                 }
+                ((AddPanelVM)SelectedVM).ToAdd = (TECPanel)panel.DragDropCopy(scopeManager);
             }
         }
 
