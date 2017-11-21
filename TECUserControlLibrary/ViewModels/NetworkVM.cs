@@ -39,6 +39,8 @@ namespace TECUserControlLibrary.ViewModels
         private string _cannotConnectMessage;
         #endregion
 
+        private bool isTypical = false;
+
         //Constructor
         public NetworkVM(TECBid bid, ChangeWatcher cw)
         {
@@ -47,6 +49,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public NetworkVM(TECSystem system, TECCatalogs catalogs)
         {
+            isTypical = system.IsTypical;
             setupCommands();
             Refresh(system, catalogs);
         }
@@ -347,7 +350,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (e.Change == Change.Add)
             {
-                if (e.Sender is TECNetworkConnection netConnection)
+                if (e.Sender is TECNetworkConnection netConnection && netConnection.IsTypical == isTypical)
                 {
                     if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
                     {
@@ -359,7 +362,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (e.Change == Change.Remove)
             {
-                if (e.Sender is TECNetworkConnection netConnection)
+                if (e.Sender is TECNetworkConnection netConnection && netConnection.IsTypical == isTypical)
                 {
                     if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
                     {
@@ -369,7 +372,9 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (e.Change == Change.Edit)
             {
-                if (e.Sender is INetworkConnectable networkConnectable && e.PropertyName == "IsServer" && e.Value is bool isServer)
+                if (e.Sender is INetworkConnectable networkConnectable && 
+                    ((ITypicalable)networkConnectable)?.IsTypical == isTypical &&
+                    e.PropertyName == "IsServer" && e.Value is bool isServer)
                 {
                     updateIsConnected(networkConnectable, isServer);
                 }
@@ -492,7 +497,7 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             CannotConnectMessage = "";
-            if (dropInfo.Data is ConnectableItem connectable && dropInfo.TargetCollection == SelectedConnection.Children)
+            if (dropInfo.Data is ConnectableItem connectable && dropInfo.TargetCollection == SelectedConnection?.Children)
             {
                 if (SelectedConnection.CanAddINetworkConnectable(connectable.Item))
                 {
