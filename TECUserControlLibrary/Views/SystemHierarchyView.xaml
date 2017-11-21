@@ -309,7 +309,8 @@
                                               VerticalContentAlignment="Center"
                                               SelectedIndex="0"
                       SelectionChanged="componentComboBox_Selected"
-                      Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
+                      Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"
+                              IsEnabled="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM.CanLeave}"/>
                     <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  Name="componentGrid"
                                                       ContentTemplateSelector="{StaticResource ComponentSelector}"
                                                       Grid.Row="1"/>

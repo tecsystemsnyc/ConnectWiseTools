@@ -71,6 +71,12 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=networkView, Path=ViewModel}"/>
+                        <DataTemplate x:Key="cannotConnectAdorner">
+                            <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
+                        </DataTemplate>
+                    </Grid.Resources>
 
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                 Margin="5,0,5,0">
@@ -82,6 +88,7 @@
                         Source="{Binding NonParentables}"
                         SelectedItem="{Binding SelectedNonParentable}"
                         DropHandler="{Binding}"
+                        DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
                         IsDragSource="True"
                         Grid.Row="1"/>
                 </Grid>
@@ -326,18 +333,12 @@
                                             <RowDefinition/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <Grid.Resources>
-                                            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=networkView, Path=ViewModel}"/>
-                                            <DataTemplate x:Key="cannotConnectAdorner">
-                                                <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
-                                            </DataTemplate>
-                                        </Grid.Resources>
+                                        
                                         <Label Content="Add Connectables to Connection" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
                                         <listControls:NetworkConnectableListControl
                                             Source="{Binding ElementName=Connections, Path=SelectedItem.Children}"
                                             SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedChildConnectable}"
                                             DropHandler="{Binding ElementName=networkView, Path=ViewModel}"
-                                            DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
                                             Grid.Row="1" Grid.ColumnSpan="2"
                                             Margin="5"/>
                                         <Button Content="Remove" Grid.Row="2" Margin="5"  Background="{DynamicResource AlertActionBrush}"

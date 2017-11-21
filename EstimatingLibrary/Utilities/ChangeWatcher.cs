@@ -77,7 +77,7 @@ namespace EstimatingLibrary.Utilities
             registerChange(e);
             raiseChanged(e);
 
-            if (e.PropertyName != "TypicalInstanceDictionary")
+            if (e.PropertyName != "TypicalInstanceDictionary" && !(e.Sender is TECCatalogs))
             {
                 if (e.Value is ITypicalable valueTyp)
                 {

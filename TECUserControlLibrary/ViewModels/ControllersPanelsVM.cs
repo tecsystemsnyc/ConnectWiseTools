@@ -311,11 +311,13 @@ namespace TECUserControlLibrary.ViewModels
 
             system.TECChanged += args =>
             {
-                if (args.Change == Change.Add && args.Value is TECController controller)
+                if (args.Change == Change.Add && args.Value is TECController controller
+                && controller.IsTypical == system.IsTypical)
                 {
                     sourceControllers.Add(controller);
                 }
-                else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                else if (args.Change == Change.Remove && args.Value is TECController oldController
+                && oldController.IsTypical == system.IsTypical)
                 {
                     sourceControllers.Remove(oldController);
                 }
