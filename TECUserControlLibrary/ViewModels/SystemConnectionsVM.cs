@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -17,6 +18,7 @@ namespace TECUserControlLibrary.ViewModels
     {
         #region Fields
         private TECSystem system;
+        private ChangeWatcher watcher;
 
         private readonly ObservableCollection<TECElectricalMaterial> _conduitTypes;
 
@@ -143,6 +145,8 @@ namespace TECUserControlLibrary.ViewModels
         public SystemConnectionsVM(TECSystem system, ObservableCollection<TECElectricalMaterial> conduitTypes)
         {
             this.system = system;
+            watcher = new ChangeWatcher(system);
+            watcher.Changed += handleSystemChanged;
             this.ConfirmationObject = new MessageBoxService();
             ObservableCollection<TECElectricalMaterial> tempConduit = new ObservableCollection<TECElectricalMaterial>();
             foreach(TECElectricalMaterial type in conduitTypes)
@@ -165,6 +169,8 @@ namespace TECUserControlLibrary.ViewModels
             UpdateAllCommand = new RelayCommand(updateAllExecute);
             UpdateItemCommand = new RelayCommand<SubScopeConnectionItem>(updateItem);
         }
+
+        
 
         public event Action<UpdateConnectionVM> UpdateVM;
 
@@ -322,6 +328,21 @@ namespace TECUserControlLibrary.ViewModels
                 UpdateConnectionVM = null;
             }
             RaisePropertyChanged("CanLeave");
+        }
+
+        private void handleSystemChanged(TECChangedEventArgs obj)
+        {
+            if (obj.Value is TECController controller)
+            {
+                if (obj.Change == Change.Add)
+                {
+                    Controllers.Add(controller);
+                }
+                else if (obj.Change == Change.Remove)
+                {
+                    Controllers.Remove(controller);
+                }
+            }
         }
     }
 }
