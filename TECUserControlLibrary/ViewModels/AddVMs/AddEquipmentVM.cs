@@ -12,6 +12,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECEquipment toAdd;
         private int quantity;
         private Action<TECEquipment> add;
+        private bool isTypical = false;
 
         public TECEquipment ToAdd
         {
@@ -36,6 +37,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddEquipmentVM(TECSystem parentSystem)
         {
             parent = parentSystem;
+            isTypical = parent.IsTypical;
             toAdd = new TECEquipment(parentSystem.IsTypical);
             add = equip =>
             {
@@ -62,7 +64,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var equipment = new TECEquipment(ToAdd, ToAdd.IsTypical);
+                var equipment = new TECEquipment(ToAdd, isTypical);
                 add(equipment);
                 Added?.Invoke(equipment);
             }

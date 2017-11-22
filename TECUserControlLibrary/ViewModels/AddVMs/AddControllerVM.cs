@@ -16,6 +16,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECControllerType noneControllerType;
         private string _hintText;
         private TECControllerType _selectedType;
+        private bool isTypical = false; 
 
         public TECController ToAdd
         {
@@ -63,6 +64,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             setup(controllerTypes);
             parent = parentSystem;
+            isTypical = parent.IsTypical;
             add = controller =>
             {
                 parent.AddController(controller);
@@ -112,7 +114,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for(int x = 0; x < Quantity; x++)
             {
-                var controller = new TECController(ToAdd, ToAdd.IsTypical);
+                var controller = new TECController(ToAdd, isTypical);
                 add(controller);
                 Added?.Invoke(controller);
             }
