@@ -19,8 +19,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Fields
         private TECSystem system;
         private ChangeWatcher watcher;
-
-        private readonly ObservableCollection<TECElectricalMaterial> _conduitTypes;
+        private TECElectricalMaterial noneConduitType;
 
         private ObservableCollection<TECController> _controllers;
         private ObservableCollection<ISubScopeConnectionItem> _connectedSubScope;
@@ -35,7 +34,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Properties
         public IUserConfirmable ConfirmationObject { get; set; }
 
-        public ObservableCollection<TECElectricalMaterial> ConduitTypes { get { return _conduitTypes; } }
+        public ObservableCollection<TECElectricalMaterial> ConduitTypes { get; }
 
         public ObservableCollection<TECController> Controllers
         {
@@ -144,6 +143,12 @@ namespace TECUserControlLibrary.ViewModels
 
         public SystemConnectionsVM(TECSystem system, ObservableCollection<TECElectricalMaterial> conduitTypes)
         {
+            //Construct conduit types collection
+            noneConduitType = new TECElectricalMaterial();
+            noneConduitType.Name = "None";
+            this.ConduitTypes = new ObservableCollection<TECElectricalMaterial>(conduitTypes);
+            this.ConduitTypes.Insert(0, noneConduitType);
+
             this.system = system;
             watcher = new ChangeWatcher(system);
             watcher.InstanceConstituentChanged += handleSystemChanged;
@@ -153,7 +158,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 tempConduit.Add(type);
             }
-            _conduitTypes = conduitTypes;
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
             {
@@ -166,7 +170,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 Controllers.Add(controller);
             }
-            UpdateAllCommand = new RelayCommand(updateAllExecute);
+            UpdateAllCommand = new RelayCommand(updateAllExecute, updateAllCanExecute);
             UpdateItemCommand = new RelayCommand<ISubScopeConnectionItem>(updateItem, canUpdateItem);
         }
         
@@ -252,6 +256,17 @@ namespace TECUserControlLibrary.ViewModels
         private void updateAllExecute()
         {
             updateSubScope(ConnectedSubScope);
+        }
+        private bool updateAllCanExecute()
+        {
+            if (system is TECTypical typ)
+            {
+                return (typ.Instances.Count > 0);
+            }
+            else
+            {
+                return false;
+            }
         }
         private void updateWhatNeedsUpdate()
         {
@@ -364,7 +379,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addNewConnectedSubScope(TECSubScope ss, bool needsUpdate = false)
         {
-            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, needsUpdate);
+            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, needsUpdate);
             ssConnectItem.PropagationPropertyChanged += handlePropagationPropertyChanged;
             ConnectedSubScope.Add(ssConnectItem);
         }

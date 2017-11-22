@@ -12,6 +12,8 @@ namespace TECUserControlLibrary.Models
     {
         private bool _needsUpdate;
         private TECElectricalMaterial _selectedConduitType;
+        
+        private TECElectricalMaterial noneConduit;
 
         public TECSubScope SubScope { get; private set; }
         public bool NeedsUpdate
@@ -37,7 +39,7 @@ namespace TECUserControlLibrary.Models
 
         public event Action<ISubScopeConnectionItem> PropagationPropertyChanged;
 
-        public SubScopeConnectionItem(TECSubScope subScope, bool needsUpdate = false)
+        public SubScopeConnectionItem(TECSubScope subScope, TECElectricalMaterial noneConduit, bool needsUpdate = false)
         {
             SubScope = subScope;
             NeedsUpdate = needsUpdate;
@@ -45,21 +47,28 @@ namespace TECUserControlLibrary.Models
             {
                 subScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
+            this.noneConduit = noneConduit;
             ChangeConduitCommand = new RelayCommand(UpdateConduitExecute, CanUpdateConduit);
         }
 
         private bool CanUpdateConduit()
         {
-            if(SelectedConduitType == SubScope.Connection.ConduitType)
-            {
-                return false;
-            }
-            return true;
+            bool bothAreNone = (SelectedConduitType == noneConduit && SubScope.Connection.ConduitType == null);
+            bool areSame = bothAreNone || (SelectedConduitType == SubScope.Connection.ConduitType);
+
+            return !areSame;
         }
 
         private void UpdateConduitExecute()
         {
-            SubScope.Connection.ConduitType = SelectedConduitType;
+            if (SelectedConduitType == noneConduit)
+            {
+                SubScope.Connection.ConduitType = null;
+            }
+            else
+            {
+                SubScope.Connection.ConduitType = SelectedConduitType;
+            }
         }
 
         private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
