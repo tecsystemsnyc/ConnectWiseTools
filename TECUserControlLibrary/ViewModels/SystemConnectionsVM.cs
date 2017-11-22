@@ -146,7 +146,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.system = system;
             watcher = new ChangeWatcher(system);
-            watcher.Changed += (args) => handleSystemChanged(args.Change, (args.Value as TECObject));
             watcher.InstanceConstituentChanged += handleSystemChanged;
             this.ConfirmationObject = new MessageBoxService();
             ObservableCollection<TECElectricalMaterial> tempConduit = new ObservableCollection<TECElectricalMaterial>();
