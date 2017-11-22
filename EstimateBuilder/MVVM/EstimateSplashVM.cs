@@ -76,43 +76,62 @@ namespace EstimateBuilder.MVVM
             if (!File.Exists(BidPath))
             {
                 MessageBox.Show("Bid file no longer exists at that path.");
-            }else if (!File.Exists(TemplatesPath))
+            }
+            else if (TemplatesPath == "" || TemplatesPath == null)
+            {
+                MessageBoxResult result = MessageBox.Show("No templates have been selected.", "Continue?", MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        EditorStarted?.Invoke(BidPath, "");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (!File.Exists(TemplatesPath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
-            } else
+            }
+            else
             {
                 EditorStarted?.Invoke(BidPath, TemplatesPath);
             }
         }
         private bool openExistingCanExecute()
         {
-            return (BidPath != "" && TemplatesPath != ""
-                && BidPath != null && TemplatesPath != null);
+            return (BidPath != "" && BidPath != null);
         }
     
         private void createNewExecute()
         {
-            if (!File.Exists(TemplatesPath))
+           
+            if (TemplatesPath == "" || TemplatesPath == null)
+            {
+                MessageBoxResult result = MessageBox.Show("No templates have been selected.", "Continue?", MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        EditorStarted?.Invoke("", "");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (!File.Exists(TemplatesPath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
-            } else
+            }
+            else
             {
                 EditorStarted?.Invoke("", TemplatesPath);
             }
         }
         private bool createNewCanExecute()
         {
-            bool outBool = false;
-            if(TemplatesPath == "" || TemplatesPath == null)
-            {
-                HintText = "Select Templates file (.tdb) to get started.";
-            }
-            else
-            {
-                HintText = "";
-                outBool = true;
-            }
-            return outBool;
+            return true;
         }
     }
 }

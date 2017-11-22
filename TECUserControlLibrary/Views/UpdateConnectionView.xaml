@@ -47,7 +47,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="2"/>
+        <Border BorderBrush="DarkGray" BorderThickness="0,0,1,0" Grid.RowSpan="2"/>
 
         <Grid Grid.Column="1" Grid.RowSpan="2">
             <Grid.Resources>
@@ -140,7 +140,7 @@
             <!--Buttons-->
             <Button Content="Update" Command="{Binding UpdateCommand}" Grid.Column="1" Grid.Row="6" Margin="2"/>
             <Button Content="Done" Click="doneButton_Click"
-                    Grid.Column="5" Grid.Row="8" Margin="5"
+                    Grid.Column="2" Grid.Row="8" Margin="5"
                     Width="100" Height="50"/>
 
             <Border Grid.Row="1" Grid.ColumnSpan="3"/>

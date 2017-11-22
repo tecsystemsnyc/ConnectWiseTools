@@ -140,7 +140,7 @@ namespace TECUserControlLibrary.ViewModels
             //File menu items
             addMenuItem("New", busyText, parentItemName:"File");
             addMenuItem("Load", busyText, parentItemName: "File");
-            addMenuItem("Save", busyText, parentItemName: "File");
+            addMenuItem("Save", "Nothing to save", parentItemName: "File");
             addMenuItem("Save As", busyText, parentItemName: "File");
 
             //Edit menu items
