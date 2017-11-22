@@ -76,9 +76,6 @@ namespace EstimateBuilder.MVVM
             if (!File.Exists(BidPath))
             {
                 MessageBox.Show("Bid file no longer exists at that path.");
-            }else if (!File.Exists(TemplatesPath))
-            {
-                MessageBox.Show("Templates file no longer exist at that path.");
             }
             else if (TemplatesPath == "" || TemplatesPath == null)
             {
@@ -93,6 +90,10 @@ namespace EstimateBuilder.MVVM
                         break;
                 }
             }
+            else if (!File.Exists(TemplatesPath))
+            {
+                MessageBox.Show("Templates file no longer exist at that path.");
+            }
             else
             {
                 EditorStarted?.Invoke(BidPath, TemplatesPath);
@@ -105,11 +106,8 @@ namespace EstimateBuilder.MVVM
     
         private void createNewExecute()
         {
-            if (!File.Exists(TemplatesPath))
-            {
-                MessageBox.Show("Templates file no longer exist at that path.");
-            }
-            else if (TemplatesPath == "" || TemplatesPath == null)
+           
+            if (TemplatesPath == "" || TemplatesPath == null)
             {
                 MessageBoxResult result = MessageBox.Show("No templates have been selected.", "Continue?", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation);
@@ -121,6 +119,10 @@ namespace EstimateBuilder.MVVM
                     default:
                         break;
                 }
+            }
+            else if (!File.Exists(TemplatesPath))
+            {
+                MessageBox.Show("Templates file no longer exist at that path.");
             }
             else
             {
