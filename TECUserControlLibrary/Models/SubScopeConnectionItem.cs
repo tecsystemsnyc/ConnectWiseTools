@@ -21,7 +21,6 @@ namespace TECUserControlLibrary.Models
             {
                 _needsUpdate = value;
                 RaisePropertyChanged("NeedsUpdate");
-                NeedsUpdateChanged?.Invoke();
             }
         }
 
@@ -36,7 +35,7 @@ namespace TECUserControlLibrary.Models
         }
         public ICommand ChangeConduitCommand { get; private set; }
 
-        public event Action NeedsUpdateChanged;
+        public event Action<ISubScopeConnectionItem> PropagationPropertyChanged;
 
         public SubScopeConnectionItem(TECSubScope subScope, bool needsUpdate = false)
         {
@@ -68,11 +67,8 @@ namespace TECUserControlLibrary.Models
             List<string> properties = new List<string>() { "Length", "ConduitLength", "ConduitType" };
             if (properties.Contains(e.PropertyName))
             {
-                NeedsUpdate = true;
+                PropagationPropertyChanged?.Invoke(this);
             }
         }
-
-
-
     }
 }
