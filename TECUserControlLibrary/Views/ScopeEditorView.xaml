@@ -97,7 +97,8 @@
                                           DisplayMemberPath="Item1"
                                           SelectedValuePath="Item2"
                                           SelectedIndex="0"
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center"
+                                          IsEnabled="{Binding TypicalEditVM.ConnectionsVM.CanLeave}"/>
                                 <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceDescriptionSelector}"
                                       Grid.Column="1"/>
