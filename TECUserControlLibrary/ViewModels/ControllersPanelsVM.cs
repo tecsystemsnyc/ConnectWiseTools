@@ -215,7 +215,10 @@ namespace TECUserControlLibrary.ViewModels
             };
             addControllerMethod = bid.AddController;
             addPanelMethod = bid.Panels.Add;
-            deleteControllerMethod = bid.RemoveController;
+            deleteControllerMethod = controller => {
+                controller.RemoveAllConnections();
+                bid.RemoveController(controller);
+                };
             deletePanelMethod = panel => { bid.Panels.Remove(panel); };
             setup();
         }
@@ -229,7 +232,9 @@ namespace TECUserControlLibrary.ViewModels
             Templates = templates;
             addControllerMethod = templates.ControllerTemplates.Add;
             addPanelMethod = templates.PanelTemplates.Add;
-            deleteControllerMethod = controller => { templates.ControllerTemplates.Remove(controller); };
+            deleteControllerMethod = controller => {
+                controller.RemoveAllConnections();
+                templates.ControllerTemplates.Remove(controller); };
             deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };
             setup();
 
@@ -260,7 +265,12 @@ namespace TECUserControlLibrary.ViewModels
             };
             PanelsSource = system.Panels;
             SelectedSystem = system;
-            deleteControllerMethod = system.RemoveController;
+            deleteControllerMethod = controller =>
+            {
+                controller.RemoveAllConnections();
+                system.RemoveController(controller);
+            };
+
             deletePanelMethod = panel => { system.Panels.Remove(panel); };
             setup();
         }
