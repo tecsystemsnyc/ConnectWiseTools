@@ -8,6 +8,9 @@ namespace TECUserControlLibrary.Interfaces
         bool NeedsUpdate { get; set; }
         TECSubScope SubScope { get; }
 
-        event Action NeedsUpdateChanged;
+        /// <summary>
+        /// A property changed that may want to get propagated to instances.
+        /// </summary>
+        event Action<ISubScopeConnectionItem> PropagationPropertyChanged;
     }
 }

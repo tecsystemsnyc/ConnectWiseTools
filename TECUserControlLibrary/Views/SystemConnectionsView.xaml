@@ -80,7 +80,7 @@
                     Path=IsTypical, 
                     Converter={utilities:BooleanToVisibilityConverter}}"/>
                 <listControls:SubScopeConnectionListControl
-                    Source="{Binding SubScope}"
+                    Source="{Binding ConnectedSubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
                     UpdateCommand="{Binding UpdateItemCommand}"
                     IsDragSource="True"
