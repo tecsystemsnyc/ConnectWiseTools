@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -55,6 +56,9 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand UpdateCommand { get; private set; }
+        public ICommand DoneCommand { get; private set; }
+
+        public event Action UpdatesDone;
         #endregion
 
         public UpdateConnectionVM(IEnumerable<ISubScopeConnectionItem> subScope, TECTypical typical)
@@ -73,6 +77,7 @@ namespace TECUserControlLibrary.ViewModels
             _subScope = instances;
 
             UpdateCommand = new RelayCommand(updateExecute, canUpdate);
+            DoneCommand = new RelayCommand(doneExecute);
         }
 
         private void handleNewSelectedInstance(SubScopeUpdatedWrapper subScope)
@@ -200,6 +205,11 @@ namespace TECUserControlLibrary.ViewModels
         private bool canUpdate()
         {
             return instanceCanUpdate;
+        }
+
+        private void doneExecute()
+        {
+            UpdatesDone?.Invoke();
         }
     }
 

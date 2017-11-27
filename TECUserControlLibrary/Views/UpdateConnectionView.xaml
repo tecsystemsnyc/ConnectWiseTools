@@ -150,6 +150,7 @@
         </Grid>
         <Button Content="Done" Click="doneButton_Click"
                     Grid.Column="1" Grid.Row="2" Margin="2"
-                    Width="100" HorizontalAlignment="Right"/>
+                    Width="100" HorizontalAlignment="Right"
+                Command="{Binding DoneCommand}"/>
     </Grid>
 </UserControl>

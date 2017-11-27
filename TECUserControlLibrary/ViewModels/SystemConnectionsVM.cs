@@ -297,6 +297,7 @@ namespace TECUserControlLibrary.ViewModels
                     item.NeedsUpdate = false;
                 }
                 UpdateConnectionVM = new UpdateConnectionVM(subScope, typical);
+                UpdateConnectionVM.UpdatesDone += handleUpdatesDone;
             }
             else
             {
@@ -394,6 +395,11 @@ namespace TECUserControlLibrary.ViewModels
                     RaisePropertyChanged("CanLeave");
                 }
             }
+        }
+
+        private void handleUpdatesDone()
+        {
+            RaisePropertyChanged("CanLeave");
         }
     }
 }
