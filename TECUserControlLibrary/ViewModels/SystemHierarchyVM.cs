@@ -369,6 +369,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteControllerExecute(TECController obj)
         {
+            obj.RemoveAllConnections();
             SelectedSystem.RemoveController(obj);
         }
 
