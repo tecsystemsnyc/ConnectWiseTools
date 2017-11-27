@@ -14,6 +14,8 @@ namespace TECUserControlLibrary.ViewModels
     {
         private TECCatalogs _catalogs;
         private TECScopeManager scopeManager;
+        private bool _readOnly;
+        private TECObject _selected;
 
         public TECCatalogs Catalogs
         {
@@ -22,6 +24,25 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _catalogs = value;
                 RaisePropertyChanged("Catalogs");
+            }
+        }
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set
+            {
+                _readOnly = value;
+                RaisePropertyChanged("ReadOnly");
+            }
+
+        }
+        public TECObject Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
             }
         }
 
