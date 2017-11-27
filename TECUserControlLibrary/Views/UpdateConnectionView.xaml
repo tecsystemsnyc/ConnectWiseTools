@@ -18,9 +18,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Label FontSize="14" Content="Instances to Update"/>
-        <ListView Grid.Row="2" 
+        <ListView Grid.Row="1" Grid.RowSpan="2"
                   ItemsSource="{Binding SubScope}"
                   SelectedItem="{Binding SelectedInstance}">
             <ListView.ItemTemplate>
@@ -139,9 +140,7 @@
 
             <!--Buttons-->
             <Button Content="Update" Command="{Binding UpdateCommand}" Grid.Column="1" Grid.Row="6" Margin="2"/>
-            <Button Content="Done" Click="doneButton_Click"
-                    Grid.Column="2" Grid.Row="8" Margin="5"
-                    Width="100" Height="50"/>
+            
 
             <Border Grid.Row="1" Grid.ColumnSpan="3"/>
             <Border Grid.Row="2" Grid.ColumnSpan="3"/>
@@ -149,5 +148,8 @@
             <Border Grid.Row="4" Grid.ColumnSpan="3"/>
             <Border Grid.Row="5" Grid.ColumnSpan="3"/>
         </Grid>
+        <Button Content="Done" Click="doneButton_Click"
+                    Grid.Column="1" Grid.Row="2" Margin="2"
+                    Width="100" HorizontalAlignment="Right"/>
     </Grid>
 </UserControl>
