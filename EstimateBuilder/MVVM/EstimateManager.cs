@@ -105,24 +105,32 @@ namespace EstimateBuilder.MVVM
         {
             this.templatesFilePath = templatesFilePath;
             buildTitleString(bidFilePath, "Estimate Builder");
-            templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
-            templatesDatabaseManager.LoadComplete += scopeManager =>
+            if(templatesFilePath != "")
             {
-                templates = scopeManager as TECTemplates;
-                if(bidFilePath != "")
+                templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
+                templatesDatabaseManager.LoadComplete += assignData;
+                ViewEnabled = false;
+                templatesDatabaseManager.AsyncLoad();
+            } else
+            {
+                assignData(new TECTemplates());
+            }
+            
+
+            void assignData(TECTemplates loadedTemplates)
+            {
+                templates = loadedTemplates;
+                if (bidFilePath != "")
                 {
                     databaseManager = new DatabaseManager<TECBid>(bidFilePath);
                     databaseManager.LoadComplete += handleLoaded;
                     databaseManager.AsyncLoad();
-                } 
+                }
                 else
                 {
                     handleLoaded(getNewWorkingScope());
                 }
-                
-            };
-            ViewEnabled = false;
-            templatesDatabaseManager.AsyncLoad();
+            }
         }
 
         protected override void handleLoaded(TECBid loadedBid)
@@ -163,10 +171,10 @@ namespace EstimateBuilder.MVVM
         //Load Templates
         private void loadTemplatesExecute()
         {
-            ViewEnabled = false;
             string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
             if(loadFilePath != null)
             {
+                ViewEnabled = false;
                 StatusBarVM.CurrentStatusText = "Loading Templates...";
                 templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
                 templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
@@ -187,11 +195,11 @@ namespace EstimateBuilder.MVVM
         private void refreshTemplatesExecute()
         {
             string message = "Would you like to save your changes before refreshing?";
-            ViewEnabled = false;
-            checkForChanges(message, refreshTemplates);
+            checkForChanges(message, refreshTemplates, () => { ViewEnabled = true; });
 
             void refreshTemplates()
             {
+                ViewEnabled = false;
                 StatusBarVM.CurrentStatusText = "Loading...";
                 templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
                 templatesDatabaseManager.AsyncLoad();

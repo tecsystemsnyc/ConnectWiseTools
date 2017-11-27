@@ -10,6 +10,7 @@
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="materialView"
              d:DesignHeight="400" d:DesignWidth="600">
@@ -49,24 +50,30 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding DeviceName}"/>
-                            <TextBlock Text="List Price:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
+                            <TextBlock Text="Description:" Margin="5,0,0,0"
+                       VerticalAlignment="Center" Grid.Column="2"/>
                             <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding DeviceListPrice}"/>
+                      Text="{Binding DeviceDescription}"/>
+                            <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                            <TextBox  Grid.Column="5" Margin="2"
+                      Text="{Binding DeviceListPrice, StringFormat={}{0:C}}"/>
                         </Grid>
                         <Grid Grid.Row="1" >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="70"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
@@ -89,7 +96,7 @@
                             <TextBlock Text="Connection Types:" TextWrapping="Wrap"/>
                             <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
                                 <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
-                                                                        DropHandler="{Binding}"/>
+                                                                        DropHandler="{Binding ReferenceDropHandler}"/>
                             </Border>
                             
                         </Grid>
@@ -116,24 +123,30 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="70"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding ValveName}"/>
-                            <TextBlock Text="List Price:" Grid.Column="2" Margin="5,0,0,0"
+                            <TextBlock Text="Description:" Grid.Column="2" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ValveListPrice}"/>
-                            <TextBlock Text="Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center" Grid.Column="4"/>
+                      Text="{Binding ValveDescription}"/>
+                            <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="5" Margin="2"
+                      Text="{Binding ValveListPrice, StringFormat={}{0:C}}"/>
+                            <TextBlock Text="Labor:" Margin="5,0,0,0"
+                       VerticalAlignment="Center" Grid.Column="6"/>
+                            <TextBox  Grid.Column="7" Margin="2"
                       Text="{Binding ValveLabor}"/>
                         </Grid>
                         <Grid Grid.Row="1" >
@@ -189,7 +202,7 @@
                             <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ConnectionTypeCost}"/>
+                      Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
                         </Grid>
                         <Grid Grid.Row="1" >
                             <Grid.ColumnDefinitions>
@@ -237,7 +250,7 @@
                        VerticalAlignment="Center"
                        Grid.Column="2"/>
                             <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ConduitTypeCost}"/>
+                      Text="{Binding ConduitTypeCost, StringFormat={}{0:C}}"/>
                         </Grid>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -274,19 +287,25 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="70"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding ControllerTypeName}"/>
-                            <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
+                            <TextBlock Text="Description:" Margin="5,0,0,0"
+                       VerticalAlignment="Center" Grid.Column="2"/>
                             <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ControllerTypeCost}"/>
+                      Text="{Binding ControllerTypeDescription}"/>
+                            <TextBlock Text="List Price: " Grid.Column="4" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                            <TextBox  Grid.Column="5" Margin="2"
+                      Text="{Binding ControllerTypeCost, StringFormat={}{0:C}}"/>
 
                         </Grid>
                         <Grid Grid.Row="1">
@@ -320,6 +339,8 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="IO: "/>
                                 <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
@@ -327,9 +348,11 @@
                                       DisplayMemberPath="Item1"
                                       SelectedValuePath="Item2"
                                       Grid.Column="1"/>
-                                <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="2"/>
+                                <Label Content="Qty: " Grid.Column="2"/>
+                                <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3"/>
+                                <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="4"/>
                                 <controls:IOGridControl IOSource="{Binding ControllerTypeIO}"
-                                                    Grid.Row="1" Grid.ColumnSpan="3"/>
+                                                    Grid.Row="1" Grid.ColumnSpan="5"/>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.RowDefinitions>
@@ -337,9 +360,24 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Max IO Modules: "/>
-                                <controls:HardwareGridControl HardwareSource="{Binding ControllerTypeModules}"
-                                                          Grid.Row="1" 
-                                                              DropHandler="{Binding}"/>
+                                <DataGrid Grid.Row="1" 
+                                          ItemsSource="{Binding ControllerTypeModules}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          dd:DragDrop.DropHandler="{Binding ReferenceDropHandler}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Price, StringFormat= {} {0:C}}"
+                                                            Header="Price" Width="Auto" IsReadOnly="True" MinWidth="40"
+                                                            ElementStyle="{StaticResource RightCell}"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Cost, StringFormat= {} {0:C}}"
+                                                            Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
+                                                            ElementStyle="{StaticResource RightCell}"/>
+                                        <DataGridTextColumn Binding="{Binding Item.Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
+                                        <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" MinWidth="20"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
                             
                         </Grid>
@@ -366,19 +404,25 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="70"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding PanelTypeName}"/>
-                            <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
+                            <TextBlock Text="Description:" Grid.Column="2" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding PanelTypeCost}"/>
+                      Text="{Binding PanelTypeDescription}"/>
+                            <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+                            <TextBox  Grid.Column="5" Margin="2"
+                      Text="{Binding PanelTypeCost, StringFormat={}{0:C}}"/>
 
                         </Grid>
                         <Grid Grid.Row="1">
@@ -420,7 +464,7 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -449,7 +493,7 @@
                             <TextBlock Text="Cost:" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding AssociatedCostCost}"/>
+                      Text="{Binding AssociatedCostCost, StringFormat={}{0:C}}"/>
                             <TextBlock Text="Labor:" Grid.Column="2" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="3" Margin="2"
@@ -483,32 +527,32 @@
                         </Grid.Resources>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
                             <RowDefinition Height="120"/>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name:" />
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding IOModuleName}"/>
-                            <TextBlock Text="Cost:" Grid.Column="2" />
+                            <TextBlock Text="List Price:" Grid.Column="2" />
                             <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding IOModuleCost}"/>
+                      Text="{Binding IOModuleCost, StringFormat={}{0:C}}"/>
                             <TextBlock Text="Description:" Grid.Column="4" Margin="5,0,0,0"
                        VerticalAlignment="Center"/>
                             <TextBox  Grid.Column="5" Margin="2"
                       Text="{Binding IOModuleDescription}"/>
 
                         </Grid>
-                        <Grid Grid.Row="1">
+                        <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -530,13 +574,15 @@
                     Command="{Binding AddIOModuleCommand}"/>
                         </Grid>
 
-                        <Grid Grid.Row="2">
+                        <Grid Grid.Row="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
@@ -545,10 +591,13 @@
                                     SelectedValue="{Binding SelectedIO}"
                                     DisplayMemberPath="Item1"
                                     SelectedValuePath="Item2"
-                                    Grid.Column="1"/>
-                            <Button Content="Add" Command="{Binding AddIOToModuleCommand}" Grid.Column="2"/>
+                                    Grid.Column="1"
+                                      Margin="2"/>
+                            <Label Content="Qty: " Grid.Column="2" HorizontalAlignment="Right"/>
+                            <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3" Margin="2"/>
+                            <Button Content="Add IO" Command="{Binding AddIOToModuleCommand}" Grid.Column="4" Margin="2"/>
                             <controls:IOGridControl IOSource="{Binding ModuleIO}"
-                                                Grid.Row="1" Grid.ColumnSpan="3"/>
+                                                Grid.Row="1" Grid.ColumnSpan="5"/>
                         </Grid>
                         <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.IOModules}"
                                                     Selected="{Binding Selected}"
@@ -571,15 +620,15 @@
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0"/>
                             <TextBox Text="{Binding ManufacturerToAdd.Label}" Grid.Row="0" Grid.Column="1"/>
                             <TextBlock Text="Multiplier: " Grid.Row="0" Grid.Column="2"/>
-                            <TextBox Text="{Binding ManufacturerToAdd.Multiplier}" Grid.Row="0" Grid.Column="3"/>
+                            <TextBox Text="{Binding ManufacturerToAdd.Multiplier, StringFormat={}{0:F2}}" Grid.Row="0" Grid.Column="3"/>
                             <Button Content="Add" Command="{Binding AddManufacturerCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"/>
                         </Grid>
                         <controls:ManufacturersGridControl ManufacturersSource="{Binding Templates.Catalogs.Manufacturers}"
@@ -600,14 +649,13 @@
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="80"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Label: " Grid.Row="0" Grid.Column="0"/>
-                            <TextBox Text="{Binding TagToAdd.Label}" Grid.Row="0" Grid.Column="1"/>
-                            <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"/>
+                            <TextBox Text="{Binding TagToAdd.Label}" Grid.Row="0" Grid.Column="1" Margin="2"/>
+                            <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Margin="2"/>
                         </Grid>
                         <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Tags}"
                                                            Grid.Row="1"/>

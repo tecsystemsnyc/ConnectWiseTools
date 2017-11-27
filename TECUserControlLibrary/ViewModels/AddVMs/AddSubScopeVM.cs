@@ -12,6 +12,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECSubScope toAdd;
         private int quantity;
         private Action<TECSubScope> add;
+        private bool isTypical = false;
 
         public TECSubScope ToAdd
         {
@@ -37,6 +38,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             Quantity = 1;
             parent = parentEquipment;
+            isTypical = parent.IsTypical;
             toAdd = new TECSubScope(parentEquipment.IsTypical);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
 
@@ -65,7 +67,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var subScope = new TECSubScope(ToAdd, ToAdd.IsTypical);
+                var subScope = new TECSubScope(ToAdd, isTypical);
                 add(subScope);
                 Added?.Invoke(subScope);
             }

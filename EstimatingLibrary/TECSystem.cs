@@ -38,11 +38,13 @@ namespace EstimatingLibrary
 
         public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
-        public TECSystem(TECSystem source, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
+        public TECSystem(TECSystem source, bool isTypical, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null, 
             ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
         {
-            if (guidDictionary != null)
-            { guidDictionary[_guid] = source.Guid; }
+            if (guidDictionary == null)
+            { guidDictionary = new Dictionary<Guid, Guid>();  }
+
+            guidDictionary[_guid] = source.Guid;
             foreach (TECEquipment equipment in source.Equipment)
             {
                 var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference);
@@ -81,6 +83,7 @@ namespace EstimatingLibrary
                 _scopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
+            ModelLinkingHelper.LinkSystem(this, manager, guidDictionary);
         }
         #endregion
 
@@ -187,9 +190,7 @@ namespace EstimatingLibrary
 
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
-            Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            TECSystem outSystem = new TECSystem(this, this.IsTypical, guidDictionary);
-            ModelLinkingHelper.LinkSystem(outSystem, scopeManager, guidDictionary);
+            TECSystem outSystem = new TECSystem(this, this.IsTypical, scopeManager);
             return outSystem;
         }
 

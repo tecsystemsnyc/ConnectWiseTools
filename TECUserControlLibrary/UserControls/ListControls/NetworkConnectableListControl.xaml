@@ -8,7 +8,7 @@
                        xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
                        xmlns:dd="urn:gong-wpf-dragdrop"
                        xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
-             x:Name="parent"
+             x:Name="networkConnectableListControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -19,12 +19,14 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent}">
+    <Grid DataContext="{Binding ElementName=networkConnectableListControl}">
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
                   SelectionChanged="ListView_Selected"
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
-                  dd:DragDrop.DropHandler="{Binding DropHandler}">
+                  dd:DragDrop.IsDropTarget="True"
+                  dd:DragDrop.DropHandler="{Binding DropHandler}"
+                  dd:DragDrop.DragAdornerTemplate="{Binding DragAdornerTemplate}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ContentPresenter Content="{Binding}">

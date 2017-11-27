@@ -24,7 +24,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private TECPanelType tempPanelType;
         static private TECControllerType tempControllerType;
 
-        public static TECScopeManager Load(string path, bool versionUpdated = false)
+        public static (TECScopeManager scopeManager, bool needsSaveNew) Load(string path, bool versionUpdated = false)
         {
             justUpdated = versionUpdated;
             if (justUpdated)
@@ -36,18 +36,19 @@ namespace EstimatingUtilitiesLibrary.Database
             SQLiteDB.NonQueryCommand("BEGIN TRANSACTION");
 
             var tableNames = DatabaseHelper.TableNames(SQLiteDB);
+            bool needsUpdate;
             if (tableNames.Contains("BidInfo"))
             {
-                workingScopeManager = loadBid();
+                (workingScopeManager, needsUpdate) = loadBid();
             }
             else if (tableNames.Contains("TemplatesInfo"))
             {
-                workingScopeManager = loadTemplates();
+                (workingScopeManager, needsUpdate) = loadTemplates();
             }
             else
             {
                 MessageBox.Show("File is not a compatible database.");
-                return null;
+                return (null, false);
             }
 
             SQLiteDB.NonQueryCommand("END TRANSACTION");
@@ -55,14 +56,13 @@ namespace EstimatingUtilitiesLibrary.Database
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            return workingScopeManager;
+            return (workingScopeManager, needsUpdate);
         }
 
         #region Loading from DB Methods
-        static private TECBid loadBid()
+        static private (TECBid bid, bool needsUpdate) loadBid()
         {
             TECBid bid = GetBidInfo(SQLiteDB);
-            //updateCatalogs(bid, templates);
 
             getScopeManagerProperties(bid);
 
@@ -78,13 +78,11 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Panels = getOrphanPanels();
             var placeholderDict = getCharacteristicInstancesList();
 
-            ModelLinkingHelper.LinkBid(bid, placeholderDict);
-            //Breaks Visual Scope in a page
-            //populatePageVisualConnections(bid.Drawings, bid.Connections);
+            bool needsSave = ModelLinkingHelper.LinkBid(bid, placeholderDict);
 
-            return bid;
+            return (bid, needsSave);
         }
-        static private TECTemplates loadTemplates()
+        static private (TECTemplates templates, bool needsUpdate) loadTemplates()
         {
             TECTemplates templates = new TECTemplates();
             templates = GetTemplatesInfo(SQLiteDB);
@@ -96,8 +94,8 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.MiscCostTemplates = getAllMisc();
             templates.PanelTemplates = getOrphanPanels();
             templates.Parameters = getTemplatesParameters();
-            ModelLinkingHelper.LinkTemplates(templates);
-            return templates;
+            bool needsSave = ModelLinkingHelper.LinkTemplates(templates);
+            return (templates, needsSave);
         }
 
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
@@ -581,20 +579,32 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECIOModule> getIOModuleInController(Guid guid)
         {
             ObservableCollection<TECIOModule> outModules = new ObservableCollection<TECIOModule>();
-            DataTable dt = getChildIDs(new ControllerIOModuleTable(), guid);
-            foreach(DataRow row in dt.Rows)
+            string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
+                ControllerIOModuleTable.ModuleID.Name, ControllerIOModuleTable.TableName,
+                ControllerIOModuleTable.ControllerID.Name, guid, ControllerIOModuleTable.Quantity.Name);
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
+            foreach (DataRow row in dt.Rows)
             {
-                outModules.Add(getPlaceholderIOModuleFromRow(row));
+                var module = getPlaceholderIOModuleFromRow(row);
+                int quantity = row[ControllerIOModuleTable.Quantity.Name].ToString().ToInt(1);
+                for (int x = 0; x < quantity; x++)
+                { outModules.Add(module); }
             }
             return outModules;
         }
         static private ObservableCollection<TECIOModule> getIOModuleInControllerType(Guid guid)
         {
             ObservableCollection<TECIOModule> outModules = new ObservableCollection<TECIOModule>();
-            DataTable dt = getChildIDs(new ControllerTypeIOModuleTable(), guid);
+            string command = string.Format("select {0}, {4} from {1} where {2} = '{3}'",
+                ControllerTypeIOModuleTable.ModuleID.Name, ControllerTypeIOModuleTable.TableName,
+                ControllerTypeIOModuleTable.TypeID.Name, guid, ControllerTypeIOModuleTable.Quantity.Name);
+            DataTable dt = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in dt.Rows)
             {
-                outModules.Add(getPlaceholderIOModuleFromRow(row));
+                var module = getPlaceholderIOModuleFromRow(row);
+                int quantity = row[ControllerTypeIOModuleTable.Quantity.Name].ToString().ToInt(1);
+                for (int x = 0; x < quantity; x++)
+                { outModules.Add(module); }
             }
             return outModules;
         }

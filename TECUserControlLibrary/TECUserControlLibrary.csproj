@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
+    <Compile Include="Models\ControllerTypePropertiesItem.cs" />
     <Compile Include="Models\IOModulePropertiesItem.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
@@ -182,6 +183,9 @@
     <Compile Include="UserControls\PropertyControls\ControllerPropertiesControl.xaml.cs">
       <DependentUpon>ControllerPropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\ControllerTypePropertiesControl.xaml.cs">
+      <DependentUpon>ControllerTypePropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\CostPropertiesControl.xaml.cs">
       <DependentUpon>CostPropertiesControl.xaml</DependentUpon>
     </Compile>
@@ -197,6 +201,7 @@
     <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="Views\EquipmentHierarchyView.xaml.cs">
       <DependentUpon>EquipmentHierarchyView.xaml</DependentUpon>
@@ -539,6 +544,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\ControllerPropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\ControllerTypePropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

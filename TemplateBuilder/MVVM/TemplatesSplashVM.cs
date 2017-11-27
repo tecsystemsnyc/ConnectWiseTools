@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
+using System.IO;
+using System.Windows;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.ViewModels;
 
@@ -44,11 +46,19 @@ namespace TemplateBuilder.MVVM
 
         private void openExistingExecute()
         {
-            EditorStarted?.Invoke(TemplatesPath);
+            if (!File.Exists(TemplatesPath))
+            {
+                MessageBox.Show("Templates file no longer exist at that path.");
+            }
+            else
+            {
+                EditorStarted?.Invoke(TemplatesPath);
+            }
         }
         private bool openExistingCanExecute()
         {
-            return (TemplatesPath != "");
+            
+            return (TemplatesPath != "" && TemplatesPath != null);
         }
 
         private void createNewExecute()

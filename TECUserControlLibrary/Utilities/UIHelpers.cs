@@ -101,7 +101,6 @@ namespace TECUserControlLibrary.Utilities
                     else
                     {
                         ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-
                     }
                 }
             }
@@ -143,7 +142,7 @@ namespace TECUserControlLibrary.Utilities
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 TECSystem copiedSystem = (sourceItem).DragDropCopy(bid) as TECSystem;
-                sourceItem = new TECTypical(copiedSystem);
+                sourceItem = new TECTypical(copiedSystem, bid);
 
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
@@ -430,6 +429,15 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, IOType>("ModbusTCP", IOType.ModbusTCP)
         };
 
+        public static List<Tuple<string, ScopeTemplateIndex>> ScopeTemplateSelectorList = new List<Tuple<string, ScopeTemplateIndex>>
+        {
+            new Tuple<string, ScopeTemplateIndex>("Systems", ScopeTemplateIndex.System),
+            new Tuple<string, ScopeTemplateIndex>("Equipment", ScopeTemplateIndex.Equipment),
+            new Tuple<string, ScopeTemplateIndex>("Points", ScopeTemplateIndex.SubScope),
+            new Tuple<string, ScopeTemplateIndex>("Controllers and Panels", ScopeTemplateIndex.Controller),
+            new Tuple<string, ScopeTemplateIndex>("Miscellaneous", ScopeTemplateIndex.Misc)
+        };
+
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
        where T : DependencyObject
         {
@@ -472,10 +480,10 @@ namespace TECUserControlLibrary.Utilities
     public enum MaterialType { Device, ConnectionType, ConduitType, ControllerType,
         PanelType, AssociatedCost, IOModule, Valve, Manufacturer, Tag};
     public enum TypicalSystemIndex { Edit, Instances };
-    public enum SystemComponentIndex { Equipment, Controllers, Electrical, Misc, Proposal };
+    public enum SystemComponentIndex { Equipment, Controllers, Electrical, Network, Misc, Proposal };
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
-    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Panel, Misc }
+    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Misc }
     public enum AllSearchableObjects
     {
         System,

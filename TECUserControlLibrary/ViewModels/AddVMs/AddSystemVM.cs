@@ -52,13 +52,13 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 if (parent is TECBid bid)
                 {
-                    TECTypical typical = new TECTypical(ToAdd);
+                    TECTypical typical = new TECTypical(toAdd, bid);
                     bid.Systems.Add(typical);
                     Added?.Invoke(typical);
                 }
                 else if (parent is TECTemplates templates)
                 {
-                    var system = new TECSystem(ToAdd, ToAdd.IsTypical);
+                    var system = new TECSystem(ToAdd, ToAdd.IsTypical, templates);
                     templates.SystemTemplates.Add(system);
                     Added?.Invoke(system);
                 }

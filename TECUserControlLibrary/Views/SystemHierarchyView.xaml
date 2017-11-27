@@ -133,22 +133,13 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:ControllerListControl.Dropped">
+            
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped" SourceName="subScopeList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:PanelListControl.Dropped">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.Dropped" SourceName="pointList">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="listControls:SubScopeListControl.DoubleClicked">
+            <EventTrigger RoutedEvent="listControls:SubScopeListControl.DoubleClicked" SourceName="subScopeList">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>
@@ -271,7 +262,8 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
-                                    <local:ControllersPanelsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ControllersPanelsVM}" Grid.ColumnSpan="2"/>
+                                    <local:ControllersPanelsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ControllersPanelsVM}"
+                                                                 Grid.ColumnSpan="2"/>
                                     
                                 </Grid>
                             </DataTemplate>
@@ -280,6 +272,12 @@
                                     <local:SystemConnectionsView 
                                         ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"
                                         IsTypical="{Binding ElementName=systemHierarchyView, Path=IsTypical}"/>
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate x:Key="NetworkTemplate">
+                                <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
+                                    <local:NetworkView 
+                                        ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.NetworkVM}"/>
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="MiscTemplate">
@@ -297,6 +295,7 @@
                                                            EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                                            ControllerTemplate="{StaticResource ControllerTemplate}"
                                                            ConnectionTemplate="{StaticResource ElectricalTemplate}"
+                                                               NetworkTemplate="{StaticResource NetworkTemplate}"
                                                            MiscTemplate="{StaticResource MiscTemplate}"
                                                            ProposalTemplate="{StaticResource ProposalTemplate}"/>
                         </ResourceDictionary>
@@ -310,7 +309,8 @@
                                               VerticalContentAlignment="Center"
                                               SelectedIndex="0"
                       SelectionChanged="componentComboBox_Selected"
-                      Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"/>
+                      Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}"
+                              IsEnabled="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM.CanLeave}"/>
                     <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  Name="componentGrid"
                                                       ContentTemplateSelector="{StaticResource ComponentSelector}"
                                                       Grid.Row="1"/>

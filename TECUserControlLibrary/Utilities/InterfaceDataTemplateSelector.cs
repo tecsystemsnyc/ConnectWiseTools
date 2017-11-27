@@ -31,6 +31,7 @@ namespace TECUserControlLibrary.Utilities
     public class PanelSelector : InterfaceDataTemplateSelector<TECPanel> { }
     public class MiscSelector : InterfaceDataTemplateSelector<TECMisc> { }
     public class IOModuleSelector : InterfaceDataTemplateSelector<TECIOModule> { }
+    public class ControllerTypeSelector : InterfaceDataTemplateSelector<TECControllerType> { }
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }
@@ -42,7 +43,6 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate EquipmentTemplate { get; set; }
         public DataTemplate SubScopeTemplate { get; set; }
         public DataTemplate ControllerTemplate { get; set; }
-        public DataTemplate PanelTemplate { get; set; }
         public DataTemplate MiscTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -59,8 +59,6 @@ namespace TECUserControlLibrary.Utilities
                         return SubScopeTemplate;
                     case ScopeTemplateIndex.Controller:
                         return ControllerTemplate;
-                    case ScopeTemplateIndex.Panel:
-                        return PanelTemplate;
                     case ScopeTemplateIndex.Misc:
                         return MiscTemplate;
                     default:
@@ -80,6 +78,7 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate ControllerTemplate { get; set; }
         public DataTemplate MiscTemplate { get; set; }
         public DataTemplate ConnectionTemplate { get; set; }
+        public DataTemplate NetworkTemplate { get; set; }
 
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -98,6 +97,8 @@ namespace TECUserControlLibrary.Utilities
                         return ControllerTemplate;
                     case SystemComponentIndex.Electrical:
                         return ConnectionTemplate;
+                    case SystemComponentIndex.Network:
+                        return NetworkTemplate;
                     default:
                         return EquipmentTemplate;
                 }

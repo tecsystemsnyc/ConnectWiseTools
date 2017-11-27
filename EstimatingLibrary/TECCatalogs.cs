@@ -246,14 +246,17 @@ namespace EstimatingLibrary
 
         public void Unionize(TECCatalogs catalogToAdd)
         {
-            unionizeScope(this.Devices, catalogToAdd.Devices);
-            unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
             unionizeScope(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
             unionizeScope(this.ConduitTypes, catalogToAdd.ConduitTypes);
-            unionizeScope(this.PanelTypes, catalogToAdd.PanelTypes);
-            unionizeScope(this.IOModules, catalogToAdd.IOModules);
-            unionizeScope(this.Tags, catalogToAdd.Tags);
             unionizeScope(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
+            unionizeScope(this.PanelTypes, catalogToAdd.PanelTypes);
+            unionizeScope(this.ControllerTypes, catalogToAdd.ControllerTypes);
+            unionizeScope(this.IOModules, catalogToAdd.IOModules);
+            unionizeScope(this.Devices, catalogToAdd.Devices);
+            unionizeScope(this.Valves, catalogToAdd.Valves);
+            unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
+            unionizeScope(this.Tags, catalogToAdd.Tags);
+
 
         }
         private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)

@@ -193,15 +193,8 @@ namespace EstimatingLibrary
 
         public bool CanConnectSubScope(TECSubScope subScope)
         {
-            IOCollection ssIO = new IOCollection();
-            foreach (TECPoint point in subScope.Points)
-            {
-                for (int i = 0; i < point.Quantity; i++)
-                {
-                    ssIO.AddIO(point.Type);
-                }
-            }
-            return getAvailableIO().Contains(ssIO.ListIO());
+            return getAvailableIO().Contains(subScope.IO) 
+                || getPotentialIO().Contains(subScope.IO);
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
@@ -210,12 +203,61 @@ namespace EstimatingLibrary
                 bool connectionIsTypical = (this.IsTypical || subScope.IsTypical);
                 if (!subScope.IsNetwork)
                 {
-                    TECSubScopeConnection connection = new TECSubScopeConnection(connectionIsTypical);
-                    connection.ParentController = this;
-                    connection.SubScope = subScope;
-                    addChildConnection(connection);
-                    subScope.Connection = connection;
-                    return connection;
+                    if (getAvailableIO().Contains(subScope.IO))
+                    {
+                        return addConnection(subScope, connectionIsTypical);
+                    }
+                    else if(getPotentialIO().Contains(subScope.IO))
+                    {
+                        foreach(TECIO io in subScope.IO.ListIO())
+                        {
+                            for (int i = 0; i < io.Quantity; i++)
+                            {
+                                bool foundIO = false;
+                                if (!AvailableIO.Contains(io.Type))
+                                {
+                                    foreach (TECIOModule module in Type.IOModules)
+                                    {
+                                        if (this.IOModules.Count(item => { return item == module; }) <
+                                        Type.IOModules.Count(item => { return item == module; }))
+                                        {
+                                            if (new IOCollection(module.IO).Contains(io.Type))
+                                            {
+                                                this.IOModules.Add(module);
+                                                if (getAvailableIO().Contains(subScope.IO))
+                                                {
+                                                    return addConnection(subScope, connectionIsTypical);
+                                                }
+                                                foundIO = true;
+                                                break;
+                                                
+                                            }
+                                        }
+                                    }
+                                    if (foundIO)
+                                    {
+                                        break;
+                                    }
+                                }
+                                
+                            }
+                        }
+                        
+                        foreach (TECIOModule module in Type.IOModules)
+                        {
+                            if (this.IOModules.Count(item => { return item == module; }) <
+                                Type.IOModules.Count(item => { return item == module; }))
+                            {
+                                this.IOModules.Add(module);
+                            }
+                        }
+                        return addConnection(subScope, connectionIsTypical);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Attempted to connect subscope which could not be connected.");
+
+                    }
                 }
                 else
                 {
@@ -225,6 +267,16 @@ namespace EstimatingLibrary
             else
             {
                 throw new InvalidOperationException("Subscope incompatible.");
+            }
+
+            TECSubScopeConnection addConnection(TECSubScope toConnect, bool isTypical)
+            {
+                TECSubScopeConnection connection = new TECSubScopeConnection(isTypical);
+                connection.ParentController = this;
+                connection.SubScope = subScope;
+                addChildConnection(connection);
+                subScope.Connection = connection;
+                return connection;
             }
         }
         public void RemoveSubScope(TECSubScope subScope)
@@ -306,6 +358,25 @@ namespace EstimatingLibrary
                 }
             }
             return networkConnections;
+        }
+        #endregion
+
+        #region Module Methods
+        public bool CanAddModule(TECIOModule module)
+        {
+            return (this.Type.IOModules.Count(mod => (mod == module)) >
+                this.IOModules.Count(mod => (mod == module)));
+        }
+        public void AddModule(TECIOModule module)
+        {
+            if (CanAddModule(module))
+            {
+                IOModules.Add(module);
+            } 
+            else
+            {
+                throw new InvalidOperationException("Controller can't accept IOModule.");
+            }
         }
         #endregion
 
@@ -456,7 +527,9 @@ namespace EstimatingLibrary
         }
         private IOCollection getAvailableIO()
         {
-            return (getTotalIO() - getUsedIO());
+            IOCollection totalIO = getTotalIO();
+            IOCollection usedIO = getUsedIO();
+            return (totalIO - usedIO);
         }
         private IOCollection getAvailableNetworkIO()
         {
@@ -470,13 +543,31 @@ namespace EstimatingLibrary
             }
             return availableIO;
         }
+        private IOCollection getPotentialIO()
+        {
+            IOCollection potentialIO = new IOCollection();
+            foreach(TECIOModule module in Type.IOModules)
+            {
+                foreach(TECIO io in module.IO)
+                {
+                    potentialIO.AddIO(io);
+                }
+            }
+            foreach(TECIOModule module in IOModules)
+            {
+                foreach(TECIO io in module.IO)
+                {
+                    potentialIO.RemoveIO(io);
+                }
+            }
+            return potentialIO;
+        }
 
         public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
         {
             return new TECController(item as TECController, isTypical, guidDictionary);
         }
-
-
+        
         #endregion
     }
 }

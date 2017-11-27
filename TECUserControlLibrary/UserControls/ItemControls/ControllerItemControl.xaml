@@ -30,7 +30,7 @@
             </Grid.RowDefinitions>
             <Label FontSize="14" Content="{Binding Name}" FontWeight="DemiBold" Background="Transparent"/>
             <Label Content="{Binding Description}" Grid.Column="1"  Background="Transparent"/>
-            <TextBlock Text="{Binding Type.Name, StringFormat=Text: {0}}" Grid.Row="1" Background="Transparent"/>
+            <TextBlock Text="{Binding Type.Name, StringFormat=Type: {0}}" Grid.Row="1" Background="Transparent"/>
         </Grid>
     </Border>
 </local:BaseItemControl>

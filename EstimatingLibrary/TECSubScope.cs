@@ -100,7 +100,21 @@ namespace EstimatingLibrary
         {
             get { return getNetworkIO(); }
         }
-
+        public IOCollection IO
+        {
+            get
+            {
+                IOCollection ssIO = new IOCollection();
+                foreach (TECPoint point in Points)
+                {
+                    for (int i = 0; i < point.Quantity; i++)
+                    {
+                        ssIO.AddIO(point.Type);
+                    }
+                }
+                return ssIO;
+            }
+        }
         public bool IsNetwork
         {
             get { return isNetwork(); }

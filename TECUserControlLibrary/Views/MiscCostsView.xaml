@@ -107,9 +107,9 @@
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="60"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="60"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="45"/>
                 <ColumnDefinition/>

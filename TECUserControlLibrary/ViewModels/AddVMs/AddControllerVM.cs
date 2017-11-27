@@ -13,7 +13,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECController toAdd;
         private int quantity;
         private Action<TECController> add;
-        
+        private TECControllerType noneControllerType;
+        private string _hintText;
+        private TECControllerType _selectedType;
+        private bool isTypical = false; 
+
         public TECController ToAdd
         {
             get { return toAdd; }
@@ -32,47 +36,97 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Quantity");
             }
         }
+        public string HintText
+        {
+            get { return _hintText; }
+            set
+            {
+                _hintText = value;
+                RaisePropertyChanged("HintText");
+            }
+        }
+        public TECControllerType SelectedType
+        {
+            get { return _selectedType; }
+            set
+            {
+                _selectedType = value;
+                RaisePropertyChanged("SelectedType");
+            }
+        }
 
         public List<TECControllerType> ControllerTypes { get; private set; }
         public ICommand AddCommand { get; private set; }
+        public ICommand SetTypeCommand { get; private set; }
+        public PropertiesVM PropertiesVM { get; private set; }
 
         public AddControllerVM(TECSystem parentSystem, IEnumerable<TECControllerType> controllerTypes)
         {
-            Quantity = 1;
+            setup(controllerTypes);
             parent = parentSystem;
+            isTypical = parent.IsTypical;
             add = controller =>
             {
                 parent.AddController(controller);
             };
-            ControllerTypes = new List<TECControllerType>(controllerTypes);
-            toAdd = new TECController(ControllerTypes[0], parentSystem.IsTypical);
-            AddCommand = new RelayCommand(addExecute, addCanExecute);
+            
+            toAdd = new TECController(noneControllerType, parentSystem.IsTypical);
         }
 
         public AddControllerVM(Action<TECController> addMethod, IEnumerable<TECControllerType> controllerTypes)
         {
-            Quantity = 1;
+            setup(controllerTypes);
             add = addMethod;
+            toAdd = new TECController(noneControllerType, false);
+        }
+
+        private void setup(IEnumerable<TECControllerType> controllerTypes)
+        {
+            Quantity = 1;
+            noneControllerType = new TECControllerType(new TECManufacturer());
+            noneControllerType.Name = "Select Controller Type";
             ControllerTypes = new List<TECControllerType>(controllerTypes);
-            toAdd = new TECController(ControllerTypes[0], false);
+            ControllerTypes.Insert(0, noneControllerType);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
+            SetTypeCommand = new RelayCommand(setTypeExecute, canSetType);
+            SelectedType = noneControllerType;
+            //PropertiesVM = new PropertiesVM()
+
         }
         
+
         public Action<object> Added { get; }
 
         private bool addCanExecute()
         {
-            return true;
+            bool canAdd = toAdd.Type != noneControllerType;
+            if (canAdd)
+            {
+                HintText = null;
+                return true;
+            } else
+            {
+                HintText = "Select a Controller Type";
+                return false;
+            }
         }
         private void addExecute()
         {
             for(int x = 0; x < Quantity; x++)
             {
-                var controller = new TECController(ToAdd, ToAdd.IsTypical);
+                var controller = new TECController(ToAdd, isTypical);
                 add(controller);
                 Added?.Invoke(controller);
             }
         }
+        private void setTypeExecute()
+        {
+            toAdd.Type = SelectedType;
+        }
 
+        private bool canSetType()
+        {
+            return toAdd.Type != SelectedType && SelectedType != null;
+        }
     }
 }

@@ -297,7 +297,8 @@ namespace TECUserControlLibrary.Views
             if (selectedValue == SystemComponentIndex.Electrical ||
                 selectedValue == SystemComponentIndex.Misc ||
                 selectedValue == SystemComponentIndex.Proposal ||
-                selectedValue == SystemComponentIndex.Controllers)
+                selectedValue == SystemComponentIndex.Controllers ||
+                selectedValue == SystemComponentIndex.Network)
             {
                 Storyboard move = (Storyboard)FindResource("systemMove");
                 move.Begin();

@@ -9,6 +9,7 @@
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="networkView"
              d:DesignHeight="720" d:DesignWidth="1200">
@@ -55,6 +56,7 @@
                     <listControls:ConnectableItemListControl
                         Source="{Binding Parentables}"
                         SelectedItem="{Binding SelectedParentable}"
+                        DropHandler="{Binding}"
                         Grid.Row="1"/>
                 </Grid>
             </Border>
@@ -69,6 +71,12 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=networkView, Path=ViewModel}"/>
+                        <DataTemplate x:Key="cannotConnectAdorner">
+                            <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
+                        </DataTemplate>
+                    </Grid.Resources>
 
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                 Margin="5,0,5,0">
@@ -79,6 +87,9 @@
                     <listControls:ConnectableItemListControl
                         Source="{Binding NonParentables}"
                         SelectedItem="{Binding SelectedNonParentable}"
+                        DropHandler="{Binding}"
+                        DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
+                        IsDragSource="True"
                         Grid.Row="1"/>
                 </Grid>
             </Border>
@@ -322,12 +333,13 @@
                                             <RowDefinition/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
+                                        
                                         <Label Content="Add Connectables to Connection" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
                                         <listControls:NetworkConnectableListControl
-                                        Source="{Binding ElementName=Connections, Path=SelectedItem.Children}"
-                                        SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedChildConnectable}"
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="2"
+                                            Source="{Binding ElementName=Connections, Path=SelectedItem.Children}"
+                                            SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedChildConnectable}"
+                                            DropHandler="{Binding ElementName=networkView, Path=ViewModel}"
+                                            Grid.Row="1" Grid.ColumnSpan="2"
                                             Margin="5"/>
                                         <Button Content="Remove" Grid.Row="2" Margin="5"  Background="{DynamicResource AlertActionBrush}"
                                                 Command="{Binding ElementName=networkView, Path=ViewModel.RemoveConnectableCommand}"/>

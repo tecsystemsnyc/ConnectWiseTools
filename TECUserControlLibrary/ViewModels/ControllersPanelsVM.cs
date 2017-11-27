@@ -202,9 +202,23 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
             PanelsSource = bid.Panels;
             Bid = bid;
+            Bid.TECChanged += args =>
+            {
+                if (args.Change == Change.Add && args.Value is TECController controller)
+                {
+                    sourceControllers.Add(controller);
+                }
+                else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             addControllerMethod = bid.AddController;
             addPanelMethod = bid.Panels.Add;
-            deleteControllerMethod = bid.RemoveController;
+            deleteControllerMethod = controller => {
+                controller.RemoveAllConnections();
+                bid.RemoveController(controller);
+                };
             deletePanelMethod = panel => { bid.Panels.Remove(panel); };
             setup();
         }
@@ -218,7 +232,9 @@ namespace TECUserControlLibrary.ViewModels
             Templates = templates;
             addControllerMethod = templates.ControllerTemplates.Add;
             addPanelMethod = templates.PanelTemplates.Add;
-            deleteControllerMethod = controller => { templates.ControllerTemplates.Remove(controller); };
+            deleteControllerMethod = controller => {
+                controller.RemoveAllConnections();
+                templates.ControllerTemplates.Remove(controller); };
             deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };
             setup();
 
@@ -236,9 +252,25 @@ namespace TECUserControlLibrary.ViewModels
             PanelSelectionReadOnly = !canSelectPanel;
             PanelSelectionVisibility = Visibility.Visible;
             sourceControllers = new ObservableCollection<TECController>(system.Controllers);
+            system.TECChanged += args =>
+            {
+                if (args.Change == Change.Add && args.Value is TECController controller)
+                {
+                    sourceControllers.Add(controller);
+                }
+                else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             PanelsSource = system.Panels;
             SelectedSystem = system;
-            deleteControllerMethod = system.RemoveController;
+            deleteControllerMethod = controller =>
+            {
+                controller.RemoveAllConnections();
+                system.RemoveController(controller);
+            };
+
             deletePanelMethod = panel => { system.Panels.Remove(panel); };
             setup();
         }
@@ -250,6 +282,16 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
             PanelsSource = bid.Panels;
             Bid = bid;
+            Bid.TECChanged += args =>
+            {
+                if(args.Change == Change.Add && args.Value is TECController controller)
+                {
+                    sourceControllers.Add(controller);
+                } else if (args.Change == Change.Remove && args.Value is TECController oldController)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             setup();
         }
         public void Refresh(TECTemplates templates)
@@ -276,6 +318,20 @@ namespace TECUserControlLibrary.ViewModels
             sourceControllers = new ObservableCollection<TECController>(system.Controllers);
             PanelsSource = system.Panels;
             SelectedSystem = system;
+
+            system.TECChanged += args =>
+            {
+                if (args.Change == Change.Add && args.Value is TECController controller
+                && controller.IsTypical == system.IsTypical)
+                {
+                    sourceControllers.Add(controller);
+                }
+                else if (args.Change == Change.Remove && args.Value is TECController oldController
+                && oldController.IsTypical == system.IsTypical)
+                {
+                    sourceControllers.Remove(oldController);
+                }
+            };
             setup();
         }
 
@@ -458,13 +514,33 @@ namespace TECUserControlLibrary.ViewModels
             {
                 scopeManager = Bid;
             }
-            if (dropInfo.Data is TECController)
+            if (dropInfo.Data is TECController controller)
             {
-                UIHelpers.ControllerInPanelDrop(dropInfo, sourceControllers.Add, scopeManager, isGlobal);
+                var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+                if (addControllerMethod != null)
+                {
+                    SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes);
+                }
+                else
+                {
+                    SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes);
+                }
+                TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
+                ((AddControllerVM)SelectedVM).ToAdd = dropped;
+                ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
             }
-            else
+            else if (dropInfo.Data is TECPanel panel)
             {
-                UIHelpers.StandardDrop(dropInfo, scopeManager);
+                var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
+                if (addPanelMethod != null)
+                {
+                    SelectedVM = new AddPanelVM(addPanelMethod, panelTypes);
+                }
+                else
+                {
+                    SelectedVM = new AddPanelVM(SelectedSystem, panelTypes);
+                }
+                ((AddPanelVM)SelectedVM).ToAdd = (TECPanel)panel.DragDropCopy(scopeManager);
             }
         }
 

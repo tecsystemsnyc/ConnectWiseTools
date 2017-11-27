@@ -78,7 +78,7 @@ namespace EstimatingLibrary
             _cv = 0;
             _actuator = actuator;
         }
-        public TECValve(TECValve valveSource) : this(Guid.NewGuid(), valveSource.Manufacturer, valveSource.Actuator)
+        public TECValve(TECValve valveSource) : this(valveSource.Manufacturer, valveSource.Actuator)
         {
             this.copyPropertiesFromHardware(valveSource);
 

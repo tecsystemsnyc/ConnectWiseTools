@@ -21,6 +21,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Controller: "/>
@@ -28,6 +29,11 @@
             <Label Content="Quantity: " Grid.Row="1"/>
             <TextBox Text="{Binding ElementName=addControllerView, Path=ViewModel.Quantity}" Grid.Row="1" Grid.Column="1"
                      Margin="2"/>
+            <Button Content="Set Type: " Grid.Row="2" Command="{Binding ElementName=addControllerView, Path=ViewModel.SetTypeCommand}"/>
+            <ComboBox ItemsSource="{Binding ElementName=addControllerView, Path=ViewModel.ControllerTypes}"
+                      SelectedItem="{Binding ElementName=addControllerView, Path=ViewModel.SelectedType}"
+                      DisplayMemberPath="Name" 
+                      Grid.Row="2" Grid.Column="1"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -42,7 +48,8 @@
             <Label Content="Review Properties" Grid.ColumnSpan="2"/>
             <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2"/>
             <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"/>
-            <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="2"/>
+            <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="2"
+                    ToolTip="{Binding HintText}"/>
             <Button Content="Add" x:Name="doneButton" Click="doneButton_Click" Grid.Row="2"
                     Command="{Binding AddCommand}" Grid.Column="1"/>
         </Grid>

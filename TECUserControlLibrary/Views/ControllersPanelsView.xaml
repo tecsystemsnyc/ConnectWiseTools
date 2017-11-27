@@ -47,6 +47,16 @@
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:ControllerInPanelListControl.Dropped">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:PanelListControl.Dropped">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
         </Grid.Triggers>
         <Grid Background="{StaticResource SectionBackgroundBrush}" DataContext="{Binding ElementName=controllersPanelsView}">
             <Grid.ColumnDefinitions>
@@ -69,6 +79,7 @@
                                                            SelectedItem="{Binding ViewModel.SelectedControllerInPanel}"
                                                           DeleteCommand="{Binding ViewModel.DeleteControllerCommand}"
                                                            Grid.Row="1"
+                                                           DropHandler="{Binding ViewModel}"
                                                        Margin="5,0,5,0"/>
                 <Button HorizontalAlignment="Right" Content="Add" Style="{StaticResource AddButtonStyle}"
                         Command="{Binding ViewModel.AddControllerCommand}" Grid.Row="2" Width="50"/>

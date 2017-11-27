@@ -1,7 +1,7 @@
 pointLaborData = read.csv("PointLaborData.csv")
 
 #Remove Outliers
-#pointLaborData <- pointLaborData[-c(1,2,3,4,5,6,7,9,11,14,16,17,18,20,30,31,37,40),]
+pointLaborData <- pointLaborData[-c(1,2,3,4,5,6,7,9,11,14,16,17,18,20,30,31,37,40),]
 
 #Prepare Data
 pointLaborData <- pointLaborData[which(pointLaborData$En_hours > 0),]
@@ -12,11 +12,11 @@ pointLaborData <- pointLaborData[which(pointLaborData$Cm_hours > 0),]
 pointLaborData$Total_Points <- pointLaborData$IO_Points + pointLaborData$Comm_Points
 
 #Create Models
-engModel <- lm(En_hours ~ Total_Points, data = pointLaborData)
-pmModel <- lm(Pm_hours ~ Total_Points, data = pointLaborData)
-sfModel <- lm(Sf_hours ~ Total_Points, data = pointLaborData)
-grModel <- lm(Gr_hours ~ Total_Points, data = pointLaborData)
-cmModel <- lm(Cm_hours ~ Total_Points, data = pointLaborData)
+engModel <- lm(En_hours ~ 0 + Total_Points, data = pointLaborData)
+pmModel <- lm(Pm_hours ~ 0 + Total_Points, data = pointLaborData)
+sfModel <- lm(Sf_hours ~ 0 + Total_Points, data = pointLaborData)
+grModel <- lm(Gr_hours ~ 0 + Total_Points, data = pointLaborData)
+cmModel <- lm(Cm_hours ~ 0 + Total_Points, data = pointLaborData)
 
 #Display Models
 summary(engModel)

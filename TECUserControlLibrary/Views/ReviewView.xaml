@@ -50,9 +50,9 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="150"/>
@@ -61,16 +61,27 @@
 
             <Label Content="Combined Review" Grid.Row="0" FontWeight="Bold"/>
 
-            <Label Content="Bid Name:" Grid.Row="1"/>
-            <Label Content="Bid Name:" Grid.Row="1"/>
-            <TextBox Text="{Binding Bid.Name}"
+            <Grid Grid.ColumnSpan="2"  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Bid Name:"/>
+                <TextBox Text="{Binding Bid.Name}"
                  Margin="2" Grid.Column="1" Grid.Row="1"/>
-
-            <Label Content="Bid Number:" Grid.Row="2"/>
-            <TextBox Text="{Binding Bid.BidNumber}"
-                 Grid.Row="2"
+            </Grid>
+            <Grid Grid.ColumnSpan="2"  Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Bid Number:"/>
+                <TextBox Text="{Binding Bid.BidNumber}"
                  Grid.Column="1"
                  Margin="2"/>
+            </Grid>
+
+            
 
             <Label Content="Estimator:" Grid.Row="1" 
                Grid.Column="2" />
@@ -100,7 +111,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="TEC Cost" FontWeight="Bold"/>
                 <Label Content="Material Cost:" Grid.Row="1" />
@@ -194,7 +205,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Profit:"/>
-                    <TextBox Text="{Binding Bid.Parameters.Profit, StringFormat={}{0}%, Converter={utilities:PercentageToNumberConverter}}"
+                    <TextBox Text="{Binding Bid.Parameters.Profit, StringFormat={}{0:F2}%, Converter={utilities:PercentageToNumberConverter}}"
                              Grid.Column="1" Margin="2"
                              HorizontalContentAlignment="Right"/>
                 </Grid>
@@ -212,10 +223,6 @@
                TextAlignment="Right"/>
             </Grid>
             
-
-            
-            
-
             <Grid  Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -246,17 +253,6 @@
                          HorizontalContentAlignment="Right"
                          Grid.Column="3" Margin="2"/>
             </Grid>
-            <!--<Grid  Grid.Column="5" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="Wrap-Up:" />
-            <CheckBox IsChecked="{Binding Bid.Parameters.RequiresWrapUp}"
-                                    HorizontalAlignment="Right" VerticalAlignment="Center"
-                 Grid.Column="1" Margin="0,0,5,0"/>
-        </Grid>-->
-
 
             <!--SubContractor-->
             <Border BorderBrush="Gray" BorderThickness="1,0,0,0"  Grid.Row="4" Grid.RowSpan="8" Grid.Column="2" Grid.ColumnSpan="2"
@@ -274,7 +270,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Subcontractor Cost" FontWeight="Bold"/>
 

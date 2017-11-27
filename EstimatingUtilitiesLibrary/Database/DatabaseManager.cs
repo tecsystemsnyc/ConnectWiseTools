@@ -4,7 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -29,7 +32,11 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 return catchOnRelease("Save delta failed. Exception: ", () =>
                 {
-                    DatabaseUpdater.Update(path, updates);
+                    bool success = DatabaseUpdater.Update(path, updates);
+                    if (!success)
+                    {
+                        MessageBox.Show("Not all items saved properly, check logs for more details.");
+                    }
                 });
             }
             else
@@ -75,7 +82,11 @@ namespace EstimatingUtilitiesLibrary.Database
                     throw new Exception("Generator can only reate bid or template DBs");
                 }
                 List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
-                DatabaseUpdater.Update(path, newStack);
+                bool success =DatabaseUpdater.Update(path, newStack);
+                if (!success)
+                {
+                    MessageBox.Show("Not all items saved properly, check logs for more details.");
+                }
                 return true;
             }
             else
@@ -102,15 +113,48 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public T Load()
         {
+            string appFolder = "EstimateBuilder";
+            if(Path.GetExtension(path) == ".tdb")
+            {
+                appFolder = "TemplateBuilder";
+            }
+            if(!File.Exists(String.Format("{0}\\{1}\\{2}",
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                appFolder,
+                "backups"))){
+                Directory.CreateDirectory(String.Format("{0}\\{1}\\{2}",
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                appFolder,
+                "backups"));
+            }
+
+            string backupPath = String.Format("{0}\\{1}\\{2}\\{3} {4}{5}",
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                appFolder,
+                "backups",
+                Path.GetFileNameWithoutExtension(path),
+                String.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now),
+                Path.GetExtension(path));
+            File.Copy(path, backupPath);
             DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
+
+            bool needsSave;
+            TECScopeManager scopeManager;
             if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
             {
-                return DatabaseLoader.Load(path, true) as T;
+                (scopeManager, needsSave) = DatabaseLoader.Load(path, true);
             }
             else
             {
-                return DatabaseLoader.Load(path) as T;
+                (scopeManager, needsSave) = DatabaseLoader.Load(path);
             }
+
+            if (needsSave)
+            {
+                New(scopeManager);
+            }
+
+            return scopeManager as T;
         }
         public void AsyncLoad()
         {

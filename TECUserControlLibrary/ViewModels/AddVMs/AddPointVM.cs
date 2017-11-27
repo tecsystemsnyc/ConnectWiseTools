@@ -10,6 +10,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
         private TECSubScope parent;
         private TECPoint toAdd;
+        private bool isTypical;
 
         public TECPoint ToAdd
         {
@@ -25,6 +26,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddPointVM(TECSubScope parentSubScope)
         {
             parent = parentSubScope;
+            isTypical = parentSubScope.IsTypical;
             toAdd = new TECPoint(parentSubScope.IsTypical);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
@@ -37,8 +39,9 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private void addExecute()
         {
-            parent.Points.Add(ToAdd);
-            Added?.Invoke(ToAdd);
+            var newPoint = new TECPoint(ToAdd, isTypical);
+            parent.Points.Add(newPoint);
+            Added?.Invoke(newPoint);
         }
 
     }

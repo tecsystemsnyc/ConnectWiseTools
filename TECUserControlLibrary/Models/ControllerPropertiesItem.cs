@@ -46,7 +46,6 @@ namespace TECUserControlLibrary.Models
             }
         }
         
-
         public RelayCommand<TECIOModule> AddModuleCommand { get; private set; }
         public RelayCommand<TECIOModule> RemoveModuleCommand { get; private set; }
 
@@ -82,8 +81,25 @@ namespace TECUserControlLibrary.Models
 
         private bool canRemoveModule(TECIOModule arg)
         {
-            bool hasModule = Controller.IOModules.Contains(arg);
-            return hasModule;
+            if(arg == null)
+            {
+                return false;
+            }
+            else
+            {
+                bool hasModule = Controller.IOModules.Contains(arg);
+                bool canSpare = true;
+                foreach (TECIO io in arg.IO)
+                {
+                    if (!Controller.AvailableIO.Contains(io))
+                    {
+                        canSpare = false;
+                        break;
+                    }
+                }
+                return hasModule && canSpare;
+            }
+            
         }
 
         private void populateIO()

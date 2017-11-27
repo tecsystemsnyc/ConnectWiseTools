@@ -3,14 +3,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EstimatingLibrary.Utilities
 {
     public static class ModelLinkingHelper
     {
         #region Public Methods
-        public static void LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> guidDictionary)
+        public static bool LinkBid(TECBid bid, Dictionary<Guid, List<Guid>> guidDictionary)
         {
+            bool needsSave = false;
+
             ObservableCollection<TECController> allControllers = new ObservableCollection<TECController>();
             ObservableCollection<TECSubScope> allSubScope = new ObservableCollection<TECSubScope>();
 
@@ -70,14 +74,27 @@ namespace EstimatingLibrary.Utilities
             linkNetworkConnections(allControllers, allChildren);
             linkSubScopeConnections(allControllers, allSubScope);
             linkPanelsToControllers(bid.Panels, bid.Controllers);
+
+            foreach(TECController controller in allControllers)
+            {
+                bool controllerNeedsSave = addRequiredIOModules(controller);
+                if (controllerNeedsSave)
+                {
+                    needsSave = true;
+                }
+            }
+
             foreach(TECTypical system in bid.Systems)
             {
                 system.RefreshRegistration();
             }
+            return needsSave;
         }
 
-        public static void LinkTemplates(TECTemplates templates)
+        public static bool LinkTemplates(TECTemplates templates)
         {
+            bool needsSave = false;
+
             linkCatalogs(templates.Catalogs);
 
             foreach (TECSystem sys in templates.SystemTemplates)
@@ -112,6 +129,8 @@ namespace EstimatingLibrary.Utilities
             {
                 linkPanelToCatalogs(panel, templates.Catalogs);
             }
+
+            return needsSave;
         }
 
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
@@ -834,6 +853,63 @@ namespace EstimatingLibrary.Utilities
             scope.Tags = linkedTags;
         }
         #endregion
+
+        private static bool addRequiredIOModules(TECController controller)
+        {
+            //The IO needed by the points connected to the controller
+            IOCollection necessaryIO = new IOCollection();
+            bool needsSave = false;
+
+            foreach (TECSubScopeConnection ssConnect in 
+                controller.ChildrenConnections.Where(con => con is TECSubScopeConnection))
+            {
+                foreach (TECIO io in ssConnect.SubScope.IO.ListIO())
+                {
+                    for(int i = 0; i < io.Quantity; i++)
+                    {
+                        //The point IO that exists on our controller at the moment.
+                        IOCollection totalPointIO = getPointIO(controller);
+                        necessaryIO.AddIO(io.Type);
+                        //Check if our io that exists satisfies the IO that we need.
+                        if (!totalPointIO.Contains(necessaryIO))
+                        {
+                            needsSave = true;
+                            bool moduleFound = false;
+                            //If it doesn't, we need to add an IO module that will satisfy it.
+                            foreach (TECIOModule module in controller.Type.IOModules)
+                            {
+                                //We only need to check for the type of the last IO that we added.
+                                if (module.IOCollection().Contains(io.Type) && controller.CanAddModule(module))
+                                {
+                                    controller.AddModule(module);
+                                    moduleFound = true;
+                                    break;
+                                }
+                            }
+                            if (!moduleFound)
+                            {
+                                controller.RemoveAllConnections();
+                                MessageBox.Show(string.Format(
+                                    "The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
+                                    controller.Name));
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return needsSave;
+
+            IOCollection getPointIO(TECController con)
+            {
+                IOCollection pointIOCollection = new IOCollection();
+                foreach (TECIO pointIO in controller.TotalIO.ListIO().Where(io => TECIO.PointIO.Contains(io.Type)))
+                {
+                    pointIOCollection.AddIO(pointIO);
+                }
+                return pointIOCollection;
+            }
+        }
         #endregion
     }
 }

@@ -13,6 +13,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECPanel toAdd;
         private int quantity;
         private Action<TECPanel> add;
+        private bool isTypical = false;
 
         public TECPanel ToAdd
         {
@@ -39,6 +40,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             Quantity = 1;
             parent = parentSystem;
+            isTypical = parent.IsTypical;
             add = panel =>
             {
                 parent.Panels.Add(panel);
@@ -67,7 +69,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var panel = new TECPanel(ToAdd, ToAdd.IsTypical);
+                var panel = new TECPanel(ToAdd, isTypical);
                 add(panel);
                 Added?.Invoke(panel);
             }
