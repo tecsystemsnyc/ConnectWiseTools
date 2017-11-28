@@ -43,10 +43,24 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _selected = value;
+                setReadOnly(value);
                 RaisePropertyChanged("Selected");
             }
         }
-        
+
+        private void setReadOnly(TECObject value)
+        {
+            ReadOnly = false;
+            if(scopeManager is TECBid)
+            {
+                if(value is TECHardware)
+                {
+                    ReadOnly = true;
+                }
+            }
+            
+        }
+
         public string TestString
         {
             get { return "test"; }

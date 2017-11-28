@@ -12,6 +12,11 @@
              mc:Ignorable="d" 
              x:Name="propertiesView"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="local:PropertiesView">
+            <Setter Property="Selected" Value="{Binding ElementName=propertiesView, Path=ViewModel.Selected}"/>
+        </Style>
+    </UserControl.Resources>
     <ScrollViewer DataContext="{Binding ElementName=propertiesView, Path=Selected}"
                   Background="{DynamicResource SectionBackgroundBrush}">
         <ScrollViewer.Resources>
@@ -24,7 +29,8 @@
                 </Style>
                 <DataTemplate x:Key="scope">
                     <pControls:ScopePropertiesControl Selected="{Binding}"
-                                                  DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
+                                                      DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"
+                                                      ReadOnly="{Binding ElementName=propertiesView, Path=ViewModel.ReadOnly}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="cost">
                     <pControls:CostPropertiesControl Selected="{Binding}"/>
