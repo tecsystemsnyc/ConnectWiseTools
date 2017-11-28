@@ -106,11 +106,11 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ID = new TableField("ID", "TEXT", ParameterType.GetProperty("Guid"));
         public static TableField Label = new TableField("Label", "TEXT", ParameterType.GetProperty("Label"), defaultValue: "Parameters");
 
-        public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"));
-        public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"));
-        public static TableField Profit = new TableField("Profit", "REAL", ParameterType.GetProperty("Profit"));
-        public static TableField SubcontractorMarkup = new TableField("SubcontractorMarkup", "REAL", ParameterType.GetProperty("SubcontractorMarkup"));
-        public static TableField SubcontractorEscalation = new TableField("SubcontractorEscalation", "REAL", ParameterType.GetProperty("SubcontractorEscalation"));
+        public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"), defaultValue: "0.0");
+        public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"), defaultValue: "10.0");
+        public static TableField Profit = new TableField("Profit", "REAL", ParameterType.GetProperty("Profit"), defaultValue: "20.0");
+        public static TableField SubcontractorMarkup = new TableField("SubcontractorMarkup", "REAL", ParameterType.GetProperty("SubcontractorMarkup"), defaultValue: "10.0");
+        public static TableField SubcontractorEscalation = new TableField("SubcontractorEscalation", "REAL", ParameterType.GetProperty("SubcontractorEscalation"), defaultValue: "0.0");
         public static TableField Warranty = new TableField("Warranty", "REAL", ParameterType.GetProperty("Warranty"), defaultValue: "3.0");
         public static TableField Shipping = new TableField("Shipping", "REAL", ParameterType.GetProperty("Shipping"), defaultValue: "3.0");
         public static TableField Tax = new TableField("Tax", "REAL", ParameterType.GetProperty("Tax"), defaultValue: "8.75");
@@ -118,43 +118,43 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SubcontractorShipping = new TableField("SubcontractorShipping", "REAL", ParameterType.GetProperty("SubcontractorShipping"), defaultValue: "3.0");
         public static TableField BondRate = new TableField("BondRate", "REAL", ParameterType.GetProperty("BondRate"), defaultValue: "1.5");
 
-        public static TableField IsTaxExempt = new TableField("IsTaxExempt", "INTEGER", ParameterType.GetProperty("IsTaxExempt"));
-        public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.GetProperty("RequiresBond"));
-        public static TableField RequiresWrapUp = new TableField("RequiresWrapUp", "INTEGER", ParameterType.GetProperty("RequiresWrapUp"));
+        public static TableField IsTaxExempt = new TableField("IsTaxExempt", "INTEGER", ParameterType.GetProperty("IsTaxExempt"), defaultValue: "0");
+        public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.GetProperty("RequiresBond"), defaultValue: "0");
+        public static TableField RequiresWrapUp = new TableField("RequiresWrapUp", "INTEGER", ParameterType.GetProperty("RequiresWrapUp"), defaultValue: "0");
 
         #region Labor
         public static TableField DesiredConfidence = new TableField("DesiredConfidence", "TEXT", ParameterType.GetProperty("DesiredConfidence"), defaultValue: "NinetyFive");
 
         public static TableField PMCoefStdError = new TableField("PMCoefStdError", "REAL", ParameterType.GetProperty("PMCoefStdError"), defaultValue: "1.0");
-        public static TableField PMCoef = new TableField("PMCoef", "REAL", ParameterType.GetProperty("PMCoef"));
-        public static TableField PMRate = new TableField("PMRate", "REAL", ParameterType.GetProperty("PMRate"));
+        public static TableField PMCoef = new TableField("PMCoef", "REAL", ParameterType.GetProperty("PMCoef"), defaultValue: "0.0");
+        public static TableField PMRate = new TableField("PMRate", "REAL", ParameterType.GetProperty("PMRate"), defaultValue: "0.0");
 
         public static TableField ENGCoefStdError = new TableField("ENGCoefStdError", "REAL", ParameterType.GetProperty("ENGCoefStdError"), defaultValue: "1.0");
-        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", ParameterType.GetProperty("ENGCoef"));
-        public static TableField ENGRate = new TableField("ENGRate", "REAL", ParameterType.GetProperty("ENGRate"));
+        public static TableField ENGCoef = new TableField("ENGCoef", "REAL", ParameterType.GetProperty("ENGCoef"), defaultValue: "0.0");
+        public static TableField ENGRate = new TableField("ENGRate", "REAL", ParameterType.GetProperty("ENGRate"), defaultValue: "0.0");
 
         public static TableField CommCoefStdError = new TableField("CommCoefStdError", "REAL", ParameterType.GetProperty("CommCoefStdError"), defaultValue: "1.0");
-        public static TableField CommCoef = new TableField("CommCoef", "REAL", ParameterType.GetProperty("CommCoef"));
-        public static TableField CommRate = new TableField("CommRate", "REAL", ParameterType.GetProperty("CommRate"));
+        public static TableField CommCoef = new TableField("CommCoef", "REAL", ParameterType.GetProperty("CommCoef"), defaultValue: "0.0");
+        public static TableField CommRate = new TableField("CommRate", "REAL", ParameterType.GetProperty("CommRate"), defaultValue: "0.0");
 
         public static TableField SoftCoefStdError = new TableField("SoftCoefStdError", "REAL", ParameterType.GetProperty("SoftCoefStdError"), defaultValue: "1.0");
-        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", ParameterType.GetProperty("SoftCoef"));
-        public static TableField SoftRate = new TableField("SoftRate", "REAL", ParameterType.GetProperty("SoftRate"));
+        public static TableField SoftCoef = new TableField("SoftCoef", "REAL", ParameterType.GetProperty("SoftCoef"), defaultValue: "0.0");
+        public static TableField SoftRate = new TableField("SoftRate", "REAL", ParameterType.GetProperty("SoftRate"), defaultValue: "0.0");
 
         public static TableField GraphCoefStdError = new TableField("GraphCoefStdError", "REAL", ParameterType.GetProperty("GraphCoefStdError"), defaultValue: "1.0");
-        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", ParameterType.GetProperty("GraphCoef"));
-        public static TableField GraphRate = new TableField("GraphRate", "REAL", ParameterType.GetProperty("GraphRate"));
+        public static TableField GraphCoef = new TableField("GraphCoef", "REAL", ParameterType.GetProperty("GraphCoef"), defaultValue: "0.0");
+        public static TableField GraphRate = new TableField("GraphRate", "REAL", ParameterType.GetProperty("GraphRate"), defaultValue: "0.0");
         #endregion
 
         #region SubContractor
-        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", ParameterType.GetProperty("ElectricalRate"));
-        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", ParameterType.GetProperty("ElectricalSuperRate"));
-        public static TableField ElectricalNonUnionRate = new TableField("ElectricalNonUnionRate", "REAL", ParameterType.GetProperty("ElectricalNonUnionRate"));
-        public static TableField ElectricalSuperNonUnionRate = new TableField("ElectricalSuperNonUnionRate", "REAL", ParameterType.GetProperty("ElectricalSuperNonUnionRate"));
-        public static TableField ElectricalSuperRatio = new TableField("ElectricalSuperRatio", "REAL", ParameterType.GetProperty("ElectricalSuperRatio"));
+        public static TableField ElectricalRate = new TableField("ElectricalRate", "REAL", ParameterType.GetProperty("ElectricalRate"), defaultValue: "0.0");
+        public static TableField ElectricalSuperRate = new TableField("ElectricalSuperRate", "REAL", ParameterType.GetProperty("ElectricalSuperRate"), defaultValue: "0.0");
+        public static TableField ElectricalNonUnionRate = new TableField("ElectricalNonUnionRate", "REAL", ParameterType.GetProperty("ElectricalNonUnionRate"), defaultValue: "0.0");
+        public static TableField ElectricalSuperNonUnionRate = new TableField("ElectricalSuperNonUnionRate", "REAL", ParameterType.GetProperty("ElectricalSuperNonUnionRate"), defaultValue: "0.0");
+        public static TableField ElectricalSuperRatio = new TableField("ElectricalSuperRatio", "REAL", ParameterType.GetProperty("ElectricalSuperRatio"), defaultValue: "1.0");
 
-        public static TableField ElectricalIsOnOvertime = new TableField("ElectricalIsOnOvertime", "INTEGER", ParameterType.GetProperty("ElectricalIsOnOvertime"));
-        public static TableField ElectricalIsUnion = new TableField("ElectricalIsUnion", "INTEGER", ParameterType.GetProperty("ElectricalIsUnion"));
+        public static TableField ElectricalIsOnOvertime = new TableField("ElectricalIsOnOvertime", "INTEGER", ParameterType.GetProperty("ElectricalIsOnOvertime"), defaultValue: "0");
+        public static TableField ElectricalIsUnion = new TableField("ElectricalIsUnion", "INTEGER", ParameterType.GetProperty("ElectricalIsUnion"), defaultValue: "1");
         #endregion
 
         private List<TableField> primaryKeys = new List<TableField>()
