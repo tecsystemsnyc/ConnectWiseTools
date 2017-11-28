@@ -22,6 +22,7 @@ namespace TemplateBuilder.MVVM
         public EquipmentHierarchyVM EquipmentHierarchyVM { get; }
         public SubScopeHierarchyVM SubScopeHierarchyVM { get; }
         public PropertiesVM PropertiesVM { get; }
+        public MiscCostsVM MiscVM { get; }
 
         public TECTemplates Templates
         {
@@ -60,6 +61,9 @@ namespace TemplateBuilder.MVVM
             EquipmentHierarchyVM.Selected += obj => { Selected = obj; };
             SubScopeHierarchyVM = new SubScopeHierarchyVM(templates);
             SubScopeHierarchyVM.Selected += obj => { Selected = obj; };
+
+            MiscVM = new MiscCostsVM(templates);
+            MiscVM.SelectionChanged += obj => { Selected = obj; };
             
             PropertiesVM = new PropertiesVM(templates.Catalogs, templates);
 
@@ -79,6 +83,7 @@ namespace TemplateBuilder.MVVM
             EquipmentHierarchyVM.Refresh(templates);
             SubScopeHierarchyVM.Refresh(templates);
             PropertiesVM.Refresh(templates.Catalogs, templates);
+            MiscVM.Refresh(templates);
         }
 
         public void DragOver(IDropInfo dropInfo)

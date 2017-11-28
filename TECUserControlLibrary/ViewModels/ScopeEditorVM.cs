@@ -30,7 +30,9 @@ namespace TECUserControlLibrary.ViewModels
                 Selected = item;
             };
             InstanceEditVM = new TypicalHierarchyVM(bid);
-            InstanceEditVM.Selected += item => { Selected = item; };
+            InstanceEditVM.Selected += item => {
+                Selected = item;
+            };
             NetworkVM = new NetworkVM(bid, watcher);
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             DGTabIndex = GridIndex.Systems;

@@ -61,7 +61,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="{Binding SystemTotal, StringFormat=Total: {0:C}, Mode=OneWay}" Grid.Row="2"
+            <TextBlock Text="{Binding SystemTotal, StringFormat=System Total: {0:C}, Mode=OneWay}" Grid.Row="2"
                        HorizontalAlignment="Right" FontWeight="Bold"/>
         </Grid>
         <!--Riser List-->
@@ -91,7 +91,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="{Binding RiserTotal, StringFormat=Total: {0:C}}" Grid.Row="2"
+            <TextBlock Text="{Binding RiserTotal, StringFormat= Riser Total: {0:C}}" Grid.Row="2"
                        HorizontalAlignment="Right"
                        FontWeight="Bold"/>
         </Grid>
@@ -123,7 +123,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="{Binding MiscTotal, StringFormat=Total: {0:C}}" Grid.Row="2"
+            <TextBlock Text="{Binding MiscTotal, StringFormat=Misc. Total: {0:C}}" Grid.Row="2"
                        HorizontalAlignment="Right"
                        FontWeight="Bold"/>
         </Grid>

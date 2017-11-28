@@ -830,8 +830,10 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
+            throw new NotImplementedException("T drop<T> is alway object for some reason.");
             object drop<T>(T item)
             {
+                Console.WriteLine(typeof(T));
                 if (item is ICatalog<T> catalogItem)
                 {
                     return catalogItem.CatalogCopy();

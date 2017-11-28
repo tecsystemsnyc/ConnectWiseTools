@@ -26,16 +26,20 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public ICommand AddInstanceCommand { get; private set; }
-
-
+        
         public TypicalHierarchyVM(TECBid bid)
         {
             this.bid = bid;
             SystemHierarchyVM = new SystemHierarchyVM(bid);
-            SystemHierarchyVM.Selected += this.Selected;
+            SystemHierarchyVM.Selected += systemHierarchyVM_Selected;
             TypicalSystems = new ReadOnlyObservableCollection<TECTypical>(bid.Systems);
             AddInstanceCommand = new RelayCommand(addInstanceExecute, canAddInstance);
 
+        }
+
+        private void systemHierarchyVM_Selected(TECObject obj)
+        {
+            Selected?.Invoke(obj);
         }
 
         public event Action<TECObject> Selected;
