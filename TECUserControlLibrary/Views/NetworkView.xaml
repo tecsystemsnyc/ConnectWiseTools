@@ -57,6 +57,7 @@
                         Source="{Binding Parentables}"
                         SelectedItem="{Binding SelectedParentable}"
                         DropHandler="{Binding}"
+                        IsDragSource="True"
                         Grid.Row="1"/>
                 </Grid>
             </Border>
