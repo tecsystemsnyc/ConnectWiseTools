@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
@@ -14,6 +15,8 @@ namespace TECUserControlLibrary.ViewModels
     {
         private TECCatalogs _catalogs;
         private TECScopeManager scopeManager;
+        private bool _readOnly;
+        private TECObject _selected;
 
         public TECCatalogs Catalogs
         {
@@ -24,11 +27,34 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Catalogs");
             }
         }
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set
+            {
+                _readOnly = value;
+                RaisePropertyChanged("ReadOnly");
+            }
+
+        }
+        public TECObject Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
+            }
+        }
+        
+        public string TestString
+        {
+            get { return "test"; }
+        }
 
         public PropertiesVM(TECCatalogs catalogs, TECScopeManager scopeManager)
         {
-            Catalogs = catalogs;
-            this.scopeManager = scopeManager;
+            Refresh(catalogs, scopeManager);
         }
 
         public void Refresh(TECCatalogs catalogs, TECScopeManager scopeManager)
@@ -46,5 +72,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             UIHelpers.StandardDrop(dropInfo, scopeManager);
         }
+        
     }
 }

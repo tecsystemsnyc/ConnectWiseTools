@@ -21,6 +21,19 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
               typeof(ScopePropertiesControl));
 
 
+
+        public bool ReadOnly
+        {
+            get { return (bool)GetValue(ReadOnlyProperty); }
+            set { SetValue(ReadOnlyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ReadOnly.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReadOnlyProperty =
+            DependencyProperty.Register("ReadOnly", typeof(bool), typeof(ScopePropertiesControl), new PropertyMetadata(false));
+
+
+
         public IDropTarget DropHandler
         {
             get { return (IDropTarget)GetValue(DropHandlerProperty); }

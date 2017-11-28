@@ -11,6 +11,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="300">
 
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

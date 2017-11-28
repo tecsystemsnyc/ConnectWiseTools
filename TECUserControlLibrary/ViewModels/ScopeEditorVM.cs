@@ -30,9 +30,12 @@ namespace TECUserControlLibrary.ViewModels
                 Selected = item;
             };
             InstanceEditVM = new TypicalHierarchyVM(bid);
-            InstanceEditVM.Selected += item => { Selected = item; };
+            InstanceEditVM.Selected += item => {
+                Selected = item;
+            };
             NetworkVM = new NetworkVM(bid, watcher);
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
+            WorkBoxVM = new WorkBoxVM(bid);
             DGTabIndex = GridIndex.Systems;
             TemplatesVisibility = Visibility.Visible;
         }
@@ -68,6 +71,7 @@ namespace TECUserControlLibrary.ViewModels
         public TypicalHierarchyVM InstanceEditVM { get; set; }
         public NetworkVM NetworkVM { get; }
         public PropertiesVM PropertiesVM { get; }
+        public WorkBoxVM WorkBoxVM { get; }
         #endregion
 
         #region Interface Properties
@@ -127,6 +131,7 @@ namespace TECUserControlLibrary.ViewModels
             TypicalEditVM.Refresh(Bid);
             NetworkVM.Refresh(bid, watcher);
             PropertiesVM.Refresh(bid.Catalogs, bid);
+            WorkBoxVM.Refresh(bid);
         }
 
         #region Setup Extensions

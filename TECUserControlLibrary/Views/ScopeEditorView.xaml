@@ -68,9 +68,22 @@
                 <RowDefinition Height="*" MinHeight="40"/>
             </Grid.RowDefinitions>
 
-            <views:ScopeCollectionsTabView Grid.Column="0" Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           ViewModel="{Binding ScopeCollection}"/>
+            <Grid Grid.Column="0" Grid.Row="0"
+                  Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <views:ScopeCollectionsTabView ViewModel="{Binding ScopeCollection}" Grid.Row="0"/>
+
+                <Expander Header="Work Box" Grid.Row="1" >
+                    <views:WorkBoxView ViewModel="{Binding WorkBoxVM}"
+                                   Height="200"/>
+                </Expander>
+                
+
+            </Grid>
+            
             <TabControl Grid.Row="0"
                     Grid.RowSpan="2"
                     Grid.Column="1"
@@ -97,7 +110,8 @@
                                           DisplayMemberPath="Item1"
                                           SelectedValuePath="Item2"
                                           SelectedIndex="0"
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center"
+                                          IsEnabled="{Binding TypicalEditVM.ConnectionsVM.CanLeave}"/>
                                 <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceDescriptionSelector}"
                                       Grid.Column="1"/>

@@ -7,13 +7,14 @@ namespace EstimatingUtilitiesLibraryTests
     {
         public static TECBid LoadTestBid(string path)
         {
-            TECBid testBid = DatabaseLoader.Load(path) as TECBid;
-            return testBid;
+            (TECScopeManager testBid, bool needsSaveNew) = DatabaseLoader.Load(path);
+            return testBid as TECBid;
         }
 
         public static TECTemplates LoadTestTemplates(string path)
         {
-            return DatabaseLoader.Load(path) as TECTemplates;
+            (TECScopeManager testTemplates, bool needsSaveNew) = DatabaseLoader.Load(path);
+            return testTemplates as TECTemplates;
         }
     }
 }

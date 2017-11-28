@@ -19,6 +19,7 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -32,11 +33,14 @@
             <Label Content="Name:"/>
             <TextBox Text="{Binding Name}" Grid.Column="1" 
                      VerticalAlignment="Top"
-                     Margin="5"/>
+                     Margin="5"
+                     IsReadOnly="{Binding ElementName=scopePropertiesControl, Path=ReadOnly}"/>
             <Label Content="Description:" Grid.Row="1"/>
             <TextBox Text="{Binding Description}" Grid.Column="1" Grid.Row="1" 
-                                 VerticalAlignment="Top"
-                             Margin="5"/>
+                     VerticalAlignment="Top"
+                     Margin="5"
+                     IsReadOnly="{Binding ElementName=scopePropertiesControl, Path=ReadOnly}"/>
+
         </Grid>
         <Expander Header="Tags"  Grid.ColumnSpan="2" Grid.Row="1">
             <Border BorderBrush="DarkGray" BorderThickness="1" MinHeight="100">
@@ -45,10 +49,10 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <local:LabeledGridControl LabelName="Label"
-                                           LabeledSource="{Binding Tags}"
-                                          DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
-                                          Grid.Row="1"
-                                          ReadOnly="True">
+                                              LabeledSource="{Binding Tags}"
+                                              DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
+                                              Grid.Row="1"
+                                              ReadOnly="True">
                         <i:Interaction.Behaviors>
                             <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>
@@ -63,9 +67,9 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
-                                                  DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
-                                                  ReadOnly="True"
-                                          Grid.Row="1">
+                                                      DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
+                                                      ReadOnly="True"
+                                                      Grid.Row="1">
                         <i:Interaction.Behaviors>
                             <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>

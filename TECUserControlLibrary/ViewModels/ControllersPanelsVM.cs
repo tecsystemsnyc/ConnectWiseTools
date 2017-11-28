@@ -26,17 +26,14 @@ namespace TECUserControlLibrary.ViewModels
         private Action<TECController> deleteControllerMethod;
         private Action<TECPanel> deletePanelMethod;
 
-        private bool isGlobal;
         private TECBid _bid;
         public TECBid Bid
         {
             get { return _bid; }
             private set
             {
-                unregisterChanges();
                 _bid = value;
                 RaisePropertyChanged("Bid");
-                registerChanges();
             }
         }
         private TECTemplates _templates;
@@ -45,10 +42,8 @@ namespace TECUserControlLibrary.ViewModels
             get { return _templates; }
             private set
             {
-                unregisterChanges();
                 _templates = value;
                 RaisePropertyChanged("Templates");
-                registerChanges();
             }
         }
         private TECSystem _selectedSystem;
@@ -57,10 +52,8 @@ namespace TECUserControlLibrary.ViewModels
             get { return _selectedSystem; }
             private set
             {
-                unregisterChanges();
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
-                registerChanges();
             }
         }
 
@@ -143,18 +136,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
-        private VisibilityModel _dataGridVisibilty;
-        public VisibilityModel DataGridVisibilty
-        {
-            get { return _dataGridVisibilty; }
-            set
-            {
-                _dataGridVisibilty = value;
-                RaisePropertyChanged("DataGridVisibilty");
-            }
-        }
-
+        
         private TECPanel _nonePanel;
         public TECPanel NonePanel
         {
@@ -194,52 +176,34 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Constructor
-        public ControllersPanelsVM(TECBid bid)
+        private ControllersPanelsVM(TECObject parent, IEnumerable<TECController> controllers, ObservableCollection<TECPanel> panels)
         {
-            isGlobal = true;
-            PanelSelectionReadOnly = false;
-            PanelSelectionVisibility = Visibility.Visible;
-            sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
-            PanelsSource = bid.Panels;
-            Bid = bid;
-            Bid.TECChanged += args =>
-            {
-                if (args.Change == Change.Add && args.Value is TECController controller)
-                {
-                    sourceControllers.Add(controller);
-                }
-                else if (args.Change == Change.Remove && args.Value is TECController oldController)
-                {
-                    sourceControllers.Remove(oldController);
-                }
-            };
-            addControllerMethod = bid.AddController;
-            addPanelMethod = bid.Panels.Add;
-            deleteControllerMethod = controller => {
-                controller.RemoveAllConnections();
-                bid.RemoveController(controller);
-                };
-            deletePanelMethod = panel => { bid.Panels.Remove(panel); };
-            setup();
-        }
-        public ControllersPanelsVM(TECTemplates templates)
-        {
-            isGlobal = true;
-            PanelSelectionReadOnly = false;
-            PanelSelectionVisibility = Visibility.Collapsed;
-            sourceControllers = templates.ControllerTemplates;
-            PanelsSource = templates.PanelTemplates;
-            Templates = templates;
-            addControllerMethod = templates.ControllerTemplates.Add;
-            addPanelMethod = templates.PanelTemplates.Add;
-            deleteControllerMethod = controller => {
-                controller.RemoveAllConnections();
-                templates.ControllerTemplates.Remove(controller); };
-            deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };
-            setup();
+            
+            AddControllerCommand = new RelayCommand(addControllerExecute, canAddController);
+            AddPanelCommand = new RelayCommand(addPanelExecute, canAddPanel);
+            DeleteControllerCommand = new RelayCommand<TECController>(deleteControllerExecute);
+            DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelExecute);
+
+            Refresh(parent, controllers, panels);
 
         }
-        public ControllersPanelsVM(TECSystem system, TECScopeManager manager, bool canSelectPanel = true)
+        public ControllersPanelsVM(TECBid bid) : this(bid, bid.Controllers, bid.Panels)
+        {
+            PanelSelectionReadOnly = false;
+            PanelSelectionVisibility = Visibility.Visible;
+            Bid = bid;
+            
+        }
+        public ControllersPanelsVM(TECTemplates templates) 
+            : this(templates, templates.ControllerTemplates, templates.PanelTemplates)
+        {
+            PanelSelectionReadOnly = false;
+            PanelSelectionVisibility = Visibility.Collapsed;
+            Templates = templates;
+            
+        }
+        public ControllersPanelsVM(TECSystem system, TECScopeManager manager,
+            bool canSelectPanel = true) : this(system, system.Controllers, system.Panels)
         {
             if(manager is TECBid)
             {
@@ -248,62 +212,44 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _templates = manager as TECTemplates;
             }
-            isGlobal = false;
             PanelSelectionReadOnly = !canSelectPanel;
             PanelSelectionVisibility = Visibility.Visible;
-            sourceControllers = new ObservableCollection<TECController>(system.Controllers);
-            system.TECChanged += args =>
-            {
-                if (args.Change == Change.Add && args.Value is TECController controller)
-                {
-                    sourceControllers.Add(controller);
-                }
-                else if (args.Change == Change.Remove && args.Value is TECController oldController)
-                {
-                    sourceControllers.Remove(oldController);
-                }
-            };
-            PanelsSource = system.Panels;
             SelectedSystem = system;
-            deleteControllerMethod = controller =>
-            {
-                controller.RemoveAllConnections();
-                system.RemoveController(controller);
-            };
-
-            deletePanelMethod = panel => { system.Panels.Remove(panel); };
-            setup();
+            
         }
         #endregion
 
         #region Methods
+        private void Refresh(TECObject parent, IEnumerable<TECController> controllers, ObservableCollection<TECPanel> panels)
+        {
+            setupAddRemoveMethods(parent);
+
+            unregisterChanges();
+            sourceControllers = new ObservableCollection<TECController>(controllers);
+            PanelsSource = panels;
+
+            populateControllerCollection();
+            populatePanelSelections();
+            registerChanges();
+
+            parent.TECChanged += args => parentChanged(args, parent);
+        }
         public void Refresh(TECBid bid)
         {
-            sourceControllers = new ObservableCollection<TECController>(bid.Controllers);
-            PanelsSource = bid.Panels;
+            Bid.TECChanged -= args => parentChanged(args, Bid);
             Bid = bid;
-            Bid.TECChanged += args =>
-            {
-                if(args.Change == Change.Add && args.Value is TECController controller)
-                {
-                    sourceControllers.Add(controller);
-                } else if (args.Change == Change.Remove && args.Value is TECController oldController)
-                {
-                    sourceControllers.Remove(oldController);
-                }
-            };
-            setup();
+            Refresh(bid, bid.Controllers, bid.Panels);
         }
         public void Refresh(TECTemplates templates)
         {
-            sourceControllers = templates.ControllerTemplates;
-            PanelsSource = templates.PanelTemplates;
+            Templates.TECChanged -= args => parentChanged(args, Templates);
             Templates = templates;
-            setup();
+            Refresh(templates, templates.ControllerTemplates, templates.PanelTemplates);
         }
         public void Refresh(TECSystem system, TECScopeManager manager = null)
         {
-            if(manager != null)
+            SelectedSystem.TECChanged -= args => parentChanged(args, SelectedSystem);
+            if (manager != null)
             {
                 if (manager is TECBid)
                 {
@@ -314,36 +260,57 @@ namespace TECUserControlLibrary.ViewModels
                     _templates = manager as TECTemplates;
                 }
             }
-            
-            sourceControllers = new ObservableCollection<TECController>(system.Controllers);
-            PanelsSource = system.Panels;
             SelectedSystem = system;
-
-            system.TECChanged += args =>
-            {
-                if (args.Change == Change.Add && args.Value is TECController controller
-                && controller.IsTypical == system.IsTypical)
-                {
-                    sourceControllers.Add(controller);
-                }
-                else if (args.Change == Change.Remove && args.Value is TECController oldController
-                && oldController.IsTypical == system.IsTypical)
-                {
-                    sourceControllers.Remove(oldController);
-                }
-            };
-            setup();
+            Refresh(system, system.Controllers, system.Panels);
         }
 
-        private void setup()
+        private void setupAddRemoveMethods(TECObject obj)
         {
-            AddControllerCommand = new RelayCommand(addControllerExecute, canAddController);
-            AddPanelCommand = new RelayCommand(addPanelExecute, canAddPanel);
-            DeleteControllerCommand = new RelayCommand<TECController>(deleteControllerMethod);
-            DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelMethod);
-
-            populateControllerCollection();
-            populatePanelSelections();
+            if(obj is TECSystem system)
+            {
+                setupAddRemoveMethods(system);
+            }
+            else if (obj is TECBid bid)
+            {
+                setupAddRemoveMethods(bid);
+            }
+            else if (obj is TECTemplates templates)
+            {
+                setupAddRemoveMethods(templates);
+            }
+            else
+            {
+                throw new Exception("Cannot setup methods for object: " + obj);
+            }
+        }
+        private void setupAddRemoveMethods(TECBid bid)
+        {
+            addControllerMethod = bid.AddController;
+            addPanelMethod = bid.Panels.Add;
+            deleteControllerMethod = controller => {
+                controller.RemoveAllConnections();
+                bid.RemoveController(controller);
+            };
+            deletePanelMethod = panel => { bid.Panels.Remove(panel); };
+        }
+        private void setupAddRemoveMethods(TECTemplates templates)
+        {
+            addControllerMethod = templates.ControllerTemplates.Add;
+            addPanelMethod = templates.PanelTemplates.Add;
+            deleteControllerMethod = controller => {
+                controller.RemoveAllConnections();
+                templates.ControllerTemplates.Remove(controller);
+            };
+            deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };
+        }
+        private void setupAddRemoveMethods(TECSystem system)
+        {
+            deleteControllerMethod = controller =>
+            {
+                controller.RemoveAllConnections();
+                system.RemoveController(controller);
+            };
+            deletePanelMethod = panel => { system.Panels.Remove(panel); };
         }
 
         private void addControllerExecute()
@@ -358,7 +325,6 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes);
             }
         }
-
         private bool canAddController()
         {
             var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
@@ -377,11 +343,19 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-
         private bool canAddPanel()
         {
             var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
             return panelTypes.Count > 0;
+        }
+
+        private void deleteControllerExecute(TECController controller)
+        {
+            deleteControllerMethod(controller);
+        }
+        private void deletePanelExecute(TECPanel panel)
+        {
+            deletePanelMethod(panel);
         }
 
         private void populateControllerCollection()
@@ -415,25 +389,6 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECPanel panel in sourcePanels)
             {
                 PanelSelections.Add(panel);
-                panel.PropertyChanged += Panel_PropertyChanged;
-            }
-        }
-
-        private void Panel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "AddRelationship")
-            {
-                foreach (TECController controller in (sender as TECPanel).Controllers)
-                {
-                    controllersIndex[controller].UpdatePanel(sender as TECPanel);
-                }
-            }
-            if (e.PropertyName == "RemoveRelationship")
-            {
-                foreach (TECController controller in (sender as TECPanel).Controllers)
-                {
-                    controllersIndex[controller].UpdatePanel(null);
-                }
             }
         }
         
@@ -451,7 +406,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void collectionChanged(object sender, 
+            System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -464,7 +420,6 @@ namespace TECUserControlLibrary.ViewModels
                     else if (item is TECPanel)
                     {
                         addPanel(item as TECPanel);
-                        (item as TECPanel).PropertyChanged += Panel_PropertyChanged;
                     }
                 }
             }
@@ -490,12 +445,22 @@ namespace TECUserControlLibrary.ViewModels
                     else if (item is TECPanel)
                     {
                         removePanel(item as TECPanel);
-                        (item as TECPanel).PropertyChanged -= Panel_PropertyChanged;
                     }
                 }
             }
         }
-
+        private void parentChanged(TECChangedEventArgs e, TECObject parent)
+        {
+            if (e.Change == Change.Add && e.Value is TECController controller && e.Sender == parent)
+            {
+                sourceControllers.Add(controller);
+            }
+            else if (e.Change == Change.Remove && e.Value is TECController oldController && e.Sender == parent)
+            {
+                sourceControllers.Remove(oldController);
+            }
+        }
+        
         public void DragOver(IDropInfo dropInfo)
         {
             if (!PanelSelectionReadOnly)
