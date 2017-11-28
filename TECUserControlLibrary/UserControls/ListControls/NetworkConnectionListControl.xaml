@@ -30,7 +30,6 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
-                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -38,20 +37,16 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Label Content="# of Connected:"/>
-                        <Label Content="{Binding Children.Count}" Grid.Column="1"/>
+                        <TextBlock Text="{Binding Children.Count, StringFormat=Children: {0}}"/>
                         <Border BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="2"/>
 
-                        <Label Content="Run Length:" Grid.Row="1"/>
-                        <Label Content="{Binding Length}" Grid.Column="1" Grid.Row="1"/>
+                        <TextBlock Text="{Binding Length, StringFormat=Distance: {0}}" Grid.Row="1"/>
                         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.ColumnSpan="2"/>
 
-                        <Label Content="Conduit Length:" Grid.Row="2"/>
-                        <Label Content="{Binding ConduitLength}" Grid.Column="1" Grid.Row="2"/>
+                        <TextBlock Text="{Binding ConduitLength, StringFormat=Conduit Length: {0}}" Grid.Row="2"/>
                         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.ColumnSpan="2"/>
 
-                        <Label Content="Conduit Type:" Grid.Row="3"/>
-                        <Label Content="{Binding ConduitType.Name}" Grid.Column="1" Grid.Row="3"/>
+                        <TextBlock Text="{Binding ConduitType.Name, StringFormat=Conduit Type: {0}}" Grid.Row="3"/>
                         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Grid.ColumnSpan="2"/>
 
                         <Grid Grid.Column="2" Grid.RowSpan="4">
