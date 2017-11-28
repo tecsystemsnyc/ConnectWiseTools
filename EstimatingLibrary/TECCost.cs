@@ -80,7 +80,7 @@ namespace EstimatingLibrary
 
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
-            return new TECCost(this);
+            return this;
         }
 
         public static TECCost operator *(TECCost left, double right)

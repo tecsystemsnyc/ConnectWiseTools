@@ -22,15 +22,12 @@
             </Grid.ContextMenu>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <Label FontSize="14" Content="{Binding Label}" FontWeight="DemiBold"/>
-            <Label Content="{Binding Type}" Grid.Column="1"/>
-            <TextBlock Text="{Binding Quantity, StringFormat=Qty: {0}}" Grid.Row="1" />
+            <TextBlock Margin="2" FontSize="14" Text="{Binding Label}" FontWeight="DemiBold" Height="25"/>
+            <TextBlock Text="{Binding Quantity, StringFormat=Qty: {0}}" Grid.Column="2" Margin="2" />
+            <TextBlock Text="{Binding Type}" Grid.Column="1" Margin="2"/>
         </Grid>
     </Border>
 </local:BaseItemControl>
