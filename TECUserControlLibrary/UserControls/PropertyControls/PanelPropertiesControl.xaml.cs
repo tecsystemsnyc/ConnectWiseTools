@@ -21,15 +21,15 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
         public static readonly DependencyProperty SelectedProperty =
             DependencyProperty.Register("Selected", typeof(TECPanel), typeof(PanelPropertiesControl));
     
-        public IEnumerable<TECControllerType> TypeSource
+        public IEnumerable<TECPanelType> TypeSource
         {
-            get { return (IEnumerable<TECControllerType>)GetValue(TypeSourceProperty); }
+            get { return (IEnumerable<TECPanelType>)GetValue(TypeSourceProperty); }
             set { SetValue(TypeSourceProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for TypeSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TypeSourceProperty =
-            DependencyProperty.Register("TypeSource", typeof(IEnumerable<TECControllerType>), typeof(PanelPropertiesControl));
+            DependencyProperty.Register("TypeSource", typeof(IEnumerable<TECPanelType>), typeof(PanelPropertiesControl));
 
 
         public PanelPropertiesControl()

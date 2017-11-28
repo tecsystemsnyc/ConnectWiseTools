@@ -448,6 +448,9 @@
     <Compile Include="Views\UpdateConnectionView.xaml.cs">
       <DependentUpon>UpdateConnectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WorkBoxView.xaml.cs">
+      <DependentUpon>WorkBoxView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Debug\EBDebugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -866,6 +869,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UpdateConnectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WorkBoxView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 
 namespace EstimatingLibrary
 {
-    public class TECLabeled : TECObject
+    public class TECLabeled : TECObject, IDragDropable
     {
         #region Properties
 
@@ -33,6 +34,12 @@ namespace EstimatingLibrary
         {
             _label = source.Label;
         }
+        
         #endregion //Constructors
+
+        public object DragDropCopy(TECScopeManager scopeManager)
+        {
+            return this;
+        }
     }
 }
