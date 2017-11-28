@@ -161,7 +161,7 @@ namespace TECUserControlLibrary.ViewModels
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
             {
-                if (ss.Connection == null)
+                if (ss.Connection == null && !ss.IsNetwork)
                 {
                     UnconnectedSubScope.Add(ss);
                 }
@@ -353,7 +353,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (change == Change.Add)
                 {
-                    if (subScope.Connection == null)
+                    if (subScope.Connection == null && !subScope.IsNetwork)
                     {
                         UnconnectedSubScope.Add(subScope);
                     }
@@ -364,7 +364,7 @@ namespace TECUserControlLibrary.ViewModels
                     ISubScopeConnectionItem ssItem = null;
                     foreach(ISubScopeConnectionItem item in ConnectedSubScope)
                     {
-                        if (item.SubScope == subScope)
+                        if (item.SubScope == subScope && !item.SubScope.IsNetwork)
                         {
                             ssItem = item;
                             break;

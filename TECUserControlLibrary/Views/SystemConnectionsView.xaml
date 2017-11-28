@@ -70,15 +70,27 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Border BorderThickness="0,0,0,1" Margin="0,5,0,5" BorderBrush="DarkGray">
+                    <Grid>
+                        <TextBlock Text="{Binding SelectedController.Name, StringFormat=Connected to {0}}" HorizontalAlignment="Center"
+                               Visibility="{Binding SelectedController, 
+                    Converter={utilities:NullToCollapsedConverter}}" Foreground="Black"/>
+                        <TextBlock Text="Select a Controller to Create Connections" HorizontalAlignment="Center"
+                               Visibility="{Binding SelectedController, 
+                    Converter={utilities:NullToVisibilityConverter}}" Foreground="Black"/>
+                    </Grid>
+                </Border>
                 <Button Content="Update All"
                         Command="{Binding UpdateAllCommand}"
                         Margin="5"
                         Visibility="{Binding 
                     ElementName=systemConnectionsView, 
                     Path=IsTypical, 
-                    Converter={utilities:BooleanToVisibilityConverter}}"/>
+                    Converter={utilities:BooleanToVisibilityConverter}}"
+                        Grid.Row="1"/>
                 <listControls:SubScopeConnectionListControl
                     Source="{Binding ConnectedSubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
@@ -86,7 +98,7 @@
                     IsDragSource="True"
                     DropHandler="{Binding}"
                     ReadOnly="False"
-                    Grid.Row="1">
+                    Grid.Row="2">
                     <listControls:SubScopeConnectionListControl.Resources>
                         <Visibility x:Key="Visible">
                             Visible

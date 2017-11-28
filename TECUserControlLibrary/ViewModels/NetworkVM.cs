@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
@@ -251,7 +252,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     foreach (TECEquipment equip in system.Equipment)
                     {
-                        foreach (TECSubScope ss in equip.SubScope)
+                        foreach (TECSubScope ss in equip.SubScope.Where(item => item.IsNetwork == true))
                         {
                             addConnectableItem(ss);
                         }
@@ -265,7 +266,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 addConnectableItem(controller);
             }
-            foreach (TECSubScope ss in system.GetAllSubScope())
+            foreach (TECSubScope ss in system.GetAllSubScope().Where(item => item.IsNetwork == true))
             {
                 addConnectableItem(ss);
             }
@@ -281,6 +282,10 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectableItem(INetworkConnectable connectable)
         {
+            if (connectable is TECSubScope sub && sub.IsNetwork == false)
+            {
+                return;
+            }
             bool parentConnected = false;
             if (connectable.ParentConnection != null && connectable.ParentConnection.ParentController != null)
             {
@@ -309,6 +314,10 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void removeConnectableItem(INetworkConnectable connectable)
         {
+            if (connectable is TECSubScope sub && sub.IsNetwork == false)
+            {
+                return;
+            }
             ConnectableItem item = connectableDictionary[connectable];
             if (connectable is INetworkParentable parentable)
             {
@@ -499,7 +508,7 @@ namespace TECUserControlLibrary.ViewModels
             CannotConnectMessage = "";
             if (dropInfo.Data is ConnectableItem connectable && dropInfo.TargetCollection == SelectedConnection?.Children)
             {
-                if (SelectedConnection.CanAddINetworkConnectable(connectable.Item))
+                if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;

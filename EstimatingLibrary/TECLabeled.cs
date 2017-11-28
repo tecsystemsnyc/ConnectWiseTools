@@ -37,7 +37,7 @@ namespace EstimatingLibrary
         
         #endregion //Constructors
 
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
             return this;
         }

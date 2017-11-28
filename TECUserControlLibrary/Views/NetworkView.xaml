@@ -20,6 +20,9 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="default"/>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -27,7 +30,8 @@
     <Grid DataContext="{Binding ElementName=networkView, Path=ViewModel}"
         Background="{DynamicResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="180
+                              "/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -57,6 +61,7 @@
                         Source="{Binding Parentables}"
                         SelectedItem="{Binding SelectedParentable}"
                         DropHandler="{Binding}"
+                        IsDragSource="True"
                         Grid.Row="1"/>
                 </Grid>
             </Border>
@@ -109,15 +114,12 @@
                 <Border BorderBrush="Black" BorderThickness="1">
                     <Grid DataContext="{Binding SelectedItem.Item}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.Resources>
@@ -134,94 +136,78 @@
                         </Grid.Resources>
 
                         <!--Item Info-->
-                        <Label FontSize="15" FontWeight="Bold" Content="Info"/>
-
-                        <Label Grid.Column="1" FontSize="15" Content="Name:"/>
-                        <Label Grid.Column="2" FontSize="15" Content="{Binding Name}"/>
-                        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.ColumnSpan="2"/>
-
-                        <ContentPresenter Content="{Binding}" Grid.Column="3">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECController}">
-                                    <Label FontSize="15" Content="Type:"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-                        <ContentPresenter Content="{Binding}" Grid.Column="4">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECController}">
-                                    <Label FontSize="15" Content="{Binding Type.Name}"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-                        <ContentPresenter Content="{Binding}" Grid.Column="3" Grid.ColumnSpan="2">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECController}">
-                                    <Border BorderBrush="Black" BorderThickness="1"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-
-                        <Label Grid.Column="5" FontSize="15" Content="Network IO Types:"/>
-                        <listControls:IOListControl 
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="14" FontWeight="Bold" Text="Info" Foreground="Black"/>
+                            <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.ColumnSpan="2">
+                                <TextBlock FontSize="14" Text="{Binding Name, StringFormat=Name: {0}}" Foreground="Black"/>
+                            </Border>
+                            <ContentPresenter Content="{Binding}" Grid.Column="2">
+                                <ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type models:TECController}">
+                                        <Border BorderBrush="Black" BorderThickness="1">
+                                            <TextBlock FontSize="14" Text="{Binding Type.Name, StringFormat=Type: {0}}" Foreground="Black"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+                        </Grid>
+                        
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontSize="14" Content="IO Types:"/>
+                            <listControls:IOListControl 
                             Source="{Binding AllNetworkIOList}" 
                             Grid.Column="5"
                             Grid.Row="1"/>
-                        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="5" Grid.RowSpan="2"/>
+                        </Grid>
+                        
 
                         <!--Parent Info-->
-                        <ContentPresenter Content="{Binding ParentConnection}" Grid.Row="1">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Button Command="{Binding ElementName=networkView, Path=ViewModel.SetParentAsSelectedCommand}"
-                                        Margin="5" Content="View Parent Details"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-                        
-                        <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="1" Grid.Row="1">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Label FontSize="15" Content="Parent:"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-                        <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="2" Grid.Row="1">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Label FontSize="15" Content="{Binding ParentController.Name}"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-                        <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Border BorderBrush="Black" BorderThickness="1"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Content="{Binding ParentConnection}">
+                                <ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                        <Button Command="{Binding ElementName=networkView, Path=ViewModel.SetParentAsSelectedCommand}"
+                                        Margin="5" Content="View Parent"/>
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
 
-                        <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="3" Grid.Row="1">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Label FontSize="15" Content="Parent Type:"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-                        <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="4" Grid.Row="1">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Label FontSize="15" Content="{Binding ParentController.Type.Name}"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
-                        <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2">
-                            <ContentPresenter.Resources>
-                                <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                    <Border BorderBrush="Black" BorderThickness="1"/>
-                                </DataTemplate>
-                            </ContentPresenter.Resources>
-                        </ContentPresenter>
+                            <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="1" >
+                                <ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                        <Border BorderBrush="Black" BorderThickness="1">
+                                            <TextBlock FontSize="14" Text="{Binding ParentController.Name, StringFormat=Parent: {0}}" Foreground="Black"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+
+                            <ContentPresenter Content="{Binding ParentConnection}" Grid.Column="2" >
+                                <ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                        <Border BorderBrush="Black" BorderThickness="1">
+                                            <TextBlock FontSize="14" Text="{Binding ParentController.Type.Name, StringFormat=Parent Type: {0}}" Foreground="Black"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+                            
+                        </Grid>
+                        
                     </Grid>
                 </Border>
 
@@ -231,47 +217,54 @@
                         <DataTemplate x:Key="addConnection">
                             <Expander DataContext="{Binding ElementName=networkView, Path=ViewModel}">
                                 <Expander.Header>
-                                    <Label Content="Add Connection" FontSize="15" FontWeight="Bold"/>
+                                    <Label Content="Add Connection" FontSize="12" FontWeight="DemiBold"/>
                                 </Expander.Header>
                                 <Grid MaxHeight="200">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="20"/>
                                         <RowDefinition/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Label Content="Connection Types"/>
+                                    <TextBlock Text="Connection Types"/>
                                     <listControls:ElectricalMaterialListControl Source="{Binding AllConnectionTypes}"
                                                                     SelectedItem="{Binding SelectedPotentialConnectionType}"
                                                                 Margin="5" 
                                                                 Grid.Row="1" 
-                                                                Grid.RowSpan="4"/>
-
+                                                                Grid.RowSpan="3"/>
+                                    <Button Command="{Binding AddConnectionTypeCommand}"
+                            Content="-&gt;" Grid.Column="1" Grid.Row="1" Width="30" Height="30"/>
                                     <Button Command="{Binding RemoveConnectionTypeCommand}"
                             Content="&lt;-" Grid.Column="1" Grid.Row="2" Width="30" Height="30"/>
-                                    <Button Command="{Binding AddConnectionTypeCommand}"
-                            Content="-&gt;" Grid.Column="1" Grid.Row="3" Width="30" Height="30"/>
+                                    
 
-                                    <Label Content="Selected Types" Grid.Column="2"/>
+                                    <TextBlock Text="Selected Types" Grid.Column="2"/>
                                     <listControls:ElectricalMaterialListControl Source="{Binding SelectedConnectionTypes}"
                                                                     SelectedItem="{Binding SelectedChosenConnectionType}"
                                                                 Margin="5"
                                                                 Grid.Column="2" 
                                                                 Grid.Row="1" 
-                                                                Grid.RowSpan="4"/>
+                                                                Grid.RowSpan="3"/>
 
-                                    <Label Content="IO Type" Grid.Column="3"/>
-                                    <ComboBox ItemsSource="{Binding IOTypes}" SelectedItem="{Binding SelectedIOType}" Grid.Column="3" Grid.Row="1" Width="200" Height="25"/>
+                                    <Grid Grid.Row="4" Grid.ColumnSpan="3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="IO Type:"/>
+                                        <ComboBox ItemsSource="{Binding IOTypes}" SelectedItem="{Binding SelectedIOType}" Grid.Column="1" Margin="2"/>
+                                        <Button Command="{Binding AddConnectionCommand}"
+                                            Content="Add Connection" Margin="2" Grid.Column="3" Grid.Row="4" />
+                                    </Grid>
 
-                                    <Button Command="{Binding AddConnectionCommand}"
-                            Content="Add Connection" Margin="5" Grid.Column="3" Grid.Row="4" Width="200" Height="25"/>
+                                    
                                 </Grid>
                             </Expander>
                         </DataTemplate>

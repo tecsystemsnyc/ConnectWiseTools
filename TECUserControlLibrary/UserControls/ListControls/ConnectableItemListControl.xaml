@@ -32,15 +32,15 @@
                         <Grid MouseUp="ItemControl_MouseUp">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition MaxHeight="20" Height="Auto"/>
+                                <RowDefinition Height="20"/>
                             </Grid.RowDefinitions>
-                            <Label FontSize="14" Content="{Binding Item.Name}"/>
-                            <Label Content="{Binding Item.Description}" Grid.Column="1"/>
-                            <TextBlock Text="{Binding IsConnected, StringFormat= Connected to BMS: {0}}" Grid.Row="1"/>
+                            <TextBlock FontSize="14" Text="{Binding Item.Name}"/>
+                            <TextBlock Text="{Binding Item.Description}" Grid.Row="1"/>
+                            <TextBlock Text="{Binding IsConnected, StringFormat= Connected to BMS: {0}}" Grid.Row="2"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
