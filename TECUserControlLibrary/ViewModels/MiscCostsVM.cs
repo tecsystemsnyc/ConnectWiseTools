@@ -310,9 +310,8 @@ namespace TECUserControlLibrary.ViewModels
             {
                 scopeManager = _bid;
             }
-            var newMisc = (dropInfo.Data as TECMisc).DragDropCopy(scopeManager) as TECMisc;
             bool isTypical = (_system != null && _system is TECTypical);
-            //newMisc.IsTypical = isTypical;
+            TECMisc newMisc = new TECMisc(dropInfo.Data as TECMisc, isTypical);
             sourceCollection.Add(newMisc);
         }
     }
