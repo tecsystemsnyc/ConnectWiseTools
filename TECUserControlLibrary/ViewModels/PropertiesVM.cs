@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
@@ -45,11 +46,15 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Selected");
             }
         }
+        
+        public string TestString
+        {
+            get { return "test"; }
+        }
 
         public PropertiesVM(TECCatalogs catalogs, TECScopeManager scopeManager)
         {
-            Catalogs = catalogs;
-            this.scopeManager = scopeManager;
+            Refresh(catalogs, scopeManager);
         }
 
         public void Refresh(TECCatalogs catalogs, TECScopeManager scopeManager)
@@ -67,5 +72,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             UIHelpers.StandardDrop(dropInfo, scopeManager);
         }
+        
     }
 }

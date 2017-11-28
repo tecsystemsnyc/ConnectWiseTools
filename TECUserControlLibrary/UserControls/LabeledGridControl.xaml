@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="labeledGridControl">
@@ -21,7 +22,8 @@
                   AutoGenerateColumns="False"
                   x:Name="TagsGrid"
                   IsReadOnly="{Binding ReadOnly}"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  dd:DragDrop.DropHandler="{Binding DropHandler}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Label}" Header="{Binding Data.LabelName, 
                                     Source={StaticResource proxy}}" Width="*"/> 
