@@ -35,7 +35,14 @@ namespace TECUserControlLibrary.ViewModels
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDrop(dropInfo, manager);
+            if (dropInfo.Data is TECTypical typ)
+            {
+                BoxItems.Add(new TECSystem((typ as TECSystem), false, manager));
+            }
+            else
+            {
+                UIHelpers.StandardDrop(dropInfo, manager);
+            }
         }
     }
 }
