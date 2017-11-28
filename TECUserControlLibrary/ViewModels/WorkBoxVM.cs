@@ -11,9 +11,9 @@ using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    class WorkBoxVM : ViewModelBase, IDropTarget
+    public class WorkBoxVM : ViewModelBase, IDropTarget
     {
-        private readonly TECScopeManager manager;
+        private TECScopeManager manager;
 
         public ObservableCollection<TECObject> BoxItems { get; }
 
@@ -21,6 +21,11 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.manager = manager;
             BoxItems = new ObservableCollection<TECObject>();
+        }
+
+        public void Refresh(TECScopeManager manager)
+        {
+            this.manager = manager;
         }
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
