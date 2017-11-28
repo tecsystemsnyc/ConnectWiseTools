@@ -72,11 +72,15 @@
                   Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <views:ScopeCollectionsTabView ViewModel="{Binding ScopeCollection}" Grid.Row="0"/>
 
-                <views:WorkBoxView ViewModel="{Binding WorkBoxVM}" Grid.Row="1"/>
+                <Expander Header="Work Box" Grid.Row="1" >
+                    <views:WorkBoxView ViewModel="{Binding WorkBoxVM}"
+                                   Height="200"/>
+                </Expander>
+                
 
             </Grid>
             
