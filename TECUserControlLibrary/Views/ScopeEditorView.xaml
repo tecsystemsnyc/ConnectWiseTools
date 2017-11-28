@@ -68,12 +68,17 @@
                 <RowDefinition Height="*" MinHeight="40"/>
             </Grid.RowDefinitions>
 
-            <StackPanel  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-                <views:ScopeCollectionsTabView ViewModel="{Binding ScopeCollection}"/>
-                <Expander Header="Work Box">
-                    <views:WorkBoxView ViewModel="{Binding WorkBoxVM}"/>
-                </Expander>
-            </StackPanel>
+            <Grid Grid.Column="0" Grid.Row="0"
+                  Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <views:ScopeCollectionsTabView ViewModel="{Binding ScopeCollection}" Grid.Row="0"/>
+
+                <views:WorkBoxView ViewModel="{Binding WorkBoxVM}" Grid.Row="1"/>
+
+            </Grid>
             
             <TabControl Grid.Row="0"
                     Grid.RowSpan="2"

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -20,8 +21,7 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class WorkBoxView : UserControl
     {
-
-
+        
         public WorkBoxVM ViewModel
         {
             get { return (WorkBoxVM)GetValue(ViewModelProperty); }
