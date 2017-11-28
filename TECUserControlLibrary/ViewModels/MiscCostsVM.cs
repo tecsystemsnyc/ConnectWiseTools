@@ -199,7 +199,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addNewExecute()
         {
-            TECMisc newMisc = new TECMisc(MiscType, false);
+            bool isTypical = (_system != null && _system is TECTypical);
+            TECMisc newMisc = new TECMisc(MiscType, isTypical);
             newMisc.Name = MiscName;
             newMisc.Cost = Cost;
             newMisc.Labor = Labor;
@@ -310,6 +311,8 @@ namespace TECUserControlLibrary.ViewModels
                 scopeManager = _bid;
             }
             var newMisc = (dropInfo.Data as TECMisc).DragDropCopy(scopeManager) as TECMisc;
+            bool isTypical = (_system != null && _system is TECTypical);
+            //newMisc.IsTypical = isTypical;
             sourceCollection.Add(newMisc);
         }
     }
