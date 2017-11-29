@@ -238,7 +238,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (dropInfo.TargetCollection == UnconnectedSubScope)
                     {
                         SelectedController.RemoveSubScope(ssConnectItem.SubScope);
-                        if (system is TECTypical)
+                        if (system is TECTypical typ && typ.Instances.Count > 0)
                         {
                             updateItem(ssConnectItem);
                         }
