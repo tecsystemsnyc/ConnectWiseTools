@@ -15,7 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Label:"/>
+        <TextBlock Text="Label:" Foreground="Black" VerticalAlignment="Center" Margin="5"/>
         <TextBox Text="{Binding Label}" Grid.Column="1" Margin="2"/>
     </Grid>
 </UserControl>

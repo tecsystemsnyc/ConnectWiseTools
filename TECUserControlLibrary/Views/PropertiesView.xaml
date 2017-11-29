@@ -12,11 +12,7 @@
              mc:Ignorable="d" 
              x:Name="propertiesView"
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <Style TargetType="local:PropertiesView">
-            <Setter Property="Selected" Value="{Binding ElementName=propertiesView, Path=ViewModel.Selected}"/>
-        </Style>
-    </UserControl.Resources>
+
     <ScrollViewer DataContext="{Binding ElementName=propertiesView, Path=Selected}"
                   Background="{DynamicResource SectionBackgroundBrush}">
         <ScrollViewer.Resources>

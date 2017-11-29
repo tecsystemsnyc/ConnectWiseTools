@@ -51,6 +51,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 selected = value;
                 RaisePropertyChanged("Selected");
+                PropertiesVM.Selected = value;
             }
         }
         public GridIndex DGTabIndex
