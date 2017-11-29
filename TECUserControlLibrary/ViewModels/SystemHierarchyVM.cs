@@ -418,7 +418,7 @@ namespace TECUserControlLibrary.ViewModels
             else if (dropped is TECMisc misc)
             {
                 SelectedVM = new AddMiscVM(SelectedSystem);
-                ((AddMiscVM)SelectedVM).ToAdd = misc;
+                ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
             }
             else if (dropped is TECSystem system)
             {
