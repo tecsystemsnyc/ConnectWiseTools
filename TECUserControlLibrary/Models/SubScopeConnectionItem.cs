@@ -54,7 +54,7 @@ namespace TECUserControlLibrary.Models
         private bool CanUpdateConduit()
         {
             bool bothAreNone = (SelectedConduitType == noneConduit && SubScope.Connection.ConduitType == null);
-            bool areSame = bothAreNone || (SelectedConduitType == SubScope.Connection.ConduitType);
+            bool areSame = bothAreNone || (SelectedConduitType == SubScope.Connection?.ConduitType);
 
             return !areSame;
         }
