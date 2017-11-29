@@ -262,7 +262,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (dropInfo.TargetCollection == UnconnectedSubScope)
                     {
                         SelectedController.RemoveSubScope(ssConnectItem.SubScope);
-                        if (system is TECTypical)
+                        if (system is TECTypical typ && typ.Instances.Count > 0)
                         {
                             updateItem(ssConnectItem);
                         }
@@ -290,9 +290,9 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool updateAllCanExecute()
         {
-            if (system is TECTypical typ)
+            if (system is TECTypical typ && SelectedController != null)
             {
-                return (typ.Instances.Count > 0);
+                return (typ.Instances.Count > 0 && SelectedController.ChildrenConnections.Count > 0);
             }
             else
             {
