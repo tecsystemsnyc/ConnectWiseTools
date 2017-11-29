@@ -151,7 +151,14 @@ namespace TECUserControlLibrary.ViewModels
 
             this.system = system;
             watcher = new ChangeWatcher(system);
-            watcher.InstanceConstituentChanged += handleSystemChanged;
+            if(system is TECTypical)
+            {
+                watcher.TypicalConstituentChanged += handleSystemChanged;
+            }
+            else
+            {
+                watcher.InstanceConstituentChanged += handleSystemChanged;
+            }
             this.ConfirmationObject = new MessageBoxService();
             ObservableCollection<TECElectricalMaterial> tempConduit = new ObservableCollection<TECElectricalMaterial>();
             foreach(TECElectricalMaterial type in conduitTypes)

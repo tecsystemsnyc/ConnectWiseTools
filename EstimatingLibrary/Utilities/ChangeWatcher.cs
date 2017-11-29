@@ -14,12 +14,34 @@ namespace EstimatingLibrary.Utilities
         #endregion
 
         #region Events
+        /// <summary>
+        /// Adds, removes, edit raised from models
+        /// </summary>
         public event Action<TECChangedEventArgs> Changed;
+        /// <summary>
+        /// All Changed events where the object is not typical
+        /// </summary>
         public event Action<TECChangedEventArgs> InstanceChanged;
+        /// <summary>
+        /// Changes in cost raised from models
+        /// </summary>
         public event Action<CostBatch> CostChanged;
+        /// <summary>
+        /// Changes in point raised from models
+        /// </summary>
         public event Action<int> PointChanged;
+        /// <summary>
+        /// INotifyPropertyChanged events from all registered objects
+        /// </summary>
         public event Action<object, PropertyChangedEventArgs> PropertyChanged;
+        /// <summary>
+        /// Add, Remove events from all instances and their PropertyObjects
+        /// </summary>
         public event Action<Change, TECObject> InstanceConstituentChanged;
+        /// <summary>
+        /// Add, Remove events from all typical objects and their PropertyObjects
+        /// </summary>
+        public event Action<Change, TECObject> TypicalConstituentChanged;
         #endregion
 
         #region Methods
@@ -84,6 +106,9 @@ namespace EstimatingLibrary.Utilities
                     if (!valueTyp.IsTypical)
                     {
                         raiseInstanceChanged(e);
+                    } else
+                    {
+                        raiseTypicalConsituentChanged(e);
                     }
                 }
                 else
@@ -94,12 +119,25 @@ namespace EstimatingLibrary.Utilities
                         {
                             raiseInstanceChanged(e);
                         }
+                        else
+                        {
+                            raiseTypicalConsituentChanged(e);
+                        }
                     }
                     else
                     {
                         raiseInstanceChanged(e);
                     }
                 }
+            }
+        }
+
+        private void raiseTypicalConsituentChanged(TECChangedEventArgs e)
+        {
+            if ((e.Change == Change.Add || e.Change == Change.Remove) && e.Sender is IRelatable parent)
+            {
+                if (!parent.LinkedObjects.Contains(e.PropertyName))
+                    raiseTypicalConstituents(e.Change, e.Value as TECObject);
             }
         }
 
@@ -142,7 +180,22 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
+        private void raiseTypicalConstituents(Change change, TECObject item)
+        {
+            TypicalConstituentChanged?.Invoke(change, item);
+            if (item is IRelatable parent)
+            {
+                foreach (var child in parent.PropertyObjects.ChildList())
+                {
+                    if (child is ITypicalable typ && typ.IsTypical &&
+                        !parent.LinkedObjects.Contains(child.Item1))
+                    {
+                        raiseTypicalConstituents(change, child.Item2);
+                    }
+                }
+            }
+        }
         #endregion
-        
+
     }
 }
