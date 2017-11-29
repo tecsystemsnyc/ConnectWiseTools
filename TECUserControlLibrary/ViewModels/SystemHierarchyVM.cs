@@ -144,9 +144,13 @@ namespace TECUserControlLibrary.ViewModels
             {
                 connectionsVM = value;
                 RaisePropertyChanged("ConnectionsVM");
-                value.UpdateVM += updateVM =>
+                connectionsVM.UpdateVM += updateVM =>
                 {
                     SelectedVM = updateVM;
+                };
+                connectionsVM.Selected += item =>
+                {
+                    Selected?.Invoke(item as TECObject);
                 };
             }
         }

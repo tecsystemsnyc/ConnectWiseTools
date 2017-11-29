@@ -64,6 +64,9 @@
                     <pControls:ControllerTypePropertiesControl Selected="{Binding}"
                                                                DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
                 </DataTemplate>
+                <DataTemplate x:Key="connection">
+                    <pControls:ConnectionPropertiesControl Selected="{Binding}"/>
+                </DataTemplate>
                 <DataTemplate x:Key="default"/>
                 <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -101,6 +104,9 @@
                 <utilities:ControllerTypeSelector x:Key="controllerTypeSelector"
                                               InterfaceTemplate="{StaticResource controllerType}"
                                               DefaultTemplate="{StaticResource default}"/>
+                <utilities:ConnectionSelector x:Key="connectionSelector"
+                                              InterfaceTemplate="{StaticResource connection}"
+                                              DefaultTemplate="{StaticResource default}"/>
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
@@ -115,6 +121,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource miscSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ioModuleSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource controllerTypeSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
         </StackPanel>
     </ScrollViewer>

@@ -25,6 +25,8 @@ namespace TECUserControlLibrary.ViewModels
         private ObservableCollection<ISubScopeConnectionItem> _connectedSubScope;
         private ObservableCollection<TECSubScope> _unconnectedSubScope;
         private TECController _selectedController;
+        private TECSubScope _selectedUnconnectedSubScope;
+        private ISubScopeConnectionItem _selectedConnection;
 
         private UpdateConnectionVM _updateConnectionVM;
 
@@ -108,7 +110,28 @@ namespace TECUserControlLibrary.ViewModels
                     _selectedController = value;
                     RaisePropertyChanged("SelectedController");
                     handleControllerSelected(value);
+                    Selected?.Invoke(value);
                 }
+            }
+        }
+        public TECSubScope SelectedUnconnectedSubScope
+        {
+            get { return _selectedUnconnectedSubScope; }
+            set
+            {
+                _selectedUnconnectedSubScope = value;
+                RaisePropertyChanged("SelectedUnconnectedSubScope");
+                Selected?.Invoke(value);
+            }
+        }
+        public ISubScopeConnectionItem SelectedConnection
+        {
+            get { return _selectedConnection; }
+            set
+            {
+                _selectedConnection = value;
+                RaisePropertyChanged("SelectedConnection");
+                Selected?.Invoke(value?.SubScope?.Connection as TECObject);
             }
         }
 
@@ -182,6 +205,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         
         public event Action<UpdateConnectionVM> UpdateVM;
+        public event Action<TECObject> Selected;
 
         public void DragOver(IDropInfo dropInfo)
         {
