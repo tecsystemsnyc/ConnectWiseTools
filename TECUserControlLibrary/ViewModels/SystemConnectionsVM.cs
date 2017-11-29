@@ -266,9 +266,9 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool updateAllCanExecute()
         {
-            if (system is TECTypical typ)
+            if (system is TECTypical typ && SelectedController != null)
             {
-                return (typ.Instances.Count > 0);
+                return (typ.Instances.Count > 0 && SelectedController.ChildrenConnections.Count > 0);
             }
             else
             {
