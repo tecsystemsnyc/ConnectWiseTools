@@ -34,10 +34,16 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <TextBox Text="{Binding Path=ViewModel.SearchString}"
+            <TextBox Text="{Binding Path=ViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}"
+                     x:Name="searchBox"
                      Height="24"
                      VerticalContentAlignment="Center"
-                     Margin="2" Grid.ColumnSpan="3"/>
+                     Margin="2" Grid.ColumnSpan="3">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Return" 
+                    Command="{Binding Path=ViewModel.SearchCollectionCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
             <Button Grid.Column="1" Grid.Row="1"
                     Content="Search"
                     Margin="2"

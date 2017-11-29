@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
 
@@ -830,18 +831,21 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            throw new NotImplementedException("T drop<T> is alway object for some reason.");
+            //throw new NotImplementedException("T drop<T> is alway object for some reason.");
             object drop<T>(T item)
             {
                 Console.WriteLine(typeof(T));
-                if (item is ICatalog<T> catalogItem)
+                bool isCatalog = item.GetType().GetInterfaces().Where(i => i.IsGenericType)
+                    .Any(i => i.GetGenericTypeDefinition() == typeof(ICatalog<>));
+                if (isCatalog)
                 {
-                    return catalogItem.CatalogCopy();
+                    return ((dynamic)item).CatalogCopy();
                 }
                 else if (item is IDragDropable dropable)
                 {
                     return dropable.DragDropCopy(Templates);
-                } else
+                }
+                else
                 {
                     throw new NotImplementedException();
                 }
