@@ -196,6 +196,7 @@ namespace EstimatingLibrary
         }
         internal void RefreshRegistration()
         {
+            watcher.Changed -= handleSystemChanged;
             watcher = new ChangeWatcher(this);
             watcher.Changed += handleSystemChanged;
         }
