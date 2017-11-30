@@ -909,6 +909,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"), defaultValue: "");
         public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
 
@@ -925,6 +926,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ID,
             Name,
+            Description,
             Price,
             Labor
         };

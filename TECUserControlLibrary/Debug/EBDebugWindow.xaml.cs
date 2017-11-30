@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace TECUserControlLibrary.Debug
         private ICommand testNetwork;
         private ICommand addTypical;
         private ICommand throwException;
+        private ICommand exportDBCommand;
 
         public EBDebugWindow(TECBid bid)
         {
@@ -30,6 +32,7 @@ namespace TECUserControlLibrary.Debug
             testNetwork = new RelayCommand(testNetworkExecute);
             addTypical = new RelayCommand(addTypicalExecute);
             throwException = new RelayCommand(throwExceptionExecute);
+            exportDBCommand = new RelayCommand(exportDBCVSExecute);
         }
         
         private void addResources()
@@ -37,6 +40,7 @@ namespace TECUserControlLibrary.Debug
             this.Resources.Add("TestNetworkCommand", testNetwork);
             this.Resources.Add("AddTypicalCommand", addTypical);
             this.Resources.Add("ThrowExceptionCommand", throwException);
+            this.Resources.Add("ExportDBCommand", exportDBCommand);
         }
 
         private void testNetworkExecute()
@@ -156,6 +160,11 @@ namespace TECUserControlLibrary.Debug
         private void throwExceptionExecute()
         {
             throw new Exception("Test Exception.");
+        }
+
+        private void exportDBCVSExecute()
+        {
+            DatabaseManager<TECScopeManager>.ExportDef();
         }
     }
 }

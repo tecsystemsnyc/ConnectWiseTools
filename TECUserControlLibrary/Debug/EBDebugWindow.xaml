@@ -29,5 +29,9 @@
                 Grid.Row="1">
             <TextBlock VerticalAlignment="Center">Throw Exception</TextBlock>
         </Button>
+        <Button Command="{DynamicResource ExportDBCommand}" Margin="5"
+                Grid.Row="1" Grid.Column="1">
+            <TextBlock VerticalAlignment="Center">Export DB CSV</TextBlock>
+        </Button>
     </Grid>
 </Window>

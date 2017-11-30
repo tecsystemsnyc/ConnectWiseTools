@@ -207,5 +207,16 @@ namespace EstimatingUtilitiesLibrary.Database
 #endif
 
         }
+
+        public static void ExportDef()
+        {
+            foreach(TableBase table in AllTables.Tables)
+            {
+                foreach(TableField field in table.Fields)
+                {
+                    Console.WriteLine(String.Format("{0},{1}", table.NameString, field.Name));
+                }
+            }
+        }
     }
 }
