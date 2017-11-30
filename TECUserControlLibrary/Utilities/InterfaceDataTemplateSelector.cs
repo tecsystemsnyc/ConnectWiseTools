@@ -33,6 +33,8 @@ namespace TECUserControlLibrary.Utilities
     public class IOModuleSelector : InterfaceDataTemplateSelector<TECIOModule> { }
     public class ControllerTypeSelector : InterfaceDataTemplateSelector<TECControllerType> { }
     public class ConnectionSelector : InterfaceDataTemplateSelector<TECConnection> { }
+    public class ElectricalMaterialSelector : InterfaceDataTemplateSelector<TECElectricalMaterial> { }
+    public class ConnectionTypeSelector : InterfaceDataTemplateSelector<TECConnectionType> { }
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }
