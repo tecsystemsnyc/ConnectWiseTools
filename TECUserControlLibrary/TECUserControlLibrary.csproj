@@ -183,6 +183,9 @@
     <Compile Include="UserControls\PropertyControls\ConnectionPropertiesControl.xaml.cs">
       <DependentUpon>ConnectionPropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\ConnectionTypePropertiesControl.xaml.cs">
+      <DependentUpon>ConnectionTypePropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\ControllerPropertiesControl.xaml.cs">
       <DependentUpon>ControllerPropertiesControl.xaml</DependentUpon>
     </Compile>
@@ -200,6 +203,9 @@
     </Compile>
     <Compile Include="UserControls\ListControls\EndDeviceListControl.xaml.cs">
       <DependentUpon>EndDeviceListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyControls\ElectricalMaterialPropertiesControl.xaml.cs">
+      <DependentUpon>ElectricalMaterialPropertiesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
@@ -554,6 +560,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\PropertyControls\ConnectionTypePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\PropertyControls\ControllerPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -575,6 +585,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\EndDeviceListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\ElectricalMaterialPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

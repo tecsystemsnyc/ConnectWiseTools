@@ -67,6 +67,13 @@
                 <DataTemplate x:Key="connection">
                     <pControls:ConnectionPropertiesControl Selected="{Binding}"/>
                 </DataTemplate>
+                <DataTemplate x:Key="electricalMaterial">
+                    <pControls:ElectricalMaterialPropertiesControl Selected="{Binding}"
+                                                                   DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
+                </DataTemplate>
+                <DataTemplate x:Key="connectionType">
+                    <pControls:ConnectionTypePropertiesControl Selected="{Binding}"/>
+                </DataTemplate>
                 <DataTemplate x:Key="default"/>
                 <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -107,6 +114,12 @@
                 <utilities:ConnectionSelector x:Key="connectionSelector"
                                               InterfaceTemplate="{StaticResource connection}"
                                               DefaultTemplate="{StaticResource default}"/>
+                <utilities:ElectricalMaterialSelector x:Key="electricalMaterialSelector"
+                                                      InterfaceTemplate="{StaticResource electricalMaterial}"
+                                                      DefaultTemplate="{StaticResource default}"/>
+                <utilities:ConnectionTypeSelector x:Key="connectionTypeSelector"
+                                                  InterfaceTemplate="{StaticResource connectionType}"
+                                                  DefaultTemplate="{StaticResource default}"/>
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
@@ -122,6 +135,8 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ioModuleSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource controllerTypeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource electricalMaterialSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionTypeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
         </StackPanel>
     </ScrollViewer>
