@@ -28,6 +28,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             parent = parentSubScope;
             isTypical = parentSubScope.IsTypical;
             toAdd = new TECPoint(parentSubScope.IsTypical);
+            ToAdd.Quantity = 1;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
 
