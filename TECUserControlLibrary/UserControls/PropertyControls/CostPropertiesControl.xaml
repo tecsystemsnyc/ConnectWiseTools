@@ -50,8 +50,7 @@
                         <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
-                        <TextBox Text="{Binding Cost, StringFormat={}{0:C}}" 
-                             Margin="5"/>
+                        <TextBox Text="{Binding Cost, StringFormat={}{0:C}}" />
                     </DataTemplate>
                 </ContentPresenter.Resources>
             </ContentPresenter>

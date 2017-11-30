@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Column="0" Grid.Row="0"
                    Text="List Price:"/>
-            <TextBlock Grid.Column="1" Grid.Row="0"
+            <TextBox Grid.Column="1" Grid.Row="0"
                    Text="{Binding Price, StringFormat={}{0:C}}"/>
             <TextBlock Grid.Column="0" Grid.Row="1"
                    Text="Manufacturer:"/>

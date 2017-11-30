@@ -76,6 +76,26 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ConnectionTypeLabor");
             }
         }
+        private double _connectionTypePlenumCost;
+        public double ConnectionTypePlenumCost
+        {
+            get { return _connectionTypePlenumCost; }
+            set
+            {
+                _connectionTypePlenumCost = value;
+                RaisePropertyChanged("ConnectionTypePlenumCost");
+            }
+        }
+        private double _connectionTypePlenumLabor;
+        public double ConnectionTypePlenumLabor
+        {
+            get { return _connectionTypePlenumLabor; }
+            set
+            {
+                _connectionTypePlenumLabor = value;
+                RaisePropertyChanged("ConnectionTypePlenumLabor");
+            }
+        }
         #endregion
         #region Conduit Types
         private string _conduitTypeName;
@@ -637,10 +657,14 @@ namespace TECUserControlLibrary.ViewModels
             connectionType.Name = ConnectionTypeName;
             connectionType.Cost = ConnectionTypeCost;
             connectionType.Labor = ConnectionTypeLabor;
+            connectionType.PlenumCost = ConnectionTypePlenumCost;
+            connectionType.PlenumLabor = ConnectionTypePlenumLabor;
             Templates.Catalogs.ConnectionTypes.Add(connectionType);
             ConnectionTypeName = "";
             ConnectionTypeCost = 0;
             ConnectionTypeLabor = 0;
+            ConnectionTypePlenumCost = 0;
+            ConnectionTypePlenumLabor = 0;
         }
         private void addConduitTypeExecute()
         {
@@ -859,6 +883,8 @@ namespace TECUserControlLibrary.ViewModels
             ConnectionTypeName = "";
             ConnectionTypeCost = 0;
             ConnectionTypeLabor = 0;
+            ConnectionTypePlenumCost = 0.0;
+            ConnectionTypePlenumLabor = 0.0;
 
             ConduitTypeName = "";
             ConduitTypeCost = 0;
