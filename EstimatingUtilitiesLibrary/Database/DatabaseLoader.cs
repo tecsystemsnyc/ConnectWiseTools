@@ -172,9 +172,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return panelTypes;
         }
-        static private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
+        static private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
-            ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(new ConnectionTypeTable()), ConnectionTypeTable.TableName);
             DataTable connectionTypesDT = SQLiteDB.GetDataFromCommand(command);
             foreach (DataRow row in connectionTypesDT.Rows)
@@ -494,13 +494,13 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return points;
         }
-        static private ObservableCollection<TECElectricalMaterial> getConnectionTypesInDevice(Guid deviceID)
+        static private ObservableCollection<TECConnectionType> getConnectionTypesInDevice(Guid deviceID)
         {
-            ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             DataTable connectionTypeTable = getChildIDs(new DeviceConnectionTypeTable(), deviceID, DeviceConnectionTypeTable.Quantity.Name);
             foreach (DataRow row in connectionTypeTable.Rows)
             {
-                var connectionTypeToAdd = new TECElectricalMaterial(new Guid(row[DeviceConnectionTypeTable.TypeID.Name].ToString()));
+                var connectionTypeToAdd = new TECConnectionType(new Guid(row[DeviceConnectionTypeTable.TypeID.Name].ToString()));
                 int quantity = row[DeviceConnectionTypeTable.Quantity.Name].ToString().ToInt(1);
                 for (int x = 0; x < quantity; x++)
                 { connectionTypes.Add(connectionTypeToAdd); }
@@ -515,9 +515,9 @@ namespace EstimatingUtilitiesLibrary.Database
             else
             { return null; }
         }
-        static private ObservableCollection<TECElectricalMaterial> getConnectionTypesInNetworkConnection(Guid netConnectionID)
+        static private ObservableCollection<TECConnectionType> getConnectionTypesInNetworkConnection(Guid netConnectionID)
         {
-            ObservableCollection<TECElectricalMaterial> outTypes = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> outTypes = new ObservableCollection<TECConnectionType>();
             DataTable connectionTypeDT = getChildIDs(new NetworkConnectionConnectionTypeTable(), netConnectionID);
             foreach(DataRow row in connectionTypeDT.Rows)
             {
@@ -934,10 +934,10 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         #endregion
         #region Catalogs
-        private static TECElectricalMaterial getConnectionTypeFromRow(DataRow row)
+        private static TECConnectionType getConnectionTypeFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ConnectionTypeTable.ID.Name].ToString());
-            var outConnectionType = new TECElectricalMaterial(guid);
+            var outConnectionType = new TECConnectionType(guid);
             assignValuePropertiesFromTable(outConnectionType, new ConnectionTypeTable(), row);
             getScopeChildren(outConnectionType);
             outConnectionType.RatedCosts = getRatedCostsInComponent(outConnectionType.Guid);
@@ -964,7 +964,7 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECDevice getDeviceFromRow(DataRow row)
         {
             Guid deviceID = new Guid(row[DeviceTable.ID.Name].ToString());
-            ObservableCollection<TECElectricalMaterial> connectionType = getConnectionTypesInDevice(deviceID);
+            ObservableCollection<TECConnectionType> connectionType = getConnectionTypesInDevice(deviceID);
             TECManufacturer manufacturer = getPlaceholderManufacturer(deviceID);
             TECDevice deviceToAdd = new TECDevice(deviceID, connectionType, manufacturer);
             assignValuePropertiesFromTable(deviceToAdd, new DeviceTable(), row);
@@ -1200,7 +1200,7 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECDevice getPlaceholderSubScopeDeviceFromRow(DataRow row)
         {
             Guid guid = new Guid(row[SubScopeDeviceTable.DeviceID.Name].ToString());
-            ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             TECManufacturer manufacturer = new TECManufacturer();
             TECDevice device = new TECDevice(guid, connectionTypes, manufacturer);
             device.Description = "placeholder";
@@ -1218,10 +1218,10 @@ namespace EstimatingUtilitiesLibrary.Database
             TECControllerType type = new TECControllerType(guid, new TECManufacturer());
             return type;
         }
-        private static TECElectricalMaterial getPlaceholderConnectionTypeFromRow(DataRow row, string keyField)
+        private static TECConnectionType getPlaceholderConnectionTypeFromRow(DataRow row, string keyField)
         {
             Guid guid = new Guid(row[keyField].ToString());
-            TECElectricalMaterial connectionType = new TECElectricalMaterial(guid);
+            TECConnectionType connectionType = new TECConnectionType(guid);
             return connectionType;
         }
         private static TECIOModule getPlaceholderIOModuleFromRow(DataRow row)
@@ -1234,7 +1234,7 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECDevice getPlaceholderActuatorFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ValveActuatorTable.ActuatorID.Name].ToString());
-            ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             TECManufacturer manufacturer = new TECManufacturer();
             TECDevice device = new TECDevice(guid, connectionTypes, manufacturer);
             device.Description = "placeholder";

@@ -153,13 +153,13 @@ namespace EstimatingLibrary
             return (AvailableNetworkIO.Contains(ioType));
         }
         public TECNetworkConnection AddNetworkConnection(bool isTypical, 
-            IEnumerable<TECElectricalMaterial> connectionTypes, IOType ioType)
+            IEnumerable<TECConnectionType> connectionTypes, IOType ioType)
         {
             if (CanAddNetworkConnection(ioType))
             {
                 TECNetworkConnection netConnect = new TECNetworkConnection(isTypical);
                 netConnect.ParentController = this;
-                netConnect.ConnectionTypes = new ObservableCollection<TECElectricalMaterial>(connectionTypes);
+                netConnect.ConnectionTypes = new ObservableCollection<TECConnectionType>(connectionTypes);
                 netConnect.IOType = ioType;
                 addChildConnection(netConnect);
                 return netConnect;

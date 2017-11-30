@@ -500,13 +500,13 @@ namespace EstimatingLibrary.Utilities
             linkTagsInScope(catalogs.Tags, scope);
         }
 
-        private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECElectricalMaterial> connectionTypes)
+        private static void linkDeviceToConnectionTypes(TECDevice device, ObservableCollection<TECConnectionType> connectionTypes)
         {
-            ObservableCollection<TECElectricalMaterial> linkedTypes = new ObservableCollection<TECElectricalMaterial>();
-            foreach (TECElectricalMaterial deviceType in device.ConnectionTypes)
+            ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
+            foreach (TECConnectionType deviceType in device.ConnectionTypes)
             {
                 bool found = false;
-                foreach (TECElectricalMaterial connectionType in connectionTypes)
+                foreach (TECConnectionType connectionType in connectionTypes)
                 {
                     if (deviceType.Guid == connectionType.Guid)
                     {
@@ -576,12 +576,12 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECElectricalMaterial> connectionTypes)
+        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECConnectionType> connectionTypes)
         {
-            ObservableCollection<TECElectricalMaterial> linkedTypes = new ObservableCollection<TECElectricalMaterial>();
-            foreach (TECElectricalMaterial type in connectionTypes)
+            ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
+            foreach (TECConnectionType type in connectionTypes)
             {
-                foreach(TECElectricalMaterial connType in netConnect.ConnectionTypes)
+                foreach(TECConnectionType connType in netConnect.ConnectionTypes)
                 {
                     if (connType.Guid == type.Guid)
                     {

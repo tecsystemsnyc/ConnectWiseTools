@@ -23,16 +23,16 @@ namespace EstimatingLibrary
         }
 
         //---Derived---
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get
             {
-                var outConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+                var outConnectionTypes = new ObservableCollection<TECConnectionType>();
                 if (SubScope != null)
                 {
                     foreach (TECDevice dev in SubScope.Devices)
                     {
-                        foreach(TECElectricalMaterial type in dev.ConnectionTypes)
+                        foreach(TECConnectionType type in dev.ConnectionTypes)
                         {
                             outConnectionTypes.Add(type);
                         }
@@ -92,7 +92,7 @@ namespace EstimatingLibrary
             saveList.Add(this.SubScope, "SubScope");
             return saveList;
         }
-        public override ObservableCollection<TECElectricalMaterial> GetConnectionTypes()
+        public override ObservableCollection<TECConnectionType> GetConnectionTypes()
         {
             return ConnectionTypes;
         }

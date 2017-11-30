@@ -113,6 +113,7 @@
     <Compile Include="Interfaces\IRelatable.cs" />
     <Compile Include="Interfaces\IEndDevice.cs" />
     <Compile Include="Interfaces\ITypicalable.cs" />
+    <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECExtraLabor.cs" />
     <Compile Include="TECTypical.cs" />
     <Compile Include="TECValve.cs" />

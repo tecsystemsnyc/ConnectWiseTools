@@ -6,7 +6,7 @@ namespace EstimatingLibrary
 {
     public class TECCatalogs : TECObject, IRelatable
     {
-        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
+        private ObservableCollection<TECConnectionType> _connectionTypes;
         private ObservableCollection<TECElectricalMaterial> _conduitTypes;
         private ObservableCollection<TECCost> _associatedCosts;
         private ObservableCollection<TECPanelType> _panelTypes;
@@ -90,7 +90,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "ControllerTypes", this, value, old);
             }
         }
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
@@ -162,7 +162,7 @@ namespace EstimatingLibrary
         private void instantiateCOllections()
         {
             _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
-            _connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            _connectionTypes = new ObservableCollection<TECConnectionType>();
             _associatedCosts = new ObservableCollection<TECCost>();
             _panelTypes = new ObservableCollection<TECPanelType>();
             _controllerTypes = new ObservableCollection<TECControllerType>();

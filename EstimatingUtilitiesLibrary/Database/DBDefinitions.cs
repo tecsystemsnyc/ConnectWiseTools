@@ -643,13 +643,15 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class ConnectionTypeTable : TableBase
     {
         public static string TableName = "ConnectionType";
-        public static Type ObjectType = typeof(TECElectricalMaterial);
+        public static Type ObjectType = typeof(TECConnectionType);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-
+        public static TableField PlenumCost = new TableField("PlenumCost", "REAL", ObjectType.GetProperty("PlenumCost"), defaultValue: "0.0");
+        public static TableField PlenumLabor = new TableField("PlenumLabor", "REAL", ObjectType.GetProperty("PlenumLabor"), defaultValue: "0.0");
+        
         private List<TableField> primaryKeys = new List<TableField>()
         {
             ID
@@ -663,7 +665,9 @@ namespace EstimatingUtilitiesLibrary.Database
             ID,
             Name,
             Cost,
-            Labor
+            Labor,
+            PlenumCost,
+            PlenumLabor
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -758,6 +762,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
         public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
+        public static TableField IsPlenum = new TableField("IsPlenum", "INTEGER", ObjectType.GetProperty("IsPlenum"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -770,7 +775,8 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ID,
             Length,
-            ConduitLength
+            ConduitLength,
+            IsPlenum
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -792,6 +798,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
         public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
         public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
+        public static TableField IsPlenum = new TableField("IsPlenum", "INTEGER", ObjectType.GetProperty("IsPlenum"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -805,7 +812,8 @@ namespace EstimatingUtilitiesLibrary.Database
             ID,
             Length,
             ConduitLength,
-            IOType
+            IOType,
+            IsPlenum
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1673,7 +1681,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "DeviceConnectionType";
         public static Type ObjectType = typeof(TECDevice);
-        public static Type ReferenceType = typeof(TECElectricalMaterial);
+        public static Type ReferenceType = typeof(TECConnectionType);
 
         public static Type HelperType = typeof(HelperProperties);
 
@@ -1893,7 +1901,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "NetworkConnectionConnectionType";
         public static Type ObjectType = typeof(TECNetworkConnection);
-        public static Type ReferenceType = typeof(TECElectricalMaterial);
+        public static Type ReferenceType = typeof(TECConnectionType);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));

@@ -73,7 +73,6 @@ namespace TECUserControlLibrary.ViewModels
             Estimate = estimate;
             DesiredConfidence = bid.Parameters.DesiredConfidence;
 
-            ReloadCommand = new RelayCommand(ReloadExecute);
             SetParametersCommand = new RelayCommand<TECParameters>(SetParametersExecute);
             SetDesiredConfidenceCommand = new RelayCommand(SetConfidenceExecute, CanSetConfidence);
         }
@@ -94,21 +93,7 @@ namespace TECUserControlLibrary.ViewModels
             Estimate = estimate;
             Templates = templates;
         }
-
-        private void ReloadExecute()
-        {
-            if (!TemplatesLoaded)
-            {
-                LoadTemplates();
-            }
-
-            //Check again to see if templates are properly loaded after reloading. Should not be else.
-            if (TemplatesLoaded)
-            {
-                throw new NotImplementedException();
-                //Bid.Labor.UpdateConstants(Templates.Labor);
-            }
-        }
+        
         private void SetParametersExecute(TECParameters obj)
         {
             Bid.Parameters = obj;

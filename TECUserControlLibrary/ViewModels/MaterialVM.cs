@@ -308,8 +308,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DeviceManufacturer");
             }
         }
-        private ObservableCollection<TECElectricalMaterial> _deviceConnectionTypes;
-        public ObservableCollection<TECElectricalMaterial> DeviceConnectionTypes
+        private ObservableCollection<TECConnectionType> _deviceConnectionTypes;
+        public ObservableCollection<TECConnectionType> DeviceConnectionTypes
         {
             get { return _deviceConnectionTypes; }
             set
@@ -618,7 +618,7 @@ namespace TECUserControlLibrary.ViewModels
             DeviceDescription = "";
             DeviceListPrice = 0;
             DeviceLabor = 0;
-            DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
             DeviceManufacturer = null;
         }
         private bool canAddDevice()
@@ -633,7 +633,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addConnectionTypeExecute()
         {
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Name = ConnectionTypeName;
             connectionType.Cost = ConnectionTypeCost;
             connectionType.Labor = ConnectionTypeLabor;
@@ -888,7 +888,7 @@ namespace TECUserControlLibrary.ViewModels
             DeviceName = "";
             DeviceDescription = "";
             DeviceListPrice = 0;
-            DeviceConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
 
             ValveName = "";
             ValveDescription = "";

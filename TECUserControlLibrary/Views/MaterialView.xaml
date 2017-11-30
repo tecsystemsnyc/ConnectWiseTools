@@ -439,7 +439,7 @@
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
                                        VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                      SelectedItem="{Binding DeviceManufacturer}"
+                                      SelectedItem="{Binding PanelTypeManufacturer}"
                                       DisplayMemberPath="Label" Grid.Column="3"/>
                         </Grid>
                         <Button Grid.Row="2" Grid.ColumnSpan="4"

@@ -12,12 +12,12 @@ namespace EstimatingLibrary
         #endregion
 
         #region Fields
-        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
+        private ObservableCollection<TECConnectionType> _connectionTypes;
 
         #endregion
 
         #region Properties
-        virtual public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+        virtual public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
@@ -38,13 +38,13 @@ namespace EstimatingLibrary
 
         #region Constructors
         public TECDevice(Guid guid,
-            IEnumerable<TECElectricalMaterial> connectionTypes,
+            IEnumerable<TECConnectionType> connectionTypes,
             TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
-            _connectionTypes = new ObservableCollection<TECElectricalMaterial>(connectionTypes);
+            _connectionTypes = new ObservableCollection<TECConnectionType>(connectionTypes);
             ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
-        public TECDevice(IEnumerable<TECElectricalMaterial> connectionTypes,
+        public TECDevice(IEnumerable<TECConnectionType> connectionTypes,
             TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
 
         //Copy Constructor

@@ -11,7 +11,7 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private ObservableCollection<INetworkConnectable> _children;
-        private ObservableCollection<TECElectricalMaterial> _connectionTypes;
+        private ObservableCollection<TECConnectionType> _connectionTypes;
         private IOType _ioType;
 
         public ObservableCollection<INetworkConnectable> Children
@@ -27,7 +27,7 @@ namespace EstimatingLibrary
                 raisePropertyChanged("PossibleIO");
             }
         }
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return _connectionTypes; }
             set
@@ -107,7 +107,7 @@ namespace EstimatingLibrary
         public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
         {
             _children = new ObservableCollection<INetworkConnectable>();
-            _connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            _connectionTypes = new ObservableCollection<TECConnectionType>();
             Children.CollectionChanged += Children_CollectionChanged;
             ConnectionTypes.CollectionChanged += (sender, args) =>
                     ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
@@ -120,7 +120,7 @@ namespace EstimatingLibrary
             {
                 _children.Add(item.Copy(item, isTypical, guidDictionary));
             }
-            foreach(TECElectricalMaterial type in connectionSource.ConnectionTypes)
+            foreach(TECConnectionType type in connectionSource.ConnectionTypes)
             {
                 _connectionTypes.Add(type);
             }
@@ -226,7 +226,7 @@ namespace EstimatingLibrary
             saveList.AddRange(objects, "Children");
             return saveList;
         }
-        public override ObservableCollection<TECElectricalMaterial> GetConnectionTypes()
+        public override ObservableCollection<TECConnectionType> GetConnectionTypes()
         {
             return ConnectionTypes;
         }

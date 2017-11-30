@@ -75,7 +75,8 @@ namespace EstimatingLibrary
             return saveList;
         }
 
-        private void RatedCosts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        private void RatedCosts_CollectionChanged(object sender,
+            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {

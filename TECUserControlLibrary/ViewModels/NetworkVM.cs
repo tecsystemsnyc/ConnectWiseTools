@@ -28,9 +28,9 @@ namespace TECUserControlLibrary.ViewModels
         private ConnectableItem _selectedNonParentable;
         private Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
 
-        private ObservableCollection<TECElectricalMaterial> selectedConnectionTypes;
-        private TECElectricalMaterial _selectedPotentialConnectionType;
-        private TECElectricalMaterial _selectedChosenConnectionType;
+        private ObservableCollection<TECConnectionType> selectedConnectionTypes;
+        private TECConnectionType _selectedPotentialConnectionType;
+        private TECConnectionType _selectedChosenConnectionType;
         private IOType _selectedIOType;
 
         private TECNetworkConnection _selectedConnection;
@@ -118,14 +118,14 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand SetParentAsSelectedCommand { get; private set; }
 
         //Add Connection Properties
-        public ReadOnlyObservableCollection<TECElectricalMaterial> AllConnectionTypes { get; private set; }
+        public ReadOnlyObservableCollection<TECConnectionType> AllConnectionTypes { get; private set; }
         public List<IOType> IOTypes { get; private set; }
-        public ReadOnlyObservableCollection<TECElectricalMaterial> SelectedConnectionTypes
+        public ReadOnlyObservableCollection<TECConnectionType> SelectedConnectionTypes
         {
-            get { return new ReadOnlyObservableCollection<TECElectricalMaterial>(selectedConnectionTypes); }
+            get { return new ReadOnlyObservableCollection<TECConnectionType>(selectedConnectionTypes); }
         }
 
-        public TECElectricalMaterial SelectedPotentialConnectionType
+        public TECConnectionType SelectedPotentialConnectionType
         {
             get { return _selectedPotentialConnectionType; }
             set
@@ -134,7 +134,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedPotentialConnectionType");
             }
         }
-        public TECElectricalMaterial SelectedChosenConnectionType
+        public TECConnectionType SelectedChosenConnectionType
         {
             get { return _selectedChosenConnectionType; }
             set
@@ -227,9 +227,9 @@ namespace TECUserControlLibrary.ViewModels
             connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
             _parentables = new ObservableCollection<ConnectableItem>();
             _nonParentables = new ObservableCollection<ConnectableItem>();
-            AllConnectionTypes = new ReadOnlyObservableCollection<TECElectricalMaterial>(catalogs.ConnectionTypes);
+            AllConnectionTypes = new ReadOnlyObservableCollection<TECConnectionType>(catalogs.ConnectionTypes);
             IOTypes = new List<IOType>(TECIO.NetworkIO);
-            selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            selectedConnectionTypes = new ObservableCollection<TECConnectionType>();
             RaisePropertyChanged("Parentables");
             RaisePropertyChanged("NonParentables");
             RaisePropertyChanged("AllConnectionTypes");
@@ -449,7 +449,7 @@ namespace TECUserControlLibrary.ViewModels
             if (SelectedParentable.Item is INetworkParentable parentable)
             {
                 parentable.AddNetworkConnection(false, selectedConnectionTypes, SelectedIOType);
-                selectedConnectionTypes = new ObservableCollection<TECElectricalMaterial>();
+                selectedConnectionTypes = new ObservableCollection<TECConnectionType>();
                 RaisePropertyChanged("SelectedConnectionTypes");
             }
             else

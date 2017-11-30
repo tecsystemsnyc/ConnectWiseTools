@@ -61,7 +61,7 @@ namespace EstimatingLibrary
             }
         }
         
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get
             {
