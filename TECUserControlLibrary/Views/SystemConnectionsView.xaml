@@ -60,7 +60,8 @@
                 <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
                                                   IsDragSource="True"
                                                   DropHandler="{Binding}" Grid.Row="3"
-                                                  DragAdornerTemplate="{StaticResource cannotConnectAdorner}"/>
+                                                  DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
+                                                  SelectedItem="{Binding SelectedUnconnectedSubScope}"/>
                 <Border Grid.Row="2" Grid.RowSpan="2"/>
             </Grid>
         </Border>
@@ -95,6 +96,7 @@
                     Source="{Binding ConnectedSubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
                     UpdateCommand="{Binding UpdateItemCommand}"
+                    SelectedItem="{Binding SelectedConnection}"
                     IsDragSource="True"
                     DropHandler="{Binding}"
                     ReadOnly="False"

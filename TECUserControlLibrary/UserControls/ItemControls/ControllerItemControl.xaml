@@ -24,9 +24,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <Label FontSize="14" Content="{Binding Name}" FontWeight="DemiBold" Background="Transparent"/>
             <Label Content="{Binding Description}" Grid.Row="1"  Background="Transparent"/>

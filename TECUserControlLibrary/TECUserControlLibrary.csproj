@@ -180,6 +180,9 @@
     <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
       <DependentUpon>ControllerListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\ConnectionPropertiesControl.xaml.cs">
+      <DependentUpon>ConnectionPropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\ControllerPropertiesControl.xaml.cs">
       <DependentUpon>ControllerPropertiesControl.xaml</DependentUpon>
     </Compile>
@@ -544,6 +547,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\ListControls\ControllerListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\ConnectionPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -144,9 +144,13 @@ namespace TECUserControlLibrary.ViewModels
             {
                 connectionsVM = value;
                 RaisePropertyChanged("ConnectionsVM");
-                value.UpdateVM += updateVM =>
+                connectionsVM.UpdateVM += updateVM =>
                 {
                     SelectedVM = updateVM;
+                };
+                connectionsVM.Selected += item =>
+                {
+                    Selected?.Invoke(item as TECObject);
                 };
             }
         }
@@ -414,7 +418,7 @@ namespace TECUserControlLibrary.ViewModels
             else if (dropped is TECMisc misc)
             {
                 SelectedVM = new AddMiscVM(SelectedSystem);
-                ((AddMiscVM)SelectedVM).ToAdd = misc;
+                ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
             }
             else if (dropped is TECSystem system)
             {

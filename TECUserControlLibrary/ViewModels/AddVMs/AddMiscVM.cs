@@ -25,7 +25,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddMiscVM(TECSystem parentSystem)
         {
             parent = parentSystem;
-            toAdd = new TECMisc(CostType.TEC, parentSystem.IsTypical);
+            ToAdd = new TECMisc(CostType.TEC, parentSystem.IsTypical);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
 
