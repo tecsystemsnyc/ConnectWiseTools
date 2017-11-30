@@ -35,7 +35,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     bool success = DatabaseUpdater.Update(path, updates);
                     if (!success)
                     {
-                        MessageBox.Show("Not all items saved properly, check logs for more details.");
+                        MessageBox.Show("Some items might not have saved properly, check logs for more details.");
                     }
                 });
             }
