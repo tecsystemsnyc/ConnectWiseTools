@@ -27,7 +27,7 @@ namespace Tests
             bid.AddController(server);
             bid.AddController(controller);
             TECNetworkConnection netConnect = server.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
+                new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
             
             ConnectableItem serverItem = null;
             ConnectableItem controllerItem = null;
@@ -66,7 +66,7 @@ namespace Tests
             ChangeWatcher cw = new ChangeWatcher(bid);
             NetworkVM netVM = new NetworkVM(bid, cw);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(device);
 
@@ -137,7 +137,7 @@ namespace Tests
             bid.AddController(server1);
             bid.AddController(server2);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
 
             TECNetworkConnection netConnect = server1.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
 
@@ -186,7 +186,7 @@ namespace Tests
             bid.AddController(parentController);
             bid.AddController(childController);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
 
             TECNetworkConnection serverConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
             serverConnect.AddINetworkConnectable(parentController);
@@ -242,7 +242,7 @@ namespace Tests
             bid.AddController(server);
             bid.AddController(parentController);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(device);
 
@@ -320,7 +320,7 @@ namespace Tests
             bid.AddController(parentController);
             bid.AddController(childController);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConduitTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
 
             TECNetworkConnection serverConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
             TECNetworkConnection parentConnect = parentController.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
@@ -376,7 +376,7 @@ namespace Tests
             bid.AddController(server);
             bid.AddController(controller);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConduitTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
 
             TECNetworkConnection serverConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
             serverConnect.AddINetworkConnectable(controller);
@@ -418,7 +418,7 @@ namespace Tests
             ChangeWatcher cw = new ChangeWatcher(bid);
             NetworkVM netVM = new NetworkVM(bid, cw);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(device);
 
@@ -491,7 +491,7 @@ namespace Tests
             bid.AddController(server1);
             bid.AddController(server2);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
 
             TECNetworkConnection netConnect = server1.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
             netConnect.AddINetworkConnectable(server2);
@@ -541,7 +541,7 @@ namespace Tests
             bid.AddController(parentController);
             bid.AddController(childController);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
 
             TECNetworkConnection serverConnect = server.AddNetworkConnection(false, connectionTypes, IOType.BACnetIP);
             serverConnect.AddINetworkConnectable(parentController);
@@ -602,7 +602,7 @@ namespace Tests
             bid.AddController(server);
             bid.AddController(controller);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(device);
 
@@ -692,7 +692,7 @@ namespace Tests
             bid.AddController(server);
             bid.AddController(controller);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(device);
 
@@ -784,7 +784,7 @@ namespace Tests
             bid.AddController(server);
             bid.AddController(controller);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(device);
 
@@ -869,7 +869,7 @@ namespace Tests
             bid.AddController(server);
             bid.AddController(controller);
 
-            List<TECElectricalMaterial> connectionTypes = new List<TECElectricalMaterial>() { bid.Catalogs.ConnectionTypes[0] };
+            List<TECConnectionType> connectionTypes = new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] };
             TECDevice device = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(device);
 

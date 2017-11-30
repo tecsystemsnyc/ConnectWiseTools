@@ -33,8 +33,8 @@ namespace TECUserControlLibraryTests
             ssItem2.SetupAllProperties();
             ssItem2.Object.NeedsUpdate = true;
 
-            vm.SubScope.Add(ssItem1.Object);
-            vm.SubScope.Add(ssItem2.Object);
+            vm.ConnectedSubScope.Add(ssItem1.Object);
+            vm.ConnectedSubScope.Add(ssItem2.Object);
 
             //Assert
             Assert.IsFalse(vm.CanLeave, "CanLeave should be false.");
@@ -61,8 +61,8 @@ namespace TECUserControlLibraryTests
             ssItem2.SetupAllProperties();
             ssItem2.Object.NeedsUpdate = false;
 
-            vm.SubScope.Add(ssItem1.Object);
-            vm.SubScope.Add(ssItem2.Object);
+            vm.ConnectedSubScope.Add(ssItem1.Object);
+            vm.ConnectedSubScope.Add(ssItem2.Object);
 
             //Assert
             Assert.IsTrue(vm.CanLeave, "CanLeave should be true.");
@@ -94,8 +94,8 @@ namespace TECUserControlLibraryTests
             ssItem2.SetupAllProperties();
             ssItem2.Object.NeedsUpdate = false;
 
-            vm.SubScope.Add(ssItem1.Object);
-            vm.SubScope.Add(ssItem2.Object);
+            vm.ConnectedSubScope.Add(ssItem1.Object);
+            vm.ConnectedSubScope.Add(ssItem2.Object);
 
             //Act
             vm.SelectedController = controller;
@@ -130,8 +130,8 @@ namespace TECUserControlLibraryTests
             ssItem2.SetupAllProperties();
             ssItem2.Object.NeedsUpdate = true;
 
-            vm.SubScope.Add(ssItem1.Object);
-            vm.SubScope.Add(ssItem2.Object);
+            vm.ConnectedSubScope.Add(ssItem1.Object);
+            vm.ConnectedSubScope.Add(ssItem2.Object);
 
             //Act
             vm.SelectedController = controller;
@@ -166,8 +166,8 @@ namespace TECUserControlLibraryTests
             ssItem2.SetupAllProperties();
             ssItem2.Object.NeedsUpdate = true;
 
-            vm.SubScope.Add(ssItem1.Object);
-            vm.SubScope.Add(ssItem2.Object);
+            vm.ConnectedSubScope.Add(ssItem1.Object);
+            vm.ConnectedSubScope.Add(ssItem2.Object);
 
             //Act
             vm.SelectedController = controller;
@@ -203,8 +203,8 @@ namespace TECUserControlLibraryTests
             ssItem2.SetupAllProperties();
             ssItem2.Object.NeedsUpdate = true;
 
-            vm.SubScope.Add(ssItem1.Object);
-            vm.SubScope.Add(ssItem2.Object);
+            vm.ConnectedSubScope.Add(ssItem1.Object);
+            vm.ConnectedSubScope.Add(ssItem2.Object);
 
             //Act
             vm.SelectedController = controller;

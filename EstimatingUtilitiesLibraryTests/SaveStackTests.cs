@@ -880,7 +880,7 @@ namespace Tests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
-            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             Dictionary < string, string> data = new Dictionary<string, string>();
@@ -912,7 +912,7 @@ namespace Tests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher);
-            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -947,7 +947,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
@@ -1548,7 +1548,7 @@ namespace Tests
             bid.AddController(controller);
             bid.AddController(child);
 
-            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECConnectionType connectionType = new TECConnectionType();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1556,7 +1556,7 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
             connection.AddINetworkConnectable(child);
 
             Dictionary<string, string> data;
@@ -1608,7 +1608,7 @@ namespace Tests
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
             
-            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECConnectionType connectionType = new TECConnectionType();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1616,7 +1616,7 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
             connection.AddINetworkConnectable(instanceController);
 
             Dictionary<string, string> data;
@@ -1674,7 +1674,7 @@ namespace Tests
             TECSystem otherSystem = otherTypical.AddInstance(bid);
             TECController otherInstanceController = otherSystem.Controllers[0];
 
-            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECConnectionType connectionType = new TECConnectionType();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
@@ -1682,7 +1682,7 @@ namespace Tests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             TECNetworkConnection connection = instanceController.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
             connection.AddINetworkConnectable(otherInstanceController);
 
             Dictionary<string, string> data;
@@ -2723,7 +2723,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             //Act
@@ -2753,7 +2753,7 @@ namespace Tests
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
@@ -2789,7 +2789,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECElectricalMaterial>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
             TECSystem instance = system.AddInstance(bid);
@@ -3344,9 +3344,9 @@ namespace Tests
             bid.AddController(controller);
             bid.AddController(child);
 
-            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECConnectionType connectionType = new TECConnectionType();
             TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
             connection.AddINetworkConnectable(child);
 
             //Act
@@ -3403,9 +3403,9 @@ namespace Tests
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
-            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECConnectionType connectionType = new TECConnectionType();
             TECNetworkConnection connection = controller.AddNetworkConnection(false, 
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
             connection.AddINetworkConnectable(instanceController);
 
             //Act
@@ -3466,9 +3466,9 @@ namespace Tests
             TECSystem otherSystem = otherTypical.AddInstance(bid);
             TECController otherInstanceController = otherSystem.Controllers[0];
 
-            TECElectricalMaterial connectionType = new TECElectricalMaterial();
+            TECConnectionType connectionType = new TECConnectionType();
             TECNetworkConnection connection = instanceController.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
             connection.AddINetworkConnectable(otherInstanceController);
             //Act
             DeltaStacker stack = new DeltaStacker(watcher);
