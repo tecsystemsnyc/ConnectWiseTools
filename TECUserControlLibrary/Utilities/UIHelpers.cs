@@ -405,7 +405,7 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, AllSearchableObjects>("Valves", AllSearchableObjects.Valves),
             new Tuple<string, AllSearchableObjects>("Wire Types", AllSearchableObjects.Wires),
             new Tuple<string, AllSearchableObjects>("Conduit Types", AllSearchableObjects.Conduits),
-            new Tuple<string, AllSearchableObjects>("Associatd Costs", AllSearchableObjects.AssociatedCosts),
+            new Tuple<string, AllSearchableObjects>("Associated Costs", AllSearchableObjects.AssociatedCosts),
             new Tuple<string, AllSearchableObjects>("Misc. Costs", AllSearchableObjects.MiscCosts),
             new Tuple<string, AllSearchableObjects>("Misc. Wiring", AllSearchableObjects.MiscWiring),
             new Tuple<string, AllSearchableObjects>("Tags", AllSearchableObjects.Tags),
