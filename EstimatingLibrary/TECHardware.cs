@@ -51,6 +51,7 @@ namespace EstimatingLibrary
                 _price = value;
                 notifyCombinedChanged(Change.Edit, "Price", this, value, old);
                 notifyCostChanged(new CostBatch(value - old, 0, Type));
+                raisePropertyChanged("Cost");
             }
         }
         #endregion
