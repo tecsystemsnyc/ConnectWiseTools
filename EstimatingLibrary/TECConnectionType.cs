@@ -10,6 +10,7 @@ namespace EstimatingLibrary
     public class TECConnectionType : TECElectricalMaterial
     {
         private double _plenumCost;
+        private double _plenumLabor;
 
         public double PlenumCost
         {
@@ -20,6 +21,17 @@ namespace EstimatingLibrary
                 _plenumCost = value;
                 notifyCombinedChanged(Change.Edit, "PlenumCost", this, value, old);
                 notifyCostChanged(new CostBatch(value - old, 0, Type));
+            }
+        }
+        public double PlenumLabor
+        {
+            get { return _plenumLabor; }
+            set
+            {
+                var old = PlenumLabor;
+                _plenumLabor = value;
+                notifyCombinedChanged(Change.Edit, "PlenumLabor", this, value, old);
+                notifyCostChanged(new CostBatch(0, value - old, Type));
             }
         }
 
@@ -40,6 +52,7 @@ namespace EstimatingLibrary
             {
                 TECCost plenumCost = new TECCost(CostType.Electrical);
                 plenumCost.Cost = length * PlenumCost;
+                plenumCost.Labor = length * PlenumLabor;
                 outCosts.AddCost(plenumCost);
             }
             return outCosts;

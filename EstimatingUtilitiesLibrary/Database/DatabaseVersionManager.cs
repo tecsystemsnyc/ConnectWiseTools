@@ -312,8 +312,11 @@ namespace EstimatingUtilitiesLibrary.Database
                     {
                         UpdateFields.Add(updateField);
                     }
-                    OriginalFields.Add(originalField);
-                    TableFieldsDictionary[originalTable].Add(originalField);
+                    if (!OriginalFields.Contains(originalField))
+                    {
+                        OriginalFields.Add(originalField);
+                        TableFieldsDictionary[originalTable].Add(originalField);
+                    }
                 }
                 else
                 {
@@ -321,7 +324,10 @@ namespace EstimatingUtilitiesLibrary.Database
                     {
                         UpdateFields.Add(updateField);
                     }
-                    OriginalFields.Add(originalField);
+                    if (!OriginalFields.Contains(originalField))
+                    {
+                        OriginalFields.Add(originalField);
+                    }
                     TableFieldsDictionary[originalTable] = new List<string>() { originalField };
                     OriginalTableNames.Add(originalTable);
                 }
