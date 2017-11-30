@@ -419,7 +419,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _controllerTypeDescription = value;
-                RaisePropertyChanged("ControllerTypeDescripiton");
+                RaisePropertyChanged("ControllerTypeDescription");
             }
         }
         private double _controllerTypeCost;
