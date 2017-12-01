@@ -665,7 +665,12 @@
                                 <ColumnDefinition Width="80"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Label: " Grid.Row="0" Grid.Column="0"/>
-                            <TextBox Text="{Binding TagToAdd.Label}" Grid.Row="0" Grid.Column="1" Margin="2"/>
+                            <TextBox Text="{Binding TagToAdd.Label, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="2">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Return" 
+                                                Command="{Binding AddTagCommand}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
                             <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Margin="2"/>
                         </Grid>
                         <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Tags}"

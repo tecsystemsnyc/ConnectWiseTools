@@ -41,7 +41,9 @@
             </Grid.ColumnDefinitions>
             <Label Content="Review Properties" Grid.ColumnSpan="2"/>
             <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2"/>
-            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"
+                                  DropHandler="{Binding PropertiesVM}"
+                                  ViewModel="{Binding PropertiesVM}"/>
             <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="2"/>
             <Button Content="Add" x:Name="doneButton" Click="doneButton_Click" Grid.Row="2"
                     Command="{Binding AddCommand}" Grid.Column="1"/>

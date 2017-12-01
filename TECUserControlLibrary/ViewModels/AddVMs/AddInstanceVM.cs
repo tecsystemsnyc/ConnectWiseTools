@@ -1,21 +1,20 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddInstanceVM : ViewModelBase, IAddVM
+    public class AddInstanceVM : AddVM
     {
         private TECTypical parent;
         private TECBid bid;
         private int quantity;
         private TECSystem toAdd;
 
-        public Action<object> Added { get; }
-
-        public ICommand AddCommand { get; private set; }
         public int Quantity
         {
             get { return quantity; }
@@ -35,7 +34,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
         }
 
-        public AddInstanceVM(TECTypical typical, TECBid bid)
+        public AddInstanceVM(TECTypical typical, TECBid bid) : base(bid)
         {
             toAdd = new TECSystem(false);
             Quantity = 1;
@@ -61,5 +60,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
             return false;
         }
+        
     }
 }

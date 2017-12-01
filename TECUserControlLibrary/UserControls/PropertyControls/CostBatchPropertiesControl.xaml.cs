@@ -1,6 +1,10 @@
 ﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.UserControls.PropertyControls
 {
@@ -23,5 +27,30 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
         {
             InitializeComponent();
         }
+    }
+
+    public class CostBatchToPropertiesItemConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value != null)
+            {
+                return new CostBatchPropertiesItem(value as INotifyCostChanged);
+
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+
+        }
+        #endregion
     }
 }

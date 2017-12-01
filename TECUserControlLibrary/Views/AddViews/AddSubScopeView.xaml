@@ -47,7 +47,7 @@
                 <TextBlock Text="{Binding Name, StringFormat=Devices/Contacts in {0}}"/>
             </Border>
             <listControls:EndDeviceListControl Source="{Binding Devices}" Grid.Row="3" Grid.ColumnSpan="2"
-                                               DropHandler="{Binding ElementName=addSubScopeView, Path=ViewModel}"
+                                               DropHandler="{Binding ElementName=addSubScopeView, Path=ViewModel.PropertiesVM}"
                                                DeleteCommand="{Binding ElementName=addSubScopeView, Path=ViewModel.DeleteDeviceCommand}"/>
             <Border Grid.Row="4" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
                 <TextBlock Text="{Binding Name, StringFormat=IO in {0}}" />
@@ -95,7 +95,9 @@
             </Grid.ColumnDefinitions>
             <Label Content="Review Properties" Grid.ColumnSpan="2"/>
             <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2"/>
-            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"
+                                  DropHandler="{Binding PropertiesVM}"
+                                  ViewModel="{Binding PropertiesVM}"/>
             <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="2" Margin="2"/>
             <Button Content="Add" x:Name="doneButton" Click="doneButton_Click" Grid.Row="2"
                     Command="{Binding AddCommand}" Grid.Column="1" Margin="2"/>

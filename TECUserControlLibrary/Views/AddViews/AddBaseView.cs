@@ -26,14 +26,14 @@ namespace TECUserControlLibrary.Views.AddViews
             remove { RemoveHandler(CancelEvent, value); }
         }
 
-        public IAddVM ViewModel
+        public AddVM ViewModel
         {
-            get { return (IAddVM)GetValue(ViewModelProperty); }
+            get { return (AddVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(IAddVM), typeof(AddBaseView), new PropertyMetadata(default(object)));
+            DependencyProperty.Register("ViewModel", typeof(AddVM), typeof(AddBaseView), new PropertyMetadata(default(object)));
         
         protected void doneButton_Click(object sender, RoutedEventArgs e)
         {

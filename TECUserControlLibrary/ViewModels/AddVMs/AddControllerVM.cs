@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddControllerVM : ViewModelBase, IAddVM
+    public class AddControllerVM :  AddVM
     {
         private TECSystem parent;
         private TECController toAdd;
@@ -16,7 +16,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECControllerType noneControllerType;
         private string _hintText;
         private TECControllerType _selectedType;
-        private bool isTypical = false; 
+        private bool isTypical = false;
 
         public TECController ToAdd
         {
@@ -56,11 +56,9 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
 
         public List<TECControllerType> ControllerTypes { get; private set; }
-        public ICommand AddCommand { get; private set; }
         public ICommand SetTypeCommand { get; private set; }
-        public PropertiesVM PropertiesVM { get; private set; }
 
-        public AddControllerVM(TECSystem parentSystem, IEnumerable<TECControllerType> controllerTypes)
+        public AddControllerVM(TECSystem parentSystem, IEnumerable<TECControllerType> controllerTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
             setup(controllerTypes);
             parent = parentSystem;
@@ -73,7 +71,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             toAdd = new TECController(noneControllerType, parentSystem.IsTypical);
         }
 
-        public AddControllerVM(Action<TECController> addMethod, IEnumerable<TECControllerType> controllerTypes)
+        public AddControllerVM(Action<TECController> addMethod, IEnumerable<TECControllerType> controllerTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
             setup(controllerTypes);
             add = addMethod;
@@ -94,9 +92,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         }
         
-
-        public Action<object> Added { get; }
-
         private bool addCanExecute()
         {
             bool canAdd = toAdd.Type != noneControllerType;

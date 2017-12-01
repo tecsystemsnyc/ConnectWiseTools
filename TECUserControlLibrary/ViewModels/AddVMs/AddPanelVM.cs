@@ -1,13 +1,15 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddPanelVM : ViewModelBase, IAddVM
+    public class AddPanelVM : AddVM
     {
         private TECSystem parent;
         private TECPanel toAdd;
@@ -34,9 +36,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
         }
         public List<TECPanelType> PanelTypes { get; private set; }
-        public ICommand AddCommand { get; private set; }
 
-        public AddPanelVM(TECSystem parentSystem, IEnumerable<TECPanelType> panelTypes)
+        public AddPanelVM(TECSystem parentSystem, IEnumerable<TECPanelType> panelTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
             Quantity = 1;
             parent = parentSystem;
@@ -49,7 +50,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             toAdd = new TECPanel(PanelTypes[0], parentSystem.IsTypical);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
-        public AddPanelVM(Action<TECPanel> addMethod, IEnumerable<TECPanelType> panelTypes)
+        public AddPanelVM(Action<TECPanel> addMethod, IEnumerable<TECPanelType> panelTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
             Quantity = 1;
             add = addMethod;
@@ -59,7 +60,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         }
 
-        public Action<object> Added { get; }
 
         private bool addCanExecute()
         {
@@ -74,6 +74,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 Added?.Invoke(panel);
             }
         }
+        
 
     }
 }

@@ -242,7 +242,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addEquipmentExecute(TECSystem system)
         {
-            SelectedVM = new AddEquipmentVM(system);
+            SelectedVM = new AddEquipmentVM(system, scopeManager);
         }
         private bool canAddEquipment(TECSystem system)
         {
@@ -251,7 +251,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addSubScopeExecute(TECEquipment equipment)
         {
-            SelectedVM = new AddSubScopeVM(equipment);
+            SelectedVM = new AddSubScopeVM(equipment,scopeManager);
         }
         private bool canAddSubScope(TECEquipment equipment)
         {
@@ -260,7 +260,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addPointExecute(TECSubScope subScope)
         {
-            SelectedVM = new AddPointVM(subScope);
+            SelectedVM = new AddPointVM(subScope, scopeManager);
         }
         private bool canAddPoint(TECSubScope subScope)
         {
@@ -269,7 +269,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addControllerExecute(TECSystem system)
         {
-            SelectedVM = new AddControllerVM(system, catalogs.ControllerTypes);
+            SelectedVM = new AddControllerVM(system, catalogs.ControllerTypes, scopeManager);
         }
         private bool canAddController(TECSystem system)
         {
@@ -278,7 +278,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addPanelExecute(TECSystem system)
         {
-            SelectedVM = new AddPanelVM(system, catalogs.PanelTypes);
+            SelectedVM = new AddPanelVM(system, catalogs.PanelTypes, scopeManager);
         }
         private bool canAddPanel(TECSystem system)
         {
@@ -287,7 +287,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addMiscExecute(TECSystem system)
         {
-            SelectedVM = new AddMiscVM(system);
+            SelectedVM = new AddMiscVM(system, scopeManager);
         }
         private bool canAddMisc(TECSystem system)
         {
@@ -403,21 +403,21 @@ namespace TECUserControlLibrary.ViewModels
             }
             if (dropped is TECEquipment equipment)
             {
-                SelectedVM = new AddEquipmentVM(SelectedSystem);
+                SelectedVM = new AddEquipmentVM(SelectedSystem, scopeManager);
                 ((AddEquipmentVM)SelectedVM).ToAdd = equipment;
             } else if (dropped is TECSubScope subScope)
             {
-                SelectedVM = new AddSubScopeVM(SelectedEquipment);
+                SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
                 ((AddSubScopeVM)SelectedVM).ToAdd = subScope;
             }
             else if (dropped is TECPoint point)
             {
-                SelectedVM = new AddPointVM(SelectedSubScope);
+                SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
                 ((AddPointVM)SelectedVM).ToAdd = point;
             }
             else if (dropped is TECMisc misc)
             {
-                SelectedVM = new AddMiscVM(SelectedSystem);
+                SelectedVM = new AddMiscVM(SelectedSystem, scopeManager);
                 ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
             }
             else if (dropped is TECSystem system)
