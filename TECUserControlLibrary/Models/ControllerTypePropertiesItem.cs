@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.Models
 {
-    public class ControllerTypePropertiesItem : ViewModelBase
+    public class ControllerTypePropertiesItem : ViewModelBase, IDropTarget
     {
         private IOType _selectedIO;
 
@@ -77,6 +78,33 @@ namespace TECUserControlLibrary.Models
         private bool canAddIO()
         {
             return true;
+        }
+
+        void IDropTarget.DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.StandardDragOver(dropInfo);
+        }
+
+        void IDropTarget.Drop(IDropInfo dropInfo)
+        {
+            if(dropInfo.Data is TECIOModule module)
+            {
+                bool foundModule = false;
+                foreach(var item in IOModules)
+                {
+                    if(item.Item == module)
+                    {
+                        item.Quantity++;
+                        foundModule = true;
+                        break;
+                    }
+                }
+                if (!foundModule)
+                {
+                    ControllerType.IOModules.Add(module);
+                    IOModules.Add(module);
+                }
+            }
         }
     }
 }
