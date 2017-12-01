@@ -348,7 +348,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(25, 2).Value = String.Format("%{0:F2}", estimate.Margin);
 
             var image = worksheet.AddPicture(createPlotImage(estimate));
-            image.MoveTo(worksheet.Cell(18, 5).Address);
+            image.MoveTo(worksheet.Cell(7, 4).Address);
 
             worksheet.Columns().AdjustToContents();
 
