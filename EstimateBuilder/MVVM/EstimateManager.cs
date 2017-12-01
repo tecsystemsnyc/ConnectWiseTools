@@ -171,14 +171,21 @@ namespace EstimateBuilder.MVVM
         //Load Templates
         private void loadTemplatesExecute()
         {
-            string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
-            if(loadFilePath != null)
+            string message = "Would you like to save your changes before loading new templates?";
+
+            checkForChanges(message, loadTemplates);
+
+            void loadTemplates()
             {
-                ViewEnabled = false;
-                StatusBarVM.CurrentStatusText = "Loading Templates...";
-                templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
-                templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
-                templatesDatabaseManager.AsyncLoad();
+                string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+                if (loadFilePath != null)
+                {
+                    ViewEnabled = false;
+                    StatusBarVM.CurrentStatusText = "Loading Templates...";
+                    templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
+                    templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
+                    templatesDatabaseManager.AsyncLoad();
+                }
             }
         }
         private bool canLoadTemplates()

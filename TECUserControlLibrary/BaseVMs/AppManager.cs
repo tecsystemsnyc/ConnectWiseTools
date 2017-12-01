@@ -332,7 +332,14 @@ namespace TECUserControlLibrary.BaseVMs
                     case MessageBoxResult.Yes:
                         logger.Info("User responded 'yes', saving delta.");
                         saveDeltaExecute();
-                        databaseManager.SaveComplete += saveComplete;
+                        if (databaseManager != null)
+                        {
+                            databaseManager.SaveComplete += (dbSuccess) => saveComplete(dbSuccess);
+                        }
+                        else
+                        {
+                            saveComplete(false, "databaseManager is null. User (probably) cancelled save.");
+                        }
                         break;
                     case MessageBoxResult.No:
                         logger.Info("User responded 'no'.");
@@ -350,13 +357,19 @@ namespace TECUserControlLibrary.BaseVMs
                 executeOnComplete();
             }
 
-            void saveComplete(bool success)
+            void saveComplete(bool success, string nonSuccessMessage = "databaseManager.SaveComplete returned false.")
             {
-                databaseManager.SaveComplete -= saveComplete;
+                databaseManager.SaveComplete -= (dbSuccess) => saveComplete(dbSuccess);
                 if (success)
+                {
+                    logger.Info("Save successful.");
                     executeOnComplete();
+                }
                 else
+                {
+                    logger.Info("Save unsuccessful, {0}", nonSuccessMessage);
                     return;
+                }
             }
 
             void executeOnComplete()
