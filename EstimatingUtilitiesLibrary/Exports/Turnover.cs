@@ -3,6 +3,9 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Wpf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -344,6 +347,8 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(25, 1).Value = "Margin";
             worksheet.Cell(25, 2).Value = String.Format("%{0:F2}", estimate.Margin);
 
+            var image = worksheet.AddPicture(createPlotImage(estimate));
+            image.MoveTo(worksheet.Cell(18, 5).Address);
 
             worksheet.Columns().AdjustToContents();
 
@@ -351,10 +356,18 @@ namespace EstimatingUtilitiesLibrary.Exports
 
         private static string createPlotImage(TECEstimator estimate)
         {
-            //Path.gettem
-            //var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
-            //pngExporter.ExportToFile(plotModel, fileName);
-            return "";
+            string path = Path.GetTempFileName();
+            var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
+            PlotModel plotModel = new PlotModel { Title = "Cost Distribution" };
+            OxyPlot.Series.PieSeries pieSeries = new OxyPlot.Series.PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
+            pieSeries.Slices.Add(new PieSlice("Material Cost", estimate.TECMaterialCost) { IsExploded = false });
+            pieSeries.Slices.Add(new PieSlice("Labor Cost", estimate.TECLaborCost) { IsExploded = false });
+            pieSeries.Slices.Add(new PieSlice("Sub. Labor Cost", estimate.SubcontractorLaborCost) { IsExploded = false });
+            pieSeries.Slices.Add(new PieSlice("Sub. Material Cost", estimate.ElectricalMaterialCost) { IsExploded = false });
+            plotModel.Series.Add(pieSeries);
+
+            pngExporter.ExportToFile(plotModel, path);
+            return path;
         }
 
         private static Paragraph introParagraph(TECBid bid)
