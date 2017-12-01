@@ -15,8 +15,13 @@ namespace EstimatingUtilitiesLibrary.Exports
         {
             XLWorkbook workbook = new XLWorkbook();
             createSummarySheet(workbook, bid, estimate);
+            MaterialSummaryExport.AddControllersSheet(workbook, bid);
+            MaterialSummaryExport.AddPanelsSheet(workbook, bid);
+            MaterialSummaryExport.AddDevicesSheet(workbook, bid);
+            MaterialSummaryExport.AddValvesSheet(workbook, bid);
+            MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
+            MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
             createBomSheets(workbook, bid);
-
             workbook.SaveAs(path);
         }
 
