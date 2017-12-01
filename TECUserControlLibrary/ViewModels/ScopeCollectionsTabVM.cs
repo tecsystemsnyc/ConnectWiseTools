@@ -277,29 +277,19 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if(item is TECScope scope)
                 {
-                    if (UtilitiesMethods.StringContainsStrings(scope.Name.ToUpper(), searchCriteria) ||
-                                        UtilitiesMethods.StringContainsStrings(scope.Description.ToUpper(), searchCriteria))
+                    string[] references = { scope.Name.ToUpper(), scope.Description.ToUpper() };
+                    foreach(TECLabeled tag in scope.Tags)
+                    {
+                        references.Append(tag.Label);
+                    }
+                    if (scope is TECHardware hardware)
+                    {
+                        references.Append(hardware.Manufacturer.Label.ToUpper());
+                    }
+                    if (UtilitiesMethods.StringsContainStrings(references, searchCriteria))
                     {
                         outCollection.Add(item);
                     }
-                    else if(scope is TECHardware hardware)
-                    {
-                        if(UtilitiesMethods.StringContainsStrings(hardware.Manufacturer.Label.ToUpper(), searchCriteria))
-                        {
-                            outCollection.Add(item);
-                        }
-                    }
-                    else
-                    {
-                        foreach (TECLabeled tag in scope.Tags)
-                        {
-                            if (UtilitiesMethods.StringContainsStrings(tag.Label.ToUpper(), searchCriteria))
-                            {
-                                outCollection.Add(item);
-                            }
-                        }
-                    }
-                    
                 }
                 else if (item is TECLabeled labeled)
                 {
