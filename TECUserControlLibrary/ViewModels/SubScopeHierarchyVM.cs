@@ -99,7 +99,7 @@ namespace TECUserControlLibrary.ViewModels
             SelectedVM = new AddSubScopeVM(toAdd =>
             {
                 (scopeManager as TECTemplates).SubScopeTemplates.Add(toAdd);
-            });
+            }, scopeManager);
         }
         private bool canAddSubScope()
         {
@@ -108,7 +108,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addPointExecute(TECSubScope subScope)
         {
-            SelectedVM = new AddPointVM(subScope);
+            SelectedVM = new AddPointVM(subScope, scopeManager);
         }
         private bool canAddPoint(TECSubScope subScope)
         {
@@ -157,13 +157,17 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddSubScopeVM(toAdd =>
                 {
                     (scopeManager as TECTemplates).SubScopeTemplates.Add(toAdd);
-                });
+                }, scopeManager);
                 ((AddSubScopeVM)SelectedVM).ToAdd = new TECSubScope(subScope, false);
             }
             else if (dropInfo.Data is TECPoint point)
             {
-                SelectedVM = new AddPointVM(SelectedSubScope);
+                SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
                 ((AddPointVM)SelectedVM).ToAdd = new TECPoint(point, SelectedSubScope.IsTypical);
+            }
+            else if (dropInfo.Data is IEndDevice)
+            {
+                UIHelpers.StandardDrop(dropInfo, scopeManager);
             }
         }
 

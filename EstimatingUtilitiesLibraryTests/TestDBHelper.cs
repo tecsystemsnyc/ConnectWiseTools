@@ -407,6 +407,8 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test Connection Type");
             values.Add("12.48");
             values.Add("84.21");
+            values.Add("1.34");
+            values.Add("4.31");
             addDataToTable(new ConnectionTypeTable(), values);
         }
         private static void addToConduitTypeTable()
@@ -450,12 +452,14 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
             values.Add("40");
             values.Add("20");
+            values.Add("false");
             addDataToTable(new SubScopeConnectionTable(), values);
 
             values = new List<string>();
             values.Add("560ffd84-444d-4611-a346-266074f62f6f");
             values.Add("50");
             values.Add("30");
+            values.Add("false");
             addDataToTable(new SubScopeConnectionTable(), values);
         }
         private static void addToNetworkConnectionTable()
@@ -465,6 +469,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("100");
             values.Add("80");
             values.Add("BACnetIP");
+            values.Add("false");
             addDataToTable(new NetworkConnectionTable(), values);
 
             values = new List<string>();
@@ -472,6 +477,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("90");
             values.Add("70");
             values.Add("BACnetIP");
+            values.Add("false");
             addDataToTable(new NetworkConnectionTable(), values);
 
             values = new List<string>();
@@ -479,6 +485,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("80");
             values.Add("60");
             values.Add("BACnetIP");
+            values.Add("false");
             addDataToTable(new NetworkConnectionTable(), values);
 
             values = new List<string>();
@@ -486,6 +493,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("70");
             values.Add("50");
             values.Add("BACnetIP");
+            values.Add("false");
             addDataToTable(new NetworkConnectionTable(), values);
         }
         private static void addToControllerTable()
@@ -563,6 +571,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
             values.Add("Test Panel Type");
+            values.Add("Test Panel Type Description");
             values.Add("1324");
             values.Add("4231");
             addDataToTable(new PanelTypeTable(), values);

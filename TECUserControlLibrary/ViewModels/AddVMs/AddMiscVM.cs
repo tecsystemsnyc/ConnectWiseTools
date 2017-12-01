@@ -1,15 +1,18 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddMiscVM : ViewModelBase, IAddVM
+    public class AddMiscVM : AddVM
     {
         private TECSystem parent;
         private TECMisc toAdd;
+        private TECScopeManager scopeManager;
 
         public TECMisc ToAdd
         {
@@ -20,16 +23,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("ToAdd");
             }
         }
-        public ICommand AddCommand { get; private set; }
 
-        public AddMiscVM(TECSystem parentSystem)
+        public AddMiscVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
+            this.scopeManager = scopeManager;
             parent = parentSystem;
             ToAdd = new TECMisc(CostType.TEC, parentSystem.IsTypical);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
-
-        public Action<object> Added { get; }
 
         private bool addCanExecute()
         {
@@ -40,6 +41,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             parent.MiscCosts.Add(ToAdd);
             Added?.Invoke(ToAdd);
         }
+        
 
     }
 }
