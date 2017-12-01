@@ -5,6 +5,7 @@ using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace EstimatingUtilitiesLibrary.Exports
@@ -287,6 +288,11 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(5, 1).Value = "Estimator";
             worksheet.Cell(5, 2).Value = bid.Estimator;
 
+            worksheet.Cell(2, 3).Value = "Tax Exempt";
+            worksheet.Cell(2, 4).Value = bid.Parameters.IsTaxExempt ? "Yes" : "No";
+            worksheet.Cell(3, 3).Value = "Bond Required";
+            worksheet.Cell(3, 4).Value = bid.Parameters.RequiresBond ? "Yes" : "No";
+
             worksheet.Cell(7, 1).Value = "Labor Summary";
             worksheet.Cell(7, 1).Style.Font.SetBold();
             worksheet.Cell(7, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -341,6 +347,14 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             worksheet.Columns().AdjustToContents();
 
+        }
+
+        private static string createPlotImage(TECEstimator estimate)
+        {
+            //Path.gettem
+            //var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
+            //pngExporter.ExportToFile(plotModel, fileName);
+            return "";
         }
 
         private static Paragraph introParagraph(TECBid bid)
