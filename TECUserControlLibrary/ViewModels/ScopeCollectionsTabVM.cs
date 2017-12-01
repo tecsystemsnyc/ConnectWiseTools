@@ -253,12 +253,15 @@ namespace TECUserControlLibrary.ViewModels
                         ResultCollection.Add(type);
                     }
                     break;
+                case AllSearchableObjects.Tags:
+                    foreach (TECLabeled tag in catalogs.Tags)
+                    {
+                        ResultCollection.Add(tag);
+                    }
+                    break;
                 default:
                     break;
             }
-            
-            
-            
         }
         
         public void DragOver(IDropInfo dropInfo)
@@ -277,6 +280,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if(item is TECScope scope)
                 {
+
                     if (UtilitiesMethods.StringContainsStrings(scope.Name.ToUpper(), searchCriteria) ||
                                         UtilitiesMethods.StringContainsStrings(scope.Description.ToUpper(), searchCriteria))
                     {
