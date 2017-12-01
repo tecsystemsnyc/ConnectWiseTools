@@ -162,12 +162,14 @@ namespace EstimateBuilder.MVVM
             menuVM.SetRefreshBidCommand(refreshExecute, canRefresh);
             menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
+            menuVM.SetExportTurnoverCommand(exportTurnoverExecute, canExportTurnover);
             menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
             menuVM.SetExportSummaryCommand(exportSummaryExecute, canExportSummary);
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
         }
+        
         //Load Templates
         private void loadTemplatesExecute()
         {
@@ -236,6 +238,29 @@ namespace EstimateBuilder.MVVM
             }
         }
         private bool canExportProposal()
+        {
+            return true;
+        }
+        //Export Turnover Sheet
+        private void exportTurnoverExecute()
+        {
+            string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
+                                        defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Turnover.GenerateTurnoverExport(path, bid, estimate);
+                    logger.Info("Exported to turnover document.");
+                }
+                else
+                {
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                }
+            }
+        }
+
+        private bool canExportTurnover()
         {
             return true;
         }
