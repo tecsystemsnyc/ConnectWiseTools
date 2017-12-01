@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
-             x:Name="parent"
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
+             x:Name="costBatchPropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
+    <Grid DataContext="{Binding ElementName=costBatchPropertiesControl, Path=Selected, 
+        Converter={local:CostBatchToPropertiesItemConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition/>
@@ -15,7 +16,7 @@
         <Border BorderThickness="0,0,0,1" BorderBrush="Black" Margin="0,0,60,0">
             <TextBlock Text="Costs Summary" FontWeight="DemiBold"/>
         </Border>
-        <ItemsControl ItemsSource="{Binding CostBatch.AllCosts}" Grid.Row="1">
+        <ItemsControl ItemsSource="{Binding AllCosts}" Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
