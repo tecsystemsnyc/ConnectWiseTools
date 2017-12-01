@@ -2,49 +2,46 @@
 using EstimatingLibrary.Utilities;
 using System;
 
-namespace TECUserControlLibrary.Models
+namespace EstimatingUtilitiesLibrary.SummaryItems
 {
-    public class HardwareSummaryItem : TECObject
+    public class RatedCostSummaryItem : TECObject
     {
         #region Fields
-        private TECHardware _hardware;
+        private TECCost _ratedCost;
 
-        private int _quantity;
+        private double _length;
 
         private double _totalCost;
         private double _totalLabor;
         #endregion
 
         //Constructor
-        public HardwareSummaryItem(TECHardware hardware) : base(Guid.NewGuid())
+        public RatedCostSummaryItem(TECCost ratedCost, double length) : base(Guid.NewGuid())
         {
-            _hardware = hardware;
-            _quantity = 1;
+            _ratedCost = ratedCost;
+            _length = length;
             updateTotals();
         }
 
         #region Properties
-        public TECHardware Hardware
+        public TECCost RatedCost
         {
-            get { return _hardware; }
+            get { return _ratedCost; }
         }
 
-        public int Quantity
+        public double Length
         {
-            get { return _quantity; }
+            get { return _length; }
             private set
             {
-                _quantity = value;
-                raisePropertyChanged("Quantity");
+                _length = value;
+                raisePropertyChanged("Length");
             }
         }
 
         public double TotalCost
         {
-            get
-            {
-                return _totalCost;
-            }
+            get { return _totalCost; }
             private set
             {
                 _totalCost = value;
@@ -53,10 +50,7 @@ namespace TECUserControlLibrary.Models
         }
         public double TotalLabor
         {
-            get
-            {
-                return _totalLabor;
-            }
+            get { return _totalLabor; }
             private set
             {
                 _totalLabor = value;
@@ -66,21 +60,21 @@ namespace TECUserControlLibrary.Models
         #endregion
 
         #region Methods
-        public CostBatch Increment()
+        public CostBatch AddLength(double length)
         {
-            Quantity++;
+            Length += length;
             return updateTotals();
         }
-        public CostBatch Decrement()
+        public CostBatch RemoveLength(double length)
         {
-            Quantity--;
+            Length -= length;
             return updateTotals();
         }
 
         private CostBatch updateTotals()
         {
-            double newCost = (Hardware.Cost * Quantity);
-            double newLabor = (Hardware.Labor * Quantity);
+            double newCost = (RatedCost.Cost * Length);
+            double newLabor = (RatedCost.Labor * Length);
 
             double deltaCost = newCost - TotalCost;
             double deltaLabor = newLabor - TotalLabor;
@@ -88,7 +82,7 @@ namespace TECUserControlLibrary.Models
             TotalCost = newCost;
             TotalLabor = newLabor;
 
-            return new CostBatch(deltaCost, deltaLabor, CostType.TEC);
+            return new CostBatch(deltaCost, deltaLabor, RatedCost.Type);
         }
         #endregion
     }

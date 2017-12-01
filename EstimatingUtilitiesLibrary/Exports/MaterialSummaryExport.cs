@@ -10,12 +10,12 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class MaterialSummaryExport
     {
-        public static void Generate(string path, TECBid bid)
+        public static void GenerateAndExport(string path, TECBid bid)
         {
             XLWorkbook workbook = new XLWorkbook();
         }
 
-        private static void addDevicesSheet(XLWorkbook workbook, TECBid bid)
+        internal static void AddDevicesSheet(XLWorkbook workbook, TECBid bid)
         {
             const string sheetName = "Devices";
 

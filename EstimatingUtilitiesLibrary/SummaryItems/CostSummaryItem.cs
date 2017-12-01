@@ -2,7 +2,7 @@
 using EstimatingLibrary.Utilities;
 using System;
 
-namespace TECUserControlLibrary.Models
+namespace EstimatingUtilitiesLibrary.SummaryItems
 {
     public class CostSummaryItem : TECObject
     {

@@ -248,6 +248,10 @@
     <Compile Include="ScopeWordDocumentBuilder.cs" />
     <Compile Include="Database\SQLiteDatabase.cs" />
     <Compile Include="StackItems.cs" />
+    <Compile Include="SummaryItems\CostSummaryItem.cs" />
+    <Compile Include="SummaryItems\HardwareSummaryItem.cs" />
+    <Compile Include="SummaryItems\LengthSummaryItem.cs" />
+    <Compile Include="SummaryItems\RatedCostSummaryItem.cs" />
     <Compile Include="UtilitiesMethods.cs" />
   </ItemGroup>
   <ItemGroup>

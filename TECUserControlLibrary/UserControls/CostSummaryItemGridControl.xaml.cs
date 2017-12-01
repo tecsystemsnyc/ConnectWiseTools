@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EstimatingUtilitiesLibrary.SummaryItems;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using TECUserControlLibrary.Models;

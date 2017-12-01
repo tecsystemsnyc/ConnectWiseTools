@@ -126,7 +126,6 @@
       <DependentUpon>TypicalControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\BaseListControl.cs" />
-    <Compile Include="Models\RatedCostSummaryItem.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
     </Compile>
@@ -372,11 +371,8 @@
     <Compile Include="Views\MaterialView.xaml.cs">
       <DependentUpon>MaterialView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\CostSummaryItem.cs" />
     <Compile Include="Models\ControllerInPanel.cs" />
-    <Compile Include="Models\HardwareSummaryItem.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
-    <Compile Include="Models\LengthSummaryItem.cs" />
     <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="UserControls\ScopeBranchAsNoteGridControl.xaml.cs">
       <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
