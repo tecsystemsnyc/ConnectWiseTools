@@ -21,40 +21,38 @@
         </Grid.RowDefinitions>
         <Label Content="{Binding Title}" FontSize="16"/>
 
-        <Border Grid.Row="1">
+        <Border Grid.Row="1" Grid.RowSpan="2">
             <ContentPresenter ContentTemplate="{Binding ElementName=summaryDataGrid, Path=GridTemplate}"/>
         </Border>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock VerticalAlignment="Center"
+            <TextBlock VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            Foreground="Black">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0}: {1:C}">
-                            <Binding Path="CostString"/>
-                            <Binding Path="CostValue"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}: {1:C}">
+                        <Binding Path="CostString"/>
+                        <Binding Path="CostValue"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
 
-                <TextBlock Grid.Column="1"
+            <TextBlock Grid.Column="1"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            Foreground="Black">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0}: {1:F2}">
-                            <Binding Path="LaborString"/>
-                            <Binding Path="LaborValue"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </Grid>
-        </Border>
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}: {1:F2} Hours">
+                        <Binding Path="LaborString"/>
+                        <Binding Path="LaborValue"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Grid>
     </Grid>
 </UserControl>

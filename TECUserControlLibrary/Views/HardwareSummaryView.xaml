@@ -63,10 +63,10 @@
                 </DataTemplate>
             </Border.Resources>
             <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource hardwareItemGrid}}"
-                                          Title="{Binding HardwareItemType}"
-                                          CostString="{Binding HardwareItemType, StringFormat={}{0} (TEC) Cost}"
+                                          Title="{Binding HardwareItemType, StringFormat={}{0} (TEC)}"
+                                          CostString="Cost Subtotal (TEC)"
                                           CostValue="{Binding ViewModel.HardwareCost}"
-                                          LaborString="{Binding HardwareItemType, StringFormat={}{0} (TEC) Labor}"
+                                          LaborString="Labor Subtotal (TEC)"
                                           LaborValue="{Binding ViewModel.HardwareLabor}"/>
         </Border>
 
@@ -79,9 +79,9 @@
             </Border.Resources>
             <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocTECItemGrid}}"
                                           Title="Associated TEC Cost and Labor Items"
-                                          CostString="Total Associated TEC Cost"
+                                          CostString="Cost Subtotal"
                                           CostValue="{Binding ViewModel.AssocTECCostTotal}"
-                                          LaborString="Total Assosciated Labor Cost"
+                                          LaborString="Labor Subtotal"
                                           LaborValue="{Binding ViewModel.AssocTECLaborTotal}"/>
         </Border>
         
@@ -94,9 +94,9 @@
             </Border.Resources>
             <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocElecItemGrid}}"
                                           Title="Associated Electrical Cost and Labor Items"
-                                          CostString="Total Associated Electrical Cost"
+                                          CostString="Cost Subtotal"
                                           CostValue="{Binding ViewModel.AssocElecCostTotal}"
-                                          LaborString="Total Associated Electrical Labor"
+                                          LaborString="Labor Subtotal"
                                           LaborValue="{Binding ViewModel.AssocElecLaborTotal}"/>
         </Border>
     </Grid>
