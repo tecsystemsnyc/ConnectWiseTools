@@ -212,6 +212,7 @@
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
+    <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\EquipmentHierarchyView.xaml.cs">
@@ -278,7 +279,6 @@
     <Compile Include="ViewModels\AddVMs\AddPointVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddSubScopeVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddSystemVM.cs" />
-    <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\HardwareSummaryVM.cs" />
     <Compile Include="ViewModels\Interfaces\IComponentSummaryVM.cs" />
     <Compile Include="ViewModels\LengthSummaryVM.cs" />

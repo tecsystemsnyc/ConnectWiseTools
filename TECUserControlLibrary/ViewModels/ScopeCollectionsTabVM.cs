@@ -96,8 +96,8 @@ namespace TECUserControlLibrary.ViewModels
         #region Commands
         private void SearchCollectionExecute()
         {
-            char dilemeter = ',';
-            string[] searchCriteria = SearchString.ToUpper().Split(dilemeter);
+            char[] dilemeters = { ',', ' ' };
+            string[] searchCriteria = SearchString.ToUpper().Split(dilemeters);
             switch (ChosenType)
             {
                 case AllSearchableObjects.System:
@@ -253,12 +253,15 @@ namespace TECUserControlLibrary.ViewModels
                         ResultCollection.Add(type);
                     }
                     break;
+                case AllSearchableObjects.Tags:
+                    foreach (TECLabeled tag in catalogs.Tags)
+                    {
+                        ResultCollection.Add(tag);
+                    }
+                    break;
                 default:
                     break;
             }
-            
-            
-            
         }
         
         public void DragOver(IDropInfo dropInfo)
