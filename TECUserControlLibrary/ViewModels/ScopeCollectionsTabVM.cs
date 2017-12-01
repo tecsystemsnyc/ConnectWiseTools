@@ -96,8 +96,8 @@ namespace TECUserControlLibrary.ViewModels
         #region Commands
         private void SearchCollectionExecute()
         {
-            char dilemeter = ',';
-            string[] searchCriteria = SearchString.ToUpper().Split(dilemeter);
+            char[] dilemeters = { ',', ' ' };
+            string[] searchCriteria = SearchString.ToUpper().Split(dilemeters);
             switch (ChosenType)
             {
                 case AllSearchableObjects.System:
