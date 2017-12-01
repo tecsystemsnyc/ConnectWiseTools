@@ -11,9 +11,19 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class Turnover
     {
+        public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate)
+        {
+            XLWorkbook workbook = new XLWorkbook();
+            createSummarySheet(workbook, bid, estimate);
+            createBomSheets(workbook, bid);
+
+            workbook.SaveAs(path);
+        }
 
         public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate)
         {
+            GenerateTurnoverExport(path, bid, estimate);
+            return;
             using (WordprocessingDocument package = WordprocessingDocument.Create(path, 
                 DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
             {
@@ -34,14 +44,20 @@ namespace EstimatingUtilitiesLibrary.Exports
 
         public static void GenerateBOM(string path, TECBid bid)
         {
-            List<String> sheetNames = new List<string>();
             XLWorkbook workbook = new XLWorkbook();
+            createBomSheets(workbook, bid);
+            workbook.SaveAs(path);
+        }
+
+        private static void createBomSheets(XLWorkbook workbook, TECBid bid)
+        {
             int postfix = 1;
-            foreach(TECTypical typical in bid.Systems.Where(typ => typ.Instances.Count > 0))
+            List<String> sheetNames = new List<string>();
+            foreach (TECTypical typical in bid.Systems.Where(typ => typ.Instances.Count > 0))
             {
                 List<TECCost> associatedCosts = new List<TECCost>();
                 string sheetName = typical.Instances.Count > 1 ? typical.Name : typical.Instances[0].Name;
-                if(sheetName == "")
+                if (sheetName == "")
                 {
                     sheetName = "Untitled";
                 }
@@ -82,16 +98,16 @@ namespace EstimatingUtilitiesLibrary.Exports
                 x++;
                 List<IEndDevice> devices = new List<IEndDevice>();
                 associatedCosts.AddRange(typical.AssociatedCosts);
-                foreach(TECEquipment equipment in typical.Equipment)
+                foreach (TECEquipment equipment in typical.Equipment)
                 {
                     associatedCosts.AddRange(equipment.AssociatedCosts);
-                    foreach(TECSubScope subScope in equipment.SubScope)
+                    foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         associatedCosts.AddRange(subScope.AssociatedCosts);
                         devices.AddRange(subScope.Devices);
                     }
                 }
-                foreach(IEndDevice device in devices.Distinct())
+                foreach (IEndDevice device in devices.Distinct())
                 {
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 2).Value = devices.Count(item => item == device);
@@ -105,7 +121,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
                 }
-                foreach(TECController controller in typical.Controllers)
+                foreach (TECController controller in typical.Controllers)
                 {
                     associatedCosts.AddRange(controller.AssociatedCosts);
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -120,7 +136,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
                 }
-                foreach(TECPanel panel in typical.Panels)
+                foreach (TECPanel panel in typical.Panels)
                 {
                     associatedCosts.AddRange(panel.AssociatedCosts);
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -148,7 +164,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 3).Style.Font.SetBold();
                 worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 x++;
-                foreach(TECCost cost in associatedCosts.Distinct())
+                foreach (TECCost cost in associatedCosts.Distinct())
                 {
                     worksheet.Cell(x, 1).Value = cost.Name;
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -164,7 +180,6 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             createMiscBOMSheet(workbook, bid);
 
-            workbook.SaveAs(path);
         }
 
         private static void createMiscBOMSheet(XLWorkbook workbook, TECBid bid)
@@ -249,6 +264,80 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 x++;
             }
+            worksheet.Columns().AdjustToContents();
+
+        }
+
+        private static void createSummarySheet(XLWorkbook workbook, TECBid bid, TECEstimator estimate)
+        {
+            IXLWorksheet worksheet = workbook.Worksheets.Add("Summary");
+            worksheet.Cell(1, 1).Value = "Project Information";
+            worksheet.Cell(1, 1).Style.Font.SetBold();
+            worksheet.Cell(1, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+            worksheet.Cell(2, 1).Value = "Name";
+            worksheet.Cell(2, 2).Value = bid.Name;
+            worksheet.Cell(3, 1).Value = "Bid Number";
+            worksheet.Cell(3, 2).Value = bid.BidNumber;
+            worksheet.Cell(4, 1).Value = "Salesperson";
+            worksheet.Cell(4, 2).Value = bid.Salesperson;
+            worksheet.Cell(5, 1).Value = "Estimator";
+            worksheet.Cell(5, 2).Value = bid.Estimator;
+
+            worksheet.Cell(7, 1).Value = "Labor Summary";
+            worksheet.Cell(7, 1).Style.Font.SetBold();
+            worksheet.Cell(7, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+            worksheet.Cell(8, 1).Value = "Project Management";
+            worksheet.Cell(8, 2).Value = String.Format("{0:F} hours", estimate.PMLaborHours);
+            worksheet.Cell(9, 1).Value = "Engineering";
+            worksheet.Cell(9, 2).Value = String.Format("{0:F} hours", estimate.ENGLaborHours);
+            worksheet.Cell(10, 1).Value = "Software";
+            worksheet.Cell(10, 2).Value = String.Format("{0:F} hours", estimate.SoftLaborHours);
+            worksheet.Cell(11, 1).Value = "Commissioning";
+            worksheet.Cell(11, 2).Value = String.Format("{0:F} hours", estimate.CommLaborHours);
+            worksheet.Cell(12, 1).Value = "Graphics";
+            worksheet.Cell(12, 2).Value = String.Format("{0:F} hours", estimate.GraphLaborHours);
+            worksheet.Cell(13, 1).Value = "Field";
+            worksheet.Cell(13, 2).Value = String.Format("{0:F} hours", estimate.TECFieldHours);
+
+            worksheet.Cell(14, 1).Value = "Total Hours";
+            worksheet.Cell(14, 1).Style.Font.SetBold();
+
+            worksheet.Cell(14, 2).Value = String.Format("{0:F} hours", estimate.TECLaborHours);
+            worksheet.Cell(14, 2).Style.Font.SetBold();
+
+            worksheet.Cell(15, 1).Value = "Cost";
+            worksheet.Cell(15, 1).Style.Font.SetBold();
+
+            worksheet.Cell(15, 2).Value = String.Format("{0:C} ", estimate.TECLaborCost);
+            worksheet.Cell(15, 2).Style.Font.SetBold();
+
+            worksheet.Cell(17, 1).Value = "Costs Summary";
+            worksheet.Cell(17, 1).Style.Font.SetBold();
+            worksheet.Cell(17, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+            worksheet.Cell(18, 1).Value = "Material Cost";
+            worksheet.Cell(18, 2).Value = String.Format("{0:C}", estimate.TECMaterialCost);
+            worksheet.Cell(19, 1).Value = "Subcontractor Labor";
+            worksheet.Cell(19, 2).Value = String.Format("{0:F} hours", estimate.SubcontractorLaborHours);
+            worksheet.Cell(20, 1).Value = "Subcontractor Material";
+            worksheet.Cell(20, 2).Value = String.Format("{0:C}", estimate.ElectricalMaterialCost);
+            worksheet.Cell(21, 1).Value = "Subcontractor Subtotal";
+            worksheet.Cell(21, 2).Value = String.Format("{0:C}", estimate.SubcontractorSubtotal);
+
+            worksheet.Cell(23, 1).Value = "Sale Summary";
+            worksheet.Cell(23, 1).Style.Font.SetBold();
+            worksheet.Cell(23, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+            worksheet.Cell(24, 1).Value = "Price";
+            worksheet.Cell(24, 2).Value = String.Format("{0:C}", estimate.TotalPrice);
+            worksheet.Cell(25, 1).Value = "Margin";
+            worksheet.Cell(25, 2).Value = String.Format("%{0:F2}", estimate.Margin);
+
+
+            worksheet.Columns().AdjustToContents();
+
         }
 
         private static Paragraph introParagraph(TECBid bid)
