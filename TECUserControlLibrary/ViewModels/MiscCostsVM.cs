@@ -297,7 +297,18 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            UIHelpers.StandardDragOver(dropInfo,
+                type =>
+                {
+                    if (type == typeof(TECMisc) && dropInfo.Data is TECCost)
+                    {
+                        return true;
+                    } else
+                    {
+                        return false;
+                    }
+                }
+            );
         }
         public void Drop(IDropInfo dropInfo)
         {
@@ -311,7 +322,17 @@ namespace TECUserControlLibrary.ViewModels
                 scopeManager = _bid;
             }
             bool isTypical = (_system != null && _system is TECTypical);
-            TECMisc newMisc = new TECMisc(dropInfo.Data as TECMisc, isTypical);
+            TECMisc newMisc = null;
+            if(dropInfo.Data is TECMisc misc)
+            {
+                newMisc = new TECMisc(misc, isTypical);
+            } else if (dropInfo.Data is TECCost cost)
+            {
+                newMisc = new TECMisc(cost, isTypical);
+            } else
+            {
+                throw new NotImplementedException();
+            }
             sourceCollection.Add(newMisc);
         }
     }

@@ -390,7 +390,19 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                UIHelpers.StandardDragOver(dropInfo);
+                UIHelpers.StandardDragOver(dropInfo,
+                type =>
+                {
+                    if (type == typeof(TECMisc) && dropInfo.Data is TECCost)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            );
             }
             
         }
@@ -415,10 +427,13 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
                 ((AddPointVM)SelectedVM).ToAdd = point;
             }
-            else if (dropped is TECMisc misc)
+            else if (dropped is TECMisc || dropped is TECCost)
             {
+                TECMisc misc = dropped as TECMisc;
                 SelectedVM = new AddMiscVM(SelectedSystem, scopeManager);
-                ((AddMiscVM)SelectedVM).ToAdd = new TECMisc(misc, SelectedSystem.IsTypical);
+                TECMisc newMisc = misc != null ? new TECMisc(misc, SelectedSystem.IsTypical) :
+                    new TECMisc(dropped as TECCost, SelectedSystem.IsTypical);
+                ((AddMiscVM)SelectedVM).ToAdd = newMisc;
             }
             else if (dropped is TECSystem system)
             {

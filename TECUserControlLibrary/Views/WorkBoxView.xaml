@@ -9,10 +9,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=workBoxView, Path=ViewModel}">
-        <ScrollViewer>
-            <controls:ScopeItemsControl ScopeSource="{Binding BoxItems}"
-                                        CanDrop="True"
-                                        DropHandler="{Binding}"/>
-        </ScrollViewer>
+        <controls:ScopeItemsControl ScopeSource="{Binding BoxItems}"
+                                    CanDrop="True"
+                                    DropHandler="{Binding}"/>
     </Grid>
 </UserControl>

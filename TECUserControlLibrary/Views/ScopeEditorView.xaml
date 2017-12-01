@@ -76,12 +76,12 @@
                 </Grid.RowDefinitions>
                 <views:ScopeCollectionsTabView ViewModel="{Binding ScopeCollection}" Grid.Row="0"/>
 
-                <Expander Header="Work Box" Grid.Row="1" >
-                    <views:WorkBoxView ViewModel="{Binding WorkBoxVM}"
+                <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0"  Grid.Row="1" >
+                    <Expander Header="Work Box">
+                        <views:WorkBoxView ViewModel="{Binding WorkBoxVM}"
                                    Height="200"/>
-                </Expander>
-                
-
+                    </Expander>
+                </Border>
             </Grid>
             
             <TabControl Grid.Row="0"
