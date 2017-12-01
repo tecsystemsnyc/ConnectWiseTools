@@ -244,6 +244,42 @@ namespace EstimatingUtilitiesLibrary
             }
             return containsAll;
         }
+        public static bool StringsContainStrings(string[] references, string[] criteria)
+        {
+            bool containsAll = true;
+            foreach(string critereon in criteria)
+            {
+                bool containsCirtereon = false;
+                foreach(string reference in references)
+                {
+                    if (reference.Contains(critereon))
+                    {
+                        containsCirtereon = true;
+                        break;
+                    }
+                }
+                if (!containsCirtereon)
+                {
+                    containsAll = false;
+                    break;
+                }
+            }
+            return containsAll;
+        }
+        public static bool StringsContainsAnyStrings(string[] references, string[] criteria)
+        {
+            foreach(string crtiereon in criteria)
+            {
+                foreach(string reference in references)
+                {
+                    if (reference.Contains(crtiereon))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
     }
 }
