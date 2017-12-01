@@ -94,7 +94,6 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Commands
-
         private void SearchCollectionExecute()
         {
             char dilemeter = ',';
@@ -160,12 +159,10 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void EndSearchExecute()
         {
-            populateItemsCollections();
             SearchString = "";
+            populateItemsCollections();
         }
-        
         #endregion
-        
 
         public void populateItemsCollections()
         {
