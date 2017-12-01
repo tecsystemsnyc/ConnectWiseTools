@@ -31,26 +31,21 @@ namespace EstimatingUtilitiesLibrary.Exports
             titleCell.Value = sheetName;
             titleCell.Style.Font.SetBold();
 
-            int row = 3;
-            insertHardwareHeaders(worksheet, row);
-            row++;
-            foreach(HardwareSummaryItem controller in controllerItems)
-            {
-                insertHardwareItem(controller, worksheet, row);
-                row++;
-            }
-
-            row += 2;
-            insertCostHeaders(worksheet, row);
-            row++;
-            foreach(CostSummaryItem cost in costItems)
-            {
-                insertCostItem(cost, worksheet, row);
-            }
+            addHardwareSummary(worksheet, 3, controllerItems, costItems);
         }
         internal static void AddPanelsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Panels")
         {
-            throw new NotImplementedException();
+            List<TECPanel> panels = getAllPanels(bid);
+            List<HardwareSummaryItem> panelItems = consolidateHardware(panels.Select(panel => panel.Type));
+            List<CostSummaryItem> costItems = consolidateCostInPanels(panels);
+
+            IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+
+            IXLCell titleCell = worksheet.Cell(1, "A");
+            titleCell.Value = sheetName;
+            titleCell.Style.Font.SetBold();
+
+            addHardwareSummary(worksheet, 3, panelItems, costItems);
         }
         internal static void AddDevicesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Devices")
         {
@@ -69,6 +64,29 @@ namespace EstimatingUtilitiesLibrary.Exports
         internal static void AddMiscCostsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Misc Costs")
         {
             throw new NotImplementedException();
+        }
+
+        private static void addHardwareSummary(IXLWorksheet worksheet, int row, IEnumerable<HardwareSummaryItem> hardwareItems, IEnumerable<CostSummaryItem> costItems)
+        {
+            insertHardwareHeaders(worksheet, row);
+            row++;
+            foreach (HardwareSummaryItem item in hardwareItems)
+            {
+                insertHardwareItem(item, worksheet, row);
+                row++;
+            }
+
+            row += 2;
+            IXLCell titleCell = worksheet.Cell(row, "A");
+            titleCell.Value = "Associated Costs";
+            insertCostHeaders(worksheet, row);
+            row++;
+            foreach (CostSummaryItem cost in costItems)
+            {
+                insertCostItem(cost, worksheet, row);
+            }
+
+            worksheet.Columns().AdjustToContents();
         }
 
         #region Add Row Methods
@@ -107,13 +125,13 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             itemRow.Cell("A").Value = item.Hardware.Name;
             itemRow.Cell("B").Value = item.Hardware.Description;
-            itemRow.Cell("C").Value = item.Hardware.Manufacturer;
+            itemRow.Cell("C").Value = item.Hardware.Manufacturer.Label;
             itemRow.Cell("D").Value = item.Quantity;
             itemRow.Cell("E").Value = item.Hardware.Price;
-            itemRow.Cell("F").Value = item.Hardware.Cost;
-            itemRow.Cell("G").Value = item.TotalCost;
-            itemRow.Cell("H").Value = item.Hardware.Labor;
-            itemRow.Cell("I").Value = item.TotalLabor;
+            itemRow.Cell("F").Value = string.Format("{0:C}", item.Hardware.Cost);
+            itemRow.Cell("G").Value = string.Format("{0:C}", item.TotalCost);
+            itemRow.Cell("H").Value = string.Format("{0:F2}", item.Hardware.Labor);
+            itemRow.Cell("I").Value = string.Format("{0:F2}", item.TotalLabor);
         }
         private static void insertCostItem(CostSummaryItem item, IXLWorksheet worksheet, int row)
         {
@@ -122,10 +140,10 @@ namespace EstimatingUtilitiesLibrary.Exports
             itemRow.Cell("A").Value = item.Cost.Name;
             itemRow.Cell("B").Value = item.Quantity;
             itemRow.Cell("C").Value = item.Cost.Type;
-            itemRow.Cell("D").Value = item.Cost.Cost;
-            itemRow.Cell("E").Value = item.TotalCost;
-            itemRow.Cell("F").Value = item.Cost.Labor;
-            itemRow.Cell("G").Value = item.TotalLabor;
+            itemRow.Cell("D").Value = string.Format("{0:C}", item.Cost.Cost);
+            itemRow.Cell("E").Value = string.Format("{0:C}", item.TotalCost);
+            itemRow.Cell("F").Value = string.Format("{0:F2}", item.Cost.Labor);
+            itemRow.Cell("G").Value = string.Format("{0:F2}", item.TotalLabor);
         }
         #endregion
 
@@ -143,6 +161,20 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return controllers;
         }
+        private static List<TECPanel> getAllPanels(TECBid bid)
+        {
+            List<TECPanel> panels = new List<TECPanel>();
+            panels.AddRange(bid.Panels);
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem sys in typ.Instances)
+                {
+                    panels.AddRange(sys.Panels);
+                }
+            }
+            return panels;
+        }
+
         private static List<HardwareSummaryItem> consolidateHardware(IEnumerable<TECHardware> hardware)
         {
             Dictionary<TECHardware, HardwareSummaryItem> dictionary = new Dictionary<TECHardware, HardwareSummaryItem>();
@@ -174,6 +206,34 @@ namespace EstimatingUtilitiesLibrary.Exports
             {
                 costs.AddRange(controller.AssociatedCosts);
                 costs.AddRange(controller.Type.AssociatedCosts);
+            }
+
+            foreach (TECCost cost in costs)
+            {
+                if (dictionary.ContainsKey(cost))
+                {
+                    dictionary[cost].AddQuantity(1);
+                }
+                else
+                {
+                    CostSummaryItem item = new CostSummaryItem(cost);
+                    dictionary.Add(cost, item);
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
+        private static List<CostSummaryItem> consolidateCostInPanels(IEnumerable<TECPanel> panels)
+        {
+            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            List<CostSummaryItem> items = new List<CostSummaryItem>();
+
+            List<TECCost> costs = new List<TECCost>();
+            foreach (TECPanel panel in panels)
+            {
+                costs.AddRange(panel.AssociatedCosts);
+                costs.AddRange(panel.Type.AssociatedCosts);
             }
 
             foreach (TECCost cost in costs)
