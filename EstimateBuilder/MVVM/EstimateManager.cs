@@ -81,7 +81,7 @@ namespace EstimateBuilder.MVVM
             }
         }
         
-        private string templatesFilePath
+        override protected string templatesFilePath
         {
             get { return Properties.Settings.Default.TemplatesFilePath; }
             set

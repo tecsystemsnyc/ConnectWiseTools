@@ -88,6 +88,7 @@ namespace TECUserControlLibrary.BaseVMs
         abstract protected FileDialogParameters workingFileParameters { get; }
         abstract protected string defaultDirectory { get; set; }
         abstract protected string defaultFileName { get; }
+        abstract protected string templatesFilePath { get; set; }
         #endregion
 
         public AppManager(string name, SplashVM splashVM, MenuVM menuVM)
