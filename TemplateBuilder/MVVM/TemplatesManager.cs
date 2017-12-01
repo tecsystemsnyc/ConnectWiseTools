@@ -52,11 +52,27 @@ namespace TemplateBuilder.MVVM
                 return string.Format("Templates v{0}", Version);
             }
         }
+        protected override string templatesFilePath
+        {
+            get
+            {
+                return Properties.Settings.Default.TemplatesFilePath;
+            }
+            set
+            {
+                Properties.Settings.Default.TemplatesFilePath = value;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         public TemplatesManager() : base("Template Builder",
             new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
         {
-            splashVM.TemplatesPath = getStartUpFilePath();
+            string startUpFilePath = getStartUpFilePath();
+            if (startUpFilePath != null && startUpFilePath != "")
+            {
+                splashVM.TemplatesPath = getStartUpFilePath();
+            }
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Template Builder";
             setupCommands();
@@ -67,14 +83,15 @@ namespace TemplateBuilder.MVVM
             buildTitleString(path, "TemplateBuilder");
             if(path != "")
             {
+                templatesFilePath = path;
                 databaseManager = new DatabaseManager<TECTemplates>(path);
                 databaseManager.LoadComplete += handleLoaded;
                 ViewEnabled = false;
                 databaseManager.AsyncLoad();
-            } else
+            }
+            else
             {
                 handleLoaded(new TECTemplates());
-
             }
             
         }
