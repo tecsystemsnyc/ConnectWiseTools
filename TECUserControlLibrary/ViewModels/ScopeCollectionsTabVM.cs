@@ -280,20 +280,23 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if(item is TECScope scope)
                 {
-
+                    bool added = false;
                     if (UtilitiesMethods.StringContainsStrings(scope.Name.ToUpper(), searchCriteria) ||
                                         UtilitiesMethods.StringContainsStrings(scope.Description.ToUpper(), searchCriteria))
                     {
                         outCollection.Add(item);
+                        added = true;
                     }
                     else if(scope is TECHardware hardware)
                     {
                         if(UtilitiesMethods.StringContainsStrings(hardware.Manufacturer.Label.ToUpper(), searchCriteria))
                         {
                             outCollection.Add(item);
+                            added = true;
                         }
                     }
-                    else
+                    
+                    if (!added)
                     {
                         foreach (TECLabeled tag in scope.Tags)
                         {
