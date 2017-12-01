@@ -158,6 +158,8 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
                 }
+                worksheet.Columns().AdjustToContents();
+
             }
 
             createMiscBOMSheet(workbook, bid);
@@ -270,11 +272,11 @@ namespace EstimatingUtilitiesLibrary.Exports
         private static Paragraph laborSummary(TECEstimator estimate)
         {
             Paragraph par = new Paragraph();
-            Text pmLaborText = new Text(String.Format("Project Management Labor: {0} ours", estimate.PMLaborHours));
-            Text engLaborText = new Text(String.Format("Engineering Labor: {0} hours", estimate.ENGLaborHours));
-            Text softLaborText = new Text(String.Format("Software Labor: {0} hours", estimate.SoftLaborHours));
-            Text commLaborText = new Text(String.Format("Commissioning Labor: {0} hours", estimate.CommLaborHours));
-            Text graphLaborText = new Text(String.Format("Graphics Labor: {0} hours", estimate.GraphLaborHours));
+            Text pmLaborText = new Text(String.Format("Project Management Labor: {0:F} hours", estimate.PMLaborHours));
+            Text engLaborText = new Text(String.Format("Engineering Labor: {0:F} hours", estimate.ENGLaborHours));
+            Text softLaborText = new Text(String.Format("Software Labor: {0:F} hours", estimate.SoftLaborHours));
+            Text commLaborText = new Text(String.Format("Commissioning Labor: {0:F} hours", estimate.CommLaborHours));
+            Text graphLaborText = new Text(String.Format("Graphics Labor: {0:F} hours", estimate.GraphLaborHours));
         
             par.Append(new Run(pmLaborText));
             par.Append(new Break());
