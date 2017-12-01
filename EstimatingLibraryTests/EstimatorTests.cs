@@ -447,8 +447,8 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var connectionType = new TECConnectionType();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             bid.Catalogs.Devices.Add(device);
             connectionType.Cost = 1;
@@ -476,8 +476,8 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var connectionType = new TECConnectionType();
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             bid.Catalogs.Devices.Add(device);
             connectionType.Cost = 1;
@@ -578,7 +578,7 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -587,7 +587,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
@@ -638,7 +638,7 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -647,7 +647,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
@@ -703,7 +703,7 @@ namespace Tests
             assCost.Cost = 1;
             assCost.Labor = 1;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -714,7 +714,7 @@ namespace Tests
             conduitType.RatedCosts.Add(ratedCost);
             conduitType.AssociatedCosts.Add(assCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
@@ -784,7 +784,7 @@ namespace Tests
             assCost.Cost = 1;
             assCost.Labor = 1;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -795,7 +795,7 @@ namespace Tests
             conduitType.RatedCosts.Add(ratedCost);
             conduitType.AssociatedCosts.Add(assCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
@@ -860,7 +860,7 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -869,7 +869,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
@@ -917,7 +917,7 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -926,7 +926,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
@@ -1232,7 +1232,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { new TECConnectionType() }, manufacturer);
             device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
@@ -1262,7 +1262,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { new TECConnectionType() }, manufacturer);
             device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
@@ -1294,7 +1294,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 0.5;
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { new TECConnectionType() }, manufacturer);
             device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
@@ -1324,7 +1324,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 0.5;
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { new TECElectricalMaterial() }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { new TECConnectionType() }, manufacturer);
             device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
@@ -1350,7 +1350,7 @@ namespace Tests
             var controllerType = new TECControllerType(manufacturer);
             controllerType.IO.Add(io);
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
@@ -1365,7 +1365,7 @@ namespace Tests
             bid.AddController(controller2);
 
             var connection = controller1.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
 
             connection.AddINetworkConnectable(controller2);
             connection.Length = 50;
@@ -1390,7 +1390,7 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
@@ -1401,7 +1401,7 @@ namespace Tests
             bid.AddController(controller2);
 
             var connection = controller1.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
 
             connection.AddINetworkConnectable(controller2);
             connection.Length = 50;
@@ -1430,7 +1430,7 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
@@ -1443,7 +1443,7 @@ namespace Tests
             var instanceController = system.Instances[0].Controllers[0];
 
             var connection = controller1.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
 
             connection.AddINetworkConnectable(instanceController);
             connection.Length = 50;
@@ -1468,7 +1468,7 @@ namespace Tests
             TECIO io = new TECIO(IOType.BACnetIP);
             controllerType.IO.Add(io);
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
@@ -1481,7 +1481,7 @@ namespace Tests
             var instanceController = system.Instances[0].Controllers[0];
 
             var connection = controller1.AddNetworkConnection(false,
-                new List<TECElectricalMaterial>() { connectionType }, IOType.BACnetIP);
+                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
 
             connection.AddINetworkConnectable(instanceController);
             connection.Length = 50;
@@ -1503,7 +1503,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1513,7 +1513,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             system.AddInstance(bid);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1532,7 +1532,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1542,7 +1542,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             system.AddInstance(bid);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1563,7 +1563,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1571,7 +1571,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var equipment = new TECEquipment(true);
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1591,7 +1591,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1599,7 +1599,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var equipment = new TECEquipment(true);
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1621,7 +1621,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1629,7 +1629,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var equipment = new TECEquipment(true);
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1649,7 +1649,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1657,7 +1657,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var equipment = new TECEquipment(true);
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1679,7 +1679,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1687,7 +1687,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var equipment = new TECEquipment(true);
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1707,7 +1707,7 @@ namespace Tests
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             var system = new TECTypical();
@@ -1715,7 +1715,7 @@ namespace Tests
             system.AddInstance(bid);
 
             var equipment = new TECEquipment(true);
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             device.Price = 10;
             var subScope = new TECSubScope(true);
             subScope.Devices.Add(device);
@@ -1756,7 +1756,7 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -1765,7 +1765,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);
@@ -1813,7 +1813,7 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -1822,7 +1822,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);
@@ -1901,7 +1901,7 @@ namespace Tests
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
 
-            var connectionType = new TECElectricalMaterial();
+            var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
             connectionType.RatedCosts.Add(ratedCost);
@@ -1910,7 +1910,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var device = new TECDevice(new ObservableCollection<TECElectricalMaterial> { connectionType }, manufacturer);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);

@@ -51,7 +51,7 @@ namespace Tests
         {
             foreach(TECDevice device in bid.Catalogs.Devices)
             {
-                foreach(TECElectricalMaterial connectionType in device.ConnectionTypes)
+                foreach(TECConnectionType connectionType in device.ConnectionTypes)
                 {
                     if (!bid.Catalogs.ConnectionTypes.Contains(connectionType))
                     {

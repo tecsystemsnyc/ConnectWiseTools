@@ -223,10 +223,10 @@ namespace Tests
             templates.Catalogs.Manufacturers.Add(childDevMan);
 
             //Connection Types
-            TECElectricalMaterial testDevConnType = new TECElectricalMaterial();
+            TECConnectionType testDevConnType = new TECConnectionType();
             testDevConnType.Name = "FourC18";
 
-            TECElectricalMaterial childDevConnType = new TECElectricalMaterial();
+            TECConnectionType childDevConnType = new TECConnectionType();
             childDevConnType.Name = "ThreeC18";
 
             templates.Catalogs.ConnectionTypes.Add(testDevConnType);
@@ -266,14 +266,14 @@ namespace Tests
             templates.Catalogs.IOModules.Add(testIOModule);
 
             //Devices
-            ObservableCollection<TECElectricalMaterial> contypes2 = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> contypes2 = new ObservableCollection<TECConnectionType>();
             contypes2.Add(testDevConnType);
             TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
             testDev.Price = 20.3;
 
-            ObservableCollection<TECElectricalMaterial> contypes3 = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> contypes3 = new ObservableCollection<TECConnectionType>();
             contypes3.Add(childDevConnType);
             TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, childDevMan);
             childDev.Name = "Child Device";
@@ -483,7 +483,7 @@ namespace Tests
             outCatalogs.ConduitTypes.Add(conduitType2);
 
             //ConnectionTypes
-            var connectionType1 = new TECElectricalMaterial();
+            var connectionType1 = new TECConnectionType();
             connectionType1.Name = "FourC18";
             connectionType1.Cost = 64.63;
             connectionType1.Labor = 98.16;
@@ -491,7 +491,7 @@ namespace Tests
             connectionType1.RatedCosts.Add(tecCost);
             connectionType1.RatedCosts.Add(elecCost);
 
-            var connectionType2 = new TECElectricalMaterial();
+            var connectionType2 = new TECConnectionType();
             connectionType2.Name = "ThreeC18";
             connectionType2.Cost = 73.16;
             connectionType2.Labor = 35.49;
@@ -510,7 +510,7 @@ namespace Tests
             outCatalogs.Manufacturers.Add(manufacturer1);
 
             //Devices
-            ObservableCollection<TECElectricalMaterial> contypes4 = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> contypes4 = new ObservableCollection<TECConnectionType>();
             contypes4.Add(connectionType1);
             TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
             device1.Name = "Device 1";
@@ -555,7 +555,7 @@ namespace Tests
             outCatalogs.PanelTypes.Add(panelType);
 
             //Valves
-            TECDevice actuator = new TECDevice(new ObservableCollection<TECElectricalMaterial>() { connectionType1 },
+            TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 },
                 manufacturer1);
             actuator.Name = "actuator";
             outCatalogs.Devices.Add(actuator);
@@ -597,7 +597,7 @@ namespace Tests
         public static TECDevice CreateTestDevice(TECCatalogs catalogs)
         {
 
-            var connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            var connectionTypes = new ObservableCollection<TECConnectionType>();
             connectionTypes.Add(catalogs.ConnectionTypes[0]);
             var manufacturer = catalogs.Manufacturers[0];
 

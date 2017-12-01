@@ -53,8 +53,8 @@ namespace Tests
             bid.Name = expectedName;
             
             DatabaseUpdater.Update(path, testStack.CleansedStack());
-
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             string actualName = actualBid.Name;
 
             //Assert
@@ -69,7 +69,7 @@ namespace Tests
             bid.BidNumber = expectedBidNo;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             string actualBidNo = actualBid.BidNumber;
 
             //Assert
@@ -84,7 +84,7 @@ namespace Tests
             bid.DueDate = expectedDueDate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             DateTime actualDueDate = actualBid.DueDate;
 
             //Assert
@@ -99,7 +99,7 @@ namespace Tests
             bid.Salesperson = expectedSalesperson;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             string actualSalesperson = actualBid.Salesperson;
 
             //Assert
@@ -114,7 +114,7 @@ namespace Tests
             bid.Estimator = expectedEstimator;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             string actualEstimator = actualBid.Estimator;
 
             //Assert
@@ -131,7 +131,7 @@ namespace Tests
             bid.Parameters.PMCoef = expectedPM;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualPM = actualBid.Parameters.PMCoef;
 
             //Assert
@@ -146,8 +146,8 @@ namespace Tests
             bid.Parameters.PMRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Parameters.PMRate;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+            double actualRate = actualBid.Parameters.PMRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -161,7 +161,7 @@ namespace Tests
             bid.ExtraLabor.PMExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualHours = actualBid.ExtraLabor.PMExtraHours;
 
             //Assert
@@ -176,7 +176,7 @@ namespace Tests
             bid.Parameters.ENGCoef = expectedENG;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualENG = actualBid.Parameters.ENGCoef;
 
             //Assert
@@ -191,8 +191,8 @@ namespace Tests
             bid.Parameters.ENGRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Parameters.ENGRate;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+            double actualRate = actualBid.Parameters.ENGRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -206,7 +206,7 @@ namespace Tests
             bid.ExtraLabor.ENGExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualHours = actualBid.ExtraLabor.ENGExtraHours;
 
             //Assert
@@ -221,7 +221,7 @@ namespace Tests
             bid.Parameters.CommCoef = expectedComm;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualComm = actualBid.Parameters.CommCoef;
 
             //Assert
@@ -236,8 +236,8 @@ namespace Tests
             bid.Parameters.CommRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Parameters.CommRate;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+            double actualRate = actualBid.Parameters.CommRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -251,7 +251,7 @@ namespace Tests
             bid.ExtraLabor.CommExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualHours = actualBid.ExtraLabor.CommExtraHours;
 
             //Assert
@@ -266,7 +266,7 @@ namespace Tests
             bid.Parameters.SoftCoef = expectedSoft;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualSoft = actualBid.Parameters.SoftCoef;
 
             //Assert
@@ -281,8 +281,8 @@ namespace Tests
             bid.Parameters.SoftRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Parameters.SoftRate;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+            double actualRate = actualBid.Parameters.SoftRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -296,7 +296,7 @@ namespace Tests
             bid.ExtraLabor.SoftExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualHours = actualBid.ExtraLabor.SoftExtraHours;
 
             //Assert
@@ -311,7 +311,7 @@ namespace Tests
             bid.Parameters.GraphCoef = expectedGraph;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualGraph = actualBid.Parameters.GraphCoef;
 
             //Assert
@@ -326,8 +326,8 @@ namespace Tests
             bid.Parameters.GraphRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualbid = DatabaseLoader.Load(path) as TECBid;
-            double actualRate = actualbid.Parameters.GraphRate;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+            double actualRate = actualBid.Parameters.GraphRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -341,7 +341,7 @@ namespace Tests
             bid.ExtraLabor.GraphExtraHours = expectedHours;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualHours = actualBid.ExtraLabor.GraphExtraHours;
 
             //Assert
@@ -356,7 +356,7 @@ namespace Tests
             bid.Parameters.ElectricalRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualRate = actualBid.Parameters.ElectricalRate;
 
             //Assert
@@ -371,7 +371,7 @@ namespace Tests
             bid.Parameters.ElectricalNonUnionRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualRate = actualBid.Parameters.ElectricalNonUnionRate;
 
             //Assert
@@ -386,7 +386,7 @@ namespace Tests
             bid.Parameters.ElectricalSuperRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualRate = actualBid.Parameters.ElectricalSuperRate;
 
             //Assert
@@ -401,7 +401,7 @@ namespace Tests
             bid.Parameters.ElectricalSuperNonUnionRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
             double actualRate = actualBid.Parameters.ElectricalSuperNonUnionRate;
 
             //Assert
@@ -415,7 +415,7 @@ namespace Tests
             bid.Parameters.ElectricalIsOnOvertime = !bid.Parameters.ElectricalIsOnOvertime;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             Assert.AreEqual(bid.Parameters.ElectricalIsOnOvertime, actualBid.Parameters.ElectricalIsOnOvertime);
@@ -428,7 +428,7 @@ namespace Tests
             bid.Parameters.ElectricalIsUnion = !bid.Parameters.ElectricalIsUnion;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             Assert.AreEqual(bid.Parameters.ElectricalIsUnion, actualBid.Parameters.ElectricalIsUnion);
@@ -449,7 +449,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -477,7 +477,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECTypical system in actualBid.Systems)
@@ -509,7 +509,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECTypical system in actualBid.Systems)
@@ -541,7 +541,8 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid finalBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager scopeManager, bool needsUpdate) = DatabaseLoader.Load(path);
+            TECBid finalBid = scopeManager as TECBid;
 
             //Assert
             foreach (TECSystem system in finalBid.Systems)
@@ -564,7 +565,7 @@ namespace Tests
             expectedSystem.Name = "Save System Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -588,7 +589,7 @@ namespace Tests
             expectedSystem.Description = "Save System Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -612,7 +613,7 @@ namespace Tests
             expectedSystem.MiscCosts.Add(expectedMisc);
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSystem actualSystem = null;
             TECMisc actualMisc = null;
@@ -652,7 +653,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSystem actualSystem = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -697,7 +698,8 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid finalBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path);
+            TECBid finalBid = loaded as TECBid;
 
             TECSystem modifiedSystem = null;
             foreach (TECSystem system in bid.Systems)
@@ -730,7 +732,7 @@ namespace Tests
             expectedEquip.Name = "Save Equip Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECEquipment actualEquip = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -758,7 +760,7 @@ namespace Tests
             expectedEquip.Description = "Save Equip Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECEquipment actualEquip = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -796,7 +798,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -833,7 +835,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECEquipment modifiedEquip = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -867,7 +869,7 @@ namespace Tests
             expectedSubScope.Name = "Save SubScope Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -899,7 +901,7 @@ namespace Tests
             expectedSubScope.Description = "Save SubScope Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -947,7 +949,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECDevice actualDevice = null;
             int actualQuantity = 0;
@@ -1037,7 +1039,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSubScope modifiedSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1107,7 +1109,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSubScope modifiedSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1175,7 +1177,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSubScope modifiedSS = null;
             int actualQuantity = 0;
@@ -1238,7 +1240,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1295,7 +1297,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECSubScope modifiedSubScope = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1333,7 +1335,7 @@ namespace Tests
             expectedPoint.Label = "Point name save test";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1384,7 +1386,7 @@ namespace Tests
             expectedPoint.Quantity = 7463;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1435,7 +1437,7 @@ namespace Tests
             expectedPoint.Type = IOType.DI;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECPoint actualPoint = null;
             foreach (TECSystem sys in actualBid.Systems)
@@ -1482,7 +1484,7 @@ namespace Tests
             }
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid finalBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid finalBid = loaded as TECBid;
 
             TECSystem finalSystem = null;
             foreach (TECSystem system in finalBid.Systems)
@@ -1520,7 +1522,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid finalBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid finalBid = loaded as TECBid;
 
             TECEquipment finalEquipment = null;
             foreach (TECSystem system in finalBid.Systems)
@@ -1565,7 +1567,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid finalBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid finalBid = loaded as TECBid;
 
             TECSubScope finalSubScope = null;
             foreach (TECSystem system in finalBid.Systems)
@@ -1611,7 +1613,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid finalBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid finalBid = loaded as TECBid;
 
             TECController finalController = null;
             foreach (TECController Controller in finalBid.Controllers)
@@ -1647,7 +1649,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECScopeBranch actualBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1675,7 +1677,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECScopeBranch modifiedBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1711,7 +1713,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1743,7 +1745,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECScopeBranch modifiedBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1772,7 +1774,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECScopeBranch actualBranch = null;
             foreach (TECScopeBranch branch in actualBid.ScopeTree)
@@ -1800,7 +1802,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECLabeled actualLocation = null;
             foreach (TECLabeled loc in actualBid.Locations)
@@ -1827,7 +1829,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECLabeled loc in actualBid.Locations)
@@ -1847,7 +1849,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECLabeled actualLocation = null;
             foreach (TECLabeled loc in actualBid.Locations)
@@ -1887,7 +1889,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECLabeled actualLocation = null;
             foreach (TECLabeled loc in actualBid.Locations)
@@ -1944,7 +1946,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             int actualNumLocations = actualBid.Locations.Count;
 
@@ -1998,7 +2000,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             int actualNumLocations = actualBid.Locations.Count;
 
@@ -2041,7 +2043,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECLabeled actualNote = null;
             foreach (TECLabeled note in actualBid.Notes)
@@ -2067,7 +2069,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECLabeled note in actualBid.Notes)
@@ -2087,7 +2089,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECLabeled actualNote = null;
             foreach (TECLabeled note in actualBid.Notes)
@@ -2116,7 +2118,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECLabeled actualExclusion = null;
             foreach (TECLabeled Exclusion in actualBid.Exclusions)
@@ -2142,7 +2144,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECLabeled Exclusion in actualBid.Exclusions)
@@ -2162,7 +2164,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECLabeled actualExclusion = null;
             foreach (TECLabeled Exclusion in actualBid.Exclusions)
@@ -2312,7 +2314,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -2340,7 +2342,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECController controller in actualBid.Controllers)
@@ -2360,7 +2362,7 @@ namespace Tests
             expectedController.Name = "Test save controller name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -2384,7 +2386,7 @@ namespace Tests
             expectedController.Description = "Save Device Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -2433,7 +2435,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECMisc actualCost = null;
             foreach (TECMisc cost in actualBid.MiscCosts)
@@ -2460,7 +2462,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECMisc cost in actualBid.MiscCosts)
@@ -2480,7 +2482,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECMisc actualCost = null;
             foreach (TECMisc cost in actualBid.MiscCosts)
@@ -2505,7 +2507,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECMisc actualCost = null;
             foreach (TECMisc cost in actualBid.MiscCosts)
@@ -2530,7 +2532,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECMisc actualCost = null;
             foreach (TECMisc cost in actualBid.MiscCosts)
@@ -2560,7 +2562,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECPanelType actualCost = null;
             foreach (TECPanelType cost in bid.Catalogs.PanelTypes)
@@ -2591,7 +2593,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECPanel actualpanel = null;
             foreach (TECPanel panel in actualBid.Panels)
@@ -2619,7 +2621,7 @@ namespace Tests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECPanel panel in actualBid.Panels)
@@ -2639,7 +2641,7 @@ namespace Tests
             expectedPanel.Name = "Test save panel name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            TECBid actualBid = DatabaseLoader.Load(path) as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
             TECPanel actualPanel = null;
             foreach (TECPanel panel in actualBid.Panels)
