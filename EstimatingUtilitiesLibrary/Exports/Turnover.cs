@@ -27,8 +27,6 @@ namespace EstimatingUtilitiesLibrary.Exports
 
         public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate)
         {
-            GenerateTurnoverExport(path, bid, estimate);
-            return;
             using (WordprocessingDocument package = WordprocessingDocument.Create(path, 
                 DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
             {
