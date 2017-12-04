@@ -23,7 +23,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             MaterialSummaryExport.AddPanelsSheet(workbook, bid, "Panel Hardware");
             MaterialSummaryExport.AddDevicesSheet(workbook, bid);
             MaterialSummaryExport.AddValvesSheet(workbook, bid);
-            //MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
+            MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
             //MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
             createBomSheets(workbook, bid);
             workbook.SaveAs(path);
