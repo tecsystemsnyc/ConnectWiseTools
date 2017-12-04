@@ -61,6 +61,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _dGTabIndex = value;
                 RaisePropertyChanged("DGTabIndex");
+                Selected = null;
             }
         }
 
