@@ -314,11 +314,11 @@ namespace EstimatingUtilitiesLibrary.Exports
             x++;
 
             x = startRow + 1;
-            worksheet.Cell(x, 3).Value = "Tax Exempt";
-            worksheet.Cell(x, 4).Value = bid.Parameters.IsTaxExempt ? "Yes" : "No";
+            worksheet.Cell(x, 4).Value = "Tax Exempt";
+            worksheet.Cell(x, 5).Value = bid.Parameters.IsTaxExempt ? "Yes" : "No";
             x++;
-            worksheet.Cell(x, 3).Value = "Bond Required";
-            worksheet.Cell(x, 4).Value = bid.Parameters.RequiresBond ? "Yes" : "No";
+            worksheet.Cell(x, 4).Value = "Bond Required";
+            worksheet.Cell(x, 5).Value = bid.Parameters.RequiresBond ? "Yes" : "No";
 
         }
 
