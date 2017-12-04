@@ -187,6 +187,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 networkVM = value;
                 RaisePropertyChanged("NetworkVM");
+                NetworkVM.Selected += item =>
+                {
+                    Selected?.Invoke(item as TECObject);
+                };
             }
         }
 
