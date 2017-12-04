@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using System;
 using System.Collections.Generic;
@@ -26,12 +27,20 @@ namespace EstimatingUtilitiesLibrary.Exports
             List<CostSummaryItem> costItems = consolidateCostInControllers(controllers);
 
             IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            int row = 1;
 
-            IXLCell titleCell = worksheet.Cell(1, "A");
-            titleCell.Value = sheetName;
-            titleCell.Style.Font.SetBold();
+            row = worksheet.insertTitleRow(sheetName, row);
+            row++;
 
-            addHardwareSummary(worksheet, 3, controllerItems, costItems);
+            row = worksheet.insertHardwareItemSummary(row, controllerItems);
+            row++;
+
+            row = worksheet.insertTitleRow("Associated Costs", row);
+            row++;
+
+            row = worksheet.insertCostItemSummary(row, costItems);
+
+            worksheet.Columns().AdjustToContents();
         }
         internal static void AddPanelsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Panels")
         {
@@ -40,18 +49,42 @@ namespace EstimatingUtilitiesLibrary.Exports
             List<CostSummaryItem> costItems = consolidateCostInPanels(panels);
 
             IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            int row = 1;
 
-            IXLCell titleCell = worksheet.Cell(1, "A");
-            titleCell.Value = sheetName;
-            titleCell.Style.Font.SetBold();
+            row = worksheet.insertTitleRow(sheetName, row);
+            row++;
 
-            addHardwareSummary(worksheet, 3, panelItems, costItems);
+            row = worksheet.insertHardwareItemSummary(row, panelItems);
+            row++;
+
+            row = worksheet.insertTitleRow("AssociatedCosts", row);
+            row++;
+
+            row = worksheet.insertCostItemSummary(row, costItems);
+
+            worksheet.Columns().AdjustToContents();
         }
         internal static void AddDevicesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Devices")
         {
-            IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            List<TECDevice> devices = getAllDevices(bid);
+            List<HardwareSummaryItem> deviceItems = consolidateHardware(devices);
+            List<CostSummaryItem> costItems = consolidateCostInDevices(devices);
 
-            throw new NotImplementedException();
+            IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            int row = 1;
+
+            row = worksheet.insertTitleRow(sheetName, row);
+            row++;
+
+            row = worksheet.insertHardwareItemSummary(row, deviceItems);
+            row++;
+
+            row = worksheet.insertTitleRow("AssociatedCosts", row);
+            row++;
+
+            row = worksheet.insertCostItemSummary(row, costItems);
+
+            worksheet.Columns().AdjustToContents();
         }
         internal static void AddValvesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Valves")
         {
@@ -66,31 +99,38 @@ namespace EstimatingUtilitiesLibrary.Exports
             throw new NotImplementedException();
         }
 
-        private static void addHardwareSummary(IXLWorksheet worksheet, int row, IEnumerable<HardwareSummaryItem> hardwareItems, IEnumerable<CostSummaryItem> costItems)
+        #region Insert to Sheet Methods
+        private static int insertHardwareItemSummary(this IXLWorksheet worksheet, int row, IEnumerable<HardwareSummaryItem> hardwareItems)
         {
             insertHardwareHeaders(worksheet, row);
             row++;
             foreach (HardwareSummaryItem item in hardwareItems)
             {
-                insertHardwareItem(item, worksheet, row);
-                row++;
+                row = worksheet.insertHardwareItem(item, row);
             }
-
-            row += 2;
-            IXLCell titleCell = worksheet.Cell(row, "A");
-            titleCell.Value = "Associated Costs";
+            return row;
+        }
+        private static int insertCostItemSummary(this IXLWorksheet worksheet, int row, IEnumerable<CostSummaryItem> costItems)
+        {
             insertCostHeaders(worksheet, row);
             row++;
             foreach (CostSummaryItem cost in costItems)
             {
-                insertCostItem(cost, worksheet, row);
+                row = worksheet.insertCostItem(cost, row);
             }
-
-            worksheet.Columns().AdjustToContents();
+            return row;
+        }
+        
+        private static int insertTitleRow(this IXLWorksheet worksheet, string title, int row)
+        {
+            IXLCell titleCell = worksheet.Cell(row, "A");
+            titleCell.Value = title;
+            titleCell.Style.Font.SetBold();
+            row++;
+            return row;
         }
 
-        #region Add Row Methods
-        private static void insertHardwareHeaders(IXLWorksheet worksheet, int row)
+        private static int insertHardwareHeaders(this IXLWorksheet worksheet, int row)
         {
             IXLRow headerRow = worksheet.Row(row);
             headerRow.Style.Font.SetBold();
@@ -104,8 +144,11 @@ namespace EstimatingUtilitiesLibrary.Exports
             headerRow.Cell("G").Value = "Total Cost";
             headerRow.Cell("H").Value = "Unit Labor";
             headerRow.Cell("I").Value = "Total Labor";
+
+            row++;
+            return row;
         }
-        private static void insertCostHeaders(IXLWorksheet worksheet, int row)
+        private static int insertCostHeaders(this IXLWorksheet worksheet, int row)
         {
             IXLRow headerRow = worksheet.Row(row);
             headerRow.Style.Font.SetBold();
@@ -117,9 +160,12 @@ namespace EstimatingUtilitiesLibrary.Exports
             headerRow.Cell("E").Value = "Total Cost";
             headerRow.Cell("F").Value = "Unit Labor";
             headerRow.Cell("G").Value = "Total Labor";
+            row++;
+
+            return row;
         }
 
-        private static void insertHardwareItem(HardwareSummaryItem item, IXLWorksheet worksheet, int row)
+        private static int insertHardwareItem(this IXLWorksheet worksheet, HardwareSummaryItem item, int row)
         {
             IXLRow itemRow = worksheet.Row(row);
 
@@ -132,8 +178,10 @@ namespace EstimatingUtilitiesLibrary.Exports
             itemRow.Cell("G").Value = string.Format("{0:C}", item.TotalCost);
             itemRow.Cell("H").Value = string.Format("{0:F2}", item.Hardware.Labor);
             itemRow.Cell("I").Value = string.Format("{0:F2}", item.TotalLabor);
+            row++;
+            return row;
         }
-        private static void insertCostItem(CostSummaryItem item, IXLWorksheet worksheet, int row)
+        private static int insertCostItem(this IXLWorksheet worksheet, CostSummaryItem item, int row)
         {
             IXLRow itemRow = worksheet.Row(row);
 
@@ -144,11 +192,13 @@ namespace EstimatingUtilitiesLibrary.Exports
             itemRow.Cell("E").Value = string.Format("{0:C}", item.TotalCost);
             itemRow.Cell("F").Value = string.Format("{0:F2}", item.Cost.Labor);
             itemRow.Cell("G").Value = string.Format("{0:F2}", item.TotalLabor);
+            row++;
+            return row;
         }
         #endregion
 
         #region Get Material Methods
-        private static List<TECController> getAllControllers(TECBid bid)
+        private static List<TECController> getAllControllers(this TECBid bid)
         {
             List<TECController> controllers = new List<TECController>();
             controllers.AddRange(bid.Controllers);
@@ -161,7 +211,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return controllers;
         }
-        private static List<TECPanel> getAllPanels(TECBid bid)
+        private static List<TECPanel> getAllPanels(this TECBid bid)
         {
             List<TECPanel> panels = new List<TECPanel>();
             panels.AddRange(bid.Panels);
@@ -173,6 +223,30 @@ namespace EstimatingUtilitiesLibrary.Exports
                 }
             }
             return panels;
+        }
+        private static List<TECDevice> getAllDevices(this TECBid bid)
+        {
+            List<TECDevice> devices = new List<TECDevice>();
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach (TECSystem instance in typ.Instances)
+                {
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            foreach (IEndDevice endDev in ss.Devices)
+                            {
+                                if (endDev is TECDevice dev)
+                                {
+                                    devices.Add(dev);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return devices;
         }
 
         private static List<HardwareSummaryItem> consolidateHardware(IEnumerable<TECHardware> hardware)
@@ -250,6 +324,32 @@ namespace EstimatingUtilitiesLibrary.Exports
                 }
             }
 
+            return items;
+        }
+        private static List<CostSummaryItem> consolidateCostInDevices(IEnumerable<TECDevice> devices)
+        {
+            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            List<CostSummaryItem> items = new List<CostSummaryItem>();
+
+            List<TECCost> costs = new List<TECCost>();
+            foreach(TECDevice device in devices)
+            {
+                costs.AddRange(device.AssociatedCosts);
+            }
+
+            foreach(TECCost cost in costs)
+            {
+                if (dictionary.ContainsKey(cost))
+                {
+                    dictionary[cost].AddQuantity(1);
+                }
+                else
+                {
+                    CostSummaryItem item = new CostSummaryItem(cost);
+                    dictionary.Add(cost, item);
+                    items.Add(item);
+                }
+            }
             return items;
         }
         #endregion

@@ -85,7 +85,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>0F065CE35C01600AC9B8FF437E19F075F8FFBE1F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>C53568748C738E8C52DB1C8D3B2D878CF90D2D91</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
