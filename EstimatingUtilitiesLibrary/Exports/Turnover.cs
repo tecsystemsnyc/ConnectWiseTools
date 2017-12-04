@@ -15,6 +15,8 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class Turnover
     {
+        private static string accountingFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* \" - \"??_);_(@_)";
+
         public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
@@ -345,31 +347,49 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, 1).Style.Font.SetBold();
             x++;
             worksheet.Cell(x, 1).Value = "Material Cost";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECMaterialCost);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECMaterialCost);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Tax";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Tax);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Tax);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Shipping";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECShipping);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECShipping);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Warranty";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECWarranty);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECWarranty);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Labor";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECLaborCost);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECLaborCost);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Escalation";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Escalation);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Escalation);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Overhead";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Overhead);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Overhead);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Profit";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Profit);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Profit);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 1).Value = "Subtotal";
-            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECSubtotal);
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECSubtotal);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
 
             x = startRow + 1;
@@ -378,25 +398,39 @@ namespace EstimatingUtilitiesLibrary.Exports
             x++;
 
             worksheet.Cell(x, 4).Value = "Material Cost";
-            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalMaterialCost);
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalMaterialCost);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 4).Value = "Shipping";
-            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalShipping);
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalShipping);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 4).Value = "Warranty";
-            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalWarranty);
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalWarranty);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 4).Value = "Labor";
-            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.SubcontractorLaborCost);
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.SubcontractorLaborCost);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 4).Value = "Escalation";
-            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalEscalation);
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalEscalation);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 4).Value = "Markup";
-            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalMarkup);
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalMarkup);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;
             worksheet.Cell(x, 4).Value = "Subtotal";
-            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.SubcontractorSubtotal);
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.SubcontractorSubtotal);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
         }
 
         private static void createLaborSummarySection(IXLWorksheet worksheet, TECEstimator estimate, int startRow, int startColumn)
@@ -410,29 +444,43 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             x++;
 
-            worksheet.Cell(x, y).Value = "Project Management";
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.PMLaborHours);
+            worksheet.Cell(x, y).Value = "Project Management (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.PMLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             x++;
-            worksheet.Cell(x, y).Value = "Engineering";
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.ENGLaborHours);
+            worksheet.Cell(x, y).Value = "Engineering (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.ENGLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             x++;
-            worksheet.Cell(x, y).Value = "Software";
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.SoftLaborHours);
+            worksheet.Cell(x, y).Value = "Software (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.SoftLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             x++;
-            worksheet.Cell(x, y).Value = "Commissioning";
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.CommLaborHours);
+            worksheet.Cell(x, y).Value = "Commissioning (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.CommLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             x++;
-            worksheet.Cell(x, y).Value = "Graphics";
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.GraphLaborHours);
+            worksheet.Cell(x, y).Value = "Graphics (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.GraphLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             x++;
-            worksheet.Cell(x, y).Value = "Field";
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.TECFieldHours);
+            worksheet.Cell(x, y).Value = "Field (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.TECFieldHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             x++;
 
             worksheet.Cell(x, y).Value = "Total Hours";
             worksheet.Cell(x, y).Style.Font.SetBold();
 
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.TECLaborHours);
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.TECLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             worksheet.Cell(x, yPrime).Style.Font.SetBold();
             
         }
@@ -449,11 +497,15 @@ namespace EstimatingUtilitiesLibrary.Exports
             x++;
 
             worksheet.Cell(x, y).Value = "Price";
-            worksheet.Cell(x, yPrime).Value = String.Format("{0:C}", estimate.TotalPrice);
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.TotalPrice);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
             x++;
 
             worksheet.Cell(x, y).Value = "Margin";
-            worksheet.Cell(x, yPrime).Value = String.Format("%{0:F2}", estimate.Margin);
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", (estimate.Margin / 100));
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00%";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
         }
 
         private static string createPlotImage(TECEstimator estimate)

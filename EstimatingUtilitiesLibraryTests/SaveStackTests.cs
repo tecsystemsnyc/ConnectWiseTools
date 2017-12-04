@@ -1566,6 +1566,8 @@ namespace Tests
             data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
             data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
             data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
+            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1626,6 +1628,8 @@ namespace Tests
             data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
             data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
             data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
+            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1692,6 +1696,8 @@ namespace Tests
             data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
             data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
             data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
+            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1747,6 +1753,7 @@ namespace Tests
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
             
             data = new Dictionary<string, string>();
@@ -1799,6 +1806,7 @@ namespace Tests
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1849,6 +1857,7 @@ namespace Tests
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1899,12 +1908,12 @@ namespace Tests
             TECSubScopeConnection instanceConnection = instanceController.AddSubScope(subScope);
 
             Dictionary<string, string> data;
-            Tuple<string, string> pkData;
 
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1917,20 +1926,11 @@ namespace Tests
             data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
-            //data = new Dictionary<string, string>();
-            //pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
-            //data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
-            //expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
-
-            //data = new Dictionary<string, string>();
-            //pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
-            //data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
-            //expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
-
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();

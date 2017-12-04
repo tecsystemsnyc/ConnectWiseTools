@@ -1583,10 +1583,10 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
     internal class TableBase
     {
-        public static string TableName;
-        public static List<Type> Types;
+        public static string TableName = "";
+        public static List<Type> Types = new List<Type>();
 
-        public static List<TableField> PrimaryKey;
+        public static List<TableField> PrimaryKey = new List<TableField>();
     }
 
     internal class IndexedRelationTableBase : TableBase { }

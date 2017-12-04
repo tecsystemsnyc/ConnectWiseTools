@@ -1197,8 +1197,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             string expectedName = "Bid Controller";
             string expectedDescription = "Bid Controller Description";
-            //double expectedCost = 1812;
-            bool expectedType = true;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -1235,8 +1233,6 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
-            //Assert.AreEqual(expectedCost, actualController.Cost);
-            //Assert.AreEqual(expectedType, actualController.IsServer);
             //Assert.IsTrue(hasIO);
             Assert.IsTrue(hasConnection);
             testForTag(actualController);
@@ -1250,8 +1246,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
             string expectedName = "Typical Controller";
             string expectedDescription = "Typical Controller Description";
-            //double expectedCost = 1776;
-            bool expectedType = false;
 
             TECController actualController = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -1291,8 +1285,6 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
-            //Assert.AreEqual(expectedCost, actualController.Cost);
-            //Assert.AreEqual(expectedType, actualController.IsServer);
             //Assert.IsTrue(hasIO, "IO not loaded");
             Assert.IsTrue(hasConnection, "Connection not loaded");
             testForTag(actualController);
@@ -1306,7 +1298,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
             string expectedName = "Instance Controller";
             string expectedDescription = "Instance Controller Description";
-            //double expectedCost = 1776;
             bool expectedType = false;
 
             TECController actualController = null;
@@ -1350,7 +1341,6 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
-            //Assert.AreEqual(expectedCost, actualController.Cost);
             Assert.AreEqual(expectedType, actualController.IsServer);
             //Assert.IsTrue(hasIO, "IO not loaded");
             Assert.IsTrue(hasConnection, "Connection not loaded");
