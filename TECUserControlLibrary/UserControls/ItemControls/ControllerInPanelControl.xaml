@@ -12,7 +12,7 @@
         <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerInPanelControl}"/>
         <utilities:NoneValueConverter x:Key="NoneValueConverter" />
     </local:BaseItemControl.Resources>
-    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+    <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
         <Grid DataContext="{Binding ElementName=controllerInPanelControl, Path=Controller}" Background="Transparent">
             <Grid.ContextMenu>
                 <ContextMenu>
