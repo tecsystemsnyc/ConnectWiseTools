@@ -1908,7 +1908,6 @@ namespace Tests
             TECSubScopeConnection instanceConnection = instanceController.AddSubScope(subScope);
 
             Dictionary<string, string> data;
-            Tuple<string, string> pkData;
 
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
@@ -1926,16 +1925,6 @@ namespace Tests
             data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
-
-            //data = new Dictionary<string, string>();
-            //pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
-            //data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
-            //expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
-
-            //data = new Dictionary<string, string>();
-            //pkData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
-            //data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
-            //expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, pkData));
 
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
