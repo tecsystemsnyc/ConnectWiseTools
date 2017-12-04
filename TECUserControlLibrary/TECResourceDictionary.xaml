@@ -27,7 +27,7 @@
     <Color x:Key="TECFlatMagenta">#5D3E3C</Color>
 
     <Color x:Key="TECRed">#E14D4C</Color>
-    <Color x:Key="TECLightItemBlue">#56BBFF</Color>
+    <Color x:Key="TECLightItemBlue">#C7E8FF</Color>
 
     <!--Brushes-->
     <SolidColorBrush x:Key="EBWindowBackgroundBrush" Color="{StaticResource TECFlatDarkBlue}"/>
@@ -46,6 +46,8 @@
     <SolidColorBrush x:Key="SelectedTabBrush" Color="{StaticResource TECFlatBlue}"/>
 
     <SolidColorBrush x:Key="ItemBackgroundBrush" Color="{StaticResource TECLightItemBlue}"/>
+    <SolidColorBrush x:Key="ItemBorderBrush" Color="DarkGray"/>
+
 
     <!--GlobalStyles-->
     <Style TargetType="Button">

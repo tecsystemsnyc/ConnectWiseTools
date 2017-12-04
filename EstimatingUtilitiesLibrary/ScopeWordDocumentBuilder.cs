@@ -26,11 +26,15 @@ namespace EstimatingUtilitiesLibrary
         static private TECBid _bid;
         static private TECEstimator _estimate;
 
-        public static void CreateScopeWordDocument(TECBid bid, TECEstimator estimate, string path)
+        public static void CreateScopeWordDocument(TECBid bid, TECEstimator estimate, string path, bool openOnComplete = true)
         {
             _bid = bid;
             _estimate = estimate;
             CreatePackage(path);
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
 
         static private void addHeader(MainDocumentPart mainPart, TECBid bid)
