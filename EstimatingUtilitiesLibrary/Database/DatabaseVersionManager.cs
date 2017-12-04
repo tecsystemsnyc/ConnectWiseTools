@@ -315,6 +315,9 @@ namespace EstimatingUtilitiesLibrary.Database
                     if (!OriginalFields.Contains(originalField))
                     {
                         OriginalFields.Add(originalField);
+                    }
+                    if (!TableFieldsDictionary[originalTable].Contains(originalField))
+                    {
                         TableFieldsDictionary[originalTable].Add(originalField);
                     }
                 }
