@@ -20,7 +20,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             XLWorkbook workbook = new XLWorkbook();
             createSummarySheet(workbook, bid, estimate);
             MaterialSummaryExport.AddControllersSheet(workbook, bid);
-            //MaterialSummaryExport.AddPanelsSheet(workbook, bid);
+            MaterialSummaryExport.AddPanelsSheet(workbook, bid, "Panel Hardware");
             //MaterialSummaryExport.AddDevicesSheet(workbook, bid);
             //MaterialSummaryExport.AddValvesSheet(workbook, bid);
             //MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
