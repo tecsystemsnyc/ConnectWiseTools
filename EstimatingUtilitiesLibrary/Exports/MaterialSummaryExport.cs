@@ -88,7 +88,32 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         internal static void AddValvesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Valves")
         {
-            throw new NotImplementedException();
+            List<TECValve> valves = getAllValves(bid);
+            List<HardwareSummaryItem> valveItems = consolidateHardware(valves);
+            List<HardwareSummaryItem> actuatorItems = consolidateHardware(valves.Select(valve => (valve.Actuator)));
+            List<CostSummaryItem> costItems = consolidateCostInValves(valves);
+
+            IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            int row = 1;
+
+            row = worksheet.insertTitleRow(sheetName, row);
+            row++;
+
+            row = worksheet.insertHardwareItemSummary(row, valveItems);
+            row++;
+
+            row = worksheet.insertTitleRow("Actuators", row);
+            row++;
+
+            row = worksheet.insertHardwareItemSummary(row, actuatorItems);
+            row++;
+
+            row = worksheet.insertTitleRow("Associated Costs", row);
+            row++;
+
+            row = worksheet.insertCostItemSummary(row, costItems);
+
+            worksheet.Columns().AdjustToContents();
         }
         internal static void AddElectricalMaterialSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Wire and Conduit")
         {
@@ -198,7 +223,7 @@ namespace EstimatingUtilitiesLibrary.Exports
         #endregion
 
         #region Get Material Methods
-        private static List<TECController> getAllControllers(this TECBid bid)
+        private static List<TECController> getAllControllers(TECBid bid)
         {
             List<TECController> controllers = new List<TECController>();
             controllers.AddRange(bid.Controllers);
@@ -211,7 +236,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return controllers;
         }
-        private static List<TECPanel> getAllPanels(this TECBid bid)
+        private static List<TECPanel> getAllPanels(TECBid bid)
         {
             List<TECPanel> panels = new List<TECPanel>();
             panels.AddRange(bid.Panels);
@@ -224,7 +249,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return panels;
         }
-        private static List<TECDevice> getAllDevices(this TECBid bid)
+        private static List<TECDevice> getAllDevices(TECBid bid)
         {
             List<TECDevice> devices = new List<TECDevice>();
             foreach(TECTypical typ in bid.Systems)
@@ -247,6 +272,30 @@ namespace EstimatingUtilitiesLibrary.Exports
                 }
             }
             return devices;
+        }
+        private static List<TECValve> getAllValves(TECBid bid)
+        {
+            List<TECValve> valves = new List<TECValve>();
+            foreach (TECTypical typ in bid.Systems)
+            {
+                foreach (TECSystem instance in typ.Instances)
+                {
+                    foreach (TECEquipment equip in instance.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            foreach (IEndDevice endDev in ss.Devices)
+                            {
+                                if (endDev is TECValve valve)
+                                {
+                                    valves.Add(valve);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return valves;
         }
 
         private static List<HardwareSummaryItem> consolidateHardware(IEnumerable<TECHardware> hardware)
@@ -352,7 +401,33 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return items;
         }
-        #endregion
+        private static List<CostSummaryItem> consolidateCostInValves(IEnumerable<TECValve> valves)
+        {
+            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            List<CostSummaryItem> items = new List<CostSummaryItem>();
 
+            List<TECCost> costs = new List<TECCost>();
+            foreach (TECValve valve in valves)
+            {
+                costs.AddRange(valve.AssociatedCosts);
+                costs.AddRange(valve.Actuator.AssociatedCosts);
+            }
+
+            foreach (TECCost cost in costs)
+            {
+                if (dictionary.ContainsKey(cost))
+                {
+                    dictionary[cost].AddQuantity(1);
+                }
+                else
+                {
+                    CostSummaryItem item = new CostSummaryItem(cost);
+                    dictionary.Add(cost, item);
+                    items.Add(item);
+                }
+            }
+            return items;
+        }
+        #endregion
     }
 }
