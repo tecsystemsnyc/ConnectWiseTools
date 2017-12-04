@@ -278,80 +278,170 @@ namespace EstimatingUtilitiesLibrary.Exports
         private static void createSummarySheet(XLWorkbook workbook, TECBid bid, TECEstimator estimate)
         {
             IXLWorksheet worksheet = workbook.Worksheets.Add("Summary");
-            worksheet.Cell(1, 1).Value = "Project Information";
-            worksheet.Cell(1, 1).Style.Font.SetBold();
-            worksheet.Cell(1, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
-            worksheet.Cell(2, 1).Value = "Name";
-            worksheet.Cell(2, 2).Value = bid.Name;
-            worksheet.Cell(3, 1).Value = "Bid Number";
-            worksheet.Cell(3, 2).Value = bid.BidNumber;
-            worksheet.Cell(4, 1).Value = "Salesperson";
-            worksheet.Cell(4, 2).Value = bid.Salesperson;
-            worksheet.Cell(5, 1).Value = "Estimator";
-            worksheet.Cell(5, 2).Value = bid.Estimator;
-
-            worksheet.Cell(2, 3).Value = "Tax Exempt";
-            worksheet.Cell(2, 4).Value = bid.Parameters.IsTaxExempt ? "Yes" : "No";
-            worksheet.Cell(3, 3).Value = "Bond Required";
-            worksheet.Cell(3, 4).Value = bid.Parameters.RequiresBond ? "Yes" : "No";
-
-            worksheet.Cell(7, 1).Value = "Labor Summary";
-            worksheet.Cell(7, 1).Style.Font.SetBold();
-            worksheet.Cell(7, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-            worksheet.Cell(8, 1).Value = "Project Management";
-            worksheet.Cell(8, 2).Value = String.Format("{0:F} hours", estimate.PMLaborHours);
-            worksheet.Cell(9, 1).Value = "Engineering";
-            worksheet.Cell(9, 2).Value = String.Format("{0:F} hours", estimate.ENGLaborHours);
-            worksheet.Cell(10, 1).Value = "Software";
-            worksheet.Cell(10, 2).Value = String.Format("{0:F} hours", estimate.SoftLaborHours);
-            worksheet.Cell(11, 1).Value = "Commissioning";
-            worksheet.Cell(11, 2).Value = String.Format("{0:F} hours", estimate.CommLaborHours);
-            worksheet.Cell(12, 1).Value = "Graphics";
-            worksheet.Cell(12, 2).Value = String.Format("{0:F} hours", estimate.GraphLaborHours);
-            worksheet.Cell(13, 1).Value = "Field";
-            worksheet.Cell(13, 2).Value = String.Format("{0:F} hours", estimate.TECFieldHours);
-
-            worksheet.Cell(14, 1).Value = "Total Hours";
-            worksheet.Cell(14, 1).Style.Font.SetBold();
-
-            worksheet.Cell(14, 2).Value = String.Format("{0:F} hours", estimate.TECLaborHours);
-            worksheet.Cell(14, 2).Style.Font.SetBold();
-
-            worksheet.Cell(15, 1).Value = "Cost";
-            worksheet.Cell(15, 1).Style.Font.SetBold();
-
-            worksheet.Cell(15, 2).Value = String.Format("{0:C} ", estimate.TECLaborCost);
-            worksheet.Cell(15, 2).Style.Font.SetBold();
-
-            worksheet.Cell(17, 1).Value = "Costs Summary";
-            worksheet.Cell(17, 1).Style.Font.SetBold();
-            worksheet.Cell(17, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-            worksheet.Cell(18, 1).Value = "Material Cost";
-            worksheet.Cell(18, 2).Value = String.Format("{0:C}", estimate.TECMaterialCost);
-            worksheet.Cell(19, 1).Value = "Subcontractor Labor";
-            worksheet.Cell(19, 2).Value = String.Format("{0:F} hours", estimate.SubcontractorLaborHours);
-            worksheet.Cell(20, 1).Value = "Subcontractor Material";
-            worksheet.Cell(20, 2).Value = String.Format("{0:C}", estimate.ElectricalMaterialCost);
-            worksheet.Cell(21, 1).Value = "Subcontractor Subtotal";
-            worksheet.Cell(21, 2).Value = String.Format("{0:C}", estimate.SubcontractorSubtotal);
-
-            worksheet.Cell(23, 1).Value = "Sale Summary";
-            worksheet.Cell(23, 1).Style.Font.SetBold();
-            worksheet.Cell(23, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-            worksheet.Cell(24, 1).Value = "Price";
-            worksheet.Cell(24, 2).Value = String.Format("{0:C}", estimate.TotalPrice);
-            worksheet.Cell(25, 1).Value = "Margin";
-            worksheet.Cell(25, 2).Value = String.Format("%{0:F2}", estimate.Margin);
-
+            createProjectInfoSection(worksheet, bid, 1);
+            createCostSummarySection(worksheet, estimate, 7);
+            createLaborSummarySection(worksheet, estimate, 19, 1);
+            createSalesSummarySection(worksheet, estimate, 19, 4);
+            
             var image = worksheet.AddPicture(createPlotImage(estimate));
-            image.MoveTo(worksheet.Cell(7, 4).Address);
+            image.MoveTo(worksheet.Cell(28, 1).Address);
+            //image.Scale(.7);
 
             worksheet.Columns().AdjustToContents();
 
+        }
+
+        private static void createProjectInfoSection(IXLWorksheet worksheet, TECBid bid, int startRow)
+        {
+            int x = startRow;
+            worksheet.Cell(x, 1).Value = "Project Information";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+
+            worksheet.Cell(x, 1).Value = "Name";
+            worksheet.Cell(x, 2).Value = bid.Name;
+            x++;
+            worksheet.Cell(x, 1).Value = "Bid Number";
+            worksheet.Cell(x, 2).Value = bid.BidNumber;
+            x++;
+            worksheet.Cell(x, 1).Value = "Salesperson";
+            worksheet.Cell(x, 2).Value = bid.Salesperson;
+            x++;
+            worksheet.Cell(x, 1).Value = "Estimator";
+            worksheet.Cell(x, 2).Value = bid.Estimator;
+            x++;
+
+            x = startRow + 1;
+            worksheet.Cell(x, 3).Value = "Tax Exempt";
+            worksheet.Cell(x, 4).Value = bid.Parameters.IsTaxExempt ? "Yes" : "No";
+            x++;
+            worksheet.Cell(x, 3).Value = "Bond Required";
+            worksheet.Cell(x, 4).Value = bid.Parameters.RequiresBond ? "Yes" : "No";
+
+        }
+
+        private static void createCostSummarySection(IXLWorksheet worksheet, TECEstimator estimate, int startRow)
+        {
+            int x = startRow;
+            worksheet.Cell(x, 1).Value = "Costs Summary";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+            worksheet.Cell(x, 1).Value = "TEC";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            x++;
+            worksheet.Cell(x, 1).Value = "Material Cost";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECMaterialCost);
+            x++;
+            worksheet.Cell(x, 1).Value = "Tax";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Tax);
+            x++;
+            worksheet.Cell(x, 1).Value = "Shipping";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECShipping);
+            x++;
+            worksheet.Cell(x, 1).Value = "Warranty";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECWarranty);
+            x++;
+            worksheet.Cell(x, 1).Value = "Labor";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECLaborCost);
+            x++;
+            worksheet.Cell(x, 1).Value = "Escalation";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Escalation);
+            x++;
+            worksheet.Cell(x, 1).Value = "Overhead";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Overhead);
+            x++;
+            worksheet.Cell(x, 1).Value = "Profit";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.Profit);
+            x++;
+            worksheet.Cell(x, 1).Value = "Subtotal";
+            worksheet.Cell(x, 2).Value = String.Format("{0:C}", estimate.TECSubtotal);
+            x++;
+
+            x = startRow + 1;
+            worksheet.Cell(x, 4).Value = "Subcontractor";
+            worksheet.Cell(x, 4).Style.Font.SetBold();
+            x++;
+
+            worksheet.Cell(x, 4).Value = "Material Cost";
+            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalMaterialCost);
+            x++;
+            worksheet.Cell(x, 4).Value = "Shipping";
+            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalShipping);
+            x++;
+            worksheet.Cell(x, 4).Value = "Warranty";
+            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalWarranty);
+            x++;
+            worksheet.Cell(x, 4).Value = "Labor";
+            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.SubcontractorLaborCost);
+            x++;
+            worksheet.Cell(x, 4).Value = "Escalation";
+            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalEscalation);
+            x++;
+            worksheet.Cell(x, 4).Value = "Markup";
+            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.ElectricalMarkup);
+            x++;
+            worksheet.Cell(x, 4).Value = "Subtotal";
+            worksheet.Cell(x, 5).Value = String.Format("{0:C}", estimate.SubcontractorSubtotal);
+        }
+
+        private static void createLaborSummarySection(IXLWorksheet worksheet, TECEstimator estimate, int startRow, int startColumn)
+        {
+            int x = startRow;
+            int y = startColumn;
+            int yPrime = y + 1;
+
+            worksheet.Cell(x, y).Value = "Labor Summary";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+
+            worksheet.Cell(x, y).Value = "Project Management";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.PMLaborHours);
+            x++;
+            worksheet.Cell(x, y).Value = "Engineering";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.ENGLaborHours);
+            x++;
+            worksheet.Cell(x, y).Value = "Software";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.SoftLaborHours);
+            x++;
+            worksheet.Cell(x, y).Value = "Commissioning";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.CommLaborHours);
+            x++;
+            worksheet.Cell(x, y).Value = "Graphics";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.GraphLaborHours);
+            x++;
+            worksheet.Cell(x, y).Value = "Field";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.TECFieldHours);
+            x++;
+
+            worksheet.Cell(x, y).Value = "Total Hours";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:F} hours", estimate.TECLaborHours);
+            worksheet.Cell(x, yPrime).Style.Font.SetBold();
+            
+        }
+
+        private static void createSalesSummarySection(IXLWorksheet worksheet, TECEstimator estimate, int startRow, int startColumn)
+        {
+            int x = startRow;
+            int y = startColumn;
+            int yPrime = y + 1;
+
+            worksheet.Cell(x, y).Value = "Sale Summary";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+
+            worksheet.Cell(x, y).Value = "Price";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0:C}", estimate.TotalPrice);
+            x++;
+
+            worksheet.Cell(x, y).Value = "Margin";
+            worksheet.Cell(x, yPrime).Value = String.Format("%{0:F2}", estimate.Margin);
         }
 
         private static string createPlotImage(TECEstimator estimate)
