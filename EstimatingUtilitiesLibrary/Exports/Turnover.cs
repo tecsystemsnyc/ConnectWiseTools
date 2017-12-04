@@ -15,7 +15,7 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class Turnover
     {
-        public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate)
+        public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
             createSummarySheet(workbook, bid, estimate);
@@ -27,9 +27,13 @@ namespace EstimatingUtilitiesLibrary.Exports
             //MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
             createBomSheets(workbook, bid);
             workbook.SaveAs(path);
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
 
-        public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate)
+        public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             using (WordprocessingDocument package = WordprocessingDocument.Create(path, 
                 DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
@@ -47,13 +51,21 @@ namespace EstimatingUtilitiesLibrary.Exports
 
                 package.MainDocumentPart.Document.Save();
             }
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
 
-        public static void GenerateBOM(string path, TECBid bid)
+        public static void GenerateBOM(string path, TECBid bid, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
             createBomSheets(workbook, bid);
             workbook.SaveAs(path);
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
 
         private static void createBomSheets(XLWorkbook workbook, TECBid bid)
