@@ -725,7 +725,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 
@@ -1527,7 +1527,7 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
 

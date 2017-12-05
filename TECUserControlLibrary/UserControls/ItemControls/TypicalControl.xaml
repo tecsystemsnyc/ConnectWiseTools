@@ -11,7 +11,7 @@
     <local:BaseItemControl.Resources>
         <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=typicalControl}"/>
     </local:BaseItemControl.Resources>
-    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+    <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
         <Grid DataContext="{Binding ElementName=typicalControl, Path=Typical}">
             <Grid.ContextMenu>
                 <ContextMenu>

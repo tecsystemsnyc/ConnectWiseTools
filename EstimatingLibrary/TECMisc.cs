@@ -22,6 +22,10 @@ namespace EstimatingLibrary
             copyPropertiesFromCost(miscSource);
             _quantity = miscSource.Quantity;
         }
+        public TECMisc(TECCost costSource, bool istypical) : this(costSource.Type, istypical)
+        {
+            copyPropertiesFromCost(costSource);
+        }
         #endregion
         
         #region Properties

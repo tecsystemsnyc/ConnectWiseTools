@@ -2,12 +2,14 @@
 using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddSubScopeVM : ViewModelBase, IAddVM
+    public class AddSubScopeVM :  AddVM
     {
         private TECEquipment parent;
         private TECSubScope toAdd;
@@ -63,12 +65,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("PointType");
             }
         }
-        public ICommand AddCommand { get; private set; }
         public ICommand AddPointCommand { get; private set; }
         public RelayCommand<IEndDevice> DeleteDeviceCommand { get; private set; }
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
 
-        public AddSubScopeVM(TECEquipment parentEquipment)
+        public AddSubScopeVM(TECEquipment parentEquipment, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentEquipment;
             isTypical = parent.IsTypical;
@@ -81,7 +82,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             setup();
         }
 
-        public AddSubScopeVM(Action<TECSubScope> addMethod)
+        public AddSubScopeVM(Action<TECSubScope> addMethod, TECScopeManager scopeManager): base(scopeManager)
         {
             add = addMethod;
             toAdd = new TECSubScope(false);
@@ -128,9 +129,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             toAdd.Devices.Remove(device);
         }
-
-        public Action<object> Added { get; }
-
+        
         private bool addCanExecute()
         {
             return true;
@@ -144,6 +143,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 Added?.Invoke(subScope);
             }
         }
-
+        
     }
 }

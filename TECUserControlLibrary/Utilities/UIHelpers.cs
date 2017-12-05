@@ -17,8 +17,12 @@ namespace TECUserControlLibrary.Utilities
     public static class UIHelpers
     {
 
-        public static void StandardDragOver(IDropInfo dropInfo)
+        public static void StandardDragOver(IDropInfo dropInfo, Func<Type, bool> typeMeetsCondition = null)
         {
+            if(typeMeetsCondition == null)
+            {
+                typeMeetsCondition = type => { return false; };
+            }
             if (dropInfo.TargetCollection == dropInfo.DragInfo.SourceCollection)
             {
                 return;
@@ -37,7 +41,7 @@ namespace TECUserControlLibrary.Utilities
                 bool isDragDropable = sourceItem is IDragDropable;
                 bool sourceNotNull = sourceItem != null;
                 bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
-                if (sourceNotNull && sourceMatchesTarget && isDragDropable)
+                if (sourceNotNull && (sourceMatchesTarget || typeMeetsCondition(targetType)) && isDragDropable)
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;

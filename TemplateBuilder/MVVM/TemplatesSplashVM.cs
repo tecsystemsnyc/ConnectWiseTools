@@ -32,7 +32,7 @@ namespace TemplateBuilder.MVVM
         public TemplatesSplashVM(string templatesPath, string defaultDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)
         {
-            _templatesPath = templatesPath;
+            TemplatesPath = templatesPath;
 
             GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
             OpenExistingCommand = new RelayCommand(openExistingExecute, openExistingCanExecute);
@@ -57,7 +57,6 @@ namespace TemplateBuilder.MVVM
         }
         private bool openExistingCanExecute()
         {
-            
             return (TemplatesPath != "" && TemplatesPath != null);
         }
 

@@ -145,7 +145,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);
@@ -215,12 +215,12 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECElectricalMaterial> expected = new ObservableCollection<TECElectricalMaterial>();
-            foreach (TECElectricalMaterial item in Template.Catalogs.ConnectionTypes)
+            ObservableCollection<TECConnectionType> expected = new ObservableCollection<TECConnectionType>();
+            foreach (TECConnectionType item in Template.Catalogs.ConnectionTypes)
             {
                 expected.Add(item);
             }
-            TECElectricalMaterial edit = new TECElectricalMaterial();
+            TECConnectionType edit = new TECConnectionType();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -229,7 +229,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECElectricalMaterial> actual = Template.Catalogs.ConnectionTypes;
+            ObservableCollection<TECConnectionType> actual = Template.Catalogs.ConnectionTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -620,7 +620,7 @@ namespace Tests
             var Template = TestHelper.CreateTestTemplates();
             var device = Template.Catalogs.Devices[0];
             int expected = device.ConnectionTypes.Count;
-            TECElectricalMaterial edit = Template.Catalogs.ConnectionTypes[0];
+            TECConnectionType edit = Template.Catalogs.ConnectionTypes[0];
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -898,7 +898,7 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);
@@ -1160,7 +1160,7 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            ObservableCollection<TECElectricalMaterial> types = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types,
                 Template.Catalogs.Manufacturers[0]);

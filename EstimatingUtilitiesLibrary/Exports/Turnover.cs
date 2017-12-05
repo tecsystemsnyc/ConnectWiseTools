@@ -3,16 +3,39 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Wpf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class Turnover
     {
+        internal static string accountingFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* \" - \"??_);_(@_)";
 
-        public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate)
+        public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
+        {
+            XLWorkbook workbook = new XLWorkbook();
+            createSummarySheet(workbook, bid, estimate);
+            MaterialSummaryExport.AddControllersSheet(workbook, bid, "Controller Hardware");
+            MaterialSummaryExport.AddPanelsSheet(workbook, bid, "Panel Hardware");
+            MaterialSummaryExport.AddDevicesSheet(workbook, bid);
+            MaterialSummaryExport.AddValvesSheet(workbook, bid);
+            MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
+            MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
+            createBomSheets(workbook, bid);
+            workbook.SaveAs(path);
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+        }
+
+        public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             using (WordprocessingDocument package = WordprocessingDocument.Create(path, 
                 DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
@@ -30,18 +53,32 @@ namespace EstimatingUtilitiesLibrary.Exports
 
                 package.MainDocumentPart.Document.Save();
             }
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
 
-        public static void GenerateBOM(string path, TECBid bid)
+        public static void GenerateBOM(string path, TECBid bid, bool openOnComplete = true)
         {
-            List<String> sheetNames = new List<string>();
             XLWorkbook workbook = new XLWorkbook();
+            createBomSheets(workbook, bid);
+            workbook.SaveAs(path);
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+        }
+
+        private static void createBomSheets(XLWorkbook workbook, TECBid bid)
+        {
             int postfix = 1;
-            foreach(TECTypical typical in bid.Systems.Where(typ => typ.Instances.Count > 0))
+            List<String> sheetNames = new List<string>();
+            foreach (TECTypical typical in bid.Systems.Where(typ => typ.Instances.Count > 0))
             {
                 List<TECCost> associatedCosts = new List<TECCost>();
                 string sheetName = typical.Instances.Count > 1 ? typical.Name : typical.Instances[0].Name;
-                if(sheetName == "")
+                if (sheetName == "")
                 {
                     sheetName = "Untitled";
                 }
@@ -82,16 +119,16 @@ namespace EstimatingUtilitiesLibrary.Exports
                 x++;
                 List<IEndDevice> devices = new List<IEndDevice>();
                 associatedCosts.AddRange(typical.AssociatedCosts);
-                foreach(TECEquipment equipment in typical.Equipment)
+                foreach (TECEquipment equipment in typical.Equipment)
                 {
                     associatedCosts.AddRange(equipment.AssociatedCosts);
-                    foreach(TECSubScope subScope in equipment.SubScope)
+                    foreach (TECSubScope subScope in equipment.SubScope)
                     {
                         associatedCosts.AddRange(subScope.AssociatedCosts);
                         devices.AddRange(subScope.Devices);
                     }
                 }
-                foreach(IEndDevice device in devices.Distinct())
+                foreach (IEndDevice device in devices.Distinct())
                 {
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 2).Value = devices.Count(item => item == device);
@@ -105,7 +142,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
                 }
-                foreach(TECController controller in typical.Controllers)
+                foreach (TECController controller in typical.Controllers)
                 {
                     associatedCosts.AddRange(controller.AssociatedCosts);
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -120,7 +157,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
                 }
-                foreach(TECPanel panel in typical.Panels)
+                foreach (TECPanel panel in typical.Panels)
                 {
                     associatedCosts.AddRange(panel.AssociatedCosts);
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -148,7 +185,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 3).Style.Font.SetBold();
                 worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 x++;
-                foreach(TECCost cost in associatedCosts.Distinct())
+                foreach (TECCost cost in associatedCosts.Distinct())
                 {
                     worksheet.Cell(x, 1).Value = cost.Name;
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -158,11 +195,12 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
                 }
+                worksheet.Columns().AdjustToContents();
+
             }
 
             createMiscBOMSheet(workbook, bid);
 
-            workbook.SaveAs(path);
         }
 
         private static void createMiscBOMSheet(XLWorkbook workbook, TECBid bid)
@@ -247,6 +285,243 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 x++;
             }
+            worksheet.Columns().AdjustToContents();
+
+        }
+
+        private static void createSummarySheet(XLWorkbook workbook, TECBid bid, TECEstimator estimate)
+        {
+            IXLWorksheet worksheet = workbook.Worksheets.Add("Summary");
+
+            createProjectInfoSection(worksheet, bid, 1);
+            createCostSummarySection(worksheet, estimate, 7);
+            createLaborSummarySection(worksheet, estimate, 19, 1);
+            createSalesSummarySection(worksheet, estimate, 19, 4);
+            
+            var image = worksheet.AddPicture(createPlotImage(estimate));
+            image.MoveTo(worksheet.Cell(28, 1).Address);
+            //image.Scale(.7);
+
+            worksheet.Columns().AdjustToContents();
+
+        }
+
+        private static void createProjectInfoSection(IXLWorksheet worksheet, TECBid bid, int startRow)
+        {
+            int x = startRow;
+            worksheet.Cell(x, 1).Value = "Project Information";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+
+            worksheet.Cell(x, 1).Value = "Name";
+            worksheet.Cell(x, 2).Value = bid.Name;
+            x++;
+            worksheet.Cell(x, 1).Value = "Bid Number";
+            worksheet.Cell(x, 2).Value = bid.BidNumber;
+            x++;
+            worksheet.Cell(x, 1).Value = "Salesperson";
+            worksheet.Cell(x, 2).Value = bid.Salesperson;
+            x++;
+            worksheet.Cell(x, 1).Value = "Estimator";
+            worksheet.Cell(x, 2).Value = bid.Estimator;
+            x++;
+
+            x = startRow + 1;
+            worksheet.Cell(x, 4).Value = "Tax Exempt";
+            worksheet.Cell(x, 5).Value = bid.Parameters.IsTaxExempt ? "Yes" : "No";
+            x++;
+            worksheet.Cell(x, 4).Value = "Bond Required";
+            worksheet.Cell(x, 5).Value = bid.Parameters.RequiresBond ? "Yes" : "No";
+
+        }
+
+        private static void createCostSummarySection(IXLWorksheet worksheet, TECEstimator estimate, int startRow)
+        {
+            int x = startRow;
+            worksheet.Cell(x, 1).Value = "Costs Summary";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+            worksheet.Cell(x, 1).Value = "TEC";
+            worksheet.Cell(x, 1).Style.Font.SetBold();
+            x++;
+            worksheet.Cell(x, 1).Value = "Material Cost";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECMaterialCost);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Tax";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Tax);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Shipping";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECShipping);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Warranty";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECWarranty);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Labor";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECLaborCost);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Escalation";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Escalation);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Overhead";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Overhead);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Profit";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Profit);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 1).Value = "Subtotal";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECSubtotal);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
+
+            x = startRow + 1;
+            worksheet.Cell(x, 4).Value = "Subcontractor";
+            worksheet.Cell(x, 4).Style.Font.SetBold();
+            x++;
+
+            worksheet.Cell(x, 4).Value = "Material Cost";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalMaterialCost);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 4).Value = "Shipping";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalShipping);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 4).Value = "Warranty";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalWarranty);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 4).Value = "Labor";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.SubcontractorLaborCost);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 4).Value = "Escalation";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalEscalation);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 4).Value = "Markup";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalMarkup);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 4).Value = "Subtotal";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.SubcontractorSubtotal);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+        }
+
+        private static void createLaborSummarySection(IXLWorksheet worksheet, TECEstimator estimate, int startRow, int startColumn)
+        {
+            int x = startRow;
+            int y = startColumn;
+            int yPrime = y + 1;
+
+            worksheet.Cell(x, y).Value = "Labor Summary";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+
+            worksheet.Cell(x, y).Value = "Project Management (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.PMLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, y).Value = "Engineering (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.ENGLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, y).Value = "Software (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.SoftLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, y).Value = "Commissioning (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.CommLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, y).Value = "Graphics (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.GraphLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, y).Value = "Field (Hours)";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.TECFieldHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            x++;
+
+            worksheet.Cell(x, y).Value = "Total Hours";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.TECLaborHours);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            worksheet.Cell(x, yPrime).Style.Font.SetBold();
+            
+        }
+
+        private static void createSalesSummarySection(IXLWorksheet worksheet, TECEstimator estimate, int startRow, int startColumn)
+        {
+            int x = startRow;
+            int y = startColumn;
+            int yPrime = y + 1;
+
+            worksheet.Cell(x, y).Value = "Sale Summary";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            x++;
+
+            worksheet.Cell(x, y).Value = "Price";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", estimate.TotalPrice);
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+            x++;
+
+            worksheet.Cell(x, y).Value = "Margin";
+            worksheet.Cell(x, yPrime).Value = String.Format("{0}", (estimate.Margin / 100));
+            worksheet.Cell(x, yPrime).Style.NumberFormat.Format = "0.00%";
+            worksheet.Cell(x, yPrime).DataType = XLCellValues.Number;
+        }
+
+        private static string createPlotImage(TECEstimator estimate)
+        {
+            string path = Path.GetTempFileName();
+            var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
+            PlotModel plotModel = new PlotModel { Title = "Cost Distribution" };
+            OxyPlot.Series.PieSeries pieSeries = new OxyPlot.Series.PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
+            pieSeries.Slices.Add(new PieSlice("Material Cost", estimate.TECMaterialCost) { IsExploded = false });
+            pieSeries.Slices.Add(new PieSlice("Labor Cost", estimate.TECLaborCost) { IsExploded = false });
+            pieSeries.Slices.Add(new PieSlice("Sub. Labor Cost", estimate.SubcontractorLaborCost) { IsExploded = false });
+            pieSeries.Slices.Add(new PieSlice("Sub. Material Cost", estimate.ElectricalMaterialCost) { IsExploded = false });
+            plotModel.Series.Add(pieSeries);
+
+            pngExporter.ExportToFile(plotModel, path);
+            return path;
         }
 
         private static Paragraph introParagraph(TECBid bid)
@@ -270,11 +545,11 @@ namespace EstimatingUtilitiesLibrary.Exports
         private static Paragraph laborSummary(TECEstimator estimate)
         {
             Paragraph par = new Paragraph();
-            Text pmLaborText = new Text(String.Format("Project Management Labor: {0} ours", estimate.PMLaborHours));
-            Text engLaborText = new Text(String.Format("Engineering Labor: {0} hours", estimate.ENGLaborHours));
-            Text softLaborText = new Text(String.Format("Software Labor: {0} hours", estimate.SoftLaborHours));
-            Text commLaborText = new Text(String.Format("Commissioning Labor: {0} hours", estimate.CommLaborHours));
-            Text graphLaborText = new Text(String.Format("Graphics Labor: {0} hours", estimate.GraphLaborHours));
+            Text pmLaborText = new Text(String.Format("Project Management Labor: {0:F} hours", estimate.PMLaborHours));
+            Text engLaborText = new Text(String.Format("Engineering Labor: {0:F} hours", estimate.ENGLaborHours));
+            Text softLaborText = new Text(String.Format("Software Labor: {0:F} hours", estimate.SoftLaborHours));
+            Text commLaborText = new Text(String.Format("Commissioning Labor: {0:F} hours", estimate.CommLaborHours));
+            Text graphLaborText = new Text(String.Format("Graphics Labor: {0:F} hours", estimate.GraphLaborHours));
         
             par.Append(new Run(pmLaborText));
             par.Append(new Break());

@@ -52,7 +52,7 @@
                       ItemsSource="{Binding IOModules}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
-                      dd:DragDrop.DropHandler="{Binding ElementName=controllerTypePropertiesControl, Path=DropHandler}">
+                      dd:DragDrop.DropHandler="{Binding}">
                 <i:Interaction.Behaviors>
                     <utilities:BubbleScrollEvent/>
                 </i:Interaction.Behaviors>

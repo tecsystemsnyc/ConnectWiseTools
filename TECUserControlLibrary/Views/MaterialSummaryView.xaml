@@ -43,34 +43,34 @@
             </Grid.RowDefinitions>
 
             <!--Grand Subtotals-->
-            <TextBlock Text="Subtotals:" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16"/>
+            <TextBlock Text="Combined Subtotals:" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16"/>
 
-            <TextBlock Text="TEC Cost Subtotal:" Grid.Row="1" HorizontalAlignment="Right"/>
+            <TextBlock Text="TEC Cost:" Grid.Row="1" HorizontalAlignment="Right"/>
             <TextBlock Text="{Binding TotalTECCost, StringFormat={}{0:C}}" Grid.Row="1" Grid.Column="1"/>
 
-            <TextBlock Text="TEC Labor Subtotal:" Grid.Row="2" HorizontalAlignment="Right"/>
-            <TextBlock Text="{Binding TotalTECLabor, StringFormat={}{0:F2}}" Grid.Row="2" Grid.Column="1"/>
+            <TextBlock Text="Electrical Cost:" Grid.Row="2" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding TotalElecCost, StringFormat={}{0:C}}" Grid.Row="2" Grid.Column="1"/>
 
-            <TextBlock Text="Electrical Cost Subtotal:" Grid.Row="3" HorizontalAlignment="Right"/>
-            <TextBlock Text="{Binding TotalElecCost, StringFormat={}{0:C}}" Grid.Row="3" Grid.Column="1"/>
+            <TextBlock Text="TEC Labor:" Grid.Row="3" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding TotalTECLabor, StringFormat={}{0:F2} Hours}" Grid.Row="3" Grid.Column="1"/>
 
-            <TextBlock Text="Electrical Labor Subtotal:" Grid.Row="4" HorizontalAlignment="Right"/>
-            <TextBlock Text="{Binding TotalElecLabor, StringFormat={}{0:F2}}" Grid.Row="4" Grid.Column="1"/>
+            <TextBlock Text="Electrical Labor:" Grid.Row="4" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding TotalElecLabor, StringFormat={}{0:F2} Hours}" Grid.Row="4" Grid.Column="1"/>
 
             <!--Type Subtotals-->
             <TextBlock Text="{Binding CurrentType, StringFormat={}{0} Subtotals:}" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16"/>
 
-            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} TEC Cost Subtotal:}" Grid.Row="7" HorizontalAlignment="Right"/>
+            <TextBlock Text="TEC Cost:" Grid.Row="7" HorizontalAlignment="Right"/>
             <TextBlock Text="{Binding CurrentVM.TotalTECCost, StringFormat={}{0:C}}" Grid.Row="7" Grid.Column="1"/>
+            
+            <TextBlock Text="Electrical Cost:" Grid.Row="8" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding CurrentVM.TotalElecCost, StringFormat={}{0:C}}" Grid.Row="8" Grid.Column="1"/>
 
-            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} TEC Labor Subtotal:}" Grid.Row="8" HorizontalAlignment="Right"/>
-            <TextBlock Text="{Binding CurrentVM.TotalTECLabor, StringFormat={}{0:F2}}" Grid.Row="8" Grid.Column="1"/>
+            <TextBlock Text="TEC Labor:" Grid.Row="9" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding CurrentVM.TotalTECLabor, StringFormat={}{0:F2} Hours}" Grid.Row="9" Grid.Column="1"/>
 
-            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} Electrical Cost Subtotal:}" Grid.Row="9" HorizontalAlignment="Right"/>
-            <TextBlock Text="{Binding CurrentVM.TotalElecCost, StringFormat={}{0:C}}" Grid.Row="9" Grid.Column="1"/>
-
-            <TextBlock Text="{Binding CurrentType, StringFormat={}{0} Electrical Labor Subtotal:}" Grid.Row="10" HorizontalAlignment="Right"/>
-            <TextBlock Text="{Binding CurrentVM.TotalElecLabor, StringFormat={}{0:F2}}" Grid.Row="10" Grid.Column="1"/>
+            <TextBlock Text="Electrical Labor:" Grid.Row="10" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding CurrentVM.TotalElecLabor, StringFormat={}{0:F2} Hours}" Grid.Row="10" Grid.Column="1"/>
         </Grid>
         
         <!--Chilren Views-->

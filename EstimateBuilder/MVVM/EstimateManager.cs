@@ -81,7 +81,7 @@ namespace EstimateBuilder.MVVM
             }
         }
         
-        private string templatesFilePath
+        override protected string templatesFilePath
         {
             get { return Properties.Settings.Default.TemplatesFilePath; }
             set
@@ -162,23 +162,32 @@ namespace EstimateBuilder.MVVM
             menuVM.SetRefreshBidCommand(refreshExecute, canRefresh);
             menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
+            menuVM.SetExportTurnoverCommand(exportTurnoverExecute, canExportTurnover);
             menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
             menuVM.SetExportSummaryCommand(exportSummaryExecute, canExportSummary);
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
         }
+        
         //Load Templates
         private void loadTemplatesExecute()
         {
-            string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
-            if(loadFilePath != null)
+            string message = "Would you like to save your changes before loading new templates?";
+
+            checkForChanges(message, loadTemplates);
+
+            void loadTemplates()
             {
-                ViewEnabled = false;
-                StatusBarVM.CurrentStatusText = "Loading Templates...";
-                templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
-                templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
-                templatesDatabaseManager.AsyncLoad();
+                string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+                if (loadFilePath != null)
+                {
+                    ViewEnabled = false;
+                    StatusBarVM.CurrentStatusText = "Loading Templates...";
+                    templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
+                    templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
+                    templatesDatabaseManager.AsyncLoad();
+                }
             }
         }
         private bool canLoadTemplates()
@@ -229,6 +238,29 @@ namespace EstimateBuilder.MVVM
             }
         }
         private bool canExportProposal()
+        {
+            return true;
+        }
+        //Export Turnover Sheet
+        private void exportTurnoverExecute()
+        {
+            string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
+                                        defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Turnover.GenerateTurnoverExport(path, bid, estimate);
+                    logger.Info("Exported to turnover document.");
+                }
+                else
+                {
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                }
+            }
+        }
+
+        private bool canExportTurnover()
         {
             return true;
         }

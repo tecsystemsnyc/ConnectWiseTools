@@ -1196,7 +1196,6 @@ namespace Tests
             string expectedName = "Bid Controller";
             string expectedDescription = "Bid Controller Description";
             double expectedCost = 142;
-            bool expectedType = true;
 
             TECController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
@@ -1234,7 +1233,6 @@ namespace Tests
             Assert.AreEqual(expectedName, actualController.Name);
             Assert.AreEqual(expectedDescription, actualController.Description);
             Assert.AreEqual(expectedCost, actualController.Type.Price);
-            //Assert.AreEqual(expectedType, actualController.IsServer);
             Assert.IsTrue(hasIO);
             Assert.IsTrue(hasConnection);
             testForTag(actualController);

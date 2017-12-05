@@ -1,12 +1,14 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddEquipmentVM : ViewModelBase, IAddVM
+    public class AddEquipmentVM : AddVM
     {
         private TECSystem parent;
         private TECEquipment toAdd;
@@ -32,9 +34,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Quantity");
             }
         }
-        public ICommand AddCommand { get; private set; }
 
-        public AddEquipmentVM(TECSystem parentSystem)
+        public AddEquipmentVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSystem;
             isTypical = parent.IsTypical;
@@ -46,16 +47,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
         }
-        public AddEquipmentVM(Action<TECEquipment> addMethod)
+        public AddEquipmentVM(Action<TECEquipment> addMethod, TECScopeManager scopeManager) : base(scopeManager)
         {
             toAdd = new TECEquipment(false);
             add = addMethod;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
         }
-
-        public Action<object> Added { get; }
-
+        
         private bool addCanExecute()
         {
             return true;
@@ -69,6 +68,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 Added?.Invoke(equipment);
             }
         }
-
+        
     }
 }

@@ -25,6 +25,11 @@ namespace EstimateBuilder.MVVM
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
             setCommand("Proposal", command);
         }
+        public void SetExportTurnoverCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Turnover", command);
+        }
         public void SetExportPointsListCommand(Action execute, Func<bool> canExecute = null)
         {
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
@@ -71,6 +76,7 @@ namespace EstimateBuilder.MVVM
 
             //Export menu items
             addMenuItem("Proposal", parentItemName: "Export");
+            addMenuItem("Turnover", parentItemName: "Export");
             addMenuItem("Points List", parentItemName: "Export");
             addMenuItem("Summary", parentItemName: "Export");
             addMenuItem("Budget", parentItemName: "Export");

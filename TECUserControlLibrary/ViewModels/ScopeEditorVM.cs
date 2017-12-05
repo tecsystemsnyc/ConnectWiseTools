@@ -34,6 +34,10 @@ namespace TECUserControlLibrary.ViewModels
                 Selected = item;
             };
             NetworkVM = new NetworkVM(bid, watcher);
+            NetworkVM.Selected += item =>
+            {
+                Selected = item;
+            };
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
             DGTabIndex = GridIndex.Systems;
@@ -61,6 +65,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _dGTabIndex = value;
                 RaisePropertyChanged("DGTabIndex");
+                Selected = null;
             }
         }
 

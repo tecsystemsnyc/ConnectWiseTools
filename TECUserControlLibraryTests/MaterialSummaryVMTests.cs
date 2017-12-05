@@ -403,7 +403,7 @@ namespace Tests
             TECSubScope typSS = new TECSubScope(true);
             typEquip.SubScope.Add(typSS);
 
-            ObservableCollection<TECElectricalMaterial> connectionTypes = new ObservableCollection<TECElectricalMaterial>();
+            ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             connectionTypes.Add(bid.Catalogs.ConnectionTypes[0]);
             TECDevice dev = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(dev);

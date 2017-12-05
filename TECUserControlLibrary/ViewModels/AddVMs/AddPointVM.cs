@@ -1,12 +1,14 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddPointVM : ViewModelBase, IAddVM
+    public class AddPointVM : AddVM
     {
         private TECSubScope parent;
         private TECPoint toAdd;
@@ -21,17 +23,15 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("ToAdd");
             }
         }
-        public ICommand AddCommand { get; private set; }
 
-        public AddPointVM(TECSubScope parentSubScope)
+        public AddPointVM(TECSubScope parentSubScope, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSubScope;
             isTypical = parentSubScope.IsTypical;
             toAdd = new TECPoint(parentSubScope.IsTypical);
+            ToAdd.Quantity = 1;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
-
-        public Action<object> Added { get; }
 
         private bool addCanExecute()
         {
@@ -43,6 +43,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             parent.Points.Add(newPoint);
             Added?.Invoke(newPoint);
         }
+        
 
     }
 }

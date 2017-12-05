@@ -1,12 +1,14 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddSystemVM : ViewModelBase, IAddVM
+    public class AddSystemVM : AddVM
     {
         private TECScopeManager parent;
         private TECSystem toAdd;
@@ -30,17 +32,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Quantity");
             }
         }
-        public ICommand AddCommand { get; private set; }
 
-        public AddSystemVM(TECScopeManager scopeManager)
+        public AddSystemVM(TECScopeManager scopeManager) : base(scopeManager)
         {
             Quantity = 1;
             parent = scopeManager;
             toAdd = new TECSystem(false);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
-
-        public Action<object> Added { get; }
 
         private bool addCanExecute()
         {
@@ -65,5 +64,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
             
         }
+        
     }
 }

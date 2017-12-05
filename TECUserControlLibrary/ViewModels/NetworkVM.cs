@@ -55,6 +55,8 @@ namespace TECUserControlLibrary.ViewModels
             Refresh(system, catalogs);
         }
 
+        public event Action<TECObject> Selected;
+
         #region Properties
         //Item Properties
         public ReadOnlyObservableCollection<ConnectableItem> Parentables
@@ -76,6 +78,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedItem = value;
                 RaisePropertyChanged("SelectedItem");
+                Selected?.Invoke(value?.Item as TECObject);
             }
         }
         public ConnectableItem SelectedParentable
@@ -163,6 +166,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedChildConnectable = value;
                 RaisePropertyChanged("SelectedChildConnectable");
+                Selected?.Invoke(value as TECObject);
             }
         }
 
@@ -184,6 +188,7 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedConnection = value;
                 RaisePropertyChanged("SelectedConnection");
                 handleSelectedConnectionChanged(SelectedConnection);
+                Selected?.Invoke(value as TECObject);
             }
         }
 
