@@ -31,6 +31,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
@@ -42,17 +43,19 @@
             <Label Content="Quantity: " Grid.Row="1"/>
             <TextBox Text="{Binding ElementName=addSubScopeView, Path=ViewModel.Quantity}" Grid.Row="1" Grid.Column="1"
                      Margin="2"/>
-            <Border  Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+            <Label Content="Add as Template" Grid.Row="2"/>
+            <CheckBox IsChecked="{Binding ElementName=addSubScopeView, Path=ViewModel.AsReference}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Border  Grid.Row="3" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
 
                 <TextBlock Text="{Binding Name, StringFormat=Devices/Contacts in {0}}"/>
             </Border>
-            <listControls:EndDeviceListControl Source="{Binding Devices}" Grid.Row="3" Grid.ColumnSpan="2"
+            <listControls:EndDeviceListControl Source="{Binding Devices}" Grid.Row="4" Grid.ColumnSpan="2"
                                                DropHandler="{Binding ElementName=addSubScopeView, Path=ViewModel.PropertiesVM}"
                                                DeleteCommand="{Binding ElementName=addSubScopeView, Path=ViewModel.DeleteDeviceCommand}"/>
-            <Border Grid.Row="4" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+            <Border Grid.Row="5" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
                 <TextBlock Text="{Binding Name, StringFormat=IO in {0}}" />
             </Border>
-            <Grid Grid.Row="5" Grid.ColumnSpan="2">
+            <Grid Grid.Row="6" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40"/>
                     <ColumnDefinition/>

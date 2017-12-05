@@ -87,12 +87,12 @@ namespace EstimatingUtilitiesLibrary.Database
             TECTemplates templates = new TECTemplates();
             templates = GetTemplatesInfo(SQLiteDB);
             getScopeManagerProperties(templates);
-            templates.SystemTemplates = getSystems();
-            templates.EquipmentTemplates = getOrphanEquipment();
-            templates.SubScopeTemplates = getOrphanSubScope();
-            templates.ControllerTemplates = getOrphanControllers();
-            templates.MiscCostTemplates = getAllMisc();
-            templates.PanelTemplates = getOrphanPanels();
+            templates.SystemTemplates = getSystemTemplates();
+            templates.EquipmentTemplates = getEquipmentTemplates();
+            templates.SubScopeTemplates = getSubScopeTemplates();
+            templates.ControllerTemplates = getControllerTemplates();
+            templates.MiscCostTemplates = getMiscTemplates();
+            templates.PanelTemplates = getPanelTemplates();
             templates.Parameters = getTemplatesParameters();
             bool needsSave = ModelLinkingHelper.LinkTemplates(templates);
             return (templates, needsSave);
@@ -860,6 +860,124 @@ namespace EstimatingUtilitiesLibrary.Database
             { return null; }
         }
 
+
+        #region Template Scope
+        static private ObservableCollection<TECSystem> getSystemTemplates()
+        {
+            ObservableCollection<TECSystem> systems = new ObservableCollection<TECSystem>();
+
+            string command = String.Format("select {0} from {1} where {2} in (select {3} from {4})",
+                DatabaseHelper.AllFieldsInTableString(new SystemTable()),
+                SystemTable.TableName,
+                SystemTable.ID.Name,
+                TemplatesSystemTable.SystemID.Name,
+                TemplatesSystemTable.TableName);
+
+            DataTable systemsDT = SQLiteDB.GetDataFromCommand(command);
+
+            foreach (DataRow row in systemsDT.Rows)
+            {
+                systems.Add(getSystemFromRow(row));
+            }
+            return systems;
+        }
+        static private ObservableCollection<TECEquipment> getEquipmentTemplates()
+        {
+            ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
+
+            string command = String.Format("select {0} from {1} where {2} in (select {3} from {4})",
+                DatabaseHelper.AllFieldsInTableString(new EquipmentTable()),
+                EquipmentTable.TableName,
+                EquipmentTable.ID.Name,
+                TemplatesEquipmentTable.EquipmentID.Name,
+                TemplatesEquipmentTable.TableName);
+
+            DataTable equipmentDT = SQLiteDB.GetDataFromCommand(command);
+
+            foreach (DataRow row in equipmentDT.Rows)
+            {
+                equipment.Add(getEquipmentFromRow(row, false));
+            }
+            return equipment;
+        }
+        static private ObservableCollection<TECSubScope> getSubScopeTemplates()
+        {
+            ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
+
+            string command = String.Format("select {0} from {1} where {2} in (select {3} from {4})",
+                DatabaseHelper.AllFieldsInTableString(new SubScopeTable()),
+                SubScopeTable.TableName,
+                SubScopeTable.ID.Name,
+                TemplatesSubScopeTable.SubScopeID.Name,
+                TemplatesSubScopeTable.TableName);
+
+            DataTable systemsDT = SQLiteDB.GetDataFromCommand(command);
+
+            foreach (DataRow row in systemsDT.Rows)
+            {
+                subScope.Add(getSubScopeFromRow(row, false));
+            }
+            return subScope;
+        }
+        static private ObservableCollection<TECMisc> getMiscTemplates()
+        {
+            ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
+
+            string command = String.Format("select {0} from {1} where {2} in (select {3} from {4})",
+                DatabaseHelper.AllFieldsInTableString(new MiscTable()),
+                MiscTable.TableName,
+                MiscTable.ID.Name,
+                TemplatesMiscCostTable.MiscID.Name,
+                TemplatesMiscCostTable.TableName);
+
+            DataTable miscDT = SQLiteDB.GetDataFromCommand(command);
+
+            foreach (DataRow row in miscDT.Rows)
+            {
+                misc.Add(getMiscFromRow(row, false));
+            }
+            return misc;
+        }
+        static private ObservableCollection<TECController> getControllerTemplates()
+        {
+            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
+
+            string command = String.Format("select {0} from {1} where {2} in (select {3} from {4})",
+                DatabaseHelper.AllFieldsInTableString(new ControllerTable()),
+                ControllerTable.TableName,
+                ControllerTable.ID.Name,
+                TemplatesControllerTable.ControllerID.Name,
+                TemplatesControllerTable.TableName);
+
+            DataTable controllerDT = SQLiteDB.GetDataFromCommand(command);
+
+            foreach (DataRow row in controllerDT.Rows)
+            {
+                controllers.Add(getControllerFromRow(row, false));
+            }
+            return controllers;
+        }
+        static private ObservableCollection<TECPanel> getPanelTemplates()
+        {
+            ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
+
+            string command = String.Format("select {0} from {1} where {2} in (select {3} from {4})",
+                DatabaseHelper.AllFieldsInTableString(new PanelTable()),
+                PanelTable.TableName,
+                PanelTable.ID.Name,
+                TemplatesPanelTable.PanelID.Name,
+                TemplatesPanelTable.TableName);
+
+            DataTable panelsDT = SQLiteDB.GetDataFromCommand(command);
+
+            foreach (DataRow row in panelsDT.Rows)
+            {
+                panels.Add(getPanelFromRow(row, false));
+            }
+            return panels;
+        }
+
+        #endregion
         #endregion //Loading from DB Methods
 
         #region Row to Object Methods

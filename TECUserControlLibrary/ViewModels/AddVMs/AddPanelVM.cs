@@ -69,7 +69,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var panel = new TECPanel(ToAdd, isTypical);
+                var panel = AsReference ? ToAdd : new TECPanel(ToAdd, isTypical);
                 add(panel);
                 Added?.Invoke(panel);
             }
