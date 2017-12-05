@@ -23,8 +23,10 @@ namespace EstimatingUtilitiesLibrary.Exports
         internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Controllers")
         {
             List<TECController> controllers = getAllControllers(bid);
+            List<TECIOModule> modules = getAllIOModules(bid);
             List<HardwareSummaryItem> controllerItems = consolidateHardware(controllers.Select(controller => controller.Type));
             List<CostSummaryItem> costItems = consolidateCostInControllers(controllers);
+            List<HardwareSummaryItem> modulesItems = consolidateHardware(modules);
 
             IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
             int row = 1;
@@ -34,6 +36,16 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             row = worksheet.insertHardwareHeaders(row);
             foreach(HardwareSummaryItem item in controllerItems)
+            {
+                row = worksheet.insertHardwareItem(item, row);
+            }
+            row++;
+
+            row = worksheet.insertTitleRow("IO Modules", row);
+            row++;
+
+            row = worksheet.insertHardwareHeaders(row);
+            foreach(HardwareSummaryItem item in modulesItems)
             {
                 row = worksheet.insertHardwareItem(item, row);
             }
@@ -479,6 +491,21 @@ namespace EstimatingUtilitiesLibrary.Exports
                 }
             }
             return costs;
+        }
+        private static List<TECIOModule> getAllIOModules(TECBid bid)
+        {
+            List<TECIOModule> modules = new List<TECIOModule>();
+            foreach (TECTypical typ in bid.Systems)
+            {
+                foreach (TECSystem sys in typ.Instances)
+                {
+                    foreach(TECController controller in sys.Controllers)
+                    {
+                        modules.AddRange(controller.IOModules);
+                    }
+                }
+            }
+            return modules;
         }
 
         private static List<HardwareSummaryItem> consolidateHardware(IEnumerable<TECHardware> hardware)
