@@ -210,7 +210,23 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         internal static void AddMiscCostsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Misc Costs")
         {
-            throw new NotImplementedException();
+            List<TECCost> miscCosts = getAllMiscCosts(bid);
+            List<CostSummaryItem> miscItems = consolidateMiscCosts(miscCosts);
+
+            IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            int row = 1;
+
+            row = worksheet.insertTitleRow(sheetName, row);
+            row++;
+
+            row = worksheet.insertCostHeaders(row);
+            foreach(CostSummaryItem item in miscItems)
+            {
+                row = worksheet.insertCostItem(item, row);
+            }
+            row++;
+
+            worksheet.Columns().AdjustToContents();
         }
 
         #region Insert to Sheet Methods
@@ -441,6 +457,28 @@ namespace EstimatingUtilitiesLibrary.Exports
                 }
             }
             return connections;
+        }
+        private static List<TECCost> getAllMiscCosts(TECBid bid)
+        {
+            List<TECCost> costs = new List<TECCost>();
+            costs.AddRange(bid.MiscCosts);
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem sys in typ.Instances)
+                {
+                    costs.AddRange(sys.MiscCosts);
+                    costs.AddRange(sys.AssociatedCosts);
+                    foreach(TECEquipment equip in sys.Equipment)
+                    {
+                        costs.AddRange(equip.AssociatedCosts);
+                        foreach(TECSubScope ss in equip.SubScope)
+                        {
+                            costs.AddRange(ss.AssociatedCosts);
+                        }
+                    }
+                }
+            }
+            return costs;
         }
 
         private static List<HardwareSummaryItem> consolidateHardware(IEnumerable<TECHardware> hardware)
@@ -689,6 +727,32 @@ namespace EstimatingUtilitiesLibrary.Exports
                 {
                     RatedCostSummaryItem item = new RatedCostSummaryItem(cost.Item1, cost.Item2);
                     dictionary.Add(cost.Item1, item);
+                    items.Add(item);
+                }
+            }
+            return items;
+        }
+        private static List<CostSummaryItem> consolidateMiscCosts(IEnumerable<TECCost> costs)
+        {
+            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            List<CostSummaryItem> items = new List<CostSummaryItem>();
+
+            foreach(TECCost cost in costs)
+            {
+                int quantity = 1;
+                if (cost is TECMisc misc)
+                {
+                    quantity = misc.Quantity;
+                }
+
+                if (dictionary.ContainsKey(cost))
+                {
+                    dictionary[cost].AddQuantity(1);
+                }
+                else
+                {
+                    CostSummaryItem item = new CostSummaryItem(cost);
+                    dictionary.Add(cost, item);
                     items.Add(item);
                 }
             }
