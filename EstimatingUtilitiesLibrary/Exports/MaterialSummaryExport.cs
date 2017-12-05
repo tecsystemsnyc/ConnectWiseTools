@@ -670,9 +670,12 @@ namespace EstimatingUtilitiesLibrary.Exports
                         costs.Add(new Tuple<TECCost, double>(rated, connection.Length));
                     }
                 }
-                foreach(TECCost rated in connection.ConduitType.RatedCosts)
+                if (connection.ConduitType != null)
                 {
-                    costs.Add(new Tuple<TECCost, double>(rated, connection.ConduitLength));
+                    foreach (TECCost rated in connection.ConduitType.RatedCosts)
+                    {
+                        costs.Add(new Tuple<TECCost, double>(rated, connection.ConduitLength));
+                    }
                 }
             }
 
@@ -703,7 +706,7 @@ namespace EstimatingUtilitiesLibrary.Exports
         private static void insertDollarDouble(this IXLCell cell, double doub)
         {
             cell.DataType = XLCellValues.Number;
-            cell.Style.NumberFormat.Format = "$0.00";
+            cell.Style.NumberFormat.Format = Turnover.accountingFormat;
             cell.Value = doub;
         }
         #endregion
