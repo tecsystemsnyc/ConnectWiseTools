@@ -109,7 +109,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             row = worksheet.insertHardwareHeaders(row);
             foreach(HardwareSummaryItem item in deviceItems)
             {
-                worksheet.insertHardwareItem(item, row);
+                row = worksheet.insertHardwareItem(item, row);
             }
             row++;
 
@@ -119,7 +119,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             row = worksheet.insertCostHeaders(row);
             foreach(CostSummaryItem item in costItems)
             {
-                worksheet.insertCostItem(item, row);
+                row = worksheet.insertCostItem(item, row);
             }
             row++;
 
