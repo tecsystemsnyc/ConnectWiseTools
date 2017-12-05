@@ -23,8 +23,10 @@ namespace EstimatingUtilitiesLibrary.Exports
         internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Controllers")
         {
             List<TECController> controllers = getAllControllers(bid);
+            List<TECIOModule> modules = getAllIOModules(bid);
             List<HardwareSummaryItem> controllerItems = consolidateHardware(controllers.Select(controller => controller.Type));
             List<CostSummaryItem> costItems = consolidateCostInControllers(controllers);
+            List<HardwareSummaryItem> modulesItems = consolidateHardware(modules);
 
             IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
             int row = 1;
@@ -32,15 +34,34 @@ namespace EstimatingUtilitiesLibrary.Exports
             row = worksheet.insertTitleRow(sheetName, row);
             row++;
 
-            row = worksheet.insertHardwareItemSummary(row, controllerItems);
+            row = worksheet.insertHardwareHeaders(row);
+            foreach(HardwareSummaryItem item in controllerItems)
+            {
+                row = worksheet.insertHardwareItem(item, row);
+            }
+            row++;
+
+            row = worksheet.insertTitleRow("IO Modules", row);
+            row++;
+
+            row = worksheet.insertHardwareHeaders(row);
+            foreach(HardwareSummaryItem item in modulesItems)
+            {
+                row = worksheet.insertHardwareItem(item, row);
+            }
             row++;
 
             row = worksheet.insertTitleRow("Associated Costs", row);
             row++;
 
-            row = worksheet.insertCostItemSummary(row, costItems);
+            row = worksheet.insertCostHeaders(row);
+            foreach(CostSummaryItem item in costItems)
+            {
+                row = worksheet.insertCostItem(item, row);
+            }
+            row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddPanelsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Panels")
         {
@@ -54,15 +75,24 @@ namespace EstimatingUtilitiesLibrary.Exports
             row = worksheet.insertTitleRow(sheetName, row);
             row++;
 
-            row = worksheet.insertHardwareItemSummary(row, panelItems);
+            row = worksheet.insertHardwareHeaders(row);
+            foreach(HardwareSummaryItem item in panelItems)
+            {
+                row = worksheet.insertHardwareItem(item, row);
+            }
             row++;
 
             row = worksheet.insertTitleRow("AssociatedCosts", row);
             row++;
 
-            row = worksheet.insertCostItemSummary(row, costItems);
+            row = worksheet.insertCostHeaders(row);
+            foreach(CostSummaryItem item in costItems)
+            {
+                row = worksheet.insertCostItem(item, row);
+            }
+            row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddDevicesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Devices")
         {
@@ -76,15 +106,24 @@ namespace EstimatingUtilitiesLibrary.Exports
             row = worksheet.insertTitleRow(sheetName, row);
             row++;
 
-            row = worksheet.insertHardwareItemSummary(row, deviceItems);
+            row = worksheet.insertHardwareHeaders(row);
+            foreach(HardwareSummaryItem item in deviceItems)
+            {
+                row = worksheet.insertHardwareItem(item, row);
+            }
             row++;
 
             row = worksheet.insertTitleRow("AssociatedCosts", row);
             row++;
 
-            row = worksheet.insertCostItemSummary(row, costItems);
+            row = worksheet.insertCostHeaders(row);
+            foreach(CostSummaryItem item in costItems)
+            {
+                row = worksheet.insertCostItem(item, row);
+            }
+            row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddValvesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Valves")
         {
@@ -99,53 +138,110 @@ namespace EstimatingUtilitiesLibrary.Exports
             row = worksheet.insertTitleRow(sheetName, row);
             row++;
 
-            row = worksheet.insertHardwareItemSummary(row, valveItems);
+            row = worksheet.insertHardwareHeaders(row);
+            foreach(HardwareSummaryItem item in valveItems)
+            {
+                row = worksheet.insertHardwareItem(item, row);
+            }
             row++;
 
             row = worksheet.insertTitleRow("Actuators", row);
             row++;
 
-            row = worksheet.insertHardwareItemSummary(row, actuatorItems);
+            row = worksheet.insertHardwareHeaders(row);
+            foreach(HardwareSummaryItem item in valveItems)
+            {
+                row = worksheet.insertHardwareItem(item, row);
+            }
             row++;
 
             row = worksheet.insertTitleRow("Associated Costs", row);
             row++;
 
-            row = worksheet.insertCostItemSummary(row, costItems);
+            row = worksheet.insertCostHeaders(row);
+            foreach(CostSummaryItem item in costItems)
+            {
+                row = worksheet.insertCostItem(item, row);
+            }
+            row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddElectricalMaterialSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Wire and Conduit")
         {
-            throw new NotImplementedException();
+            List<TECConnection> connections = getAllConnections(bid);
+            List<LengthSummaryItem> wireItems = consolidateWire(connections);
+            List<LengthSummaryItem> conduitItems = consolidateConduit(connections);
+            List<CostSummaryItem> costItems = consolidateCostInConnections(connections);
+            List<RatedCostSummaryItem> ratedItems = consolidateRatedCostInConnections(connections);
+
+            IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            int row = 1;
+
+            row = worksheet.insertTitleRow("Wire", row);
+            row++;
+
+            row = worksheet.insertLengthHeaders(row);
+            foreach(LengthSummaryItem item in wireItems)
+            {
+                row = worksheet.insertLengthItem(item, row);
+            }
+            row++;
+
+            row = worksheet.insertTitleRow("Conduit", row);
+            row++;
+
+            row = worksheet.insertLengthHeaders(row);
+            foreach(LengthSummaryItem item in conduitItems)
+            {
+                row = worksheet.insertLengthItem(item, row);
+            }
+            row++;
+
+            row = worksheet.insertTitleRow("Associated Costs", row);
+            row++;
+
+            row = worksheet.insertCostHeaders(row);
+            foreach(CostSummaryItem item in costItems)
+            {
+                row = worksheet.insertCostItem(item, row);
+            }
+            row++;
+
+            row = worksheet.insertTitleRow("Rated Costs", row);
+            row++;
+
+            row = worksheet.insertRatedCostHeaders(row);
+            foreach(RatedCostSummaryItem item in ratedItems)
+            {
+                row = worksheet.insertRatedCostItem(item, row);
+            }
+            row++;
+
+            worksheet.formatFinal();
         }
         internal static void AddMiscCostsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Misc Costs")
         {
-            throw new NotImplementedException();
+            List<TECCost> miscCosts = getAllMiscCosts(bid);
+            List<CostSummaryItem> miscItems = consolidateMiscCosts(miscCosts);
+
+            IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
+            int row = 1;
+
+            row = worksheet.insertTitleRow(sheetName, row);
+            row++;
+
+            row = worksheet.insertCostHeaders(row);
+            foreach(CostSummaryItem item in miscItems)
+            {
+                row = worksheet.insertCostItem(item, row);
+            }
+            row++;
+
+            worksheet.formatFinal();
         }
 
         #region Insert to Sheet Methods
-        private static int insertHardwareItemSummary(this IXLWorksheet worksheet, int row, IEnumerable<HardwareSummaryItem> hardwareItems)
-        {
-            insertHardwareHeaders(worksheet, row);
-            row++;
-            foreach (HardwareSummaryItem item in hardwareItems)
-            {
-                row = worksheet.insertHardwareItem(item, row);
-            }
-            return row;
-        }
-        private static int insertCostItemSummary(this IXLWorksheet worksheet, int row, IEnumerable<CostSummaryItem> costItems)
-        {
-            insertCostHeaders(worksheet, row);
-            row++;
-            foreach (CostSummaryItem cost in costItems)
-            {
-                row = worksheet.insertCostItem(cost, row);
-            }
-            return row;
-        }
-        
         private static int insertTitleRow(this IXLWorksheet worksheet, string title, int row)
         {
             IXLCell titleCell = worksheet.Cell(row, "A");
@@ -189,6 +285,37 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             return row;
         }
+        private static int insertLengthHeaders(this IXLWorksheet worksheet, int row)
+        {
+            IXLRow headerRow = worksheet.Row(row);
+            headerRow.Style.Font.SetBold();
+
+            headerRow.Cell("A").Value = "Name";
+            headerRow.Cell("B").Value = "Length";
+            headerRow.Cell("C").Value = "Cost per Foot";
+            headerRow.Cell("D").Value = "Total Cost";
+            headerRow.Cell("E").Value = "Labor per Foot";
+            headerRow.Cell("F").Value = "Total Labor";
+            row++;
+
+            return row;
+        }
+        private static int insertRatedCostHeaders(this IXLWorksheet worksheet, int row)
+        {
+            IXLRow headerRow = worksheet.Row(row);
+            headerRow.Style.Font.SetBold();
+
+            headerRow.Cell("A").Value = "Name";
+            headerRow.Cell("B").Value = "Length";
+            headerRow.Cell("C").Value = "Type";
+            headerRow.Cell("D").Value = "Cost per Foot";
+            headerRow.Cell("E").Value = "Total Cost";
+            headerRow.Cell("F").Value = "Labor per Foot";
+            headerRow.Cell("G").Value = "Total Labor";
+            row++;
+
+            return row;
+        }
 
         private static int insertHardwareItem(this IXLWorksheet worksheet, HardwareSummaryItem item, int row)
         {
@@ -198,11 +325,11 @@ namespace EstimatingUtilitiesLibrary.Exports
             itemRow.Cell("B").Value = item.Hardware.Description;
             itemRow.Cell("C").Value = item.Hardware.Manufacturer.Label;
             itemRow.Cell("D").Value = item.Quantity;
-            itemRow.Cell("E").Value = item.Hardware.Price;
-            itemRow.Cell("F").Value = string.Format("{0:C}", item.Hardware.Cost);
-            itemRow.Cell("G").Value = string.Format("{0:C}", item.TotalCost);
-            itemRow.Cell("H").Value = string.Format("{0:F2}", item.Hardware.Labor);
-            itemRow.Cell("I").Value = string.Format("{0:F2}", item.TotalLabor);
+            itemRow.Cell("E").insertDollarDouble(item.Hardware.Price);
+            itemRow.Cell("F").insertDollarDouble(item.Hardware.Cost);
+            itemRow.Cell("G").insertDollarDouble(item.TotalCost);
+            itemRow.Cell("H").insertDouble(item.Hardware.Labor);
+            itemRow.Cell("I").insertDouble(item.TotalLabor);
             row++;
             return row;
         }
@@ -213,10 +340,37 @@ namespace EstimatingUtilitiesLibrary.Exports
             itemRow.Cell("A").Value = item.Cost.Name;
             itemRow.Cell("B").Value = item.Quantity;
             itemRow.Cell("C").Value = item.Cost.Type;
-            itemRow.Cell("D").Value = string.Format("{0:C}", item.Cost.Cost);
-            itemRow.Cell("E").Value = string.Format("{0:C}", item.TotalCost);
-            itemRow.Cell("F").Value = string.Format("{0:F2}", item.Cost.Labor);
-            itemRow.Cell("G").Value = string.Format("{0:F2}", item.TotalLabor);
+            itemRow.Cell("D").insertDollarDouble(item.Cost.Cost);
+            itemRow.Cell("E").insertDollarDouble(item.TotalCost);
+            itemRow.Cell("F").insertDouble(item.Cost.Labor);
+            itemRow.Cell("G").insertDouble(item.TotalLabor);
+            row++;
+            return row;
+        }
+        private static int insertLengthItem(this IXLWorksheet worksheet, LengthSummaryItem item, int row)
+        {
+            IXLRow itemRow = worksheet.Row(row);
+
+            itemRow.Cell("A").Value = item.Material.Name;
+            itemRow.Cell("B").insertDouble(item.Length);
+            itemRow.Cell("C").insertDollarDouble(item.Material.Cost);
+            itemRow.Cell("D").insertDollarDouble(item.TotalCost);
+            itemRow.Cell("E").insertDouble(item.Material.Labor);
+            itemRow.Cell("F").insertDouble(item.TotalLabor);
+            row++;
+            return row;
+        }
+        private static int insertRatedCostItem(this IXLWorksheet worksheet, RatedCostSummaryItem item, int row)
+        {
+            IXLRow itemRow = worksheet.Row(row);
+
+            itemRow.Cell("A").Value = item.RatedCost.Name;
+            itemRow.Cell("B").insertDouble(item.Length);
+            itemRow.Cell("C").Value = item.RatedCost.Type;
+            itemRow.Cell("D").insertDollarDouble(item.RatedCost.Cost);
+            itemRow.Cell("E").insertDollarDouble(item.TotalCost);
+            itemRow.Cell("F").insertDouble(item.RatedCost.Labor);
+            itemRow.Cell("G").insertDouble(item.TotalLabor);
             row++;
             return row;
         }
@@ -297,6 +451,62 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return valves;
         }
+        private static List<TECConnection> getAllConnections(TECBid bid)
+        {
+            List<TECConnection> connections = new List<TECConnection>();
+            foreach (TECController controller in bid.Controllers)
+            {
+                connections.AddRange(controller.ChildrenConnections);
+            }
+            foreach (TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem instance in typ.Instances)
+                {
+                    foreach(TECController controller in instance.Controllers)
+                    {
+                        connections.AddRange(controller.ChildrenConnections);
+                    }
+                }
+            }
+            return connections;
+        }
+        private static List<TECCost> getAllMiscCosts(TECBid bid)
+        {
+            List<TECCost> costs = new List<TECCost>();
+            costs.AddRange(bid.MiscCosts);
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem sys in typ.Instances)
+                {
+                    costs.AddRange(sys.MiscCosts);
+                    costs.AddRange(sys.AssociatedCosts);
+                    foreach(TECEquipment equip in sys.Equipment)
+                    {
+                        costs.AddRange(equip.AssociatedCosts);
+                        foreach(TECSubScope ss in equip.SubScope)
+                        {
+                            costs.AddRange(ss.AssociatedCosts);
+                        }
+                    }
+                }
+            }
+            return costs;
+        }
+        private static List<TECIOModule> getAllIOModules(TECBid bid)
+        {
+            List<TECIOModule> modules = new List<TECIOModule>();
+            foreach (TECTypical typ in bid.Systems)
+            {
+                foreach (TECSystem sys in typ.Instances)
+                {
+                    foreach(TECController controller in sys.Controllers)
+                    {
+                        modules.AddRange(controller.IOModules);
+                    }
+                }
+            }
+            return modules;
+        }
 
         private static List<HardwareSummaryItem> consolidateHardware(IEnumerable<TECHardware> hardware)
         {
@@ -314,6 +524,55 @@ namespace EstimatingUtilitiesLibrary.Exports
                     HardwareSummaryItem item = new HardwareSummaryItem(hw);
                     dictionary.Add(hw, item);
                     items.Add(item);
+                }
+            }
+
+            return items;
+        }
+        private static List<LengthSummaryItem> consolidateWire(IEnumerable<TECConnection> connections)
+        {
+            Dictionary<TECElectricalMaterial, LengthSummaryItem> dictionary = new Dictionary<TECElectricalMaterial, LengthSummaryItem>();
+            List<LengthSummaryItem> items = new List<LengthSummaryItem>();
+
+            foreach(TECConnection connection in connections)
+            {
+                foreach(TECElectricalMaterial type in connection.GetConnectionTypes())
+                {
+                    if (dictionary.ContainsKey(type))
+                    {
+                        dictionary[type].AddLength(connection.Length);
+                    }
+                    else
+                    {
+                        LengthSummaryItem item = new LengthSummaryItem(type, connection.Length);
+                        dictionary.Add(type, item);
+                        items.Add(item);
+                    }
+                }
+            }
+
+            return items;
+        }
+        private static List<LengthSummaryItem> consolidateConduit(IEnumerable<TECConnection> connections)
+        {
+            Dictionary<TECElectricalMaterial, LengthSummaryItem> dictionary = new Dictionary<TECElectricalMaterial, LengthSummaryItem>();
+            List<LengthSummaryItem> items = new List<LengthSummaryItem>();
+
+            foreach (TECConnection connection in connections)
+            {
+                TECElectricalMaterial type = connection.ConduitType;
+                if (type != null)
+                {
+                    if (dictionary.ContainsKey(type))
+                    {
+                        dictionary[type].AddLength(connection.ConduitLength);
+                    }
+                    else
+                    {
+                        LengthSummaryItem item = new LengthSummaryItem(type, connection.ConduitLength);
+                        dictionary.Add(type, item);
+                        items.Add(item);
+                    }
                 }
             }
 
@@ -428,6 +687,126 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return items;
         }
+        private static List<CostSummaryItem> consolidateCostInConnections(IEnumerable<TECConnection> connections)
+        {
+            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            List<CostSummaryItem> items = new List<CostSummaryItem>();
+
+            List<TECCost> costs = new List<TECCost>();
+            foreach(TECConnection connection in connections)
+            {
+                foreach(TECElectricalMaterial mat in connection.GetConnectionTypes())
+                {
+                    costs.AddRange(mat.AssociatedCosts);
+                }
+                if (connection.ConduitType != null)
+                {
+                    costs.AddRange(connection.ConduitType.AssociatedCosts);
+                }
+            }
+
+            foreach (TECCost cost in costs)
+            {
+                if (dictionary.ContainsKey(cost))
+                {
+                    dictionary[cost].AddQuantity(1);
+                }
+                else
+                {
+                    CostSummaryItem item = new CostSummaryItem(cost);
+                    dictionary.Add(cost, item);
+                    items.Add(item);
+                }
+            }
+            return items;
+        }
+        private static List<RatedCostSummaryItem> consolidateRatedCostInConnections(IEnumerable<TECConnection> connections)
+        {
+            Dictionary<TECCost, RatedCostSummaryItem> dictionary = new Dictionary<TECCost, RatedCostSummaryItem>();
+            List<RatedCostSummaryItem> items = new List<RatedCostSummaryItem>();
+
+            List<Tuple<TECCost, double>> costs = new List<Tuple<TECCost, double>>();
+            foreach (TECConnection connection in connections)
+            {
+                foreach(TECElectricalMaterial mat in connection.GetConnectionTypes())
+                {
+                    foreach(TECCost rated in mat.RatedCosts)
+                    {
+                        costs.Add(new Tuple<TECCost, double>(rated, connection.Length));
+                    }
+                }
+                if (connection.ConduitType != null)
+                {
+                    foreach (TECCost rated in connection.ConduitType.RatedCosts)
+                    {
+                        costs.Add(new Tuple<TECCost, double>(rated, connection.ConduitLength));
+                    }
+                }
+            }
+
+            foreach(Tuple<TECCost, double> cost in costs)
+            {
+                if (dictionary.ContainsKey(cost.Item1))
+                {
+                    dictionary[cost.Item1].AddLength(cost.Item2);
+                }
+                else
+                {
+                    RatedCostSummaryItem item = new RatedCostSummaryItem(cost.Item1, cost.Item2);
+                    dictionary.Add(cost.Item1, item);
+                    items.Add(item);
+                }
+            }
+            return items;
+        }
+        private static List<CostSummaryItem> consolidateMiscCosts(IEnumerable<TECCost> costs)
+        {
+            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            List<CostSummaryItem> items = new List<CostSummaryItem>();
+
+            foreach(TECCost cost in costs)
+            {
+                int quantity = 1;
+                if (cost is TECMisc misc)
+                {
+                    quantity = misc.Quantity;
+                }
+
+                if (dictionary.ContainsKey(cost))
+                {
+                    dictionary[cost].AddQuantity(1);
+                }
+                else
+                {
+                    CostSummaryItem item = new CostSummaryItem(cost);
+                    dictionary.Add(cost, item);
+                    items.Add(item);
+                }
+            }
+            return items;
+        }
         #endregion
+
+        #region Cell Format Insert Methods
+        private static void insertDouble(this IXLCell cell, double doub)
+        {
+            cell.DataType = XLCellValues.Number;
+            cell.Style.NumberFormat.Format = "0.00";
+            cell.Value = doub;
+        }
+        private static void insertDollarDouble(this IXLCell cell, double doub)
+        {
+            cell.DataType = XLCellValues.Number;
+            cell.Style.NumberFormat.Format = Turnover.accountingFormat;
+            cell.Value = doub;
+        }
+        #endregion
+
+        private static void formatFinal(this IXLWorksheet worksheet)
+        {
+            worksheet.Columns().AdjustToContents();
+            worksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
+            worksheet.PageSetup.FitToPages(1, 1);
+        }
     }
 }

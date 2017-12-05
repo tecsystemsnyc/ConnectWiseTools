@@ -15,19 +15,18 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class Turnover
     {
-        private static string accountingFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* \" - \"??_);_(@_)";
+        internal static string accountingFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* \" - \"??_);_(@_)";
 
         public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
             createSummarySheet(workbook, bid, estimate);
-            MaterialSummaryExport.AddControllersSheet(workbook, bid);
+            MaterialSummaryExport.AddControllersSheet(workbook, bid, "Controller Hardware");
             MaterialSummaryExport.AddPanelsSheet(workbook, bid, "Panel Hardware");
             MaterialSummaryExport.AddDevicesSheet(workbook, bid);
             MaterialSummaryExport.AddValvesSheet(workbook, bid);
-            //MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
-            //MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
-            createBomSheets(workbook, bid);
+            MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
+            MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
             workbook.SaveAs(path);
             if (openOnComplete)
             {
@@ -303,7 +302,8 @@ namespace EstimatingUtilitiesLibrary.Exports
             //image.Scale(.7);
 
             worksheet.Columns().AdjustToContents();
-
+            worksheet.PageSetup.PageOrientation = XLPageOrientation.Portrait;
+            worksheet.PageSetup.FitToPages(1, 1);
         }
 
         private static void createProjectInfoSection(IXLWorksheet worksheet, TECBid bid, int startRow)
