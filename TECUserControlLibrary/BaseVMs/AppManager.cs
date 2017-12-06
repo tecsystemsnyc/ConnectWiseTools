@@ -410,6 +410,7 @@ namespace TECUserControlLibrary.BaseVMs
         }
         private void closingExecute(CancelEventArgs e)
         {
+            
             logger.Info("App manager recieved command to close.");
             if (databaseManager == null || !databaseManager.IsBusy)
             {

@@ -29,12 +29,16 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <utilities:CancelEventArgsWithSenderConverter x:Key="ClosingConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+            <cmd:EventToCommand Command="{Binding ClosingCommand}" 
+                                PassEventArgsToCommand="True"
+                                EventArgsConverterParameter="{Binding ElementName=parent}"
+                                EventArgsConverter="{StaticResource ClosingConverter}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.InputBindings>
