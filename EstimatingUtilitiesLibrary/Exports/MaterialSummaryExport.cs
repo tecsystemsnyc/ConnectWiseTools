@@ -61,7 +61,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddPanelsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Panels")
         {
@@ -92,7 +92,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddDevicesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Devices")
         {
@@ -123,7 +123,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddValvesSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Valves")
         {
@@ -165,7 +165,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddElectricalMaterialSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Wire and Conduit")
         {
@@ -218,7 +218,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
         internal static void AddMiscCostsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Misc Costs")
         {
@@ -238,7 +238,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             row++;
 
-            worksheet.Columns().AdjustToContents();
+            worksheet.formatFinal();
         }
 
         #region Insert to Sheet Methods
@@ -801,5 +801,12 @@ namespace EstimatingUtilitiesLibrary.Exports
             cell.Value = doub;
         }
         #endregion
+
+        private static void formatFinal(this IXLWorksheet worksheet)
+        {
+            worksheet.Columns().AdjustToContents();
+            worksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
+            worksheet.PageSetup.FitToPages(1, 1);
+        }
     }
 }

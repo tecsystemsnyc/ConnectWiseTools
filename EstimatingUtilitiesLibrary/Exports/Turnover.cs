@@ -27,7 +27,6 @@ namespace EstimatingUtilitiesLibrary.Exports
             MaterialSummaryExport.AddValvesSheet(workbook, bid);
             MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
             MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
-            createBomSheets(workbook, bid);
             workbook.SaveAs(path);
             if (openOnComplete)
             {
@@ -303,7 +302,8 @@ namespace EstimatingUtilitiesLibrary.Exports
             //image.Scale(.7);
 
             worksheet.Columns().AdjustToContents();
-
+            worksheet.PageSetup.PageOrientation = XLPageOrientation.Portrait;
+            worksheet.PageSetup.FitToPages(1, 1);
         }
 
         private static void createProjectInfoSection(IXLWorksheet worksheet, TECBid bid, int startRow)
