@@ -197,19 +197,19 @@ namespace TECUserControlLibrary.ViewModels
             if (dropInfo.Data is TECEquipment equipment)
             {
                 SelectedVM = new AddEquipmentVM(toAdd => {
-                    (scopeManager as TECTemplates).EquipmentTemplates.Remove(toAdd);
+                    (scopeManager as TECTemplates).EquipmentTemplates.Add(toAdd);
                 }, scopeManager);
-                ((AddEquipmentVM)SelectedVM).ToAdd = new TECEquipment(equipment, false);
+                ((AddEquipmentVM)SelectedVM).ToAdd = equipment;
             }
             else if (dropInfo.Data is TECSubScope subScope)
             {
                 SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
-                ((AddSubScopeVM)SelectedVM).ToAdd = new TECSubScope(subScope, SelectedEquipment.IsTypical);
+                ((AddSubScopeVM)SelectedVM).ToAdd = subScope;
             }
             else if (dropInfo.Data is TECPoint point)
             {
                 SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
-                ((AddPointVM)SelectedVM).ToAdd = new TECPoint(point, SelectedEquipment.IsTypical);
+                ((AddPointVM)SelectedVM).ToAdd = point;
             }
             else if (dropInfo.Data is IEndDevice)
             {

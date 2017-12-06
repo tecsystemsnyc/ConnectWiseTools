@@ -192,7 +192,7 @@
                         Command="{Binding ViewModel.AddSystemCommand}" />
                 <Button Width="50" Content="Add" Style="{StaticResource AddButtonStyle}" x:Name="addInstance" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right"
                         Command="{Binding ElementName=systemHierarchyView, Path=AddInstanceCommand}" 
-                        Visibility="{Binding ElementName=systemHierarchyView,Path=IsTypical, 
+                        Visibility="{Binding ElementName=systemHierarchyView, Path=IsTypical, 
                     Converter={utilities:BooleanToVisibilityConverter}, ConverterParameter={StaticResource false}}"/>
             </Grid>
             

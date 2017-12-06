@@ -87,7 +87,8 @@
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
                                             <views:SystemHierarchyView SystemSource="{Binding ElementName=templatesTab, Path=DataContext.Templates.SystemTemplates}"
                                                DropHandler="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"
-                                               ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"/>
+                                               ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"
+                                                                       IsTypical="True"/>
                                         </Grid>
                                     </DataTemplate>
                                     <DataTemplate x:Key="EquipmentTemplate">

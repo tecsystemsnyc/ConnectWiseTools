@@ -109,7 +109,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for(int x = 0; x < Quantity; x++)
             {
-                var controller = new TECController(ToAdd, isTypical);
+                var controller = AsReference ? ToAdd : new TECController(ToAdd, isTypical);
                 add(controller);
                 Added?.Invoke(controller);
             }

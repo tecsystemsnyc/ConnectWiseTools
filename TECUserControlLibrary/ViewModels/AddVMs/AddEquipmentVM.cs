@@ -34,7 +34,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Quantity");
             }
         }
-
+        
         public AddEquipmentVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSystem;
@@ -63,7 +63,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var equipment = new TECEquipment(ToAdd, isTypical);
+                var equipment = AsReference ? ToAdd : new TECEquipment(ToAdd, isTypical);
                 add(equipment);
                 Added?.Invoke(equipment);
             }

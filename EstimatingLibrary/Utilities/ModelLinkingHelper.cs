@@ -96,6 +96,7 @@ namespace EstimatingLibrary.Utilities
             bool needsSave = false;
 
             linkCatalogs(templates.Catalogs);
+            linkTemplateReferences(templates);
 
             foreach (TECSystem sys in templates.SystemTemplates)
             {
@@ -132,7 +133,7 @@ namespace EstimatingLibrary.Utilities
 
             return needsSave;
         }
-
+        
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
@@ -652,7 +653,83 @@ namespace EstimatingLibrary.Utilities
             }
             subScope.Devices = replacements;
         }
-        
+
+
+        private static void linkTemplateReferences(TECTemplates templates)
+        {
+            foreach(TECEquipment equipment in templates.EquipmentTemplates)
+            {
+                (List<TECSubScope> toRemove, List<TECSubScope> toReplace) = findReferences(equipment.SubScope, templates.SubScopeTemplates);
+                foreach(TECSubScope item in toRemove)
+                {
+                    equipment.SubScope.Remove(item);
+                }
+                foreach(TECSubScope item in toReplace)
+                {
+                    equipment.SubScope.Add(item);
+                }
+            }
+            foreach(TECSystem system in templates.SystemTemplates)
+            {
+                (List<TECEquipment> equipmentRemove, List<TECEquipment> equipmentReplace) = findReferences(system.Equipment, templates.EquipmentTemplates);
+                foreach(TECEquipment item in equipmentRemove)
+                {
+                    system.Equipment.Remove(item);
+                }
+                foreach(TECEquipment item in equipmentReplace)
+                {
+                    system.Equipment.Add(item);
+                }
+                (List<TECController> controllerRemove, List<TECController> controllerReplace) = findReferences(system.Controllers, templates.ControllerTemplates);
+                foreach(TECController item in controllerRemove)
+                {
+                    system.RemoveController(item);
+                }
+                foreach(TECController item in controllerReplace)
+                {
+                    system.AddController(item);
+                }
+                (List<TECMisc> miscRemove, List<TECMisc> miscReplace) = findReferences(system.MiscCosts, templates.MiscCostTemplates);
+                foreach(TECMisc item in miscRemove)
+                {
+                    system.MiscCosts.Remove(item);
+                }
+                foreach(TECMisc item in miscReplace)
+                {
+                    system.MiscCosts.Add(item);
+                }
+                (List<TECPanel> panelRemove, List<TECPanel> panelReplace) = findReferences(system.Panels, templates.PanelTemplates);
+                foreach (TECPanel item in panelRemove)
+                {
+                    system.Panels.Remove(item);
+                }
+                foreach (TECPanel item in panelReplace)
+                {
+                    system.Panels.Add(item);
+                }
+
+
+
+            }
+        }
+        private static (List<T> toRemove, List<T> toReplace) findReferences<T>(IEnumerable<T> instanceList, IEnumerable<T> ReferenceList) where T : TECObject
+        {
+            List<T> toRemove = new List<T>();
+            List<T> toReplace = new List<T>();
+            foreach (T item in instanceList)
+            {
+                foreach (T template in ReferenceList)
+                {
+                    if (item.Guid == template.Guid)
+                    {
+                        toRemove.Add(item);
+                        toReplace.Add(template);
+                    }
+                }
+            }
+            return (toRemove, toReplace);
+        }
+
         #region Location Linking
         private static void linkLocation(TECSystem system, ObservableCollection<TECLabeled> locations)
         {

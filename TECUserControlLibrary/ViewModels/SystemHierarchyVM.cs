@@ -25,6 +25,7 @@ namespace TECUserControlLibrary.ViewModels
         private MiscCostsVM miscVM;
         private ControllersPanelsVM controllersPanelsVM;
         private NetworkVM networkVM;
+        private bool isTemplates;
 
         public ViewModelBase SelectedVM
         {
@@ -196,6 +197,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public SystemHierarchyVM(TECScopeManager scopeManager)
         {
+            isTemplates = scopeManager is TECTemplates;
+
             AddSystemCommand = new RelayCommand(addSystemExecute, canAddSystem);
             AddEquipmentCommand = new RelayCommand<TECSystem>(addEquipmentExecute, canAddEquipment);
             AddSubScopeCommand = new RelayCommand<TECEquipment>(addSubScopeExecute, canAddSubScope);
@@ -413,9 +416,12 @@ namespace TECUserControlLibrary.ViewModels
         public void Drop(IDropInfo dropInfo)
         {
             object dropped = null;
-            if(dropInfo.Data is IDragDropable dropable)
+            if(!isTemplates && dropInfo.Data is IDragDropable dropable)
             {
                 dropped = dropable.DragDropCopy(scopeManager);
+            } else
+            {
+                dropped = dropInfo.Data;
             }
             if (dropped is TECEquipment equipment)
             {
