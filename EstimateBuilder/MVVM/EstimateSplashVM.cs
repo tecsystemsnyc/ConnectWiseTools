@@ -73,13 +73,14 @@ namespace EstimateBuilder.MVVM
 
         private void openExistingExecute()
         {
+            LoadingText = "Loading...";
             if (!File.Exists(BidPath))
             {
                 MessageBox.Show("Bid file no longer exists at that path.");
             }
             else if (TemplatesPath == "" || TemplatesPath == null)
             {
-                MessageBoxResult result = MessageBox.Show("No templates have been selected.", "Continue?", MessageBoxButton.YesNo,
+                MessageBoxResult result = MessageBox.Show("No templates have been selected. Would you like to continue?", "Continue?", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation);
                 switch (result)
                 {
@@ -87,12 +88,14 @@ namespace EstimateBuilder.MVVM
                         EditorStarted?.Invoke(BidPath, "");
                         break;
                     default:
+                        LoadingText = "";
                         break;
                 }
             }
             else if (!File.Exists(TemplatesPath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
+                LoadingText = "";
             }
             else
             {
@@ -106,10 +109,10 @@ namespace EstimateBuilder.MVVM
     
         private void createNewExecute()
         {
-           
+            LoadingText = "Loading...";
             if (TemplatesPath == "" || TemplatesPath == null)
             {
-                MessageBoxResult result = MessageBox.Show("No templates have been selected.", "Continue?", MessageBoxButton.YesNo,
+                MessageBoxResult result = MessageBox.Show("No templates have been selected. Would you like to continue?", "Continue?", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation);
                 switch (result)
                 {
@@ -117,12 +120,14 @@ namespace EstimateBuilder.MVVM
                         EditorStarted?.Invoke("", "");
                         break;
                     default:
+                        LoadingText = "";
                         break;
                 }
             }
             else if (!File.Exists(TemplatesPath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
+                LoadingText = "";
             }
             else
             {

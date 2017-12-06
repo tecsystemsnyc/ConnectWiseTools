@@ -46,9 +46,11 @@ namespace TemplateBuilder.MVVM
 
         private void openExistingExecute()
         {
+            LoadingText = "Loading...";
             if (!File.Exists(TemplatesPath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
+                LoadingText = "";
             }
             else
             {
@@ -62,6 +64,7 @@ namespace TemplateBuilder.MVVM
 
         private void createNewExecute()
         {
+            LoadingText = "Loading...";
             EditorStarted?.Invoke("");
         }
         private bool createNewCanExecute()
