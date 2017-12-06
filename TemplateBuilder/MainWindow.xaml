@@ -22,7 +22,7 @@
         Width="1024"
         WindowStartupLocation="CenterScreen"
         MinHeight="300" MinWidth="535"
-        x:Name="parent">
+        x:Name="mainWindow">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -37,7 +37,7 @@
         <i:EventTrigger EventName="Closing">
             <cmd:EventToCommand Command="{Binding ClosingCommand}" 
                                 PassEventArgsToCommand="True"
-                                EventArgsConverterParameter="{Binding ElementName=parent}"
+                                EventArgsConverterParameter="{Binding ElementName=mainWindow}"
                                 EventArgsConverter="{StaticResource ClosingConverter}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
@@ -55,12 +55,12 @@
         <KeyBinding Command="{Binding MenuVM.NewCommand}"
                     Gesture="CTRL+N" />
     </Window.InputBindings>
-    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}"  
+    <ContentControl Content="{Binding ElementName=mainWindow, Path=DataContext.CurrentVM}"  
                     IsEnabled="{Binding ViewEnabled}">
         <ContentControl.Resources>
             <DataTemplate DataType="{x:Type localMVVM:TemplatesEditorVM}">
                 <DockPanel Background="{DynamicResource TBWindowBackgroundBrush}">
-                    <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+                    <views:MenuView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.MenuVM}"
                                     DockPanel.Dock="Top"/>
                     <Grid Background="{StaticResource SectionBackgroundBrush}">
                         <Grid.ColumnDefinitions>
@@ -75,7 +75,7 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
 
-                        <Image Source="{Binding ElementName=parent, Path=DataContext.TECLogo}"
+                        <Image Source="{Binding ElementName=mainWindow, Path=DataContext.TECLogo}"
                                Grid.Column="4"/>
 
                         <views:ScopeCollectionsTabView Grid.RowSpan="2"
@@ -159,7 +159,7 @@
                                               ViewModel="{Binding PropertiesVM}"
                                               DropHandler="{Binding PropertiesVM}"/>
 
-                        <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+                        <views:StatusBarView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.StatusBarVM}"
                             Grid.Row="3"
                                    Grid.ColumnSpan="6"/>
                     </Grid>
