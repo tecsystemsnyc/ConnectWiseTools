@@ -44,6 +44,7 @@ namespace TECUserControlLibrary.ViewModels
         public string Version { get; set; }
 
         public ICommand GetTemplatesPathCommand { get; protected set; }
+        public ICommand ClearTemplatesPathCommand { get; protected set; }
         public ICommand OpenExistingCommand { get; protected set; }
         public ICommand CreateNewCommand { get; protected set; }
 
@@ -61,10 +62,15 @@ namespace TECUserControlLibrary.ViewModels
             openFileDialog.DefaultExt = fileParams.DefaultExtension;
             openFileDialog.AddExtension = true;
 
+
             string savePath = null;
             if (openFileDialog.ShowDialog() == true)
             {
                 savePath = openFileDialog.FileName;
+                if(savePath == "")
+                {
+                    savePath = null;
+                }
             }
             return savePath;
         }

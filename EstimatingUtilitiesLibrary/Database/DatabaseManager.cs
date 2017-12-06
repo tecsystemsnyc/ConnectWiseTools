@@ -30,14 +30,12 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
-                return catchOnRelease("Save delta failed. Exception: ", () =>
+                bool success = DatabaseUpdater.Update(path, updates);
+                if (!success)
                 {
-                    bool success = DatabaseUpdater.Update(path, updates);
-                    if (!success)
-                    {
-                        MessageBox.Show("Some items might not have saved properly, check logs for more details.");
-                    }
-                });
+                    MessageBox.Show("Some items might not have saved properly, check logs for more details.");
+                }
+                return success;
             }
             else
             {
@@ -51,11 +49,15 @@ namespace EstimatingUtilitiesLibrary.Database
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (s, e) =>
             {
-                Save(updates);
+                e.Result = catchOnRelease("Save delta failed", () =>
+                {
+                    Save(updates);
+                });
+
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                notifySaveComplete(true);
+                notifySaveComplete((bool)e.Result);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -82,7 +84,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     throw new Exception("Generator can only reate bid or template DBs");
                 }
                 List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
-                bool success =DatabaseUpdater.Update(path, newStack);
+                bool success = DatabaseUpdater.Update(path, newStack);
                 if (!success)
                 {
                     MessageBox.Show("Not all items saved properly, check logs for more details.");
@@ -101,17 +103,21 @@ namespace EstimatingUtilitiesLibrary.Database
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (s, e) =>
             {
-                New(scopeManager);
+                e.Result = catchOnRelease("Save New failed", () =>
+                {
+                    New(scopeManager);
+                });
+
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                notifySaveComplete(true);
+                notifySaveComplete((bool)e.Result);
             };
             IsBusy = true;
             worker.RunWorkerAsync();
         }
 
-        public T Load()
+        internal T Load()
         {
             string appFolder = "EstimateBuilder";
             if(Path.GetExtension(path) == ".tdb")
@@ -161,11 +167,17 @@ namespace EstimatingUtilitiesLibrary.Database
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (s, e) =>
             {
-                e.Result = Load();
+
+                bool success = catchOnRelease("Load failed",
+                    () => { e.Result = Load(); });
+                if (!success)
+                {
+                    e.Result = success;
+                }
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                if(e.Result is T scopeManager)
+                if (e.Result is T scopeManager)
                 {
                     notifyLoadComplete(scopeManager);
                 } else
@@ -201,7 +213,10 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             catch (Exception ex)
             {
-                logger.Error(message + ex.Message);
+                logger.Error(message);
+                logger.Error("Exception: {0}", ex.Message);
+                logger.Error("Internal Exception: {0}", ex.InnerException.Message);
+                logger.Error("Stack Trace: {0}", ex.StackTrace);
                 return false;
             }
 #endif
