@@ -103,7 +103,7 @@
                 </DockPanel>
             </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SplashVM}">
-            <views:SplashView ViewModel="{Binding}" BidVisibility="Visible" BidPath="{Binding BidPath}" GetBidPathCommand="{Binding GetBidPathCommand}"/>
+            <views:SplashView ViewModel="{Binding}" BidVisibility="Visible" BidPath="{Binding BidPath}" GetBidPathCommand="{Binding GetBidPathCommand}" ClearBidPathCommand="{Binding ClearBidPathCommand}"/>
         </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

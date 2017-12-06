@@ -35,13 +35,22 @@ namespace TemplateBuilder.MVVM
             TemplatesPath = templatesPath;
 
             GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
+            ClearTemplatesPathCommand = new RelayCommand(clearTemplatesPathExecute);
             OpenExistingCommand = new RelayCommand(openExistingExecute, openExistingCanExecute);
             CreateNewCommand = new RelayCommand(createNewExecute, createNewCanExecute);
         }
 
         private void getTemplatesPathExecute()
         {
-            TemplatesPath = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            if (path != null)
+            {
+                TemplatesPath = path;
+            }
+        }
+        private void clearTemplatesPathExecute()
+        {
+            TemplatesPath = "";
         }
 
         private void openExistingExecute()

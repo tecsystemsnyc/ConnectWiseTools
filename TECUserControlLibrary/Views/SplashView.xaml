@@ -28,6 +28,7 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*" MinWidth="200"/>
             <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.ColumnSpan="3" Margin="5">
             <Grid.RowDefinitions>
@@ -55,6 +56,11 @@
                    VerticalAlignment="Center"/>
         <Button Grid.Column="2" Grid.Row="1"
                 Margin="5"
+                Command="{Binding ClearTemplatesPathCommand}">
+            <TextBlock VerticalAlignment="Center">Clear</TextBlock>
+        </Button>
+        <Button Grid.Column="3" Grid.Row="1"
+                Margin="5"
                 Command="{Binding GetTemplatesPathCommand}">
             <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
         </Button>
@@ -69,14 +75,20 @@
                    Grid.Column="1" ToolTip="{Binding ElementName=splashView, Path=BidPath}" 
                    VerticalAlignment="Center"
                    Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}"/>
-        <Button Grid.Column="2" Margin="5" Command="{Binding ElementName=splashView, Path=GetBidPathCommand}"
+        <Button Grid.Column="2" Grid.Row="2"
+                Margin="5"
+                Command="{Binding ElementName=splashView, Path=ClearBidPathCommand}"
+                Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
+            <TextBlock VerticalAlignment="Center">Clear</TextBlock>
+        </Button>
+        <Button Grid.Column="3" Margin="5" Command="{Binding ElementName=splashView, Path=GetBidPathCommand}"
                 Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
             <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
         </Button>
 
         <TextBlock Text="{Binding HintText}" Grid.Row="3" Grid.Column="1"/>
 
-        <Grid Grid.Row="4" Grid.ColumnSpan="3">
+        <Grid Grid.Row="4" Grid.ColumnSpan="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -89,7 +101,7 @@
             </Button>
         </Grid>
 
-        <TextBlock Grid.Row="5" Grid.Column="1" 
+        <TextBlock Grid.Row="5" Grid.ColumnSpan="4" 
                    Text="{Binding LoadingText}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
@@ -97,12 +109,12 @@
                    FontSize="20"/>
 
         <!--Borders-->
-        <Border Grid.ColumnSpan="3" Grid.Row="1"
+        <Border Grid.ColumnSpan="4" Grid.Row="1"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"
                 Margin="5,0,5,0"/>
 
-        <Border Grid.Row="2" Grid.ColumnSpan="3"
+        <Border Grid.Row="2" Grid.ColumnSpan="4"
                 BorderThickness="0 0 0 1"
                 BorderBrush="Black"
                 Margin="5,0,5,0"

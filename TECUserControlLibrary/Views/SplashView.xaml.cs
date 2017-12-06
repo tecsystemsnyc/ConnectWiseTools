@@ -62,6 +62,18 @@ namespace TECUserControlLibrary.Views
 
 
 
+        public ICommand ClearBidPathCommand
+        {
+            get { return (ICommand)GetValue(ClearBidPathCommandProperty); }
+            set { SetValue(ClearBidPathCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ClearBidPathCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ClearBidPathCommandProperty =
+            DependencyProperty.Register("ClearBidPathCommand", typeof(ICommand), typeof(SplashView));
+
+
+
 
 
         public SplashView()

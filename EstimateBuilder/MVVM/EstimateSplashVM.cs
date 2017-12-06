@@ -39,6 +39,7 @@ namespace EstimateBuilder.MVVM
         }
 
         public ICommand GetBidPathCommand { get; private set; }
+        public ICommand ClearBidPathCommand { get; private set; }
         
         public event Action<string, string> EditorStarted;
 
@@ -49,7 +50,9 @@ namespace EstimateBuilder.MVVM
             _templatesPath = templatesPath;
             
             GetBidPathCommand = new RelayCommand(getBidPathExecute);
+            ClearBidPathCommand = new RelayCommand(clearBidPathExecute);
             GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
+            ClearTemplatesPathCommand = new RelayCommand(clearTemplatesPathExecute);
             OpenExistingCommand = new RelayCommand(openExistingExecute, openExistingCanExecute);
             CreateNewCommand = new RelayCommand(createNewExecute, createNewCanExecute);
         }
@@ -62,6 +65,10 @@ namespace EstimateBuilder.MVVM
                 BidPath = path;
             }
         }
+        private void clearBidPathExecute()
+        {
+            BidPath = "";
+        }
         private void getTemplatesPathExecute()
         {
             string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
@@ -69,6 +76,10 @@ namespace EstimateBuilder.MVVM
             {
                 TemplatesPath = path;
             }
+        }
+        private void clearTemplatesPathExecute()
+        {
+            TemplatesPath = "";
         }
 
         private void openExistingExecute()
