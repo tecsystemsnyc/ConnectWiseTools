@@ -18,7 +18,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>\\tec-ny-fs01\F-General\Internal Software\Estimating Tools\Versions\1.7\Template Builder\x86\</PublishUrl>
+    <PublishUrl>\\tec-ny-fs01\F-General\Internal Software\Estimating Tools\Versions\1.7\Template Builder\x64\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -31,8 +31,8 @@
     <ProductName>Template Builder</ProductName>
     <PublisherName>TEC Systems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
-    <ApplicationRevision>63</ApplicationRevision>
-    <ApplicationVersion>1.7.1.%2a</ApplicationVersion>
+    <ApplicationRevision>69</ApplicationRevision>
+    <ApplicationVersion>1.7.3.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -59,7 +59,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>0F065CE35C01600AC9B8FF437E19F075F8FFBE1F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>C53568748C738E8C52DB1C8D3B2D878CF90D2D91</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
@@ -91,6 +91,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>

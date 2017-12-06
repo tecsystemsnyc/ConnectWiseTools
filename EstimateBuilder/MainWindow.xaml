@@ -10,6 +10,7 @@
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:localMVVM="clr-namespace:EstimateBuilder.MVVM"
         xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
+        xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
         
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
@@ -26,12 +27,16 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <utilities:CancelEventArgsWithSenderConverter x:Key="ClosingConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <cmd:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+            <cmd:EventToCommand Command="{Binding ClosingCommand}" 
+                                PassEventArgsToCommand="True"
+                                EventArgsConverterParameter="{Binding ElementName=parent}" 
+                                EventArgsConverter="{StaticResource ClosingConverter}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

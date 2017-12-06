@@ -1,8 +1,10 @@
 ﻿using EstimatingLibrary;
 using EstimatingUtilitiesLibrary;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -744,6 +746,17 @@ namespace TECUserControlLibrary.Utilities
         }
 
         #endregion
+    }
+
+    public class CancelEventArgsWithSenderConverter : IEventArgsConverter
+    {
+        public object Convert(object value, object parameter)
+        {
+            var args = (CancelEventArgs)value;
+            var window = (Window)parameter;
+
+            return (args, window);
+        }
     }
 
     #region Enumeration Converters

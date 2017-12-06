@@ -56,18 +56,18 @@ namespace EstimateBuilder.MVVM
         
         private void getBidPathExecute()
         {
-            BidPath = getPath(FileDialogParameters.EstimateFileParameters, defaultDirectory);
-            if(BidPath == null)
+            string path = getPath(FileDialogParameters.EstimateFileParameters, defaultDirectory);
+            if(path != null)
             {
-                BidPath = "";
+                BidPath = path;
             }
         }
         private void getTemplatesPathExecute()
         {
-            TemplatesPath = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
-            if(TemplatesPath == null)
+            string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            if(path != null)
             {
-                TemplatesPath = "";
+                TemplatesPath = path;
             }
         }
 
