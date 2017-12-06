@@ -14,7 +14,9 @@ namespace EstimateBuilder
 
         public App() : base()
         {
+#if !DEBUG
             this.Dispatcher.UnhandledException += logUnhandledException;
+#endif
             DispatcherHelper.Initialize();
         }
 
