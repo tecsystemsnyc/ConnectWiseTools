@@ -26,7 +26,7 @@ namespace EstimatingUtilitiesLibrary.Database
             path = databasePath;
         }
         
-        public bool Save(List<UpdateItem> updates)
+        internal bool Save(List<UpdateItem> updates)
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {
@@ -63,7 +63,7 @@ namespace EstimatingUtilitiesLibrary.Database
             worker.RunWorkerAsync();
         }
 
-        public bool New(TECScopeManager scopeManager)
+        internal bool New(TECScopeManager scopeManager)
         {
             if (!UtilitiesMethods.IsFileLocked(path))
             {

@@ -83,7 +83,7 @@ namespace TECUserControlLibrary.BaseVMs
             }
         }
         public string Version { get; }
-        public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
+        public RelayCommand<(CancelEventArgs, Window)> ClosingCommand { get; private set; }
 
         abstract protected FileDialogParameters workingFileParameters { get; }
         abstract protected string defaultDirectory { get; set; }
@@ -107,7 +107,8 @@ namespace TECUserControlLibrary.BaseVMs
             StatusBarVM.CurrentStatusText = "Ready";
             setupCommands();
             CurrentVM = SplashVM;
-            ClosingCommand = new RelayCommand<CancelEventArgs>(closingExecute);
+            ClosingCommand = new RelayCommand<(CancelEventArgs, Window)>(((CancelEventArgs, Window) tup) 
+                => closingExecute(tup.Item1, tup.Item2));
         }
 
         #region Menu Commands Methods
@@ -389,26 +390,8 @@ namespace TECUserControlLibrary.BaseVMs
 
         protected abstract T getWorkingScope();
         protected abstract T getNewWorkingScope();
-
-        private bool saveNewBeforeClosing()
-        {
-            logger.Info("Saving new file before closing.");
-            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
-            try
-            {
-                databaseManager = new DatabaseManager<T>(saveFilePath);
-                return databaseManager.New(getWorkingScope());
-            }
-            catch (Exception e)
-            {
-                logger.Fatal("Save new before closing failed.");
-                logger.Fatal("Exception: {0}", e.Message);
-                logger.Fatal("Inner Exception: {0}", e.InnerException.Message);
-                logger.Fatal("Stack trace: {0}", e.StackTrace);
-                return false;
-            }
-        }
-        private void closingExecute(CancelEventArgs e)
+        
+        private void closingExecute(CancelEventArgs e, Window window)
         {
             logger.Info("App manager recieved command to close.");
             if (databaseManager == null || !databaseManager.IsBusy)
@@ -420,30 +403,20 @@ namespace TECUserControlLibrary.BaseVMs
                     MessageBoxResult result = MessageBox.Show("You have unsaved changes. Would you like to save before quitting?", "Save?", MessageBoxButton.YesNoCancel);
                     if (result == MessageBoxResult.Yes)
                     {
-                        if(databaseManager == null)
+                        e.Cancel = true;
+                        if (databaseManager == null)
                         {
-                            if (!saveNewBeforeClosing())
-                            {
-                                MessageBox.Show("Save unsuccessful.");
-                                e.Cancel = true;
-                            }
+                            logger.Info("Saving new file before closing.");
+                            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
+                            databaseManager = new DatabaseManager<T>(saveFilePath);
+                            databaseManager.SaveComplete += closeWindowOnSuccess;
+                            databaseManager.AsyncNew(getWorkingScope());
                         }
-
-                        else if (!databaseManager.Save(deltaStack.CleansedStack()))
+                        else
                         {
-                            MessageBoxResult newResult = MessageBox.Show("Save delta unsuccessful. Would you like to save to a new file?", "Save?", MessageBoxButton.OKCancel);
-                            if (newResult == MessageBoxResult.OK)
-                            {
-                                if (!saveNewBeforeClosing())
-                                {
-                                    MessageBox.Show("Save unsuccessful");
-                                    e.Cancel = true;
-                                }
-                            }
-                            else if (newResult == MessageBoxResult.Cancel)
-                            {
-                                e.Cancel = true;
-                            }
+                            logger.Info("Saving delta before closing.");
+                            databaseManager.SaveComplete += closeWindowOnSuccess;
+                            databaseManager.AsyncSave(deltaStack.CleansedStack());
                         }
                     }
                     else if (result == MessageBoxResult.Cancel)
@@ -453,12 +426,12 @@ namespace TECUserControlLibrary.BaseVMs
                 }
                 if (!e.Cancel)
                 {
-                    logger.Info("Closing...");
+                    logger.Info("Closing finally...");
                     Properties.Settings.Default.Save();
                 }
                 else
                 {
-                    logger.Info("Close cancelled.");
+                    logger.Info("Close cancelled. Save may have executed.");
                 }
             }
             else
@@ -467,7 +440,23 @@ namespace TECUserControlLibrary.BaseVMs
                 e.Cancel = true;
                 MessageBox.Show("Program is busy. Please wait for current processes to stop.");
             }
-        }
 
+            void closeWindowOnSuccess(bool success)
+            {
+                databaseManager.SaveComplete -= closeWindowOnSuccess;
+                if (success)
+                {
+                    logger.Info("Save successful, attempting window.Close()");
+                    deltaStack = new DeltaStacker(watcher, isTemplates);
+                    window.Close();
+                }
+                else
+                {
+                    logger.Info("Save unsuccessful, notifying user. Not closing window.");
+                    MessageBox.Show("Save failed. Check logs for more info. Attempt to 'Save As' and try again.");
+                }
+            }
+        }
     }
+    
 }
