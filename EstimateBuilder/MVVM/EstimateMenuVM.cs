@@ -83,7 +83,7 @@ namespace EstimateBuilder.MVVM
             addMenuItem("BOM", parentItemName: "Export");
 
             //Templates menu items
-            addMenuItem("Load Templates", busyText, parentItemName: "Templates");
+            addMenuItem("Load Templates", BUSY_TEXT, parentItemName: "Templates");
 
 #if DEBUG
             addMenuItem("Debug");

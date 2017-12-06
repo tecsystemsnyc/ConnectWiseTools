@@ -10,8 +10,7 @@ namespace TECUserControlLibrary.ViewModels
     public class MenuVM : ViewModelBase
     {
         #region Constants
-        protected const string busyText = "Please wait for the current process to complete";
-
+        protected const string BUSY_TEXT = "Please wait for the current process to complete";
         #endregion
 
         #region Fields
@@ -28,6 +27,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand SaveAsCommand { get; private set; }
         public RelayCommand UndoCommand { get; private set; }
         public RelayCommand RedoCommand { get; private set; }
+        public RelayCommand HelpCommand { get; private set; }
         #endregion
 
         public MenuVM()
@@ -73,6 +73,11 @@ namespace TECUserControlLibrary.ViewModels
         {
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
             setCommand("Refresh Templates", command);
+        }
+        public void SetWikiCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Wiki", command);
         }
 
         protected TECMenuItem addMenuItem(string newItemName, string disabledText = null, string parentItemName = null)
@@ -136,19 +141,23 @@ namespace TECUserControlLibrary.ViewModels
             addMenuItem("File");
             addMenuItem("Edit");
             addMenuItem("Templates");
+            addMenuItem("Help");
 
             //File menu items
-            addMenuItem("New", busyText, parentItemName:"File");
-            addMenuItem("Load", busyText, parentItemName: "File");
+            addMenuItem("New", BUSY_TEXT, parentItemName:"File");
+            addMenuItem("Load", BUSY_TEXT, parentItemName: "File");
             addMenuItem("Save", "Nothing to save", parentItemName: "File");
-            addMenuItem("Save As", busyText, parentItemName: "File");
+            addMenuItem("Save As", BUSY_TEXT, parentItemName: "File");
 
             //Edit menu items
             addMenuItem("Undo", "Nothing to undo", parentItemName: "Edit");
             addMenuItem("Redo", "Nothing to redo", parentItemName: "Edit");
 
             //Templates menu items
-            addMenuItem("Refresh Templates", busyText, parentItemName: "Templates");
+            addMenuItem("Refresh Templates", BUSY_TEXT, parentItemName: "Templates");
+
+            //Help menu items
+            addMenuItem("Wiki", parentItemName: "Help");
         }
         #endregion
     }

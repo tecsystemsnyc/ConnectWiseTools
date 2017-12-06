@@ -22,6 +22,8 @@ namespace TECUserControlLibrary.BaseVMs
 {
     abstract public class AppManager<T>  : ViewModelBase where T : TECScopeManager
     {
+        private const string WIKI_LINK = "https://github.com/tecsystemsnyc/EstimatingTools/wiki";
+
         static private Logger logger = LogManager.GetCurrentClassLogger();
 
         protected DatabaseManager<T> databaseManager;
@@ -119,6 +121,7 @@ namespace TECUserControlLibrary.BaseVMs
             MenuVM.SetLoadCommand(loadExecute, loadCanExecute);
             MenuVM.SetSaveDeltaCommand(saveDeltaExecute, canSaveDelta);
             MenuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
+            MenuVM.SetWikiCommand(wikiExecute);
         }
         //New
         private void newExecute()
@@ -285,6 +288,11 @@ namespace TECUserControlLibrary.BaseVMs
         private bool canRedo()
         {
             return doStack.RedoCount() > 0;
+        }
+        //Help
+        private void wikiExecute()
+        {
+            System.Diagnostics.Process.Start(WIKI_LINK);
         }
         #endregion
 
