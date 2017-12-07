@@ -107,7 +107,11 @@ namespace TECUserControlLibrary.ViewModels
             {
                 GlobalControllers.Add(controller);
             }
+
+            watcher.InstanceChanged += handleInstanceChanged;
         }
+
+        
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -126,26 +130,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (TECSystem sys in typ.Instances)
                 {
-                    bool sysHasUnconnected = false;
-                    foreach (TECEquipment equip in sys.Equipment)
-                    {
-                        foreach (TECSubScope ss in equip.SubScope)
-                        {
-                            if (!ss.IsNetwork && ss.Connection == null)
-                            {
-                                sysHasUnconnected = true;
-                                break;
-                            }
-                        }
-                        if (sysHasUnconnected)
-                        {
-                            break;
-                        }
-                    }
-                    if (sysHasUnconnected)
-                    {
-                        UnconnectedSystems.Add(sys);
-                    }
+                    
                 }
             }
         }
@@ -192,6 +177,49 @@ namespace TECUserControlLibrary.ViewModels
                 if (!ss.IsNetwork && ss.Connection == null)
                 {
                     UnconnectedSubScope.Add(ss);
+                }
+            }
+        }
+
+        private bool systemHasUnconnected(TECSystem sys)
+        {
+            bool sysHasUnconnected = false;
+            foreach (TECEquipment equip in sys.Equipment)
+            {
+                foreach (TECSubScope ss in equip.SubScope)
+                {
+                    if (!ss.IsNetwork && ss.Connection == null)
+                    {
+                        sysHasUnconnected = true;
+                        break;
+                    }
+                }
+                if (sysHasUnconnected)
+                {
+                    break;
+                }
+            }
+            return sysHasUnconnected;
+        }
+
+        private void handleInstanceChanged(TECChangedEventArgs args)
+        {
+            Change change = args.Change;
+            object obj = args.Value;
+            TECObject sender = args.Sender;
+
+            if (change == Change.Add)
+            {
+                if (sender is TECBid && obj is TECController controller)
+                {
+                    GlobalControllers.Add(controller);
+                }
+                else if (obj is TECSystem sys)
+                {
+                    if (systemHasUnconnected(sys))
+                    {
+                        UnconnectedSystems.Add(sys);
+                    }
                 }
             }
         }
