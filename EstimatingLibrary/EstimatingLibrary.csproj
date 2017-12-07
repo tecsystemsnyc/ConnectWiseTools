@@ -154,6 +154,7 @@
     <Compile Include="TECSystem.cs" />
     <Compile Include="TECTemplates.cs" />
     <Compile Include="Utilities\ChangeWatcher.cs" />
+    <Compile Include="Utilities\ScopeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

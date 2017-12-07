@@ -64,7 +64,6 @@ namespace EstimatingLibrary
                 SubScope.Add(toAdd);
             }
             copyPropertiesFromScope(equipmentSource);
-            
         }
         #endregion //Constructors
 
