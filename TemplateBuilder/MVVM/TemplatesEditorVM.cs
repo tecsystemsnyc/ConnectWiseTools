@@ -41,6 +41,7 @@ namespace TemplateBuilder.MVVM
                 _selected = value;
                 RaisePropertyChanged("Selected");
                 SelectionChanged?.Invoke(value);
+                PropertiesVM.Selected = value as TECObject;
             }
         }
         public ICommand AddParameterCommand { get; private set; }
@@ -55,7 +56,7 @@ namespace TemplateBuilder.MVVM
             };
             ControllersPanelsVM = new ControllersPanelsVM(templates);
             ControllersPanelsVM.SelectionChanged += obj => { Selected = obj; };
-            SystemHierarchyVM = new SystemHierarchyVM(templates);
+            SystemHierarchyVM = new SystemHierarchyVM(templates, true);
             SystemHierarchyVM.Selected += obj => { Selected = obj; };
             EquipmentHierarchyVM = new EquipmentHierarchyVM(templates);
             EquipmentHierarchyVM.Selected += obj => { Selected = obj; };

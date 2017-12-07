@@ -24,7 +24,7 @@ namespace TECUserControlLibrary.ViewModels
             setupScopeCollection();
             setupControllersPanelsTab();
             setupMiscVM();
-            TypicalEditVM = new SystemHierarchyVM(bid);
+            TypicalEditVM = new SystemHierarchyVM(bid, true);
             TypicalEditVM.Selected += item =>
             {
                 Selected = item;

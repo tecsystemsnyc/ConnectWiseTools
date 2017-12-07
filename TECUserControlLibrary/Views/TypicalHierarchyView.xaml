@@ -50,6 +50,7 @@
         <local:SystemHierarchyView
             ViewModel="{Binding SystemHierarchyVM}"
             IsTypical="False"
+            IsChild="True"
             AddInstanceCommand="{Binding AddInstanceCommand}"
             SystemSource="{Binding SelectedTypical.Instances}"
             Grid.Column="1"/>

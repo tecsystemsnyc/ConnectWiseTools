@@ -122,6 +122,7 @@ namespace EstimateBuilder.MVVM
                 templates = loadedTemplates;
                 if (bidFilePath != "")
                 {
+                    ViewEnabled = false;
                     databaseManager = new DatabaseManager<TECBid>(bidFilePath);
                     databaseManager.LoadComplete += handleLoaded;
                     databaseManager.AsyncLoad();

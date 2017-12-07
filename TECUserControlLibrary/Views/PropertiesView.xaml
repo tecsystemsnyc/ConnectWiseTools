@@ -13,6 +13,11 @@
              x:Name="propertiesView"
              d:DesignHeight="300" d:DesignWidth="300">
 
+    <UserControl.Resources>
+        <Style TargetType="local:PropertiesView">
+            <Setter Property="Selected" Value="{Binding ElementName=propertiesView, Path=ViewModel.Selected}"/>
+        </Style>
+    </UserControl.Resources>
     <ScrollViewer DataContext="{Binding ElementName=propertiesView, Path=Selected}"
                   Background="{DynamicResource SectionBackgroundBrush}">
         <ScrollViewer.Resources>
@@ -123,6 +128,10 @@
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
+            <Grid Visibility="{Binding ElementName=propertiesView, Path=ViewModel.IsTemplates, Converter={utilities:BooleanToVisibilityConverter}}" Height="30">
+                <TextBlock Text="{Binding ElementName=propertiesView, Path=ViewModel.TemplateText}" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Center"
+                           Visibility="{Binding ElementName=propertiesView, Path=Selected, Converter={utilities:NullToCollapsedConverter}}"/>
+            </Grid>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
