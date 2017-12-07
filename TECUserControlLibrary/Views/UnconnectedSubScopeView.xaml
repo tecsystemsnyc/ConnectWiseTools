@@ -101,7 +101,8 @@
                 <TextBlock Text="Systems" Grid.Column="1"/>
                 <Button Content="->" x:Name="systemDetails" Grid.Column="2"/>
             </Grid>
-            <listControls:SystemListControl Source="{Binding SystemSource}"
+            <listControls:SystemListControl Grid.Row="1" 
+                                            Source="{Binding SystemSource}"
                                             SelectedItem="{Binding SelectedSystem}"
                                             DropHandler="{Binding DropHandler}"/>
         </Grid>
@@ -124,9 +125,10 @@
                     </Button.Content>
                 </Button>
                 <TextBlock Text="Equipment" Grid.Column="1"/>
-                <Button Content="->" x:Name="equipmentDetails" Margin="2"/>
+                <Button Content="->" x:Name="equipmentDetails" Margin="2" Grid.Column="2"/>
             </Grid>
-            <listControls:EquipmentListControl Source="{Binding EquipmentSource}"
+            <listControls:EquipmentListControl Grid.Row="1"
+                                               Source="{Binding EquipmentSource}"
                                             SelectedItem="{Binding SelectedEquipment}"
                                             DropHandler="{Binding DropHandler}"/>
         </Grid>
@@ -150,7 +152,8 @@
                 </Button>
                 <TextBlock Text="SubScope" Grid.Column="1"/>
             </Grid>
-            <listControls:SubScopeListControl Source="{Binding SubScopeSource}"
+            <listControls:SubScopeListControl Grid.Row="1"
+                                            Source="{Binding SubScopeSource}"
                                             SelectedItem="{Binding SelectedSubScope}"
                                             DropHandler="{Binding DropHandler}"/>
         </Grid>
