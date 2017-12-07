@@ -145,6 +145,12 @@
                         CommandParameter="{Binding SubScopeConnectionItem}"
                         Visibility="{Binding UpdateButtonVisibility}"
                         Margin="5"/>
+                <Button Content="Disconnect"
+                        Command="{Binding DisconnectCommand}"
+                        CommandParameter="{Binding SubScopeConnectionItem}"
+                        Visibility="{Binding DisconnectButtonVisibility}"
+                        Background="{StaticResource AlertActionBrush}"
+                        Margin="5"/>
             </Grid>
         </Grid>
     </Border>
