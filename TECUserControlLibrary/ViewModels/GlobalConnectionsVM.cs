@@ -10,11 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
     public class GlobalConnectionsVM : ViewModelBase, IDropTarget
     {
+        private Dictionary<TECSubScopeConnection, SubScopeConnectionItem> subScopeConnectionDictionary;
+        private TECElectricalMaterial noneConduit;
+
         private TECController _selectedController;
         private TECSystem _selectedSystem;
         private TECEquipment _selectedEquipment;
@@ -22,10 +26,12 @@ namespace TECUserControlLibrary.ViewModels
         private TECSubScope _selectedUnconnectedSubScope;
 
         public ObservableCollection<TECController> GlobalControllers { get; }
-        public ObservableCollection<TECSubScopeConnection> ConnectedSubScope { get; }
+        public ObservableCollection<SubScopeConnectionItem> ConnectedSubScope { get; }
         public ObservableCollection<TECSystem> UnconnectedSystems { get; }
         public ObservableCollection<TECEquipment> UnconnectedEquipment { get; }
         public ObservableCollection<TECSubScope> UnconnectedSubScope { get; }
+
+        public ObservableCollection<TECElectricalMaterial> ConduitTypes { get; }
 
         public TECController SelectedController
         {
@@ -96,19 +102,26 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public RelayCommand<TECSubScopeConnection> DisconnectSubScopeCommand { get; }
+        public RelayCommand<SubScopeConnectionItem> DisconnectSubScopeCommand { get; }
 
         public event Action<TECObject> Selected;
 
         public GlobalConnectionsVM(TECBid bid, ChangeWatcher watcher)
         {
+            subScopeConnectionDictionary = new Dictionary<TECSubScopeConnection, SubScopeConnectionItem>();
+            noneConduit = new TECElectricalMaterial();
+            noneConduit.Name = "None";
+
             GlobalControllers = new ObservableCollection<TECController>();
-            ConnectedSubScope = new ObservableCollection<TECSubScopeConnection>();
+            ConnectedSubScope = new ObservableCollection<SubScopeConnectionItem>();
             UnconnectedSystems = new ObservableCollection<TECSystem>();
             UnconnectedEquipment = new ObservableCollection<TECEquipment>();
             UnconnectedSubScope = new ObservableCollection<TECSubScope>();
 
-            DisconnectSubScopeCommand = new RelayCommand<TECSubScopeConnection>(disconnectSubScopeExecute);
+            ConduitTypes = new ObservableCollection<TECElectricalMaterial>(bid.Catalogs.ConduitTypes);
+            ConduitTypes.Insert(0, noneConduit);
+
+            DisconnectSubScopeCommand = new RelayCommand<SubScopeConnectionItem>(disconnectSubScopeExecute);
 
             filterSystems(bid);
 
@@ -178,7 +191,7 @@ namespace TECUserControlLibrary.ViewModels
                 foreach (TECSubScopeConnection ssConnect in SelectedController.ChildrenConnections.Where(
                 (connection) => connection is TECSubScopeConnection))
                 {
-                    ConnectedSubScope.Add(ssConnect);
+                    addSubScopeConnectionItem(ssConnect);
                 }
             }
         }
@@ -318,7 +331,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     if (SelectedController.ChildrenConnections.Contains(newConnection))
                     {
-                        ConnectedSubScope.Add(newConnection);
+                        addSubScopeConnectionItem(newConnection);
                     }
 
                     TECSubScopeConnection oldConnection = args.OldValue as TECSubScopeConnection;
@@ -326,17 +339,29 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         UnconnectedSubScope.Add(oldConnection.SubScope);
                     }
-                    if (ConnectedSubScope.Contains(oldConnection))
+                    if (ConnectedSubScope.Contains(subScopeConnectionDictionary[oldConnection]))
                     {
-                        ConnectedSubScope.Remove(oldConnection);
+                        removeSubScopeConnectionItem(oldConnection);
                     }
                 }
             }
         }
 
-        private void disconnectSubScopeExecute(TECSubScopeConnection ssConnect)
+        private void disconnectSubScopeExecute(SubScopeConnectionItem ssConnect)
         {
-            ssConnect.ParentController.RemoveSubScope(ssConnect.SubScope);
+            ssConnect.SubScope.Connection.ParentController.RemoveSubScope(ssConnect.SubScope);
+        }
+
+        private void addSubScopeConnectionItem(TECSubScopeConnection ssConnect)
+        {
+            SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit);
+            subScopeConnectionDictionary.Add(ssConnect, newItem);
+            ConnectedSubScope.Add(newItem);
+        }
+        private void removeSubScopeConnectionItem(TECSubScopeConnection ssConnect)
+        {
+            ConnectedSubScope.Remove(subScopeConnectionDictionary[ssConnect]);
+            subScopeConnectionDictionary.Remove(ssConnect);
         }
     }
 }
