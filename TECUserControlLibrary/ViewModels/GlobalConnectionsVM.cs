@@ -155,7 +155,7 @@ namespace TECUserControlLibrary.ViewModels
             UnconnectedSubScope.Clear();
             SelectedEquipment = null;
 
-            foreach(TECEquipment equip in SelectedSystem.Equipment)
+            foreach(TECEquipment equip in SelectedSystem?.Equipment)
             {
                 if (equipHasUnconnected(equip))
                 {
@@ -167,7 +167,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             UnconnectedSubScope.Clear();
 
-            foreach(TECSubScope ss in SelectedEquipment.SubScope)
+            foreach(TECSubScope ss in SelectedEquipment?.SubScope)
             {
                 if (ssIsUnconnected(ss))
                 {
@@ -208,7 +208,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (change == Change.Add)
             {
-                if (sender is TECBid && obj is TECController controller)
+                if (obj is TECController controller && sender is TECBid)
                 {
                     GlobalControllers.Add(controller);
                 }
@@ -218,6 +218,55 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         UnconnectedSystems.Add(sys);
                     }
+                }
+                else if (obj is TECEquipment equip && sender == SelectedSystem)
+                {
+                    if (equipHasUnconnected(equip))
+                    {
+                        UnconnectedEquipment.Add(equip);
+                    }
+                }
+                else if (obj is TECSubScope ss && sender == SelectedEquipment)
+                {
+                    if (ssIsUnconnected(ss))
+                    {
+                        UnconnectedSubScope.Add(ss);
+                    }
+                }
+            }
+            else if (change == Change.Remove)
+            {
+                if (obj is TECController controller && sender is TECBid)
+                {
+                    if (controller == SelectedController)
+                    {
+                        SelectedController = null;
+                    }
+                    GlobalControllers.Remove(controller);
+                } 
+                else if (obj is TECSystem sys && UnconnectedSystems.Contains(sys))
+                {
+                    if (sys == SelectedSystem)
+                    {
+                        SelectedSystem = null;
+                    }
+                    UnconnectedSystems.Remove(sys);
+                }
+                else if (obj is TECEquipment equip && UnconnectedEquipment.Contains(equip))
+                {
+                    if (equip == SelectedEquipment)
+                    {
+                        SelectedEquipment = null;
+                    }
+                    UnconnectedEquipment.Remove(equip);
+                }
+                else if (obj is TECSubScope ss && UnconnectedSubScope.Contains(ss))
+                {
+                    if (ss == SelectedUnconnectedSubScope)
+                    {
+                        SelectedUnconnectedSubScope = null;
+                    }
+                    UnconnectedSubScope.Remove(ss);
                 }
             }
         }
