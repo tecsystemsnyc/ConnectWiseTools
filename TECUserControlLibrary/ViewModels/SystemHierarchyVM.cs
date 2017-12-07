@@ -198,9 +198,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public SystemHierarchyVM(TECScopeManager scopeManager)
+        public SystemHierarchyVM(TECScopeManager scopeManager, bool canEdit)
         {
             IsTemplates = scopeManager is TECTemplates;
+            CanEdit = canEdit;
 
             AddSystemCommand = new RelayCommand(addSystemExecute, canAddSystem);
             AddEquipmentCommand = new RelayCommand<TECSystem>(addEquipmentExecute, canAddEquipment);

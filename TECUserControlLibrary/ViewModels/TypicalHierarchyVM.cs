@@ -30,7 +30,7 @@ namespace TECUserControlLibrary.ViewModels
         public TypicalHierarchyVM(TECBid bid)
         {
             this.bid = bid;
-            SystemHierarchyVM = new SystemHierarchyVM(bid);
+            SystemHierarchyVM = new SystemHierarchyVM(bid, false);
             SystemHierarchyVM.Selected += systemHierarchyVM_Selected;
             TypicalSystems = new ReadOnlyObservableCollection<TECTypical>(bid.Systems);
             AddInstanceCommand = new RelayCommand(addInstanceExecute, canAddInstance);

@@ -92,7 +92,7 @@
                                             <views:SystemHierarchyView SystemSource="{Binding ElementName=templatesTab, Path=DataContext.Templates.SystemTemplates}"
                                                DropHandler="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"
                                                ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SystemHierarchyVM}"
-                                                                       IsTypical="True"/>
+                                                                       IsTypical="False"/>
                                         </Grid>
                                     </DataTemplate>
                                     <DataTemplate x:Key="EquipmentTemplate">
