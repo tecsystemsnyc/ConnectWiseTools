@@ -61,8 +61,15 @@
                 <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Name}" FontWeight="DemiBold"/>
                 <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Description}" Grid.Column="1"/>
             </Grid>
-            <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Connection.ParentController.Name, StringFormat=Controller: {0}}"
-                       Grid.Row="1"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Connection.ParentController.Name, StringFormat=Controller: {0}}"/>
+                <TextBlock Text="{Binding SubScopeConnectionItem.Equipment.Name, StringFormat=In Equipment: {0}}" Grid.Column="1"/>
+
+            </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
