@@ -116,9 +116,7 @@ namespace TECUserControlLibrary.Views
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
-
-
-
+        
         public IDropTarget DropHandler
         {
             get { return (IDropTarget)GetValue(DropHandlerProperty); }
@@ -134,10 +132,16 @@ namespace TECUserControlLibrary.Views
         public UnconnectedSubScopeView()
         {
             InitializeComponent();
+            bool initial = true;
             this.SizeChanged += (s, e) =>
             {
                 if (e.WidthChanged)
                 {
+                    if (initial && e.NewSize.Width != 0)
+                    {
+                        SystemWidth = e.NewSize.Width;
+                        initial = false;
+                    }
                     if (SystemWidth != 0)
                     {
                         SystemWidth = e.NewSize.Width;
