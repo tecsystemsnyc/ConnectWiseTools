@@ -134,6 +134,20 @@ namespace TECUserControlLibrary.Views
         public UnconnectedSubScopeView()
         {
             InitializeComponent();
+            this.SizeChanged += (s, e) =>
+            {
+                if (e.WidthChanged)
+                {
+                    if (SystemWidth != 0)
+                    {
+                        SystemWidth = e.NewSize.Width;
+                    }
+                    else if (EquipmentWidth != 0)
+                    {
+                        EquipmentWidth = e.NewSize.Width;
+                    }
+                }
+            };
         }
 
         private void systemBack_Click(object sender, RoutedEventArgs e)

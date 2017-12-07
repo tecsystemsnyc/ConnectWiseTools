@@ -22,7 +22,7 @@
                                  Storyboard.TargetProperty="(local:UnconnectedSubScopeView.SystemWidth)" 
                                  Completed="systemMoveBack_Completed"
                                  FillBehavior="Stop"
-                                 To="{Binding ElementName=unconnectedSubScopeView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                 To="{Binding ElementName=unconnectedSubScopeView, Path=ActualWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="equipmentMove">
                 <DoubleAnimation Storyboard.TargetName="unconnectedSubScopeView"
@@ -36,7 +36,7 @@
                                  Storyboard.TargetProperty="(local:UnconnectedSubScopeView.EquipmentWidth)" 
                                  Completed="equipmentMoveBack_Completed"
                                  FillBehavior="Stop"
-                                 To="{Binding ElementName=unconnectedSubScopeView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                 To="{Binding ElementName=unconnectedSubScopeView, Path=ActualWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -91,10 +91,10 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Systems" Grid.Column="1"/>
-                <Button Content="->" Grid.Column="2"/>
+                <Button Content="->" x:Name="systemDetails" Grid.Column="2"/>
             </Grid>
             <listControls:SystemListControl Source="{Binding SystemSource}"
-                                            Selected="{Binding SelectedSystem}"
+                                            SelectedItem="{Binding SelectedSystem}"
                                             DropHandler="{Binding DropHandler}"/>
         </Grid>
         <!--Equipment Grid-->
@@ -109,11 +109,17 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Systems" Grid.Column="1"/>
-                <Button Content="->" Grid.Column="2"/>
+                <Button x:Name="systemBack" 
+                        Click="systemBack_Click" Margin="2">
+                    <Button.Content>
+                        &lt;-
+                    </Button.Content>
+                </Button>
+                <TextBlock Text="Equipment" Grid.Column="1"/>
+                <Button Content="->" x:Name="equipmentDetails" Margin="2"/>
             </Grid>
-            <listControls:SystemListControl Source="{Binding EquipmentSource}"
-                                            Selected="{Binding SelectedEquipment}"
+            <listControls:EquipmentListControl Source="{Binding EquipmentSource}"
+                                            SelectedItem="{Binding SelectedEquipment}"
                                             DropHandler="{Binding DropHandler}"/>
         </Grid>
         <!--SubScope Grid-->
@@ -128,11 +134,16 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Systems" Grid.Column="1"/>
-                <Button Content="->" Grid.Column="2"/>
+                <Button x:Name="equipmentBack" Margin="2"
+                    Click="equipmentBack_Click">
+                    <Button.Content>
+                        &lt;-
+                    </Button.Content>
+                </Button>
+                <TextBlock Text="SubScope" Grid.Column="1"/>
             </Grid>
-            <listControls:SystemListControl Source="{Binding SubScopeSource}"
-                                            Selected="{Binding SelectedSubScoep}"
+            <listControls:SubScopeListControl Source="{Binding SubScopeSource}"
+                                            SelectedItem="{Binding SelectedSubScope}"
                                             DropHandler="{Binding DropHandler}"/>
         </Grid>
     </Grid>
