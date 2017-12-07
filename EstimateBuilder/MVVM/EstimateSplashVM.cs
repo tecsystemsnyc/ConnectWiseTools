@@ -88,6 +88,7 @@ namespace EstimateBuilder.MVVM
             if (!File.Exists(BidPath))
             {
                 MessageBox.Show("Bid file no longer exists at that path.");
+                LoadingText = "";
             }
             else if (TemplatesPath == "" || TemplatesPath == null)
             {

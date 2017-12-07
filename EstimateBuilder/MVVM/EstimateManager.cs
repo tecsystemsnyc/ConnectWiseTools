@@ -111,11 +111,11 @@ namespace EstimateBuilder.MVVM
                 templatesDatabaseManager.LoadComplete += assignData;
                 ViewEnabled = false;
                 templatesDatabaseManager.AsyncLoad();
-            } else
+            }
+            else
             {
                 assignData(new TECTemplates());
             }
-            
 
             void assignData(TECTemplates loadedTemplates)
             {
