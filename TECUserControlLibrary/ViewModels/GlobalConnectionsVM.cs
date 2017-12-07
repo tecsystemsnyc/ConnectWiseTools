@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public RelayCommand<TECSubScopeConnection> DisconnectSubScopeCommand { get; }
+
         public event Action<TECObject> Selected;
 
         public GlobalConnectionsVM(TECBid bid, ChangeWatcher watcher)
@@ -103,6 +106,8 @@ namespace TECUserControlLibrary.ViewModels
             UnconnectedSystems = new ObservableCollection<TECSystem>();
             UnconnectedEquipment = new ObservableCollection<TECEquipment>();
             UnconnectedSubScope = new ObservableCollection<TECSubScope>();
+
+            DisconnectSubScopeCommand = new RelayCommand<TECSubScopeConnection>(disconnectSubScopeExecute);
 
             filterSystems(bid);
 
@@ -278,6 +283,35 @@ namespace TECUserControlLibrary.ViewModels
                     UnconnectedSubScope.Remove(ss);
                 }
             }
+            else if (change == Change.Edit)
+            {
+                if (obj is TECSubScopeConnection newConnection)
+                {
+                    if (UnconnectedSubScope.Contains(newConnection.SubScope))
+                    {
+                        UnconnectedSubScope.Remove(newConnection.SubScope);
+                    }
+                    if (SelectedController.ChildrenConnections.Contains(newConnection))
+                    {
+                        ConnectedSubScope.Add(newConnection);
+                    }
+
+                    TECSubScopeConnection oldConnection = args.OldValue as TECSubScopeConnection;
+                    if (SelectedEquipment.SubScope.Contains(oldConnection.SubScope))
+                    {
+                        UnconnectedSubScope.Add(oldConnection.SubScope);
+                    }
+                    if (ConnectedSubScope.Contains(oldConnection))
+                    {
+                        ConnectedSubScope.Remove(oldConnection);
+                    }
+                }
+            }
+        }
+
+        private void disconnectSubScopeExecute(TECSubScopeConnection ssConnect)
+        {
+            ssConnect.ParentController.RemoveSubScope(ssConnect.SubScope);
         }
     }
 }
