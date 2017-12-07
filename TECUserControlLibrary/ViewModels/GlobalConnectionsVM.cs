@@ -18,6 +18,8 @@ namespace TECUserControlLibrary.ViewModels
         private TECController _selectedController;
         private TECSystem _selectedSystem;
         private TECEquipment _selectedEquipment;
+        private TECSubScopeConnection _selectedConnectedSubScope;
+        private TECSubScope _selectedUnconnectedSubScope;
 
         public ObservableCollection<TECController> GlobalControllers { get; }
         public ObservableCollection<TECSubScopeConnection> ConnectedSubScope { get; }
@@ -62,6 +64,30 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
                 handleSelectedEquipmentChanged();
+            }
+        }
+        public TECSubScopeConnection SelectedConnectedSubScope
+        {
+            get
+            {
+                return _selectedConnectedSubScope;
+            }
+            set
+            {
+                _selectedConnectedSubScope = value;
+                RaisePropertyChanged("SelectedConnectedSubScope");
+            }
+        }
+        public TECSubScope SelectedUnconnectedSubScope
+        {
+            get
+            {
+                return _selectedUnconnectedSubScope;
+            }
+            set
+            {
+                _selectedUnconnectedSubScope = value;
+                RaisePropertyChanged("SelectedUnconnectedSubScope");
             }
         }
 

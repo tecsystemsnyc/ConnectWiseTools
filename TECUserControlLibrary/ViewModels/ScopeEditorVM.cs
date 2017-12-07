@@ -40,6 +40,7 @@ namespace TECUserControlLibrary.ViewModels
             };
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
+            GlobalConnectionsVM = new GlobalConnectionsVM(bid, watcher);
             DGTabIndex = GridIndex.Systems;
             TemplatesVisibility = Visibility.Visible;
         }
@@ -78,6 +79,7 @@ namespace TECUserControlLibrary.ViewModels
         public NetworkVM NetworkVM { get; }
         public PropertiesVM PropertiesVM { get; }
         public WorkBoxVM WorkBoxVM { get; }
+        public GlobalConnectionsVM GlobalConnectionsVM { get; }
         #endregion
 
         #region Interface Properties
