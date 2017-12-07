@@ -98,8 +98,11 @@ namespace TECUserControlLibrary.ViewModels
 
         public GlobalConnectionsVM(TECBid bid, ChangeWatcher watcher)
         {
-            UnconnectedSystems = new ObservableCollection<TECSystem>();
             GlobalControllers = new ObservableCollection<TECController>();
+            ConnectedSubScope = new ObservableCollection<TECSubScopeConnection>();
+            UnconnectedSystems = new ObservableCollection<TECSystem>();
+            UnconnectedEquipment = new ObservableCollection<TECEquipment>();
+            UnconnectedSubScope = new ObservableCollection<TECSubScope>();
 
             filterSystems(bid);
 
@@ -110,8 +113,6 @@ namespace TECUserControlLibrary.ViewModels
 
             watcher.InstanceChanged += handleInstanceChanged;
         }
-
-        
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -130,7 +131,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (TECSystem sys in typ.Instances)
                 {
-                    
+                    if (systemHasUnconnected(sys))
+                    {
+                        UnconnectedSystems.Add(sys);
+                    }
                 }
             }
         }
@@ -153,16 +157,7 @@ namespace TECUserControlLibrary.ViewModels
 
             foreach(TECEquipment equip in SelectedSystem.Equipment)
             {
-                bool equipHasUnconnected = false;
-                foreach (TECSubScope ss in equip.SubScope)
-                {
-                    if (!ss.IsNetwork && ss.Connection == null)
-                    {
-                        equipHasUnconnected = true;
-                        break;
-                    }
-                }
-                if (equipHasUnconnected)
+                if (equipHasUnconnected(equip))
                 {
                     UnconnectedEquipment.Add(equip);
                 }
@@ -174,7 +169,7 @@ namespace TECUserControlLibrary.ViewModels
 
             foreach(TECSubScope ss in SelectedEquipment.SubScope)
             {
-                if (!ss.IsNetwork && ss.Connection == null)
+                if (ssIsUnconnected(ss))
                 {
                     UnconnectedSubScope.Add(ss);
                 }
@@ -183,23 +178,26 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool systemHasUnconnected(TECSystem sys)
         {
-            bool sysHasUnconnected = false;
             foreach (TECEquipment equip in sys.Equipment)
             {
-                foreach (TECSubScope ss in equip.SubScope)
+                if (equipHasUnconnected(equip))
                 {
-                    if (!ss.IsNetwork && ss.Connection == null)
-                    {
-                        sysHasUnconnected = true;
-                        break;
-                    }
-                }
-                if (sysHasUnconnected)
-                {
-                    break;
+                    return true;
                 }
             }
-            return sysHasUnconnected;
+            return false;
+        }
+        private bool equipHasUnconnected(TECEquipment equip)
+        {
+            foreach (TECSubScope ss in equip.SubScope)
+            {
+                if (ssIsUnconnected(ss)) { return true; }
+            }
+            return false;
+        }
+        private bool ssIsUnconnected(TECSubScope ss)
+        {
+            return (!ss.IsNetwork && ss.Connection == null);
         }
 
         private void handleInstanceChanged(TECChangedEventArgs args)
