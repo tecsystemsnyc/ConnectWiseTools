@@ -171,7 +171,7 @@ namespace TECUserControlLibrary.Views
 
         private void systemMoveBack_Completed(object sender, EventArgs e)
         {
-            SystemWidth = this.ActualWidth / 2;
+            SystemWidth = this.ActualWidth;
         }
 
         private void equipmentMove_Completed(object sender, EventArgs e)
@@ -181,7 +181,7 @@ namespace TECUserControlLibrary.Views
 
         private void equipmentMoveBack_Completed(object sender, EventArgs e)
         {
-            EquipmentWidth = this.ActualWidth / 2;
+            EquipmentWidth = this.ActualWidth;
         }
     }
 }
