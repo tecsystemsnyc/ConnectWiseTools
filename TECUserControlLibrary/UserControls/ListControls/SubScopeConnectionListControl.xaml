@@ -38,6 +38,8 @@
                         ReadOnly="{Binding ElementName=subScopeConnectionListControl, Path=ReadOnly}"
                         UpdateCommand="{Binding ElementName=subScopeConnectionListControl, Path=UpdateCommand}"
                         UpdateButtonVisibility="{Binding ElementName=subScopeConnectionListControl, Path=UpdateButtonVisibility}"
+                        DisconnectCommand="{Binding ElementName=subScopeConnectionListControl, Path=DisconnectCommand}"
+                        DisconnectButtonVisibility="{Binding ElementName=subScopeConnectionListControl, Path=DisconnectButtonVisibility}"
                         MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>

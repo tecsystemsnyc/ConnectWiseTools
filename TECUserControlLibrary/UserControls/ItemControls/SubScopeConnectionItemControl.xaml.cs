@@ -69,6 +69,30 @@ namespace TECUserControlLibrary.UserControls.ItemControls
 
 
 
+        public ICommand DisconnectCommand
+        {
+            get { return (ICommand)GetValue(DisconnectCommandProperty); }
+            set { SetValue(DisconnectCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DisconnectCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DisconnectCommandProperty =
+            DependencyProperty.Register("DisconnectCommand", typeof(ICommand), typeof(SubScopeConnectionItemControl));
+
+
+
+        public Visibility DisconnectButtonVisibility
+        {
+            get { return (Visibility)GetValue(DisconnectButtonVisibilityProperty); }
+            set { SetValue(DisconnectButtonVisibilityProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DisconnectButtonVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DisconnectButtonVisibilityProperty =
+            DependencyProperty.Register("DisconnectButtonVisibility", typeof(Visibility), typeof(SubScopeConnectionItemControl));
+
+
+
 
         public SubScopeConnectionItemControl()
         {

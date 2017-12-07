@@ -60,6 +60,8 @@
                                                         SelectedItem="{Binding SelectedConnectedSubScope}"
                                                         DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"
                                                         UpdateButtonVisibility="Collapsed"
+                                                        DisconnectButtonVisibility="Visible"
+                                                        DisconnectCommand="{Binding DisconnectSubScopeCommand}"
                                                         ConduitTypes="{Binding ConduitTypes}"
                                                         Grid.Row="1"/>
         </Grid>

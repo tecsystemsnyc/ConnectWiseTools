@@ -100,7 +100,8 @@
                     IsDragSource="True"
                     DropHandler="{Binding}"
                     ReadOnly="False"
-                    Grid.Row="2">
+                    Grid.Row="2"
+                    DisconnectButtonVisibility="Collapsed">
                     <listControls:SubScopeConnectionListControl.Resources>
                         <Visibility x:Key="Visible">
                             Visible
