@@ -13,8 +13,6 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class GlobalConnectionsVM : ViewModelBase, IDropTarget
     {
-        Dictionary<TECScope, TECScope> dummyInstanceDictionary;
-
         private TECController _selectedController;
         private TECSystem _selectedSystem;
         private TECEquipment _selectedEquipment;
@@ -38,6 +36,7 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedController = value;
                 RaisePropertyChanged("SelectedController");
                 handleSelectedControllerChanged();
+                Selected?.Invoke(SelectedController);
             }
         }
         public TECSystem SelectedSystem
@@ -51,6 +50,7 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
                 handleSelectedSystemChanged();
+                Selected?.Invoke(SelectedSystem);
             }
         }
         public TECEquipment SelectedEquipment
@@ -64,6 +64,7 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedEquipment = value;
                 RaisePropertyChanged("SelectedEquipment");
                 handleSelectedEquipmentChanged();
+                Selected?.Invoke(SelectedEquipment);
             }
         }
         public TECSubScopeConnection SelectedConnectedSubScope
@@ -76,6 +77,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedConnectedSubScope = value;
                 RaisePropertyChanged("SelectedConnectedSubScope");
+                Selected?.Invoke(SelectedConnectedSubScope);
             }
         }
         public TECSubScope SelectedUnconnectedSubScope
@@ -88,16 +90,18 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedUnconnectedSubScope = value;
                 RaisePropertyChanged("SelectedUnconnectedSubScope");
+                Selected?.Invoke(SelectedUnconnectedSubScope);
             }
         }
 
+        public event Action<TECObject> Selected;
+
         public GlobalConnectionsVM(TECBid bid, ChangeWatcher watcher)
         {
-            dummyInstanceDictionary = new Dictionary<TECScope, TECScope>();
             UnconnectedSystems = new ObservableCollection<TECSystem>();
             GlobalControllers = new ObservableCollection<TECController>();
 
-            setupDummySystems(bid);
+            filterSystems(bid);
 
             foreach(TECController controller in bid.Controllers)
             {
@@ -115,47 +119,32 @@ namespace TECUserControlLibrary.ViewModels
             throw new NotImplementedException();
         }
 
-        private void setupDummySystems(TECBid bid)
+        private void filterSystems(TECBid bid)
         {
+            UnconnectedSystems.Clear();
             foreach (TECTypical typ in bid.Systems)
             {
                 foreach (TECSystem sys in typ.Instances)
                 {
-                    List<TECEquipment> dummyEquip = new List<TECEquipment>();
+                    bool sysHasUnconnected = false;
                     foreach (TECEquipment equip in sys.Equipment)
                     {
-                        List<TECSubScope> dummySS = new List<TECSubScope>();
                         foreach (TECSubScope ss in equip.SubScope)
                         {
                             if (!ss.IsNetwork && ss.Connection == null)
                             {
-                                TECSubScope newDummySS = new TECSubScope(ss, false);
-                                dummyInstanceDictionary.Add(newDummySS, ss);
-                                dummySS.Add(newDummySS);
+                                sysHasUnconnected = true;
+                                break;
                             }
                         }
-                        if (dummySS.Count > 0)
+                        if (sysHasUnconnected)
                         {
-                            TECEquipment newDummyEquip = new TECEquipment(false);
-                            newDummyEquip.CopyPropertiesFromScope(equip);
-                            foreach(TECSubScope ss in dummySS)
-                            {
-                                newDummyEquip.SubScope.Add(ss);
-                            }
-                            dummyInstanceDictionary.Add(newDummyEquip, equip);
-                            dummyEquip.Add(newDummyEquip);
+                            break;
                         }
                     }
-                    if (dummyEquip.Count > 0)
+                    if (sysHasUnconnected)
                     {
-                        TECSystem newDummySys = new TECSystem(false);
-                        newDummySys.CopyPropertiesFromScope(sys);
-                        foreach(TECEquipment equip in dummyEquip)
-                        {
-                            newDummySys.Equipment.Add(equip);
-                        }
-                        dummyInstanceDictionary.Add(newDummySys, sys);
-                        UnconnectedSystems.Add(newDummySys);
+                        UnconnectedSystems.Add(sys);
                     }
                 }
             }
@@ -179,7 +168,19 @@ namespace TECUserControlLibrary.ViewModels
 
             foreach(TECEquipment equip in SelectedSystem.Equipment)
             {
-                UnconnectedEquipment.Add(equip);
+                bool equipHasUnconnected = false;
+                foreach (TECSubScope ss in equip.SubScope)
+                {
+                    if (!ss.IsNetwork && ss.Connection == null)
+                    {
+                        equipHasUnconnected = true;
+                        break;
+                    }
+                }
+                if (equipHasUnconnected)
+                {
+                    UnconnectedEquipment.Add(equip);
+                }
             }
         }
         private void handleSelectedEquipmentChanged()
@@ -188,7 +189,10 @@ namespace TECUserControlLibrary.ViewModels
 
             foreach(TECSubScope ss in SelectedEquipment.SubScope)
             {
-                UnconnectedSubScope.Add(ss);
+                if (!ss.IsNetwork && ss.Connection == null)
+                {
+                    UnconnectedSubScope.Add(ss);
+                }
             }
         }
     }
