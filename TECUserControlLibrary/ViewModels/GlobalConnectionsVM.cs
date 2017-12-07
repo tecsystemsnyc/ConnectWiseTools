@@ -143,10 +143,13 @@ namespace TECUserControlLibrary.ViewModels
         {
             ConnectedSubScope.Clear();
 
-            foreach(TECSubScopeConnection ssConnect in SelectedController?.ChildrenConnections.Where(
-                (connection) => connection is TECSubScopeConnection))
+            if (SelectedController != null)
             {
-                ConnectedSubScope.Add(ssConnect);
+                foreach (TECSubScopeConnection ssConnect in SelectedController.ChildrenConnections.Where(
+                (connection) => connection is TECSubScopeConnection))
+                {
+                    ConnectedSubScope.Add(ssConnect);
+                }
             }
         }
         private void handleSelectedSystemChanged()
@@ -155,11 +158,14 @@ namespace TECUserControlLibrary.ViewModels
             UnconnectedSubScope.Clear();
             SelectedEquipment = null;
 
-            foreach(TECEquipment equip in SelectedSystem?.Equipment)
+            if (SelectedSystem != null)
             {
-                if (equipHasUnconnected(equip))
+                foreach (TECEquipment equip in SelectedSystem.Equipment)
                 {
-                    UnconnectedEquipment.Add(equip);
+                    if (equipHasUnconnected(equip))
+                    {
+                        UnconnectedEquipment.Add(equip);
+                    }
                 }
             }
         }
@@ -167,11 +173,14 @@ namespace TECUserControlLibrary.ViewModels
         {
             UnconnectedSubScope.Clear();
 
-            foreach(TECSubScope ss in SelectedEquipment?.SubScope)
+            if (SelectedEquipment != null)
             {
-                if (ssIsUnconnected(ss))
+                foreach (TECSubScope ss in SelectedEquipment.SubScope)
                 {
-                    UnconnectedSubScope.Add(ss);
+                    if (ssIsUnconnected(ss))
+                    {
+                        UnconnectedSubScope.Add(ss);
+                    }
                 }
             }
         }
