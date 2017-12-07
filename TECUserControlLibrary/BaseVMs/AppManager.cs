@@ -466,6 +466,13 @@ namespace TECUserControlLibrary.BaseVMs
                 }
             }
         }
+
+        protected void notifyFileLocked(string fileName)
+        {
+            string message = string.Format("Could not access file: {0}. File may be open elsewhere.", fileName);
+            logger.Warn(message);
+            MessageBox.Show(message, "File Locked", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        }
     }
     
 }

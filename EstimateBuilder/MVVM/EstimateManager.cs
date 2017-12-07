@@ -233,7 +233,7 @@ namespace EstimateBuilder.MVVM
                 }
                 else
                 {
-                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                    notifyFileLocked(path);
                 }
             }
         }
@@ -255,11 +255,10 @@ namespace EstimateBuilder.MVVM
                 }
                 else
                 {
-                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                    notifyFileLocked(path);
                 }
             }
         }
-
         private bool canExportTurnover()
         {
             return true;
@@ -301,7 +300,7 @@ namespace EstimateBuilder.MVVM
                 }
                 else
                 {
-                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                    notifyFileLocked(path);
                 }
             }
         }
@@ -323,7 +322,7 @@ namespace EstimateBuilder.MVVM
                 }
                 else
                 {
-                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                    notifyFileLocked(path);
                 }
             }
         }
@@ -345,7 +344,7 @@ namespace EstimateBuilder.MVVM
                 }
                 else
                 {
-                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                    notifyFileLocked(path);
                 }
             }
         }
@@ -385,6 +384,5 @@ namespace EstimateBuilder.MVVM
             }
             return outBid;
         }
-
     }
 }
