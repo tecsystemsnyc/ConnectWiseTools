@@ -319,6 +319,9 @@
       <DependentUpon>AddSystemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BaseView.cs" />
+    <Compile Include="Views\GlobalConnectionsView.xaml.cs">
+      <DependentUpon>GlobalConnectionsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HardwareSummaryView.xaml.cs">
       <DependentUpon>HardwareSummaryView.xaml</DependentUpon>
     </Compile>
@@ -452,6 +455,9 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\VisibilityModel.cs" />
+    <Compile Include="Views\UnconnectedSubScopeView.xaml.cs">
+      <DependentUpon>UnconnectedSubScopeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UpdateConnectionView.xaml.cs">
       <DependentUpon>UpdateConnectionView.xaml</DependentUpon>
     </Compile>
@@ -698,6 +704,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GlobalConnectionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HardwareSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -884,6 +894,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UnconnectedSubScopeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

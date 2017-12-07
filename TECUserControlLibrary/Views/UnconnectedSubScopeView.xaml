@@ -1,0 +1,139 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.UnconnectedSubScopeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             x:Name="unconnectedSubScopeView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Storyboard x:Key="systemMove">
+                <DoubleAnimation Storyboard.TargetName="unconnectedSubScopeView"
+                                 Storyboard.TargetProperty="(local:UnconnectedSubScopeView.SystemWidth)"
+                                 Completed="systemMove_Completed"
+                                 FillBehavior="Stop"
+                                 To="0" From="{Binding ElementName=unconnectedSubScopeView, Path=SystemWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="systemMoveBack">
+                <DoubleAnimation Storyboard.TargetName="unconnectedSubScopeView"
+                                 Storyboard.TargetProperty="(local:UnconnectedSubScopeView.SystemWidth)" 
+                                 Completed="systemMoveBack_Completed"
+                                 FillBehavior="Stop"
+                                 To="{Binding ElementName=unconnectedSubScopeView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="equipmentMove">
+                <DoubleAnimation Storyboard.TargetName="unconnectedSubScopeView"
+                                 Storyboard.TargetProperty="(local:UnconnectedSubScopeView.EquipmentWidth)" 
+                                 Completed="equipmentMove_Completed"
+                                 FillBehavior="Stop"
+                                 To="0" From="{Binding ElementName=unconnectedSubScopeView, Path=EquipmentWidth}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="equipmentMoveBack">
+                <DoubleAnimation Storyboard.TargetName="unconnectedSubScopeView"
+                                 Storyboard.TargetProperty="(local:UnconnectedSubScopeView.EquipmentWidth)" 
+                                 Completed="equipmentMoveBack_Completed"
+                                 FillBehavior="Stop"
+                                 To="{Binding ElementName=unconnectedSubScopeView, Path=HalfWidth}" From="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=unconnectedSubScopeView}">
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="systemDetails">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="systemBack">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource systemMoveBack}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="equipmentDetails">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Button.Click" SourceName="equipmentBack">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMoveBack}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:SystemListControl.DoubleClicked">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource systemMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="listControls:EquipmentListControl.DoubleClicked">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding SystemWidth}"/>
+            <ColumnDefinition Width="{Binding EquipmentWidth}"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--System Grid-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Systems" Grid.Column="1"/>
+                <Button Content="->" Grid.Column="2"/>
+            </Grid>
+            <listControls:SystemListControl Source="{Binding SystemSource}"
+                                            Selected="{Binding SelectedSystem}"
+                                            DropHandler="{Binding DropHandler}"/>
+        </Grid>
+        <!--Equipment Grid-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Systems" Grid.Column="1"/>
+                <Button Content="->" Grid.Column="2"/>
+            </Grid>
+            <listControls:SystemListControl Source="{Binding EquipmentSource}"
+                                            Selected="{Binding SelectedEquipment}"
+                                            DropHandler="{Binding DropHandler}"/>
+        </Grid>
+        <!--SubScope Grid-->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Systems" Grid.Column="1"/>
+                <Button Content="->" Grid.Column="2"/>
+            </Grid>
+            <listControls:SystemListControl Source="{Binding SubScopeSource}"
+                                            Selected="{Binding SelectedSubScoep}"
+                                            DropHandler="{Binding DropHandler}"/>
+        </Grid>
+    </Grid>
+</UserControl>
