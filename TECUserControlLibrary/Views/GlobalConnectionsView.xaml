@@ -59,6 +59,8 @@
             <listControls:SubScopeConnectionListControl Source="{Binding ConnectedSubScope}"
                                                         SelectedItem="{Binding SelectedConnectedSubScope}"
                                                         DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"
+                                                        UpdateButtonVisibility="Collapsed"
+                                                        ConduitTypes="{Binding ConduitTypes}"
                                                         Grid.Row="1"/>
         </Grid>
     </Grid>
