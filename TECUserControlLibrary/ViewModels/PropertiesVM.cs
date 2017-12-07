@@ -17,6 +17,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECScopeManager scopeManager;
         private bool _readOnly;
         private TECObject _selected;
+        private string _templateText;
 
         public TECCatalogs Catalogs
         {
@@ -45,6 +46,40 @@ namespace TECUserControlLibrary.ViewModels
                 _selected = value;
                 setReadOnly(value);
                 RaisePropertyChanged("Selected");
+                if (IsTemplates)
+                {
+                    TemplateText = getTemplateText(value);
+                }
+            }
+        }
+
+        private string getTemplateText(TECObject item)
+        {
+            TECTemplates templates = scopeManager as TECTemplates;
+            if(item is TECSubScope subScope)
+            {
+                if (templates.SubScopeTemplates.Contains(subScope))
+                {
+                    return "Reference Template";
+                }
+            } else if(item is TECEquipment equipment)
+            {
+                if (templates.EquipmentTemplates.Contains(equipment))
+                {
+                    return "Reference Template";
+                }
+            }
+            return "Instance Template";
+        }
+
+        public bool IsTemplates { get; }
+        public string TemplateText
+        {
+            get { return _templateText; }
+            set
+            {
+                _templateText = value;
+                RaisePropertyChanged("TemplateText");
             }
         }
 
@@ -68,6 +103,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public PropertiesVM(TECCatalogs catalogs, TECScopeManager scopeManager)
         {
+            IsTemplates = scopeManager is TECTemplates;
+            TemplateText = "Instance Template";
             Refresh(catalogs, scopeManager);
         }
 

@@ -41,6 +41,7 @@ namespace TemplateBuilder.MVVM
                 _selected = value;
                 RaisePropertyChanged("Selected");
                 SelectionChanged?.Invoke(value);
+                PropertiesVM.Selected = value as TECObject;
             }
         }
         public ICommand AddParameterCommand { get; private set; }
