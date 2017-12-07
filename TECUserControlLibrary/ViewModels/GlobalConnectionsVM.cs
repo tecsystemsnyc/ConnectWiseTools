@@ -126,6 +126,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (UnconnectedSubScope.Contains(ss))
                 {
+                    Console.WriteLine("Target Collection: " + dropInfo.TargetCollection);
                     if (dropInfo.TargetCollection == ConnectedSubScope)
                     {
                         if (SelectedController.CanConnectSubScope(ss))
