@@ -27,7 +27,7 @@
                                            EquipmentSource="{Binding UnconnectedEquipment}"
                                            SelectedEquipment="{Binding SelectedEquipment}"
                                            SubScopeSource="{Binding UnconnectedSubScope}"
-                                           SelectedSubScope="{Binding SelectedSubScope}"
+                                           SelectedSubScope="{Binding SelectedUnconnectedSubScope}"
                                            DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
         </Grid>
         <Grid Grid.Column="1" Grid.RowSpan="2">
