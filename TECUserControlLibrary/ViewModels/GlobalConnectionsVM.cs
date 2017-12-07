@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -121,12 +122,36 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
+            if (dropInfo.Data is TECSubScope ss)
+            {
+                if (UnconnectedSubScope.Contains(ss))
+                {
+                    if (dropInfo.TargetCollection == ConnectedSubScope)
+                    {
+                        if (SelectedController.CanConnectSubScope(ss))
+                        {
+                            dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                            dropInfo.Effects = DragDropEffects.Copy;
+                        }
+                    }
+                }
+            }
         }
-
         public void Drop(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
+            if (dropInfo.Data is TECSubScope ss)
+            {
+                if (UnconnectedSubScope.Contains(ss))
+                {
+                    if (dropInfo.TargetCollection == ConnectedSubScope)
+                    {
+                        if (SelectedController.CanConnectSubScope(ss))
+                        {
+                            SelectedController.AddSubScope(ss);
+                        }
+                    }
+                }
+            }
         }
 
         private void filterSystems(TECBid bid)
