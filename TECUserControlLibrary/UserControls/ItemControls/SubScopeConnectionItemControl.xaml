@@ -67,7 +67,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Connection.ParentController.Name, StringFormat=Controller: {0}}"/>
-                <TextBlock Text="{Binding SubScopeConnectionItem.Equipment.Name, StringFormat=In Equipment: {0}}" Grid.Column="1"/>
+                <TextBlock Text="{Binding SubScopeConnectionItem.EquipmentName, StringFormat=In Equipment: {0}}" Grid.Column="1"/>
 
             </Grid>
             <Grid Grid.Row="2">
@@ -130,6 +130,7 @@
                           ItemsSource="{Binding ConduitTypes, Mode=OneWay}" 
                           DisplayMemberPath="Name"
                           Margin="5"
+                                  MinWidth="100"
                           />
                         <Button Grid.Column="1" Margin="5" 
                                 Content="Change" Command="{Binding SubScopeConnectionItem.ChangeConduitCommand}" CommandParameter="{Binding}"/>

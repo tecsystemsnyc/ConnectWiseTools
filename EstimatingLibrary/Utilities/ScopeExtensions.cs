@@ -21,5 +21,41 @@ namespace EstimatingLibrary.Utilities
                 scope.AssociatedCosts.Add(cost);
             }
         }
+        
+        public static TECEquipment FindParentEquipment(this TECSubScope subScope, TECScopeManager manager)
+        {
+            foreach (TECEquipment equip in manager.GetAllEquipment())
+            {
+                if (equip.SubScope.Contains(subScope))
+                {
+                    return equip;
+                }
+            }
+            return null;
+        }
+
+        public static List<TECEquipment> GetAllEquipment(this TECScopeManager manager)
+        {
+            List<TECEquipment> equip = new List<TECEquipment>();
+            if (manager is TECBid bid)
+            {
+                foreach(TECTypical typ in bid.Systems)
+                {
+                    foreach(TECSystem sys in typ.Instances)
+                    {
+                        equip.AddRange(sys.Equipment);
+                    }
+                }
+            }
+            else if (manager is TECTemplates templates)
+            {
+                foreach(TECSystem sys in templates.SystemTemplates)
+                {
+                    equip.AddRange(sys.Equipment);
+                }
+                equip.AddRange(templates.EquipmentTemplates);
+            }
+            return equip;
+        }
     }
 }
