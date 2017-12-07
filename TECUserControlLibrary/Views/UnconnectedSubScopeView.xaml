@@ -167,7 +167,8 @@
             <listControls:SubScopeListControl Grid.Row="1"
                                             Source="{Binding SubScopeSource}"
                                             SelectedItem="{Binding SelectedSubScope}"
-                                            DropHandler="{Binding DropHandler}"/>
+                                            DropHandler="{Binding DropHandler}"
+                                              IsDragSource="True"/>
         </Grid>
     </Grid>
 </UserControl>
