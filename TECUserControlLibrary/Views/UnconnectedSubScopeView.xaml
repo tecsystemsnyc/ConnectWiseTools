@@ -10,6 +10,14 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="blackText" TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
+            </Style>
             <Storyboard x:Key="systemMove">
                 <DoubleAnimation Storyboard.TargetName="unconnectedSubScopeView"
                                  Storyboard.TargetProperty="(local:UnconnectedSubScopeView.SystemWidth)"

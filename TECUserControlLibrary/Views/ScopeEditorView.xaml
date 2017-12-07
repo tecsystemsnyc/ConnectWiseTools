@@ -143,7 +143,8 @@
                     <views:NetworkView ViewModel="{Binding NetworkVM}"/>
                 </TabItem>
                 <TabItem Header="Global Runs">
-                    <views:GlobalConnectionsView ViewModel="{Binding GlobalConnectionsVM}"/>
+                    <views:GlobalConnectionsView ViewModel="{Binding GlobalConnectionsVM}"
+                                                 DropHandler="{Binding GlobalConnectionsVM}"/>
                 </TabItem>
                 <TabItem Header="Misc.">
                     <views:MiscCostsView ViewModel="{Binding MiscVM}"
