@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,6 +53,28 @@ namespace TECUserControlLibrary.Views
             DependencyProperty.Register("SystemSource", typeof(IEnumerable<TECSystem>),
               typeof(UnconnectedSubScopeView), new PropertyMetadata(default(IEnumerable<TECSystem>)));
 
+
+        public IEnumerable<TECEquipment> EquipmentSource
+        {
+            get { return (IEnumerable<TECEquipment>)GetValue(EquipmentSourceProperty); }
+            set { SetValue(EquipmentSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EquipmentSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EquipmentSourceProperty =
+            DependencyProperty.Register("EquipmentSource", typeof(IEnumerable<TECEquipment>), typeof(UnconnectedSubScopeView));
+
+
+        public IEnumerable<TECSubScope> SubScopeSource
+        {
+            get { return (IEnumerable<TECSubScope>)GetValue(SubScopeSourceProperty); }
+            set { SetValue(SubScopeSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SubScopeSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SubScopeSourceProperty =
+            DependencyProperty.Register("SubScopeSource", typeof(IEnumerable<TECSubScope>), typeof(UnconnectedSubScopeView));
+        
         public TECSystem SelectedSystem
         {
             get { return (TECSystem)GetValue(SelectedSystemProperty); }
@@ -93,6 +116,20 @@ namespace TECUserControlLibrary.Views
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
+
+
+
+        public IDropTarget DropHandler
+        {
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DropHandler.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget), typeof(UnconnectedSubScopeView));
+
+
 
         public UnconnectedSubScopeView()
         {

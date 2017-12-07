@@ -22,11 +22,16 @@
                                                 DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
         </Grid>
         <Grid Grid.Row="1">
-            <local:UnconnectedSubScopeView Source="{Binding UnconnectedSystems}"
+            <local:UnconnectedSubScopeView SystemSource="{Binding UnconnectedSystems}"
+                                           SelectedSystem="{Binding SelectedSystem}"
+                                           EquipmentSource="{Binding UnconnectedEquipment}"
+                                           SelectedEquipment="{Binding SelectedEquipment}"
+                                           SubScopeSource="{Binding UnconnectedSubScope}"
+                                           SelectedSubScope="{Binding SelectedSubScope}"
                                            DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
         </Grid>
         <Grid Grid.Column="1" Grid.RowSpan="2">
-            <listControls:SubScopeConnectionListControl Source="{Binding SelectedConnections}"
+            <listControls:SubScopeConnectionListControl Source="{Binding ConnectedSubScope}"
                                                         DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
         </Grid>
     </Grid>

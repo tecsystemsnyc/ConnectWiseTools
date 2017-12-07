@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -24,15 +25,15 @@ namespace TECUserControlLibrary.Views
     public partial class GlobalConnectionsView : UserControl
     {
 
-        public GlobalConnectionsViewModel ViewModel
+        public GlobalConnectionsVM ViewModel
         {
-            get { return (GlobalConnectionsViewModel)GetValue(ViewModelProperty); }
+            get { return (GlobalConnectionsVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(GlobalConnectionsViewModel), typeof(GlobalConnectionsView));
+            DependencyProperty.Register("ViewModel", typeof(GlobalConnectionsVM), typeof(GlobalConnectionsView));
 
 
         public IDropTarget DropHandler
