@@ -19,6 +19,7 @@
         </Grid.ColumnDefinitions>
         <Grid>
             <listControls:ControllerListControl Source="{Binding GlobalControllers}"
+                                                SelectedItem="{Binding SelectedController}"
                                                 DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
         </Grid>
         <Grid Grid.Row="1">
@@ -32,6 +33,7 @@
         </Grid>
         <Grid Grid.Column="1" Grid.RowSpan="2">
             <listControls:SubScopeConnectionListControl Source="{Binding ConnectedSubScope}"
+                                                        SelectedItem="{Binding SelectedConnectedSubScope}"
                                                         DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
         </Grid>
     </Grid>
