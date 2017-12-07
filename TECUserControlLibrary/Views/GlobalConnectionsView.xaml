@@ -8,7 +8,15 @@
              x:Name="globalConnectionView"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=globalConnectionView, Path=ViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=globalConnectionView, Path=ViewModel}" Background="{StaticResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -18,11 +26,20 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+                <TextBlock Text="Controllers"/>
+            </Border>
             <listControls:ControllerListControl Source="{Binding GlobalControllers}"
                                                 SelectedItem="{Binding SelectedController}"
-                                                DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
+                                                DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"
+                                                Grid.Row="1"/>
         </Grid>
         <Grid Grid.Row="1">
+            
             <local:UnconnectedSubScopeView SystemSource="{Binding UnconnectedSystems}"
                                            SelectedSystem="{Binding SelectedSystem}"
                                            EquipmentSource="{Binding UnconnectedEquipment}"
@@ -32,9 +49,17 @@
                                            DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
         </Grid>
         <Grid Grid.Column="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+                <TextBlock Text="{Binding SelectedController.Name, StringFormat=Connections in {0}}"/>
+            </Border>
             <listControls:SubScopeConnectionListControl Source="{Binding ConnectedSubScope}"
                                                         SelectedItem="{Binding SelectedConnectedSubScope}"
-                                                        DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"/>
+                                                        DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"
+                                                        Grid.Row="1"/>
         </Grid>
     </Grid>
 </UserControl>

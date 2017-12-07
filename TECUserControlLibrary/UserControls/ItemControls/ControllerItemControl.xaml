@@ -28,8 +28,8 @@
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <Label FontSize="14" Content="{Binding Name}" FontWeight="DemiBold" Background="Transparent"/>
-            <Label Content="{Binding Description}" Grid.Row="1"  Background="Transparent"/>
+            <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold" Background="Transparent"/>
+            <TextBlock Text="{Binding Description}" Grid.Row="1"  Background="Transparent"/>
             <TextBlock Text="{Binding Type.Name, StringFormat=Type: {0}}" Grid.Row="2" Background="Transparent"/>
         </Grid>
     </Border>
