@@ -40,10 +40,10 @@ namespace TECUserControlLibrary.Models
 
         public event Action<ISubScopeConnectionItem> PropagationPropertyChanged;
 
-        public SubScopeConnectionItem(TECSubScope subScope, TECElectricalMaterial noneConduit, bool needsUpdate = false, TECEquipment parent = null)
+        public SubScopeConnectionItem(TECSubScope subScope, TECElectricalMaterial noneConduit, TECEquipment parent, bool needsUpdate = false)
         {
             SubScope = subScope;
-            EquipmentName = parent?.Name;
+            EquipmentName = parent.Name;
             NeedsUpdate = needsUpdate;
             if (subScope.IsTypical)
             {

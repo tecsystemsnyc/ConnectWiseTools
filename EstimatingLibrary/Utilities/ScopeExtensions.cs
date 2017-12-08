@@ -34,6 +34,18 @@ namespace EstimatingLibrary.Utilities
             return null;
         }
 
+        public static TECEquipment FindParentEquipment(this TECSubScope subScope, TECSystem system)
+        {
+            foreach(TECEquipment equip in system.Equipment)
+            {
+                if (equip.SubScope.Contains(subScope))
+                {
+                    return equip;
+                }
+            }
+            return null;
+        }
+
         public static List<TECEquipment> GetAllEquipment(this TECScopeManager manager)
         {
             List<TECEquipment> equip = new List<TECEquipment>();

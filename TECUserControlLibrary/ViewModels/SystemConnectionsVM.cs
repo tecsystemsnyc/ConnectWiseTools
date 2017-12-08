@@ -176,7 +176,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public SystemConnectionsVM(TECSystem system, ObservableCollection<TECElectricalMaterial> conduitTypes)
+        public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             //Construct conduit types collection
             noneConduitType = new TECElectricalMaterial();
@@ -195,11 +195,6 @@ namespace TECUserControlLibrary.ViewModels
                 watcher.InstanceConstituentChanged += handleSystemChanged;
             }
             this.ConfirmationObject = new MessageBoxService();
-            ObservableCollection<TECElectricalMaterial> tempConduit = new ObservableCollection<TECElectricalMaterial>();
-            foreach(TECElectricalMaterial type in conduitTypes)
-            {
-                tempConduit.Add(type);
-            }
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
             {
@@ -448,7 +443,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addNewConnectedSubScope(TECSubScope ss, bool needsUpdate = false)
         {
-            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, needsUpdate);
+            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, ss.FindParentEquipment(system), needsUpdate);
             ssConnectItem.PropagationPropertyChanged += handlePropagationPropertyChanged;
             ConnectedSubScope.Add(ssConnectItem);
         }
