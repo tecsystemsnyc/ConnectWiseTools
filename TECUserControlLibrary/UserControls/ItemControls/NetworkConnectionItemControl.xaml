@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border>
+    <Border BorderThickness="1" BorderBrush="Black">
         <Grid DataContext="{Binding ElementName=networkConnectionItemControl, Path=NetworkConnection}">
             <Grid.RowDefinitions>
                 <RowDefinition MinHeight="30"/>
