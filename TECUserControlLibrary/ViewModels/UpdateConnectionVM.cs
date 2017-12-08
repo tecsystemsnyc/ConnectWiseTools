@@ -56,6 +56,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand UpdateCommand { get; private set; }
+        public ICommand UpdateAllCommand { get; private set; }
         public ICommand DoneCommand { get; private set; }
 
         public event Action UpdatesDone;
@@ -70,13 +71,19 @@ namespace TECUserControlLibrary.ViewModels
                 List<TECSubScope> ssInstances = typical.TypicalInstanceDictionary.GetInstancesOfType(typ.SubScope);
                 foreach(TECSubScope instance in ssInstances)
                 {
-                    SubScopeUpdatedWrapper wrapped = new SubScopeUpdatedWrapper(instance);
+                    bool needsUpdate =
+                        ((instanceController != equivalentInstanceController) ||
+                        (instance.Connection?.Length != typ.SubScope.Connection?.Length) ||
+                        (instance.Connection?.ConduitLength != typ.SubScope.Connection?.ConduitLength) ||
+                        (instance.Connection?.ConduitType != typ.SubScope.Connection?.ConduitType));
+                    SubScopeUpdatedWrapper wrapped = new SubScopeUpdatedWrapper(instance, needsUpdate);
                     instances.Add(wrapped);
                 }
             }
             _subScope = instances;
 
             UpdateCommand = new RelayCommand(updateExecute, canUpdate);
+            UpdateAllCommand = new RelayCommand(updateAllExecute, updateAllCanExecute);
             DoneCommand = new RelayCommand(doneExecute);
         }
 
@@ -207,6 +214,29 @@ namespace TECUserControlLibrary.ViewModels
             return instanceCanUpdate;
         }
 
+        private void updateAllExecute()
+        {
+            foreach(SubScopeUpdatedWrapper ss in SubScope)
+            {
+                if (!ss.Updated)
+                {
+                    SelectedInstance = ss;
+                    updateExecute();
+                }
+            }
+        }
+        private bool updateAllCanExecute()
+        {
+            foreach (SubScopeUpdatedWrapper ss in SubScope)
+            {
+                if (!ss.Updated)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void doneExecute()
         {
             UpdatesDone?.Invoke();
@@ -229,10 +259,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public SubScopeUpdatedWrapper(TECSubScope subScope)
+        public SubScopeUpdatedWrapper(TECSubScope subScope, bool needsUpdate)
         {
             _subScope = subScope;
-            _updated = false;
+            _updated = !needsUpdate;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
