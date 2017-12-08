@@ -41,28 +41,41 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=systemConnectionsView, Path=ViewModel}"/>
                     <DataTemplate x:Key="cannotConnectAdorner">
                         <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
                     </DataTemplate>
                 </Grid.Resources>
-                <Label Content="Controllers"/>
+                <Label Content="Controllers" Grid.ColumnSpan="2"/>
                 <listControls:ControllerListControl
                 Source="{Binding Controllers}"
                 SelectedItem="{Binding SelectedController}"
-                    Grid.Row="1"/>
-                <Border Grid.RowSpan="2"/>
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"/>
+                <Border Grid.RowSpan="2" Grid.ColumnSpan="2"/>
 
-                <Label Content="Unconnected Points" Grid.Row="2"/>
+                <Label Content="Unconnected Points" Grid.Row="2" Grid.ColumnSpan="2"/>
+                <Label Content="Equipment:" Grid.Row="3"/>
+                <ComboBox Grid.Row="3"
+                          Grid.Column="1"
+                          ItemsSource="{Binding Equipment}"
+                          SelectedItem="{Binding SelectedEquipment}"
+                          DisplayMemberPath="Name"
+                          Width="Auto"/>
                 <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
                                                   IsDragSource="True"
-                                                  DropHandler="{Binding}" Grid.Row="3"
+                                                  DropHandler="{Binding}" Grid.Row="4" Grid.ColumnSpan="2"
                                                   DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
                                                   SelectedItem="{Binding SelectedUnconnectedSubScope}"/>
-                <Border Grid.Row="2" Grid.RowSpan="2"/>
+                <Border Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
             </Grid>
         </Border>
         

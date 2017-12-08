@@ -27,6 +27,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECController _selectedController;
         private TECSubScope _selectedUnconnectedSubScope;
         private ISubScopeConnectionItem _selectedConnection;
+        private TECEquipment _selectedEquipment;
 
         private UpdateConnectionVM _updateConnectionVM;
 
@@ -50,6 +51,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Controllers");
             }
         }
+        public ObservableCollection<TECEquipment> Equipment { get; }
         public ObservableCollection<ISubScopeConnectionItem> ConnectedSubScope
         {
             get { return _connectedSubScope; }
@@ -134,6 +136,16 @@ namespace TECUserControlLibrary.ViewModels
                 Selected?.Invoke(value?.SubScope?.Connection as TECObject);
             }
         }
+        public TECEquipment SelectedEquipment
+        {
+            get { return _selectedEquipment; }
+            set
+            {
+                _selectedEquipment = value;
+                RaisePropertyChanged("SelectedEquipment");
+                handleEquipmentSelected();
+            }
+        }
 
         public UpdateConnectionVM UpdateConnectionVM
         {
@@ -164,7 +176,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public SystemConnectionsVM(TECSystem system, ObservableCollection<TECElectricalMaterial> conduitTypes)
+        public SystemConnectionsVM(TECSystem system, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             //Construct conduit types collection
             noneConduitType = new TECElectricalMaterial();
@@ -183,15 +195,10 @@ namespace TECUserControlLibrary.ViewModels
                 watcher.InstanceConstituentChanged += handleSystemChanged;
             }
             this.ConfirmationObject = new MessageBoxService();
-            ObservableCollection<TECElectricalMaterial> tempConduit = new ObservableCollection<TECElectricalMaterial>();
-            foreach(TECElectricalMaterial type in conduitTypes)
-            {
-                tempConduit.Add(type);
-            }
             initializeCollections();
             foreach (TECSubScope ss in system.GetAllSubScope())
             {
-                if (ss.Connection == null && !ss.IsNetwork)
+                if (ss.Connection == null && !ss.IsNetwork && SelectedEquipment != null && SelectedEquipment.SubScope.Contains(ss))
                 {
                     UnconnectedSubScope.Add(ss);
                 }
@@ -200,6 +207,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 Controllers.Add(controller);
             }
+            Equipment = new ObservableCollection<TECEquipment>(system.Equipment);
             UpdateAllCommand = new RelayCommand(updateAllExecute, updateAllCanExecute);
             UpdateItemCommand = new RelayCommand<ISubScopeConnectionItem>(updateItem, canUpdateItem);
         }
@@ -267,7 +275,9 @@ namespace TECUserControlLibrary.ViewModels
                             updateItem(ssConnectItem);
                         }
                         ConnectedSubScope.Remove(ssConnectItem);
-                        UnconnectedSubScope.Add(ssConnectItem.SubScope);
+                        if (SelectedEquipment != null && SelectedEquipment.SubScope.Contains(ssConnectItem.SubScope)) {
+                            UnconnectedSubScope.Add(ssConnectItem.SubScope);
+                        }
                     }
                 }
                 else
@@ -366,6 +376,17 @@ namespace TECUserControlLibrary.ViewModels
             }
             RaisePropertyChanged("CanLeave");
         }
+        private void handleEquipmentSelected()
+        {
+            UnconnectedSubScope.Clear();
+            foreach (TECSubScope ss in system.GetAllSubScope())
+            {
+                if (ss.Connection == null && !ss.IsNetwork && SelectedEquipment != null && SelectedEquipment.SubScope.Contains(ss))
+                {
+                    UnconnectedSubScope.Add(ss);
+                }
+            }
+        }
 
         private void handleSystemChanged(Change change, TECObject obj)
         {
@@ -380,11 +401,22 @@ namespace TECUserControlLibrary.ViewModels
                     Controllers.Remove(controller);
                 }
             }
+            else if (obj is TECEquipment equip)
+            {
+                if (change == Change.Add)
+                {
+                    Equipment.Add(equip);
+                }
+                else if (change == Change.Remove)
+                {
+                    Equipment.Remove(equip);
+                }
+            }
             else if (obj is TECSubScope subScope)
             {
                 if (change == Change.Add)
                 {
-                    if (subScope.Connection == null && !subScope.IsNetwork)
+                    if (subScope.Connection == null && !subScope.IsNetwork && SelectedEquipment != null && SelectedEquipment.SubScope.Contains(subScope))
                     {
                         UnconnectedSubScope.Add(subScope);
                     }
@@ -411,7 +443,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addNewConnectedSubScope(TECSubScope ss, bool needsUpdate = false)
         {
-            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, needsUpdate);
+            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, ss.FindParentEquipment(system), needsUpdate);
             ssConnectItem.PropagationPropertyChanged += handlePropagationPropertyChanged;
             ConnectedSubScope.Add(ssConnectItem);
         }
