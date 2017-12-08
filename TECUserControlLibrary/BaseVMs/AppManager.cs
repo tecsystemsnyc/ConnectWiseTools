@@ -417,9 +417,16 @@ namespace TECUserControlLibrary.BaseVMs
                         {
                             logger.Info("Saving new file before closing.");
                             string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
-                            databaseManager = new DatabaseManager<T>(saveFilePath);
-                            databaseManager.SaveComplete += closeWindowOnSuccess;
-                            databaseManager.AsyncNew(getWorkingScope());
+                            if (saveFilePath != null && saveFilePath != "")
+                            {
+                                databaseManager = new DatabaseManager<T>(saveFilePath);
+                                databaseManager.SaveComplete += closeWindowOnSuccess;
+                                databaseManager.AsyncNew(getWorkingScope());
+                            } 
+                            else
+                            {
+                                e.Cancel = true;
+                            }
                         }
                         else
                         {
