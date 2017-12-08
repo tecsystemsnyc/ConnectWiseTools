@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.UserControls.ItemControls
 {
@@ -20,6 +21,20 @@ namespace TECUserControlLibrary.UserControls.ItemControls
     /// </summary>
     public partial class NetworkConnectionItemControl : UserControl
     {
+
+
+        public NetworkConnectionVM NetworkConnection
+        {
+            get { return ( NetworkConnectionVM)GetValue(NetworkConnectionProperty); }
+            set { SetValue(NetworkConnectionProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for NetworkConnection.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NetworkConnectionProperty =
+            DependencyProperty.Register("NetworkConnection", typeof(NetworkConnectionVM), typeof(NetworkConnectionItemControl));
+
+
+
         public NetworkConnectionItemControl()
         {
             InitializeComponent();

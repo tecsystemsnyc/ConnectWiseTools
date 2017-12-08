@@ -49,6 +49,7 @@ namespace TECUserControlLibrary.ViewModels
             IsTypical = false;
             setupCommands();
             Refresh(bid, cw);
+            ConduitTypes = new List<TECElectricalMaterial>(bid.Catalogs.ConduitTypes);
         }
         public NetworkVM(TECSystem system, TECCatalogs catalogs)
         {
@@ -56,6 +57,7 @@ namespace TECUserControlLibrary.ViewModels
             typical = system is TECTypical ? system as TECTypical : null;
             setupCommands();
             Refresh(system, catalogs);
+            ConduitTypes = new List<TECElectricalMaterial>(catalogs.ConduitTypes);
         }
 
         public event Action<TECObject> Selected;
@@ -131,6 +133,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return new ReadOnlyObservableCollection<TECConnectionType>(selectedConnectionTypes); }
         }
+        public List<TECElectricalMaterial> ConduitTypes { get; }
 
         public TECConnectionType SelectedPotentialConnectionType
         {

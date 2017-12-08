@@ -16,8 +16,37 @@
     </UserControl.Resources>
 
     <Border>
-        <Grid DataContext="{Binding ElementName=networkConnectionItemControl}">
+        <Grid DataContext="{Binding ElementName=networkConnectionItemControl, Path=NetworkConnection}">
+            <Grid.RowDefinitions>
+                <RowDefinition MinHeight="30"/>
+                <RowDefinition MinHeight="30"/>
+                <RowDefinition MinHeight="30"/>
+                <RowDefinition MinHeight="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             
+            <TextBlock Text="# Connected:" HorizontalAlignment="Right"/>
+            <TextBlock Text="{Binding Connection.Children.Count}"
+                       Grid.Column="1"/>
+
+            <TextBlock Text="Wire Length:" HorizontalAlignment="Right"
+                       Grid.Row="1"/>
+            <TextBox Text="{Binding Connection.Length}" Margin="5"
+                     Grid.Row="1" Grid.Column="1"/>
+
+            <TextBlock Text="Conduit Type:" HorizontalAlignment="Right"
+                       Grid.Row="2"/>
+            <ComboBox ItemsSource="{Binding ConduitTypes}" SelectedItem="{Binding SelectedConduitType}"
+                      DisplayMemberPath="Name" Margin="5"
+                      Grid.Row="2" Grid.Column="1"/>
+
+            <TextBlock Text="Conduit Length:" HorizontalAlignment="Right"
+                       Grid.Row="3"/>
+            <TextBox Text="{Binding Connection.ConduitLength}" Margin="5"
+                     Grid.Row="3" Grid.Column="1"/>
         </Grid>
     </Border>
 </UserControl>

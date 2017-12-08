@@ -6,6 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+    xmlns:items="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
                        xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
                        x:Name="NetworkConnectionList"
              mc:Ignorable="d" 
@@ -26,47 +27,7 @@
                   SelectionChanged="ListView_Selected">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid MouseUp="ItemControl_MouseUp">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding Children.Count, StringFormat=Children: {0}}"/>
-                        <Border BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="2"/>
-
-                        <TextBlock Text="{Binding Length, StringFormat=Distance: {0}}" Grid.Row="1"/>
-                        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.ColumnSpan="2"/>
-
-                        <TextBlock Text="{Binding ConduitLength, StringFormat=Conduit Length: {0}}" Grid.Row="2"/>
-                        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.ColumnSpan="2"/>
-
-                        <TextBlock Text="{Binding ConduitType.Name, StringFormat=Conduit Type: {0}}" Grid.Row="3"/>
-                        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Grid.ColumnSpan="2"/>
-
-                        <Grid Grid.Column="2" Grid.RowSpan="4">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Connection Types:"/>
-                            <local:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"
-                                                                 Grid.Row="1"/>
-                            <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="2"/>
-
-                            <Label Content="IO Types:" Grid.Row="2"/>
-                            <local:IOListControl Source="{Binding IOList}" Grid.Row="3"/>
-                            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.RowSpan="2"/>
-                        </Grid>
-                        
-                    </Grid>
+                    <items:NetworkConnectionItemControl NetworkConnection="{Binding, Converter={local:NetworkConnectionToItemConverter}, ConverterParameter={Binding ConduitTypes}}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
