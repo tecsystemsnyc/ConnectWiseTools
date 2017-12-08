@@ -24,8 +24,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label FontSize="10" Content="{Binding Name}" FontWeight="DemiBold"/>
-            <Label FontSize="10" Content="{Binding Description}" Grid.Column="1"/>
+            <TextBlock FontSize="10" Text="{Binding Name}" FontWeight="DemiBold"/>
+            <TextBlock FontSize="10" Text="{Binding Description}" Grid.Column="1"/>
         </Grid>
     </Border>
 </local:BaseItemControl>
