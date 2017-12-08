@@ -30,6 +30,11 @@
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   AllowDrop="True"
                   Drop="ListView_Dropped">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:SubScopeConnectionItemControl
