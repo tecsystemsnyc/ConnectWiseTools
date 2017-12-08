@@ -91,7 +91,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Conduit Length:" />
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="1" MinWidth="40">
                     <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
                        Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
@@ -107,33 +107,14 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Conduit:" />
-                <TextBlock Grid.Column="1" Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType.Name}"
-                       Visibility="{Binding ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
-                <Grid Grid.Column="2">
-                    <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitType.Name}"
-                       Visibility="{Binding ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                    <Grid Visibility="{Binding ReadOnly,
-                    Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="60"/>
-                        </Grid.ColumnDefinitions>
-                        <ComboBox SelectedItem="{Binding SubScopeConnectionItem.SelectedConduitType}"
-                          ItemsSource="{Binding ConduitTypes, Mode=OneWay}" 
-                          DisplayMemberPath="Name"
-                          Margin="5"
+                <ComboBox SelectedItem="{Binding SubScopeConnectionItem.SelectedConduitType}"
+                                  ItemsSource="{Binding ConduitTypes, Mode=OneWay}" 
+                                  DisplayMemberPath="Name"
+                                  Margin="5"
                                   MinWidth="50"
-                          />
-                        <Button Grid.Column="1" Margin="5" 
-                                Content="Change" Command="{Binding SubScopeConnectionItem.ChangeConduitCommand}" CommandParameter="{Binding}"/>
-                    </Grid>
-                    
-                </Grid>
+                          Grid.Column="1"/>
             </Grid>
             
 

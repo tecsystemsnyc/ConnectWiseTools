@@ -11,7 +11,6 @@ namespace TECUserControlLibrary.Models
     public class SubScopeConnectionItem : ViewModelBase, ISubScopeConnectionItem
     {
         private bool _needsUpdate;
-        private TECElectricalMaterial _selectedConduitType;
         
         private TECElectricalMaterial noneConduit;
 
@@ -29,14 +28,30 @@ namespace TECUserControlLibrary.Models
 
         public TECElectricalMaterial SelectedConduitType
         {
-            get { return _selectedConduitType; }
+            get
+            {
+                if (SubScope.Connection.ConduitType == null)
+                {
+                    return noneConduit;
+                }
+                else
+                {
+                    return SubScope.Connection.ConduitType;
+                }
+            }
             set
             {
-                _selectedConduitType = value;
+                if (value == noneConduit)
+                {
+                    SubScope.Connection.ConduitType = null;
+                }
+                else if (value != null)
+                {
+                    SubScope.Connection.ConduitType = value;
+                }
                 RaisePropertyChanged("SelectedConduitType");
             }
         }
-        public ICommand ChangeConduitCommand { get; private set; }
 
         public event Action<ISubScopeConnectionItem> PropagationPropertyChanged;
 
@@ -50,27 +65,6 @@ namespace TECUserControlLibrary.Models
                 subScope.Connection.PropertyChanged += Connection_PropertyChanged;
             }
             this.noneConduit = noneConduit;
-            ChangeConduitCommand = new RelayCommand(UpdateConduitExecute, CanUpdateConduit);
-        }
-
-        private bool CanUpdateConduit()
-        {
-            bool bothAreNone = (SelectedConduitType == noneConduit && SubScope.Connection.ConduitType == null);
-            bool areSame = bothAreNone || (SelectedConduitType == SubScope.Connection?.ConduitType);
-
-            return !areSame;
-        }
-
-        private void UpdateConduitExecute()
-        {
-            if (SelectedConduitType == noneConduit)
-            {
-                SubScope.Connection.ConduitType = null;
-            }
-            else
-            {
-                SubScope.Connection.ConduitType = SelectedConduitType;
-            }
         }
 
         private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
