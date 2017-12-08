@@ -30,11 +30,9 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label FontSize="10" Content="{Binding Type}"/>
-                            <Label FontSize="10" Content="Qty:" Grid.Column="1"/>
-                            <Label FontSize="10" Content="{Binding Quantity}" Grid.Column="2"/>
+                            <TextBlock FontSize="10" Text="{Binding Type}"/>
+                            <TextBlock FontSize="10" Text="{Binding Quantity, StringFormat=Qty: {0}}" Grid.Column="1"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

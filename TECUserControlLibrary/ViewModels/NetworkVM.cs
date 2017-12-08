@@ -213,14 +213,14 @@ namespace TECUserControlLibrary.ViewModels
             isConnecting = false;
             resetCollections(bid.Catalogs);
             addBid(bid);
-            resubscribe(cw);
+            resubscribe(cw, false);
         }
         public void Refresh(TECSystem system, TECCatalogs catalogs)
         {
             isConnecting = false;
             resetCollections(catalogs);
             addSystem(system);
-            resubscribe(new ChangeWatcher(system));
+            resubscribe(new ChangeWatcher(system), system.IsTypical);
         }
         private void setupCommands()
         {
@@ -232,9 +232,7 @@ namespace TECUserControlLibrary.ViewModels
             RemoveConnectableCommand = new RelayCommand(removeConnectableExecute, canRemoveConnectable);
             UpdateInstancesCommand = new RelayCommand(updateInstancesExecute, canUpdateInstances);
         }
-
-       
-
+        
         private void resetCollections(TECCatalogs catalogs)
         {
             connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
@@ -284,13 +282,25 @@ namespace TECUserControlLibrary.ViewModels
                 addConnectableItem(ss);
             }
         }
-        private void resubscribe(ChangeWatcher cw)
+        private void resubscribe(ChangeWatcher cw, bool isTypical)
         {
-            cw.InstanceChanged -= handleInstanceChanged;
-            cw.InstanceConstituentChanged -= handleInstanceConstituentChanged;
+            if (IsTypical)
+            {
+                cw.Changed -= handleChanged;
+                cw.TypicalConstituentChanged -= handleConstituentChanged;
 
-            cw.InstanceChanged += handleInstanceChanged;
-            cw.InstanceConstituentChanged += handleInstanceConstituentChanged;
+                cw.Changed += handleChanged;
+                cw.TypicalConstituentChanged += handleConstituentChanged;
+            }
+            else
+            {
+                cw.InstanceChanged -= handleChanged;
+                cw.InstanceConstituentChanged -= handleConstituentChanged;
+
+                cw.InstanceChanged += handleChanged;
+                cw.InstanceConstituentChanged += handleConstituentChanged;
+            }
+            
         }
 
         private void addConnectableItem(INetworkConnectable connectable)
@@ -351,7 +361,7 @@ namespace TECUserControlLibrary.ViewModels
             connectableDictionary.Remove(connectable);
         }
 
-        private void handleInstanceConstituentChanged(Change change, TECObject obj)
+        private void handleConstituentChanged(Change change, TECObject obj)
         {
             if (change == Change.Add)
             {
@@ -368,7 +378,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        private void handleInstanceChanged(TECChangedEventArgs e)
+        private void handleChanged(TECChangedEventArgs e)
         {
             if (e.Change == Change.Add)
             {
@@ -612,7 +622,7 @@ namespace TECUserControlLibrary.ViewModels
 
     public class ConnectableItem : INotifyPropertyChanged
     {
-        public INetworkConnectable Item { get; private set; }
+        public INetworkConnectable Item { get; }
         private bool _isConnected;
 
         public ConnectableItem(INetworkConnectable item, bool isConnected)
