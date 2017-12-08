@@ -291,6 +291,7 @@
                                     Source="{Binding ChildNetworkConnections}"
                                     SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedConnection}"
                                     Selected="NetworkConnectionListControl_Selected"
+                                                                            ConduitTypes="{Binding ElementName=networkView, Path=ViewModel.ConduitTypes}"
                                     Grid.Row="1"/>
 
                                 <!--Add to Connection-->
