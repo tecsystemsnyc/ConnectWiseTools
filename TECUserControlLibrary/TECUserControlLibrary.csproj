@@ -106,6 +106,7 @@
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
     <Compile Include="Models\CostBatchPropertiesItem.cs" />
     <Compile Include="Models\IOModulePropertiesItem.cs" />
+    <Compile Include="Models\NetworkConnectionVM.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
