@@ -41,17 +41,18 @@ namespace TECUserControlLibrary.ViewModels
         private TECTypical typical;
         #endregion
 
-        private bool isTypical = false;
+        public bool IsTypical { get; }
 
         //Constructor
         public NetworkVM(TECBid bid, ChangeWatcher cw)
         {
+            IsTypical = false;
             setupCommands();
             Refresh(bid, cw);
         }
         public NetworkVM(TECSystem system, TECCatalogs catalogs)
         {
-            isTypical = system.IsTypical;
+            IsTypical = system.IsTypical;
             typical = system is TECTypical ? system as TECTypical : null;
             setupCommands();
             Refresh(system, catalogs);
@@ -121,6 +122,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand SetParentAsSelectedCommand { get; private set; }
+        public ICommand UpdateInstancesCommand { get; private set; }
 
         //Add Connection Properties
         public ReadOnlyObservableCollection<TECConnectionType> AllConnectionTypes { get; private set; }
@@ -228,7 +230,11 @@ namespace TECUserControlLibrary.ViewModels
             AddConnectionCommand = new RelayCommand(addConnectionExecute, canAddConnection);
             DoneConnectionCommand = new RelayCommand(doneConnectionExecute);
             RemoveConnectableCommand = new RelayCommand(removeConnectableExecute, canRemoveConnectable);
+            UpdateInstancesCommand = new RelayCommand(updateInstancesExecute, canUpdateInstances);
         }
+
+       
+
         private void resetCollections(TECCatalogs catalogs)
         {
             connectableDictionary = new Dictionary<INetworkConnectable, ConnectableItem>();
@@ -366,7 +372,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (e.Change == Change.Add)
             {
-                if (e.Sender is TECNetworkConnection netConnection && netConnection.IsTypical == isTypical)
+                if (e.Sender is TECNetworkConnection netConnection && netConnection.IsTypical == IsTypical)
                 {
                     if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
                     {
@@ -378,7 +384,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (e.Change == Change.Remove)
             {
-                if (e.Sender is TECNetworkConnection netConnection && netConnection.IsTypical == isTypical)
+                if (e.Sender is TECNetworkConnection netConnection && netConnection.IsTypical == IsTypical)
                 {
                     if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
                     {
@@ -389,7 +395,7 @@ namespace TECUserControlLibrary.ViewModels
             else if (e.Change == Change.Edit)
             {
                 if (e.Sender is INetworkConnectable networkConnectable && 
-                    ((ITypicalable)networkConnectable)?.IsTypical == isTypical &&
+                    ((ITypicalable)networkConnectable)?.IsTypical == IsTypical &&
                     e.PropertyName == "IsServer" && e.Value is bool isServer)
                 {
                     updateIsConnected(networkConnectable, isServer);
@@ -496,6 +502,15 @@ namespace TECUserControlLibrary.ViewModels
         private bool canRemoveConnectable()
         {
             return (SelectedChildConnectable != null);
+        }
+
+        private void updateInstancesExecute()
+        {
+            updateInstances();
+        }
+        private bool canUpdateInstances()
+        {
+            return typical != null && typical.Instances.Count > 0;
         }
 
         private void handleSelectedConnectionChanged(TECNetworkConnection selected)

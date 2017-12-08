@@ -329,7 +329,7 @@ namespace EstimatingLibrary
                 {
                     throw new NotImplementedException();
                 }
-                ChildrenConnections.Remove(connectToRemove);
+                removeChildConnection(connectToRemove);
             }
         }
         public void RemoveAllChildSubScopeConnections()
@@ -351,7 +351,7 @@ namespace EstimatingLibrary
                 {
                     throw new NotImplementedException();
                 }
-                ChildrenConnections.Remove(connectToRemove);
+                removeChildConnection(connectToRemove);
             }
         }
         public void RemoveAllChildConnections()
