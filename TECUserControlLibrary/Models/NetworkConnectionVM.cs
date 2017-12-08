@@ -48,7 +48,7 @@ namespace TECUserControlLibrary.Models
 
             Connection = connection;
             Connection.PropertyChanged += handleConnectionChanged;
-            ConduitTypes = new List<TECElectricalMaterial>(conduitTypes);
+            ConduitTypes = conduitTypes != null ? new List<TECElectricalMaterial>(conduitTypes) : new List<TECElectricalMaterial>();
             ConduitTypes.Insert(0, noneConduit);
         }
 

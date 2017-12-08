@@ -16,10 +16,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="Border">
-                <Setter Property="BorderBrush" Value="Black"/>
-                <Setter Property="BorderThickness" Value="1"/>
-            </Style>
             <system:Boolean x:Key="True">
                 True
             </system:Boolean>
@@ -29,13 +25,13 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border>
+    <Border BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="5">
         <Border.Background>
             <MultiBinding Converter="{converters:BooleanChoiceConverter}">
                 <Binding ElementName="subScopeConnectionItemControl" Path="SubScopeConnectionItem.NeedsUpdate"/>
                 <Binding Source="{StaticResource AlertActionBrush}"/>
-                <Binding Source="{StaticResource SectionBackgroundBrush}"/>
-                <Binding Source="{StaticResource SectionBackgroundBrush}"/>
+                <Binding Source="{StaticResource ItemBackgroundBrush}"/>
+                <Binding Source="{StaticResource ItemBackgroundBrush}"/>
             </MultiBinding>
         </Border.Background>
         <Grid DataContext="{Binding ElementName=subScopeConnectionItemControl}">

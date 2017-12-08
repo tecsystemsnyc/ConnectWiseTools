@@ -28,7 +28,7 @@
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+                    <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
                         <Grid MouseUp="ItemControl_MouseUp">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -38,7 +38,7 @@
                                 <RowDefinition MaxHeight="20" Height="Auto"/>
                                 <RowDefinition Height="20"/>
                             </Grid.RowDefinitions>
-                            <TextBlock FontSize="14" Text="{Binding Item.Name}"/>
+                            <TextBlock FontSize="14" Text="{Binding Item.Name}" FontWeight="DemiBold"/>
                             <TextBlock Text="{Binding Item.Description}" Grid.Row="1"/>
                             <TextBlock Text="{Binding IsConnected, StringFormat= Connected to BMS: {0}}" Grid.Row="2"/>
                         </Grid>

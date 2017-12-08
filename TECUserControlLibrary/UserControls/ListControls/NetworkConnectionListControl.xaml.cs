@@ -40,7 +40,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
 
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (values.Length > 2)
+            if (values.Length >= 2)
             {
                 return new NetworkConnectionVM(values[0] as TECNetworkConnection, values[1] as IEnumerable<TECElectricalMaterial>);
             }
