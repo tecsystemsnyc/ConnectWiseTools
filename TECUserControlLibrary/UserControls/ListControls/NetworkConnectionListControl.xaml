@@ -1,17 +1,17 @@
-﻿<local:BaseListControl 
-    x:TypeArguments="models:TECNetworkConnection"
-    x:Class="TECUserControlLibrary.UserControls.ListControls.NetworkConnectionListControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
-    xmlns:items="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
-                       xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
-    xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+﻿<local:BaseListControl x:TypeArguments="models:TECNetworkConnection"
+                        x:Class="TECUserControlLibrary.UserControls.ListControls.NetworkConnectionListControl"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                    xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+            xmlns:items="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
+                            xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+            xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+                       xmlns:sys="clr-namespace:System.Collections;assembly=mscorlib"
                        x:Name="NetworkConnectionList"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+                    mc:Ignorable="d" 
+                    d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -31,7 +31,14 @@
                   SelectionChanged="ListView_Selected">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <items:NetworkConnectionItemControl NetworkConnection="{Binding Converter={local:NetworkConnectionToItemConverter}, ConverterParameter={Binding ConduitTypes, Source={StaticResource proxy}}}"/>
+                    <items:NetworkConnectionItemControl>
+                        <items:NetworkConnectionItemControl.NetworkConnection>
+                            <MultiBinding Converter="{local:NetworkConnectionToItemConverter}">
+                                <Binding/>
+                                <Binding Path="ConduitTypes" Source="{StaticResource proxy}"/>
+                            </MultiBinding>
+                        </items:NetworkConnectionItemControl.NetworkConnection>
+                    </items:NetworkConnectionItemControl>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

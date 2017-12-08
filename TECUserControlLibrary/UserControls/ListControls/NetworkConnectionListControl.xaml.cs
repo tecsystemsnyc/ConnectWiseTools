@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using TECUserControlLibrary.Models;
@@ -33,26 +34,25 @@ namespace TECUserControlLibrary.UserControls.ListControls
         }
     }
 
-    public class NetworkConnectionToItemConverter : BaseConverter, IValueConverter
+    public class NetworkConnectionToItemConverter : BaseConverter, IMultiValueConverter
     {
         #region IValueConverter Members
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null)
+            if (values.Length > 2)
             {
-                return new NetworkConnectionVM(value as TECNetworkConnection, parameter as IEnumerable<TECElectricalMaterial>);
+                return new NetworkConnectionVM(values[0] as TECNetworkConnection, values[1] as IEnumerable<TECElectricalMaterial>);
             }
             else
             {
                 return null;
             }
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
-
         }
         #endregion
     }
