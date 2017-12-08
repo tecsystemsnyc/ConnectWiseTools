@@ -34,7 +34,7 @@
                     <items:NetworkConnectionItemControl>
                         <items:NetworkConnectionItemControl.NetworkConnection>
                             <MultiBinding Converter="{local:NetworkConnectionToItemConverter}">
-                                <Binding/>
+                                <Binding Path="{Binding}"/>
                                 <Binding Path="ConduitTypes" Source="{StaticResource proxy}"/>
                             </MultiBinding>
                         </items:NetworkConnectionItemControl.NetworkConnection>
