@@ -1,5 +1,4 @@
 ﻿using EstimatingLibrary;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
@@ -52,15 +51,18 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 _selectedType = value;
                 RaisePropertyChanged("SelectedType");
+                if(value != null)
+                {
+                    ToAdd.Type = SelectedType;
+                }
             }
         }
 
         public List<TECControllerType> ControllerTypes { get; private set; }
-        public ICommand SetTypeCommand { get; private set; }
 
         public AddControllerVM(TECSystem parentSystem, IEnumerable<TECControllerType> controllerTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
-            setup(controllerTypes);
+            setup(controllerTypes, parentSystem.IsTypical);
             parent = parentSystem;
             isTypical = parent.IsTypical;
             add = controller =>
@@ -68,25 +70,23 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 parent.AddController(controller);
             };
             
-            toAdd = new TECController(noneControllerType, parentSystem.IsTypical);
         }
 
         public AddControllerVM(Action<TECController> addMethod, IEnumerable<TECControllerType> controllerTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
-            setup(controllerTypes);
+            setup(controllerTypes, false);
             add = addMethod;
-            toAdd = new TECController(noneControllerType, false);
         }
 
-        private void setup(IEnumerable<TECControllerType> controllerTypes)
+        private void setup(IEnumerable<TECControllerType> controllerTypes, bool isTypical)
         {
             Quantity = 1;
             noneControllerType = new TECControllerType(new TECManufacturer());
             noneControllerType.Name = "Select Controller Type";
+            toAdd = new TECController(noneControllerType, isTypical);
             ControllerTypes = new List<TECControllerType>(controllerTypes);
             ControllerTypes.Insert(0, noneControllerType);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
-            SetTypeCommand = new RelayCommand(setTypeExecute, canSetType);
             SelectedType = noneControllerType;
             //PropertiesVM = new PropertiesVM()
 
@@ -113,15 +113,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 add(controller);
                 Added?.Invoke(controller);
             }
-        }
-        private void setTypeExecute()
-        {
-            toAdd.Type = SelectedType;
-        }
-
-        private bool canSetType()
-        {
-            return toAdd.Type != SelectedType && SelectedType != null;
         }
     }
 }
