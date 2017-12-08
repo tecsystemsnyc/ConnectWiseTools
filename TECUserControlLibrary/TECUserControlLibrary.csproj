@@ -123,6 +123,9 @@
     <Compile Include="UserControls\ItemControls\MiscControl.xaml.cs">
       <DependentUpon>MiscControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ItemControls\NetworkConnectionItemControl.xaml.cs">
+      <DependentUpon>NetworkConnectionItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
       <DependentUpon>TypicalControl.xaml</DependentUpon>
     </Compile>
@@ -494,6 +497,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\MiscControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\NetworkConnectionItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
