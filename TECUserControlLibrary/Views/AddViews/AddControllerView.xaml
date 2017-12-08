@@ -8,6 +8,13 @@
              mc:Ignorable="d" 
                    x:Name="addControllerView"
              d:DesignHeight="300" d:DesignWidth="300">
+    <local:AddBaseView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Foreground" Value="Black"/>
+            </Style>
+        </ResourceDictionary>
+    </local:AddBaseView.Resources>
     <Grid DataContext="{Binding ElementName=addControllerView, Path=DataContext}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -24,12 +31,12 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Content="Controller: "/>
-            <Label Content="{Binding Name}" Grid.Column="1"/>
-            <Label Content="Quantity: " Grid.Row="1"/>
+            <TextBlock Text="Controller: "/>
+            <TextBlock Text="{Binding Name}" Grid.Column="1"/>
+            <TextBlock Text="Quantity: " Grid.Row="1"/>
             <TextBox Text="{Binding ElementName=addControllerView, Path=ViewModel.Quantity}" Grid.Row="1" Grid.Column="1"
                      Margin="2"/>
-            <Button Content="Set Type: " Grid.Row="2" Command="{Binding ElementName=addControllerView, Path=ViewModel.SetTypeCommand}"/>
+            <TextBlock Text="Type: " Grid.Row="2"/>
             <ComboBox ItemsSource="{Binding ElementName=addControllerView, Path=ViewModel.ControllerTypes}"
                       SelectedItem="{Binding ElementName=addControllerView, Path=ViewModel.SelectedType}"
                       DisplayMemberPath="Name" 
