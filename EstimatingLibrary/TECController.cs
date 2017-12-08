@@ -306,18 +306,42 @@ namespace EstimatingLibrary
 
         public void RemoveAllConnections()
         {
+            RemoveAllChildConnections();
+            if(ParentConnection != null)
+            {
+                ParentConnection.RemoveINetworkConnectable(this);
+            }
+        }
+        public void RemoveAllChildNetworkConnections()
+        {
             ObservableCollection<TECConnection> connectionsToRemove = new ObservableCollection<TECConnection>();
-            foreach(TECConnection connection in ChildrenConnections)
+            foreach (TECNetworkConnection connection in ChildrenConnections.Where(item => item is TECNetworkConnection))
             {
                 connectionsToRemove.Add(connection);
             }
-            foreach(TECConnection connectToRemove in connectionsToRemove)
+            foreach (TECNetworkConnection connectToRemove in connectionsToRemove)
             {
                 if (connectToRemove is TECNetworkConnection netConnect)
                 {
                     RemoveNetworkConnection(netConnect);
                 }
-                else if (connectToRemove is TECSubScopeConnection)
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                ChildrenConnections.Remove(connectToRemove);
+            }
+        }
+        public void RemoveAllChildSubScopeConnections()
+        {
+            ObservableCollection<TECConnection> connectionsToRemove = new ObservableCollection<TECConnection>();
+            foreach (TECSubScopeConnection connection in ChildrenConnections.Where(item => item is TECSubScopeConnection))
+            {
+                connectionsToRemove.Add(connection);
+            }
+            foreach (TECSubScopeConnection connectToRemove in connectionsToRemove)
+            {
+                if (connectToRemove is TECSubScopeConnection)
                 {
                     (connectToRemove as TECSubScopeConnection).SubScope.Connection = null;
                     (connectToRemove as TECSubScopeConnection).SubScope = null;
@@ -329,10 +353,11 @@ namespace EstimatingLibrary
                 }
                 ChildrenConnections.Remove(connectToRemove);
             }
-            if(ParentConnection != null)
-            {
-                ParentConnection.RemoveINetworkConnectable(this);
-            }
+        }
+        public void RemoveAllChildConnections()
+        {
+            RemoveAllChildNetworkConnections();
+            RemoveAllChildSubScopeConnections();
         }
 
         public TECController GetParentController()

@@ -38,6 +38,7 @@ namespace TECUserControlLibrary.ViewModels
         private INetworkConnectable _selectedChildConnectable;
 
         private string _cannotConnectMessage;
+        private TECTypical typical;
         #endregion
 
         private bool isTypical = false;
@@ -51,6 +52,7 @@ namespace TECUserControlLibrary.ViewModels
         public NetworkVM(TECSystem system, TECCatalogs catalogs)
         {
             isTypical = system.IsTypical;
+            typical = system is TECTypical ? system as TECTypical : null;
             setupCommands();
             Refresh(system, catalogs);
         }
@@ -534,6 +536,60 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 throw new DataMisalignedException("Data misalignment between DragOver and Drop.");
+            }
+        }
+
+        private void updateInstances()
+        {
+            if(typical != null)
+            {
+                foreach(TECController controller in typical.Controllers)
+                {
+                    foreach(TECController instance in typical.TypicalInstanceDictionary.GetInstances(controller))
+                    {
+                        instance.RemoveAllChildNetworkConnections();
+                        foreach(TECNetworkConnection connection in controller.ChildNetworkConnections)
+                        {
+                            TECNetworkConnection instanceConnection = instance.AddNetworkConnection(false, connection.ConnectionTypes, connection.IOType);
+                            instanceConnection.Length = connection.Length;
+                            instanceConnection.ConduitType = connection.ConduitType;
+                            instanceConnection.ConduitLength = connection.ConduitLength;
+                            foreach(INetworkConnectable child in connection.Children)
+                            {
+                                if(child is TECController childController)
+                                {
+                                    foreach(TECController instanceChild in typical.TypicalInstanceDictionary.GetInstances(childController))
+                                    {
+                                        foreach(TECSystem system in typical.Instances)
+                                        {
+                                            if (system.Controllers.Contains(instanceChild))
+                                            {
+                                                instanceConnection.AddINetworkConnectable(instanceChild);
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (child is TECSubScope childSubScope)
+                                {
+                                    foreach (TECSubScope instanceChild in typical.TypicalInstanceDictionary.GetInstances(childSubScope))
+                                    {
+                                        foreach (TECSystem system in typical.Instances)
+                                        {
+                                            if (system.GetAllSubScope().Contains(instanceChild))
+                                            {
+                                                instanceConnection.AddINetworkConnectable(instanceChild);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+            else
+            {
+                throw new Exception("No Typical System");
             }
         }
         #endregion
