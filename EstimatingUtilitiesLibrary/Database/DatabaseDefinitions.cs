@@ -2247,8 +2247,8 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type ValveType = typeof(TECValve);
         public static Type ActuatorType = typeof(TECDevice);
 
-        public static TableField ValveID = new TableField("SystemID", "TEXT", ValveType.GetProperty("Guid"));
-        public static TableField ActuatorID = new TableField("MIscID", "TEXT", ActuatorType.GetProperty("Guid"));
+        public static TableField ValveID = new TableField("ValveID", "TEXT", ValveType.GetProperty("Guid"));
+        public static TableField ActuatorID = new TableField("ActuatorID", "TEXT", ActuatorType.GetProperty("Guid"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ValveID,
@@ -2586,6 +2586,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
+            new ValveActuatorTable()
             };
     }
 
@@ -2645,6 +2646,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
             new ScopeBranchHierarchyTable(),
+            new ValveActuatorTable(),
             new TemplatesSystemTable(),
             new TemplatesEquipmentTable(),
             new TemplatesSubScopeTable(),
@@ -2720,6 +2722,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
             new BidMiscTable(),
+            new ValveActuatorTable(),
             new TemplatesSystemTable(),
             new TemplatesEquipmentTable(),
             new TemplatesSubScopeTable(),

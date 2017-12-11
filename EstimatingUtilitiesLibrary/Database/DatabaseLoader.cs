@@ -852,7 +852,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private TECDevice getPlaceholderActuator(Guid valveID)
         {
             string command = String.Format("select {0} from {1} where {2} = '{3}'",
-                ValveActuatorTable.ActuatorID.Name, ValveActuatorTable.TableName, ValveActuatorTable.ValveID, valveID);
+                ValveActuatorTable.ActuatorID.Name, ValveActuatorTable.TableName, ValveActuatorTable.ValveID.Name, valveID);
 
             DataTable dt = SQLiteDB.GetDataFromCommand(command);
             if (dt.Rows.Count > 0)
