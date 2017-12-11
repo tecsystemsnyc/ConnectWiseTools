@@ -4,13 +4,6 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class StatusBarVM : ViewModelBase
     {
-        private const string BUG_REPORT_URL = "https://goo.gl/forms/FvbdNI8gMHmmKcvn2";
-
-        public string BugReportURL
-        {
-            get { return BUG_REPORT_URL; }
-        }
-
         private string _currentStatusText;
         public string CurrentStatusText
         {

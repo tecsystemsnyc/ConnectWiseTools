@@ -22,7 +22,6 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="70"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
@@ -37,15 +36,6 @@
             <StatusBarItem Grid.Column="2"
                                HorizontalAlignment="Right">
                 <TextBlock Text="{Binding VersionString}"/>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="3"
-                           HorizontalAlignment="Center">
-                <TextBlock>
-                    <Hyperlink NavigateUri="{Binding BugReportURL, Mode=OneWay}"
-                               RequestNavigate="Hyperlink_RequestNavigate">
-                        Report Bug
-                    </Hyperlink>
-                </TextBlock>
             </StatusBarItem>
         </StatusBar>
     </Grid>

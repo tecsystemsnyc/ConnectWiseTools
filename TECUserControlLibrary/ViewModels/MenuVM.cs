@@ -20,14 +20,6 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Properties
         public ReadOnlyObservableCollection<TECMenuItem> Menu { get { return new ReadOnlyObservableCollection<TECMenuItem>(_menu); } }
-
-        public RelayCommand NewCommand { get; private set; }
-        public RelayCommand LoadCommand { get; private set; }
-        public RelayCommand SaveCommand { get; private set; }
-        public RelayCommand SaveAsCommand { get; private set; }
-        public RelayCommand UndoCommand { get; private set; }
-        public RelayCommand RedoCommand { get; private set; }
-        public RelayCommand HelpCommand { get; private set; }
         #endregion
 
         public MenuVM()
@@ -41,33 +33,33 @@ namespace TECUserControlLibrary.ViewModels
         #region Methods
         public void SetNewCommand(Action execute, Func<bool> canExecute = null)
         {
-            NewCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("New", NewCommand);
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("New", command);
         }
         public void SetLoadCommand(Action execute, Func<bool> canExecute = null)
         {
-            LoadCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Load", LoadCommand);
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Load", command);
         }
         public void SetSaveDeltaCommand(Action execute, Func<bool> canExecute = null)
         {
-            SaveCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Save", SaveCommand);
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save", command);
         }
         public void SetSaveNewCommand(Action execute, Func<bool> canExecute = null)
         {
-            SaveAsCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Save As", SaveAsCommand);
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save As", command);
         }
         public void SetUndoCommand(Action execute, Func<bool> canExecute = null)
         {
-            UndoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Undo", UndoCommand);
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Undo", command);
         }
         public void SetRedoCommand(Action execute, Func<bool> canExecute = null)
         {
-            RedoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Redo", RedoCommand);
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Redo", command);
         }
         public void SetRefreshTemplatesCommand(Action execute, Func<bool> canExecute = null)
         {
@@ -78,6 +70,11 @@ namespace TECUserControlLibrary.ViewModels
         {
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
             setCommand("Wiki", command);
+        }
+        public void SetReportBugCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Report Bug", command);
         }
 
         protected TECMenuItem addMenuItem(string newItemName, string disabledText = null, string parentItemName = null)
@@ -158,6 +155,7 @@ namespace TECUserControlLibrary.ViewModels
 
             //Help menu items
             addMenuItem("Wiki", parentItemName: "Help");
+            addMenuItem("Report Bug", parentItemName: "Help");
         }
         #endregion
     }
