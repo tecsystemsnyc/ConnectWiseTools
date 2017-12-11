@@ -337,7 +337,7 @@ namespace EstimatingLibrary
                 }
                 else
                 {
-                    throw new Exception("This ocntains an unsupported end device.");
+                    throw new Exception("This contains an unsupported end device.");
                 }
             }
             return costs;
