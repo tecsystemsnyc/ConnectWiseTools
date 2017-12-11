@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DisplayReferenceProperty");
             }
         }
+        public RelayCommand<TECConnectionType> DeleteConnectionTypeCommand { get; private set; }
 
         private string getTemplateText(TECObject item)
         {
@@ -116,7 +118,18 @@ namespace TECUserControlLibrary.ViewModels
         {
             IsTemplates = scopeManager is TECTemplates;
             TemplateText = "Instance Template";
+            DeleteConnectionTypeCommand = new RelayCommand<TECConnectionType>(deleteConnectionTypeExecute, canDeleteConnectionType);
             Refresh(catalogs, scopeManager);
+        }
+
+        private void deleteConnectionTypeExecute(TECConnectionType obj)
+        {
+            (Selected as TECDevice).ConnectionTypes.Remove(obj);
+        }
+
+        private bool canDeleteConnectionType(TECConnectionType arg)
+        {
+            return Selected is TECDevice;
         }
 
         public void Refresh(TECCatalogs catalogs, TECScopeManager scopeManager)

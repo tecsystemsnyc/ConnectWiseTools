@@ -13,10 +13,25 @@
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Actuator.Name, StringFormat=Actuator: {0}}" TextTrimming="CharacterEllipsis" Grid.Row="0"/>
-        <TextBlock Text="{Binding Cv, StringFormat=Cv: {0}}" Grid.Row="1"/>
-        <TextBlock Text="{Binding Size, StringFormat=Size: {0} inches}" Grid.Row="2"/>
-        <TextBlock Text="{Binding Style, StringFormat=Style: {0}}" Grid.Row="3"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding Actuator.Name, StringFormat=Actuator: {0}}" TextTrimming="CharacterEllipsis" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <TextBlock Text="{Binding Actuator.Cost, StringFormat=Actuator Cost: {0:C}}" TextTrimming="CharacterEllipsis" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <TextBlock Text="Cv: " Grid.Row="2"/>
+        <TextBox Text="{Binding Cv}" Grid.Row="2" Grid.Column="1" Margin="2"
+                 IsReadOnly="{Binding ElementName=valvePropertiesControl, Path=ReadOnly}"/>
+
+        <TextBlock Text="Size: " Grid.Row="3"/>
+        <TextBox Text="{Binding Size, StringFormat={}{0} inches}" Grid.Row="3" Grid.Column="1" Margin="2"
+                 IsReadOnly="{Binding ElementName=valvePropertiesControl, Path=ReadOnly}"/>
+
+        <TextBlock Text="Style: " Grid.Row="4"/>
+        <TextBox Text="{Binding Style}" Grid.Row="4" Grid.Column="1" Margin="2"
+                 IsReadOnly="{Binding ElementName=valvePropertiesControl, Path=ReadOnly}"/>
+
     </Grid>
 </UserControl>

@@ -10,7 +10,14 @@
              d:DesignHeight="120" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=endDevicePropertiesControl, Path=Selected}">
         <Expander Header="Connection Types">
-            <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}" Height="60"/>
+            <Border BorderBrush="DarkGray" BorderThickness="1">
+                
+                <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}" Height="60"
+                                                            IsDragSource="False"
+                                                            DropHandler="{Binding ElementName=endDevicePropertiesControl, Path=DropHandler}"
+                                                        DeleteCommand="{Binding ElementName=endDevicePropertiesControl, Path=DeleteCommand}"/>
+            </Border>
+
         </Expander>   
     </Grid>
 </UserControl>

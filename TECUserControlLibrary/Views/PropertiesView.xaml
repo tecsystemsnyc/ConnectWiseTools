@@ -81,10 +81,14 @@
                     <pControls:ConnectionTypePropertiesControl Selected="{Binding}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="endDevice">
-                    <pControls:EndDevicePropertiesControl Selected="{Binding}"/>
+                    <pControls:EndDevicePropertiesControl Selected="{Binding}"
+                                                          DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"
+                                                          ReadOnly="{Binding ElementName=propertiesView, Path=ViewModel.ReadOnly}"
+                                                          DeleteCommand="{Binding ElementName=propertiesView, Path=ViewModel.DeleteConnectionTypeCommand}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="valve">
-                    <pControls:ValvePropertiesControl Selected="{Binding}"/>
+                    <pControls:ValvePropertiesControl Selected="{Binding}"
+                                                      ReadOnly="{Binding ElementName=propertiesView, Path=ViewModel.ReadOnly}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="default"/>
                 <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
