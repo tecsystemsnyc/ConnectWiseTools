@@ -68,6 +68,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public ICommand AddPointCommand { get; private set; }
         public RelayCommand<IEndDevice> DeleteDeviceCommand { get; private set; }
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
+        public bool DisplayReferenceProperty { get; }
 
         public AddSubScopeVM(TECEquipment parentEquipment, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -80,6 +81,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
             };
             setup();
+            DisplayReferenceProperty = IsTemplates;
         }
 
         public AddSubScopeVM(Action<TECSubScope> addMethod, TECScopeManager scopeManager): base(scopeManager)
@@ -87,6 +89,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             add = addMethod;
             toAdd = new TECSubScope(false);
             setup();
+            PropertiesVM.DisplayReferenceProperty = false;
+            DisplayReferenceProperty = false;
         }
         private void setup()
         {

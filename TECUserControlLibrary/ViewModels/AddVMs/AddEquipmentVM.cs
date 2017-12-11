@@ -34,7 +34,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Quantity");
             }
         }
-        
+        public bool DisplayReferenceProperty { get; }
+
         public AddEquipmentVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSystem;
@@ -46,6 +47,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             };
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
+            DisplayReferenceProperty = IsTemplates;
         }
         public AddEquipmentVM(Action<TECEquipment> addMethod, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -53,8 +55,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             add = addMethod;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
+            PropertiesVM.DisplayReferenceProperty = false;
+            DisplayReferenceProperty = false;
         }
-        
+
         private bool addCanExecute()
         {
             return true;
