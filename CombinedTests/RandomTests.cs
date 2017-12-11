@@ -2,6 +2,7 @@
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 
 namespace Tests
@@ -63,20 +64,21 @@ namespace Tests
         [TestMethod]
         public void AddSubScopeToLoadedSystem()
         {
-            TECBid bid = TestHelper.CreateTestBid();
+            throw new Exception();
+            //TECBid bid = TestHelper.CreateTestBid();
 
-            var path = Path.GetTempFileName();
+            //var path = Path.GetTempFileName();
 
-            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
-            manager.New(bid);
-            bid = manager.Load() as TECBid;
-            var watcher = new ChangeWatcher(bid);
+            //DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
+            //manager.New(bid);
+            //bid = manager.Load() as TECBid;
+            //var watcher = new ChangeWatcher(bid);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
-            bid.Systems[0].Equipment[0].SubScope.Add(new TECSubScope(true));
-            manager.Save(stack.CleansedStack());
+            //DeltaStacker stack = new DeltaStacker(watcher);
+            //bid.Systems[0].Equipment[0].SubScope.Add(new TECSubScope(true));
+            //manager.Save(stack.CleansedStack());
 
-            bid = manager.Load() as TECBid;
+            //bid = manager.Load() as TECBid;
         }
     }
 }
