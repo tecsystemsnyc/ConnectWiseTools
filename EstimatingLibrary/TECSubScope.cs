@@ -158,6 +158,7 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            raisePropertyChanged("PointNumber");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 int pointNumber = 0;

@@ -713,6 +713,7 @@
                   SelectedIndex="0"
                   Margin="5"
                   Grid.Row="0"
+                  FontSize="16"
                   VerticalContentAlignment="Center"/>
         <ContentPresenter Content="{Binding ElementName=MaterialComboBox, Path=SelectedValue}"
                           ContentTemplateSelector="{StaticResource materialTypeSelector}"
