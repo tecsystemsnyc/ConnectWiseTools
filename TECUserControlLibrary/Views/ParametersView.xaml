@@ -70,19 +70,19 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="TEC: "/>
                                 <TextBlock Text="Tax Rate: " Grid.Column="1"/>
-                                <TextBox Text="{Binding Tax}" Grid.Column="2"/>
+                                <TextBox Text="{Binding Tax, StringFormat={}{0}%}" Grid.Column="2"/>
                                 <TextBlock Text="Escalation: " Grid.Column="3"/>
-                                <TextBox Text="{Binding Escalation}" Grid.Column="4"/>
+                                <TextBox Text="{Binding Escalation, StringFormat={}{0}%}" Grid.Column="4"/>
                                 <TextBlock Text="Overhead: " Grid.Column="5"/>
-                                <TextBox Text="{Binding Overhead}" Grid.Column="6"/>
+                                <TextBox Text="{Binding Overhead, StringFormat={}{0}%}" Grid.Column="6"/>
                                 <TextBlock Text="Profit: " Grid.Column="7"/>
-                                <TextBox Text="{Binding Profit}" Grid.Column="8"/>
+                                <TextBox Text="{Binding Profit, StringFormat={}{0}%}" Grid.Column="8"/>
                                 <TextBlock Text="Warranty: " Grid.Column="9" />
-                                <TextBox Text="{Binding Warranty}" Grid.Column="10" />
+                                <TextBox Text="{Binding Warranty, StringFormat={}{0}%}" Grid.Column="10" />
                                 <TextBlock Text="Shipping: " Grid.Column="11"/>
-                                <TextBox Text="{Binding Shipping}" Grid.Column="12" />
+                                <TextBox Text="{Binding Shipping, StringFormat={}{0}%}" Grid.Column="12" />
                                 <TextBlock Text="Bond Rate: " Grid.Column="13"/>
-                                <TextBox Text="{Binding BondRate}" Grid.Column="14" />
+                                <TextBox Text="{Binding BondRate, StringFormat={}{0}%}" Grid.Column="14" />
                             </Grid>
                             
                             <!--Overall Subcontractor-->
@@ -100,13 +100,13 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Subcontractor: "/>
                                 <TextBlock Text="Escalation: " Grid.Column="1"/>
-                                <TextBox Text="{Binding SubcontractorEscalation}" Grid.Column="2"/>
+                                <TextBox Text="{Binding SubcontractorEscalation, StringFormat={}{0}%}" Grid.Column="2"/>
                                 <TextBlock Text="Markup: " Grid.Column="3"/>
-                                <TextBox Text="{Binding SubcontractorMarkup}" Grid.Column="4"/>
+                                <TextBox Text="{Binding SubcontractorMarkup, StringFormat={}{0}%}" Grid.Column="4"/>
                                 <TextBlock Text="Warranty: " Grid.Column="5"/>
-                                <TextBox Text="{Binding SubcontractorWarranty}" Grid.Column="6"/>
+                                <TextBox Text="{Binding SubcontractorWarranty, StringFormat={}{0}%}" Grid.Column="6"/>
                                 <TextBlock Text="Shipping: " Grid.Column="7"/>
-                                <TextBox Text="{Binding SubcontractorShipping}" Grid.Column="8"/>
+                                <TextBox Text="{Binding SubcontractorShipping, StringFormat={}{0}%}" Grid.Column="8"/>
                             </Grid>
                             
                             <!--TEC Labor-->
@@ -224,9 +224,9 @@
                                     <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="130"/>
                                     <ColumnDefinition Width="50"/>
@@ -236,7 +236,7 @@
                                 <TextBlock Text="Electrical Labor: "/>
                                 <TextBlock Text="Rate: " Grid.Column="1"/>
                                 <TextBox Text="{Binding ElectricalRate, StringFormat={}{0:C}}" Grid.Column="2"/>
-                                <TextBlock Text="Supervisor Rate: " Grid.Column="3"/>
+                                <TextBlock Text="Super. Rate: " Grid.Column="3"/>
                                 <TextBox Text="{Binding ElectricalSuperRate, StringFormat={}{0:C}}" Grid.Column="4"/>
                                 <TextBlock Text="Non-Union Rate: " Grid.Column="5"/>
                                 <TextBox Text="{Binding ElectricalNonUnionRate, StringFormat={}{0:C}}"  Grid.Column="6"/>
