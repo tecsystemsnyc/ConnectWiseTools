@@ -22,7 +22,8 @@ namespace TECUserControlLibrary.BaseVMs
 {
     abstract public class AppManager<T>  : ViewModelBase where T : TECScopeManager
     {
-        private const string WIKI_LINK = "https://github.com/tecsystemsnyc/EstimatingTools/wiki";
+        private const string WIKI_URL = "https://github.com/tecsystemsnyc/EstimatingTools/wiki";
+        private const string BUG_REPORT_URL = "https://goo.gl/forms/FvbdNI8gMHmmKcvn2";
 
         static private Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -123,6 +124,7 @@ namespace TECUserControlLibrary.BaseVMs
             MenuVM.SetSaveDeltaCommand(saveDeltaExecute, canSaveDelta);
             MenuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
             MenuVM.SetWikiCommand(wikiExecute);
+            MenuVM.SetReportBugCommand(reportBugExecute);
         }
         //New
         private void newExecute()
@@ -290,10 +292,15 @@ namespace TECUserControlLibrary.BaseVMs
         {
             return doStack.RedoCount() > 0;
         }
-        //Help
+        //Wiki
         private void wikiExecute()
         {
-            System.Diagnostics.Process.Start(WIKI_LINK);
+            System.Diagnostics.Process.Start(WIKI_URL);
+        }
+        //Report Bug
+        private void reportBugExecute()
+        {
+            System.Diagnostics.Process.Start(BUG_REPORT_URL);
         }
         #endregion
 
