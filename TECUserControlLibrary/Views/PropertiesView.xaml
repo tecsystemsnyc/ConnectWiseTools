@@ -79,6 +79,9 @@
                 <DataTemplate x:Key="connectionType">
                     <pControls:ConnectionTypePropertiesControl Selected="{Binding}"/>
                 </DataTemplate>
+                <DataTemplate x:Key="endDevice">
+                    <pControls:EndDevicePropertiesControl Selected="{Binding}"/>
+                </DataTemplate>
                 <DataTemplate x:Key="default"/>
                 <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -125,6 +128,9 @@
                 <utilities:ConnectionTypeSelector x:Key="connectionTypeSelector"
                                                   InterfaceTemplate="{StaticResource connectionType}"
                                                   DefaultTemplate="{StaticResource default}"/>
+                <utilities:EndDeviceSelector x:Key="endDeviceSelector"
+                                             InterfaceTemplate="{StaticResource endDevice}"
+                                             DefaultTemplate="{StaticResource default}"/>
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
@@ -135,6 +141,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource endDeviceSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LocatedSelector}"/>

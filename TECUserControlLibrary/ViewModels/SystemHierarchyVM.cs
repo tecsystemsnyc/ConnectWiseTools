@@ -441,6 +441,10 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
                 ((AddPointVM)SelectedVM).ToAdd = point;
             }
+            else if (dropped is IEndDevice)
+            {
+                UIHelpers.StandardDrop(dropInfo, scopeManager);
+            }
             else if (dropped is TECMisc || dropped is TECCost)
             {
                 TECMisc misc = dropped as TECMisc;
@@ -454,10 +458,7 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddSystemVM(scopeManager as TECBid);
                 ((AddSystemVM)SelectedVM).ToAdd = system;
             }
-            else if (dropped is IEndDevice)
-            {
-                UIHelpers.StandardDrop(dropInfo, scopeManager);
-            }
+            
         }
 
         protected void NotifySelected(TECObject item)

@@ -212,6 +212,9 @@
     <Compile Include="UserControls\PropertyControls\ElectricalMaterialPropertiesControl.xaml.cs">
       <DependentUpon>ElectricalMaterialPropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\EndDevicePropertiesControl.xaml.cs">
+      <DependentUpon>EndDevicePropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
     </Compile>
@@ -602,6 +605,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\ElectricalMaterialPropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\EndDevicePropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
