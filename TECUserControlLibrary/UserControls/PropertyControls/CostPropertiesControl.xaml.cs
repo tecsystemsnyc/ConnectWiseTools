@@ -20,6 +20,17 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
             DependencyProperty.Register("Selected", typeof(TECCost),
               typeof(CostPropertiesControl));
 
+        public bool ReadOnly
+        {
+            get { return (bool)GetValue(ReadOnlyProperty); }
+            set { SetValue(ReadOnlyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ReadOnly.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReadOnlyProperty =
+            DependencyProperty.Register("ReadOnly", typeof(bool), typeof(CostPropertiesControl), new PropertyMetadata(false));
+
+
         public CostPropertiesControl()
         {
             InitializeComponent();

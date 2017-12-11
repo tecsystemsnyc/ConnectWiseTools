@@ -9,6 +9,7 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
     /// </summary>
     public partial class HardwarePropertiesControl : UserControl
     {
+        
         public TECHardware Selected
         {
             get { return (TECHardware)GetValue(SelectedProperty); }

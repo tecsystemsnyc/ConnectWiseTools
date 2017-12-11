@@ -35,6 +35,7 @@ namespace TECUserControlLibrary.Utilities
     public class ConnectionSelector : InterfaceDataTemplateSelector<TECConnection> { }
     public class ElectricalMaterialSelector : InterfaceDataTemplateSelector<TECElectricalMaterial> { }
     public class ConnectionTypeSelector : InterfaceDataTemplateSelector<TECConnectionType> { }
+    public class ValveSelector : InterfaceDataTemplateSelector<TECValve> { }
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }

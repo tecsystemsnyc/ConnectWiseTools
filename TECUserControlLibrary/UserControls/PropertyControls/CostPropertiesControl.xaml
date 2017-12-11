@@ -50,22 +50,14 @@
                         <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
-                        <TextBox Text="{Binding Cost, StringFormat={}{0:C}}" />
                     </DataTemplate>
                 </ContentPresenter.Resources>
             </ContentPresenter>
 
-            <ContentPresenter Content="{Binding}" Grid.Column="1"
-                           Grid.Row="1" VerticalAlignment="Center" >
-                <ContentPresenter.Resources>
-                    <DataTemplate DataType="{x:Type models:TECHardware}">
-                        <TextBlock Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type models:TECCost}">
-                        <TextBox Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}"/>
-                    </DataTemplate>
-                </ContentPresenter.Resources>
-            </ContentPresenter>
+            <TextBox Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}" 
+                                   IsReadOnly="{Binding ElementName=parent, Path=ReadOnly}"
+                                   Grid.Row="1" Grid.Column="1"
+                     Margin="2"/>
 
             <ContentPresenter Content="{Binding}" Grid.Column="1"
                            Grid.Row="2" VerticalAlignment="Center" >
