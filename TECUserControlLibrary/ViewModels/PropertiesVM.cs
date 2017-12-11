@@ -18,6 +18,7 @@ namespace TECUserControlLibrary.ViewModels
         private bool _readOnly;
         private TECObject _selected;
         private string _templateText;
+        private bool _displayReferenceProperty = false;
 
         public TECCatalogs Catalogs
         {
@@ -48,8 +49,18 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Selected");
                 if (IsTemplates)
                 {
+                    DisplayReferenceProperty = value is TECEquipment || value is TECSubScope ? true : false;
                     TemplateText = getTemplateText(value);
                 }
+            }
+        }
+        public bool DisplayReferenceProperty
+        {
+            get { return _displayReferenceProperty; }
+            set
+            {
+                _displayReferenceProperty = value;
+                RaisePropertyChanged("DisplayReferenceProperty");
             }
         }
 
