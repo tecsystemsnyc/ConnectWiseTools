@@ -820,7 +820,7 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable moduleTable = getChildObjects(new IOModuleIOTable(), new IOTable(), moduleID);
             ObservableCollection<TECIO> outIO = new ObservableCollection<TECIO>();
             foreach(DataRow row in moduleTable.Rows)
-            { outIO.Add(getIOFromRow(moduleTable.Rows[0])); }
+            { outIO.Add(getIOFromRow(row)); }
             return outIO;
         }
 
