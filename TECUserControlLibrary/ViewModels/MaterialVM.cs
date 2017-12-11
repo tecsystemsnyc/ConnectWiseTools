@@ -380,6 +380,36 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ValveLabor");
             }
         }
+        private double _valveCv;
+        public double ValveCv
+        {
+            get { return _valveCv; }
+            set
+            {
+                _valveCv = value;
+                RaisePropertyChanged("ValveCv");
+            }
+        }
+        private double _valveSize;
+        public double ValveSize
+        {
+            get { return _valveSize; }
+            set
+            {
+                _valveSize = value;
+                RaisePropertyChanged("ValveSize");
+            }
+        }
+        private string _valveStyle;
+        public string ValveStyle
+        {
+            get { return _valveStyle; }
+            set
+            {
+                _valveStyle = value;
+                RaisePropertyChanged("ValveStyle");
+            }
+        }
         private TECManufacturer _valveManufacturer;
         public TECManufacturer ValveManufacturer
         {
@@ -795,12 +825,18 @@ namespace TECUserControlLibrary.ViewModels
             toAdd.Description = ValveDescription;
             toAdd.Price = ValveListPrice;
             toAdd.Labor = ValveLabor;
+            toAdd.Style = ValveStyle;
+            toAdd.Cv = ValveCv;
+            toAdd.Size = ValveSize;
             Templates.Catalogs.Valves.Add(toAdd);
 
             ValveName = "";
             ValveDescription = "";
             ValveListPrice = 0;
             ValveLabor = 0;
+            ValveCv = 0.0;
+            ValveStyle = "";
+            ValveSize = 0.0;
             ValveActuator = null;
             ValveManufacturer = null;
         }
@@ -919,6 +955,9 @@ namespace TECUserControlLibrary.ViewModels
             ValveName = "";
             ValveDescription = "";
             ValveListPrice = 0;
+            ValveCv = 0.0;
+            ValveStyle = "";
+            ValveSize = 0.0;
 
             ManufacturerToAdd = new TECManufacturer();
 

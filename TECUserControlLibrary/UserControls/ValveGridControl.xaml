@@ -15,8 +15,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=hardwareGridControl}">
-        <DataGrid ItemsSource="{Binding HardwareSource}"
+    <Grid DataContext="{Binding ElementName=valveGridControl}">
+        <DataGrid ItemsSource="{Binding Source}"
                   AutoGenerateColumns="False"
                   SelectedItem="{Binding Selected}"
                   x:Name="valveGrid"
@@ -33,6 +33,9 @@
                                     Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
                 <DataGridTextColumn Binding="{Binding Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
+                <DataGridTextColumn Binding="{Binding Cv}" Header="Cv" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Size}" Header="Size" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Style}" Header="Style" Width="Auto" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Actuator.Name}" Header="Actuator" Width="Auto" IsReadOnly="True" MinWidth="80"/>
             </DataGrid.Columns>
         </DataGrid>
