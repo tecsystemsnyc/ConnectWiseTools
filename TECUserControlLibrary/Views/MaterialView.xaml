@@ -172,7 +172,7 @@
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
                                 Content="Add" Margin="2"
                                 Command="{Binding AddValveCommand}"/>
-                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.Valves}"
+                        <controls:ValveGridControl Source="{Binding Templates.Catalogs.Valves}"
                                                  DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
                                                      Selected="{Binding Selected}"
                                                  Grid.Row="3"/>

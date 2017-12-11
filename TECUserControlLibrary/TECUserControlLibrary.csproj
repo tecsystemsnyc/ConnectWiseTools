@@ -218,6 +218,9 @@
     <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ValveGridControl.xaml.cs">
+      <DependentUpon>ValveGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
@@ -613,6 +616,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ValveGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

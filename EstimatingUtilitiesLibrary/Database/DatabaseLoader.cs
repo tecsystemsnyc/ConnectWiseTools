@@ -122,6 +122,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             TECCatalogs catalogs = new TECCatalogs();
             catalogs.Devices = getAllDevices();
+            catalogs.Valves = getValves();
             catalogs.Manufacturers = getAllManufacturers();
             catalogs.ConnectionTypes = getConnectionTypes();
             catalogs.ConduitTypes = getConduitTypes();
