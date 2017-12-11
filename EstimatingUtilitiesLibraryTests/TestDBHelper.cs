@@ -47,7 +47,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToBidScopeBranchTable();
             addToBidMiscTable();
             addToHardwareManufacturerTable();
-            addToIOIOModuleTable();
+            addToIOModuleIOTable();
             addToControllerConnectionTable();
             addToScopeBranchHierarchyTable();
             addToBidSystemTable();
@@ -73,8 +73,11 @@ namespace EstimatingUtilitiesLibraryTests
             addToSystemMiscTable();
             addToCharacteristicScopeInstanceScopeTable();
             addToControllerTypeIOTable();
+            addToControllerTypeIOModuleTable();
             addToControllerControllerTypeTable();
-            
+            addToControllerIOModuleTable();
+
+
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }
@@ -108,7 +111,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToParametersTable();
 
             addToHardwareManufacturerTable();
-            addToIOIOModuleTable();
+            addToIOModuleIOTable();
             addToControllerConnectionTable();
             addToSystemEquipmentTable();
             addToEquipmentSubScopeTable();
@@ -130,7 +133,9 @@ namespace EstimatingUtilitiesLibraryTests
             addToScopeBranchHierarchyTable();
             addToDeviceConnectionTypeTable();
             addToControllerTypeIOTable();
+            addToControllerTypeIOModuleTable();
             addToControllerControllerTypeTable();
+            addToControllerIOModuleTable();
 
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
@@ -613,7 +618,19 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("BACnetIP");
             values.Add("2");
             addDataToTable(new IOTable(), values);
-            
+
+            values = new List<string>();
+            values.Add("fbae3851-3320-4e94-a674-ddec86bc4964");
+            values.Add("AI");
+            values.Add("4");
+            addDataToTable(new IOTable(), values);
+
+            values = new List<string>();
+            values.Add("434bc312-f933-40c8-b8bd-f4e22f19f606");
+            values.Add("DI");
+            values.Add("5");
+            addDataToTable(new IOTable(), values);
+
         }
         private static void addToControllerTypeTable()
         {
@@ -643,7 +660,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
             addDataToTable(new BidMiscTable(), values);
         }
-        private static void addToIOIOModuleTable()
+        private static void addToIOModuleIOTable()
         {
             List<string> values = new List<string>();
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1440,6 +1457,14 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
             addDataToTable(new ControllerTypeIOTable(), values);
         }
+        private static void addToControllerTypeIOModuleTable()
+        {
+            var values = new List<string>();
+            values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("10");
+            addDataToTable(new ControllerTypeIOModuleTable(), values);
+        }
         private static void addToControllerControllerTypeTable()
         {
             List<string> values = new List<string>();
@@ -1481,6 +1506,56 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
             addDataToTable(new ControllerControllerTypeTable(), values);
+        }
+        private static void addToControllerIOModuleTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
+
+            values = new List<string>();
+            values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
+            values.Add("2");
+            addDataToTable(new ControllerIOModuleTable(), values);
         }
         #endregion
     }

@@ -1580,7 +1580,7 @@ namespace Tests
             string expectedName = "Test IO Module";
             string expectedDescription = "Test IO Module Description";
             double expectedCost = 2233;
-            double expectedIOCount = 1;
+            double expectedIOCount = 3;
 
             Guid manufacturerGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
 
