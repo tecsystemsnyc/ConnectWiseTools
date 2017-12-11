@@ -201,7 +201,7 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 CostBatch costs = new CostBatch();
-                foreach (TECDevice item in e.OldItems)
+                foreach (IEndDevice item in e.OldItems)
                 {
                     notifyCombinedChanged(Change.Remove, "Devices", this, item);
                     if (item is INotifyCostChanged costly)
@@ -279,7 +279,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
         {
             var outTypes = new ObservableCollection<TECElectricalMaterial>();
-            foreach (TECDevice device in Devices)
+            foreach (IEndDevice device in Devices)
             {
                 foreach(TECElectricalMaterial type in device.ConnectionTypes)
                 {
@@ -329,9 +329,16 @@ namespace EstimatingLibrary
         protected override CostBatch getCosts()
         {
             CostBatch costs = base.getCosts();
-            foreach (TECDevice dev in Devices)
+            foreach (IEndDevice dev in Devices)
             {
-                costs += dev.CostBatch;
+                if(dev is INotifyCostChanged costDev)
+                {
+                    costs += costDev.CostBatch;
+                }
+                else
+                {
+                    throw new Exception("This ocntains an unsupported end device.");
+                }
             }
             return costs;
         }

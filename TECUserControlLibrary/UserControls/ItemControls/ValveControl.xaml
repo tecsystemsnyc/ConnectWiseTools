@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
             <Label FontSize="12" Content="{Binding Name}" FontWeight="DemiBold"/>
             <Label Content="{Binding Description}" Grid.Column="1"/>
-            <TextBlock VerticalAlignment="Center" Text="{Binding Cost, StringFormat=Cost: {0:C}}" Grid.Column="1" Grid.Row="1"/>
+            <TextBlock VerticalAlignment="Center" Text="{Binding Cost, StringFormat=Cost: {0:C}}" Grid.Row="1"/>
             <TextBlock VerticalAlignment="Center" Text="{Binding Actuator.Name, StringFormat=Actuator: {0}}" Grid.Column="1" Grid.Row="1"/>
         </Grid>
     </Border>
