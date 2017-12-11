@@ -20,6 +20,13 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Properties
         public ReadOnlyObservableCollection<TECMenuItem> Menu { get { return new ReadOnlyObservableCollection<TECMenuItem>(_menu); } }
+        
+         public RelayCommand NewCommand { get; private set; }
+         public RelayCommand LoadCommand { get; private set; }
+         public RelayCommand SaveCommand { get; private set; }
+         public RelayCommand SaveAsCommand { get; private set; }
+         public RelayCommand UndoCommand { get; private set; }
+         public RelayCommand RedoCommand { get; private set; }
         #endregion
 
         public MenuVM()
@@ -33,33 +40,33 @@ namespace TECUserControlLibrary.ViewModels
         #region Methods
         public void SetNewCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("New", command);
+            NewCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("New", NewCommand);
         }
         public void SetLoadCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Load", command);
+            LoadCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Load", LoadCommand);
         }
         public void SetSaveDeltaCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Save", command);
+            SaveCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save", SaveCommand);
         }
         public void SetSaveNewCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Save As", command);
+            SaveAsCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Save As", SaveAsCommand);
         }
         public void SetUndoCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Undo", command);
+            UndoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Undo", UndoCommand);
         }
         public void SetRedoCommand(Action execute, Func<bool> canExecute = null)
         {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Redo", command);
+            RedoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Redo", RedoCommand);
         }
         public void SetRefreshTemplatesCommand(Action execute, Func<bool> canExecute = null)
         {
