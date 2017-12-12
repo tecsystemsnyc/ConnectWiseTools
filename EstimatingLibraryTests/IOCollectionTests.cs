@@ -168,19 +168,107 @@ namespace EstimatingLibraryTests
         public void ContainsSameList()
         {
             //Ex. 5 AI, 3 DI contains 4 AI, 2 DI. Uses Contains(IEnumerable<TECIO>)
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO aix = new TECIO(IOType.AI);
+            aix.Quantity = 3;
+            TECIO aox = new TECIO(IOType.AO);
+            aox.Quantity = 2;
+            TECIO dix = new TECIO(IOType.DI);
+            dix.Quantity = 4;
+            TECIO ioDOx = new TECIO(IOType.DO);
+            ioDOx.Quantity = 5;
+            List<TECIO> subjectIo = new List<TECIO>
+            {
+                aix,
+                aox,
+                dix,
+                ioDOx
+            };
+
+            Assert.IsTrue(collection.Contains(subjectIo));
+
         }
         [TestMethod]
         public void UnivsersalContainsSpecificList()
         {
             //Ex. 5 UI, 5 UO contains 3 AI, 2 DI, 3 AO, 2 DO. Uses Contains(IEnumerable<TECIO>)
-            throw new NotImplementedException();
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 5;
+            TECIO uo = new TECIO(IOType.UO);
+            uo.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ui,
+                uo
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 3;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 2;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 2;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 3;
+            List<TECIO> subjectIo = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+
+            Assert.IsTrue(collection.Contains(subjectIo));
         }
         [TestMethod]
         public void SpecificDoesntContainUniversalList()
         {
             //Ex. 3 AI, 2 DI, 3 AO, 2 DO doesn't contain 2 UI, 2 UO. Uses Contains(IEnumerable<TECIO>)
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 2;
+            TECIO uo = new TECIO(IOType.UO);
+            uo.Quantity = 2;
+            List<TECIO> subjectIO = new List<TECIO>
+            {
+                ui,
+                uo
+            };
+
+            Assert.IsFalse(collection.Contains(subjectIO));
         }
 
         //Tests for Contains(IOCollection)
@@ -188,19 +276,111 @@ namespace EstimatingLibraryTests
         public void ContainsSameCollection()
         {
             //Ex. 5 AI, 3 DI contains 4 AI, 2 DI. Uses Contains(IOCollection)
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO aix = new TECIO(IOType.AI);
+            aix.Quantity = 3;
+            TECIO aox = new TECIO(IOType.AO);
+            aox.Quantity = 2;
+            TECIO dix = new TECIO(IOType.DI);
+            dix.Quantity = 4;
+            TECIO ioDOx = new TECIO(IOType.DO);
+            ioDOx.Quantity = 5;
+            List<TECIO> subjectIo = new List<TECIO>
+            {
+                aix,
+                aox,
+                dix,
+                ioDOx
+            };
+            IOCollection subjectCollection = new IOCollection(subjectIo);
+
+
+            Assert.IsTrue(collection.Contains(subjectCollection));
         }
         [TestMethod]
         public void UniversalContainsSpecificCollection()
         {
             //Ex. 5 UI, 5 UO contains 3 AI, 2 DI, 3 AO, 2 DO. Uses Contains(IOCollection)
-            throw new NotImplementedException();
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 5;
+            TECIO uo = new TECIO(IOType.UO);
+            uo.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ui,
+                uo
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 3;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 2;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 2;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 3;
+            List<TECIO> subjectIo = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection subjectCollection = new IOCollection(subjectIo);
+
+            Assert.IsTrue(collection.Contains(subjectCollection));
         }
         [TestMethod]
         public void SpecificDoesntContainUniversalCollection()
         {
             //Ex. 3 AI, 2 DI, 3 AO, 2 DO doesn't contain 2 UI, 2 UO. Uses Contains(IOCollection)
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 2;
+            TECIO uo = new TECIO(IOType.UO);
+            uo.Quantity = 2;
+            List<TECIO> subjectIO = new List<TECIO>
+            {
+                ui,
+                uo
+            };
+            IOCollection subjectCollection = new IOCollection(subjectIO);
+
+
+            Assert.IsFalse(collection.Contains(subjectCollection));
         }
         #endregion
 
