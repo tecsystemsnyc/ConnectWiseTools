@@ -388,13 +388,54 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void AddType()
         {
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            collection.AddIO(IOType.AI);
+
+            Assert.AreEqual(6, collection.IONumber(IOType.AI));
         }
 
         [TestMethod]
         public void AddIO()
         {
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO toAdd = new TECIO(IOType.AI);
+            toAdd.Quantity = 2;
+
+            collection.AddIO(toAdd);
+
+            Assert.AreEqual(7, collection.IONumber(IOType.AI));
         }
 
         [TestMethod]
@@ -432,23 +473,87 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void RemoveType()
         {
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            collection.RemoveIO(IOType.AI);
+
+            Assert.AreEqual(4, collection.IONumber(IOType.AI));
         }
         [TestMethod]
         public void RemoveSpecificTypeFromUniversal()
         {
-            throw new NotImplementedException();
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ui
+            };
+            IOCollection collection = new IOCollection(io);
+
+            collection.RemoveIO(IOType.AI);
+
+            Assert.AreEqual(4, collection.IONumber(IOType.UI));
         }
 
         [TestMethod]
         public void RemoveIO()
         {
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO toRemove = new TECIO(IOType.AI);
+            toRemove.Quantity = 2;
+
+            collection.AddIO(toRemove);
+
+            Assert.AreEqual(3, collection.IONumber(IOType.AI));
         }
         [TestMethod]
         public void RemoveSpecificIOFromUniversal()
         {
-            throw new NotImplementedException();
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ui
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO toRemove = new TECIO(IOType.DI);
+            toRemove.Quantity = 2;
+
+            collection.AddIO(toRemove);
+
+            Assert.AreEqual(3, collection.IONumber(IOType.UI));
         }
 
         [TestMethod]
