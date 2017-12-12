@@ -21,7 +21,13 @@
     <Grid DataContext="{Binding ElementName=IOList}">
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectionChanged="ListView_Selected">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
