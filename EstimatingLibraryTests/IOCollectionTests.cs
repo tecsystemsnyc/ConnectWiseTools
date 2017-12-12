@@ -162,7 +162,46 @@ namespace EstimatingLibraryTests
             Assert.IsFalse(collection.Contains(ui));
             Assert.IsFalse(collection.Contains(uo));
         }
-        
+
+        //Tests for Contains(IEnumerable<TECIO>)
+        [TestMethod]
+        public void ContainsSameList()
+        {
+            //Ex. 5 AI, 3 DI contains 4 AI, 2 DI. Uses Contains(IEnumerable<TECIO>)
+            throw new NotImplementedException();
+        }
+        [TestMethod]
+        public void UnivsersalContainsSpecificList()
+        {
+            //Ex. 5 UI, 5 UO contains 3 AI, 2 DI, 3 AO, 2 DO. Uses Contains(IEnumerable<TECIO>)
+            throw new NotImplementedException();
+        }
+        [TestMethod]
+        public void SpecificDoesntContainUniversalList()
+        {
+            //Ex. 3 AI, 2 DI, 3 AO, 2 DO doesn't contain 2 UI, 2 UO. Uses Contains(IEnumerable<TECIO>)
+            throw new NotImplementedException();
+        }
+
+        //Tests for Contains(IOCollection)
+        [TestMethod]
+        public void ContainsSameCollection()
+        {
+            //Ex. 5 AI, 3 DI contains 4 AI, 2 DI. Uses Contains(IOCollection)
+            throw new NotImplementedException();
+        }
+        [TestMethod]
+        public void UniversalContainsSpecificCollection()
+        {
+            //Ex. 5 UI, 5 UO contains 3 AI, 2 DI, 3 AO, 2 DO. Uses Contains(IOCollection)
+            throw new NotImplementedException();
+        }
+        [TestMethod]
+        public void SpecificDoesntContainUniversalCollection()
+        {
+            //Ex. 3 AI, 2 DI, 3 AO, 2 DO doesn't contain 2 UI, 2 UO. Uses Contains(IOCollection)
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region AddIO Tests
