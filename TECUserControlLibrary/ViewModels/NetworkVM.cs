@@ -308,7 +308,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectableItem(INetworkConnectable connectable)
         {
-            if (connectable is TECSubScope sub && sub.IsNetwork == false)
+            if (connectable is TECSubScope sub && !sub.IsNetwork)
             {
                 return;
             }
@@ -340,28 +340,27 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void removeConnectableItem(INetworkConnectable connectable)
         {
-            if (connectable is TECSubScope sub && sub.IsNetwork == false)
+            if (connectableDictionary.ContainsKey(connectable))
             {
-                return;
-            }
-            ConnectableItem item = connectableDictionary[connectable];
-            if (connectable is INetworkParentable parentable)
-            {
-                foreach (TECNetworkConnection connection in parentable.ChildNetworkConnections)
+                ConnectableItem item = connectableDictionary[connectable];
+                if (connectable is INetworkParentable parentable)
                 {
-                    foreach (INetworkConnectable child in connection.Children)
+                    foreach (TECNetworkConnection connection in parentable.ChildNetworkConnections)
                     {
-                        updateIsConnected(child, false);
+                        foreach (INetworkConnectable child in connection.Children)
+                        {
+                            updateIsConnected(child, false);
+                        }
                     }
+                    _parentables.Remove(item);
                 }
-                _parentables.Remove(item);
-            }
-            else
-            {
-                _nonParentables.Remove(item);
-            }
+                else
+                {
+                    _nonParentables.Remove(item);
+                }
 
-            connectableDictionary.Remove(connectable);
+                connectableDictionary.Remove(connectable);
+            }
         }
 
         private void handleConstituentChanged(Change change, TECObject obj)
@@ -394,6 +393,13 @@ namespace TECUserControlLibrary.ViewModels
                         updateIsConnected(childConnectable, parentIsConnected);
                     }
                 }
+                else if (e.Sender is TECSubScope ss && e.Value is TECPoint)
+                {
+                    if (!connectableDictionary.ContainsKey(ss))
+                    {
+                        addConnectableItem(ss);
+                    }
+                }
             }
             else if (e.Change == Change.Remove)
             {
@@ -403,6 +409,10 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         updateIsConnected(childConnectable, false);
                     }
+                }
+                else if (e.Sender is TECSubScope ss && e.Value is TECPoint)
+                {
+                    removeConnectableItem(ss);
                 }
             }
             else if (e.Change == Change.Edit)
