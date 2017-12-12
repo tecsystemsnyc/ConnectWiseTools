@@ -598,7 +598,36 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void RemoveSpecificListFromUnivsersal()
         {
-            throw new NotImplementedException();
+            List<TECIO> io = new List<TECIO>
+            {
+                new TECIO(IOType.AI),
+                new TECIO(IOType.AO),
+                new TECIO(IOType.DI),
+                new TECIO(IOType.DO)
+            };
+            List<TECIO> otherIO = new List<TECIO>
+            {
+                new TECIO(IOType.UI),
+                new TECIO(IOType.UI),
+                new TECIO(IOType.UI),
+                new TECIO(IOType.UI),
+                new TECIO(IOType.UO),
+                new TECIO(IOType.UO),
+                new TECIO(IOType.UO),
+                new TECIO(IOType.UO)
+            };
+            IOCollection firstColletion = new IOCollection(io);
+            IOCollection secondCollection = new IOCollection(otherIO);
+
+            IOCollection resultCollection = new IOCollection(secondCollection);
+            resultCollection.RemoveIO(firstColletion.ListIO());
+
+            Assert.IsTrue(resultCollection.Contains(IOType.UI));
+            Assert.AreEqual(2, resultCollection.IONumber(IOType.UI));
+
+            Assert.IsTrue(resultCollection.Contains(IOType.UO));
+            Assert.AreEqual(2, resultCollection.IONumber(IOType.UO));
+            
         }
         #endregion
     }
