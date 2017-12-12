@@ -15,19 +15,45 @@ namespace EstimatingLibraryTests
     {
 
         #region Contains Tests
+        //Tests for Contains(IOType)
         [TestMethod]
         public void ContainsSameType()
         {
             //Ex. AI contains AI, uses Contains(IOType)
             throw new NotImplementedException();
         }
-
         [TestMethod]
         public void UnivseralContainsSpecificType()
         {
             //Ex. UI contains AI and DI, uses Contains(IOType)
             throw new NotImplementedException();
         }
+        [TestMethod]
+        public void SpecificDoesntContainUniversalType()
+        {
+            //Ex. AI and DI don't contain UI, uses Contains(IOType)
+            throw new NotImplementedException();
+        }
+
+        //Tests for Contains(TECIO)
+        [TestMethod]
+        public void ContainsSameIO()
+        {
+            //Ex. 5 AI contains 3 AI, uses Contains(TECIO)
+            throw new NotImplementedException();
+        }
+        [TestMethod]
+        public void UnivseralContainsSpecificIO()
+        {
+            //Ex. 5 UI contains 3 AI and 3 DI separately, uses Contains(TECIO)
+            throw new NotImplementedException();
+        }
+        [TestMethod]
+        public void SpecificDoesntContainUniversalIO()
+        {
+            //Ex. 6 AI doesn't contain 5 UI, uses Contains(TECIO)
+        }
+
 
         #endregion
 
