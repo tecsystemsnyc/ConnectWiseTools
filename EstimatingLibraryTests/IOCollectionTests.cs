@@ -13,7 +13,6 @@ namespace EstimatingLibraryTests
     [TestClass]
     public class IOCollectionTests
     {
-
         #region Contains Tests
         //Tests for Contains(IOType)
         [TestMethod]
@@ -163,8 +162,7 @@ namespace EstimatingLibraryTests
             Assert.IsFalse(collection.Contains(ui));
             Assert.IsFalse(collection.Contains(uo));
         }
-
-
+        
         #endregion
 
         #region AddIO Tests
