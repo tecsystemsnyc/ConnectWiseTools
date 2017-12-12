@@ -106,7 +106,33 @@ namespace EstimatingLibrary
         }
         public bool Contains(IOType type)
         {
-            return ioDictionary.ContainsKey(type);
+            bool containsExact = ioDictionary.ContainsKey(type);
+            if (containsExact)
+            {
+                return true;
+            }
+            else
+            {
+                if (TECIO.PointIO.Contains(type))
+                {
+                    if (type == IOType.AI || type == IOType.DI)
+                    {
+                        return ioDictionary.ContainsKey(IOType.UI);
+                    }
+                    else if (type == IOType.AO || type == IOType.DO)
+                    {
+                        return ioDictionary.ContainsKey(IOType.UO);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("PointIO type not recognized.");
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
         public bool Contains(TECIO io)
         {
