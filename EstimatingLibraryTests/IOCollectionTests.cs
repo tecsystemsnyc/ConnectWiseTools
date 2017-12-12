@@ -63,7 +63,7 @@ namespace EstimatingLibraryTests
         public void AddCollection()
         {
             TECIO ai = new TECIO(IOType.AI);
-            IOCollection collection1 = new IOCollection()
+            IOCollection collection1 = new IOCollection();
         }
     }
 }
