@@ -807,6 +807,34 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class TabsToTypicalConverter : BaseConverter, IMultiValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object[] values, Type targetType,
+           object parameter, System.Globalization.CultureInfo culture)
+        {
+            TypicalInstanceEnum systemSelect = (TypicalInstanceEnum)values[0];
+            GridIndex tabSelect = (GridIndex)values[1];
+            double width = (double)values[2];
+            if(tabSelect == GridIndex.Systems && systemSelect == TypicalInstanceEnum.Instance)
+            {
+                return new GridLength(0.0);
+            } else
+            {
+                return new GridLength(width);
+            }
+
+        }
+        public object[] ConvertBack(object value, Type[] targetTypes,
+               object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter

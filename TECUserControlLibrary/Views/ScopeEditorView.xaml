@@ -46,15 +46,19 @@
     </UserControl.Resources>
     <Border Background="{StaticResource SectionBackgroundBrush}">
         <Grid DataContext="{Binding ElementName=scopeEditorView, Path=ViewModel}">
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <sys:Double x:Key="templatesWidth">200</sys:Double>
+                </ResourceDictionary>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition>
                     <ColumnDefinition.Width>
-                        <Binding ElementName="TypicalInstanceCombo" Path="SelectedValue"
-                            Converter="{utilities:TypicalSelectionTemplateWidthConverter}">
-                            <Binding.ConverterParameter>
-                                <sys:Double>200</sys:Double>
-                            </Binding.ConverterParameter>
-                        </Binding>
+                        <MultiBinding Converter="{utilities:TabsToTypicalConverter}">
+                            <Binding ElementName="TypicalInstanceCombo" Path="SelectedValue"/>
+                            <Binding ElementName="editTabControl" Path="SelectedIndex"/>
+                            <Binding Source="{StaticResource templatesWidth}"/>
+                        </MultiBinding>
                     </ColumnDefinition.Width>
                 </ColumnDefinition>
                 <ColumnDefinition Width="*" MinWidth="400"/>
@@ -88,7 +92,8 @@
                     Grid.RowSpan="2"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
-                    SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}">
+                    SelectedIndex="{Binding DGTabIndex, Converter={utilities:GridIndexToIntegerConverter}}"
+                        x:Name="editTabControl">
                 <TabItem Header="NoneTab" Visibility="Collapsed"/>
                 <TabItem Header="Systems">
                     <Border Background="{StaticResource SectionBackgroundBrush}">
