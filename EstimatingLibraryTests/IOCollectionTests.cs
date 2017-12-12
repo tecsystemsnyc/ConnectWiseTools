@@ -13,7 +13,6 @@ namespace EstimatingLibraryTests
     [TestClass]
     public class IOCollectionTests
     {
-
         #region Contains Tests
         //Tests for Contains(IOType)
         [TestMethod]
