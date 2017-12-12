@@ -35,6 +35,16 @@ namespace TECUserControlLibrary.UserControls.ItemControls
 
 
 
+        public ICommand RemoveConnectionCommand
+        {
+            get { return (ICommand)GetValue(RemoveConnectionCommandProperty); }
+            set { SetValue(RemoveConnectionCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for RemoveConnectionCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RemoveConnectionCommandProperty =
+            DependencyProperty.Register("RemoveConnectionCommand", typeof(ICommand), typeof(NetworkConnectionItemControl));
+
         public NetworkConnectionItemControl()
         {
             InitializeComponent();
