@@ -2,15 +2,20 @@
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
+using EstimatingUtilitiesLibrary.Exports;
+using NLog;
 using System;
 using System.Deployment.Application;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TemplateBuilder.MVVM
 {
     public class TemplatesManager : AppManager<TECTemplates>
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private TECTemplates templates;
 
         private TemplatesMenuVM menuVM
@@ -112,6 +117,26 @@ namespace TemplateBuilder.MVVM
         private void setupCommands()
         {
             menuVM.SetRefreshTemplatesCommand(refreshExecute, canRefresh);
+            menuVM.SetExportTemplatesCommand(exportTemplatesExecute);
+        }
+
+        //Export Templates
+        private void exportTemplatesExecute()
+        {
+            string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
+                defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    Templates.Export(path, templates);
+                    logger.Info("Exported templates spreadsheet.");
+                }
+                else
+                {
+                    notifyFileLocked(path);
+                }
+            }
         }
         #endregion
         

@@ -152,6 +152,7 @@ namespace TECUserControlLibrary.ViewModels
             addMenuItem("Load", BUSY_TEXT, parentItemName: "File");
             addMenuItem("Save", "Nothing to save", parentItemName: "File");
             addMenuItem("Save As", BUSY_TEXT, parentItemName: "File");
+            addMenuItem("Export", parentItemName: "File");
 
             //Edit menu items
             addMenuItem("Undo", "Nothing to undo", parentItemName: "Edit");
