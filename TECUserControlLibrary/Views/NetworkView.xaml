@@ -50,9 +50,9 @@
                     </Grid.RowDefinitions>
 
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
-                Margin="5,0,5,0">
+                Margin="10,0,10,0">
                         <Label Content="Controllers"   Foreground="Black"
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <!--Controller List-->
                     <listControls:ConnectableItemListControl
@@ -80,9 +80,9 @@
                     </Grid.Resources>
 
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
-                Margin="5,0,5,0">
+                Margin="10,0,10,0">
                         <Label Content="Network Devices"   Foreground="Black"
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <!--Network Devices DataGrid-->
                     <listControls:ConnectableItemListControl
