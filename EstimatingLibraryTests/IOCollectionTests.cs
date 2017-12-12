@@ -207,7 +207,19 @@ namespace EstimatingLibraryTests
 
         #region AddIO Tests
         [TestMethod]
-        public void AddCollection()
+        public void AddType()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddIO()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddList()
         {
             List<TECIO> io = new List<TECIO>
             {
@@ -219,7 +231,9 @@ namespace EstimatingLibraryTests
             IOCollection firstColletion = new IOCollection(io);
             IOCollection secondCollection = new IOCollection(io);
 
-            IOCollection resultCollection = firstColletion + secondCollection;
+            IOCollection resultCollection = new IOCollection();
+            resultCollection.AddIO(firstColletion.ListIO());
+            resultCollection.AddIO(secondCollection.ListIO());
 
             Assert.IsTrue(resultCollection.Contains(IOType.AI));
             Assert.AreEqual(2, resultCollection.IONumber(IOType.AI));
@@ -232,7 +246,6 @@ namespace EstimatingLibraryTests
 
             Assert.IsTrue(resultCollection.Contains(IOType.DO));
             Assert.AreEqual(2, resultCollection.IONumber(IOType.DO));
-
         }
         #endregion
 
