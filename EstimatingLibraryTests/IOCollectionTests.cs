@@ -88,7 +88,47 @@ namespace EstimatingLibraryTests
             Assert.AreEqual(2, resultCollection.IONumber(IOType.DO));
 
         }
-        
+
+        [TestMethod]
+        public void RemoveCollection()
+        {
+            List<TECIO> io = new List<TECIO>
+            {
+                new TECIO(IOType.AI),
+                new TECIO(IOType.AO),
+                new TECIO(IOType.DI),
+                new TECIO(IOType.DO)
+            };
+            List<TECIO> otherIO = new List<TECIO>
+            {
+                new TECIO(IOType.AI),
+                new TECIO(IOType.AO),
+                new TECIO(IOType.DI),
+                new TECIO(IOType.DO),
+                new TECIO(IOType.AI),
+                new TECIO(IOType.AO),
+                new TECIO(IOType.DI),
+                new TECIO(IOType.DO)
+            };
+            IOCollection firstColletion = new IOCollection(io);
+            IOCollection secondCollection = new IOCollection(otherIO);
+
+            IOCollection resultCollection = secondCollection - firstColletion;
+
+            Assert.IsTrue(resultCollection.Contains(IOType.AI));
+            Assert.AreEqual(1, resultCollection.IONumber(IOType.AI));
+
+            Assert.IsTrue(resultCollection.Contains(IOType.AO));
+            Assert.AreEqual(1, resultCollection.IONumber(IOType.AO));
+
+            Assert.IsTrue(resultCollection.Contains(IOType.DI));
+            Assert.AreEqual(1, resultCollection.IONumber(IOType.DI));
+
+            Assert.IsTrue(resultCollection.Contains(IOType.DO));
+            Assert.AreEqual(1, resultCollection.IONumber(IOType.DO));
+
+        }
+
     }
 
     public static class IOCollectionExtensions
