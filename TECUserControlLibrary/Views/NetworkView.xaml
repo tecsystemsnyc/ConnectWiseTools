@@ -329,6 +329,7 @@
                                     SelectedItem="{Binding ElementName=networkView, Path=ViewModel.SelectedConnection}"
                                     Selected="NetworkConnectionListControl_Selected"
                                                                             ConduitTypes="{Binding ElementName=networkView, Path=ViewModel.ConduitTypes}"
+                                                                            RemoveConnectionCommand="{Binding ElementName=networkView, Path=ViewModel.RemoveConnectionCommand}"
                                     Grid.Row="1"/>
 
                                 <!--Add to Connection-->

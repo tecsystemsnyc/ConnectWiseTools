@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 
@@ -25,6 +26,18 @@ namespace TECUserControlLibrary.UserControls.ListControls
         // Using a DependencyProperty as the backing store for ConduitTypes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConduitTypesProperty =
             DependencyProperty.Register("ConduitTypes", typeof(IEnumerable<TECElectricalMaterial>), typeof(NetworkConnectionListControl));
+
+
+
+        public ICommand RemoveConnectionCommand
+        {
+            get { return (ICommand)GetValue(RemoveConnectionCommandProperty); }
+            set { SetValue(RemoveConnectionCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for RemoveConnectionCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RemoveConnectionCommandProperty =
+            DependencyProperty.Register("RemoveConnectionCommand", typeof(ICommand), typeof(NetworkConnectionListControl));
 
 
 

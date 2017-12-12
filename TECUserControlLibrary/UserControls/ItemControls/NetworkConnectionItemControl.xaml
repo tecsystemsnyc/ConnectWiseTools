@@ -22,6 +22,7 @@
                 <RowDefinition MinHeight="30"/>
                 <RowDefinition MinHeight="30"/>
                 <RowDefinition MinHeight="30"/>
+                <RowDefinition MinHeight="30"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -47,6 +48,11 @@
                        Grid.Row="3"/>
             <TextBox Text="{Binding Connection.ConduitLength}" Margin="5"
                      Grid.Row="3" Grid.Column="1"/>
+
+            <Button Content="Remove Connection" Margin="5" Grid.Row="4" Grid.ColumnSpan="2"
+                    Background="{StaticResource AlertActionBrush}"
+                    Command="{Binding ElementName=networkConnectionItemControl, Path=RemoveConnectionCommand}"
+                    CommandParameter="{Binding Connection}"/>
         </Grid>
     </Border>
 </UserControl>

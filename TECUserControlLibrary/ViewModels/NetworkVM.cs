@@ -135,6 +135,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand SetParentAsSelectedCommand { get; private set; }
         public ICommand UpdateInstancesCommand { get; private set; }
+        public ICommand RemoveConnectionCommand { get; private set; }
 
         //Add Connection Properties
         public ReadOnlyObservableCollection<TECConnectionType> AllConnectionTypes { get; private set; }
@@ -244,6 +245,7 @@ namespace TECUserControlLibrary.ViewModels
             DoneConnectionCommand = new RelayCommand(doneConnectionExecute);
             RemoveConnectableCommand = new RelayCommand(removeConnectableExecute, canRemoveConnectable);
             UpdateInstancesCommand = new RelayCommand(updateInstancesExecute, canUpdateInstances);
+            RemoveConnectionCommand = new RelayCommand<TECNetworkConnection>(removeConnectionExecute);
         }
         
         private void resetCollections(TECCatalogs catalogs)
@@ -544,6 +546,22 @@ namespace TECUserControlLibrary.ViewModels
         private bool canUpdateInstances()
         {
             return typical != null && typical.Instances.Count > 0;
+        }
+
+        private void removeConnectionExecute(TECNetworkConnection netConnection)
+        {
+            MessageBoxResult result = MessageBox.Show("Remove this connection and disconnect all connected devices?", "Are you sure?", MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
+            {
+                if (SelectedParentable.Item is INetworkParentable parent)
+                {
+                    parent.RemoveNetworkConnection(netConnection);
+                }
+                else
+                {
+                    throw new DataMisalignedException("SelectedParentable item isn't INetworkParentable.");
+                }
+            }
         }
 
         private void handleSelectedConnectionChanged(TECNetworkConnection selected)

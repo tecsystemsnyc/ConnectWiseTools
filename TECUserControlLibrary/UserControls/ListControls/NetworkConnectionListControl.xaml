@@ -23,7 +23,8 @@
 
     <Grid DataContext="{Binding ElementName=NetworkConnectionList}">
         <Grid.Resources>
-            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=NetworkConnectionList, Path=ConduitTypes}"/>
+            <utilities:BindingProxy x:Key="commandProxy" Data="{Binding ElementName=NetworkConnectionList, Path=RemoveConnectionCommand}"/>
+            <utilities:BindingProxy x:Key="conduitTypesProxy" Data="{Binding ElementName=NetworkConnectionList, Path=ConduitTypes}"/>
         </Grid.Resources>
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
@@ -31,11 +32,12 @@
                   SelectionChanged="ListView_Selected">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <items:NetworkConnectionItemControl>
+                    <items:NetworkConnectionItemControl
+                        RemoveConnectionCommand="{Binding Source={StaticResource commandProxy}, Path=Data}">
                         <items:NetworkConnectionItemControl.NetworkConnection>
                             <MultiBinding Converter="{local:NetworkConnectionToItemConverter}">
                                 <Binding/>
-                                <Binding Path="Data" Source="{StaticResource proxy}"/>
+                                <Binding Path="Data" Source="{StaticResource conduitTypesProxy}"/>
                             </MultiBinding>
                         </items:NetworkConnectionItemControl.NetworkConnection>
                     </items:NetworkConnectionItemControl>
