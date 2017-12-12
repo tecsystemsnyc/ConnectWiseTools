@@ -191,7 +191,8 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                             <TextBlock FontSize="14" Text="{Binding Name}" Foreground="Black"
@@ -209,6 +210,24 @@
                                                TextTrimming="CharacterEllipsis"/>
                                 </DataTemplate>
                                 <DataTemplate DataType="{x:Type models:TECSubScope}"></DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                        <ContentPresenter Content="{Binding}" Grid.Column="2">
+                            <ContentPresenter.Resources>
+                                <DataTemplate DataType="{x:Type models:TECController}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontSize="12" Text="Is Server"
+                                               Foreground="Black"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                        <CheckBox Grid.Column="1" IsChecked="{Binding IsServer}"
+                                                  VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
                             </ContentPresenter.Resources>
                         </ContentPresenter>
                     </Grid>
