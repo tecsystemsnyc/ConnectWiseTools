@@ -533,7 +533,7 @@ namespace EstimatingLibraryTests
             TECIO toRemove = new TECIO(IOType.AI);
             toRemove.Quantity = 2;
 
-            collection.AddIO(toRemove);
+            collection.RemoveIO(toRemove);
 
             Assert.AreEqual(3, collection.IONumber(IOType.AI));
         }
