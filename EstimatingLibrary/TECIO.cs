@@ -327,7 +327,7 @@ namespace EstimatingLibrary
                         universalIO.Quantity -= quantityRemaining;
                         if (universalIO.Quantity < 1)
                         {
-                            ioDictionary.Remove(sameIO.Type);
+                            ioDictionary.Remove(universalIO.Type);
                         }
                     }
                     else
@@ -343,14 +343,21 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new InvalidOperationException("IOCollection does not contain enough type.");
+                throw new InvalidOperationException("IOCollection does not contain enough IO.");
             }
         }
         public void RemoveIO(IEnumerable<TECIO> ioList)
         {
-            foreach(TECIO io in ioList)
+            if (this.Contains(ioList))
             {
-                RemoveIO(io);
+                foreach (TECIO io in ioList)
+                {
+                    RemoveIO(io);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("IOCollection does not contain enough IO.");
             }
         }
 
