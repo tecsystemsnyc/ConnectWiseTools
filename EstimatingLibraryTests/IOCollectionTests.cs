@@ -55,7 +55,17 @@ namespace EstimatingLibraryTests
         public void SpecificDoesntContainUniversalType()
         {
             //Ex. AI and DI don't contain UI, uses Contains(IOType)
-            throw new NotImplementedException();
+            List<TECIO> io = new List<TECIO>
+            {
+                new TECIO(IOType.AI),
+                new TECIO(IOType.AO),
+                new TECIO(IOType.DI),
+                new TECIO(IOType.DO)
+            };
+            IOCollection collection = new IOCollection(io);
+
+            Assert.IsFalse(collection.Contains(IOType.UI));
+            Assert.IsFalse(collection.Contains(IOType.UO));
         }
 
         //Tests for Contains(TECIO)
@@ -63,18 +73,95 @@ namespace EstimatingLibraryTests
         public void ContainsSameIO()
         {
             //Ex. 5 AI contains 3 AI, uses Contains(TECIO)
-            throw new NotImplementedException();
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO aiX = new TECIO(IOType.AI);
+            aiX.Quantity = 3;
+            TECIO aoX = new TECIO(IOType.AO);
+            aoX.Quantity = 3;
+            TECIO diX = new TECIO(IOType.DI);
+            diX.Quantity = 3;
+            TECIO ioDOX = new TECIO(IOType.DO);
+            ioDOX.Quantity = 3;
+
+            Assert.IsTrue(collection.Contains(aiX));
+            Assert.IsTrue(collection.Contains(aoX));
+            Assert.IsTrue(collection.Contains(diX));
+            Assert.IsTrue(collection.Contains(ioDOX));
+
         }
         [TestMethod]
         public void UnivseralContainsSpecificIO()
         {
             //Ex. 5 UI contains 3 AI and 3 DI separately, uses Contains(TECIO)
-            throw new NotImplementedException();
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 5;
+            TECIO uo = new TECIO(IOType.UO);
+            uo.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ui,
+                uo
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO aiX = new TECIO(IOType.AI);
+            aiX.Quantity = 3;
+            TECIO aoX = new TECIO(IOType.AO);
+            aoX.Quantity = 3;
+            TECIO diX = new TECIO(IOType.DI);
+            diX.Quantity = 3;
+            TECIO ioDOX = new TECIO(IOType.DO);
+            ioDOX.Quantity = 3;
+
+            Assert.IsTrue(collection.Contains(aiX));
+            Assert.IsTrue(collection.Contains(aoX));
+            Assert.IsTrue(collection.Contains(diX));
+            Assert.IsTrue(collection.Contains(ioDOX));
         }
         [TestMethod]
         public void SpecificDoesntContainUniversalIO()
         {
             //Ex. 6 AI doesn't contain 5 UI, uses Contains(TECIO)
+            TECIO ai = new TECIO(IOType.AI);
+            ai.Quantity = 5;
+            TECIO ao = new TECIO(IOType.AO);
+            ao.Quantity = 5;
+            TECIO di = new TECIO(IOType.DI);
+            di.Quantity = 5;
+            TECIO ioDO = new TECIO(IOType.DO);
+            ioDO.Quantity = 5;
+            List<TECIO> io = new List<TECIO>
+            {
+                ai,
+                ao,
+                di,
+                ioDO
+            };
+            IOCollection collection = new IOCollection(io);
+
+            TECIO ui = new TECIO(IOType.UI);
+            ui.Quantity = 3;
+            TECIO uo = new TECIO(IOType.UO);
+            uo.Quantity = 3;
+
+            Assert.IsFalse(collection.Contains(ui));
+            Assert.IsFalse(collection.Contains(uo));
         }
 
         //Tests for Contains(IEnumerable<TECIO>)
