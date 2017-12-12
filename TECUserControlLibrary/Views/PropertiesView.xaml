@@ -90,6 +90,9 @@
                     <pControls:ValvePropertiesControl Selected="{Binding}"
                                                       ReadOnly="{Binding ElementName=propertiesView, Path=ViewModel.ReadOnly}"/>
                 </DataTemplate>
+                <DataTemplate x:Key="subScope">
+                    <pControls:SubScopePropertiesControl Selected="{Binding}"/>
+                </DataTemplate>
                 <DataTemplate x:Key="default"/>
                 <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -142,6 +145,9 @@
                 <utilities:ValveSelector x:Key="valveSelector"
                                          InterfaceTemplate="{StaticResource valve}"
                                          DefaultTemplate="{StaticResource default}"/>
+                <utilities:SubScopeSelector x:Key="subScopeSelector"
+                                            InterfaceTemplate="{StaticResource subScope}"
+                                            DefaultTemplate="{StaticResource default}"/>
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
@@ -156,6 +162,7 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource valveSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PointSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource subScopeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LocatedSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ControllerSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource PanelSelector}"/>
