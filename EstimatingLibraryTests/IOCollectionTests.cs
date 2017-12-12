@@ -13,53 +13,25 @@ namespace EstimatingLibraryTests
     [TestClass]
     public class IOCollectionTests
     {
-        public IOCollectionTests()
+
+        #region Contains Tests
+        [TestMethod]
+        public void ContainsSameType()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            //Ex. AI contains AI, uses Contains(IOType)
+            throw new NotImplementedException();
         }
 
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
+        [TestMethod]
+        public void UnivseralContainsSpecificType()
         {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
+            //Ex. UI contains AI and DI, uses Contains(IOType)
+            throw new NotImplementedException();
         }
 
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
         #endregion
 
+        #region AddIO Tests
         [TestMethod]
         public void AddCollection()
         {
@@ -74,7 +46,7 @@ namespace EstimatingLibraryTests
             IOCollection secondCollection = new IOCollection(io);
 
             IOCollection resultCollection = firstColletion + secondCollection;
-            
+
             Assert.IsTrue(resultCollection.Contains(IOType.AI));
             Assert.AreEqual(2, resultCollection.IONumber(IOType.AI));
 
@@ -88,7 +60,9 @@ namespace EstimatingLibraryTests
             Assert.AreEqual(2, resultCollection.IONumber(IOType.DO));
 
         }
+        #endregion
 
+        #region RemoveIO Tests
         [TestMethod]
         public void RemoveCollection()
         {
@@ -128,7 +102,7 @@ namespace EstimatingLibraryTests
             Assert.AreEqual(1, resultCollection.IONumber(IOType.DO));
 
         }
-
+        #endregion
     }
 
     public static class IOCollectionExtensions
