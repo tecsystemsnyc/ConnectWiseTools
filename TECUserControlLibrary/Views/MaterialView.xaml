@@ -85,7 +85,8 @@
                                        VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding DeviceManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="3"/>
+                                      DisplayMemberPath="Label" Grid.Column="3"
+                                      Margin="2"/>
 
                         </Grid>
                         <Grid Grid.Row="2">
@@ -162,12 +163,14 @@
                                        VerticalAlignment="Center" Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding ValveManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="1"/>
+                                      DisplayMemberPath="Label" Grid.Column="1"
+                                      Margin="2"/>
                             <TextBlock Text="Actuator:" Margin="5,0,0,0"
                                        VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Devices}"
                                       SelectedItem="{Binding ValveActuator}"
-                                      DisplayMemberPath="Name" Grid.Column="3"/>
+                                      DisplayMemberPath="Name" Grid.Column="3"
+                                      Margin="2"/>
 
                         </Grid>
                         <Grid Grid.Row="2">
@@ -351,7 +354,8 @@
                                        VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding ControllerTypeManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="3"/>
+                                      DisplayMemberPath="Label" Grid.Column="3"
+                                      Margin="2"/>
                         </Grid>
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
@@ -375,7 +379,8 @@
                                       SelectedValue="{Binding SelectedIO}"
                                       DisplayMemberPath="Item1"
                                       SelectedValuePath="Item2"
-                                      Grid.Column="1"/>
+                                      Grid.Column="1"
+                                          Margin="2"/>
                                 <Label Content="Qty: " Grid.Column="2"/>
                                 <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3"/>
                                 <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="4"/>
@@ -468,7 +473,8 @@
                                        VerticalAlignment="Center" Grid.Column="2"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding PanelTypeManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="3"/>
+                                      DisplayMemberPath="Label" Grid.Column="3"
+                                      Margin="2"/>
                         </Grid>
                         <Button Grid.Row="2" Grid.ColumnSpan="4"
                                 Content="Add" Margin="2"
@@ -505,9 +511,10 @@
 
                             <TextBlock Grid.Column="2" Text="Type:" Margin="5,0,0,0"
                                    VerticalAlignment="Center"/>
-                            <ComboBox Grid.Column="3" Margin="2"
+                            <ComboBox Grid.Column="3"
                                   SelectedItem="{Binding AssociatedCostType}" 
-                                  ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"/>
+                                  ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"
+                                      Margin="2"/>
 
                         </Grid>
                         <Grid Grid.Row="1">
@@ -594,8 +601,9 @@
                        VerticalAlignment="Center"
                                    Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}" 
-                                  SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="1" Margin="2"
-                                  DisplayMemberPath="Label"/>
+                                  SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="1"
+                                  DisplayMemberPath="Label"
+                                      Margin="2"/>
 
                             <Button Grid.Column="2" Grid.ColumnSpan="4"
                     Content="Add" Margin="2"
@@ -654,10 +662,11 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0"/>
-                            <TextBox Text="{Binding ManufacturerToAdd.Label}" Grid.Row="0" Grid.Column="1"/>
+                            <TextBox Text="{Binding ManufacturerToAdd.Label}" Grid.Row="0" Grid.Column="1" Margin="2"/>
                             <TextBlock Text="Multiplier: " Grid.Row="0" Grid.Column="2"/>
-                            <TextBox Text="{Binding ManufacturerToAdd.Multiplier, StringFormat={}{0:F2}}" Grid.Row="0" Grid.Column="3"/>
-                            <Button Content="Add" Command="{Binding AddManufacturerCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"/>
+                            <TextBox Text="{Binding ManufacturerToAdd.Multiplier, StringFormat={}{0:F2}}" Grid.Row="0" Grid.Column="3" Margin="2"/>
+                            <Button Content="Add" Command="{Binding AddManufacturerCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
+                                    Margin="2"/>
                         </Grid>
                         <controls:ManufacturersGridControl ManufacturersSource="{Binding Templates.Catalogs.Manufacturers}"
                                                            Grid.Row="1"/>
