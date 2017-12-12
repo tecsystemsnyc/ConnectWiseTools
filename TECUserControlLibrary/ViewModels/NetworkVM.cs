@@ -101,6 +101,16 @@ namespace TECUserControlLibrary.ViewModels
                     _selectedNonParentable = null;
                     RaisePropertyChanged("SelectedNonParentable");
                     SelectedItem = SelectedParentable;
+                    IOTypes = new List<IOType>();
+                    if(value != null)
+                    {
+                        foreach (TECIO io in SelectedParentable.Item.AvailableNetworkIO.ListIO())
+                        {
+                            IOTypes.Add(io.Type);
+                        }
+
+                    }
+                    RaisePropertyChanged("IOTypes");
                 }
             }
         }

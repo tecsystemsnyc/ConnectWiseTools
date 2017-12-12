@@ -59,7 +59,7 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             int x = 1, y = 2;
             y = addHardwareHeader(worksheet, x, y).nextColumn;
-            (x, y) = addEndDeviceHeader(worksheet, x, y);
+            y = addEndDeviceHeader(worksheet, x, y).nextColumn;
             worksheet.Cell(x, y).Value = "Actuator";
             worksheet.Cell(x, y).Style.Font.SetBold();
             worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -83,7 +83,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("Controller Types");
 
             int x = 1, y = 2;
-            y = addHardwareHeader(worksheet, x, y).nextColumn;
+            (x, y) = addHardwareHeader(worksheet, x, y);
 
             int startY = 2;
             foreach (TECControllerType item in templates.Catalogs.ControllerTypes)
@@ -101,7 +101,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("Panel Types");
 
             int x = 1, y = 2;
-            y = addHardwareHeader(worksheet, x, y).nextColumn;
+            (x, y) = addHardwareHeader(worksheet, x, y);
 
             int startY = 2;
             foreach (TECPanelType item in templates.Catalogs.PanelTypes)
@@ -119,7 +119,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("IO Modules");
 
             int x = 1, y = 2;
-            y = addHardwareHeader(worksheet, x, y).nextColumn;
+            (x,y) = addHardwareHeader(worksheet, x, y);
 
             int startY = 2;
             foreach (TECIOModule item in templates.Catalogs.IOModules)
@@ -137,7 +137,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("AssociatedCosts");
 
             int x = 1, y = 2;
-            y = addCostHeader(worksheet, x, y).nextColumn;
+            (x, y) = addCostHeader(worksheet, x, y);
 
             int startY = 2;
             foreach (TECCost item in templates.Catalogs.AssociatedCosts)
@@ -155,7 +155,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("Connection Types");
 
             int x = 1, y = 2;
-            y = addCostHeader(worksheet, x, y).nextColumn;
+            (x, y) = addCostHeader(worksheet, x, y);
 
             int startY = 2;
             foreach (TECConnectionType item in templates.Catalogs.ConnectionTypes)
@@ -191,11 +191,11 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("Points");
 
             int x = 1, y = 2;
-            x = addScopeHeader(worksheet, x, y).nextRow;
+            x = addSubScopeHeader(worksheet, x, y).nextRow;
 
             foreach(TECSubScope scope in templates.SubScopeTemplates)
             {
-                x = addScopeRow(worksheet, scope, x, y).nextRow;
+                x = addSubScopeRow(worksheet, scope, x, y).nextRow;
             }
 
             worksheet.Columns().AdjustToContents();
@@ -207,7 +207,8 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("Equipment");
 
             int x = 1, y = 2;
-            x = addScopeHeader(worksheet, x, y).nextRow;
+            y = addScopeHeader(worksheet, x, y).nextColumn;
+            x = addSubScopeHeader(worksheet, x, y).nextRow;
             foreach(TECEquipment equipment in templates.EquipmentTemplates)
             {
 
@@ -215,7 +216,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                 {
                     y = 2;
                     y = addScopeRow(worksheet, equipment, x, y).nextColumn;
-                    x = addScopeRow(worksheet, scope, x, y).nextRow;
+                    x = addSubScopeRow(worksheet, scope, x, y).nextRow;
                 }
             }
             
@@ -229,8 +230,10 @@ namespace EstimatingUtilitiesLibrary.Exports
             IXLWorksheet worksheet = workbook.Worksheets.Add("Systems");
 
             int x = 1, y = 2;
-            x = addScopeHeader(worksheet, x, y).nextRow;
-            foreach(TECSystem system in templates.SystemTemplates)
+            y = addScopeHeader(worksheet, x, y).nextColumn;
+            y = addScopeHeader(worksheet, x, y).nextColumn;
+            x = addSubScopeHeader(worksheet, x, y).nextRow;
+            foreach (TECSystem system in templates.SystemTemplates)
             {
                 foreach (TECEquipment equipment in system.Equipment)
                 {
@@ -239,7 +242,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                         y = 2;
                         y = addScopeRow(worksheet, system, x, y).nextColumn;
                         y = addScopeRow(worksheet, equipment, x, y).nextColumn;
-                        x = addScopeRow(worksheet, scope, x, y).nextRow;
+                        x = addSubScopeRow(worksheet, scope, x, y).nextRow;
                     }
                 }
             }
@@ -256,30 +259,40 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, y).Value = "Name";
             worksheet.Cell(x, y).Style.Font.SetBold();
             worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 1).Value = "Description";
-            worksheet.Cell(x, y + 1).Style.Font.SetBold();
-            worksheet.Cell(x, y + 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 2).Value = "Manufacturer";
-            worksheet.Cell(x, y + 2).Style.Font.SetBold();
-            worksheet.Cell(x, y + 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 3).Value = "List Price";
-            worksheet.Cell(x, y + 3).Style.Font.SetBold();
-            worksheet.Cell(x, y + 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 4).Value = "Cost";
-            worksheet.Cell(x, y + 4).Style.Font.SetBold();
-            worksheet.Cell(x, y + 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            return (x + 1, y + 1);
+            y++;
+            worksheet.Cell(x, y).Value = "Description";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            worksheet.Cell(x, y ).Value = "Manufacturer";
+            worksheet.Cell(x, y ).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            worksheet.Cell(x, y ).Value = "List Price";
+            worksheet.Cell(x, y ).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            worksheet.Cell(x, y ).Value = "Cost";
+            worksheet.Cell(x, y ).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            return (x + 1, y);
         }
         private static (int nextRow, int nextColumn) addHardwareRow(IXLWorksheet worksheet, TECHardware hardware, int startRow, int startColumn)
         {
             int x = startRow;
             int y = startColumn;
             worksheet.Cell(x, y).Value = hardware.Name;
-            worksheet.Cell(x, y + 1).Value = hardware.Description;
-            worksheet.Cell(x, y + 2).Value = hardware.Manufacturer.Label;
-            worksheet.Cell(x, y + 3).Value = hardware.Price;
-            worksheet.Cell(x, y + 4).Value = hardware.Cost;
-            return (x + 1, y + 1);
+            y++;
+            worksheet.Cell(x, y).Value = hardware.Description;
+            y++;
+            worksheet.Cell(x, y).Value = hardware.Manufacturer.Label;
+            y++;
+            worksheet.Cell(x, y).Value = hardware.Price;
+            y++;
+            worksheet.Cell(x, y).Value = hardware.Cost;
+            y++;
+            return (x + 1, y);
         }
 
         private static (int nextRow, int nextColumn) addEndDeviceHeader(IXLWorksheet worksheet, int startRow, int startColumn)
@@ -298,7 +311,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             string connectionString = "";
             foreach(TECConnectionType type in endDevice.ConnectionTypes.Distinct())
             {
-                connectionString += String.Format("({0} Qty. {1})", type,
+                connectionString += String.Format("({0} Qty. {1})", type.Name,
                         endDevice.ConnectionTypes.Count(item => item == type));
             }
             worksheet.Cell(x, y).Value = connectionString;
@@ -312,30 +325,40 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, y).Value = "Name";
             worksheet.Cell(x, y).Style.Font.SetBold();
             worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 1).Value = "Description";
-            worksheet.Cell(x, y + 1).Style.Font.SetBold();
-            worksheet.Cell(x, y + 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 2).Value = "Cost";
-            worksheet.Cell(x, y + 2).Style.Font.SetBold();
-            worksheet.Cell(x, y + 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 3).Value = "Labor";
-            worksheet.Cell(x, y + 3).Style.Font.SetBold();
-            worksheet.Cell(x, y + 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 4).Value = "Type";
-            worksheet.Cell(x, y + 4).Style.Font.SetBold();
-            worksheet.Cell(x, y + 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            return (x + 1, y + 1);
+            y++;
+            worksheet.Cell(x, y ).Value = "Description";
+            worksheet.Cell(x, y ).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            worksheet.Cell(x, y ).Value = "Cost";
+            worksheet.Cell(x, y ).Style.Font.SetBold();
+            worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            worksheet.Cell(x, y ).Value = "Labor";
+            worksheet.Cell(x, y ).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            worksheet.Cell(x, y).Value = "Type";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            return (x + 1, y);
         }
         private static (int nextRow, int nextColumn) addCostRow(IXLWorksheet worksheet, TECCost cost, int startRow, int startColumn)
         {
             int x = startRow;
             int y = startColumn;
             worksheet.Cell(x, y).Value = cost.Name;
-            worksheet.Cell(x, y + 1).Value = cost.Description;
-            worksheet.Cell(x, y + 2).Value = cost.Cost;
-            worksheet.Cell(x, y + 3).Value = cost.Labor;
-            worksheet.Cell(x, y + 4).Value = cost.Type;
-            return (x + 1, y + 1);
+            y++;
+            worksheet.Cell(x, y ).Value = cost.Description;
+            y++;
+            worksheet.Cell(x, y).Value = cost.Cost;
+            y++;
+            worksheet.Cell(x, y).Value = cost.Labor;
+            y++;
+            worksheet.Cell(x, y ).Value = cost.Type;
+            y++;
+            return (x + 1, y);
         }
 
         private static (int nextRow, int nextColumn) addScopeHeader(IXLWorksheet worksheet, int startRow, int startColumn)
@@ -345,18 +368,67 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, y).Value = "Name";
             worksheet.Cell(x, y).Style.Font.SetBold();
             worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Cell(x, y + 1).Value = "Description";
-            worksheet.Cell(x, y + 1).Style.Font.SetBold();
-            worksheet.Cell(x, y + 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            return (x + 1, y + 1);
+            y++;
+            worksheet.Cell(x, y ).Value = "Description";
+            worksheet.Cell(x, y ).Style.Font.SetBold();
+            worksheet.Cell(x, y ).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            return (x + 1, y );
         }
         private static (int nextRow, int nextColumn) addScopeRow(IXLWorksheet worksheet, TECScope scope, int startRow, int startColumn)
         {
             int x = startRow;
             int y = startColumn;
             worksheet.Cell(x, y).Value = scope.Name;
-            worksheet.Cell(x, y + 1).Value = scope.Description;
+            y++;
+            worksheet.Cell(x, y).Value = scope.Description;
             return (x + 1, y + 1);
         }
+
+        private static (int nextRow, int nextColumn) addSubScopeHeader(IXLWorksheet worksheet, int startRow, int startColumn)
+        {
+            int x = startRow;
+            int y = startColumn;
+            y = addScopeHeader(worksheet, startRow, startColumn).nextColumn;
+            worksheet.Cell(x, y).Value = "Devices";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            worksheet.Cell(x, y).Value = "IO";
+            worksheet.Cell(x, y).Style.Font.SetBold();
+            worksheet.Cell(x, y).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            y++;
+            return (x + 1, y);
+        }
+        private static (int nextRow, int nextColumn) addSubScopeRow(IXLWorksheet worksheet, TECSubScope subScope, int startRow, int startColumn)
+        {
+            int x = startRow;
+            int y = startColumn;
+            y = addScopeRow(worksheet, subScope, x, y).nextColumn;
+            string deviceString = "";
+            foreach(IEndDevice device in subScope.Devices.Distinct())
+            {
+                deviceString += String.Format("({0} Qty. {1})", device.Name,
+                        subScope.Devices.Count(item => item == device));
+            }
+            worksheet.Cell(x, y).Value = deviceString;
+            y++;
+            string pointsString = "";
+            foreach (TECPoint point in subScope.Points)
+            {
+                pointsString += String.Format("({0})", pointString(point));
+            }
+            worksheet.Cell(x, y).Value = pointsString;
+            return (x + 1, y + 1);
+        }
+
+        private static string pointString(TECPoint point)
+        {
+            string returnString = String.Format("{0}: {1} {2}",
+                point.Label, point.Quantity, point.Type);
+            return returnString;
+        }
+
+
     }
 }
