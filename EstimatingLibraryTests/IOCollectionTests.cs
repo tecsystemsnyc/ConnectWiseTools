@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EstimatingLibrary;
+using System.Linq;
 
 namespace EstimatingLibraryTests
 {
@@ -62,8 +63,47 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void AddCollection()
         {
-            TECIO ai = new TECIO(IOType.AI);
-            IOCollection collection1 = new IOCollection();
+            List<TECIO> io = new List<TECIO>
+            {
+                new TECIO(IOType.AI),
+                new TECIO(IOType.AO),
+                new TECIO(IOType.DI),
+                new TECIO(IOType.DO)
+            };
+            IOCollection firstColletion = new IOCollection(io);
+            IOCollection secondCollection = new IOCollection(io);
+
+            IOCollection resultCollection = firstColletion + secondCollection;
+            
+            Assert.IsTrue(resultCollection.Contains(IOType.AI));
+            Assert.AreEqual(2, resultCollection.IONumber(IOType.AI));
+
+            Assert.IsTrue(resultCollection.Contains(IOType.AO));
+            Assert.AreEqual(2, resultCollection.IONumber(IOType.AO));
+
+            Assert.IsTrue(resultCollection.Contains(IOType.DI));
+            Assert.AreEqual(2, resultCollection.IONumber(IOType.DI));
+
+            Assert.IsTrue(resultCollection.Contains(IOType.DO));
+            Assert.AreEqual(2, resultCollection.IONumber(IOType.DO));
+
+        }
+        
+    }
+
+    public static class IOCollectionExtensions
+    {
+        public static int IONumber(this IOCollection collection, IOType type)
+        {
+            int ioNum = 0;
+            foreach (TECIO io in collection.ListIO())
+            {
+                if (io.Type == type)
+                {
+                    ioNum += io.Quantity;
+                }
+            }
+            return ioNum;
         }
     }
 }
