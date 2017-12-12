@@ -20,13 +20,36 @@ namespace EstimatingLibraryTests
         public void ContainsSameType()
         {
             //Ex. AI contains AI, uses Contains(IOType)
-            throw new NotImplementedException();
+            List<TECIO> io = new List<TECIO>
+            {
+                new TECIO(IOType.AI),
+                new TECIO(IOType.AO),
+                new TECIO(IOType.DI),
+                new TECIO(IOType.DO)
+            };
+            IOCollection collection = new IOCollection(io);
+
+            Assert.IsTrue(collection.Contains(IOType.AI));
+            Assert.IsTrue(collection.Contains(IOType.AO));
+            Assert.IsTrue(collection.Contains(IOType.DI));
+            Assert.IsTrue(collection.Contains(IOType.DO));
+
         }
         [TestMethod]
         public void UnivseralContainsSpecificType()
         {
             //Ex. UI contains AI and DI, uses Contains(IOType)
-            throw new NotImplementedException();
+            List<TECIO> io = new List<TECIO>
+            {
+                new TECIO(IOType.UI),
+                new TECIO(IOType.UO)
+            };
+            IOCollection collection = new IOCollection(io);
+
+            Assert.IsTrue(collection.Contains(IOType.AI));
+            Assert.IsTrue(collection.Contains(IOType.AO));
+            Assert.IsTrue(collection.Contains(IOType.DI));
+            Assert.IsTrue(collection.Contains(IOType.DO));
         }
         [TestMethod]
         public void SpecificDoesntContainUniversalType()
