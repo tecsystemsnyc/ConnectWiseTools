@@ -33,6 +33,29 @@ namespace EstimatingLibrary
             IOType.UI, IOType.UO
         };
 
+        public static IOType GetUniversalType(IOType type)
+        {
+            if (PointIO.Contains(type))
+            {
+                if (type == IOType.AI || type == IOType.DI)
+                {
+                    return IOType.UI;
+                }
+                else if (type == IOType.AO || type == IOType.DO)
+                {
+                    return IOType.UO;
+                }
+                else
+                {
+                    throw new NotImplementedException("PointIO type not recognized.");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Universal type must come from point type.");
+            }
+        }
+
         #region Properties
         private IOType _type;
         public IOType Type
@@ -170,10 +193,20 @@ namespace EstimatingLibrary
         }
         public bool Contains(IEnumerable<TECIO> io)
         {
+            //Normalize collections
+            IOCollection thisCollection = new IOCollection(this);
             IOCollection ioCollection = new IOCollection(io);
+
             foreach (TECIO ioToCheck in ioCollection.ListIO())
             {
-                if (!this.Contains(ioToCheck)) return false;
+                if (thisCollection.Contains(ioToCheck))
+                {
+                    thisCollection.RemoveIO(ioToCheck);
+                }
+                else
+                {
+                    return false;
+                }
             }
             return true;
         }
@@ -224,23 +257,93 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new ObjectDisposedException("IOCollection does not contain type.");
+                if (TECIO.PointIO.Contains(type))
+                {
+                    if (type == IOType.AI || type == IOType.DI)
+                    {
+                        if (ioDictionary.ContainsKey(IOType.UI))
+                        {
+                            TECIO io = ioDictionary[IOType.UI];
+                            io.Quantity--;
+                            if (io.Quantity < 1)
+                            {
+                                ioDictionary.Remove(io.Type);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("IOCollection does not contain IOType.");
+                        }
+                    }
+                    else if (type == IOType.AO || type == IOType.DO)
+                    {
+                        if (ioDictionary.ContainsKey(IOType.UO))
+                        {
+                            TECIO io = ioDictionary[IOType.UO];
+                            io.Quantity--;
+                            if (io.Quantity < 1)
+                            {
+                                ioDictionary.Remove(io.Type);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("IOCollection does not contain IOType.");
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("PointIO type not recognized.");
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("IOCollection does not contain IOType.");
+                }
             }
         }
         public void RemoveIO(TECIO io)
         {
-            if (ioDictionary.ContainsKey(io.Type) && ioDictionary[io.Type].Quantity >= io.Quantity)
+            if (this.Contains(io))
             {
-                TECIO collectionIO = ioDictionary[io.Type];
-                collectionIO.Quantity -= io.Quantity;
-                if (collectionIO.Quantity < 1)
+                TECIO sameIO = ioDictionary.ContainsKey(io.Type) ? ioDictionary[io.Type] : null;
+                if (sameIO?.Quantity >= io.Quantity)
                 {
-                    ioDictionary.Remove(collectionIO.Type);
+                    sameIO.Quantity -= io.Quantity;
+                }
+                else
+                {
+                    int quantityRemaining = io.Quantity;
+                    if (sameIO != null)
+                    {
+                        quantityRemaining -= sameIO.Quantity;
+                        sameIO.Quantity = 0;
+                    }
+
+                    IOType universalType = TECIO.GetUniversalType(io.Type);
+                    TECIO universalIO = ioDictionary.ContainsKey(universalType) ? ioDictionary[universalType] : null;
+                    if (universalIO?.Quantity >= quantityRemaining)
+                    {
+                        universalIO.Quantity -= quantityRemaining;
+                        if (universalIO.Quantity < 1)
+                        {
+                            ioDictionary.Remove(sameIO.Type);
+                        }
+                    }
+                    else
+                    {
+                        throw new DataMisalignedException("ContainsIO passed but RemoveIO failed.");
+                    }
+                }
+                
+                if (sameIO?.Quantity < 1)
+                {
+                    ioDictionary.Remove(sameIO.Type);
                 }
             }
             else
             {
-                throw new ObjectDisposedException("IOCollection does not contain enough type.");
+                throw new InvalidOperationException("IOCollection does not contain enough type.");
             }
         }
         public void RemoveIO(IEnumerable<TECIO> ioList)

@@ -205,7 +205,7 @@ namespace EstimatingLibraryTests
 
         }
         [TestMethod]
-        public void UnivsersalContainsSpecificList()
+        public void UniversalContainsSpecificList()
         {
             //Ex. 5 UI, 5 UO contains 3 AI, 2 DI, 3 AO, 2 DO. Uses Contains(IEnumerable<TECIO>)
             TECIO ui = new TECIO(IOType.UI);
@@ -551,7 +551,7 @@ namespace EstimatingLibraryTests
             TECIO toRemove = new TECIO(IOType.DI);
             toRemove.Quantity = 2;
 
-            collection.AddIO(toRemove);
+            collection.RemoveIO(toRemove);
 
             Assert.AreEqual(3, collection.IONumber(IOType.UI));
         }
