@@ -72,7 +72,6 @@ namespace EstimateBuilder.MVVM
         {
             //File menu items
             addMenuItem("Refresh Bid", "Can't refresh", parentItemName: "File");
-            addMenuItem("Export", parentItemName: "File");
 
             //Export menu items
             addMenuItem("Proposal", parentItemName: "Export");
