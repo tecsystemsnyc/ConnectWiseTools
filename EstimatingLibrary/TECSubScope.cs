@@ -318,10 +318,11 @@ namespace EstimatingLibrary
         }
         private bool isNetwork()
         {
-            if(Points.Count != 1)
+            if(IO.ListIO().Count != 1)
             {
                 return false;
-            } else
+            }
+            else
             {
                 return TECIO.NetworkIO.Contains(Points[0].Type);
             }
