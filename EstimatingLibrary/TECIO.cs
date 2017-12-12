@@ -136,14 +136,36 @@ namespace EstimatingLibrary
         }
         public bool Contains(TECIO io)
         {
-            if(ioDictionary.ContainsKey(io.Type))
+            if (TECIO.PointIO.Contains(io.Type))
             {
-                TECIO collectionIO = ioDictionary[io.Type];
-                return (collectionIO.Quantity >= io.Quantity);
+                if (io.Type == IOType.AI || io.Type == IOType.DI)
+                {
+                    int iQuantity = ioDictionary.ContainsKey(io.Type) ? ioDictionary[io.Type].Quantity : 0;
+                    iQuantity += (ioDictionary.ContainsKey(IOType.UI) ? ioDictionary[IOType.UI].Quantity : 0);
+                    return iQuantity >= io.Quantity;
+                }
+                else if (io.Type == IOType.AO || io.Type == IOType.DO)
+                {
+                    int oQuantity = ioDictionary.ContainsKey(io.Type) ? ioDictionary[io.Type].Quantity : 0;
+                    oQuantity += (ioDictionary.ContainsKey(IOType.UO) ? ioDictionary[IOType.UO].Quantity : 0);
+                    return oQuantity >= io.Quantity;
+                }
+                else
+                {
+                    throw new NotImplementedException("PointIO type not recognized.");
+                }
             }
             else
             {
-                return false;
+                if (ioDictionary.ContainsKey(io.Type))
+                {
+                    TECIO collectionIO = ioDictionary[io.Type];
+                    return (collectionIO.Quantity >= io.Quantity);
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         public bool Contains(IEnumerable<TECIO> io)

@@ -105,7 +105,7 @@ namespace EstimatingLibraryTests
 
         }
         [TestMethod]
-        public void UnivseralContainsSpecificIO()
+        public void UniversalContainsSpecificIO()
         {
             //Ex. 5 UI contains 3 AI and 3 DI separately, uses Contains(TECIO)
             TECIO ui = new TECIO(IOType.UI);
