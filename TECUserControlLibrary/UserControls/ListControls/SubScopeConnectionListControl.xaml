@@ -28,6 +28,7 @@
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   AllowDrop="True"
                   Drop="ListView_Dropped">
             <ListView.ItemsPanel>

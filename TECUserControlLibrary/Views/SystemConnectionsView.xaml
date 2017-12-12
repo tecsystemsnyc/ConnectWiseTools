@@ -35,8 +35,7 @@
         </Grid.RowDefinitions>
 
         <!--Controllers-->
-        <Border Grid.RowSpan="2">
-            <Grid x:Name="controllerList">
+        <Grid x:Name="controllerList" Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
@@ -54,47 +53,51 @@
                         <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
                     </DataTemplate>
                 </Grid.Resources>
-                <Label Content="Controllers" Grid.ColumnSpan="2"/>
+                <Border Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+                    <Label Content="Controllers" HorizontalAlignment="Center" />
+                </Border>
                 <listControls:ControllerListControl
                 Source="{Binding Controllers}"
                 SelectedItem="{Binding SelectedController}"
                     Grid.Row="1"
                     Grid.ColumnSpan="2"/>
-                <Border Grid.RowSpan="2" Grid.ColumnSpan="2"/>
 
-                <Label Content="Unconnected Points" Grid.Row="2" Grid.ColumnSpan="2"/>
+                <Border Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+                    <Label Content="Unconnected Points" HorizontalAlignment="Center"/>
+                </Border>
+
+
                 <Label Content="Equipment:" Grid.Row="3"/>
                 <ComboBox Grid.Row="3"
                           Grid.Column="1"
                           ItemsSource="{Binding Equipment}"
                           SelectedItem="{Binding SelectedEquipment}"
                           DisplayMemberPath="Name"
-                          Width="Auto"/>
+                          Width="Auto"
+                          SelectedIndex="0"
+                          Margin="2"/>
                 <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
                                                   IsDragSource="True"
                                                   DropHandler="{Binding}" Grid.Row="4" Grid.ColumnSpan="2"
                                                   DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
                                                   SelectedItem="{Binding SelectedUnconnectedSubScope}"/>
-                <Border Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
             </Grid>
-        </Border>
         
         <!--SubScope Connections-->
-        <Border Grid.Column="1" Grid.ColumnSpan="2">
-            <Grid>
+        <Grid Grid.Column="1" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border BorderThickness="0,0,0,1" Margin="0,5,0,5" BorderBrush="DarkGray">
+                <Border BorderThickness="0,0,0,1" Margin="20,0,20,0" BorderBrush="DarkGray">
                     <Grid>
                         <TextBlock Text="{Binding SelectedController.Name, StringFormat=Connected to {0}}" HorizontalAlignment="Center"
                                Visibility="{Binding SelectedController, 
-                    Converter={utilities:NullToCollapsedConverter}}" Foreground="Black"/>
+                    Converter={utilities:NullToCollapsedConverter}}" Foreground="Black" VerticalAlignment="Center"/>
                         <TextBlock Text="Select a Controller to Create Connections" HorizontalAlignment="Center"
                                Visibility="{Binding SelectedController, 
-                    Converter={utilities:NullToVisibilityConverter}}" Foreground="Black"/>
+                    Converter={utilities:NullToVisibilityConverter}}" Foreground="Black" VerticalAlignment="Center"/>
                     </Grid>
                 </Border>
                 <Button Content="Update All"
@@ -133,6 +136,5 @@
                     </listControls:SubScopeConnectionListControl.UpdateButtonVisibility>
                 </listControls:SubScopeConnectionListControl>
             </Grid>
-        </Border>
     </Grid>
 </UserControl>
