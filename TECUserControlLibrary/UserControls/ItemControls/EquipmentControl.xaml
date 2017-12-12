@@ -25,10 +25,10 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <Label FontSize="14" Content="{Binding Name}" FontWeight="DemiBold"/>
-            <Label Content="{Binding Description}" Grid.Column="1"/>
+            <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding Description}" Grid.Column="1" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding SubScope.Count, StringFormat=Points: {0}}" Grid.Row="1" />
         </Grid>
     </Border>

@@ -835,6 +835,32 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    
+
+    public class EmptyStringToCollapsedConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is String text && text == "")
+            {
+                return Visibility.Collapsed;
+            }
+            else
+            {
+                return Visibility.Visible;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter
