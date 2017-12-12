@@ -138,18 +138,7 @@ namespace EstimatingLibrary
             {
                 if (TECIO.PointIO.Contains(type))
                 {
-                    if (type == IOType.AI || type == IOType.DI)
-                    {
-                        return ioDictionary.ContainsKey(IOType.UI);
-                    }
-                    else if (type == IOType.AO || type == IOType.DO)
-                    {
-                        return ioDictionary.ContainsKey(IOType.UO);
-                    }
-                    else
-                    {
-                        throw new NotImplementedException("PointIO type not recognized.");
-                    }
+                    return ioDictionary.ContainsKey(TECIO.GetUniversalType(type));
                 }
                 else
                 {
@@ -161,22 +150,10 @@ namespace EstimatingLibrary
         {
             if (TECIO.PointIO.Contains(io.Type))
             {
-                if (io.Type == IOType.AI || io.Type == IOType.DI)
-                {
-                    int iQuantity = ioDictionary.ContainsKey(io.Type) ? ioDictionary[io.Type].Quantity : 0;
-                    iQuantity += (ioDictionary.ContainsKey(IOType.UI) ? ioDictionary[IOType.UI].Quantity : 0);
-                    return iQuantity >= io.Quantity;
-                }
-                else if (io.Type == IOType.AO || io.Type == IOType.DO)
-                {
-                    int oQuantity = ioDictionary.ContainsKey(io.Type) ? ioDictionary[io.Type].Quantity : 0;
-                    oQuantity += (ioDictionary.ContainsKey(IOType.UO) ? ioDictionary[IOType.UO].Quantity : 0);
-                    return oQuantity >= io.Quantity;
-                }
-                else
-                {
-                    throw new NotImplementedException("PointIO type not recognized.");
-                }
+                IOType universalType = TECIO.GetUniversalType(io.Type);
+                int quantity = ioDictionary.ContainsKey(io.Type) ? ioDictionary[io.Type].Quantity : 0;
+                quantity += ioDictionary.ContainsKey(universalType) ? ioDictionary[universalType].Quantity : 0;
+                return quantity >= io.Quantity;
             }
             else
             {
@@ -259,41 +236,19 @@ namespace EstimatingLibrary
             {
                 if (TECIO.PointIO.Contains(type))
                 {
-                    if (type == IOType.AI || type == IOType.DI)
+                    IOType universalType = TECIO.GetUniversalType(type);
+                    if (ioDictionary.ContainsKey(universalType))
                     {
-                        if (ioDictionary.ContainsKey(IOType.UI))
+                        TECIO universalIO = ioDictionary[universalType];
+                        universalIO.Quantity--;
+                        if (universalIO.Quantity < 1)
                         {
-                            TECIO io = ioDictionary[IOType.UI];
-                            io.Quantity--;
-                            if (io.Quantity < 1)
-                            {
-                                ioDictionary.Remove(io.Type);
-                            }
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("IOCollection does not contain IOType.");
-                        }
-                    }
-                    else if (type == IOType.AO || type == IOType.DO)
-                    {
-                        if (ioDictionary.ContainsKey(IOType.UO))
-                        {
-                            TECIO io = ioDictionary[IOType.UO];
-                            io.Quantity--;
-                            if (io.Quantity < 1)
-                            {
-                                ioDictionary.Remove(io.Type);
-                            }
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("IOCollection does not contain IOType.");
+                            ioDictionary.Remove(universalIO.Type);
                         }
                     }
                     else
                     {
-                        throw new NotImplementedException("PointIO type not recognized.");
+                        throw new InvalidOperationException("IOCollection does not contain IOType.");
                     }
                 }
                 else
