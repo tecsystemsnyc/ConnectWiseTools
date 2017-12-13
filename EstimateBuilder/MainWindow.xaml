@@ -21,7 +21,7 @@
         WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        x:Name="parent">
+        x:Name="mainWindow">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,7 +35,7 @@
         <i:EventTrigger EventName="Closing">
             <cmd:EventToCommand Command="{Binding ClosingCommand}" 
                                 PassEventArgsToCommand="True"
-                                EventArgsConverterParameter="{Binding ElementName=parent}" 
+                                EventArgsConverterParameter="{Binding ElementName=mainWindow}" 
                                 EventArgsConverter="{StaticResource ClosingConverter}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
@@ -55,11 +55,11 @@
                     Gesture="CTRL+N" />
     </Window.InputBindings>
 
-    <ContentControl Content="{Binding ElementName=parent, Path=DataContext.CurrentVM}" IsEnabled="{Binding ViewEnabled}">
+    <ContentControl Content="{Binding ElementName=mainWindow, Path=DataContext.CurrentVM}" IsEnabled="{Binding ViewEnabled}">
         <ContentControl.Resources>
             <DataTemplate DataType="{x:Type localMVVM:EstimateEditorVM}">
                 <DockPanel Background="{DynamicResource EBWindowBackgroundBrush}">
-                    <views:MenuView ViewModel="{Binding ElementName=parent, Path=DataContext.MenuVM}"
+                    <views:MenuView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.MenuVM}"
                                     DockPanel.Dock="Top"/>
 
                     <Grid x:Name="LayoutRoot">
@@ -76,7 +76,7 @@
                             <ColumnDefinition Width="150"/>
                         </Grid.ColumnDefinitions>
 
-                        <Image Source="{Binding ElementName=parent, Path=DataContext.TECLogo}"
+                        <Image Source="{Binding ElementName=mainWindow, Path=DataContext.TECLogo}"
                            Grid.Column="2"
                            Grid.RowSpan="2"/>
 
@@ -95,7 +95,7 @@
                             </TabItem>
                             
                         </TabControl>
-                        <views:StatusBarView ViewModel="{Binding ElementName=parent, Path=DataContext.StatusBarVM}"
+                        <views:StatusBarView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.StatusBarVM}"
                                                    Grid.Row="3" Grid.ColumnSpan="3"
                                                    dd:DragDrop.IsDropTarget="True"
                                                    dd:DragDrop.DropHandler="{Binding}"/>
