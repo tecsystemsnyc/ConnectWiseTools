@@ -372,8 +372,8 @@ namespace Tests
             //Misc Cost
             TECMisc cost = new TECMisc(CostType.TEC, false);
             cost.Name = "Test Cost";
-            cost.Cost = 69.69;
-            cost.Quantity = 69;
+            cost.Cost = 79.79;
+            cost.Quantity = 67;
 
             templates.MiscCostTemplates.Add(cost);
 

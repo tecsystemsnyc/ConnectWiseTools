@@ -427,15 +427,43 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_MiscCost()
+        public void SaveAs_Templates_Misc()
         {
             //Arrange
-            TECMisc expectedCost = expectedTemplates.MiscCostTemplates[0];
-            TECMisc actualCost = actualTemplates.MiscCostTemplates[0];
+            TECMisc expectedTECCost = null, expectedElecCost = null;
+            foreach(TECMisc misc in expectedTemplates.MiscCostTemplates)
+            {
+                if (misc.Type == CostType.TEC)
+                {
+                    expectedTECCost = misc;
+                }
+                else if (misc.Type == CostType.Electrical)
+                {
+                    expectedElecCost = misc;
+                }
+            }
 
-            Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost, DELTA);
-            Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
+            TECMisc actualTECCost = null, actualElecCost = null;
+            foreach(TECMisc misc in actualTemplates.MiscCostTemplates)
+            {
+                if (misc.Type == CostType.TEC)
+                {
+                    actualTECCost = misc;
+                }
+                else if (misc.Type == CostType.Electrical)
+                {
+                    actualElecCost = misc;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedTECCost.Name, actualTECCost.Name);
+            Assert.AreEqual(expectedTECCost.Cost, actualTECCost.Cost, DELTA);
+            Assert.AreEqual(expectedTECCost.Quantity, actualTECCost.Quantity);
+
+            Assert.AreEqual(expectedElecCost.Name, actualElecCost.Name);
+            Assert.AreEqual(expectedElecCost.Cost, actualElecCost.Cost, DELTA);
+            Assert.AreEqual(expectedElecCost.Quantity, actualElecCost.Quantity);
         }
 
         [TestMethod]
