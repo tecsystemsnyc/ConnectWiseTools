@@ -30,7 +30,7 @@ namespace EstimatingLibrary
                 var outConnectionTypes = new ObservableCollection<TECConnectionType>();
                 if (SubScope != null)
                 {
-                    foreach (TECDevice dev in SubScope.Devices)
+                    foreach (IEndDevice dev in SubScope.Devices)
                     {
                         foreach(TECConnectionType type in dev.ConnectionTypes)
                         {
