@@ -98,7 +98,6 @@ namespace TemplateBuilder.MVVM
             {
                 handleLoaded(new TECTemplates());
             }
-            
         }
 
         protected override void handleLoaded(TECTemplates loaded)
