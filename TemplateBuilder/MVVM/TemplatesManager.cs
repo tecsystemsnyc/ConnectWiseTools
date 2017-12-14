@@ -106,7 +106,7 @@ namespace TemplateBuilder.MVVM
             templates = loaded;
             watcher = new ChangeWatcher(templates);
             doStack = new DoStacker(watcher);
-            deltaStack = new DeltaStacker(watcher, true);
+            deltaStack = new DeltaStacker(watcher, templates);
 
             EditorVM = new TemplatesEditorVM(templates);
             CurrentVM = EditorVM;

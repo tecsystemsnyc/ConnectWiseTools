@@ -189,7 +189,7 @@ namespace TECUserControlLibrary.BaseVMs
                 StatusBarVM.CurrentStatusText = "Saving...";
                 databaseManager.SaveComplete += handleSaveDeltaComplete;
                 databaseManager.AsyncSave(deltaStack.CleansedStack());
-                deltaStack = new DeltaStacker(watcher, isTemplates);
+                deltaStack = new DeltaStacker(watcher, getWorkingScope());
             }
             else
             {
@@ -246,7 +246,7 @@ namespace TECUserControlLibrary.BaseVMs
             {
                 logger.Info("Save New sucessful.");
                 StatusBarVM.CurrentStatusText = "Ready";
-                deltaStack = new DeltaStacker(watcher, isTemplates);
+                deltaStack = new DeltaStacker(watcher, getWorkingScope());
             }
             else
             {
@@ -470,7 +470,7 @@ namespace TECUserControlLibrary.BaseVMs
                 if (success)
                 {
                     logger.Info("Save successful, attempting window.Close()");
-                    deltaStack = new DeltaStacker(watcher, isTemplates);
+                    deltaStack = new DeltaStacker(watcher, getWorkingScope());
                     window.Close();
                 }
                 else
