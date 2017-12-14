@@ -30,7 +30,10 @@ namespace EstimatingLibrary.Utilities
 
         private void handleTemplatesChanged(TECChangedEventArgs obj)
         {
-            throw new NotImplementedException();
+            if(obj.Value is T item && !(obj.Sender is TECTemplates) && obj.Change == Change.Remove)
+            {
+                removeItem(item);
+            }
         }
 
         public event Action<TECChangedEventArgs> TECChanged;
@@ -40,6 +43,14 @@ namespace EstimatingLibrary.Utilities
             ChangeWatcher watcher = new ChangeWatcher(template);
             watcher.Changed += (args)=> hanldeTChanged(template, template);
             dictionary.Add(template, new List<T> { template });
+        }
+        public void RemoveGroup(T template)
+        {
+            foreach(T item in dictionary[template])
+            {
+                notifyTECChanged(Change.Remove, template, item);
+            }
+            dictionary.Remove(template);
         }
         public T NewItem(T template)
         {
