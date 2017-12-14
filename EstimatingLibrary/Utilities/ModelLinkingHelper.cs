@@ -680,7 +680,21 @@ namespace EstimatingLibrary.Utilities
                 {
                     system.Equipment.Add(item);
                 }
-                (List<TECController> controllerRemove, List<TECController> controllerReplace) = findReferences(system.Controllers, templates.ControllerTemplates);
+                foreach(TECEquipment equipment in 
+                    system.Equipment.Where(item => !templates.EquipmentTemplates.Contains(item)))
+                {
+                    (List<TECSubScope> toRemove, List<TECSubScope> toReplace) = findReferences(equipment.SubScope, templates.SubScopeTemplates);
+                    foreach (TECSubScope item in toRemove)
+                    {
+                        equipment.SubScope.Remove(item);
+                    }
+                    foreach (TECSubScope item in toReplace)
+                    {
+                        equipment.SubScope.Add(item);
+                    }
+                }
+                (List<TECController> controllerRemove, List<TECController> controllerReplace) = 
+                    findReferences(system.Controllers, templates.ControllerTemplates);
                 foreach(TECController item in controllerRemove)
                 {
                     system.RemoveController(item);
@@ -707,9 +721,6 @@ namespace EstimatingLibrary.Utilities
                 {
                     system.Panels.Add(item);
                 }
-
-
-
             }
         }
         private static (List<T> toRemove, List<T> toReplace) findReferences<T>(IEnumerable<T> instanceList, IEnumerable<T> ReferenceList) where T : TECObject
