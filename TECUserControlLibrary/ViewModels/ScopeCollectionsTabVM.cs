@@ -79,8 +79,8 @@ namespace TECUserControlLibrary.ViewModels
             this.catalogs = catalogs; 
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
-            populateItemsCollections();
             SearchString = "";
+            SearchCollectionExecute();
         }
         #endregion
 
@@ -90,7 +90,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             Templates = templates;
             this.catalogs = catalogs;
-            populateItemsCollections();
+            SearchCollectionExecute();
         }
 
         #region Commands
@@ -167,109 +167,9 @@ namespace TECUserControlLibrary.ViewModels
         private void EndSearchExecute()
         {
             SearchString = "";
-            populateItemsCollections();
+            SearchCollectionExecute();
         }
         #endregion
-
-        public void populateItemsCollections()
-        {
-            ResultCollection = new ObservableCollection<TECObject>();
-            switch (ChosenType)
-            {
-                case AllSearchableObjects.System:
-                    foreach (TECSystem sys in Templates.SystemTemplates)
-                    {
-                        ResultCollection.Add(sys);
-                    }
-                    break;
-                case AllSearchableObjects.Equipment:
-                    foreach (TECEquipment equip in Templates.EquipmentTemplates)
-                    {
-                        ResultCollection.Add(equip);
-                    }
-                    break;
-                case AllSearchableObjects.SubScope:
-                    foreach (TECSubScope ss in Templates.SubScopeTemplates)
-                    {
-                        ResultCollection.Add(ss);
-                    }
-                    break;
-                case AllSearchableObjects.Devices:
-                    foreach (TECDevice dev in catalogs.Devices)
-                    {
-                        ResultCollection.Add(dev);
-                    }
-                    break;
-                case AllSearchableObjects.Controllers:
-                    foreach (TECController control in Templates.ControllerTemplates)
-                    {
-                        ResultCollection.Add(control);
-                    }
-                    break;
-                case AllSearchableObjects.Panels:
-                    foreach (TECPanel panel in Templates.PanelTemplates)
-                    {
-                        ResultCollection.Add(panel);
-                    }
-                    break;
-                case AllSearchableObjects.MiscCosts:
-                    foreach (TECMisc cost in Templates.MiscCostTemplates)
-                    {
-                        if (cost.Type == CostType.TEC)
-                        {
-                            ResultCollection.Add(cost);
-                        }
-                    }
-                    break;
-                case AllSearchableObjects.MiscWiring:
-                    foreach (TECMisc cost in Templates.MiscCostTemplates)
-                    {
-                        if (cost.Type == CostType.Electrical)
-                        {
-                            ResultCollection.Add(cost);
-                        }
-                    }
-                    break;
-                case AllSearchableObjects.Wires:
-                    foreach(TECElectricalMaterial wire in catalogs.ConnectionTypes)
-                    {
-                        ResultCollection.Add(wire);
-                    }
-                    break;
-                case AllSearchableObjects.Conduits:
-                    foreach (TECElectricalMaterial conduit in catalogs.ConduitTypes)
-                    {
-                        ResultCollection.Add(conduit);
-                    }
-                    break;
-                case AllSearchableObjects.IOModules:
-                    foreach(TECIOModule module in catalogs.IOModules)
-                    {
-                        ResultCollection.Add(module);
-                    }
-                    break;
-                case AllSearchableObjects.PanelTypes:
-                    foreach (TECPanelType type in catalogs.PanelTypes)
-                    {
-                        ResultCollection.Add(type);
-                    }
-                    break;
-                case AllSearchableObjects.ControllerTypes:
-                    foreach (TECPanelType type in catalogs.PanelTypes)
-                    {
-                        ResultCollection.Add(type);
-                    }
-                    break;
-                case AllSearchableObjects.Tags:
-                    foreach (TECLabeled tag in catalogs.Tags)
-                    {
-                        ResultCollection.Add(tag);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
         
         public void DragOver(IDropInfo dropInfo)
         {

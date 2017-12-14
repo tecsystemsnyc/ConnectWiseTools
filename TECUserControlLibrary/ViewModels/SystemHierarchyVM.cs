@@ -455,7 +455,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (dropped is TECSystem system)
             {
-                SelectedVM = new AddSystemVM(scopeManager as TECBid);
+                SelectedVM = new AddSystemVM(scopeManager);
                 ((AddSystemVM)SelectedVM).ToAdd = system;
             }
             

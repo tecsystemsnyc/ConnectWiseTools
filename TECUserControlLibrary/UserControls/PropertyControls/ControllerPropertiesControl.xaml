@@ -55,7 +55,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Label Content="Available IO" Grid.Row="3" FontWeight="DemiBold"/>
+        <Label Content="Spare IO" Grid.Row="3" FontWeight="DemiBold"/>
         <ListView Grid.Row="4" Grid.ColumnSpan="2"
                   ItemsSource="{Binding AvailableIO}"
                   HorizontalContentAlignment="Stretch">
