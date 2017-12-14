@@ -268,5 +268,33 @@ namespace EstimatingLibrary
             }
         }
         #endregion
+
+        public bool IsTemplateObject(TECObject item)
+        {
+            if(item is TECSubScope subScope)
+            {
+                return SubScopeTemplates.Contains(subScope);
+            }
+            else if (item is TECEquipment equipment)
+            {
+                return EquipmentTemplates.Contains(equipment);
+            }
+            else if (item is TECController controller)
+            {
+                return ControllerTemplates.Contains(controller);
+            }
+            else if (item is TECPanel panel)
+            {
+                return PanelTemplates.Contains(panel);
+            }
+            else if (item is TECMisc misc)
+            {
+                return MiscCostTemplates.Contains(misc);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

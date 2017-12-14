@@ -36,7 +36,7 @@ namespace Tests
             path = Path.GetTempFileName();
             templates = TestHelper.CreateTestTemplates();
             ChangeWatcher watcher = new ChangeWatcher(templates);
-            testStack = new DeltaStacker(watcher, true);
+            testStack = new DeltaStacker(watcher, templates);
             DatabaseManager<TECTemplates> manager = new DatabaseManager<TECTemplates>(path);
             manager.New(templates);
         }
