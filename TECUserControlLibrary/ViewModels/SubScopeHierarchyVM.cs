@@ -112,7 +112,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddPoint(TECSubScope subScope)
         {
-            return true;
+            return subScope != null;
         }
 
         private void deleteSubScopeExecute(TECSubScope obj)

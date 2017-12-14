@@ -129,7 +129,7 @@ namespace TECUserControlLibrary.Utilities
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
                 bool isDragDropable = sourceItem is IDragDropable;
                 bool sourceNotNull = sourceItem != null;
-                bool sourceMatchesTarget = sourceType ==  typeof(TECSystem) && targetType == typeof(TECTypical);
+                bool sourceMatchesTarget = sourceType ==  typeof(TECSystem) && (targetType == typeof(TECTypical) || targetType == typeof(TECSystem));
                 if (sourceNotNull && sourceMatchesTarget && isDragDropable)
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;

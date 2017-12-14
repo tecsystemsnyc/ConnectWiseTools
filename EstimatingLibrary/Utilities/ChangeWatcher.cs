@@ -6,9 +6,12 @@ namespace EstimatingLibrary.Utilities
 {
     public class ChangeWatcher
     {
+        private TECTemplates templates;
+
         #region Constructors
         public ChangeWatcher(TECObject item)
         {
+            templates = item as TECTemplates;
             register(item);
         }
         #endregion
@@ -57,7 +60,7 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (Tuple<string, TECObject> child in saveable.PropertyObjects.ChildList())
                 {
-                    if (!saveable.LinkedObjects.Contains(child.Item1))
+                    if (!saveable.LinkedObjects.Contains(child.Item1) && (!isTemplate(child.Item2) || item is TECTemplates))
                     {
                         register(child.Item2);
                     }
@@ -193,6 +196,17 @@ namespace EstimatingLibrary.Utilities
                         raiseTypicalConstituents(change, child.Item2);
                     }
                 }
+            }
+        }
+
+        private bool isTemplate(TECObject item)
+        {
+            if(templates == null)
+            {
+                return false;
+            } else
+            {
+                return templates.IsTemplateObject(item);
             }
         }
         #endregion
