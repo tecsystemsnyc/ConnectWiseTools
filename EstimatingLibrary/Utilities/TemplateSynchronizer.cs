@@ -92,7 +92,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void notifyTECChanged(Change change, T template, T item)
         {
-            TECChanged.Invoke(new TECChangedEventArgs(change, "TemplateRelationship", template, item, null));
+            TECChanged?.Invoke(new TECChangedEventArgs(change, "TemplateRelationship", template, item, null));
         }
     }
 }
