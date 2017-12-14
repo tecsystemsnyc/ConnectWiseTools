@@ -334,6 +334,13 @@ namespace Tests
 
             templates.EquipmentTemplates.Add(equipment);
 
+            //System with reference Equipment
+            TECSystem equipSystem = new TECSystem(false);
+            equipSystem.Name = "Sys RefEquip";
+            equipSystem.Equipment.Add(equipment);
+
+            templates.SystemTemplates.Add(equipSystem);
+
             //SubScope
             TECSubScope subScope = new TECSubScope(false);
             subScope.Name = "Test SubScope";

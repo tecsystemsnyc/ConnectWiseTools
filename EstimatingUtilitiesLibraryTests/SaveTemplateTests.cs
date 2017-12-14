@@ -1894,7 +1894,8 @@ namespace Tests
             templates.PanelTemplates.Add(expectedPanel);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
-            (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
+            (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path);
+            TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECPanel actualpanel = null;
             foreach (TECPanel panel in actualTemplates.PanelTemplates)
@@ -2043,6 +2044,52 @@ namespace Tests
             Assert.AreEqual((oldNumScope - 1), templates.SystemTemplates.Count);
         }
 
+        #endregion
+
+        #region Special Case Tests
+        [TestMethod]
+        public void RemoveEquipmentReference()
+        {
+            //Arrange
+            TECSystem refSystem = null;
+            foreach(TECSystem system in templates.SystemTemplates)
+            {
+                if (system.Name == "Sys RefEquip")
+                {
+                    refSystem = system;
+                    break;
+                }
+            }
+
+            TECEquipment refEquip = refSystem.Equipment[0];
+            Guid equipGuid = refEquip.Guid;
+
+            //Act
+            refSystem.Equipment.Remove(refEquip);
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path);
+            TECTemplates actualTemplates = loaded as TECTemplates;
+
+            //Assert
+            bool hasEquipment = false;
+            foreach(TECEquipment equip in actualTemplates.EquipmentTemplates)
+            {
+                if (equip.Guid == equipGuid)
+                {
+                    hasEquipment = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(hasEquipment);
+        }
+
+        [TestMethod]
+        public static void RemoveSubScopeReference()
+        {
+
+        }
         #endregion
     }
 }
