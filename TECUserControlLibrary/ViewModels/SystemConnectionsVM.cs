@@ -6,6 +6,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary.Interfaces;
@@ -379,13 +380,16 @@ namespace TECUserControlLibrary.ViewModels
         private void handleEquipmentSelected()
         {
             UnconnectedSubScope.Clear();
-            foreach (TECSubScope ss in system.GetAllSubScope())
+            if(SelectedEquipment == null)
             {
-                if (ss.Connection == null && !ss.IsNetwork && SelectedEquipment != null && SelectedEquipment.SubScope.Contains(ss))
-                {
-                    UnconnectedSubScope.Add(ss);
-                }
+                return;
             }
+            foreach(TECSubScope ss in 
+                SelectedEquipment.SubScope.Where(ss => ss.Connection == null && !ss.IsNetwork))
+            {
+                UnconnectedSubScope.Add(ss);
+            }
+            
         }
 
         private void handleSystemChanged(Change change, TECObject obj)
@@ -416,7 +420,8 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (change == Change.Add)
                 {
-                    if (subScope.Connection == null && !subScope.IsNetwork && SelectedEquipment != null && SelectedEquipment.SubScope.Contains(subScope))
+                    if (subScope.Connection == null && !subScope.IsNetwork && 
+                        SelectedEquipment != null && SelectedEquipment.SubScope.Contains(subScope))
                     {
                         UnconnectedSubScope.Add(subScope);
                     }
