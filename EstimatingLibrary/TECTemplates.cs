@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.ObjectModel;
 
@@ -99,6 +100,9 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
             }
         }
+
+        private TemplateSynchronizer<TECSubScope> subScopeSynchronizer;
+        private TemplateSynchronizer<TECEquipment> equipmentSynchronizer;
         #endregion //Properties
 
         //For listening to a catalog changing
@@ -141,6 +145,42 @@ namespace EstimatingLibrary
             Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
 
             Catalogs.ScopeChildRemoved += scopeChildRemoved;
+
+            void syncSubScope(TECSubScope template, TECSubScope item)
+            {
+                item.CopyPropertiesFromScope(template);
+                item.Points.Clear();
+                item.Devices.Clear();
+                foreach (TECPoint point in template.Points)
+                {
+                    item.Points.Add(new TECPoint(point, false));
+                }
+                foreach (TECDevice device in template.Devices)
+                {
+                    item.Devices.Add(device);
+                }
+            }
+
+            subScopeSynchronizer = new TemplateSynchronizer<TECSubScope>((item => 
+            {
+                return new TECSubScope(item, false);
+            }),syncSubScope, this);
+
+            equipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
+                (item => {
+                    TECEquipment newItem = new TECEquipment(false);
+                    foreach(TECSubScope subScope in item.SubScope)
+                    {
+                        newItem.SubScope.Add(subScopeSynchronizer.NewItem(subScope));
+                    }
+                    return newItem;
+
+                }),
+                ((template, item) =>
+                {
+                    item.CopyPropertiesFromScope(template);
+                }), this);
+            
         }
         #endregion //Constructors
 

@@ -41,8 +41,8 @@ namespace EstimatingLibrary.Utilities
         public void NewGroup(T template)
         {
             ChangeWatcher watcher = new ChangeWatcher(template);
-            watcher.Changed += (args)=> handleTChanged(template, template);
-            dictionary.Add(template, new List<T> { template });
+            watcher.Changed += (args)=> hanldeTChanged(template, template);
+            dictionary.Add(template, new List<T>());
         }
         public void RemoveGroup(T template)
         {
@@ -56,7 +56,11 @@ namespace EstimatingLibrary.Utilities
         {
             T newItem = copy(template);
             ChangeWatcher watcher = new ChangeWatcher(newItem);
-            watcher.Changed += (args) => handleTChanged(template, newItem);
+            watcher.Changed += (args) => hanldeTChanged(template, newItem);
+            if (!dictionary.ContainsKey(template))
+            {
+                NewGroup(template);
+            }
             dictionary[template].Add(newItem);
             notifyTECChanged(Change.Add, template, newItem);
             return newItem;
