@@ -257,7 +257,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddEquipment(TECSystem system)
         {
-            return true;
+            return system != null;
         }
 
         private void addSubScopeExecute(TECEquipment equipment)
@@ -266,7 +266,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddSubScope(TECEquipment equipment)
         {
-            return true;
+            return equipment != null;
         }
 
         private void addPointExecute(TECSubScope subScope)
@@ -275,7 +275,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddPoint(TECSubScope subScope)
         {
-            return true;
+            return subScope != null;
         }
 
         private void addControllerExecute(TECSystem system)

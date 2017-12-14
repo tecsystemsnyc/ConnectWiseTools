@@ -133,7 +133,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddSubScope(TECEquipment equipment)
         {
-            return true;
+            return equipment != null;
         }
 
         private void addPointExecute(TECSubScope subScope)
@@ -142,7 +142,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddPoint(TECSubScope subScope)
         {
-            return true;
+            return subScope != null;
         }
         
 
