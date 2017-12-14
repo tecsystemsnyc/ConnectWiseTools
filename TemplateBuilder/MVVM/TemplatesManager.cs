@@ -76,7 +76,7 @@ namespace TemplateBuilder.MVVM
             string startUpFilePath = getStartUpFilePath();
             if (startUpFilePath != null && startUpFilePath != "")
             {
-                splashVM.TemplatesPath = getStartUpFilePath();
+                splashVM.TemplatesPath = startUpFilePath;
             }
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Template Builder";
@@ -143,6 +143,7 @@ namespace TemplateBuilder.MVVM
         {
             string startUpFilePath = Properties.Settings.Default.StartUpFilePath;
             Properties.Settings.Default.StartUpFilePath = null;
+            Properties.Settings.Default.Save();
             return startUpFilePath;
         }
         protected override TECTemplates getWorkingScope()
