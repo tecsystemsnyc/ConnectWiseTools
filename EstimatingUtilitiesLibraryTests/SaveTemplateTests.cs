@@ -2048,7 +2048,7 @@ namespace Tests
 
         #region Special Case Tests
         [TestMethod]
-        public void RemoveEquipmentReference()
+        public void RemoveEquipmentReferenceFromSystem()
         {
             //Arrange
             TECSystem refSystem = null;
@@ -2086,9 +2086,41 @@ namespace Tests
         }
 
         [TestMethod]
-        public static void RemoveSubScopeReference()
+        public void RemoveSubScopeReferenceFromEquipment()
         {
+            //Arrange
+            TECEquipment refEquip = null;
+            foreach(TECEquipment equip in templates.EquipmentTemplates)
+            {
+                if (equip.Name == "Equip RefSS")
+                {
+                    refEquip = equip;
+                    break;
+                }
+            }
 
+            TECSubScope refSS = refEquip.SubScope[0];
+            Guid ssGuid = refSS.Guid;
+
+            //Act
+            refEquip.SubScope.Remove(refSS);
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+            (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path);
+            TECTemplates actualTemplates = loaded as TECTemplates;
+
+            //Assert
+            bool hasSubScope = false;
+            foreach(TECSubScope ss in actualTemplates.SubScopeTemplates)
+            {
+                if (ss.Guid == ssGuid)
+                {
+                    hasSubScope = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(hasSubScope);
         }
         #endregion
     }

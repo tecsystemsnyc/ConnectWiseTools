@@ -356,6 +356,13 @@ namespace Tests
 
             templates.SubScopeTemplates.Add(subScope);
 
+            //Equipment with reference SubScope
+            TECEquipment ssEquip = new TECEquipment(false);
+            ssEquip.Name = "Equip RefSS";
+            ssEquip.SubScope.Add(subScope);
+
+            templates.EquipmentTemplates.Add(ssEquip);
+
             //Controller
             var expectedControllerType = new TECControllerType(testMan);
             expectedControllerType.Price = 42.6;
