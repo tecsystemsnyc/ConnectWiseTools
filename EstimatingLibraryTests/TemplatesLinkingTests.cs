@@ -12,14 +12,54 @@ namespace EstimatingLibraryTests
     [TestClass]
     public class TemplatesLinkingTests
     {
+        [TestMethod]
         public void ReferenceEquipmentInSystem()
         {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
 
+            Guid equipGuid = Guid.NewGuid();
+            TECEquipment refEquip = new TECEquipment(equipGuid, false);
+
+            templates.EquipmentTemplates.Add(refEquip);
+
+            TECSystem system = new TECSystem(false);
+            TECEquipment childEquip = new TECEquipment(equipGuid, false);
+
+            system.Equipment.Add(childEquip);
+
+            templates.SystemTemplates.Add(system);
+
+            //Act
+            ModelLinkingHelper.LinkTemplates(templates);
+
+            //Assert
+            Assert.AreEqual(refEquip, system.Equipment[0]);
         }
 
+        [TestMethod]
         public void ReferenceSubScopeInReferenceEquipment()
         {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
 
+            Guid ssGuid = Guid.NewGuid();
+            TECSubScope refSS = new TECSubScope(ssGuid, false);
+
+            templates.SubScopeTemplates.Add(refSS);
+
+            TECEquipment refEquip = new TECEquipment(false);
+            TECSubScope childSS = new TECSubScope(ssGuid, false);
+
+            refEquip.SubScope.Add(childSS);
+
+            templates.EquipmentTemplates.Add(refEquip);
+
+            //Act
+            ModelLinkingHelper.LinkTemplates(templates);
+
+            //Assert
+            Assert.AreEqual(refSS, refEquip.SubScope[0]);
         }
 
         [TestMethod]
@@ -46,7 +86,7 @@ namespace EstimatingLibraryTests
             ModelLinkingHelper.LinkTemplates(templates);
 
             //Assert
-            Assert.AreEqual(equip.SubScope[0], refSubScope);
+            Assert.AreEqual(refSubScope, equip.SubScope[0]);
         }
     }
 }
