@@ -62,6 +62,7 @@
     <Compile Include="CostChangedTests.cs" />
     <Compile Include="EstimatorTests.cs" />
     <Compile Include="IOCollectionTests.cs" />
+    <Compile Include="TemplatesLinkingTests.cs" />
     <Compile Include="TypicalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
