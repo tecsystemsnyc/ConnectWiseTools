@@ -67,7 +67,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     }
                 }
             }
-            tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, item}, propertyName);
+            tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, item }, propertyName);
             outStack.AddRange(tableObjectStack(change, tables, sender, item));
 
             return outStack;

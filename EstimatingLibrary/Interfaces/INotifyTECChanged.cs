@@ -2,7 +2,7 @@
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface InotifyTECChanged
+    public interface INotifyTECChanged
     {
         event Action<TECChangedEventArgs> TECChanged;
     }
