@@ -10,7 +10,7 @@ namespace EstimatingLibrary.Utilities
     public class TemplateSynchronizer<T> : INotifyTECChanged where T : TECObject
     {
         readonly private Func<T, T> copy;
-        readonly private Action<T, T> sync;
+        readonly private Action<T, T, TECChangedEventArgs> sync;
         readonly private Dictionary<T, List<T>> dictionary;
         bool isSyncing = false;
 
@@ -19,7 +19,7 @@ namespace EstimatingLibrary.Utilities
         /// </summary>
         /// <param name="copy">Creates a new object with the properties of the argument</param>
         /// <param name="sync">Writes the properties of the first argument to the second argument</param>
-        public TemplateSynchronizer(Func<T, T> copy, Action<T, T> sync, TECTemplates templates)
+        public TemplateSynchronizer(Func<T, T> copy, Action<T, T, TECChangedEventArgs> sync, TECTemplates templates)
         {
             this.copy = copy;
             this.sync = sync;
@@ -40,9 +40,13 @@ namespace EstimatingLibrary.Utilities
 
         public void NewGroup(T template)
         {
-            ChangeWatcher watcher = new ChangeWatcher(template);
-            watcher.Changed += (args)=> handleTChanged(template, template);
-            dictionary.Add(template, new List<T>());
+            if (!dictionary.ContainsKey(template))
+            {
+                ChangeWatcher watcher = new ChangeWatcher(template);
+                watcher.Changed += (args) => handleTChanged(template, template, args);
+                dictionary.Add(template, new List<T>());
+            }
+            
         }
         public void RemoveGroup(T template)
         {
@@ -56,7 +60,7 @@ namespace EstimatingLibrary.Utilities
         {
             T newItem = copy(template);
             ChangeWatcher watcher = new ChangeWatcher(newItem);
-            watcher.Changed += (args) => handleTChanged(template, newItem);
+            watcher.Changed += (args) => handleTChanged(template, newItem, args);
             if (!dictionary.ContainsKey(template))
             {
                 NewGroup(template);
@@ -74,7 +78,7 @@ namespace EstimatingLibrary.Utilities
         public void LinkExisting(T template, T item)
         {
             ChangeWatcher watcher = new ChangeWatcher(item);
-            watcher.Changed += (args) => handleTChanged(template, item);
+            watcher.Changed += (args) => handleTChanged(template, item, args);
             if (!dictionary.ContainsKey(template))
             {
                 NewGroup(template);
@@ -111,18 +115,18 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
-        private void handleTChanged(T template, T changed)
+        private void handleTChanged(T template, T changed, TECChangedEventArgs args)
         {
             if (!isSyncing)
             {
                 isSyncing = true;
+                if (changed != template)
+                {
+                    sync(changed, template, args);
+                }
                 foreach (T item in dictionary[template].Where(obj => obj != changed))
                 {
-                    sync(changed, item);
-                }
-                if(changed != template)
-                {
-                    sync(changed, template);
+                    sync(changed, item, args);
                 }
                 isSyncing = false;
             }
@@ -131,6 +135,25 @@ namespace EstimatingLibrary.Utilities
         private void notifyTECChanged(Change change, T template, T item)
         {
             TECChanged?.Invoke(new TECChangedEventArgs(change, "TemplateRelationship", template, item, null));
+        }
+
+        internal T GetTemplate(T item)
+        {
+            if (dictionary.ContainsKey(item))
+            {
+                return item;
+            }
+            else
+            {
+                foreach(var pair in dictionary)
+                {
+                    if (pair.Value.Contains(item))
+                    {
+                        return pair.Key;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
