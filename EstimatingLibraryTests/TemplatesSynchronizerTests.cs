@@ -382,6 +382,9 @@ namespace EstimatingLibraryTests
             ss2.Name = "Second Name";
 
             //Assert
+            Assert.IsFalse(synchronizer.Contains(templateSS));
+            Assert.IsFalse(synchronizer.Contains(ss1));
+            Assert.IsFalse(synchronizer.Contains(ss2));
             Assert.AreEqual("First Name", ss1.Name);
             Assert.AreEqual("Second Name", ss2.Name);
         }
@@ -389,7 +392,24 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void ReferenceSubScopeRemoved()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+            TECSubScope refSS = synchronizer.NewItem(templateSS);
+            templateEquip.SubScope.Add(refSS);
+
+            //Act
+            templateEquip.SubScope.Remove(refSS);
+
+            //Assert
+            Assert.IsFalse(synchronizer.Contains(refSS));
+            Assert.IsTrue(synchronizer.Contains(templateSS));
         }
 
         [TestMethod]
