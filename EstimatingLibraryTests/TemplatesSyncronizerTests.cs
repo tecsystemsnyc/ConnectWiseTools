@@ -113,11 +113,19 @@ namespace EstimatingLibraryTests
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
 
-            syncronizer.NewGroup(templateSS);
-
             List<TECSubScope> newReferenceSS = new List<TECSubScope>();
+            newReferenceSS.Add(new TECSubScope(false));
+            newReferenceSS.Add(new TECSubScope(false));
 
-            throw new NotImplementedException();
+            //Act
+            syncronizer.LinkExisting(templateSS, newReferenceSS);
+            templateSS.Description = "Test Description";
+
+            //Assert
+            foreach(TECSubScope refSS in newReferenceSS)
+            {
+                Assert.AreEqual(templateSS.Description, refSS.Description);
+            }
         }
         
         #endregion
@@ -315,6 +323,6 @@ namespace EstimatingLibraryTests
         }
         #endregion
 
-        //////ADDDD SAVE LOAD TESTS
+        //////ADD DD SAVE LOAD TESTS
     }
 }
