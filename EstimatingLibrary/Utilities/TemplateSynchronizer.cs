@@ -65,6 +65,12 @@ namespace EstimatingLibrary.Utilities
             notifyTECChanged(Change.Add, template, newItem);
             return newItem;
         }
+
+        public Dictionary<T, List<T>> GetFullDictionary()
+        {
+            return dictionary;
+        }
+
         public void LinkExisting(T template, T item)
         {
             ChangeWatcher watcher = new ChangeWatcher(item);
@@ -81,6 +87,17 @@ namespace EstimatingLibrary.Utilities
             {
                 LinkExisting(template, item);
             }
+        }
+        public bool Contains(T item)
+        {
+            foreach(KeyValuePair<T, List<T>> entry in dictionary)
+            {
+                if(entry.Key == item || entry.Value.Contains(item))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void removeItem(T item)

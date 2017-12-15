@@ -1,17 +1,21 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace EstimatingLibrary.Utilities
 {
     public class ChangeWatcher
     {
-        private TECTemplates templates;
+        private readonly List<string> propertyExceptions = new List<string>
+        {
+            "TypicalInstanceDictionary",
+            "TemplateRelationship"
+        };
 
         #region Constructors
         public ChangeWatcher(TECObject item)
         {
-            templates = item as TECTemplates;
             register(item);
         }
         #endregion
@@ -60,7 +64,7 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (Tuple<string, TECObject> child in saveable.PropertyObjects.ChildList())
                 {
-                    if (!saveable.LinkedObjects.Contains(child.Item1) && (!isTemplate(child.Item2) || item is TECTemplates))
+                    if (!saveable.LinkedObjects.Contains(child.Item1))
                     {
                         register(child.Item2);
                     }
@@ -82,7 +86,7 @@ namespace EstimatingLibrary.Utilities
         }
         private void registerChange(TECChangedEventArgs args)
         {
-            if(args.PropertyName != "TypicalInstanceDictionary")
+            if(!propertyExceptions.Contains(args.PropertyName))
             {
                 if (args.Change == Change.Add && args.Value is TECObject tObj)
                 {
@@ -102,7 +106,7 @@ namespace EstimatingLibrary.Utilities
             registerChange(e);
             raiseChanged(e);
 
-            if (e.PropertyName != "TypicalInstanceDictionary" && !(e.Sender is TECCatalogs))
+            if (!propertyExceptions.Contains(e.PropertyName) && !(e.Sender is TECCatalogs))
             {
                 if (e.Value is ITypicalable valueTyp)
                 {
@@ -198,17 +202,7 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
-
-        private bool isTemplate(TECObject item)
-        {
-            if(templates == null)
-            {
-                return false;
-            } else
-            {
-                return templates.IsTemplateObject(item);
-            }
-        }
+        
         #endregion
 
     }
