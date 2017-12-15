@@ -31,10 +31,12 @@ namespace EstimatingLibraryTests
             templates.SystemTemplates.Add(system);
 
             //Act
-            ModelLinkingHelper.LinkTemplates(templates);
+            //ModelLinkingHelper.LinkTemplates(templates);
 
             //Assert
             Assert.AreEqual(refEquip, system.Equipment[0]);
+
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -56,10 +58,12 @@ namespace EstimatingLibraryTests
             templates.EquipmentTemplates.Add(refEquip);
 
             //Act
-            ModelLinkingHelper.LinkTemplates(templates);
+            //ModelLinkingHelper.LinkTemplates(templates);
 
             //Assert
             Assert.AreEqual(refSS, refEquip.SubScope[0]);
+
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -83,10 +87,12 @@ namespace EstimatingLibraryTests
             templates.SystemTemplates.Add(system);
 
             //Act
-            ModelLinkingHelper.LinkTemplates(templates);
+            //ModelLinkingHelper.LinkTemplates(templates);
 
             //Assert
             Assert.AreEqual(refSubScope, equip.SubScope[0]);
+
+            throw new NotImplementedException();
         }
     }
 }
