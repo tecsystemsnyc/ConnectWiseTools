@@ -10,12 +10,18 @@ namespace EstimatingLibrary.Utilities
     {
         public static void CopyPropertiesFromScope(this TECScope scope, TECScope otherScope)
         {
+            if(scope == otherScope)
+            {
+                return;
+            }
             scope.Name = otherScope.Name;
             scope.Description = otherScope.Description;
+            scope.Tags.Clear();
             foreach (TECLabeled tag in otherScope.Tags)
             {
                 scope.Tags.Add(tag);
             }
+            scope.AssociatedCosts.Clear();
             foreach (TECCost cost in otherScope.AssociatedCosts)
             {
                 scope.AssociatedCosts.Add(cost);

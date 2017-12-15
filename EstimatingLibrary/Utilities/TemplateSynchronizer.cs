@@ -120,14 +120,7 @@ namespace EstimatingLibrary.Utilities
             if (!isSyncing)
             {
                 isSyncing = true;
-                if (changed != template)
-                {
-                    sync(changed, template, args);
-                }
-                foreach (T item in dictionary[template].Where(obj => obj != changed))
-                {
-                    sync(changed, item, args);
-                }
+                sync(template, changed, args);
                 isSyncing = false;
             }
             

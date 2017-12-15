@@ -326,6 +326,7 @@ namespace EstimatingLibrary
 
         private void syncSubScope(TECSubScope template, TECSubScope changed, TECChangedEventArgs args)
         {
+            Console.WriteLine(template.Guid);
             if (changed != template)
             {
                 syncItem(changed, template);
