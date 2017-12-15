@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EstimatingLibraryTests
 {
     [TestClass]
-    public class TemplatesSyncronizerTests
+    public class TemplatesSynchronizerTests
     {
         #region Base Class Tests
         private TECSubScope copySubScope(TECSubScope template)
@@ -361,7 +361,29 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void TemplateSubScopeRemoved()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templateSS.Name = "First Name";
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+            TECSubScope ss1 = synchronizer.NewItem(templateSS);
+            TECSubScope ss2 = synchronizer.NewItem(templateSS);
+            templateEquip.SubScope.Add(ss1);
+            templateEquip.SubScope.Add(ss2);
+
+            //Act
+            templates.SubScopeTemplates.Remove(templateSS);
+
+            ss2.Name = "Second Name";
+
+            //Assert
+            Assert.AreEqual("First Name", ss1.Name);
+            Assert.AreEqual("Second Name", ss2.Name);
         }
         
         [TestMethod]
@@ -378,6 +400,18 @@ namespace EstimatingLibraryTests
 
         [TestMethod]
         public void ReferenceEquipmentRemoved()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void SubScopeRemovedFromTemplateEquipment()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void SubScopeRemovedFromReferenceEquipment()
         {
             throw new NotImplementedException();
         }
