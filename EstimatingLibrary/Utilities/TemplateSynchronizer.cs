@@ -88,6 +88,17 @@ namespace EstimatingLibrary.Utilities
                 LinkExisting(template, item);
             }
         }
+        public bool Contains(T item)
+        {
+            foreach(KeyValuePair<T, List<T>> entry in dictionary)
+            {
+                if(entry.Key == item || entry.Value.Contains(item))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         private void removeItem(T item)
         {

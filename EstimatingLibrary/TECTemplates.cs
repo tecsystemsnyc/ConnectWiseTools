@@ -320,11 +320,11 @@ namespace EstimatingLibrary
         {
             if(item is TECSubScope subScope)
             {
-                return SubScopeTemplates.Contains(subScope);
+                return SubScopeTemplates.Contains(subScope) || SubScopeSynchronizer.Contains(subScope);
             }
             else if (item is TECEquipment equipment)
             {
-                return EquipmentTemplates.Contains(equipment);
+                return EquipmentTemplates.Contains(equipment) || EquipmentSynchronizer.Contains(equipment);
             }
             else if (item is TECController controller)
             {
