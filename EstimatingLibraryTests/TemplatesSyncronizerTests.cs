@@ -113,11 +113,19 @@ namespace EstimatingLibraryTests
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
 
-            syncronizer.NewGroup(templateSS);
-
             List<TECSubScope> newReferenceSS = new List<TECSubScope>();
+            newReferenceSS.Add(new TECSubScope(false));
+            newReferenceSS.Add(new TECSubScope(false));
 
-            throw new NotImplementedException();
+            //Act
+            syncronizer.LinkExisting(templateSS, newReferenceSS);
+            templateSS.Description = "Test Description";
+
+            //Assert
+            foreach(TECSubScope refSS in newReferenceSS)
+            {
+                Assert.AreEqual(templateSS.Description, refSS.Description);
+            }
         }
         
         #endregion
@@ -287,7 +295,67 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void EquipmentReferenceChanged()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templateEquip.Name = "Template Equip";
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+
+            TECSystem sys = new TECSystem(false);
+            templates.SystemTemplates.Add(sys);
+            sys.Equipment.Add(refEquip);
+
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new TECManufacturer());
+            templates.Catalogs.Devices.Add(dev);
+
+            TECPoint point = new TECPoint(false);
+            point.Label = "Test Point";
+            point.Type = IOType.AI;
+            point.Quantity = 5;
+
+            TECCost cost = new TECCost(CostType.TEC);
+            templates.Catalogs.AssociatedCosts.Add(cost);
+
+            TECLabeled tag = new TECLabeled();
+            templates.Catalogs.Tags.Add(tag);
+
+            TECSubScope ss = new TECSubScope(false);
+            ss.Description = "Test Description";
+            ss.Devices.Add(dev);
+            ss.AddPoint(point);
+            ss.AssociatedCosts.Add(cost);
+            ss.Tags.Add(tag);
+
+            templates.SubScopeTemplates.Add(ss);
+
+            //Act
+            refEquip.Description = "Test Description";
+            refEquip.SubScope.Add(ss);
+            refEquip.AssociatedCosts.Add(cost);
+            refEquip.Tags.Add(tag);
+
+            //Assert
+            Assert.AreEqual(refEquip.Description, templateEquip.Description, "Description didn't sync properly between Equipment.");
+
+            Assert.IsNotNull(templateEquip.SubScope[0], "SubScope didn't sync properly between Equipment.");
+
+            TECSubScope templateSubScope = templateEquip.SubScope[0];
+            TECSubScope refSubScope = refEquip.SubScope[0];
+
+            Assert.AreEqual(refSubScope.Description, templateSubScope.Description, "Description didn't sync properly between SubScope in Equipment.");
+            Assert.AreEqual(refSubScope.Devices[0], templateSubScope.Devices[0], "Devices didn't sync properly between SubScope in Equipment.");
+            Assert.AreEqual(refSubScope.Points[0].Label, templateSubScope.Points[0].Label, "Points didn't sync properly between SubScope in Equipment.");
+            Assert.AreEqual(refSubScope.Points[0].Type, templateSubScope.Points[0].Type, "Points didn't sync properly between SubScope in Equipment.");
+            Assert.AreEqual(refSubScope.Points[0].Quantity, templateSubScope.Points[0].Quantity, "Points didn't sync properly between SubScope in Equipment.");
+            Assert.AreEqual(refSubScope.AssociatedCosts[0], templateSubScope.AssociatedCosts[0], "AssociatedCosts didn't sync properly between SubScope in Equipment.");
+            Assert.AreEqual(refSubScope.Tags[0], templateSubScope.Tags[0], "Tags didn't sync properly between SubScope.");
+
+            Assert.AreEqual(refEquip.AssociatedCosts[0], templateEquip.AssociatedCosts[0], "AssociatedCosts didn't sync properly between Equipment.");
+            Assert.AreEqual(refEquip.Tags[0], templateEquip.Tags[0], "Tags didn't sync properly in Equipment.");
         }
 
         [TestMethod]
@@ -315,6 +383,6 @@ namespace EstimatingLibraryTests
         }
         #endregion
 
-        //////ADDDD SAVE LOAD TESTS
+        //////ADD DD SAVE LOAD TESTS
     }
 }
