@@ -16,12 +16,12 @@ namespace EstimatingLibrary.Utilities
             }
             scope.Name = otherScope.Name;
             scope.Description = otherScope.Description;
-            scope.Tags.Clear();
+            scope.Tags.ObservablyClear();
             foreach (TECLabeled tag in otherScope.Tags)
             {
                 scope.Tags.Add(tag);
             }
-            scope.AssociatedCosts.Clear();
+            scope.AssociatedCosts.ObservablyClear();
             foreach (TECCost cost in otherScope.AssociatedCosts)
             {
                 scope.AssociatedCosts.Add(cost);

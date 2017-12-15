@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace EstimatingLibrary
 {
@@ -330,7 +331,7 @@ namespace EstimatingLibrary
             {
                 syncItem(changed, template);
             }
-            foreach (TECSubScope item in SubScopeSynchronizer.GetFullDictionary()[template])
+            foreach (TECSubScope item in SubScopeSynchronizer.GetFullDictionary()[template].Where(item => item != changed))
             {
                 syncItem(changed, item);
             }
@@ -338,8 +339,9 @@ namespace EstimatingLibrary
             void syncItem(TECSubScope newItem, TECSubScope subject)
             {
                 subject.CopyPropertiesFromScope(newItem);
-                subject.Points.Clear();
-                subject.Devices.Clear();
+                
+                subject.Points.ObservablyClear();
+                subject.Devices.ObservablyClear();
                 foreach (TECPoint point in newItem.Points)
                 {
                     subject.Points.Add(new TECPoint(point, false));
@@ -405,7 +407,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                foreach (TECEquipment reference in references)
+                foreach (TECEquipment reference in references.Where(obj => obj != item))
                 {
                     item.CopyPropertiesFromScope(item);
                 }
