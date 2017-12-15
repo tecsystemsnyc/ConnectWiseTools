@@ -118,6 +118,7 @@
     <Compile Include="TECExtraLabor.cs" />
     <Compile Include="TECTypical.cs" />
     <Compile Include="TECValve.cs" />
+    <Compile Include="Utilities\CommonUtilities.cs" />
     <Compile Include="Utilities\ObservableListDictionary.cs" />
     <Compile Include="TECCatalogs.cs" />
     <Compile Include="TECEstimator.cs" />
