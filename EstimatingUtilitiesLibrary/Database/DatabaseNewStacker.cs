@@ -10,7 +10,6 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> saveStack = new List<UpdateItem>();
             saveStack.AddRange(newStackForObject(toSave));
-            TECTemplates templates = toSave as TECTemplates;
             if (toSave is IRelatable saveable)
             {
                 saveStack.AddRange(DeltaStacker.ChildStack(Change.Add, saveable));

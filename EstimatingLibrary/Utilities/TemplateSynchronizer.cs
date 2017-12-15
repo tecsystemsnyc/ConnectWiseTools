@@ -65,6 +65,12 @@ namespace EstimatingLibrary.Utilities
             notifyTECChanged(Change.Add, template, newItem);
             return newItem;
         }
+
+        public Dictionary<T, List<T>> GetFullDictionary()
+        {
+            return dictionary;
+        }
+
         public void LinkExisting(T template, T item)
         {
             ChangeWatcher watcher = new ChangeWatcher(item);

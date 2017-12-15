@@ -46,11 +46,34 @@ namespace EstimatingUtilitiesLibrary.Database
             if (item is TECTypical system)
             {
                 outStack.AddRange(typicalInstanceStack(change, system));
+            } else if(item is TECTemplates templates)
+            {
+                outStack.AddRange(templatesReferencesStack(change, templates));
             }
 
             return outStack;
         }
-        
+
+        private static IEnumerable<UpdateItem> templatesReferencesStack(Change change, TECTemplates templates)
+        {
+            List<UpdateItem> outStack = new List<UpdateItem>();
+            foreach (KeyValuePair<TECSubScope, List<TECSubScope>> pair in templates.SubScopeSynchronizer.GetFullDictionary())
+            {
+                foreach (TECSubScope item in pair.Value)
+                {
+                    outStack.AddRange(addRemoveStack(change, "TemplateRelationship", pair.Key, item));
+                }
+            }
+            foreach (KeyValuePair<TECEquipment, List<TECEquipment>> pair in templates.EquipmentSynchronizer.GetFullDictionary())
+            {
+                foreach (TECEquipment item in pair.Value)
+                {
+                    outStack.AddRange(addRemoveStack(change, "TemplateRelationship", pair.Key, item));
+                }
+            }
+            return outStack;
+        }
+
         private static List<UpdateItem> addRemoveStack(Change change, string propertyName, TECObject sender, TECObject item)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
