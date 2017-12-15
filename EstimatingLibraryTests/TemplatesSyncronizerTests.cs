@@ -42,5 +42,19 @@ namespace EstimatingLibraryTests
             Assert.AreEqual(templateSS.Name, copySS.Name);
             Assert.AreNotEqual(templateSS.Guid, copySS.Guid);
         }
+
+        [TestMethod]
+        public void NewItemNoGroupTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ChangeItemTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        //////ADDDD SAVE LOAD TESTS
     }
 }
