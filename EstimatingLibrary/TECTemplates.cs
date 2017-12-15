@@ -101,8 +101,8 @@ namespace EstimatingLibrary
             }
         }
 
-        private TemplateSynchronizer<TECSubScope> subScopeSynchronizer;
-        private TemplateSynchronizer<TECEquipment> equipmentSynchronizer;
+        public TemplateSynchronizer<TECSubScope> SubScopeSynchronizer;
+        public TemplateSynchronizer<TECEquipment> EquipmentSynchronizer;
         #endregion //Properties
 
         //For listening to a catalog changing
@@ -161,17 +161,18 @@ namespace EstimatingLibrary
                 }
             }
 
-            subScopeSynchronizer = new TemplateSynchronizer<TECSubScope>((item => 
+            SubScopeSynchronizer = new TemplateSynchronizer<TECSubScope>((item => 
             {
                 return new TECSubScope(item, false);
             }),syncSubScope, this);
+            SubScopeSynchronizer.TECChanged += synchronizerChanged;
 
-            equipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
+            EquipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
                 (item => {
                     TECEquipment newItem = new TECEquipment(false);
                     foreach(TECSubScope subScope in item.SubScope)
                     {
-                        newItem.SubScope.Add(subScopeSynchronizer.NewItem(subScope));
+                        newItem.SubScope.Add(SubScopeSynchronizer.NewItem(subScope));
                     }
                     return newItem;
 
@@ -180,7 +181,13 @@ namespace EstimatingLibrary
                 {
                     item.CopyPropertiesFromScope(template);
                 }), this);
+            EquipmentSynchronizer.TECChanged += synchronizerChanged;
             
+        }
+
+        private void synchronizerChanged(TECChangedEventArgs obj)
+        {
+            notifyTECChanged(obj.Change, obj.PropertyName, obj.Sender, obj.Value);
         }
         #endregion //Constructors
 
