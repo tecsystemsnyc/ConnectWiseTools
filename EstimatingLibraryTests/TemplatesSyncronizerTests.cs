@@ -62,7 +62,7 @@ namespace EstimatingLibraryTests
             Assert.AreNotEqual(templateSS.Guid, copySS.Guid);
         }
 
-        [TestMethod]
+        [TestMethod] 
         public void ChangeTemplateTest()
         {
             //Arrange
@@ -105,8 +105,21 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void LinkExistingTest()
         {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+
+            TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templateSS.Name = "Template SubScope";
+
+            syncronizer.NewGroup(templateSS);
+
+            List<TECSubScope> newReferenceSS = new List<TECSubScope>();
+
             throw new NotImplementedException();
         }
+        
         #endregion
 
         #region TECTemplates Integration Tests
@@ -254,8 +267,11 @@ namespace EstimatingLibraryTests
             //Assert
             Assert.AreEqual(templateEquip.Description, refEquip.Description, "Description didn't sync properly between Equipment.");
 
+            Assert.IsNotNull(refEquip.SubScope[0], "SubScope didn't sync properly between Equipment.");
+
             TECSubScope templateSubScope = templateEquip.SubScope[0];
             TECSubScope refSubScope = refEquip.SubScope[0];
+
             Assert.AreEqual(templateSubScope.Description, refSubScope.Description, "Description didn't sync properly between SubScope in Equipment.");
             Assert.AreEqual(templateSubScope.Devices[0], refSubScope.Devices[0], "Devices didn't sync properly between SubScope in Equipment.");
             Assert.AreEqual(templateSubScope.Points[0].Label, refSubScope.Points[0].Label, "Points didn't sync properly between SubScope in Equipment.");
@@ -270,6 +286,30 @@ namespace EstimatingLibraryTests
 
         [TestMethod]
         public void EquipmentReferenceChanged()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void TemplateSubScopeRemoved()
+        {
+            throw new NotImplementedException();
+        }
+        
+        [TestMethod]
+        public void ReferenceSubScopeRemoved()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void TemplateEquipmentRemoved()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ReferenceEquipmentRemoved()
         {
             throw new NotImplementedException();
         }
