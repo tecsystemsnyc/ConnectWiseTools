@@ -407,6 +407,10 @@ namespace EstimatingLibrary
             }
             else
             {
+                if(item != template)
+                {
+                    template.CopyPropertiesFromScope(item);
+                }
                 foreach (TECEquipment reference in references.Where(obj => obj != item))
                 {
                     item.CopyPropertiesFromScope(item);
