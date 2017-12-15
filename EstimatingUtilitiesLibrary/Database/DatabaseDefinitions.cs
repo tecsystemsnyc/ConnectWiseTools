@@ -2520,6 +2520,40 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+
+    internal class TemplateReferenceTable : TableBase
+    {
+        public static string TableName = "TemplateReference";
+        public static Type ObjectType = typeof(TECObject);
+
+        public static TableField TemplateID = new TableField("TemplateID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ReferenceID = new TableField("ReferenceID", "TEXT", ObjectType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            TemplateID,
+            ReferenceID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            TemplateID,
+            ReferenceID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "TemplateRelationship"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #endregion
 
     internal static class AllBidTables
@@ -2652,7 +2686,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplatesSubScopeTable(),
             new TemplatesControllerTable(),
             new TemplatesMiscCostTable(),
-            new TemplatesPanelTable()
+            new TemplatesPanelTable(),
+            new TemplateReferenceTable()
         };
     }
 
@@ -2728,7 +2763,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplatesSubScopeTable(),
             new TemplatesControllerTable(),
             new TemplatesMiscCostTable(),
-            new TemplatesPanelTable()
+            new TemplatesPanelTable(),
+            new TemplateReferenceTable()
         };
     }
 
