@@ -94,10 +94,11 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.MiscCostTemplates = getMiscTemplates();
             templates.PanelTemplates = getPanelTemplates();
             templates.Parameters = getTemplatesParameters();
-            bool needsSave = ModelLinkingHelper.LinkTemplates(templates);
+            Dictionary<Guid, List<Guid>> templateReferences = getTemplateReferences();
+            bool needsSave = ModelLinkingHelper.LinkTemplates(templates, templateReferences);
             return (templates, needsSave);
         }
-
+        
         static private void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();
@@ -277,7 +278,8 @@ namespace EstimatingUtilitiesLibrary.Database
             DataTable dictDT = SQLiteDB.GetDataFromTable(TypicalInstanceTable.TableName);
             foreach (DataRow row in dictDT.Rows)
             {
-                addRowToPlaceholderDict(row, outDict);
+                addRowToPlaceholderDict(row, outDict,
+                    TypicalInstanceTable.TypicalID.Name, TypicalInstanceTable.InstanceID.Name);
             }
             return outDict;
         }
@@ -978,6 +980,17 @@ namespace EstimatingUtilitiesLibrary.Database
             return panels;
         }
 
+        private static Dictionary<Guid, List<Guid>> getTemplateReferences()
+        {
+            Dictionary<Guid, List<Guid>> outDict = new Dictionary<Guid, List<Guid>>();
+            DataTable dictDT = SQLiteDB.GetDataFromTable(TemplateReferenceTable.TableName);
+            foreach (DataRow row in dictDT.Rows)
+            {
+                addRowToPlaceholderDict(row, outDict,
+                    TemplateReferenceTable.TemplateID.Name, TemplateReferenceTable.ReferenceID.Name);
+            }
+            return outDict;
+        }
         #endregion
         #endregion //Loading from DB Methods
 
@@ -1365,10 +1378,10 @@ namespace EstimatingUtilitiesLibrary.Database
             return new TECSubScope(guid, isTypical);
         }
 
-        private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict)
+        private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict, string keyString, string valueString)
         {
-            Guid key = new Guid(row[TypicalInstanceTable.TypicalID.Name].ToString());
-            Guid value = new Guid(row[TypicalInstanceTable.InstanceID.Name].ToString());
+            Guid key = new Guid(row[keyString].ToString());
+            Guid value = new Guid(row[valueString].ToString());
 
             if (!dict.ContainsKey(key))
             {
