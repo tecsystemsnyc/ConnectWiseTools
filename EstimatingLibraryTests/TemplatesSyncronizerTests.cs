@@ -154,7 +154,48 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void SubScopeReferenceChanged()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templateSS.Name = "Template SubScope";
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+            equip.SubScope.Add(refSS);
+
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new TECManufacturer());
+            templates.Catalogs.Devices.Add(dev);
+
+            TECPoint point = new TECPoint(false);
+            point.Label = "Test Point";
+            point.Type = IOType.AI;
+            point.Quantity = 5;
+
+            TECCost cost = new TECCost(CostType.TEC);
+            templates.Catalogs.AssociatedCosts.Add(cost);
+
+            TECLabeled tag = new TECLabeled();
+            templates.Catalogs.Tags.Add(tag);
+
+            //Act
+            refSS.Description = "Test Description";
+            refSS.Devices.Add(dev);
+            refSS.AddPoint(point);
+            refSS.AssociatedCosts.Add(cost);
+            refSS.Tags.Add(tag);
+
+            //Assert
+            Assert.AreEqual(refSS.Devices[0], templateSS.Devices[0], "Devices didn't sync properly between SubScope.");
+            Assert.AreEqual(refSS.Points[0].Label, templateSS.Points[0].Label, "Points didn't sync properly between SubScope.");
+            Assert.AreEqual(refSS.Points[0].Type, templateSS.Points[0].Type, "Points didn't sync properly between SubScope.");
+            Assert.AreEqual(refSS.Points[0].Quantity, templateSS.Points[0].Quantity, "Points didn't sync properly between SubScope.");
+            Assert.AreEqual(refSS.AssociatedCosts[0], templateSS.AssociatedCosts[0], "Associated costs didn't sync properly between SubScope.");
+            Assert.AreEqual(refSS.Tags[0], templateSS.Tags[0], "Tags didn't sync properly between SubScope.");
         }
 
         [TestMethod]
