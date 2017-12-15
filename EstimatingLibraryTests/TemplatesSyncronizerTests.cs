@@ -12,6 +12,7 @@ namespace EstimatingLibraryTests
     [TestClass]
     public class TemplatesSyncronizerTests
     {
+        #region Base Class Tests
         private TECSubScope copySubScope(TECSubScope template)
         {
             return new TECSubScope(template, false);
@@ -31,8 +32,7 @@ namespace EstimatingLibraryTests
 
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
-
-            templates.SubScopeTemplates.Add(templateSS);
+            
             syncronizer.NewGroup(templateSS);
 
             //Act
@@ -46,14 +46,62 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void NewItemNoGroupTest()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+
+            TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templateSS.Name = "Template SubScope";
+
+            //Act
+            TECSubScope copySS = syncronizer.NewItem(templateSS);
+
+            //Assert
+            Assert.AreEqual(templateSS.Name, copySS.Name);
+            Assert.AreNotEqual(templateSS.Guid, copySS.Guid);
         }
 
         [TestMethod]
-        public void ChangeItemTest()
+        public void ChangeTemplateTest()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+
+            TemplateSynchronizer<TECSubScope> synchronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templateSS.Name = "Template SubScope";
+
+            TECSubScope copySS = synchronizer.NewItem(templateSS);
+
+            //Act
+            templateSS.Description = "Test Description";
+
+            //Assert
+            Assert.AreEqual(templateSS.Description, copySS.Description);
         }
+
+        [TestMethod]
+        public void ChangeInstanceTest()
+        {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+
+            TemplateSynchronizer<TECSubScope> synchronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templateSS.Name = "Template SubScope";
+
+            TECSubScope copySS = synchronizer.NewItem(templateSS);
+
+            //Act
+            copySS.Description = "Test Description";
+
+            //Assert
+            Assert.AreEqual(templateSS.Description, copySS.Description);
+        }
+        #endregion
 
         //////ADDDD SAVE LOAD TESTS
     }
