@@ -415,7 +415,32 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void TemplateEquipmentRemoved()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> synchronizer = templates.EquipmentSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templateEquip.Name = "First Name";
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSystem templateSys = new TECSystem(false);
+            templates.SystemTemplates.Add(templateSys);
+            TECEquipment equip1 = synchronizer.NewItem(templateEquip);
+            TECEquipment equip2 = synchronizer.NewItem(templateEquip);
+            templateSys.Equipment.Add(equip1);
+            templateSys.Equipment.Add(equip2);
+
+            //Act
+            templates.EquipmentTemplates.Remove(templateEquip);
+
+            equip2.Name = "Second Name";
+
+            //Assert
+            Assert.IsFalse(synchronizer.Contains(templateEquip));
+            Assert.IsFalse(synchronizer.Contains(equip1));
+            Assert.IsFalse(synchronizer.Contains(equip2));
+            Assert.AreEqual("First Name", equip1.Name);
+            Assert.AreEqual("Second Name", equip2.Name);
         }
 
         [TestMethod]
