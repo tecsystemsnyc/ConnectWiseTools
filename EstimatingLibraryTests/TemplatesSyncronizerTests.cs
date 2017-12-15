@@ -17,7 +17,7 @@ namespace EstimatingLibraryTests
         {
             return new TECSubScope(template, false);
         }
-        private void syncSubScope(TECSubScope templateSS, TECSubScope toSync)
+        private void syncSubScope(TECSubScope templateSS, TECSubScope toSync, TECChangedEventArgs args)
         {
             toSync.CopyPropertiesFromScope(templateSS);
         }
