@@ -9,6 +9,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     public abstract class AddVM : ViewModelBase
     {
         protected bool _asReference = false;
+        protected TECTemplates templates;
 
         public ICommand AddCommand { get; protected set; }
         public PropertiesVM PropertiesVM { get; }
@@ -29,6 +30,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddVM(TECScopeManager scopeManager)
         {
             IsTemplates = scopeManager is TECTemplates;
+            templates = templates as TECTemplates;
             PropertiesVM = new PropertiesVM(scopeManager.Catalogs, scopeManager);
         }
 

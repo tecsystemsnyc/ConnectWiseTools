@@ -142,7 +142,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var subScope = AsReference ? ToAdd : new TECSubScope(ToAdd, isTypical);
+                var subScope = AsReference ? templates.SubScopeSynchronizer.NewItem(ToAdd) : new TECSubScope(ToAdd, isTypical);
                 add(subScope);
                 Added?.Invoke(subScope);
             }
