@@ -446,7 +446,24 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void ReferenceEquipmentRemoved()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> synchronizer = templates.EquipmentSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSystem templateSys = new TECSystem(false);
+            templates.SystemTemplates.Add(templateSys);
+            TECEquipment refEquip = synchronizer.NewItem(templateEquip);
+            templateSys.Equipment.Add(refEquip);
+
+            //Act
+            templateSys.Equipment.Remove(refEquip);
+
+            //Assert
+            Assert.IsFalse(synchronizer.Contains(refEquip));
+            Assert.IsTrue(synchronizer.Contains(templateEquip));
         }
 
         [TestMethod]
