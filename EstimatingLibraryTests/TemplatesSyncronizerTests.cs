@@ -150,6 +150,24 @@ namespace EstimatingLibraryTests
             Assert.AreEqual(templateSS.AssociatedCosts[0], refSS.AssociatedCosts[0], "Associated costs didn't sync properly between SubScope.");
             Assert.AreEqual(templateSS.Tags[0], refSS.Tags[0], "Tags didn't sync properly between SubScope.");
         }
+
+        [TestMethod]
+        public void SubScopeReferenceChanged()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void EquipmentTemplateChanged()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void EquipmentReferenceChanged()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         //////ADDDD SAVE LOAD TESTS
