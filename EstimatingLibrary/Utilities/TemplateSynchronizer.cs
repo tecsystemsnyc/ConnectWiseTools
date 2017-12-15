@@ -65,6 +65,23 @@ namespace EstimatingLibrary.Utilities
             notifyTECChanged(Change.Add, template, newItem);
             return newItem;
         }
+        public void LinkExisting(T template, T item)
+        {
+            ChangeWatcher watcher = new ChangeWatcher(item);
+            watcher.Changed += (args) => handleTChanged(template, item);
+            if (!dictionary.ContainsKey(template))
+            {
+                NewGroup(template);
+            }
+            dictionary[template].Add(item);
+        }
+        public void LinkExisting(T template, IEnumerable<T> items)
+        {
+            foreach(T item in items)
+            {
+                LinkExisting(template, item);
+            }
+        }
 
         private void removeItem(T item)
         {
