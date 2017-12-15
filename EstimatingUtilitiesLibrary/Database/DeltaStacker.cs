@@ -10,7 +10,6 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         private List<UpdateItem> stack;
         private static DBType dbType;
-        private static TECTemplates templates;
 
         public DeltaStacker(ChangeWatcher changeWatcher, TECScopeManager manager = null)
         {
@@ -18,7 +17,6 @@ namespace EstimatingUtilitiesLibrary.Database
             if (manager != null && manager is TECTemplates)
             {
                 dbType = DBType.Templates;
-                templates = manager as TECTemplates;
             }
             changeWatcher.Changed += handleChange;
             stack = new List<UpdateItem>();
@@ -80,14 +78,11 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TableBase> tables;
             if(sender is IRelatable parent && !parent.LinkedObjects.Contains(propertyName) && parent.PropertyObjects.Contains(propertyName))
             {
-                if(dbType != DBType.Templates || !templates.IsTemplateObject(item) || sender is TECTemplates)
+                tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, dbType);
+                outStack.AddRange(tableObjectStack(change, tables, item));
+                if (item is IRelatable saveable)
                 {
-                    tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, dbType);
-                    outStack.AddRange(tableObjectStack(change, tables, item));
-                    if (item is IRelatable saveable)
-                    {
-                        outStack.AddRange(ChildStack(change, saveable));
-                    }
+                    outStack.AddRange(ChildStack(change, saveable));
                 }
             }
             tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, item }, propertyName);

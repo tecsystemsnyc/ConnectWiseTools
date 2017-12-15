@@ -7,7 +7,6 @@ namespace EstimatingLibrary.Utilities
 {
     public class ChangeWatcher
     {
-        private TECTemplates templates;
         private readonly List<string> propertyExceptions = new List<string>
         {
             "TypicalInstanceDictionary",
@@ -17,7 +16,6 @@ namespace EstimatingLibrary.Utilities
         #region Constructors
         public ChangeWatcher(TECObject item)
         {
-            templates = item as TECTemplates;
             register(item);
         }
         #endregion
@@ -66,7 +64,7 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (Tuple<string, TECObject> child in saveable.PropertyObjects.ChildList())
                 {
-                    if (!saveable.LinkedObjects.Contains(child.Item1) && (!isTemplate(child.Item2) || item is TECTemplates))
+                    if (!saveable.LinkedObjects.Contains(child.Item1))
                     {
                         register(child.Item2);
                     }
@@ -204,17 +202,7 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
-
-        private bool isTemplate(TECObject item)
-        {
-            if(templates == null)
-            {
-                return false;
-            } else
-            {
-                return templates.IsTemplateObject(item);
-            }
-        }
+        
         #endregion
 
     }
