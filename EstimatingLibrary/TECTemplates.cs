@@ -448,9 +448,9 @@ namespace EstimatingLibrary
             else if (item is TECEquipment equipment)
             {
                 EquipmentSynchronizer.RemoveGroup(equipment);
-                foreach(TECSubScope equipSS in equipment.SubScope)
+                foreach (TECSubScope equipSS in equipment.SubScope)
                 {
-                    if(SubScopeSynchronizer.GetTemplate(equipSS) != null)
+                    if (SubScopeSynchronizer.GetTemplate(equipSS) != null)
                     {
                         SubScopeSynchronizer.RemoveGroup(equipSS);
                     }
