@@ -24,10 +24,12 @@ namespace EstimatingLibrary
             get { return _name; }
             set
             {
-                var old = Name;
-                _name = value;
-                // Call raisePropertyChanged whenever the property is updated
-                notifyCombinedChanged(Change.Edit, "Name", this, value, old);
+                if (value != Name)
+                {
+                    var old = Name;
+                    _name = value;
+                    notifyCombinedChanged(Change.Edit, "Name", this, value, old);
+                }
             }
         }
         public string Description
@@ -35,11 +37,12 @@ namespace EstimatingLibrary
             get { return _description; }
             set
             {
-                var old = Description;
-                _description = value;
-                // Call raisePropertyChanged whenever the property is updated
-                notifyCombinedChanged(Change.Edit, "Description", this, value, old);
-
+                if (value != Description)
+                {
+                    var old = Description;
+                    _description = value;
+                    notifyCombinedChanged(Change.Edit, "Description", this, value, old);
+                }
             }
         }
 
