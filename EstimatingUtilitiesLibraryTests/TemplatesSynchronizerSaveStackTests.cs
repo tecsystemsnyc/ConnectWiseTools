@@ -591,11 +591,136 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void AddPointToSubScopeTemplate()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECPoint testPoint = new TECPoint(false);
+            testPoint.Label = "Test Point";
+            testPoint.Type = IOType.AI;
+            testPoint.Quantity = 5;
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.Points.Add(testPoint);
+
+            TECPoint refPoint = refSS.Points[0];
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template Point Entry
+            data = new Dictionary<string, string>();
+            data[PointTable.ID.Name] = testPoint.Guid.ToString();
+            data[PointTable.Name.Name] = testPoint.Label;
+            data[PointTable.Type.Name] = testPoint.Type.ToString();
+            data[PointTable.Quantity.Name] = testPoint.Quantity.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
+
+            //Template SubScope Point relationship
+            data = new Dictionary<string, string>();
+            data[SubScopePointTable.SubScopeID.Name] = templateSS.Guid.ToString();
+            data[SubScopePointTable.PointID.Name] = testPoint.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
+
+            //Reference Point Entry
+            data = new Dictionary<string, string>();
+            data[PointTable.ID.Name] = refPoint.Guid.ToString();
+            data[PointTable.Name.Name] = testPoint.Label;
+            data[PointTable.Type.Name] = testPoint.Type.ToString();
+            data[PointTable.Quantity.Name] = testPoint.Quantity.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
+
+            //Reference SubScope Point relationship
+            data = new Dictionary<string, string>();
+            data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
+            data[SubScopePointTable.PointID.Name] = refPoint.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
         public void RemovePointFromSubScopeTemplate()
+        {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECPoint testPoint = new TECPoint(false);
+            testPoint.Label = "Test Point";
+            testPoint.Type = IOType.AI;
+            testPoint.Quantity = 5;
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+            templateSS.Points.Add(testPoint);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECPoint refPoint = refSS.Points[0];
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.Points.Remove(testPoint);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template Point Entry
+            data = new Dictionary<string, string>();
+            data[PointTable.ID.Name] = testPoint.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, PointTable.TableName, data));
+
+            //Template SubScope Point relationship
+            data = new Dictionary<string, string>();
+            data[SubScopePointTable.SubScopeID.Name] = templateSS.Guid.ToString();
+            data[SubScopePointTable.PointID.Name] = testPoint.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SubScopePointTable.TableName, data));
+
+            //Reference Point Entry
+            data = new Dictionary<string, string>();
+            data[PointTable.ID.Name] = refPoint.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, PointTable.TableName, data));
+
+            //Reference SubScope Point relationship
+            data = new Dictionary<string, string>();
+            data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
+            data[SubScopePointTable.PointID.Name] = refPoint.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SubScopePointTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
+        }
+
+        [TestMethod]
+        public void ChangePointInSubScopeTemplate()
         {
             throw new NotImplementedException();
         }
