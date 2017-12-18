@@ -286,6 +286,96 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
+
+        [TestMethod]
+        public void AddAssociatedCostToSubScopeTemplate()
+        {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECCost testCost = new TECCost(CostType.TEC);
+            templates.Catalogs.AssociatedCosts.Add(testCost);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.AssociatedCosts.Add(testCost);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template SubScope Cost relationship
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = templateSS.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
+
+            //Reference SubScope Cost relationship
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = refSS.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
+        }
+
+        [TestMethod]
+        public void RemoveAssociatedCostFromSubScopeTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddTagToSubScopeTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveTagFromSubScopeTemplates()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddDeviceToSubScopeTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveDeviceFromSubScopeTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddPointToSubScopeTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemovePointFromSubScopeTemplate()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
