@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class SaveStackTests
@@ -47,7 +47,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         [TestMethod]
         public void Bid_AddControllerAssociatedCost()
@@ -80,7 +80,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Panel
@@ -115,7 +115,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Misc
@@ -185,7 +185,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
 
         }
         #endregion
@@ -218,7 +218,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         [TestMethod]
         public void Bid_AddChildBranch()
@@ -251,7 +251,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Notes and Exclusions
@@ -276,7 +276,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
         [TestMethod]
         public void Bid_AddExclusion()
@@ -299,7 +299,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
         #endregion
         #region Locations
@@ -324,7 +324,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
         #endregion
         #endregion
@@ -361,7 +361,7 @@ namespace Tests
             
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -396,7 +396,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #region Equipment
         [TestMethod]
@@ -432,7 +432,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -482,7 +482,7 @@ namespace Tests
             
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -534,7 +534,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region SubScope
@@ -571,7 +571,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -622,7 +622,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -687,7 +687,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Point
@@ -726,7 +726,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
             
         }
 
@@ -778,7 +778,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -862,7 +862,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Device
@@ -893,7 +893,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
 
         [TestMethod]
@@ -933,7 +933,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1010,7 +1010,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Controller
@@ -1050,7 +1050,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1111,7 +1111,7 @@ namespace Tests
             
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1168,7 +1168,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Panel
@@ -1207,7 +1207,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1242,7 +1242,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1298,7 +1298,7 @@ namespace Tests
             
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1353,7 +1353,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Misc
@@ -1389,7 +1389,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1445,7 +1445,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1498,7 +1498,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Scope Branch
@@ -1529,7 +1529,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #endregion
@@ -1589,7 +1589,7 @@ namespace Tests
             
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1651,7 +1651,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1719,7 +1719,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1770,7 +1770,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1823,7 +1823,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1874,7 +1874,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -1947,7 +1947,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #endregion
@@ -1986,7 +1986,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Panel
@@ -2020,7 +2020,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2054,7 +2054,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Misc
@@ -2084,7 +2084,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Scope Branch
@@ -2116,7 +2116,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         [TestMethod]
         public void Bid_RemoveChildBranch()
@@ -2148,7 +2148,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Notes Exclsuions
@@ -2171,7 +2171,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
         [TestMethod]
         public void Bid_RemoveExclusion()
@@ -2192,7 +2192,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
         #endregion
         #region Locations
@@ -2215,7 +2215,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
         #endregion
         #endregion
@@ -2251,7 +2251,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2283,7 +2283,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #region Equipment
         [TestMethod]
@@ -2316,7 +2316,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2361,7 +2361,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2412,7 +2412,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region SubScope
@@ -2446,7 +2446,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2491,7 +2491,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2550,7 +2550,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Point
@@ -2586,7 +2586,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2633,7 +2633,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2708,7 +2708,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Device
@@ -2738,7 +2738,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
         }
 
         [TestMethod]
@@ -2775,7 +2775,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2842,7 +2842,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Controller
@@ -2882,7 +2882,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2938,7 +2938,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -2990,7 +2990,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Panel
@@ -3028,7 +3028,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3064,7 +3064,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3118,7 +3118,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3168,7 +3168,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Misc
@@ -3200,7 +3200,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3247,7 +3247,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3294,7 +3294,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Scope Branch
@@ -3325,7 +3325,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #endregion
@@ -3382,7 +3382,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3440,7 +3440,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3503,7 +3503,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3552,7 +3552,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3604,7 +3604,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3655,7 +3655,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
 
         [TestMethod]
@@ -3725,7 +3725,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #endregion
@@ -3756,7 +3756,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
 
         }
         #endregion
@@ -3788,13 +3788,13 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            checkUpdateItems(expectedItems, stack);
+            CheckUpdateItems(expectedItems, stack);
 
         }
         #endregion
         #endregion
 
-        public void checkUpdateItem(UpdateItem expectedItem, UpdateItem actualItem)
+        public static void CheckUpdateItem(UpdateItem expectedItem, UpdateItem actualItem)
         {
             Assert.AreEqual(expectedItem.Table, actualItem.Table, "Tables do not match on UpdateItems");
             Assert.AreEqual(expectedItem.FieldData.Count, actualItem.FieldData.Count, "FieldData does not match on UpdateItems");
@@ -3807,12 +3807,12 @@ namespace Tests
             }
         }
 
-        public void checkUpdateItems(List<UpdateItem> expectedItems, DeltaStacker stack)
+        public static void CheckUpdateItems(List<UpdateItem> expectedItems, DeltaStacker stack)
         {
             int numToCheck = expectedItems.Count;
             foreach(UpdateItem item in expectedItems)
             {
-                checkUpdateItem(item, stack.CleansedStack()[stack.CleansedStack().Count - numToCheck]);
+                CheckUpdateItem(item, stack.CleansedStack()[stack.CleansedStack().Count - numToCheck]);
                 numToCheck--;
             }
         }
