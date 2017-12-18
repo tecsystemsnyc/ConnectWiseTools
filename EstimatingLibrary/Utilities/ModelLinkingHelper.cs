@@ -936,9 +936,9 @@ namespace EstimatingLibrary.Utilities
                             if (!moduleFound)
                             {
                                 controller.RemoveAllConnections();
-                                MessageBox.Show(string.Format(
-                                    "The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
-                                    controller.Name));
+                                MessageBox.Show(string.Format("The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
+                                                                    controller.Name));
+
                                 return true;
                             }
                         }

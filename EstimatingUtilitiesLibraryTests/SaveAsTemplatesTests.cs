@@ -446,11 +446,11 @@ namespace Tests
             TECMisc actualTECCost = null, actualElecCost = null;
             foreach(TECMisc misc in actualTemplates.MiscCostTemplates)
             {
-                if (misc.Type == CostType.TEC)
+                if (misc.Guid == expectedTECCost.Guid)
                 {
                     actualTECCost = misc;
                 }
-                else if (misc.Type == CostType.Electrical)
+                else if (misc.Guid == expectedElecCost.Guid)
                 {
                     actualElecCost = misc;
                 }
