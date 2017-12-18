@@ -3805,6 +3805,11 @@ namespace EstimatingUtilitiesLibraryTests
                 Assert.AreEqual(expectedItem.PrimaryKey.Item1, actualItem.PrimaryKey.Item1, "Primary key fields do not match");
                 Assert.AreEqual(expectedItem.PrimaryKey.Item2, actualItem.PrimaryKey.Item2, "Primary key values do not match");
             }
+            foreach (KeyValuePair<string, string> fieldEntry in expectedItem.FieldData)
+            {
+                Assert.IsTrue(actualItem.FieldData.ContainsKey(fieldEntry.Key), "Field missing in actualItem.");
+                Assert.AreEqual(fieldEntry.Value, actualItem.FieldData[fieldEntry.Key], "Values do not match on UpdateItems.");
+            }
         }
 
         public static void CheckUpdateItems(List<UpdateItem> expectedItems, DeltaStacker stack)
