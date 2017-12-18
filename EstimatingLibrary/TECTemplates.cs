@@ -373,7 +373,16 @@ namespace EstimatingLibrary
                 }
                 else
                 {
-                    newTemplate = new TECSubScope(value, false);
+                    TECSubScope parentTemplate = SubScopeSynchronizer.GetTemplate(newTemplate);
+                    if (parentTemplate != null)
+                    {
+                        SubScopeSynchronizer.RemoveItem(newTemplate);
+                        newTemplate = SubScopeSynchronizer.NewItem(parentTemplate);
+                    }
+                    else
+                    {
+                        newTemplate = new TECSubScope(value, false);
+                    }
                     template.SubScope.Add(newTemplate);
                     SubScopeSynchronizer.NewGroup(newTemplate);
                     item.SubScope.Remove(value);
@@ -390,6 +399,7 @@ namespace EstimatingLibrary
                 {
                     subScopeTemplate = SubScopeSynchronizer.GetTemplate(value);
                 }
+                template.SubScope.Remove(subScopeTemplate);
                 List<TECSubScope> subScopeReferences = SubScopeSynchronizer.GetFullDictionary()[subScopeTemplate];
                 foreach (TECEquipment reference in references)
                 {
@@ -405,6 +415,11 @@ namespace EstimatingLibrary
                     {
                         reference.SubScope.Remove(thing);
                     }
+                }
+                SubScopeSynchronizer.RemoveGroup(subScopeTemplate);
+                if(SubScopeSynchronizer.GetTemplate(subScopeTemplate) != null)
+                {
+                    SubScopeSynchronizer.RemoveItem(subScopeTemplate);
                 }
             }
             else

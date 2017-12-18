@@ -35,7 +35,7 @@ namespace EstimatingLibrary.Utilities
             if(obj.Value is T item && !(obj.Sender is TECTemplates)
                 && !(obj.Sender is T) && obj.Change == Change.Remove)
             {
-                removeItem(item);
+                RemoveItem(item);
             }
         }
 
@@ -88,6 +88,18 @@ namespace EstimatingLibrary.Utilities
                 handleTChanged(template, newItem, args);
             }
         }
+        public  void RemoveItem(T item)
+        {
+            foreach (T key in dictionary.Keys)
+            {
+                if (dictionary[key].Contains(item))
+                {
+                    dictionary[key].Remove(item);
+                    notifyTECChanged(Change.Remove, key, item);
+                    unsubscribeDictionary[(item, false)].Invoke();
+                }
+            }
+        }
 
         public Dictionary<T, List<T>> GetFullDictionary()
         {
@@ -123,18 +135,7 @@ namespace EstimatingLibrary.Utilities
             return false;
         }
 
-        private void removeItem(T item)
-        {
-            foreach(T key in dictionary.Keys)
-            {
-                if (dictionary[key].Contains(item))
-                {
-                    dictionary[key].Remove(item);
-                    notifyTECChanged(Change.Remove, key, item);
-                    unsubscribeDictionary[(item, false)].Invoke();
-                }
-            }
-        }
+        
         private void handleTChanged(T template, T changed, TECChangedEventArgs args)
         {
             if (!isSyncing)
