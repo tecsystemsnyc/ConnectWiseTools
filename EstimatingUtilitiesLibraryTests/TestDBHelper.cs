@@ -1614,7 +1614,7 @@ namespace EstimatingUtilitiesLibraryTests
         #region Specific Cases
         private static void addTemplateSynchronizerData()
         {
-            #region Equipment With Templated SubScope
+            #region Equipment with Templated SubScope
             List<string> values = new List<string>();
             values.Add("7e61613f-62ec-4b06-b875-84b14e432758");
             values.Add("Equipment With Templated SubScope");
@@ -1652,6 +1652,48 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("826ae232-c1c5-4924-8e10-cf2d7a1d1ec4");
             values.Add("020f58a8-afe0-409c-ab32-043297dba625");
+            addDataToTable(new TemplateReferenceTable(), values);
+            #endregion
+
+            #region System with Templated Equipment
+            values = new List<string>();
+            values.Add("e096ffb5-82f3-41c2-b767-c73b22c6875b");
+            values.Add("System With Templated Equipment");
+            values.Add("");
+            values.Add("0");
+            addDataToTable(new SystemTable(), values);
+
+            values = new List<string>();
+            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("e096ffb5-82f3-41c2-b767-c73b22c6875b");
+            addDataToTable(new TemplatesSystemTable(), values);
+
+            values = new List<string>();
+            values.Add("87d06d89-10b7-49c7-8b08-65707a5967a4");
+            values.Add("Reference to Templated Equipment");
+            values.Add("Description");
+            addDataToTable(new EquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("e096ffb5-82f3-41c2-b767-c73b22c6875b");
+            values.Add("87d06d89-10b7-49c7-8b08-65707a5967a4");
+            values.Add("0");
+            addDataToTable(new SystemEquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("5e5c034a-8c88-4ae4-92a8-a1bac716af82");
+            values.Add("Templated Equipment");
+            values.Add("Description");
+            addDataToTable(new EquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("5e5c034a-8c88-4ae4-92a8-a1bac716af82");
+            addDataToTable(new TemplatesEquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("5e5c034a-8c88-4ae4-92a8-a1bac716af82");
+            values.Add("87d06d89-10b7-49c7-8b08-65707a5967a4");
             addDataToTable(new TemplateReferenceTable(), values);
             #endregion
         }

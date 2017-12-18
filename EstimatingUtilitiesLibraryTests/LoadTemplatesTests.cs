@@ -706,11 +706,56 @@ namespace Tests
                     break;
                 }
             }
-            Assert.IsNotNull(actualReferenceSubScope, "SubScope template not found");
+            Assert.IsNotNull(actualTemplateSubScope, "SubScope template not found");
 
             Assert.IsTrue(actualTemplates.SubScopeSynchronizer.Contains(actualTemplateSubScope), "Template SubScope not in synchronizer");
             Assert.IsTrue(actualTemplates.SubScopeSynchronizer.Contains(actualReferenceSubScope), "Reference SubScope not in synchronizer");
             Assert.IsTrue(actualTemplates.SubScopeSynchronizer.GetFullDictionary()[actualTemplateSubScope].Contains(actualReferenceSubScope),
+                "Reference is not synchronized with template");
+
+        }
+
+        [TestMethod]
+        public void Load_Templates_EquipmentSynchronizer()
+        {
+            Guid expectedTemplateGuid = new Guid("5e5c034a-8c88-4ae4-92a8-a1bac716af82");
+            Guid expectedSystemGuid = new Guid("e096ffb5-82f3-41c2-b767-c73b22c6875b");
+            Guid expectedReferenceGuid = new Guid("87d06d89-10b7-49c7-8b08-65707a5967a4");
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            {
+                if (system.Guid == expectedSystemGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualSystem, "System not found");
+            TECEquipment actualReferenceEquipment = null;
+            foreach (TECEquipment equipment in actualSystem.Equipment)
+            {
+                if (equipment.Guid == expectedReferenceGuid)
+                {
+                    actualReferenceEquipment = equipment;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualReferenceEquipment, "Equipment not found in system");
+            TECEquipment actualTemplateEquipment = null;
+            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            {
+                if (equipment.Guid == expectedTemplateGuid)
+                {
+                    actualTemplateEquipment = equipment;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualTemplateEquipment, "Equipment template not found");
+
+            Assert.IsTrue(actualTemplates.EquipmentSynchronizer.Contains(actualTemplateEquipment), "Template Equipment not in synchronizer");
+            Assert.IsTrue(actualTemplates.EquipmentSynchronizer.Contains(actualReferenceEquipment), "Reference Equipment not in synchronizer");
+            Assert.IsTrue(actualTemplates.EquipmentSynchronizer.GetFullDictionary()[actualTemplateEquipment].Contains(actualReferenceEquipment),
                 "Reference is not synchronized with template");
 
         }
