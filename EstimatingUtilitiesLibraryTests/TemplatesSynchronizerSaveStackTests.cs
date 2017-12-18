@@ -338,19 +338,147 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void RemoveAssociatedCostFromSubScopeTemplate()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECCost testCost = new TECCost(CostType.TEC);
+            templates.Catalogs.AssociatedCosts.Add(testCost);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+            templateSS.AssociatedCosts.Add(testCost);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.AssociatedCosts.Remove(testCost);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template SubScope Cost relationship
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = templateSS.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, ScopeAssociatedCostTable.TableName, data));
+
+            //Reference SubScope Cost relationship
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = refSS.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, ScopeAssociatedCostTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
         public void AddTagToSubScopeTemplate()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECLabeled testTag = new TECLabeled();
+            templates.Catalogs.Tags.Add(testTag);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.Tags.Add(testTag);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template SubScope Tag relationship
+            data = new Dictionary<string, string>();
+            data[ScopeTagTable.ScopeID.Name] = templateSS.Guid.ToString();
+            data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, ScopeTagTable.TableName, data));
+
+            //Reference SubScope Tag relationship
+            data = new Dictionary<string, string>();
+            data[ScopeTagTable.ScopeID.Name] = refSS.Guid.ToString();
+            data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, ScopeTagTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
-        public void RemoveTagFromSubScopeTemplates()
+        public void RemoveTagFromSubScopeTemplate()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECLabeled testTag = new TECLabeled();
+            templates.Catalogs.Tags.Add(testTag);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+            templateSS.Tags.Add(testTag);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.Tags.Remove(testTag);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template SubScope Tag relationship
+            data = new Dictionary<string, string>();
+            data[ScopeTagTable.ScopeID.Name] = templateSS.Guid.ToString();
+            data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, ScopeTagTable.TableName, data));
+
+            //Reference SubScope Tag relationship
+            data = new Dictionary<string, string>();
+            data[ScopeTagTable.ScopeID.Name] = refSS.Guid.ToString();
+            data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, ScopeTagTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
