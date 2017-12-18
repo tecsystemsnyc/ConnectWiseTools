@@ -66,6 +66,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             Dictionary<string, string> data;
 
+            //Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = templateSS.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = refSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
+
             //New SubScope entry
             data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = refSS.Guid.ToString();
@@ -73,17 +79,17 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeTable.Description.Name] = templateSS.Description;
             expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
 
-            //Scope Cost relationship
-            data = new Dictionary<string, string>();
-            data[ScopeAssociatedCostTable.ScopeID.Name] = refSS.Guid.ToString();
-            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
-
             //Scope Tag relationship
             data = new Dictionary<string, string>();
             data[ScopeTagTable.ScopeID.Name] = refSS.Guid.ToString();
             data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Add, ScopeTagTable.TableName, data));
+
+            //Scope Cost relationship
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = refSS.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
 
             //SubScope Device relationship
             data = new Dictionary<string, string>();
@@ -105,11 +111,11 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopePointTable.PointID.Name] = newPoint.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
 
-            //Template Reference relationship
+            //Equipment SubScope relationship
             data = new Dictionary<string, string>();
-            data[TemplateReferenceTable.TemplateID.Name] = templateSS.Guid.ToString();
-            data[TemplateReferenceTable.ReferenceID.Name] = refSS.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
+            data[EquipmentSubScopeTable.EquipmentID.Name] = equip.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = refSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
