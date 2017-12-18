@@ -538,8 +538,20 @@ namespace EstimatingLibraryTests
             TECSystem system = new TECSystem(false);
             templates.SystemTemplates.Add(system);
 
-            //system.Equipment 
-            throw new NotImplementedException();
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+            system.Equipment.Add(refEquip);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+            refEquip.SubScope.Add(refSS);
+
+            //Act
+            refEquip.SubScope.Remove(refSS);
+
+            //Assert
+            Assert.IsTrue(templateEquip.SubScope.Count == 0, "SubScope not removed properly from Equipment template.");
+
+            Assert.IsFalse(ssSynchronizer.Contains(refSS));
+            Assert.IsTrue(ssSynchronizer.Contains(templateSS));
         }
 
         [TestMethod]
