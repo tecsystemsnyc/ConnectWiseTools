@@ -144,6 +144,8 @@ namespace EstimatingUtilitiesLibraryTests
             addToTemplatesPanelTable();
             addToTemplatesMiscTable();
 
+            addTemplateSynchronizerData();
+
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }
@@ -1606,6 +1608,52 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
             addDataToTable(new TemplatesMiscCostTable(), values);
+        }
+        #endregion
+
+        #region Specific Cases
+        private static void addTemplateSynchronizerData()
+        {
+            #region Equipment With Templated SubScope
+            List<string> values = new List<string>();
+            values.Add("7e61613f-62ec-4b06-b875-84b14e432758");
+            values.Add("Equipment With Templated SubScope");
+            values.Add("");
+            addDataToTable(new EquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7e61613f-62ec-4b06-b875-84b14e432758");
+            addDataToTable(new TemplatesEquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("020f58a8-afe0-409c-ab32-043297dba625");
+            values.Add("Reference to Templated SubScope");
+            values.Add("");
+            addDataToTable(new SubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("7e61613f-62ec-4b06-b875-84b14e432758");
+            values.Add("020f58a8-afe0-409c-ab32-043297dba625");
+            values.Add("0");
+            addDataToTable(new EquipmentSubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("826ae232-c1c5-4924-8e10-cf2d7a1d1ec4");
+            values.Add("Templated SubScope");
+            values.Add("");
+            addDataToTable(new SubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("826ae232-c1c5-4924-8e10-cf2d7a1d1ec4");
+            addDataToTable(new TemplatesSubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("826ae232-c1c5-4924-8e10-cf2d7a1d1ec4");
+            values.Add("020f58a8-afe0-409c-ab32-043297dba625");
+            addDataToTable(new TemplateReferenceTable(), values);
+            #endregion
         }
         #endregion
     }

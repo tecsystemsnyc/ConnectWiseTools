@@ -334,12 +334,13 @@ namespace Tests
 
             templates.EquipmentTemplates.Add(equipment);
 
-            //System with reference Equipment
+            /*System with reference Equipment
             TECSystem equipSystem = new TECSystem(false);
             equipSystem.Name = "Sys RefEquip";
-            equipSystem.Equipment.Add(equipment);
+            equipSystem.Equipment.Add(templates.EquipmentSynchronizer.NewItem(equipment));
 
             templates.SystemTemplates.Add(equipSystem);
+            */
 
             //SubScope
             TECSubScope subScope = new TECSubScope(false);
@@ -356,12 +357,14 @@ namespace Tests
 
             templates.SubScopeTemplates.Add(subScope);
 
-            //Equipment with reference SubScope
+            /*Equipment with reference SubScope
             TECEquipment ssEquip = new TECEquipment(false);
             ssEquip.Name = "Equip RefSS";
-            ssEquip.SubScope.Add(subScope);
+            ssEquip.SubScope.Add(templates.SubScopeSynchronizer.NewItem(subScope));
 
             templates.EquipmentTemplates.Add(ssEquip);
+            */
+
 
             //Controller
             var expectedControllerType = new TECControllerType(testMan);
