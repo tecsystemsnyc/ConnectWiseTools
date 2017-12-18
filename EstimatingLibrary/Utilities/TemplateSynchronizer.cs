@@ -12,6 +12,7 @@ namespace EstimatingLibrary.Utilities
         readonly private Func<T, T> copy;
         readonly private Action<T, T, TECChangedEventArgs> sync;
         readonly private Dictionary<T, List<T>> dictionary;
+        readonly private Dictionary<(T item, bool isKey), Action> unsubscribeDictionary;
         bool isSyncing = false;
 
         /// <summary>
@@ -24,13 +25,15 @@ namespace EstimatingLibrary.Utilities
             this.copy = copy;
             this.sync = sync;
             dictionary = new Dictionary<T, List<T>>();
+            unsubscribeDictionary = new Dictionary<(T, bool), Action>();
             ChangeWatcher watcher = new ChangeWatcher(templates);
             watcher.Changed += handleTemplatesChanged;
         }
 
         private void handleTemplatesChanged(TECChangedEventArgs obj)
         {
-            if(obj.Value is T item && !(obj.Sender is TECTemplates) && obj.Change == Change.Remove)
+            if(obj.Value is T item && !(obj.Sender is TECTemplates)
+                && !(obj.Sender is T) && obj.Change == Change.Remove)
             {
                 removeItem(item);
             }
@@ -43,24 +46,35 @@ namespace EstimatingLibrary.Utilities
             if (!dictionary.ContainsKey(template))
             {
                 ChangeWatcher watcher = new ChangeWatcher(template);
-                watcher.Changed += (args) => handleTChanged(template, template, args);
+                watcher.Changed += handleChange;
+                unsubscribeDictionary.Add((template, true),
+                    () => { watcher.Changed -= handleChange; });
                 dictionary.Add(template, new List<T>());
             }
-            
+
+            void handleChange(TECChangedEventArgs args)
+            {
+                handleTChanged(template, template, args);
+            }
+
         }
         public void RemoveGroup(T template)
         {
             foreach(T item in dictionary[template])
             {
                 notifyTECChanged(Change.Remove, template, item);
+                unsubscribeDictionary[(item, false)].Invoke();
             }
+            unsubscribeDictionary[(template, true)].Invoke();
             dictionary.Remove(template);
         }
         public T NewItem(T template)
         {
             T newItem = copy(template);
             ChangeWatcher watcher = new ChangeWatcher(newItem);
-            watcher.Changed += (args) => handleTChanged(template, newItem, args);
+            watcher.Changed += handleChange;
+            unsubscribeDictionary.Add((newItem, false),
+                () => { watcher.Changed -= handleChange; });
             if (!dictionary.ContainsKey(template))
             {
                 NewGroup(template);
@@ -68,6 +82,11 @@ namespace EstimatingLibrary.Utilities
             dictionary[template].Add(newItem);
             notifyTECChanged(Change.Add, template, newItem);
             return newItem;
+
+            void handleChange(TECChangedEventArgs args)
+            {
+                handleTChanged(template, newItem, args);
+            }
         }
 
         public Dictionary<T, List<T>> GetFullDictionary()
@@ -112,6 +131,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     dictionary[key].Remove(item);
                     notifyTECChanged(Change.Remove, key, item);
+                    unsubscribeDictionary[(item, false)].Invoke();
                 }
             }
         }

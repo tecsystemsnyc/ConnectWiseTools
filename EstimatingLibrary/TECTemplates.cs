@@ -288,6 +288,14 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
+                    if (item is TECSubScope subScope)
+                    {
+                        SubScopeSynchronizer.RemoveGroup(subScope);
+                    }
+                    else if (item is TECEquipment equipment)
+                    {
+                        EquipmentSynchronizer.RemoveGroup(equipment);
+                    }
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
