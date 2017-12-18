@@ -588,7 +588,5 @@ namespace EstimatingLibraryTests
             Assert.IsFalse(ssSynchronizer.Contains(refSS), "Reference SubScope was not removed properly from synchronizer.");
         }
         #endregion
-
-        //////ADD DD SAVE LOAD TESTS
     }
 }
