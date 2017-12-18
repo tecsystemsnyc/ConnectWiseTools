@@ -415,23 +415,101 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void TemplateEquipmentRemoved()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> synchronizer = templates.EquipmentSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templateEquip.Name = "First Name";
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSystem templateSys = new TECSystem(false);
+            templates.SystemTemplates.Add(templateSys);
+            TECEquipment equip1 = synchronizer.NewItem(templateEquip);
+            TECEquipment equip2 = synchronizer.NewItem(templateEquip);
+            templateSys.Equipment.Add(equip1);
+            templateSys.Equipment.Add(equip2);
+
+            //Act
+            templates.EquipmentTemplates.Remove(templateEquip);
+
+            equip2.Name = "Second Name";
+
+            //Assert
+            Assert.IsFalse(synchronizer.Contains(templateEquip));
+            Assert.IsFalse(synchronizer.Contains(equip1));
+            Assert.IsFalse(synchronizer.Contains(equip2));
+            Assert.AreEqual("First Name", equip1.Name);
+            Assert.AreEqual("Second Name", equip2.Name);
         }
 
         [TestMethod]
         public void ReferenceEquipmentRemoved()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> synchronizer = templates.EquipmentSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSystem templateSys = new TECSystem(false);
+            templates.SystemTemplates.Add(templateSys);
+            TECEquipment refEquip = synchronizer.NewItem(templateEquip);
+            templateSys.Equipment.Add(refEquip);
+
+            //Act
+            templateSys.Equipment.Remove(refEquip);
+
+            //Assert
+            Assert.IsFalse(synchronizer.Contains(refEquip));
+            Assert.IsTrue(synchronizer.Contains(templateEquip));
         }
 
         [TestMethod]
-        public void SubScopeRemovedFromTemplateEquipment()
+        public void TemplatedSubScopeRemovedFromTemplateEquipment()
+        {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSubScope instanceSS = ssSynchronizer.NewItem(templateSS);
+            templateEquip.SubScope.Add(instanceSS);
+
+            TECEquipment instanceEquip = equipSynchronizer.NewItem(templateEquip);
+            templates.EquipmentTemplates.Add(instanceEquip);
+
+            //Act
+            templateEquip.SubScope.Remove(instanceSS);
+
+            //Assert
+            Assert.IsTrue(instanceEquip.SubScope.Count == 0, "SubScope not removed properly from equipment reference.");
+
+            Assert.IsFalse(ssSynchronizer.Contains(instanceSS), "Reference SubScope not removed properly from synchronizer.");
+            Assert.IsTrue(ssSynchronizer.Contains(templateSS), "Template SubScope was removed from synchronizer when it shouldn't have been.");
+        }
+
+        [TestMethod]
+        public void InstanceSubScopeRemovedFromTemplateEquipment()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void SubScopeRemovedFromReferenceEquipment()
+        public void TemplatedSubScopeRemovedFromReferenceEquipment()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void InstanceSubScopeRemovedFromReferenceEquipment()
         {
             throw new NotImplementedException();
         }
