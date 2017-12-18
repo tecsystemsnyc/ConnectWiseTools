@@ -406,6 +406,11 @@ namespace EstimatingLibrary
                         reference.SubScope.Remove(thing);
                     }
                 }
+                SubScopeSynchronizer.RemoveGroup(subScopeTemplate);
+                if(SubScopeSynchronizer.GetTemplate(subScopeTemplate) != null)
+                {
+                    SubScopeSynchronizer.RemoveItem(subScopeTemplate);
+                }
             }
             else
             {
