@@ -171,7 +171,7 @@ namespace EstimatingUtilitiesLibraryTests
         private static void addToMetadataTable()
         {
             List<string> values = new List<string>();
-            values.Add("2");
+            values.Add("6");
             addDataToTable(new MetadataTable(), values);
         }
         private static void addToBidInfoTable()
