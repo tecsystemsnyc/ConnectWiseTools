@@ -484,13 +484,108 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void AddDeviceToSubScopeTemplate()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECManufacturer testMan = new TECManufacturer();
+            templates.Catalogs.Manufacturers.Add(testMan);
+
+            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), testMan);
+            templates.Catalogs.Devices.Add(testDevice);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.Devices.Add(testDevice);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template SubScope Device relationship
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = templateSS.Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = testDevice.Guid.ToString();
+            data[SubScopeDeviceTable.Quantity.Name] = "1";
+            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
+
+            //Reference SubScope Device relationship
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = refSS.Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = testDevice.Guid.ToString();
+            data[SubScopeDeviceTable.Quantity.Name] = "1";
+            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
         public void RemoveDeviceFromSubScopeTemplate()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECManufacturer testMan = new TECManufacturer();
+            templates.Catalogs.Manufacturers.Add(testMan);
+
+            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), testMan);
+            templates.Catalogs.Devices.Add(testDevice);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+            templateSS.Devices.Add(testDevice);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.Devices.Remove(testDevice);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Template SubScope Device relationship
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = templateSS.Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = testDevice.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SubScopeDeviceTable.TableName, data));
+
+            //Reference SubScope Device relationship
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = refSS.Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = testDevice.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SubScopeDeviceTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
