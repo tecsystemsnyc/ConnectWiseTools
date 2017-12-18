@@ -229,13 +229,62 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
-        public void SubScopeTemplateChanged()
+        public void ChangeSubScopeTemplate()
         {
             //Arrange
             TECTemplates templates = new TECTemplates();
             ChangeWatcher watcher = new ChangeWatcher(templates);
 
-            throw new NotImplementedException();
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateSS.Name = "New Name";
+            templateSS.Description = "New Description";
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+            Tuple<string, string> pk;
+
+            //Template SubScope name change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(SubScopeTable.ID.Name, templateSS.Guid.ToString());
+            data[SubScopeTable.Name.Name] = templateSS.Name;
+            expectedStack.Add(new UpdateItem(Change.Edit, SubScopeTable.TableName, data, pk));
+
+            //Reference SubScope name change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(SubScopeTable.ID.Name, refSS.Guid.ToString());
+            data[SubScopeTable.Name.Name] = refSS.Name;
+            expectedStack.Add(new UpdateItem(Change.Edit, SubScopeTable.TableName, data, pk));
+
+            //Template SubScope description change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(SubScopeTable.ID.Name, templateSS.Guid.ToString());
+            data[SubScopeTable.Description.Name] = templateSS.Description;
+            expectedStack.Add(new UpdateItem(Change.Edit, SubScopeTable.TableName, data, pk));
+
+            //Reference SubScope description change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(SubScopeTable.ID.Name, refSS.Guid.ToString());
+            data[SubScopeTable.Description.Name] = refSS.Description;
+            expectedStack.Add(new UpdateItem(Change.Edit, SubScopeTable.TableName, data, pk));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
         #endregion
     }
