@@ -467,13 +467,49 @@ namespace EstimatingLibraryTests
         }
 
         [TestMethod]
-        public void SubScopeRemovedFromTemplateEquipment()
+        public void TemplatedSubScopeRemovedFromTemplateEquipment()
+        {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSubScope instanceSS = ssSynchronizer.NewItem(templateSS);
+            templateEquip.SubScope.Add(instanceSS);
+
+            TECEquipment instanceEquip = equipSynchronizer.NewItem(templateEquip);
+            templates.EquipmentTemplates.Add(instanceEquip);
+
+            //Act
+            templateEquip.SubScope.Remove(instanceSS);
+
+            //Assert
+            Assert.IsTrue(instanceEquip.SubScope.Count == 0, "SubScope not removed properly from equipment reference.");
+
+            Assert.IsFalse(ssSynchronizer.Contains(instanceSS), "Reference SubScope not removed properly from synchronizer.");
+            Assert.IsTrue(ssSynchronizer.Contains(templateSS), "Template SubScope was removed from synchronizer when it shouldn't have been.");
+        }
+
+        [TestMethod]
+        public void InstanceSubScopeRemovedFromTemplateEquipment()
         {
             throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void SubScopeRemovedFromReferenceEquipment()
+        public void TemplatedSubScopeRemovedFromReferenceEquipment()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void InstanceSubScopeRemovedFromReferenceEquipment()
         {
             throw new NotImplementedException();
         }
