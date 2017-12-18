@@ -50,10 +50,15 @@ namespace EstimatingUtilitiesLibraryTests
             templateSS.Devices.Add(testDevice);
             templateSS.Points.Add(testPoint);
 
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
             DeltaStacker stack = new DeltaStacker(watcher, templates);
             
             //Act
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            equip.SubScope.Add(refSS);
 
             TECPoint newPoint = refSS.Points[0];
 
