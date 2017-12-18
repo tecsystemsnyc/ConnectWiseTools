@@ -157,7 +157,8 @@ namespace EstimatingLibrary
             EquipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
                 //Copy
                 (item => {
-                    TECEquipment newItem = new TECEquipment(item, false);
+                    TECEquipment newItem = new TECEquipment(false);
+                    newItem.CopyPropertiesFromScope(item);
                     foreach(TECSubScope subScope in item.SubScope)
                     {
                         newItem.SubScope.Add(SubScopeSynchronizer.NewItem(subScope));
