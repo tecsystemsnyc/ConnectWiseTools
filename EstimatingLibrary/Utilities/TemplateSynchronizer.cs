@@ -12,7 +12,7 @@ namespace EstimatingLibrary.Utilities
         readonly private Func<T, T> copy;
         readonly private Action<T, T, TECChangedEventArgs> sync;
         readonly private Dictionary<T, List<T>> dictionary;
-        readonly private Dictionary<T, Action> unsubscribeDictionary;
+        readonly private Dictionary<(T item, bool isKey), Action> unsubscribeDictionary;
         bool isSyncing = false;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace EstimatingLibrary.Utilities
             this.copy = copy;
             this.sync = sync;
             dictionary = new Dictionary<T, List<T>>();
-            unsubscribeDictionary = new Dictionary<T, Action>();
+            unsubscribeDictionary = new Dictionary<(T, bool), Action>();
             ChangeWatcher watcher = new ChangeWatcher(templates);
             watcher.Changed += handleTemplatesChanged;
         }
@@ -47,7 +47,7 @@ namespace EstimatingLibrary.Utilities
             {
                 ChangeWatcher watcher = new ChangeWatcher(template);
                 watcher.Changed += handleChange;
-                unsubscribeDictionary.Add(template,
+                unsubscribeDictionary.Add((template, true),
                     () => { watcher.Changed -= handleChange; });
                 dictionary.Add(template, new List<T>());
             }
@@ -63,12 +63,9 @@ namespace EstimatingLibrary.Utilities
             foreach(T item in dictionary[template])
             {
                 notifyTECChanged(Change.Remove, template, item);
-                if (!dictionary.ContainsKey(item))
-                {
-                    unsubscribeDictionary[item].Invoke();
-                }
+                unsubscribeDictionary[(item, false)].Invoke();
             }
-            unsubscribeDictionary[template].Invoke();
+            unsubscribeDictionary[(template, true)].Invoke();
             dictionary.Remove(template);
         }
         public T NewItem(T template)
@@ -76,7 +73,7 @@ namespace EstimatingLibrary.Utilities
             T newItem = copy(template);
             ChangeWatcher watcher = new ChangeWatcher(newItem);
             watcher.Changed += handleChange;
-            unsubscribeDictionary.Add(newItem,
+            unsubscribeDictionary.Add((newItem, false),
                 () => { watcher.Changed -= handleChange; });
             if (!dictionary.ContainsKey(template))
             {
@@ -134,7 +131,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     dictionary[key].Remove(item);
                     notifyTECChanged(Change.Remove, key, item);
-                    unsubscribeDictionary[item].Invoke();
+                    unsubscribeDictionary[(item, false)].Invoke();
                 }
             }
         }
