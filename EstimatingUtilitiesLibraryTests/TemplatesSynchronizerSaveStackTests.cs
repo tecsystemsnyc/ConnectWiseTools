@@ -322,12 +322,14 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[ScopeAssociatedCostTable.ScopeID.Name] = templateSS.Guid.ToString();
             data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            data[ScopeAssociatedCostTable.Quantity.Name] = "1";
             expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
 
             //Reference SubScope Cost relationship
             data = new Dictionary<string, string>();
             data[ScopeAssociatedCostTable.ScopeID.Name] = refSS.Guid.ToString();
             data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            data[ScopeAssociatedCostTable.Quantity.Name] = "1";
             expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
 
             //Assert
@@ -722,7 +724,81 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void ChangePointInSubScopeTemplate()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECPoint testPoint = new TECPoint(false);
+            testPoint.Label = "Test Point";
+            testPoint.Type = IOType.AI;
+            testPoint.Quantity = 5;
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+            templateSS.Points.Add(testPoint);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+
+            TECPoint refPoint = refSS.Points[0];
+
+            TECEquipment equip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(equip);
+
+            equip.SubScope.Add(refSS);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            testPoint.Label = "Different Label";
+            testPoint.Type = IOType.AO;
+            testPoint.Quantity = 69;
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+            Tuple<string, string> pk;
+
+            //Template Point name change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
+            data[PointTable.Name.Name] = testPoint.Label;
+            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+
+            //Reference Point name change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(PointTable.ID.Name, refPoint.Guid.ToString());
+            data[PointTable.Name.Name] = testPoint.Label;
+            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+
+            //Template Point type change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
+            data[PointTable.Type.Name] = testPoint.Type.ToString();
+            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+
+            //Reference Point type change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(PointTable.ID.Name, refPoint.Guid.ToString());
+            data[PointTable.Type.Name] = testPoint.Type.ToString();
+            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+
+            //Template Point quantity change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
+            data[PointTable.Quantity.Name] = testPoint.Quantity.ToString();
+            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+
+            //Reference Point quantity change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(PointTable.ID.Name, refPoint.Guid.ToString());
+            data[PointTable.Quantity.Name] = testPoint.Quantity.ToString();
+            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
         #endregion
     }
