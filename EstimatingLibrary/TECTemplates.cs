@@ -157,7 +157,7 @@ namespace EstimatingLibrary
             EquipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
                 //Copy
                 (item => {
-                    TECEquipment newItem = new TECEquipment(false);
+                    TECEquipment newItem = new TECEquipment(item, false);
                     foreach(TECSubScope subScope in item.SubScope)
                     {
                         newItem.SubScope.Add(SubScopeSynchronizer.NewItem(subScope));
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
 
                 }),
                 //Sync
-                (syncEquipment), this);
+                syncEquipment, this);
             EquipmentSynchronizer.TECChanged += synchronizerChanged;
             
         }
@@ -288,14 +288,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                    if (item is TECSubScope subScope)
-                    {
-                        SubScopeSynchronizer.RemoveGroup(subScope);
-                    }
-                    else if (item is TECEquipment equipment)
-                    {
-                        EquipmentSynchronizer.RemoveGroup(equipment);
-                    }
+                    handleSyncRemoval(item as TECObject);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -421,13 +414,32 @@ namespace EstimatingLibrary
                 }
                 foreach (TECEquipment reference in references.Where(obj => obj != item))
                 {
-                    item.CopyPropertiesFromScope(item);
+                    reference.CopyPropertiesFromScope(item);
                 }
             }
         }
         private void synchronizerChanged(TECChangedEventArgs obj)
         {
             notifyTECChanged(obj.Change, obj.PropertyName, obj.Sender, obj.Value);
+        }
+
+        private void handleSyncRemoval(TECObject item)
+        {
+            if (item is TECSubScope subScope)
+            {
+                SubScopeSynchronizer.RemoveGroup(subScope);
+            }
+            else if (item is TECEquipment equipment)
+            {
+                EquipmentSynchronizer.RemoveGroup(equipment);
+                foreach(TECSubScope equipSS in equipment.SubScope)
+                {
+                    if(SubScopeSynchronizer.GetTemplate(equipSS) != null)
+                    {
+                        SubScopeSynchronizer.RemoveGroup(equipSS);
+                    }
+                }
+            }
         }
     }
 }

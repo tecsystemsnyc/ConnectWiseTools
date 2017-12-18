@@ -28,15 +28,16 @@ namespace EstimatingLibraryTests
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            //TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
 
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
             
-            syncronizer.NewGroup(templateSS);
+            synchronizer.NewGroup(templateSS);
 
             //Act
-            TECSubScope copySS = syncronizer.NewItem(templateSS);
+            TECSubScope copySS = synchronizer.NewItem(templateSS);
 
             //Assert
             Assert.AreEqual(templateSS.Name, copySS.Name);
@@ -49,13 +50,14 @@ namespace EstimatingLibraryTests
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            //TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
 
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
 
             //Act
-            TECSubScope copySS = syncronizer.NewItem(templateSS);
+            TECSubScope copySS = synchronizer.NewItem(templateSS);
 
             //Assert
             Assert.AreEqual(templateSS.Name, copySS.Name);
@@ -68,7 +70,8 @@ namespace EstimatingLibraryTests
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TemplateSynchronizer<TECSubScope> synchronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            //TemplateSynchronizer<TECSubScope> synchronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
 
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
@@ -88,7 +91,8 @@ namespace EstimatingLibraryTests
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TemplateSynchronizer<TECSubScope> synchronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            //TemplateSynchronizer<TECSubScope> synchronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
 
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
@@ -108,7 +112,8 @@ namespace EstimatingLibraryTests
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            //TemplateSynchronizer<TECSubScope> syncronizer = new TemplateSynchronizer<TECSubScope>(copySubScope, syncSubScope, templates);
+            TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
 
             TECSubScope templateSS = new TECSubScope(false);
             templateSS.Name = "Template SubScope";
@@ -118,7 +123,7 @@ namespace EstimatingLibraryTests
             newReferenceSS.Add(new TECSubScope(false));
 
             //Act
-            syncronizer.LinkExisting(templateSS, newReferenceSS);
+            synchronizer.LinkExisting(templateSS, newReferenceSS);
             templateSS.Description = "Test Description";
 
             //Assert
