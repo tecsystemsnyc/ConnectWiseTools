@@ -2536,6 +2536,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<Type> types = new List<Type>()
         {
+            ObjectType,
             ObjectType
         };
         private List<TableField> fields = new List<TableField>()

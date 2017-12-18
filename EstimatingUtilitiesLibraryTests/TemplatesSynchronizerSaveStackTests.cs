@@ -49,7 +49,7 @@ namespace EstimatingUtilitiesLibraryTests
             templateSS.Devices.Add(testDevice);
             templateSS.Points.Add(testPoint);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
             
             //Act
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
