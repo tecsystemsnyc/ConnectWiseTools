@@ -504,13 +504,59 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void InstanceSubScopeRemovedFromTemplateEquipment()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSubScope ss = new TECSubScope(false);
+            templateEquip.SubScope.Add(ss);
+
+            TECEquipment instanceEquip = equipSynchronizer.NewItem(templateEquip);
+
+            //Act
+            templateEquip.SubScope.Remove(ss);
+
+            //Assert
+            Assert.IsTrue(instanceEquip.SubScope.Count == 0, "SubScope not removed properly from equipment reference.");
+
+            Assert.IsFalse(ssSynchronizer.Contains(ss), "SubScope was not removed properly from synchronizer.");
         }
 
         [TestMethod]
         public void TemplatedSubScopeRemovedFromReferenceEquipment()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSystem system = new TECSystem(false);
+            templates.SystemTemplates.Add(system);
+
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+            system.Equipment.Add(refEquip);
+
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+            refEquip.SubScope.Add(refSS);
+
+            //Act
+            refEquip.SubScope.Remove(refSS);
+
+            //Assert
+            Assert.IsTrue(templateEquip.SubScope.Count == 0, "SubScope not removed properly from Equipment template.");
+
+            Assert.IsFalse(ssSynchronizer.Contains(refSS));
+            Assert.IsTrue(ssSynchronizer.Contains(templateSS));
         }
 
         [TestMethod]
