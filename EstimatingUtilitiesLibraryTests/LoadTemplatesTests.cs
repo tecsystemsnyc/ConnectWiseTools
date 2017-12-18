@@ -670,6 +670,96 @@ namespace Tests
             Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
         }
 
+        [TestMethod]
+        public void Load_Templates_SubScopeSynchronizer()
+        {
+            Guid expectedTemplateGuid = new Guid("826ae232-c1c5-4924-8e10-cf2d7a1d1ec4");
+            Guid expectedEquipmentGuid = new Guid("7e61613f-62ec-4b06-b875-84b14e432758");
+            Guid expectedReferenceGuid = new Guid("020f58a8-afe0-409c-ab32-043297dba625");
+
+            TECEquipment actualEquipment = null;
+            foreach(TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            {
+                if(equipment.Guid == expectedEquipmentGuid)
+                {
+                    actualEquipment = equipment;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualEquipment, "Equipment not found");
+            TECSubScope actualReferenceSubScope = null;
+            foreach(TECSubScope subScope in actualEquipment.SubScope)
+            {
+                if(subScope.Guid == expectedReferenceGuid)
+                {
+                    actualReferenceSubScope = subScope;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualReferenceSubScope, "SubScope not found in equipment");
+            TECSubScope actualTemplateSubScope = null;
+            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
+            {
+                if (subScope.Guid == expectedTemplateGuid)
+                {
+                    actualTemplateSubScope = subScope;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualTemplateSubScope, "SubScope template not found");
+
+            Assert.IsTrue(actualTemplates.SubScopeSynchronizer.Contains(actualTemplateSubScope), "Template SubScope not in synchronizer");
+            Assert.IsTrue(actualTemplates.SubScopeSynchronizer.Contains(actualReferenceSubScope), "Reference SubScope not in synchronizer");
+            Assert.IsTrue(actualTemplates.SubScopeSynchronizer.GetFullDictionary()[actualTemplateSubScope].Contains(actualReferenceSubScope),
+                "Reference is not synchronized with template");
+
+        }
+
+        [TestMethod]
+        public void Load_Templates_EquipmentSynchronizer()
+        {
+            Guid expectedTemplateGuid = new Guid("5e5c034a-8c88-4ae4-92a8-a1bac716af82");
+            Guid expectedSystemGuid = new Guid("e096ffb5-82f3-41c2-b767-c73b22c6875b");
+            Guid expectedReferenceGuid = new Guid("87d06d89-10b7-49c7-8b08-65707a5967a4");
+
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            {
+                if (system.Guid == expectedSystemGuid)
+                {
+                    actualSystem = system;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualSystem, "System not found");
+            TECEquipment actualReferenceEquipment = null;
+            foreach (TECEquipment equipment in actualSystem.Equipment)
+            {
+                if (equipment.Guid == expectedReferenceGuid)
+                {
+                    actualReferenceEquipment = equipment;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualReferenceEquipment, "Equipment not found in system");
+            TECEquipment actualTemplateEquipment = null;
+            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            {
+                if (equipment.Guid == expectedTemplateGuid)
+                {
+                    actualTemplateEquipment = equipment;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualTemplateEquipment, "Equipment template not found");
+
+            Assert.IsTrue(actualTemplates.EquipmentSynchronizer.Contains(actualTemplateEquipment), "Template Equipment not in synchronizer");
+            Assert.IsTrue(actualTemplates.EquipmentSynchronizer.Contains(actualReferenceEquipment), "Reference Equipment not in synchronizer");
+            Assert.IsTrue(actualTemplates.EquipmentSynchronizer.GetFullDictionary()[actualTemplateEquipment].Contains(actualReferenceEquipment),
+                "Reference is not synchronized with template");
+
+        }
+
         private void testForTag(TECScope scope)
         {
             bool foundTag = false;
