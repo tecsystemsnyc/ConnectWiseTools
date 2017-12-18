@@ -515,15 +515,17 @@ namespace EstimatingLibraryTests
             TECSubScope ss = new TECSubScope(false);
             templateEquip.SubScope.Add(ss);
 
-            TECEquipment instanceEquip = equipSynchronizer.NewItem(templateEquip);
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+            TECSubScope refSS = refEquip.SubScope[0];
 
             //Act
             templateEquip.SubScope.Remove(ss);
 
             //Assert
-            Assert.IsTrue(instanceEquip.SubScope.Count == 0, "SubScope not removed properly from equipment reference.");
+            Assert.IsTrue(refEquip.SubScope.Count == 0, "SubScope not removed properly from equipment reference.");
 
             Assert.IsFalse(ssSynchronizer.Contains(ss), "SubScope was not removed properly from synchronizer.");
+            Assert.IsFalse(ssSynchronizer.Contains(refSS), "Reference SubScope was not removed properly from synchronizer.");
         }
 
         [TestMethod]
@@ -555,14 +557,35 @@ namespace EstimatingLibraryTests
             //Assert
             Assert.IsTrue(templateEquip.SubScope.Count == 0, "SubScope not removed properly from Equipment template.");
 
-            Assert.IsFalse(ssSynchronizer.Contains(refSS));
-            Assert.IsTrue(ssSynchronizer.Contains(templateSS));
+            Assert.IsFalse(ssSynchronizer.Contains(refSS), "Reference SubScope was not removed properly from synchronizer.");
+            Assert.IsTrue(ssSynchronizer.Contains(templateSS), "Template SubScope was removed from synchronizer.");
         }
 
         [TestMethod]
         public void InstanceSubScopeRemovedFromReferenceEquipment()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSubScope ss = new TECSubScope(false);
+            templateEquip.SubScope.Add(ss);
+
+            TECEquipment refEqiup = equipSynchronizer.NewItem(templateEquip);
+            TECSubScope refSS = refEqiup.SubScope[0];
+
+            //Act
+            refEqiup.SubScope.Remove(refSS);
+
+            //Assert
+            Assert.IsTrue(templateEquip.SubScope.Count == 0, "SubScope not removed properly from Equipment template.");
+
+            Assert.IsFalse(ssSynchronizer.Contains(ss), "SubScope was not removed properly from synchronizer.");
+            Assert.IsFalse(ssSynchronizer.Contains(refSS), "Reference SubScope was not removed properly from synchronizer.");
         }
         #endregion
 
