@@ -13,7 +13,7 @@ namespace EstimatingLibrary.Utilities
         readonly private Action<T, T, TECChangedEventArgs> sync;
         readonly private Dictionary<T, List<T>> dictionary;
         readonly private Dictionary<(T item, bool isKey), Action> unsubscribeDictionary;
-        bool isSyncing = false;
+        List<T> currentlySyncing = new List<T>();
 
         /// <summary>
         /// A manager for keeping properties of templates in sync with respective instances
@@ -138,11 +138,11 @@ namespace EstimatingLibrary.Utilities
         
         private void handleTChanged(T template, T changed, TECChangedEventArgs args)
         {
-            if (!isSyncing)
+            if (!currentlySyncing.Contains(template))
             {
-                isSyncing = true;
+                currentlySyncing.Add(template);
                 sync(template, changed, args);
-                isSyncing = false;
+                currentlySyncing.Remove(template);
             }
             
         }
