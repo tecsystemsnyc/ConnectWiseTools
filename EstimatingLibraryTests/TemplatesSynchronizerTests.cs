@@ -525,7 +525,21 @@ namespace EstimatingLibraryTests
         public void TemplatedSubScopeRemovedFromReferenceEquipment()
         {
             //Arrange
-            //TECTemplates templates
+            TECTemplates templates = new TECTemplates();
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECSubScope templateSS = new TECSubScope(false);
+            templates.SubScopeTemplates.Add(templateSS);
+
+            TECSystem system = new TECSystem(false);
+            templates.SystemTemplates.Add(system);
+
+            //system.Equipment 
+            throw new NotImplementedException();
         }
 
         [TestMethod]
