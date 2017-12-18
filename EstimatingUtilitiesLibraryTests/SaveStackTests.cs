@@ -346,7 +346,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = system.Guid.ToString();
             data[SystemTable.Name.Name] = system.Name.ToString();
             data[SystemTable.Description.Name] = system.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = system.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = system.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -382,7 +382,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
 
             expectedItems.Add( new UpdateItem(Change.Add, SystemTable.TableName, data));
 
@@ -510,7 +510,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -654,7 +654,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -714,7 +714,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[PointTable.ID.Name] = point.Guid.ToString();
             data[PointTable.Name.Name] = point.Label.ToString();
             data[PointTable.Type.Name] = point.Type.ToString();
-            data[PointTable.Quantity.Name] = point.Type.ToString();
+            data[PointTable.Quantity.Name] = point.Quantity.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -757,7 +757,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[PointTable.ID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
             data[PointTable.Name.Name] = instance.Equipment[0].SubScope[0].Points[0].Label.ToString();
             data[PointTable.Type.Name] = instance.Equipment[0].SubScope[0].Points[0].Type.ToString();
-            data[PointTable.Quantity.Name] = instance.Equipment[0].SubScope[0].Points[0].Type.ToString();
+            data[PointTable.Quantity.Name] = instance.Equipment[0].SubScope[0].Points[0].Quantity.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
@@ -767,10 +767,10 @@ namespace EstimatingUtilitiesLibraryTests
             data[PointTable.ID.Name] = point.Guid.ToString();
             data[PointTable.Name.Name] = point.Label.ToString();
             data[PointTable.Type.Name] = point.Type.ToString();
-            data[PointTable.Quantity.Name] = point.Type.ToString();
+            data[PointTable.Quantity.Name] = point.Quantity.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[SubScopePointTable.SubScopeID.Name] = system.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopePointTable.SubScopeID.Name] = subScope.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = point.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
@@ -800,6 +800,17 @@ namespace EstimatingUtilitiesLibraryTests
             DeltaStacker stack = new DeltaStacker(watcher);
             TECSystem instance = system.AddInstance(bid);
 
+            Console.WriteLine(String.Format("Instance System: {0}", instance.Guid));
+            Console.WriteLine(String.Format("Instance Equipment: {0}", instance.Equipment[0].Guid));
+            Console.WriteLine(String.Format("Instance SubScope: {0}", instance.Equipment[0].SubScope[0].Guid));
+            Console.WriteLine(String.Format("Instance Point: {0}", instance.Equipment[0].SubScope[0].Points[0].Guid));
+
+
+            Console.WriteLine(String.Format("Typical System: {0}", system.Guid));
+            Console.WriteLine(String.Format("Typical Equipment: {0}", system.Equipment[0].Guid));
+            Console.WriteLine(String.Format("Typical SubScope: {0}", system.Equipment[0].SubScope[0].Guid));
+            Console.WriteLine(String.Format("Typical Point: {0}", system.Equipment[0].SubScope[0].Points[0].Guid));
+
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = point.Guid.ToString();
@@ -817,7 +828,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -968,7 +979,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -1141,7 +1152,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
@@ -1326,7 +1337,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[PanelTable.ID.Name] = instance.Panels[0].Guid.ToString();
@@ -1473,7 +1484,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[MiscTable.ID.Name] = instance.MiscCosts[0].Guid.ToString();
@@ -1566,7 +1577,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
             data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
             data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
-            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
 
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
@@ -1628,7 +1639,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
             data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
             data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
-            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
 
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
@@ -1696,7 +1707,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[NetworkConnectionTable.Length.Name] = connection.Length.ToString(); ;
             data[NetworkConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
             data[NetworkConnectionTable.IOType.Name] = connection.IOType.ToString();
-            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[NetworkConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
 
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
@@ -1753,7 +1764,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
             
             data = new Dictionary<string, string>();
@@ -1806,7 +1817,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1857,7 +1868,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1913,7 +1924,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1930,7 +1941,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = connection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -3807,8 +3818,8 @@ namespace EstimatingUtilitiesLibraryTests
             }
             foreach (KeyValuePair<string, string> fieldEntry in expectedItem.FieldData)
             {
-                Assert.IsTrue(actualItem.FieldData.ContainsKey(fieldEntry.Key), "Field missing in actualItem.");
-                Assert.AreEqual(fieldEntry.Value, actualItem.FieldData[fieldEntry.Key], "Values do not match on UpdateItems.");
+                Assert.IsTrue(actualItem.FieldData.ContainsKey(fieldEntry.Key), String.Format("Field missing in actualItem for table {0}", actualItem.Table));
+                Assert.AreEqual(fieldEntry.Value, actualItem.FieldData[fieldEntry.Key], String.Format("Values do not match on UpdateItems for table {0}", actualItem.Table));
             }
         }
 
