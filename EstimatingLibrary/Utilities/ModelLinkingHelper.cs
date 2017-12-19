@@ -684,6 +684,14 @@ namespace EstimatingLibrary.Utilities
                 {
                     templates.EquipmentSynchronizer.LinkExisting(template, references);
                 }
+                foreach(TECSubScope subScope in template.SubScope)
+                {
+                    List<TECSubScope> subReferences = findReferences(subScope, allSubScope, templateReferences);
+                    if(subReferences.Count > 0)
+                    {
+                        templates.SubScopeSynchronizer.LinkExisting(subScope, subReferences);
+                    }
+                }
             }
 
         }
