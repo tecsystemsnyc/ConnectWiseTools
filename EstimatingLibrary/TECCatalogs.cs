@@ -15,7 +15,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECDevice> _devices;
         private ObservableCollection<TECValve> _valves;
         private ObservableCollection<TECManufacturer> _manufacturers;
-        private ObservableCollection<TECLabeled> _tags;
+        private ObservableCollection<TECTag> _tags;
 
         public ObservableCollection<TECIOModule> IOModules
         {
@@ -128,7 +128,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
             }
         }
-        public ObservableCollection<TECLabeled> Tags
+        public ObservableCollection<TECTag> Tags
         {
             get { return _tags; }
             set
@@ -170,7 +170,7 @@ namespace EstimatingLibrary
             _devices = new ObservableCollection<TECDevice>();
             _valves = new ObservableCollection<TECValve>();
             _manufacturers = new ObservableCollection<TECManufacturer>();
-            _tags = new ObservableCollection<TECLabeled>();
+            _tags = new ObservableCollection<TECTag>();
 
             registerInitialCollectionChanges();
         }

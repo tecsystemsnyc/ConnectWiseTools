@@ -1444,8 +1444,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToSystem()
         {
             TECSystem systemToEdit = bid.Systems[0];
-            TECLabeled tagToAdd = null;
-            foreach(TECLabeled tag in bid.Catalogs.Tags)
+            TECTag tagToAdd = null;
+            foreach(TECTag tag in bid.Catalogs.Tags)
             {
                 if (!systemToEdit.Tags.Contains(tag))
                 {
@@ -1469,7 +1469,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECLabeled tag in finalSystem.Tags)
+            foreach (TECTag tag in finalSystem.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1481,8 +1481,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToEquipment()
         {
             TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
-            TECLabeled tagToAdd = null;
-            foreach (TECLabeled tag in bid.Catalogs.Tags)
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
             {
                 if (!equipmentToEdit.Tags.Contains(tag))
                 {
@@ -1514,7 +1514,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECLabeled tag in finalEquipment.Tags)
+            foreach (TECTag tag in finalEquipment.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1526,8 +1526,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToSubScope()
         {
             TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
-            TECLabeled tagToAdd = null;
-            foreach (TECLabeled tag in bid.Catalogs.Tags)
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
             {
                 if (!subScopeToEdit.Tags.Contains(tag))
                 {
@@ -1560,7 +1560,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECLabeled tag in finalSubScope.Tags)
+            foreach (TECTag tag in finalSubScope.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }
@@ -1572,8 +1572,8 @@ namespace Tests
         public void Save_Bid_Add_Tag_ToController()
         {
             TECController ControllerToEdit = bid.Controllers[0];
-            TECLabeled tagToAdd = null;
-            foreach (TECLabeled tag in bid.Catalogs.Tags)
+            TECTag tagToAdd = null;
+            foreach (TECTag tag in bid.Catalogs.Tags)
             {
                 if (!ControllerToEdit.Tags.Contains(tag))
                 {
@@ -1598,7 +1598,7 @@ namespace Tests
             }
 
             bool tagExists = false;
-            foreach (TECLabeled tag in finalController.Tags)
+            foreach (TECTag tag in finalController.Tags)
             {
                 if (tag.Guid == tagToAdd.Guid) { tagExists = true; }
             }

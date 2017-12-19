@@ -258,7 +258,7 @@ namespace EstimatingLibrary
         private void removeChildFromScope(TECScope scope, TECObject child)
         {
             TECCost cost = child as TECCost;
-            TECLabeled tag = child as TECLabeled;
+            TECTag tag = child as TECTag;
             if (cost != null)
             {
                 scope.AssociatedCosts.Remove(cost);

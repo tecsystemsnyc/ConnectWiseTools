@@ -17,7 +17,7 @@ namespace EstimatingLibrary.Utilities
             scope.Name = otherScope.Name;
             scope.Description = otherScope.Description;
             scope.Tags.ObservablyClear();
-            foreach (TECLabeled tag in otherScope.Tags)
+            foreach (TECTag tag in otherScope.Tags)
             {
                 scope.Tags.Add(tag);
             }

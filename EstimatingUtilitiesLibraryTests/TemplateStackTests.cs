@@ -268,7 +268,7 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECLabeled edit = new TECLabeled();
+            TECTag edit = new TECTag();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -277,7 +277,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECLabeled> actual = Template.Catalogs.Tags;
+            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -949,13 +949,13 @@ namespace Tests
         {
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
-            TECLabeled edit = new TECLabeled();
+            TECTag edit = new TECTag();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.Catalogs.Tags.Add(edit);
-            var expected = new ObservableCollection<TECLabeled>();
-            foreach (TECLabeled item in Template.Catalogs.Tags)
+            var expected = new ObservableCollection<TECTag>();
+            foreach (TECTag item in Template.Catalogs.Tags)
             {
                 expected.Add(item);
             }
@@ -963,7 +963,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECLabeled> actual = Template.Catalogs.Tags;
+            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

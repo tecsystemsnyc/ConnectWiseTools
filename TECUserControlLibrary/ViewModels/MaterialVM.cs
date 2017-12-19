@@ -537,8 +537,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #region Tag
-        private TECLabeled _tagToAdd;
-        public TECLabeled TagToAdd
+        private TECTag _tagToAdd;
+        public TECTag TagToAdd
         {
             get { return _tagToAdd; }
             set
@@ -870,7 +870,7 @@ namespace TECUserControlLibrary.ViewModels
         private void addTagExecute()
         {
             Templates.Catalogs.Tags.Add(TagToAdd);
-            TagToAdd = new TECLabeled();
+            TagToAdd = new TECTag();
         }
 
         private bool canAddTag()
@@ -961,7 +961,7 @@ namespace TECUserControlLibrary.ViewModels
 
             ManufacturerToAdd = new TECManufacturer();
 
-            TagToAdd = new TECLabeled();
+            TagToAdd = new TECTag();
 
             
         }

@@ -546,7 +546,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TagTable : TableBase
     {
         public static string TableName = "Tag";
-        public static Type ObjectType = typeof(TECLabeled);
+        public static Type ObjectType = typeof(TECTag);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TagString = new TableField("Label", "TEXT", ObjectType.GetProperty("Label"));
@@ -1649,7 +1649,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "ScopeTag";
         public static Type ObjectType = typeof(TECScope);
-        public static Type ReferenceType = typeof(TECLabeled);
+        public static Type ReferenceType = typeof(TECTag);
 
         public static TableField ScopeID = new TableField("ScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TagID = new TableField("TagID", "TEXT", ReferenceType.GetProperty("Guid"));
