@@ -441,13 +441,17 @@ namespace EstimatingLibrary
 
         private void handleSyncRemoval(TECObject item)
         {
-            if (item is TECSubScope subScope)
+            if (item is TECSubScope subScope && 
+                SubScopeSynchronizer.GetFullDictionary().ContainsKey(subScope))
             {
                 SubScopeSynchronizer.RemoveGroup(subScope);
             }
             else if (item is TECEquipment equipment)
             {
-                EquipmentSynchronizer.RemoveGroup(equipment);
+                if (EquipmentSynchronizer.GetFullDictionary().ContainsKey(equipment))
+                {
+                    EquipmentSynchronizer.RemoveGroup(equipment);
+                }
                 foreach (TECSubScope equipSS in equipment.SubScope)
                 {
                     if (SubScopeSynchronizer.GetTemplate(equipSS) != null)
