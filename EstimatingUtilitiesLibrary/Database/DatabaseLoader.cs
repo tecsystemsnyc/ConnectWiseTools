@@ -116,6 +116,28 @@ namespace EstimatingUtilitiesLibrary.Database
             tempManufacturer.Label = "TEMPORARY";
 
             tempControllerType = new TECControllerType(tempManufacturer);
+            TECIO input = new TECIO(IOType.UI);
+            input.Quantity = 100;
+            TECIO output = new TECIO(IOType.UO);
+            output.Quantity = 100;
+            TECIO bacnetIP = new TECIO(IOType.BACnetIP);
+            bacnetIP.Quantity = 100;
+            TECIO bacnetMSTP = new TECIO(IOType.BACnetMSTP);
+            bacnetMSTP.Quantity = 100;
+            TECIO lon = new TECIO(IOType.LonWorks);
+            lon.Quantity = 100;
+            TECIO modbusRTU = new TECIO(IOType.ModbusRTU);
+            modbusRTU.Quantity = 100;
+            TECIO modbusTCP = new TECIO(IOType.ModbusTCP);
+            modbusTCP.Quantity = 100;
+            tempControllerType.IO.Add(input);
+            tempControllerType.IO.Add(output);
+            tempControllerType.IO.Add(bacnetIP);
+            tempControllerType.IO.Add(bacnetMSTP);
+            tempControllerType.IO.Add(lon);
+            tempControllerType.IO.Add(modbusRTU);
+            tempControllerType.IO.Add(modbusTCP);
+
             tempPanelType = new TECPanelType(tempManufacturer);
         }
         #region Catalogs
