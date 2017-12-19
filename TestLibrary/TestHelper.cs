@@ -157,6 +157,13 @@ namespace Tests
 
             subScope1.Points.Add(point1);
 
+            var point2 = new TECPoint(true);
+            point2.Label = "Point 2";
+            point2.Type = IOType.AI;
+            point2.Quantity = 2;
+
+            subScope2.Points.Add(point2);
+
             //Connections
             TECConnection testConnection = expectedController.AddSubScope(subScope1);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
