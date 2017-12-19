@@ -54,7 +54,7 @@ namespace EstimatingUtilitiesLibraryTests
             templates.EquipmentTemplates.Add(equip);
 
             DeltaStacker stack = new DeltaStacker(watcher, templates);
-            
+
             //Act
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
@@ -799,6 +799,250 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);
+        }
+        #endregion
+
+        #region Equipment
+        [TestMethod]
+        public void AddReferenceEquipment()
+        {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+
+            TECCost testCost = new TECCost(CostType.TEC);
+            templates.Catalogs.AssociatedCosts.Add(testCost);
+
+            TECLabeled testTag = new TECLabeled();
+            templates.Catalogs.Tags.Add(testTag);
+
+            TECSubScope testSS = new TECSubScope(false);
+            testSS.Name = "Test SS";
+            testSS.Description = "SS Desc";
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templateEquip.Name = "Test Equip";
+            templateEquip.Description = "Test Desc";
+            templates.EquipmentTemplates.Add(templateEquip);
+            templateEquip.AssociatedCosts.Add(testCost);
+            templateEquip.Tags.Add(testTag);
+            templateEquip.SubScope.Add(testSS);
+
+            TECSystem sys = new TECSystem(false);
+            templates.SystemTemplates.Add(sys);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+
+            sys.Equipment.Add(refEquip);
+
+            TECSubScope newSS = refEquip.SubScope[0];
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //New Equipment entry
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = refEquip.Guid.ToString();
+            data[EquipmentTable.Name.Name] = templateEquip.Name;
+            data[EquipmentTable.Description.Name] = templateEquip.Description;
+            expectedStack.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
+
+            //Scope Tag relationship
+            data = new Dictionary<string, string>();
+            data[ScopeTagTable.ScopeID.Name] = refEquip.Guid.ToString();
+            data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, ScopeTagTable.TableName, data));
+
+            //Scope Cost relationship
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = refEquip.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            data[ScopeAssociatedCostTable.Quantity.Name] = "1";
+            expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
+
+            //New SubScope entry
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = newSS.Guid.ToString();
+            data[SubScopeTable.Name.Name] = testSS.Name;
+            data[SubScopeTable.Description.Name] = testSS.Description;
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+
+            //Equipment Subscope relationship
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = refEquip.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = newSS.Guid.ToString();
+            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
+
+            //System Equipment relationship
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = sys.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = refEquip.Guid.ToString();
+            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            expectedStack.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
+
+
+
+
+            //NOT IN ACTUAL
+            //Equipment Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = templateEquip.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = refEquip.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
+
+            //SubScope Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
+        }
+
+        [TestMethod]
+        public void RemoveReferenceEquipment()
+        {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+
+            TECCost testCost = new TECCost(CostType.TEC);
+            templates.Catalogs.AssociatedCosts.Add(testCost);
+
+            TECLabeled testTag = new TECLabeled();
+            templates.Catalogs.Tags.Add(testTag);
+
+            TECSubScope testSS = new TECSubScope(false);
+            testSS.Name = "Test SS";
+            testSS.Description = "SS Desc";
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templateEquip.Name = "Test Equip";
+            templateEquip.Description = "Test Desc";
+            templates.EquipmentTemplates.Add(templateEquip);
+            templateEquip.AssociatedCosts.Add(testCost);
+            templateEquip.Tags.Add(testTag);
+            templateEquip.SubScope.Add(testSS);
+
+            TECSystem sys = new TECSystem(false);
+            templates.SystemTemplates.Add(sys);
+
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+            sys.Equipment.Add(refEquip);
+
+            TECSubScope newSS = refEquip.SubScope[0];
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            sys.Equipment.Remove(refEquip);
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+
+            //Equipment Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = templateEquip.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = refEquip.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
+
+            //Old Equipment entry
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = refEquip.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, EquipmentTable.TableName, data));
+
+            //Scope Tag relationship
+            data = new Dictionary<string, string>();
+            data[ScopeTagTable.ScopeID.Name] = refEquip.Guid.ToString();
+            data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, ScopeTagTable.TableName, data));
+
+            //Scope Cost relationship
+            data = new Dictionary<string, string>();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = refEquip.Guid.ToString();
+            data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, ScopeAssociatedCostTable.TableName, data));
+
+            //Old SubScope entry
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SubScopeTable.TableName, data));
+
+            //Equipment Subscope relationship
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = refEquip.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
+
+            //System Equipment relationship
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = sys.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = refEquip.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SystemEquipmentTable.TableName, data));
+
+            //SubScope Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
+        }
+
+        [TestMethod]
+        public void ChangeEquipmentTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddAssociatedCostToEquipmentTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveAssociatedCostFromEquipmentTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddTagToEquipmentTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveTagFromEquipmentTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddSubScopeToEquipmentTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveSubScopeFromEquipmentTemplate()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
