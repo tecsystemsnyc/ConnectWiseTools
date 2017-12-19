@@ -1338,7 +1338,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             sys.Equipment.Add(refEquip);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateEquip.SubScope.Remove(ss);

@@ -548,10 +548,10 @@ namespace EstimatingLibraryTests
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
             system.Equipment.Add(refEquip);
 
-            TECSubScope newSS = ssSynchronizer.NewItem(templateSS);
-            refEquip.SubScope.Add(newSS);
+            TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
+            refEquip.SubScope.Add(refSS);
 
-            TECSubScope refSS = refEquip.SubScope[0];
+            //TECSubScope refSS = refEquip.SubScope[0];
 
             //Act
             refEquip.SubScope.Remove(refSS);
