@@ -954,6 +954,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[TemplateReferenceTable.ReferenceID.Name] = refEquip.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
 
+            //SubScope Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
+
             //Old Equipment entry
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = refEquip.Guid.ToString();
@@ -988,11 +994,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemEquipmentTable.EquipmentID.Name] = refEquip.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Remove, SystemEquipmentTable.TableName, data));
 
-            //SubScope Template Reference relationship
-            data = new Dictionary<string, string>();
-            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
-            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
 
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
