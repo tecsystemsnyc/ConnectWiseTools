@@ -1295,18 +1295,33 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeTable.Description.Name] = ss.Description;
             expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
 
+            //Equipment SubScope relationship
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = templateEquip.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = ss.Guid.ToString();
+            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
+
             //Template Reference relationship
             data = new Dictionary<string, string>();
             data[TemplateReferenceTable.TemplateID.Name] = ss.Guid.ToString();
             data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
 
             //New SubScope entry (reference Equipment)
             data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = newSS.Guid.ToString();
-            data[SubScopeTable.Name.Name] = ss.Name;
-            data[SubScopeTable.Description.Name] = ss.Description;
+            data[SubScopeTable.Name.Name] = newSS.Name;
+            data[SubScopeTable.Description.Name] = newSS.Description;
             expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+
+            //Equipment SubScope relationship
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = refEquip.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = newSS.Guid.ToString();
+            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
+
 
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
