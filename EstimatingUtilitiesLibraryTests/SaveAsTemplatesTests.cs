@@ -3,6 +3,7 @@ using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using System.Linq;
 using static Tests.CostTestingUtilities;
 
 namespace Tests
@@ -54,13 +55,13 @@ namespace Tests
         {
             //Arrange
             expectedTemplates = TestHelper.CreateTestTemplates();
-            expectedSystem = expectedTemplates.SystemTemplates[0];
-            expectedEquipment = expectedTemplates.EquipmentTemplates[0];
-            expectedSubScope = expectedTemplates.SubScopeTemplates[0];
+            expectedSystem = expectedTemplates.SystemTemplates.First(sys => sys.Name == "Test System");
+            expectedEquipment = expectedTemplates.EquipmentTemplates.First(sys => sys.Name == "Test Equipment");
+            expectedSubScope = expectedTemplates.SubScopeTemplates.First(sys => sys.Name == "Test SubScope");
             expectedDevice = expectedTemplates.Catalogs.Devices[0];
             expectedManufacturer = expectedTemplates.Catalogs.Manufacturers[0];
             expectedTag = expectedTemplates.Catalogs.Tags[0];
-            expectedController = expectedTemplates.ControllerTemplates[0];
+            expectedController = expectedTemplates.ControllerTemplates.First(sys => sys.Name == "Test Controller");
             expectedAssociatedCost = expectedTemplates.Catalogs.AssociatedCosts[0];
             expectedConnectionType = expectedTemplates.Catalogs.ConnectionTypes[0];
             expectedConduitType = expectedTemplates.Catalogs.ConduitTypes[0];

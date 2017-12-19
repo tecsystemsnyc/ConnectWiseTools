@@ -24,7 +24,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController controller = new TECController(type, false);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -62,7 +62,7 @@ namespace EstimatingUtilitiesLibraryTests
             controller.AssociatedCosts.Add(cost);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -93,7 +93,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECPanel panel = new TECPanel(type, false);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -132,7 +132,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.AddController(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -160,7 +160,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECMisc misc = new TECMisc(CostType.TEC, false);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -198,7 +198,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECScopeBranch scopeBranch = new TECScopeBranch(false);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -230,7 +230,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TECScopeBranch scopeBranch = new TECScopeBranch(false);
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -264,7 +264,7 @@ namespace EstimatingUtilitiesLibraryTests
             note.Label = "Note";
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[NoteTable.ID.Name] = note.Guid.ToString();
             data[NoteTable.NoteText.Name] = note.Label.ToString();
@@ -287,7 +287,7 @@ namespace EstimatingUtilitiesLibraryTests
             exclusion.Label = "Exclusion";
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[ExclusionTable.ID.Name] = exclusion.Guid.ToString();
             data[ExclusionTable.ExclusionText.Name] = exclusion.Label.ToString();
@@ -312,7 +312,7 @@ namespace EstimatingUtilitiesLibraryTests
             location.Label = "Location";
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[LocationTable.ID.Name] = location.Guid.ToString();
             data[LocationTable.Name.Name] = location.Label.ToString();
@@ -339,7 +339,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical system = new TECTypical();
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -373,7 +373,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             TECSystem instance = system.AddInstance(bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -409,7 +409,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -447,7 +447,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             typical.Equipment.Add(equip);
 
@@ -496,7 +496,7 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equip);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             TECSystem instance = typical.AddInstance(bid);
 
@@ -549,7 +549,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             
             TECSubScope subScope = new TECSubScope(true);
@@ -586,7 +586,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = system.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
 
@@ -638,7 +638,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             TECSystem instance = system.AddInstance(bid);
             
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -704,7 +704,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             TECPoint point = new TECPoint(true);
@@ -744,7 +744,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = system.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             TECPoint point = new TECPoint(true);
             subScope.Points.Add(point);
 
@@ -801,7 +801,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             TECSystem instance = system.AddInstance(bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -889,7 +889,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
@@ -921,7 +921,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
@@ -962,7 +962,7 @@ namespace EstimatingUtilitiesLibraryTests
             subScope.Devices.Add(device);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             TECSystem instance = system.AddInstance(bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
@@ -1036,7 +1036,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
@@ -1077,7 +1077,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             typical.AddController(controller);
 
@@ -1138,7 +1138,7 @@ namespace EstimatingUtilitiesLibraryTests
             typical.AddController(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1193,7 +1193,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             data = new Dictionary<string, string>();
@@ -1238,7 +1238,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.AddController(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             data = new Dictionary<string, string>();
@@ -1267,7 +1267,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             typical.Panels.Add(panel);
 
@@ -1323,7 +1323,7 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Panels.Add(panel);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1377,7 +1377,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string>  data = new Dictionary<string, string>();
@@ -1413,7 +1413,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             typical.MiscCosts.Add(misc);
 
@@ -1469,7 +1469,7 @@ namespace EstimatingUtilitiesLibraryTests
             typical.MiscCosts.Add(misc);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1522,7 +1522,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1561,7 +1561,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECConnectionType connectionType = new TECConnectionType();
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -1623,7 +1623,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECConnectionType connectionType = new TECConnectionType();
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -1691,7 +1691,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECConnectionType connectionType = new TECConnectionType();
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -1751,7 +1751,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(typical);
             
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -1804,7 +1804,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -1855,7 +1855,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(typical);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -1910,7 +1910,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController instanceController = system.Controllers[0];
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -1976,7 +1976,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.AddController(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -2010,7 +2010,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Panels.Add(panel);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -2048,7 +2048,7 @@ namespace EstimatingUtilitiesLibraryTests
             panel.Controllers.Add(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -2077,7 +2077,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.MiscCosts.Add(misc);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[MiscTable.ID.Name] = misc.Guid.ToString();
@@ -2107,7 +2107,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.ScopeTree.Add(scopeBranch);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -2139,7 +2139,7 @@ namespace EstimatingUtilitiesLibraryTests
             parentBranch.Branches.Add(scopeBranch);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -2171,7 +2171,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Notes.Add(note);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[NoteTable.ID.Name] = note.Guid.ToString();
             UpdateItem expectedItem = new UpdateItem(Change.Remove, NoteTable.TableName, data);
@@ -2192,7 +2192,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Exclusions.Add(exclusion);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[ExclusionTable.ID.Name] = exclusion.Guid.ToString();
             UpdateItem expectedItem = new UpdateItem(Change.Remove, ExclusionTable.TableName, data);
@@ -2215,7 +2215,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Locations.Add(location);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[LocationTable.ID.Name] = location.Guid.ToString();
             UpdateItem expectedItem = new UpdateItem(Change.Remove, LocationTable.TableName, data);
@@ -2240,7 +2240,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -2274,7 +2274,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = system.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             system.Instances.Remove(instance);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -2307,7 +2307,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equip);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -2341,7 +2341,7 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equip);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             var removed = instance.Equipment[0];
             typical.Equipment.Remove(equip);
 
@@ -2386,7 +2386,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             typical.Instances.Remove(instance);
 
@@ -2439,7 +2439,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             equipment.SubScope.Remove(subScope);
@@ -2473,7 +2473,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             var removed = instance.Equipment[0].SubScope[0];
             equipment.SubScope.Remove(subScope);
 
@@ -2518,7 +2518,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = system.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             system.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -2584,7 +2584,7 @@ namespace EstimatingUtilitiesLibraryTests
             subScope.Points.Add(point);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             subScope.Points.Remove(point);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -2620,7 +2620,7 @@ namespace EstimatingUtilitiesLibraryTests
             subScope.Points.Add(point);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             var removed = instance.Equipment[0].SubScope[0].Points[0];
             subScope.Points.Remove(point);
 
@@ -2667,7 +2667,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = system.AddInstance(bid);
             
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             system.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -2742,7 +2742,7 @@ namespace EstimatingUtilitiesLibraryTests
             subScope.Devices.Add(device);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             subScope.Devices.Remove(device);
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -2773,7 +2773,7 @@ namespace EstimatingUtilitiesLibraryTests
             subScope.Devices.Add(device);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             subScope.Devices.Remove(device);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -2810,7 +2810,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = system.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             system.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -2874,7 +2874,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.AddController(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
@@ -2914,7 +2914,7 @@ namespace EstimatingUtilitiesLibraryTests
             typical.AddController(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             var removed = instance.Controllers[0];
             typical.RemoveController(controller);
 
@@ -2970,7 +2970,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             typical.Instances.Remove(instance);
 
@@ -3021,7 +3021,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Panels.Add(panel);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             
@@ -3065,7 +3065,7 @@ namespace EstimatingUtilitiesLibraryTests
             panel.Controllers.Add(controller);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             data = new Dictionary<string, string>();
@@ -3095,7 +3095,7 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Panels.Add(panel);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             var removed = instance.Panels[0];
             typical.Panels.Remove(panel);
 
@@ -3149,7 +3149,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             typical.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -3198,7 +3198,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.MiscCosts.Add(misc);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -3231,7 +3231,7 @@ namespace EstimatingUtilitiesLibraryTests
             var removed = instance.MiscCosts[0];
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
@@ -3277,7 +3277,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = typical.AddInstance(bid);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             typical.Instances.Remove(instance);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -3324,7 +3324,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.ScopeBranches.Add(scopeBranch);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -3365,7 +3365,7 @@ namespace EstimatingUtilitiesLibraryTests
             connection.AddINetworkConnectable(child);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             controller.RemoveNetworkConnection(connection);
 
@@ -3424,7 +3424,7 @@ namespace EstimatingUtilitiesLibraryTests
             connection.AddINetworkConnectable(instanceController);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             controller.RemoveNetworkConnection(connection);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -3486,7 +3486,7 @@ namespace EstimatingUtilitiesLibraryTests
                 new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
             connection.AddINetworkConnectable(otherInstanceController);
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             instanceController.RemoveNetworkConnection(connection);
 
@@ -3541,7 +3541,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScopeConnection connection = controller.AddSubScope(subScope);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
             controller.RemoveSubScope(subScope);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -3593,7 +3593,7 @@ namespace EstimatingUtilitiesLibraryTests
 
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -3644,7 +3644,7 @@ namespace EstimatingUtilitiesLibraryTests
 
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -3699,7 +3699,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScopeConnection instanceConnection = instanceController.AddSubScope(instanceSubScope);
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
@@ -3755,7 +3755,7 @@ namespace EstimatingUtilitiesLibraryTests
             string edit = "edit";
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             Tuple<string, string> keyData = new Tuple<string, string>(BidInfoTable.ID.Name, bid.Guid.ToString());
 
@@ -3787,7 +3787,7 @@ namespace EstimatingUtilitiesLibraryTests
             string edit = "edit";
 
             //Act
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
 
             Tuple<string, string> keyData = new Tuple<string, string>(SystemTable.ID.Name, system.Guid.ToString());
 

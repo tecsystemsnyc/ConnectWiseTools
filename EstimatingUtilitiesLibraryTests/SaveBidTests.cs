@@ -23,7 +23,7 @@ namespace Tests
             path = Path.GetTempFileName();
             bid = TestHelper.CreateTestBid();
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            testStack = new DeltaStacker(watcher);
+            testStack = new DeltaStacker(watcher, bid);
             DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
         }

@@ -11,10 +11,10 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<UpdateItem> stack;
         private static DBType dbType;
 
-        public DeltaStacker(ChangeWatcher changeWatcher, TECScopeManager manager = null)
+        public DeltaStacker(ChangeWatcher changeWatcher, TECScopeManager manager)
         {
             dbType = DBType.Bid;
-            if (manager != null && manager is TECTemplates)
+            if (manager is TECTemplates)
             {
                 dbType = DBType.Templates;
             }

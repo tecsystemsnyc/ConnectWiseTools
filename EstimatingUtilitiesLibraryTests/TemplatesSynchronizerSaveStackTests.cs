@@ -168,7 +168,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECPoint newPoint = refSS.Points[0];
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             equip.SubScope.Remove(refSS);
@@ -247,7 +247,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.Name = "New Name";
@@ -309,7 +309,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.AssociatedCosts.Add(testCost);
@@ -360,7 +360,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.AssociatedCosts.Remove(testCost);
@@ -408,7 +408,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.Tags.Add(testTag);
@@ -457,7 +457,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.Tags.Remove(testTag);
@@ -508,7 +508,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.Devices.Add(testDevice);
@@ -564,7 +564,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.Devices.Remove(testDevice);
@@ -614,7 +614,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.Points.Add(testPoint);
@@ -685,7 +685,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateSS.Points.Remove(testPoint);
@@ -748,7 +748,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             equip.SubScope.Add(refSS);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             testPoint.Label = "Different Label";
@@ -1018,7 +1018,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             sys.Equipment.Add(refEquip);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateEquip.Name = "New Name";
@@ -1031,25 +1031,25 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Template Equipment name change
             data = new Dictionary<string, string>();
-            pk = new Tuple<string, string>(EquipmentTable.TableName, templateEquip.Guid.ToString());
+            pk = new Tuple<string, string>(EquipmentTable.ID.Name, templateEquip.Guid.ToString());
             data[EquipmentTable.Name.Name] = templateEquip.Name;
             expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
 
             //Reference Equipment name change
             data = new Dictionary<string, string>();
-            pk = new Tuple<string, string>(EquipmentTable.TableName, refEquip.Guid.ToString());
+            pk = new Tuple<string, string>(EquipmentTable.ID.Name, refEquip.Guid.ToString());
             data[EquipmentTable.Name.Name] = refEquip.Name;
             expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
 
             //Template Equipment description change
             data = new Dictionary<string, string>();
-            pk = new Tuple<string, string>(EquipmentTable.TableName, templateEquip.Guid.ToString());
+            pk = new Tuple<string, string>(EquipmentTable.ID.Name, templateEquip.Guid.ToString());
             data[EquipmentTable.Description.Name] = templateEquip.Description;
             expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
 
             //Reference Equipment description change
             data = new Dictionary<string, string>();
-            pk = new Tuple<string, string>(EquipmentTable.TableName, refEquip.Guid.ToString());
+            pk = new Tuple<string, string>(EquipmentTable.ID.Name, refEquip.Guid.ToString());
             data[EquipmentTable.Description.Name] = refEquip.Description;
             expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
 
@@ -1080,7 +1080,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             sys.Equipment.Add(refEquip);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateEquip.AssociatedCosts.Add(testCost);
@@ -1098,11 +1098,11 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Reference Equipment Cost relationship
             data = new Dictionary<string, string>();
-            data[ScopeAssociatedCostTable.ScopeID.Name] = templateEquip.Guid.ToString();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = refEquip.Guid.ToString();
             data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
             data[ScopeAssociatedCostTable.Quantity.Name] = "1";
             expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
-
+            
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);
@@ -1131,7 +1131,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             sys.Equipment.Add(refEquip);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateEquip.AssociatedCosts.Remove(testCost);
@@ -1148,7 +1148,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Reference Equipment Cost relationship
             data = new Dictionary<string, string>();
-            data[ScopeAssociatedCostTable.ScopeID.Name] = templateEquip.Guid.ToString();
+            data[ScopeAssociatedCostTable.ScopeID.Name] = refEquip.Guid.ToString();
             data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Remove, ScopeAssociatedCostTable.TableName, data));
 
@@ -1179,7 +1179,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             sys.Equipment.Add(refEquip);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateEquip.Tags.Add(testTag);
@@ -1196,7 +1196,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Reference Equipment Tag relationship
             data = new Dictionary<string, string>();
-            data[ScopeTagTable.ScopeID.Name] = templateEquip.Guid.ToString();
+            data[ScopeTagTable.ScopeID.Name] = refEquip.Guid.ToString();
             data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Add, ScopeTagTable.TableName, data));
 
@@ -1227,7 +1227,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             sys.Equipment.Add(refEquip);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateEquip.Tags.Add(testTag);
@@ -1244,7 +1244,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Reference Equipment Tag relationship
             data = new Dictionary<string, string>();
-            data[ScopeTagTable.ScopeID.Name] = templateEquip.Guid.ToString();
+            data[ScopeTagTable.ScopeID.Name] = refEquip.Guid.ToString();
             data[ScopeTagTable.TagID.Name] = testTag.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Add, ScopeTagTable.TableName, data));
 
@@ -1276,7 +1276,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             sys.Equipment.Add(refEquip);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             templateEquip.SubScope.Add(ss);

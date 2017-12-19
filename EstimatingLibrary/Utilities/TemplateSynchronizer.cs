@@ -88,7 +88,7 @@ namespace EstimatingLibrary.Utilities
                 handleTChanged(template, newItem, args);
             }
         }
-        public  void RemoveItem(T item)
+        public void RemoveItem(T item)
         {
             foreach (T key in dictionary.Keys)
             {
