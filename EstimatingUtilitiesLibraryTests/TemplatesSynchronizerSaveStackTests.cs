@@ -1006,6 +1006,17 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void ChangeEquipmentTemplate()
         {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+
             throw new NotImplementedException();
         }
 
