@@ -1013,7 +1013,49 @@ namespace EstimatingUtilitiesLibraryTests
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            throw new NotImplementedException();
+            TECSystem sys = new TECSystem(false);
+            templates.SystemTemplates.Add(sys);
+
+            sys.Equipment.Add(refEquip);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateEquip.Name = "New Name";
+            templateEquip.Description = "New Description";
+
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
+
+            Dictionary<string, string> data;
+            Tuple<string, string> pk;
+
+            //Template Equipment name change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(EquipmentTable.TableName, templateEquip.Guid.ToString());
+            data[EquipmentTable.Name.Name] = templateEquip.Name;
+            expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
+
+            //Reference Equipment name change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(EquipmentTable.TableName, refEquip.Guid.ToString());
+            data[EquipmentTable.Name.Name] = refEquip.Name;
+            expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
+
+            //Template Equipment description change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(EquipmentTable.TableName, templateEquip.Guid.ToString());
+            data[EquipmentTable.Description.Name] = templateEquip.Description;
+            expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
+
+            //Reference Equipment description change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(EquipmentTable.TableName, refEquip.Guid.ToString());
+            data[EquipmentTable.Description.Name] = refEquip.Description;
+            expectedStack.Add(new UpdateItem(Change.Edit, EquipmentTable.TableName, data, pk));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
