@@ -1235,7 +1235,20 @@ namespace Tests
             expectedPoint.Label = "New Point";
             expectedPoint.Quantity = 84300;
 
-            TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
+            TECSubScope subScopeToModify = null;
+            foreach (TECSystem system in bid.Systems)
+            {
+                foreach (TECSubScope subScope in system.GetAllSubScope())
+                {
+                    if (subScope.Points.Count > 0 && subScope.Connection == null)
+                    {
+                        subScopeToModify = subScope;
+                        break;
+                    }
+                }
+                if (subScopeToModify != null)
+                    break;
+            }
             subScopeToModify.Points.Add(expectedPoint);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1390,7 +1403,7 @@ namespace Tests
             {
                 foreach (TECSubScope subScope in system.GetAllSubScope())
                 {
-                    if (subScope.Points.Count > 0)
+                    if (subScope.Points.Count > 0 && subScope.Connection == null)
                     {
                         ssToModify = subScope;
                         expectedPoint = subScope.Points[0];
@@ -1441,7 +1454,7 @@ namespace Tests
             {
                 foreach (TECSubScope subScope in system.GetAllSubScope())
                 {
-                    if (subScope.Points.Count > 0)
+                    if (subScope.Points.Count > 0 && subScope.Connection == null)
                     {
                         ssToModify = subScope;
                         expectedPoint = subScope.Points[0];
