@@ -1331,7 +1331,24 @@ namespace Tests
         public void Save_Bid_Point_Name()
         {
             //Act
-            TECPoint expectedPoint = bid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            TECPoint expectedPoint = null;
+            foreach(TECSystem system in bid.Systems)
+            {
+                foreach(TECEquipment equipment in system.Equipment)
+                {
+                    foreach(TECSubScope subScope in equipment.SubScope)
+                    {
+                        foreach(TECPoint point in subScope.Points)
+                        {
+                            expectedPoint = point;
+                            break;
+                        }
+                        if(expectedPoint != null) break; 
+                    }
+                    if (expectedPoint != null) break; 
+                }
+                if (expectedPoint != null) break; 
+            }
             expectedPoint.Label = "Point name save test";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
