@@ -30,7 +30,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddVM(TECScopeManager scopeManager)
         {
             IsTemplates = scopeManager is TECTemplates;
-            templates = templates as TECTemplates;
+            templates = scopeManager as TECTemplates;
             PropertiesVM = new PropertiesVM(scopeManager.Catalogs, scopeManager);
         }
 

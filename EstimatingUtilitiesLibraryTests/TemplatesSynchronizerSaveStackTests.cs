@@ -758,14 +758,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECPoint typed = refSS.Points[0];
             testPoint.Quantity = 69;
             TECPoint quantitied = refSS.Points[0];
-
-            Console.WriteLine(String.Format("Template: {0}", testPoint.Guid));
-            Console.WriteLine(String.Format("Original: {0}", original.Guid));
-            Console.WriteLine(String.Format("Labeled: {0}", labeled.Guid));
-            Console.WriteLine(String.Format("Typed: {0}", typed.Guid));
-            Console.WriteLine(String.Format("Quantitied: {0}", quantitied.Guid));
-
-
+            
             List<UpdateItem> expectedStack = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -866,13 +859,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = quantitied.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
-
-
-            foreach (var item in stack.CleansedStack())
-            {
-                Console.WriteLine(String.Format("{0} into table {1}, {2} pieces of data", item.Change, item.Table, item.FieldData.Count));
-            }
-
+            
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);
@@ -1364,14 +1351,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedStack = new List<UpdateItem>();
 
             Dictionary<string, string> data;
-
-
-            //Template Reference relationship
-            data = new Dictionary<string, string>();
-            data[TemplateReferenceTable.TemplateID.Name] = ss.Guid.ToString();
-            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
-
+            
             //New SubScope entry (template Equipment)
             data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = ss.Guid.ToString();
@@ -1385,7 +1365,13 @@ namespace EstimatingUtilitiesLibraryTests
             data[EquipmentSubScopeTable.SubScopeID.Name] = ss.Guid.ToString();
             data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
-            
+
+            //Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = ss.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
+
             //New SubScope entry (reference Equipment)
             data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = newSS.Guid.ToString();
@@ -1437,6 +1423,12 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             templateEquip.SubScope.Remove(ss);
 
+
+            foreach (var item in stack.CleansedStack())
+            {
+                Console.WriteLine(String.Format("{0} into table {1}, {2} pieces of data", item.Change, item.Table, item.FieldData.Count));
+            }
+
             List<UpdateItem> expectedStack = new List<UpdateItem>();
 
             Dictionary<string, string> data;
@@ -1452,6 +1444,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[EquipmentSubScopeTable.SubScopeID.Name] = ss.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
 
+            //Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = ss.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = refSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
+
             //Reference SubScope entry
             data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = refSS.Guid.ToString();
@@ -1462,13 +1460,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[EquipmentSubScopeTable.EquipmentID.Name] = refEquip.Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = refSS.Guid.ToString();
             expectedStack.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
-
-            //Template Reference relationship
-            data = new Dictionary<string, string>();
-            data[TemplateReferenceTable.TemplateID.Name] = ss.Guid.ToString();
-            data[TemplateReferenceTable.ReferenceID.Name] = refSS.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
-
+            
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);
