@@ -1289,14 +1289,62 @@ namespace EstimatingUtilitiesLibraryTests
 
             //New SubScope entry (template Equipment)
             data = new Dictionary<string, string>();
-            //data[SubScopeTable.]
+            data[SubScopeTable.ID.Name] = ss.Guid.ToString();
+            data[SubScopeTable.Name.Name] = ss.Name;
+            data[SubScopeTable.Description.Name] = ss.Description;
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
 
-            throw new NotImplementedException();
+            //Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = ss.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+
+            //New SubScope entry (reference Equipment)
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = newSS.Guid.ToString();
+            data[SubScopeTable.Name.Name] = ss.Name;
+            data[SubScopeTable.Description.Name] = ss.Description;
+            expectedStack.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
         }
 
         [TestMethod]
         public void RemoveSubScopeFromEquipmentTemplate()
         {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            ChangeWatcher watcher = new ChangeWatcher(templates);
+
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+
+            TECSubScope ss = new TECSubScope(false);
+            ss.Name = "Test SubScope";
+            ss.Description = "SS Desc";
+
+            TECEquipment templateEquip = new TECEquipment(false);
+            templates.EquipmentTemplates.Add(templateEquip);
+            templateEquip.SubScope.Add(ss);
+
+            TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
+
+            TECSubScope refSS = refEquip.SubScope[0];
+
+            TECSystem sys = new TECSystem(false);
+            templates.SystemTemplates.Add(sys);
+
+            sys.Equipment.Add(refEquip);
+
+            DeltaStacker stack = new DeltaStacker(watcher);
+
+            //Act
+            templateEquip.SubScope.Remove(ss);
+
+
+
             throw new NotImplementedException();
         }
         #endregion
