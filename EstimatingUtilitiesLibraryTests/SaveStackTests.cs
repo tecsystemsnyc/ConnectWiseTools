@@ -753,22 +753,26 @@ namespace EstimatingUtilitiesLibraryTests
             data[TypicalInstanceTable.TypicalID.Name] = point.Guid.ToString();
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[PointTable.ID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
             data[PointTable.Name.Name] = instance.Equipment[0].SubScope[0].Points[0].Label.ToString();
             data[PointTable.Type.Name] = instance.Equipment[0].SubScope[0].Points[0].Type.ToString();
             data[PointTable.Quantity.Name] = instance.Equipment[0].SubScope[0].Points[0].Quantity.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopePointTable.PointID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[PointTable.ID.Name] = point.Guid.ToString();
             data[PointTable.Name.Name] = point.Label.ToString();
             data[PointTable.Type.Name] = point.Type.ToString();
             data[PointTable.Quantity.Name] = point.Quantity.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = subScope.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = point.Guid.ToString();
@@ -800,56 +804,52 @@ namespace EstimatingUtilitiesLibraryTests
             DeltaStacker stack = new DeltaStacker(watcher);
             TECSystem instance = system.AddInstance(bid);
 
-            Console.WriteLine(String.Format("Instance System: {0}", instance.Guid));
-            Console.WriteLine(String.Format("Instance Equipment: {0}", instance.Equipment[0].Guid));
-            Console.WriteLine(String.Format("Instance SubScope: {0}", instance.Equipment[0].SubScope[0].Guid));
-            Console.WriteLine(String.Format("Instance Point: {0}", instance.Equipment[0].SubScope[0].Points[0].Guid));
-
-
-            Console.WriteLine(String.Format("Typical System: {0}", system.Guid));
-            Console.WriteLine(String.Format("Typical Equipment: {0}", system.Equipment[0].Guid));
-            Console.WriteLine(String.Format("Typical SubScope: {0}", system.Equipment[0].SubScope[0].Guid));
-            Console.WriteLine(String.Format("Typical Point: {0}", system.Equipment[0].SubScope[0].Points[0].Guid));
-
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = point.Guid.ToString();
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = subScope.Guid.ToString();
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = equipment.Guid.ToString();
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
             data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
             data[EquipmentTable.Name.Name] = instance.Equipment[0].Name.ToString();
             data[EquipmentTable.Description.Name] = instance.Equipment[0].Description.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopeTable.Name.Name] = instance.Equipment[0].SubScope[0].Name.ToString();
             data[SubScopeTable.Description.Name] = instance.Equipment[0].SubScope[0].Description.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[PointTable.ID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
             data[PointTable.Name.Name] = instance.Equipment[0].SubScope[0].Points[0].Label.ToString();
             data[PointTable.Type.Name] = instance.Equipment[0].SubScope[0].Points[0].Type.ToString();
-            data[PointTable.Quantity.Name] = instance.Equipment[0].SubScope[0].Points[0].Type.ToString();
+            data[PointTable.Quantity.Name] = instance.Equipment[0].SubScope[0].Points[0].Quantity.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PointTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopePointTable.PointID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
-            data = new Dictionary<string, string>();
             
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
@@ -861,7 +861,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             data[SystemEquipmentTable.ScopeIndex.Name] = "0";
-
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
             data = new Dictionary<string, string>();
@@ -1916,27 +1915,9 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             TECSubScopeConnection connection = controller.AddSubScope(subScope);
-            TECSubScopeConnection instanceConnection = instanceController.AddSubScope(subScope);
-
+            TECSubScopeConnection instanceConnection = instanceController.AddSubScope(instanceSubScope);
             Dictionary<string, string> data;
-
-            data = new Dictionary<string, string>();
-            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
-            data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
-            data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
-            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
-
+            
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
@@ -1953,6 +1934,24 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
+            data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
+            data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+            
 
             int expectedCount = expectedItems.Count;
 
@@ -2528,19 +2527,24 @@ namespace EstimatingUtilitiesLibraryTests
             data[TypicalInstanceTable.TypicalID.Name] = equipment.Guid.ToString();
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[TypicalInstanceTable.TypicalID.Name] = subScope.Guid.ToString();
             data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SystemTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, EquipmentTable.TableName, data));
+
             data = new Dictionary<string, string>();
-            data[SubScopeTable.ID.Name] = subScope.Guid.ToString();
+            data[SubScopeTable.ID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
@@ -3705,20 +3709,6 @@ namespace EstimatingUtilitiesLibraryTests
             Dictionary<string, string> data;
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
-            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
-
-            data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
 
@@ -3732,6 +3722,20 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
 
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+            
             int expectedCount = expectedItems.Count;
 
             //Assert
