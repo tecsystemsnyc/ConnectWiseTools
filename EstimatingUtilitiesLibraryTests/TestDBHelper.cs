@@ -1696,6 +1696,82 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("87d06d89-10b7-49c7-8b08-65707a5967a4");
             addDataToTable(new TemplateReferenceTable(), values);
             #endregion
+
+            #region Combined Synchronizer
+            //Parent system
+            values = new List<string>();
+            values.Add("d562049c-ea9e-449c-8c1f-eaa7fbcb70d3");
+            values.Add("System with templated equipment with templated subscope");
+            values.Add("");
+            values.Add("0");
+            addDataToTable(new SystemTable(), values);
+
+            //Template Equipment
+            values = new List<string>();
+            values.Add("adced9c6-41c1-478b-b9db-3833f1618378");
+            values.Add("Template Equipment");
+            values.Add("");
+            addDataToTable(new EquipmentTable(), values);
+
+            //Template SubScope
+            values = new List<string>();
+            values.Add("59d6adb3-7f48-4448-82fa-f77cdfac47ad");
+            values.Add("Template SubScope");
+            values.Add("");
+            addDataToTable(new SubScopeTable(), values);
+
+            //Reference Equipment in System
+            values = new List<string>();
+            values.Add("53d8c07f-872c-41de-8dd1-8aa349978ef4");
+            values.Add("Ref Equip in System");
+            values.Add("");
+            addDataToTable(new EquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("d562049c-ea9e-449c-8c1f-eaa7fbcb70d3");
+            values.Add("53d8c07f-872c-41de-8dd1-8aa349978ef4");
+            values.Add("0");
+            addDataToTable(new SystemEquipmentTable(), values);
+
+            values = new List<string>();
+            values.Add("adced9c6-41c1-478b-b9db-3833f1618378");
+            values.Add("53d8c07f-872c-41de-8dd1-8aa349978ef4");
+            addDataToTable(new TemplateReferenceTable(), values);
+
+            //Reference SubScope in Template Equipment
+            values = new List<string>();
+            values.Add("a26ab8aa-3b44-4321-a48e-872b250490a9");
+            values.Add("Ref SS in Template Equip");
+            values.Add("");
+            addDataToTable(new SubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("adced9c6-41c1-478b-b9db-3833f1618378");
+            values.Add("a26ab8aa-3b44-4321-a48e-872b250490a9");
+            addDataToTable(new EquipmentSubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("59d6adb3-7f48-4448-82fa-f77cdfac47ad");
+            values.Add("a26ab8aa-3b44-4321-a48e-872b250490a9");
+            addDataToTable(new TemplateReferenceTable(), values);
+
+            //Reference SubScope in Reference Equipment
+            values = new List<string>();
+            values.Add("c96120a1-b9e7-40e8-b015-e7383feca57d");
+            values.Add("Ref SS in Ref Equip");
+            values.Add("");
+            addDataToTable(new SubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("53d8c07f-872c-41de-8dd1-8aa349978ef4");
+            values.Add("c96120a1-b9e7-40e8-b015-e7383feca57d");
+            addDataToTable(new EquipmentSubScopeTable(), values);
+
+            values = new List<string>();
+            values.Add("a26ab8aa-3b44-4321-a48e-872b250490a9");
+            values.Add("c96120a1-b9e7-40e8-b015-e7383feca57d");
+            addDataToTable(new TemplateReferenceTable(), values);
+            #endregion
         }
         #endregion
     }
