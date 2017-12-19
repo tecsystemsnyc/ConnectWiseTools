@@ -796,6 +796,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[PointTable.Quantity.Name] = testPoint.Quantity.ToString();
             expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
 
+
+            foreach (var item in stack.CleansedStack())
+            {
+                Console.WriteLine(String.Format("{0} into table {1}, {2} pieces of data", item.Change, item.Table, item.FieldData.Count));
+            }
+
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);
