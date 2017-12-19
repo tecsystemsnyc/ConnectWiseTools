@@ -845,6 +845,13 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedStack = new List<UpdateItem>();
 
             Dictionary<string, string> data;
+
+            //SubScope Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
+
             //Equipment Template Reference relationship
             data = new Dictionary<string, string>();
             data[TemplateReferenceTable.TemplateID.Name] = templateEquip.Guid.ToString();
@@ -870,12 +877,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[ScopeAssociatedCostTable.AssociatedCostID.Name] = testCost.Guid.ToString();
             data[ScopeAssociatedCostTable.Quantity.Name] = "1";
             expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
-
-            //SubScope Template Reference relationship
-            data = new Dictionary<string, string>();
-            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
-            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
 
             //New SubScope entry
             data = new Dictionary<string, string>();
