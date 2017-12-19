@@ -950,7 +950,7 @@ namespace EstimatingLibrary.Utilities
             IOCollection getPointIO(TECController con)
             {
                 IOCollection pointIOCollection = new IOCollection();
-                foreach (TECIO pointIO in controller.TotalIO.ListIO().Where(io => TECIO.PointIO.Contains(io.Type)))
+                foreach (TECIO pointIO in controller.TotalIO.ListIO().Where(io => (TECIO.PointIO.Contains(io.Type) || TECIO.UniversalIO.Contains(io.Type))))
                 {
                     pointIOCollection.AddIO(pointIO);
                 }
