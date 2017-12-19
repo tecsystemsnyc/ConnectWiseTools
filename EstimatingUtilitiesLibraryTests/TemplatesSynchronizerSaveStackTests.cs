@@ -1343,8 +1343,46 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             templateEquip.SubScope.Remove(ss);
 
+            List<UpdateItem> expectedStack = new List<UpdateItem>();
 
+            Dictionary<string, string> data;
 
+            //Template SubScope entry
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = ss.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SubScopeTable.TableName, data));
+
+            //Template Equipment SubScope relationship
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = templateEquip.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = ss.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
+
+            //Reference SubScope entry
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = refSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, SubScopeTable.TableName, data));
+
+            //Reference Equipment SubScope relationship
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = refEquip.Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = refSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
+
+            //Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = ss.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = refSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Remove, TemplateReferenceTable.TableName, data));
+
+            //Assert
+            Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
+            SaveStackTests.CheckUpdateItems(expectedStack, stack);
+        }
+
+        [TestMethod]
+        public void ChangeSubScopeInEquipmentTemplate()
+        {
             throw new NotImplementedException();
         }
         #endregion
