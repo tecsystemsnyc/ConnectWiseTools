@@ -709,7 +709,7 @@ namespace Tests
             string expectedString = "Test Tag";
 
             TECLabeled actualTag = null;
-            foreach (TECLabeled tag in actualBid.Catalogs.Tags)
+            foreach (TECTag tag in actualBid.Catalogs.Tags)
             {
                 if (tag.Guid == expectedGuid)
                 {
@@ -1753,7 +1753,7 @@ namespace Tests
         {
             bool foundTag = false;
 
-            foreach (TECLabeled tag in scope.Tags)
+            foreach (TECTag tag in scope.Tags)
             {
                 if (tag.Guid == TEST_TAG_GUID)
                 {

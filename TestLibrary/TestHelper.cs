@@ -197,15 +197,15 @@ namespace Tests
             templates.Catalogs = CreateTestCatalogs();
 
             //Tags
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             testTag.Label = "Test Tag";
-            TECLabeled sysTag = new TECLabeled();
+            TECTag sysTag = new TECTag();
             sysTag.Label = "System Tag";
-            TECLabeled equipTag = new TECLabeled();
+            TECTag equipTag = new TECTag();
             equipTag.Label = "Equipment Tag";
-            TECLabeled ssTag = new TECLabeled();
+            TECTag ssTag = new TECTag();
             ssTag.Label = "SubScope Tag";
-            TECLabeled devTag = new TECLabeled();
+            TECTag devTag = new TECTag();
             devTag.Label = "Device Tag";
 
             templates.Catalogs.Tags.Add(testTag);
@@ -477,9 +477,9 @@ namespace Tests
             outCatalogs.AssociatedCosts.Add(tecCost);
 
             //Tags
-            var tag1 = new TECLabeled();
+            var tag1 = new TECTag();
             tag1.Label = "Tag 1";
-            var tag2 = new TECLabeled();
+            var tag2 = new TECTag();
             tag2.Label = "Test Tag";
 
             outCatalogs.Tags.Add(tag1);

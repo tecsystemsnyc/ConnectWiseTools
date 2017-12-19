@@ -164,7 +164,7 @@ namespace EstimatingLibraryTests
             TECCost cost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
-            TECLabeled tag = new TECLabeled();
+            TECTag tag = new TECTag();
             templates.Catalogs.Tags.Add(tag);
 
             //Act
@@ -212,7 +212,7 @@ namespace EstimatingLibraryTests
             TECCost cost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
-            TECLabeled tag = new TECLabeled();
+            TECTag tag = new TECTag();
             templates.Catalogs.Tags.Add(tag);
 
             //Act
@@ -259,7 +259,7 @@ namespace EstimatingLibraryTests
             TECCost cost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
-            TECLabeled tag = new TECLabeled();
+            TECTag tag = new TECTag();
             templates.Catalogs.Tags.Add(tag);
 
             TECSubScope ss = new TECSubScope(false);
@@ -325,7 +325,7 @@ namespace EstimatingLibraryTests
             TECCost cost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
-            TECLabeled tag = new TECLabeled();
+            TECTag tag = new TECTag();
             templates.Catalogs.Tags.Add(tag);
 
             TECSubScope ss = new TECSubScope(false);

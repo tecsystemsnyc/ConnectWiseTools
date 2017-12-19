@@ -2875,7 +2875,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECLabeled tag = templates.Catalogs.Tags[0];
+            TECTag tag = templates.Catalogs.Tags[0];
             tag.Label = original;
 
             resetRaised();

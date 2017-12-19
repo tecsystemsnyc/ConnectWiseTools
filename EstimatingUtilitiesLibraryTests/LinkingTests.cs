@@ -677,7 +677,7 @@ namespace Tests
                     Assert.Fail("Associated cost in scope not linked.");
                 }
             }
-            foreach(TECLabeled tag in scope.Tags)
+            foreach(TECTag tag in scope.Tags)
             {
                 if (!catalogs.Tags.Contains(tag))
                 {

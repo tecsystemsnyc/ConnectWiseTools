@@ -319,9 +319,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
         #endregion
         #region Scope Children
-        static private ObservableCollection<TECLabeled> getTagsInScope(Guid scopeID)
+        static private ObservableCollection<TECTag> getTagsInScope(Guid scopeID)
         {
-            ObservableCollection<TECLabeled> tags = new ObservableCollection<TECLabeled>();
+            ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
             DataTable tagsDT = getChildIDs(new ScopeTagTable(), scopeID);
             foreach (DataRow row in tagsDT.Rows)
             { tags.Add(getPlaceholderTagFromRow(row, ScopeTagTable.TagID.Name)); }
@@ -567,9 +567,9 @@ namespace EstimatingUtilitiesLibrary.Database
             { exclusions.Add(getExclusionFromRow(row)); }
             return exclusions;
         }
-        static private ObservableCollection<TECLabeled> getAllTags()
+        static private ObservableCollection<TECTag> getAllTags()
         {
-            ObservableCollection<TECLabeled> tags = new ObservableCollection<TECLabeled>();
+            ObservableCollection<TECTag> tags = new ObservableCollection<TECTag>();
             DataTable tagsDT = SQLiteDB.GetDataFromTable(TagTable.TableName);
             foreach (DataRow row in tagsDT.Rows)
             { tags.Add(getTagFromRow(row)); }
@@ -1139,9 +1139,9 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(location, new LocationTable(), row);
             return location;
         }
-        private static TECLabeled getTagFromRow(DataRow row)
+        private static TECTag getTagFromRow(DataRow row)
         {
-            var tag = new TECLabeled(new Guid(row[TagTable.ID.Name].ToString()));
+            var tag = new TECTag(new Guid(row[TagTable.ID.Name].ToString()));
             assignValuePropertiesFromTable(tag, new TagTable(), row);
             return tag;
         }
@@ -1327,10 +1327,10 @@ namespace EstimatingUtilitiesLibrary.Database
             TECController controller = new TECController(guid, new TECControllerType(new TECManufacturer()), isTypical);
             return controller;
         }
-        private static TECLabeled getPlaceholderTagFromRow(DataRow row, string keyString)
+        private static TECTag getPlaceholderTagFromRow(DataRow row, string keyString)
         {
             Guid guid = new Guid(row[ScopeTagTable.TagID.Name].ToString());
-            TECLabeled tag = new TECLabeled(guid);
+            TECTag tag = new TECTag(guid);
             return tag;
         }
         private static TECCost getPlaceholderAssociatedCostFromRow(DataRow row)

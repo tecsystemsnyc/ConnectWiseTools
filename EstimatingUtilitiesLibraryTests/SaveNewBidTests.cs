@@ -188,7 +188,7 @@ namespace Tests
                 }
             }
 
-            foreach (TECLabeled tag in actualBid.Catalogs.Tags)
+            foreach (TECTag tag in actualBid.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {

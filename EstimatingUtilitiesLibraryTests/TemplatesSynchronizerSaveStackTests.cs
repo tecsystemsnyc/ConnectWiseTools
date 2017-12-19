@@ -27,7 +27,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECCost testCost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECManufacturer testMan = new TECManufacturer();
@@ -138,7 +138,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECCost testCost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECManufacturer testMan = new TECManufacturer();
@@ -395,7 +395,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECSubScope templateSS = new TECSubScope(false);
@@ -443,7 +443,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECSubScope templateSS = new TECSubScope(false);
@@ -821,7 +821,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECCost testCost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECSubScope testSS = new TECSubScope(false);
@@ -922,7 +922,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECCost testCost = new TECCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECSubScope testSS = new TECSubScope(false);
@@ -1173,7 +1173,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECEquipment templateEquip = new TECEquipment(false);
@@ -1221,7 +1221,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
-            TECLabeled testTag = new TECLabeled();
+            TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
             TECEquipment templateEquip = new TECEquipment(false);

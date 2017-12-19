@@ -877,13 +877,13 @@ namespace EstimatingLibrary.Utilities
             }
             scope.AssociatedCosts = costsToAssign;
         }
-        static private void linkTagsInScope(ObservableCollection<TECLabeled> tags, TECScope scope)
+        static private void linkTagsInScope(ObservableCollection<TECTag> tags, TECScope scope)
         {
-            ObservableCollection<TECLabeled> linkedTags = new ObservableCollection<TECLabeled>();
-            foreach (TECLabeled tag in scope.Tags)
+            ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
+            foreach (TECTag tag in scope.Tags)
             {
                 bool found = false;
-                foreach (TECLabeled referenceTag in tags)
+                foreach (TECTag referenceTag in tags)
                 {
                     if (tag.Guid == referenceTag.Guid)
                     {

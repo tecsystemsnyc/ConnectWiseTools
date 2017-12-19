@@ -1259,7 +1259,7 @@ namespace Tests
         {
             //Act
             int oldNumTags = templates.Catalogs.Tags.Count;
-            TECLabeled expectedTag = new TECLabeled();
+            TECTag expectedTag = new TECTag();
             expectedTag.Label = "Test add tag";
 
             templates.Catalogs.Tags.Add(expectedTag);
@@ -1269,7 +1269,7 @@ namespace Tests
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECLabeled actualTag = null;
-            foreach (TECLabeled tag in actualTemplates.Catalogs.Tags)
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == expectedTag.Guid)
                 {
@@ -1288,7 +1288,7 @@ namespace Tests
         {
             //Act
             int oldNumTags = templates.Catalogs.Tags.Count;
-            TECLabeled tagToRemove = templates.Catalogs.Tags[0];
+            TECTag tagToRemove = templates.Catalogs.Tags[0];
 
             templates.Catalogs.Tags.Remove(tagToRemove);
 
@@ -1297,7 +1297,7 @@ namespace Tests
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECLabeled tag in actualTemplates.Catalogs.Tags)
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == tagToRemove.Guid) { Assert.Fail(); }
             }

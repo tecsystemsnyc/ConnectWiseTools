@@ -188,7 +188,7 @@ namespace TECUserControlLibrary.ViewModels
                 if(item is TECScope scope)
                 {
                     string[] references = { scope.Name.ToUpper(), scope.Description.ToUpper() };
-                    foreach(TECLabeled tag in scope.Tags)
+                    foreach(TECTag tag in scope.Tags)
                     {
                         references.Append(tag.Label);
                     }
