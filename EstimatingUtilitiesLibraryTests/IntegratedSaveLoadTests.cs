@@ -26,7 +26,7 @@ namespace Tests
             manager.New(bid);
             bid = manager.Load() as TECBid;
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            testStack = new DeltaStacker(watcher);
+            testStack = new DeltaStacker(watcher, bid);
         }
 
         [TestCleanup]

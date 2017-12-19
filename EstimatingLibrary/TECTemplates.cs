@@ -151,7 +151,8 @@ namespace EstimatingLibrary
             SubScopeSynchronizer = new TemplateSynchronizer<TECSubScope>((item => 
             {
                 return new TECSubScope(item, false);
-            }),syncSubScope, this);
+            }), (item => { }),
+            syncSubScope, this);
             SubScopeSynchronizer.TECChanged += synchronizerChanged;
 
             EquipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
@@ -165,6 +166,17 @@ namespace EstimatingLibrary
                     }
                     return newItem;
 
+                }),
+                //Remove
+                (item =>
+                {
+                    foreach(TECSubScope subScope in item.SubScope)
+                    {
+                        if (SubScopeSynchronizer.GetTemplate(subScope) != null)
+                        {
+                            SubScopeSynchronizer.RemoveItem(subScope);
+                        }
+                    }
                 }),
                 //Sync
                 syncEquipment, this);
@@ -289,7 +301,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                    handleSyncRemoval(item as TECObject);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
@@ -385,9 +396,10 @@ namespace EstimatingLibrary
                     }
                     template.SubScope.Add(newTemplate);
                     SubScopeSynchronizer.NewGroup(newTemplate);
-                    item.SubScope.Remove(value);
+                    SubScopeSynchronizer.LinkExisting(newTemplate, value);
+                    //item.SubScope.Remove(value);
                 }
-                foreach (TECEquipment reference in references)
+                foreach (TECEquipment reference in references.Where(obj=> obj != item))
                 {
                     reference.SubScope.Add(SubScopeSynchronizer.NewItem(newTemplate));
                 }
@@ -438,28 +450,6 @@ namespace EstimatingLibrary
         {
             notifyTECChanged(obj.Change, obj.PropertyName, obj.Sender, obj.Value);
         }
-
-        private void handleSyncRemoval(TECObject item)
-        {
-            if (item is TECSubScope subScope && 
-                SubScopeSynchronizer.GetFullDictionary().ContainsKey(subScope))
-            {
-                SubScopeSynchronizer.RemoveGroup(subScope);
-            }
-            else if (item is TECEquipment equipment)
-            {
-                if (EquipmentSynchronizer.GetFullDictionary().ContainsKey(equipment))
-                {
-                    EquipmentSynchronizer.RemoveGroup(equipment);
-                }
-                foreach (TECSubScope equipSS in equipment.SubScope)
-                {
-                    if (SubScopeSynchronizer.GetTemplate(equipSS) != null)
-                    {
-                        SubScopeSynchronizer.RemoveGroup(equipSS);
-                    }
-                }
-            }
-        }
+        
     }
 }

@@ -10,20 +10,24 @@ namespace EstimatingLibrary.Utilities
     public class TemplateSynchronizer<T> : INotifyTECChanged where T : TECObject
     {
         readonly private Func<T, T> copy;
+        readonly private Action<T> remove;
         readonly private Action<T, T, TECChangedEventArgs> sync;
         readonly private Dictionary<T, List<T>> dictionary;
         readonly private Dictionary<(T item, bool isKey), Action> unsubscribeDictionary;
-        List<T> currentlySyncing = new List<T>();
+        private List<T> currentlySyncing = new List<T>();
 
         /// <summary>
         /// A manager for keeping properties of templates in sync with respective instances
         /// </summary>
         /// <param name="copy">Creates a new object with the properties of the argument</param>
+        /// <param name="remove">Invoked upon removal of an item</param>
         /// <param name="sync">Writes the properties of the first argument to the second argument</param>
-        public TemplateSynchronizer(Func<T, T> copy, Action<T, T, TECChangedEventArgs> sync, TECTemplates templates)
+        public TemplateSynchronizer(Func<T, T> copy, Action<T> remove,
+            Action<T, T, TECChangedEventArgs> sync, TECTemplates templates)
         {
             this.copy = copy;
             this.sync = sync;
+            this.remove = remove;
             dictionary = new Dictionary<T, List<T>>();
             unsubscribeDictionary = new Dictionary<(T, bool), Action>();
             ChangeWatcher watcher = new ChangeWatcher(templates);
@@ -32,10 +36,15 @@ namespace EstimatingLibrary.Utilities
 
         private void handleTemplatesChanged(TECChangedEventArgs obj)
         {
-            if(obj.Value is T item && !(obj.Sender is TECTemplates)
-                && !(obj.Sender is T) && obj.Change == Change.Remove)
+            if(obj.Value is T item && obj.Change == Change.Remove)
             {
-                RemoveItem(item);
+                if(obj.Sender is TECTemplates && dictionary.ContainsKey(item))
+                {
+                    RemoveGroup(item);
+                } else
+                {
+                    RemoveItem(item);
+                }
             }
         }
 
@@ -60,13 +69,17 @@ namespace EstimatingLibrary.Utilities
         }
         public void RemoveGroup(T template)
         {
-            foreach(T item in dictionary[template])
+            List<T> group = new List<T>(dictionary[template]);
+            foreach (T item in group)
             {
                 notifyTECChanged(Change.Remove, template, item);
                 unsubscribeDictionary[(item, false)].Invoke();
+                remove.Invoke(item);
             }
             unsubscribeDictionary[(template, true)].Invoke();
             dictionary.Remove(template);
+            remove.Invoke(template);
+
         }
         public T NewItem(T template)
         {
@@ -88,7 +101,7 @@ namespace EstimatingLibrary.Utilities
                 handleTChanged(template, newItem, args);
             }
         }
-        public  void RemoveItem(T item)
+        public void RemoveItem(T item)
         {
             foreach (T key in dictionary.Keys)
             {
@@ -97,6 +110,7 @@ namespace EstimatingLibrary.Utilities
                     dictionary[key].Remove(item);
                     notifyTECChanged(Change.Remove, key, item);
                     unsubscribeDictionary[(item, false)].Invoke();
+                    remove.Invoke(item);
                 }
             }
         }
