@@ -760,6 +760,13 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Load_Templates_CombinedSynchronizer()
+        {
+            //Need 
+            throw new NotImplementedException();
+        }
+
         private void testForTag(TECScope scope)
         {
             bool foundTag = false;
