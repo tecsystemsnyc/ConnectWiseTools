@@ -833,7 +833,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem sys = new TECSystem(false);
             templates.SystemTemplates.Add(sys);
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
@@ -845,6 +845,11 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedStack = new List<UpdateItem>();
 
             Dictionary<string, string> data;
+            //Equipment Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = templateEquip.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = refEquip.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
 
             //New Equipment entry
             data = new Dictionary<string, string>();
@@ -866,6 +871,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[ScopeAssociatedCostTable.Quantity.Name] = "1";
             expectedStack.Add(new UpdateItem(Change.Add, ScopeAssociatedCostTable.TableName, data));
 
+            //SubScope Template Reference relationship
+            data = new Dictionary<string, string>();
+            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
+            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
+            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
+
             //New SubScope entry
             data = new Dictionary<string, string>();
             data[SubScopeTable.ID.Name] = newSS.Guid.ToString();
@@ -886,23 +897,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemEquipmentTable.EquipmentID.Name] = refEquip.Guid.ToString();
             data[SystemEquipmentTable.ScopeIndex.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
-
-
-
-
-            //NOT IN ACTUAL
-            //Equipment Template Reference relationship
-            data = new Dictionary<string, string>();
-            data[TemplateReferenceTable.TemplateID.Name] = templateEquip.Guid.ToString();
-            data[TemplateReferenceTable.ReferenceID.Name] = refEquip.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
-
-            //SubScope Template Reference relationship
-            data = new Dictionary<string, string>();
-            data[TemplateReferenceTable.TemplateID.Name] = testSS.Guid.ToString();
-            data[TemplateReferenceTable.ReferenceID.Name] = newSS.Guid.ToString();
-            expectedStack.Add(new UpdateItem(Change.Add, TemplateReferenceTable.TableName, data));
-
+            
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);
@@ -943,7 +938,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TECSubScope newSS = refEquip.SubScope[0];
 
-            DeltaStacker stack = new DeltaStacker(watcher);
+            DeltaStacker stack = new DeltaStacker(watcher, templates);
 
             //Act
             sys.Equipment.Remove(refEquip);
