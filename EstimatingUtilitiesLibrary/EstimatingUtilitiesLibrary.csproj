@@ -147,6 +147,7 @@
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Exports\Budget.cs" />
     <Compile Include="Exports\MaterialSummaryExport.cs" />
+    <Compile Include="Exports\PointsList.cs" />
     <Compile Include="Exports\Templates.cs" />
     <Compile Include="Exports\Turnover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
