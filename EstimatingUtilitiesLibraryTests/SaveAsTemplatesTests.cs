@@ -58,8 +58,8 @@ namespace Tests
             expectedSystem = expectedTemplates.SystemTemplates.First(sys => sys.Name == "Test System");
             expectedEquipment = expectedTemplates.EquipmentTemplates.First(sys => sys.Name == "Test Equipment");
             expectedSubScope = expectedTemplates.SubScopeTemplates.First(sys => sys.Name == "Test SubScope");
-            expectedDevice = expectedTemplates.Catalogs.Devices[0];
-            expectedManufacturer = expectedTemplates.Catalogs.Manufacturers[0];
+            expectedDevice = expectedTemplates.Catalogs.Devices.First(item => item.Name == "Test Device");
+            expectedManufacturer = expectedTemplates.Catalogs.Manufacturers.First(item => item.Label == "Test Manufacturer");
             expectedTag = expectedTemplates.Catalogs.Tags[0];
             expectedController = expectedTemplates.ControllerTemplates.First(sys => sys.Name == "Test Controller");
             expectedAssociatedCost = expectedTemplates.Catalogs.AssociatedCosts[0];
@@ -213,16 +213,16 @@ namespace Tests
         public void SaveAs_Templates_System()
         {
             //Arrange
-            TECEquipment expectedSysEquipment = expectedSystem.Equipment[0];
-            TECSubScope expectedSysSubScope = expectedSysEquipment.SubScope[0];
+            TECEquipment expectedSysEquipment = expectedSystem.Equipment.First(item => item.Name == "System Equipment");
+            TECSubScope expectedSysSubScope = expectedSysEquipment.SubScope.First(item => item.Name == "System SubScope");
             TECDevice expectedChildDevice = expectedSysSubScope.Devices[0] as TECDevice;
-            TECPoint expectedSysPoint = expectedSysSubScope.Points[0];
+            TECPoint expectedSysPoint = expectedSysSubScope.Points.First(item => item.Label == "System Point");
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
 
-            TECEquipment actualSysEquipment = actualSystem.Equipment[0];
-            TECSubScope actualSysSubScope = actualSysEquipment.SubScope[0];
+            TECEquipment actualSysEquipment = actualSystem.Equipment.First(item => item.Name == "System Equipment");
+            TECSubScope actualSysSubScope = actualSysEquipment.SubScope.First(item => item.Name == "System SubScope");
             TECDevice actualChildDevice = actualSysSubScope.Devices[0] as TECDevice;
-            TECPoint actualSysPoint = actualSysSubScope.Points[0];
+            TECPoint actualSysPoint = actualSysSubScope.Points.First(item => item.Label == "System Point");
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
             //Assert
@@ -266,12 +266,12 @@ namespace Tests
         public void SaveAs_Templates_Equipment()
         {
             //Arrange
-            TECSubScope actualEquipSubScope = actualEquipment.SubScope[0];
+            TECSubScope actualEquipSubScope = actualEquipment.SubScope.First(item => item.Name == "Equipment SubScope");
             TECDevice actualChildDevice = actualEquipSubScope.Devices[0] as TECDevice;
             TECPoint actualEquipPoint = actualEquipSubScope.Points[0];
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
-            TECSubScope expectedEquipSubScope = expectedEquipment.SubScope[0];
+            TECSubScope expectedEquipSubScope = expectedEquipment.SubScope.First(item => item.Name == "Equipment SubScope");
             TECDevice expectedChildDevice = expectedEquipSubScope.Devices[0] as TECDevice;
             TECPoint expectedEquipPoint = expectedEquipSubScope.Points[0];
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
@@ -420,8 +420,8 @@ namespace Tests
         public void SaveAs_Templates_Panel()
         {
             //Arrange
-            TECPanel expectedPanel = expectedTemplates.PanelTemplates[0];
-            TECPanel actualPanel = actualTemplates.PanelTemplates[0];
+            TECPanel expectedPanel = expectedTemplates.PanelTemplates.First(item => item.Name == "Test Panel");
+            TECPanel actualPanel = actualTemplates.PanelTemplates.First(item => item.Name == "Test Panel");
 
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
