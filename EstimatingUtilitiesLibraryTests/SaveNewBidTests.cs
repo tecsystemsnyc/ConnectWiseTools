@@ -71,24 +71,11 @@ namespace Tests
             expectedBid = TestHelper.CreateTestBid();
             expectedLabor = expectedBid.ExtraLabor;
             expectedParameters = expectedBid.Parameters;
-            foreach (TECSystem system in expectedBid.Systems)
-            {
-                if (system.Equipment.Count > 0)
-                {
-                    expectedSystem = system;
-                    break;
-                }
-            }
-            foreach (TECSystem system in expectedBid.Systems)
-            {
-                if (system != expectedSystem)
-                {
-                    expectedSystem1 = system;
-                    break;
-                }
-            }
-            expectedEquipment = expectedBid.Systems[0].Equipment[0];
-            expectedSubScope = expectedBid.Systems[0].Equipment[0].SubScope[0];
+            expectedSystem = expectedBid.Systems.First(item => item.Name == "System 1");
+            expectedSystem1 = expectedBid.Systems.First(item => item.Name == "System 2");
+
+            expectedEquipment = expectedSystem.Equipment.First(item => item.Name == "Equipment 1");
+            expectedSubScope = expectedEquipment.SubScope.First(item => item.Name == "SubScope 1");
             expectedDevice = null;
             foreach(TECDevice device in expectedBid.Catalogs.Devices)
             {
@@ -100,7 +87,7 @@ namespace Tests
             }
 
             expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
-            expectedPoint = expectedBid.Systems[0].Equipment[0].SubScope[0].Points[0];
+            expectedPoint = expectedSubScope.Points[0];
 
             expectedBranch = null;
             foreach (TECScopeBranch branch in expectedBid.ScopeTree)
@@ -120,14 +107,14 @@ namespace Tests
             //expectedPage = expectedDrawing.Pages[0];
             //expectedVisualScope = expectedPage.PageScope[0];
 
-            expectedController = expectedBid.Controllers[0];
+            expectedController = expectedBid.Controllers.First(item => item.Name == "Test Controller");
 
             path = Path.GetTempFileName();
 
             //Act
             DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(expectedBid);
-            actualBid = manager.Load() as TECBid;
+            actualBid = manager.Load();
             actualLabor = actualBid.ExtraLabor;
             actualBid.Parameters = actualBid.Parameters;
 
