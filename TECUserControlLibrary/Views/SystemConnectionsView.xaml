@@ -54,7 +54,7 @@
                     </DataTemplate>
                 </Grid.Resources>
                 <Border Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
-                    <Label Content="Controllers" HorizontalAlignment="Center" />
+                    <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:ControllerListControl
                 Source="{Binding Controllers}"
@@ -63,7 +63,7 @@
                     Grid.ColumnSpan="2"/>
 
                 <Border Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
-                    <Label Content="Unconnected Points" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Unconnected Points" Style="{StaticResource ListHeader}"/>
                 </Border>
 
 
@@ -94,10 +94,10 @@
                     <Grid>
                         <TextBlock Text="{Binding SelectedController.Name, StringFormat=Connected to {0}}" HorizontalAlignment="Center"
                                Visibility="{Binding SelectedController, 
-                    Converter={utilities:NullToCollapsedConverter}}" Foreground="Black" VerticalAlignment="Center"/>
+                    Converter={utilities:NullToCollapsedConverter}}" Style="{StaticResource ListHeader}"/>
                         <TextBlock Text="Select a Controller to Create Connections" HorizontalAlignment="Center"
                                Visibility="{Binding SelectedController, 
-                    Converter={utilities:NullToVisibilityConverter}}" Foreground="Black" VerticalAlignment="Center"/>
+                    Converter={utilities:NullToVisibilityConverter}}" Style="{StaticResource ListHeader}"/>
                     </Grid>
                 </Border>
                 <Button Content="Update All"

@@ -180,8 +180,7 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
                     Margin="5,0,5,0">
-                    <TextBlock Text="Systems"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Systems" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:SystemListControl x:Name="systemList" Grid.Row="1" Grid.ColumnSpan="3" Source="{Binding SystemSource}"
                                         SelectedItem="{Binding ViewModel.SelectedSystem}"
@@ -219,7 +218,7 @@
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1"  Grid.Column="1" 
                     Margin="5,0,5,0">
                     <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.Name, StringFormat='Components of {0}'}"
-                           HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
+                           Style="{StaticResource ListHeader}"/>
                 </Border>
                 <Grid Grid.Column="2" Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
                     <Button Content="->" x:Name="equipmentDetails" Margin="2"
@@ -344,7 +343,7 @@
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
                     Margin="5,0,5,0">
                     <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.Name, StringFormat='Points in {0}'}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
+                               Style="{StaticResource ListHeader}"/>
                 </Border>
                 <Grid Grid.Column="2" Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
 
@@ -380,7 +379,8 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                     Margin="5,0,5,0">
-                    <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Devices/Contacts in {0}}"/>
+                    <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Devices/Contacts in {0}}"
+                               Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                 SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
@@ -405,7 +405,8 @@
                     <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
                     Margin="5,0,65,0" Grid.ColumnSpan="2">
-                        <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=IO in {0}}"/>
+                        <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=IO in {0}}"
+                                   Style="{StaticResource ListHeader}"/>
                     </Border>
                     
                     <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"

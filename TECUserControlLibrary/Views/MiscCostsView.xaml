@@ -53,8 +53,7 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                 Margin="5,0,5,0">
-                <Label Content="Misc. Costs"  Foreground="Black"
-                                VerticalAlignment="Center"/>
+                <TextBlock Text="Misc. Costs" Style="{StaticResource ListHeader}"/>
             </Border>
 
             <listControls:MiscListControl Source="{Binding TECCostCollection}"
@@ -80,8 +79,7 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                     Margin="5,0,5,0">
-                <Label Content="Misc. Wiring" Foreground="Black"
-                                VerticalAlignment="Center"/>
+                <TextBlock Text="Misc. Wiring" Style="{StaticResource ListHeader}"/>
             </Border>
 
             <listControls:MiscListControl Source="{Binding ElectricalCostCollection}"

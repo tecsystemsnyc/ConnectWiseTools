@@ -117,8 +117,7 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
                     Margin="5,0,5,0">
-                    <TextBlock Text="Equipment Templates"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Equipment Templates" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:EquipmentListControl x:Name="equipmentList"
                                                        Source="{Binding ElementName=equipmentHierarchyView, Path=EquipmentSource}"
@@ -157,7 +156,7 @@
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
                     Margin="5,0,5,0">
                     <TextBlock Text="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedEquipment.Name, StringFormat='Points in {0}'}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
+                               Style="{StaticResource ListHeader}"/>
                 </Border>
                 <Grid Grid.Column="2" Visibility="{Binding EquipmentWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">
 
@@ -189,7 +188,7 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                     Margin="5,0,5,0">
-                    <Label Content="Devices"/>
+                    <TextBlock Text="Devices" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                 SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
@@ -203,7 +202,8 @@
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1"
                     Margin="5,0,5,0">
-                        <Label Content="IO"/>
+                        <TextBlock Text="IO"
+                                   Style="{StaticResource ListHeader}"/>
                     </Border>
                     <Grid  Grid.Column="1" 
                            Visibility="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">

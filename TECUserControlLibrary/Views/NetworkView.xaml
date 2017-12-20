@@ -51,8 +51,7 @@
 
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                 Margin="10,0,10,0">
-                        <Label Content="Controllers"   Foreground="Black"
-                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
                     </Border>
                     <!--Controller List-->
                     <listControls:ConnectableItemListControl
@@ -81,8 +80,7 @@
 
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                 Margin="10,0,10,0">
-                        <Label Content="Network Devices"   Foreground="Black"
-                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Network Devices" Style="{StaticResource ListHeader}"/>
                     </Border>
                     <!--Network Devices DataGrid-->
                     <listControls:ConnectableItemListControl

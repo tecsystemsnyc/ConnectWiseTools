@@ -71,8 +71,7 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                     Margin="5,0,5,0">
-                    <Label Content="Controllers"   Foreground="Black"
-                                    VerticalAlignment="Center"/>
+                    <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:ControllerInPanelListControl Source="{Binding ViewModel.ControllerCollection}"
                                                        ViewModel="{Binding ViewModel}" 
@@ -92,8 +91,7 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                         Margin="5,0,5,0">
-                    <Label Content="Panels" Foreground="Black"
-                                    VerticalAlignment="Center"/>
+                    <TextBlock Text="Panels" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:PanelListControl Source="{Binding ViewModel.PanelsSource}"
                                            DropHandler="{Binding ViewModel}" 
