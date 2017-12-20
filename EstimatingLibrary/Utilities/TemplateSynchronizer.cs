@@ -124,11 +124,18 @@ namespace EstimatingLibrary.Utilities
         {
             ChangeWatcher watcher = new ChangeWatcher(item);
             watcher.Changed += (args) => handleTChanged(template, item, args);
+            unsubscribeDictionary.Add((item, false),
+                    () => { watcher.Changed -= handleChange; });
             if (!dictionary.ContainsKey(template))
             {
                 NewGroup(template);
             }
             dictionary[template].Add(item);
+
+            void handleChange(TECChangedEventArgs args)
+            {
+                handleTChanged(template, item, args);
+            }
         }
         public void LinkExisting(T template, IEnumerable<T> items)
         {
@@ -179,6 +186,18 @@ namespace EstimatingLibrary.Utilities
                     {
                         return pair.Key;
                     }
+                }
+            }
+            return null;
+        }
+
+        internal T GetParent(T item)
+        {
+            foreach (var pair in dictionary)
+            {
+                if (pair.Value.Contains(item))
+                {
+                    return pair.Key;
                 }
             }
             return null;

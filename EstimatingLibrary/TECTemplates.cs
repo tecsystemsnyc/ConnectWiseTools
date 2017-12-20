@@ -314,7 +314,11 @@ namespace EstimatingLibrary
         {
             if(item is TECSubScope subScope)
             {
-                return SubScopeTemplates.Contains(subScope) || SubScopeSynchronizer.Contains(subScope);
+                bool isTemplate = SubScopeTemplates.Contains(subScope);
+                
+                bool isTemplated = SubScopeTemplates.Contains(SubScopeSynchronizer.GetParent(subScope)) ||
+                    SubScopeTemplates.Contains(SubScopeSynchronizer.GetParent(SubScopeSynchronizer.GetParent(subScope)));
+                return isTemplate || isTemplated;
             }
             else if (item is TECEquipment equipment)
             {
