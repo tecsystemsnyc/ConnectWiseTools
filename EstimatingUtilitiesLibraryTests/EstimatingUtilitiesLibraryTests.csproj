@@ -79,7 +79,7 @@
     <Compile Include="LinkingTests.cs" />
     <Compile Include="LoadBidTests.cs" />
     <Compile Include="LoadTemplatesTests.cs" />
-    <Compile Include="SaveAsTemplatesTests.cs" />
+    <Compile Include="SaveNewTemplatesTests.cs" />
     <Compile Include="SaveBidTests.cs" />
     <Compile Include="SaveNewBidTests.cs" />
     <Compile Include="SaveStackTests.cs" />
