@@ -164,7 +164,8 @@ namespace EstimateBuilder.MVVM
             menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportTurnoverCommand(exportTurnoverExecute, canExportTurnover);
-            menuVM.SetExportPointsListCommand(exportPointsListExecute, canExportPointsList);
+            menuVM.SetExportPointsListExcelCommand(exportPointsListExcelExecute, canExportPointsListExcel);
+            menuVM.SetExportPointsListCSVCommand(exportPointsListCSVExecute, canExportPointsListCSV);
             menuVM.SetExportSummaryCommand(exportSummaryExecute, canExportSummary);
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
@@ -264,8 +265,30 @@ namespace EstimateBuilder.MVVM
         {
             return true;
         }
-        //Export Points List
-        private void exportPointsListExecute()
+        //Export Points List (Excel)
+        private void exportPointsListExcelExecute()
+        {
+            string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
+                            defaultFileName, defaultDirectory, workingFileDirectory);
+            if (path != null)
+            {
+                if (!UtilitiesMethods.IsFileLocked(path))
+                {
+                    PointsList.ExportPointsList(path, bid);
+                    logger.Info("Points saved to Excel.");
+                }
+                else
+                {
+                    logger.Warn("Could not open file {0}. File is open elsewhere.", path);
+                }
+            }
+        }
+        private bool canExportPointsListExcel()
+        {
+            return true;
+        }
+        //Export Points List (CSV)
+        private void exportPointsListCSVExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.CSVFileParameters,
                             defaultFileName, defaultDirectory, workingFileDirectory);
@@ -283,7 +306,7 @@ namespace EstimateBuilder.MVVM
                 }
             }
         }
-        private bool canExportPointsList()
+        private bool canExportPointsListCSV()
         {
             return true;
         }

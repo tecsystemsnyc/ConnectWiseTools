@@ -10,33 +10,48 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class PointsList
     {
+        public static void ExportPointsList(string path, TECBid bid, bool openOnComplete = true)
+        {
+            XLWorkbook workbook = GeneratePointsList(bid);
+            workbook.SaveAs(path);
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+        }
+
         public static XLWorkbook GeneratePointsList(TECBid bid)
         {
             XLWorkbook workbook = new XLWorkbook();
 
-            IXLWorksheet workSheet = workbook.Worksheets.Add("Points List");
+            IXLWorksheet worksheet = workbook.Worksheets.Add("Points List");
             int row = 1;
 
-            IXLCell titleCell = workSheet.Cell(row, "A");
+            IXLCell titleCell = worksheet.Cell(row, "A");
             titleCell.Value = "Points List";
             titleCell.Style.Font.SetBold();
 
             row += 2;
 
-            workSheet.addBySystemHeaderRow(row);
+            worksheet.addBySystemHeaderRow(row);
 
             row++;
 
-            IXLRow xlRow = workSheet.Row(row);
+            bool rowWritten = false;
+            IXLRow xlRow = worksheet.Row(row);
             foreach (TECTypical typ in bid.Systems)
             {
                 foreach(TECSystem sys in typ.Instances)
                 {
                     xlRow.Cell("A").Value = sys.Name;
-                    foreach(TECEquipment equip in sys.Equipment)
+                    rowWritten = true;
+
+                    foreach (TECEquipment equip in sys.Equipment)
                     {
                         xlRow.Cell("B").Value = equip.Name;
-                        foreach(TECSubScope ss in equip.SubScope)
+                        rowWritten = true;
+
+                        foreach (TECSubScope ss in equip.SubScope)
                         {
                             xlRow.Cell("C").Value = ss.Name;
 
@@ -48,6 +63,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                                 deviceString += ") ";
                             }
                             xlRow.Cell("D").Value = deviceString;
+                            rowWritten = true;
 
                             foreach (TECPoint point in ss.Points)
                             {
@@ -61,16 +77,30 @@ namespace EstimatingUtilitiesLibrary.Exports
                                     xlRow.Cell("F").Value = point.Type.ToString();
                                 }
                                 xlRow.Cell("G").Value = point.Quantity;
+                                rowWritten = true;
 
-                                xlRow = xlRow.RowBelow();
+                                if (rowWritten)
+                                {
+                                    xlRow = xlRow.RowBelow();
+                                    rowWritten = false;
+                                }
                             }
-                            xlRow = xlRow.RowBelow();
+                            if (rowWritten)
+                            {
+                                xlRow = xlRow.RowBelow();
+                                rowWritten = false;
+                            }
                         }
-                        xlRow = xlRow.RowBelow();
+                        if (rowWritten)
+                        {
+                            xlRow = xlRow.RowBelow();
+                            rowWritten = false;
+                        }
                     }
                     xlRow = xlRow.RowBelow();
                 }
             }
+            worksheet.Columns().AdjustToContents();
 
             return workbook;
         }
