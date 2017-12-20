@@ -351,12 +351,16 @@
                     <Button Content="->" x:Name="subScopeDetails" 
                     Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}"/>
                 </Grid>
+                
                 <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment.SubScope}"
                                     SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
                                     Grid.ColumnSpan="3" Grid.Row="1"
                                     DropHandler="{Binding ViewModel}"
                                     DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
                                             IsDragSource="True"/>
+                <TextBlock Text="Select an Equipment to view its Points" Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment,
+                    Converter={utilities:NullToVisibilityConverter}}"
+                           Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Grid Grid.Row="2" Grid.Column="2"
                       Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}">
                     <Button Content="Add" x:Name="addSubScope" 
@@ -383,6 +387,9 @@
                                                 DropHandler="{Binding ViewModel}"
                                                     DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
                                                     IsDragSource="True"/>
+                <TextBlock Text="Select a Point to view its Devices/IO" Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope,
+                    Converter={utilities:NullToVisibilityConverter}}"
+                           Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Grid Margin="0,2,0,0" Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
