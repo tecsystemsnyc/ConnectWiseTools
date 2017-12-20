@@ -228,6 +228,7 @@
                                                   VerticalAlignment="Center"/>
                                     </Grid>
                                 </DataTemplate>
+                                <DataTemplate DataType="{x:Type models:TECSubScope}"></DataTemplate>
                             </ContentPresenter.Resources>
                         </ContentPresenter>
                     </Grid>

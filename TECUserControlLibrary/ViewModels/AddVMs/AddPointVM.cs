@@ -38,7 +38,19 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private bool addCanExecute()
         {
-            return true;
+            TECConnection connection = parent.Connection;
+            if(connection == null)
+            {
+                return true;
+            }
+            else
+            {
+                TECIO proposedIO = new TECIO(ToAdd.Type);
+                proposedIO.Quantity = ToAdd.Quantity;
+                bool containsIO = connection.ParentController.AvailableIO.Contains(proposedIO);
+                bool isNetworkIO = connection is TECNetworkConnection netConnect && netConnect.IOType == ToAdd.Type;
+                return containsIO || isNetworkIO;
+            }
         }
         private void addExecute()
         {

@@ -50,6 +50,9 @@
                         <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
+                        <TextBox Text="{Binding Cost, StringFormat={}{0:C}}" 
+                                   IsReadOnly="{Binding ElementName=parent, Path=ReadOnly}"
+                     Margin="2"/>
                     </DataTemplate>
                 </ContentPresenter.Resources>
             </ContentPresenter>
