@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -340,15 +341,7 @@ namespace Tests
             equipment.Tags.Add(equipTag);
 
             templates.EquipmentTemplates.Add(equipment);
-
-            /*System with reference Equipment
-            TECSystem equipSystem = new TECSystem(false);
-            equipSystem.Name = "Sys RefEquip";
-            equipSystem.Equipment.Add(templates.EquipmentSynchronizer.NewItem(equipment));
-
-            templates.SystemTemplates.Add(equipSystem);
-            */
-
+            
             //SubScope
             TECSubScope subScope = new TECSubScope(false);
             subScope.Name = "Test SubScope";
@@ -363,16 +356,7 @@ namespace Tests
             subScope.AssociatedCosts.Add(testAssociatedCost);
 
             templates.SubScopeTemplates.Add(subScope);
-
-            /*Equipment with reference SubScope
-            TECEquipment ssEquip = new TECEquipment(false);
-            ssEquip.Name = "Equip RefSS";
-            ssEquip.SubScope.Add(templates.SubScopeSynchronizer.NewItem(subScope));
-
-            templates.EquipmentTemplates.Add(ssEquip);
-            */
-
-
+            
             //Controller
             var expectedControllerType = new TECControllerType(testMan);
             expectedControllerType.Price = 42.6;
@@ -428,31 +412,23 @@ namespace Tests
 
             templates.PanelTemplates.Add(panel);
 
-            //Connections
-            //TECSubScopeConnection controlledConnection = new TECSubScopeConnection();
-            //controlledConnection.ConduitType = testConduitType;
-            //controlledConnection.Length = 42;
-            //controlledConnection.ParentController = controlledController;
+            //Synchronizer
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            //controlledController.ChildrenConnections.Add(controlledConnection);
+            TECSystem syncSys = new TECSystem(false);
+            syncSys.Name = "Sync System";
+            templates.SystemTemplates.Add(syncSys);
 
-            //Controlled Scope
-            //TECSystem testConScope = CreateTestSystem(templates.Catalogs);
-            //testConScope.Label = "Test Controlled Scope";
-            //testConScope.Description = "Test Description";
-            //var controlledScopeEquipment = equipment.DragDropCopy() as TECEquipment;
-            //testConScope.Equipment.Add(controlledScopeEquipment);
-            //var controlledScopePanel = controlledPanel.DragDropCopy() as TECPanel;
-            //controlledScopePanel.Type = panelType;
-            //testConScope.Panels.Add(controlledScopePanel);
-            //var controlledScopeController = controlledController.DragDropCopy() as TECController;
-            //controlledScopePanel.Controllers.Add(controlledScopeController);
-            //testConScope.Controllers.Add(controlledScopeController);
-            //var connection = controlledScopeController.AddSubScope(subScope.DragDropCopy() as TECSubScope);
-            //connection.Length = 42;
-            //controlledScopeController.ChildrenConnections[0].ConduitType = testConduitType;
+            TECEquipment syncEquip = new TECEquipment(false);
+            syncEquip.Name = "Sync Equip";
+            templates.EquipmentTemplates.Add(syncEquip);
+            syncSys.Equipment.Add(equipSynchronizer.NewItem(syncEquip));
 
-            //templates.SystemTemplates.Add(testConScope);
+            TECSubScope syncSubScope = new TECSubScope(false);
+            syncSubScope.Name = "Sync SS";
+            templates.SubScopeTemplates.Add(syncSubScope);
+            syncEquip.SubScope.Add(ssSynchronizer.NewItem(syncSubScope));
 
             return templates;
         }

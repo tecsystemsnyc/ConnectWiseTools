@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -174,7 +175,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_LaborConstants()
+        public void SaveNew_Templates_LaborConstants()
         {
             TECParameters expectedLabor = expectedTemplates.Parameters[0];
             TECParameters actualLabor = actualTemplates.Parameters[0];
@@ -197,7 +198,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_SubcontractLaborConstants()
+        public void SaveNew_Templates_SubcontractLaborConstants()
         {
             TECParameters expectedLabor = expectedTemplates.Parameters[0];
             TECParameters actualLabor = actualTemplates.Parameters[0];
@@ -210,7 +211,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_System()
+        public void SaveNew_Templates_System()
         {
             //Arrange
             TECEquipment expectedSysEquipment = expectedSystem.Equipment[0];
@@ -263,7 +264,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_Equipment()
+        public void SaveNew_Templates_Equipment()
         {
             //Arrange
             TECSubScope actualEquipSubScope = actualEquipment.SubScope[0];
@@ -300,7 +301,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_SubScope()
+        public void SaveNew_Templates_SubScope()
         {
             //Arrange
             TECDevice actualChildDevice = actualSubScope.Devices[0] as TECDevice;
@@ -332,7 +333,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_Device()
+        public void SaveNew_Templates_Device()
         {
             //Arrange
             TECManufacturer actualChildMan = actualDevice.Manufacturer;
@@ -351,7 +352,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_Manufacturer()
+        public void SaveNew_Templates_Manufacturer()
         {
             //Assert
             Assert.AreEqual(expectedManufacturer.Label, actualManufacturer.Label);
@@ -359,14 +360,14 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_Tag()
+        public void SaveNew_Templates_Tag()
         {
             //Assert
             Assert.AreEqual(expectedTag.Label, actualTag.Label);
         }
 
         [TestMethod]
-        public void SaveAs_Templates_Controller()
+        public void SaveNew_Templates_Controller()
         {
             //Assert
             Assert.AreEqual(expectedController.Name, actualController.Name);
@@ -389,7 +390,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_AssociatedCost()
+        public void SaveNew_Templates_AssociatedCost()
         {
             //Assert
             Assert.AreEqual(expectedAssociatedCost.Name, actualAssociatedCost.Name);
@@ -397,7 +398,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_ConnectionType()
+        public void SaveNew_Templates_ConnectionType()
         {
             //Assert
             Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
@@ -407,7 +408,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_ConduitType()
+        public void SaveNew_Templates_ConduitType()
         {
             //Assert
             Assert.AreEqual(expectedConduitType.Name, actualConduitType.Name);
@@ -417,7 +418,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_Panel()
+        public void SaveNew_Templates_Panel()
         {
             //Arrange
             TECPanel expectedPanel = expectedTemplates.PanelTemplates[0];
@@ -428,7 +429,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_Misc()
+        public void SaveNew_Templates_Misc()
         {
             //Arrange
             TECMisc expectedTECCost = null, expectedElecCost = null;
@@ -468,7 +469,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_PanelType()
+        public void SaveNew_Templates_PanelType()
         {
             //Arrange
             TECPanelType expectedPanelType = expectedTemplates.Catalogs.PanelTypes[0];
@@ -479,7 +480,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SaveAs_Templates_IOModule()
+        public void SaveNew_Templates_IOModule()
         {
             //Arrange
             TECIOModule expectedIOModule = expectedTemplates.Catalogs.IOModules[0];
@@ -487,6 +488,156 @@ namespace Tests
 
             Assert.AreEqual(expectedIOModule.Name, actualIOModule.Name);
             Assert.AreEqual(expectedIOModule.Cost, actualIOModule.Cost, DELTA);
+        }
+
+        [TestMethod]
+        public void SaveNew_Templates_Synchronizer()
+        {
+            //Arrange
+            TECSystem expectedSys = null, actualSys = null;
+            TECEquipment expectedTempEquip = null, actualTempEquip = null;
+            TECEquipment expectedRefEquip = null, actualRefEquip = null;
+            TECSubScope expectedTempSS = null, actualTempSS = null;
+            TECSubScope expectedRefSSInTemp = null, actualRefSSInTemp = null;
+            TECSubScope expectedRefSSInRef = null, actualRefSSInRef = null;
+
+            #region Expected
+            foreach (TECSystem sys in expectedTemplates.SystemTemplates)
+            {
+                if (sys.Name == "Sync System")
+                {
+                    expectedSys = sys;
+                    break;
+                }
+            }
+            Assert.IsNotNull(expectedSys);
+
+            foreach (TECEquipment equip in expectedTemplates.EquipmentTemplates)
+            {
+                if (equip.Name == "Sync Equip")
+                {
+                    expectedTempEquip = equip;
+                    break;
+                }
+            }
+            Assert.IsNotNull(expectedTempEquip);
+
+            foreach (TECEquipment equip in expectedSys.Equipment)
+            {
+                if (equip.Name == "Sync Equip")
+                {
+                    expectedRefEquip = equip;
+                    break;
+                }
+            }
+            Assert.IsNotNull(expectedRefEquip);
+
+            foreach (TECSubScope ss in expectedTemplates.SubScopeTemplates)
+            {
+                if (ss.Name == "Sync SS")
+                {
+                    expectedTempSS = ss;
+                    break;
+                }
+            }
+            Assert.IsNotNull(expectedTempSS);
+
+            foreach (TECSubScope ss in expectedTempEquip.SubScope)
+            {
+                if (ss.Name == "Sync SS")
+                {
+                    expectedRefSSInTemp = ss;
+                    break;
+                }
+            }
+            Assert.IsNotNull(expectedRefSSInTemp);
+
+            foreach (TECSubScope ss in expectedRefEquip.SubScope)
+            {
+                if (ss.Name == "Sync SS")
+                {
+                    expectedRefSSInRef = ss;
+                    break;
+                }
+            }
+            Assert.IsNotNull(expectedRefSSInRef);
+            #endregion
+
+            #region Actual
+            foreach (TECSystem sys in actualTemplates.SystemTemplates)
+            {
+                if (sys.Name == "Sync System" && sys.Guid == expectedSys.Guid)
+                {
+                    actualSys = sys;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualSys);
+
+            foreach (TECEquipment equip in actualTemplates.EquipmentTemplates)
+            {
+                if (equip.Name == "Sync Equip" && equip.Guid == expectedTempEquip.Guid)
+                {
+                    actualTempEquip = equip;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualTempEquip);
+
+            foreach (TECEquipment equip in actualSys.Equipment)
+            {
+                if (equip.Name == "Sync Equip" && equip.Guid == expectedRefEquip.Guid)
+                {
+                    actualRefEquip = equip;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualRefEquip);
+
+            foreach (TECSubScope ss in actualTemplates.SubScopeTemplates)
+            {
+                if (ss.Name == "Sync SS" && ss.Guid == expectedTempSS.Guid)
+                {
+                    actualTempSS = ss;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualTempSS);
+
+            foreach (TECSubScope ss in actualTempEquip.SubScope)
+            {
+                if (ss.Name == "Sync SS" && ss.Guid == expectedRefSSInTemp.Guid)
+                {
+                    actualRefSSInTemp = ss;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualRefSSInTemp);
+
+            foreach (TECSubScope ss in actualRefEquip.SubScope)
+            {
+                if (ss.Name == "Sync SS" && ss.Guid == expectedRefSSInRef.Guid)
+                {
+                    actualRefSSInRef = ss;
+                    break;
+                }
+            }
+            Assert.IsNotNull(actualRefSSInRef);
+            #endregion
+
+            //Assert
+            TemplateSynchronizer<TECEquipment> equipSync = actualTemplates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSync = actualTemplates.SubScopeSynchronizer;
+
+            Assert.IsTrue(equipSync.Contains(actualTempEquip));
+            Assert.IsTrue(equipSync.Contains(actualRefEquip));
+            Assert.IsTrue(equipSync.GetFullDictionary()[actualTempEquip].Contains(actualRefEquip));
+
+            Assert.IsTrue(ssSync.Contains(actualTempSS));
+            Assert.IsTrue(ssSync.Contains(actualRefSSInTemp));
+            Assert.IsTrue(ssSync.Contains(actualRefSSInRef));
+            Assert.IsTrue(ssSync.GetFullDictionary()[actualTempSS].Contains(actualRefSSInTemp));
+            Assert.IsTrue(ssSync.GetFullDictionary()[actualRefSSInTemp].Contains(actualRefSSInRef));
         }
     }
 }
