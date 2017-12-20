@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="subScopePropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding ElementName=subScopePropertiesControl, Path=Selected}">
+    <StackPanel DataContext="{Binding ElementName=subScopePropertiesControl, Path=Selected}">
         <Expander Header="IO">
             <ListView Grid.Row="6" Grid.ColumnSpan="2"
                       ItemsSource="{Binding IO, Converter={utilities:IOCollectionToListConverter}}"
@@ -34,5 +35,8 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Expander>
-    </Grid>
+        <Expander Header="Connection Types">
+            <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"/>
+        </Expander>
+    </StackPanel>
 </UserControl>
