@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GongSolutions.Wpf.DragDrop;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,24 +13,17 @@ namespace TECUserControlLibrary.UserControls
     public partial class LabeledGridControl : UserControl
     {
         #region DPs
-
-        /// <summary>
-        /// Gets or sets the DevicesSource which is displayed
-        /// </summary>
-        public ObservableCollection<TECLabeled> LabeledSource
+        
+        public IEnumerable<TECLabeled> LabeledSource
         {
-            get { return (ObservableCollection<TECLabeled>)GetValue(LabeledSourceProperty); }
+            get { return (IEnumerable<TECLabeled>)GetValue(LabeledSourceProperty); }
             set { SetValue(LabeledSourceProperty, value); }
         }
-
-        /// <summary>
-        /// Identified the DevicesSource dependency property
-        /// </summary>
+        
         public static readonly DependencyProperty LabeledSourceProperty =
-            DependencyProperty.Register("LabeledSource", typeof(ObservableCollection<TECLabeled>),
-              typeof(LabeledGridControl), new PropertyMetadata(default(ObservableCollection<TECLabeled>)));
-
-
+            DependencyProperty.Register("LabeledSource", typeof(IEnumerable<TECLabeled>),
+              typeof(LabeledGridControl));
+        
         public string LabelName
         {
             get { return (string)GetValue(LabelNameProperty); }
