@@ -193,8 +193,11 @@ namespace EstimatingLibrary
 
         public bool CanConnectSubScope(TECSubScope subScope)
         {
-            return getAvailableIO().Contains(subScope.IO) 
-                || getPotentialIO().Contains(subScope.IO);
+            IOCollection availableIO = getAvailableIO();
+            IOCollection potentialIO = getPotentialIO();
+            bool hasIO = availableIO.Contains(subScope.IO);
+            bool canHasIO = potentialIO.Contains(subScope.IO);
+            return hasIO || canHasIO;
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
