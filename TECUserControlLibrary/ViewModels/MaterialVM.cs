@@ -44,7 +44,7 @@ namespace TECUserControlLibrary.ViewModels
                 SelectionChanged?.Invoke(value);
             }
         }
-
+        
         #region Connection Types
         private string _connectionTypeName;
         public string ConnectionTypeName
@@ -96,6 +96,20 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ConnectionTypePlenumLabor");
             }
         }
+
+        private TECConnectionType _selectedConnectionType;
+
+        public TECConnectionType SelectedConnectionType
+        {
+            get { return _selectedConnectionType; }
+            set
+            {
+                _selectedConnectionType = value;
+                RaisePropertyChanged("SelectedConnectionType");
+                Selected = value;
+            }
+        }
+
         #endregion
         #region Conduit Types
         private string _conduitTypeName;
@@ -126,6 +140,20 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _conduitTypeLabor = value;
                 RaisePropertyChanged("ConduitTypeLabor");
+            }
+        }
+
+
+        private TECElectricalMaterial _selectedConduitType;
+
+        public TECElectricalMaterial SelectedConduitType
+        {
+            get { return _selectedConduitType; }
+            set
+            {
+                _selectedConduitType = value;
+                RaisePropertyChanged("SelectedConduitType");
+                Selected = value;
             }
         }
         #endregion
@@ -168,6 +196,20 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _associatedCostLabor = value;
                 RaisePropertyChanged("AssociatedCostLabor");
+            }
+        }
+
+
+        private TECCost _selectedAssociatedCost;
+
+        public TECCost SelectedAssociatedCost
+        {
+            get { return _selectedAssociatedCost; }
+            set
+            {
+                _selectedAssociatedCost = value;
+                RaisePropertyChanged("SelectedAssociatedCost");
+                Selected = value;
             }
         }
         #endregion
@@ -220,6 +262,20 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _panelTypeManufacturer = value;
                 RaisePropertyChanged("PanelTypeManufacturer");
+            }
+        }
+
+
+        private TECPanelType _selectedPanelType;
+
+        public TECPanelType SelectedPanelType
+        {
+            get { return _selectedPanelType; }
+            set
+            {
+                _selectedPanelType = value;
+                RaisePropertyChanged("SelectedPanelType");
+                Selected = value;
             }
         }
         #endregion
@@ -276,6 +332,18 @@ namespace TECUserControlLibrary.ViewModels
         }
         public ICommand AddIOToModuleCommand { get; private set; }
 
+        private TECIOModule _selectedIOModule;
+
+        public TECIOModule SelectedIOModule
+        {
+            get { return _selectedIOModule; }
+            set
+            {
+                _selectedIOModule = value;
+                RaisePropertyChanged("SelectedIOModule");
+                Selected = value;
+            }
+        }
         #endregion
         #region Devices
         private string _deviceName;
@@ -336,6 +404,19 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _deviceConnectionTypes = value;
                 RaisePropertyChanged("DeviceConnectionTypes");
+            }
+        }
+
+        private TECDevice _selectedDevice;
+
+        public TECDevice SelectedDevice
+        {
+            get { return _selectedDevice; }
+            set
+            {
+                _selectedDevice = value;
+                RaisePropertyChanged("SelectedDevice");
+                Selected = value;
             }
         }
         #endregion
@@ -428,6 +509,19 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _valveActuator = value;
                 RaisePropertyChanged("ValveActuator");
+            }
+        }
+
+        private TECValve _selectedValve;
+
+        public TECValve SelectedValve
+        {
+            get { return _selectedValve; }
+            set
+            {
+                _selectedValve = value;
+                RaisePropertyChanged("SelectedValve");
+                Selected = value;
             }
         }
         #endregion
@@ -523,6 +617,19 @@ namespace TECUserControlLibrary.ViewModels
             }
         } 
         public ICommand AddIOCommand { get; private set; }
+
+        private TECControllerType _selectedControllerType;
+
+        public TECControllerType SelectedControllerType
+        {
+            get { return _selectedControllerType; }
+            set
+            {
+                _selectedControllerType = value;
+                RaisePropertyChanged("SelectedControllerType");
+                Selected = value;
+            }
+        }
         #endregion
         #region Manufacturer
         private TECManufacturer _manufacturerToAdd;
@@ -535,6 +642,19 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ManufacturerToAdd");
             }
         }
+
+        private TECManufacturer _selectedManufacturer;
+
+        public TECManufacturer SelectedManufacturer
+        {
+            get { return _selectedManufacturer; }
+            set
+            {
+                _selectedManufacturer = value;
+                RaisePropertyChanged("SelectedManufacturer");
+                Selected = value;
+            }
+        }
         #endregion
         #region Tag
         private TECTag _tagToAdd;
@@ -545,6 +665,19 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _tagToAdd = value;
                 RaisePropertyChanged("TagToAdd");
+            }
+        }
+
+        private TECTag _selectedTag;
+
+        public TECTag SelectedTag
+        {
+            get { return _selectedTag; }
+            set
+            {
+                _selectedTag = value;
+                RaisePropertyChanged("SelectedTag");
+                Selected = value;
             }
         }
         #endregion
