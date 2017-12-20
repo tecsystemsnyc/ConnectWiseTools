@@ -12,14 +12,6 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class MaterialSummaryExport
     {
-        public static void GenerateAndExport(string path, TECBid bid)
-        {
-            XLWorkbook workbook = new XLWorkbook();
-            AddControllersSheet(workbook, bid);
-
-            throw new NotImplementedException();
-        }
-
         internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Controllers")
         {
             List<TECController> controllers = getAllControllers(bid);
