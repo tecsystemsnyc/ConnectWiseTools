@@ -669,6 +669,7 @@
                                     Margin="2"/>
                         </Grid>
                         <controls:ManufacturersGridControl ManufacturersSource="{Binding Templates.Catalogs.Manufacturers}"
+                                                           SelectedItem="{Binding SelectedManufacturer}"
                                                            Grid.Row="1"/>
                     </Grid>
                 </DataTemplate>

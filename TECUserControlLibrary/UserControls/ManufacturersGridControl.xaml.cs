@@ -29,6 +29,16 @@ namespace TECUserControlLibrary.UserControls
               typeof(ManufacturersGridControl), new PropertyMetadata(default(ObservableCollection<TECManufacturer>)));
 
 
+        public TECManufacturer SelectedItem
+        {
+            get { return (TECManufacturer)GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedItemProperty =
+            DependencyProperty.Register("SelectedItem", typeof(TECManufacturer), typeof(ManufacturersGridControl));
+        
         #endregion
 
         public ManufacturersGridControl()

@@ -16,11 +16,12 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
         <DataGrid ItemsSource="{Binding Path=ManufacturersSource}"
+                  SelectedItem="{Binding Path=SelectedItem}"
                   AutoGenerateColumns="False"
                   x:Name="ManufacturersGrid"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False">
-            
+
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Label}" Header="Manufacturer" Width="Auto"  MinWidth="80"/>
                 <DataGridTextColumn Binding="{Binding Multiplier}" Header="Multiplier" Width="Auto" MinWidth="70"
