@@ -69,18 +69,9 @@ namespace TECUserControlLibrary.ViewModels
         private string getTemplateText(TECObject item)
         {
             TECTemplates templates = scopeManager as TECTemplates;
-            if(item is TECSubScope subScope)
+            if(templates.IsTemplateObject(item))
             {
-                if (templates.SubScopeTemplates.Contains(subScope))
-                {
-                    return "Reference Template";
-                }
-            } else if(item is TECEquipment equipment)
-            {
-                if (templates.EquipmentTemplates.Contains(equipment))
-                {
-                    return "Reference Template";
-                }
+                return "Reference Template";
             }
             return "Instance Template";
         }
