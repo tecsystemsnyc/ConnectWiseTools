@@ -89,7 +89,7 @@
                 <Button Content="Add IO" Command="{Binding ElementName=addSubScopeView, Path=ViewModel.AddPointCommand}" Grid.Row="2" Grid.ColumnSpan="2" Margin="2"/>
 
             </Grid>
-            <listControls:PointListControl Source="{Binding Points}" Grid.Row="6" Grid.ColumnSpan="2"
+            <listControls:PointListControl Source="{Binding Points}" Grid.Row="7" Grid.ColumnSpan="2"
                                            DeleteCommand="{Binding ElementName=addSubScopeView, Path=ViewModel.DeletePointCommand}"/>
         </Grid>
         <Grid Grid.Column="1">
