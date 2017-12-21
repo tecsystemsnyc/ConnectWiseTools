@@ -71,8 +71,8 @@ namespace EstimatingLibraryTests
             ModelLinkingHelper.LinkTemplates(templates, new Dictionary<Guid, List<Guid>>());
 
             //Assert
-            Assert.IsTrue(netConnect.Children.Contains(realChildController), "Controller wasn't linked to parent network connection properly.");
             Assert.IsTrue(netConnect.Children.Contains(realSS), "SubScope wasn't linked to parent network connection properly.");
+            Assert.IsTrue(netConnect.Children.Contains(realChildController), "Controller wasn't linked to parent network connection properly.");
         }
     }
 }

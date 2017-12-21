@@ -16,6 +16,15 @@ namespace EstimatingLibrary.Utilities
             }
             scope.Name = otherScope.Name;
             scope.Description = otherScope.Description;
+            CopyChildrenFromScope(scope, otherScope);
+        }
+
+        public static void CopyChildrenFromScope(this TECScope scope, TECScope otherScope)
+        {
+            if(scope == otherScope)
+            {
+                return;
+            }
             scope.Tags.ObservablyClear();
             foreach (TECTag tag in otherScope.Tags)
             {
