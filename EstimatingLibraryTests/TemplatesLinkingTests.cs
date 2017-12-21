@@ -12,87 +12,67 @@ namespace EstimatingLibraryTests
     [TestClass]
     public class TemplatesLinkingTests
     {
-        //[TestMethod]
-        //public void ReferenceEquipmentInSystem()
-        //{
-        //    //Arrange
-        //    TECTemplates templates = new TECTemplates();
+        [TestMethod]
+        public void LinkNetworkConnections()
+        {
+            //Arrange
+            Guid childGuid = Guid.NewGuid();
+            Guid subScopeGuid = Guid.NewGuid();
 
-        //    Guid equipGuid = Guid.NewGuid();
-        //    TECEquipment refEquip = new TECEquipment(equipGuid, false);
+            TECTemplates templates = new TECTemplates();
 
-        //    templates.EquipmentTemplates.Add(refEquip);
+            TECManufacturer man = new TECManufacturer();
+            templates.Catalogs.Manufacturers.Add(man);
 
-        //    TECSystem system = new TECSystem(false);
-        //    TECEquipment childEquip = new TECEquipment(equipGuid, false);
+            TECControllerType type = new TECControllerType(man);
+            type.IO.Add(new TECIO(IOType.BACnetIP));
+            templates.Catalogs.ControllerTypes.Add(type);
 
-        //    system.Equipment.Add(childEquip);
+            //Containing System
+            TECSystem sys = new TECSystem(false);
+            templates.SystemTemplates.Add(sys);
 
-        //    templates.SystemTemplates.Add(system);
+            //Parent Controller
+            TECController parentController = new TECController(type, false);
+            sys.AddController(parentController);
 
-        //    //Act
-        //    //ModelLinkingHelper.LinkTemplates(templates);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false, new List<TECConnectionType>(), IOType.BACnetIP);
 
-        //    //Assert
-        //    Assert.AreEqual(refEquip, system.Equipment[0]);
+            //Daisy Controller
+            TECController fakeChildController = new TECController(childGuid, type, false);
+            netConnect.AddINetworkConnectable(fakeChildController);
 
-        //    throw new NotImplementedException();
-        //}
+            TECController realChildController = new TECController(childGuid, type, false);
+            sys.AddController(realChildController);
 
-        //[TestMethod]
-        //public void ReferenceSubScopeInReferenceEquipment()
-        //{
-        //    //Arrange
-        //    TECTemplates templates = new TECTemplates();
+            //Daisy SubScope
+            TECEquipment equip = new TECEquipment(false);
+            sys.Equipment.Add(equip);
 
-        //    Guid ssGuid = Guid.NewGuid();
-        //    TECSubScope refSS = new TECSubScope(ssGuid, false);
+            TECPoint fakePoint = new TECPoint(false);
+            fakePoint.Type = IOType.BACnetIP;
+            fakePoint.Quantity = 1;
 
-        //    templates.SubScopeTemplates.Add(refSS);
+            TECSubScope fakeSS = new TECSubScope(subScopeGuid, false);
+            fakeSS.AddPoint(fakePoint);
 
-        //    TECEquipment refEquip = new TECEquipment(false);
-        //    TECSubScope childSS = new TECSubScope(ssGuid, false);
+            TECPoint realPoint = new TECPoint(false);
+            realPoint.Type = IOType.BACnetIP;
+            realPoint.Quantity = 1;
 
-        //    refEquip.SubScope.Add(childSS);
+            TECSubScope realSS = new TECSubScope(subScopeGuid, false);
+            realSS.AddPoint(realPoint);
 
-        //    templates.EquipmentTemplates.Add(refEquip);
+            netConnect.AddINetworkConnectable(fakeSS);
 
-        //    //Act
-        //    //ModelLinkingHelper.LinkTemplates(templates);
+            equip.SubScope.Add(realSS);
 
-        //    //Assert
-        //    Assert.AreEqual(refSS, refEquip.SubScope[0]);
+            //Act
+            ModelLinkingHelper.LinkTemplates(templates, new Dictionary<Guid, List<Guid>>());
 
-        //    throw new NotImplementedException();
-        //}
-
-        //[TestMethod]
-        //public void ReferenceSubScopeInInstanceEquipment()
-        //{
-        //    //Arrange
-        //    TECTemplates templates = new TECTemplates();
-
-        //    Guid ssGuid = Guid.NewGuid();
-
-        //    TECSubScope refSubScope = new TECSubScope(ssGuid, false);
-
-        //    templates.SubScopeTemplates.Add(refSubScope);
-
-        //    TECSystem system = new TECSystem(false);
-        //    TECEquipment equip = new TECEquipment(false);
-        //    TECSubScope ss = new TECSubScope(ssGuid, false);
-        //    system.Equipment.Add(equip);
-        //    equip.SubScope.Add(ss);
-
-        //    templates.SystemTemplates.Add(system);
-
-        //    //Act
-        //    //ModelLinkingHelper.LinkTemplates(templates);
-
-        //    //Assert
-        //    Assert.AreEqual(refSubScope, equip.SubScope[0]);
-
-        //    throw new NotImplementedException();
-        //}
+            //Assert
+            Assert.IsTrue(netConnect.Children.Contains(realChildController), "Controller wasn't linked to parent network connection properly.");
+            Assert.IsTrue(netConnect.Children.Contains(realSS), "SubScope wasn't linked to parent network connection properly.");
+        }
     }
 }

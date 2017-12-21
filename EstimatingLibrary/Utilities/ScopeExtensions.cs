@@ -75,5 +75,35 @@ namespace EstimatingLibrary.Utilities
             }
             return equip;
         }
+
+        public static List<TECController> GetAllInstanceControllers(this TECBid bid)
+        {
+            List<TECController> instanceControllers = new List<TECController>();
+            instanceControllers.AddRange(bid.Controllers);
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem sys in typ.Instances)
+                {
+                    instanceControllers.AddRange(sys.Controllers);
+                }
+            }
+            return instanceControllers;
+        }
+
+        public static List<TECSubScope> GetAllInstanceSubScope(this TECBid bid)
+        {
+            List<TECSubScope> instanceSubScope = new List<TECSubScope>();
+            foreach(TECTypical typ in bid.Systems)
+            {
+                foreach(TECSystem sys in typ.Instances)
+                {
+                    foreach(TECEquipment equip in sys.Equipment)
+                    {
+                        instanceSubScope.AddRange(equip.SubScope);
+                    }
+                }
+            }
+            return instanceSubScope;
+        }
     }
 }

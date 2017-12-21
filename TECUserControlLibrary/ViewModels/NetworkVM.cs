@@ -264,34 +264,18 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addBid(TECBid bid)
         {
-            foreach (TECController controller in bid.Controllers)
+            List<TECController> controllers = bid.GetAllInstanceControllers();
+            instantiateControllers(controllers);
+            setIsConnected(controllers);
+            foreach(TECSubScope ss in bid.GetAllInstanceSubScope().Where(item => item.IsNetwork == true))
             {
-                addConnectableItem(controller);
-            }
-            foreach (TECTypical typical in bid.Systems)
-            {
-                foreach (TECSystem system in typical.Instances)
-                {
-                    foreach (TECController controller in system.Controllers)
-                    {
-                        addConnectableItem(controller);
-                    }
-                    foreach (TECEquipment equip in system.Equipment)
-                    {
-                        foreach (TECSubScope ss in equip.SubScope.Where(item => item.IsNetwork == true))
-                        {
-                            addConnectableItem(ss);
-                        }
-                    }
-                }
+                addConnectableItem(ss);
             }
         }
         private void addSystem(TECSystem system)
         {
-            foreach (TECController controller in system.Controllers)
-            {
-                addConnectableItem(controller);
-            }
+            instantiateControllers(system.Controllers);
+            setIsConnected(system.Controllers);
             foreach (TECSubScope ss in system.GetAllSubScope().Where(item => item.IsNetwork == true))
             {
                 addConnectableItem(ss);
@@ -316,6 +300,46 @@ namespace TECUserControlLibrary.ViewModels
                 cw.InstanceConstituentChanged += handleConstituentChanged;
             }
             
+        }
+
+        private void instantiateControllers(IEnumerable<TECController> controllers)
+        {
+            foreach(TECController controller in controllers)
+            {
+                ConnectableItem item = new ConnectableItem(controller, controller.IsServer);
+                connectableDictionary.Add(controller, item);
+                _parentables.Add(item);
+            }
+        }
+
+        private void setIsConnected(IEnumerable<TECController> controllers)
+        {
+            List<TECController> connected = new List<TECController>();
+            foreach(TECController controller in controllers)
+            {
+                if (controller.IsServer)
+                {
+                    connected.Add(controller);
+                    addConnected(controller);
+                }
+            }
+
+            void addConnected(TECController controller)
+            {
+                foreach(TECNetworkConnection netConnect in controller.ChildNetworkConnections)
+                {
+                    foreach(TECController child in netConnect.Children.Where( thing => (thing is TECController)))
+                    {
+                        connected.Add(child);
+                        addConnected(child);
+                    }
+                }
+            }
+            
+            foreach(TECController connectController in connected)
+            {
+                connectableDictionary[connectController].IsConnected = true;
+            }
         }
 
         private void addConnectableItem(INetworkConnectable connectable)
@@ -579,7 +603,8 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             CannotConnectMessage = "";
-            if (dropInfo.Data is ConnectableItem connectable && dropInfo.TargetCollection == SelectedConnection?.Children)
+            bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
+            if (dropInfo.Data is ConnectableItem connectable && targetIsChildren)
             {
                 if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
                 {
