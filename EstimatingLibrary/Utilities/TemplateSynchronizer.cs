@@ -54,18 +54,9 @@ namespace EstimatingLibrary.Utilities
         {
             if (!dictionary.ContainsKey(template))
             {
-                ChangeWatcher watcher = new ChangeWatcher(template);
-                watcher.Changed += handleChange;
-                unsubscribeDictionary.Add((template, true),
-                    () => { watcher.Changed -= handleChange; });
+                subscribe(template, template, true);
                 dictionary.Add(template, new List<T>());
             }
-
-            void handleChange(TECChangedEventArgs args)
-            {
-                handleTChanged(template, template, args);
-            }
-
         }
         public void RemoveGroup(T template)
         {
@@ -83,10 +74,7 @@ namespace EstimatingLibrary.Utilities
         public T NewItem(T template)
         {
             T newItem = copy(template);
-            ChangeWatcher watcher = new ChangeWatcher(newItem);
-            watcher.Changed += handleChange;
-            unsubscribeDictionary.Add((newItem, false),
-                () => { watcher.Changed -= handleChange; });
+            subscribe(template, newItem, false);
             if (!dictionary.ContainsKey(template))
             {
                 NewGroup(template);
@@ -94,11 +82,6 @@ namespace EstimatingLibrary.Utilities
             dictionary[template].Add(newItem);
             notifyTECChanged(Change.Add, template, newItem);
             return newItem;
-
-            void handleChange(TECChangedEventArgs args)
-            {
-                handleTChanged(template, newItem, args);
-            }
         }
         public void RemoveItem(T item)
         {
@@ -118,28 +101,14 @@ namespace EstimatingLibrary.Utilities
             remove.Invoke(item);
             unsubscribeDictionary.Remove((item, false));
         }
-
-        public Dictionary<T, List<T>> GetFullDictionary()
-        {
-            return dictionary;
-        }
-
         public void LinkExisting(T template, T item)
         {
-            ChangeWatcher watcher = new ChangeWatcher(item);
-            watcher.Changed += (args) => handleTChanged(template, item, args);
-            unsubscribeDictionary.Add((item, false),
-                    () => { watcher.Changed -= handleChange; });
+            subscribe(template, item, false);
             if (!dictionary.ContainsKey(template))
             {
                 NewGroup(template);
             }
             dictionary[template].Add(item);
-
-            void handleChange(TECChangedEventArgs args)
-            {
-                handleTChanged(template, item, args);
-            }
         }
         public void LinkExisting(T template, IEnumerable<T> items)
         {
@@ -153,6 +122,7 @@ namespace EstimatingLibrary.Utilities
             notifyTECChanged(Change.Add, template, item);
             LinkExisting(template, item);
         }
+
         public bool Contains(T item)
         {
             foreach(KeyValuePair<T, List<T>> entry in dictionary)
@@ -164,22 +134,10 @@ namespace EstimatingLibrary.Utilities
             }
             return false;
         }
-        
-        private void handleTChanged(T template, T changed, TECChangedEventArgs args)
+        public Dictionary<T, List<T>> GetFullDictionary()
         {
-            if (!currentlySyncing.Contains(template))
-            {
-                currentlySyncing.Add(template);
-                sync(this, template, changed, args);
-                currentlySyncing.Remove(template);
-            }
-            
+            return dictionary;
         }
-        private void notifyTECChanged(Change change, T template, T item)
-        {
-            TECChanged?.Invoke(new TECChangedEventArgs(change, "TemplateRelationship", template, item, null));
-        }
-
         public T GetTemplate(T item)
         {
             if (dictionary.ContainsKey(item))
@@ -198,7 +156,6 @@ namespace EstimatingLibrary.Utilities
             }
             return null;
         }
-
         public T GetParent(T item)
         {
             foreach (var pair in dictionary)
@@ -209,6 +166,33 @@ namespace EstimatingLibrary.Utilities
                 }
             }
             return null;
+        }
+        
+        private void handleTChanged(T template, T changed, TECChangedEventArgs args)
+        {
+            if (!currentlySyncing.Contains(template))
+            {
+                currentlySyncing.Add(template);
+                sync(this, template, changed, args);
+                currentlySyncing.Remove(template);
+            }
+            
+        }
+        private void notifyTECChanged(Change change, T template, T item)
+        {
+            TECChanged?.Invoke(new TECChangedEventArgs(change, "TemplateRelationship", template, item, null));
+        }
+        private void subscribe(T template, T item, bool isKey)
+        {
+            ChangeWatcher watcher = new ChangeWatcher(item);
+            watcher.Changed += handleChange;
+            unsubscribeDictionary.Add((item, isKey),
+                () => { watcher.Changed -= handleChange; });
+
+            void handleChange(TECChangedEventArgs args)
+            {
+                handleTChanged(template, item, args);
+            }
         }
     }
 }
