@@ -53,13 +53,17 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECEquipment(TECEquipment equipmentSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
+            ObservableListDictionary<TECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
                 var toAdd = new TECSubScope(subScope, isTypical, guidDictionary, characteristicReference);
+                if (ssSynchronizer != null && ssSynchronizer.Contains(subScope))
+                {
+                    ssSynchronizer.LinkExisting(ssSynchronizer.GetTemplate(subScope), toAdd);
+                }
                 characteristicReference?.AddItem(subScope,toAdd);
                 SubScope.Add(toAdd);
             }

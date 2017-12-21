@@ -38,8 +38,8 @@ namespace EstimatingLibrary
 
         public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
-        public TECSystem(TECSystem source, bool isTypical, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null, 
-            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
+        public TECSystem(TECSystem source, bool isTypical, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<TECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this(isTypical)
         {
             if (guidDictionary == null)
             { guidDictionary = new Dictionary<Guid, Guid>();  }
@@ -47,7 +47,11 @@ namespace EstimatingLibrary
             guidDictionary[_guid] = source.Guid;
             foreach (TECEquipment equipment in source.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference);
+                var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference, ssSynchronizer: synchronizers?.Item2);
+                if (synchronizers != null && synchronizers.Item1.Contains(equipment))
+                {
+                    synchronizers.Item1.LinkExisting(synchronizers.Item1.GetTemplate(equipment), toAdd);
+                }
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(equipment, toAdd);

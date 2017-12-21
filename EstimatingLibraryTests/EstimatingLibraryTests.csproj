@@ -60,8 +60,10 @@
     <Compile Include="ChangeWatcherTests.cs" />
     <Compile Include="ControllerTests.cs" />
     <Compile Include="CostChangedTests.cs" />
+    <Compile Include="EquipmentModelTests.cs" />
     <Compile Include="EstimatorTests.cs" />
     <Compile Include="IOCollectionTests.cs" />
+    <Compile Include="SystemModelTests.cs" />
     <Compile Include="TemplatesLinkingTests.cs" />
     <Compile Include="TemplatesSynchronizerTests.cs" />
     <Compile Include="TypicalTests.cs" />
