@@ -368,7 +368,6 @@ namespace EstimatingLibrary
                     subject.Devices.Add(device);
                 }
             }
-
         }
         private void syncEquipment(TemplateSynchronizer<TECEquipment> synchronizer, TECEquipment template, TECEquipment changed, TECChangedEventArgs args)
         {

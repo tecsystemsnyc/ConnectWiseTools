@@ -34,19 +34,6 @@ namespace EstimatingLibrary.Utilities
             watcher.Changed += handleTemplatesChanged;
         }
 
-        private void handleTemplatesChanged(TECChangedEventArgs obj)
-        {
-            if(obj.Value is T item && obj.Change == Change.Remove)
-            {
-                if(obj.Sender is TECTemplates && dictionary.ContainsKey(item))
-                {
-                    RemoveGroup(item);
-                } else
-                {
-                    RemoveItem(item);
-                }
-            }
-        }
 
         public event Action<TECChangedEventArgs> TECChanged;
 
@@ -194,5 +181,21 @@ namespace EstimatingLibrary.Utilities
                 handleTChanged(template, item, args);
             }
         }
+
+        private void handleTemplatesChanged(TECChangedEventArgs obj)
+        {
+            if (obj.Value is T item && obj.Change == Change.Remove)
+            {
+                if (obj.Sender is TECTemplates && dictionary.ContainsKey(item))
+                {
+                    RemoveGroup(item);
+                }
+                else
+                {
+                    RemoveItem(item);
+                }
+            }
+        }
+
     }
 }
