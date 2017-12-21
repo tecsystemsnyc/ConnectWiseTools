@@ -17,7 +17,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public TECMisc ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
@@ -41,7 +41,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             parent.MiscCosts.Add(ToAdd);
             Added?.Invoke(ToAdd);
         }
-        
 
+        internal void SetTemplate(TECMisc misc)
+        {
+            ToAdd = new TECMisc(misc, parent.IsTypical);
+        }
     }
 }

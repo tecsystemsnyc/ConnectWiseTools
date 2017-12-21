@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {
-    public class AddControllerVM :  AddVM
+    public class AddControllerVM : AddVM
     {
         private TECSystem parent;
         private TECController toAdd;
@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public TECController ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
@@ -51,7 +51,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 _selectedType = value;
                 RaisePropertyChanged("SelectedType");
-                if(value != null)
+                if (value != null)
                 {
                     ToAdd.Type = SelectedType;
                 }
@@ -69,7 +69,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 parent.AddController(controller);
             };
-            
+
         }
 
         public AddControllerVM(Action<TECController> addMethod, IEnumerable<TECControllerType> controllerTypes, TECScopeManager scopeManager) : base(scopeManager)
@@ -78,6 +78,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             add = addMethod;
         }
 
+        public void SetTemplate(TECController template)
+        {
+            ToAdd = new TECController(template, isTypical);
+        }
+        
         private void setup(IEnumerable<TECControllerType> controllerTypes, bool isTypical)
         {
             Quantity = 1;

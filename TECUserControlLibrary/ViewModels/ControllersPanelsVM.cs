@@ -495,7 +495,7 @@ namespace TECUserControlLibrary.ViewModels
                     SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
                 }
                 TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
-                ((AddControllerVM)SelectedVM).ToAdd = dropped;
+                ((AddControllerVM)SelectedVM).SetTemplate(dropped);
                 ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
             }
             else if (dropInfo.Data is TECPanel panel)
@@ -510,7 +510,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     SelectedVM = new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
                 }
-                ((AddPanelVM)SelectedVM).ToAdd = (TECPanel)panel.DragDropCopy(scopeManager);
+                ((AddPanelVM)SelectedVM).SetTemplate(panel);
             }
         }
 

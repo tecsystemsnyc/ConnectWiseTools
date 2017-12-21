@@ -1,9 +1,12 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
 
@@ -19,11 +22,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private string _pointName;
         private int _pointQuantity;
         private IOType _pointType;
+        private TECSubScope underlyingTemplate;
+        private List<TECPoint> originalPoints = new List<TECPoint>();
+        private List<IEndDevice> originalDevices = new List<IEndDevice>();
 
         public TECSubScope ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
@@ -142,11 +148,27 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var subScope = AsReference ? templates.SubScopeSynchronizer.NewItem(ToAdd) : new TECSubScope(ToAdd, isTypical);
+                var subScope = AsReference ? templates.SubScopeSynchronizer.NewItem(underlyingTemplate) : new TECSubScope(underlyingTemplate, isTypical);
+                subScope.CopyPropertiesFromScope(ToAdd);
+                foreach(IEndDevice device in ToAdd.Devices.Where(item => !originalDevices.Contains(item)))
+                {
+                    subScope.Devices.Add(device);
+                }
+                foreach(TECPoint point in ToAdd.Points.Where(item => !originalPoints.Contains(item)))
+                {
+                    subScope.Points.Add(point);
+                }
                 add(subScope);
                 Added?.Invoke(subScope);
             }
         }
-        
+
+        internal void SetTemplate(TECSubScope subScope)
+        {
+            ToAdd = new TECSubScope(subScope, isTypical);
+            originalDevices = new List<IEndDevice>(ToAdd.Devices);
+            originalPoints = new List<TECPoint>(ToAdd.Points);
+            underlyingTemplate = subScope;
+        }
     }
 }

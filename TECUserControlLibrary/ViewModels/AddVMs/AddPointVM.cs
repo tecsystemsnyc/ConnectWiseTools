@@ -18,7 +18,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public TECPoint ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
@@ -80,5 +80,9 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             return resultList;
         }
 
+        internal void SetTemplate(TECPoint point)
+        {
+            ToAdd = new TECPoint(point, isTypical);
+        }
     }
 }

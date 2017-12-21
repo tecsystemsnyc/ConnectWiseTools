@@ -27,7 +27,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public TECSystem ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");

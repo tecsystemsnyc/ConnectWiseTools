@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public TECPanel ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
@@ -74,7 +74,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 Added?.Invoke(panel);
             }
         }
-        
 
+        internal void SetTemplate(TECPanel panel)
+        {
+            ToAdd = new TECPanel(panel, isTypical);
+        }
     }
 }

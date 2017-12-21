@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -15,11 +16,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private int quantity;
         private Action<TECEquipment> add;
         private bool isTypical = false;
+        private TECEquipment underlyingTemplate;
 
         public TECEquipment ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
@@ -70,22 +72,29 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 TECEquipment equipment = null;
                 if (AsReference)
                 {
-                    equipment = templates.EquipmentSynchronizer.NewItem(ToAdd);
+                    equipment = templates.EquipmentSynchronizer.NewItem(underlyingTemplate);
                 }
                 else
                 {
                     if (templates != null)
                     {
-                        equipment = new TECEquipment(ToAdd, isTypical, ssSynchronizer: templates.SubScopeSynchronizer);
+                        equipment = new TECEquipment(underlyingTemplate, isTypical, ssSynchronizer: templates.SubScopeSynchronizer);
                     }
                     else
                     {
-                        equipment = new TECEquipment(ToAdd, isTypical);
+                        equipment = new TECEquipment(underlyingTemplate, isTypical);
                     }
                 }
+                equipment.CopyPropertiesFromScope(ToAdd);
                 add(equipment);
                 Added?.Invoke(equipment);
             }
+        }
+
+        public void SetTemplate(TECEquipment template)
+        {
+            underlyingTemplate = template;
+            ToAdd = new TECEquipment(template, isTypical);
         }
         
     }

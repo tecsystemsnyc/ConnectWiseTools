@@ -158,12 +158,12 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     (scopeManager as TECTemplates).SubScopeTemplates.Add(toAdd);
                 }, scopeManager);
-                ((AddSubScopeVM)SelectedVM).ToAdd = new TECSubScope(subScope, false);
+                ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
             }
             else if (dropInfo.Data is TECPoint point)
             {
                 SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
-                ((AddPointVM)SelectedVM).ToAdd = new TECPoint(point, SelectedSubScope.IsTypical);
+                ((AddPointVM)SelectedVM).SetTemplate(point);
             }
             else if (dropInfo.Data is IEndDevice)
             {

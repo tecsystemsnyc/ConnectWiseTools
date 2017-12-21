@@ -14,11 +14,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECScopeManager parent;
         private TECSystem toAdd;
         private int quantity;
+        private TECSystem underlyingTemplate;
 
         public TECSystem ToAdd
         {
             get { return toAdd; }
-            set
+            private set
             {
                 toAdd = value;
                 RaisePropertyChanged("ToAdd");
@@ -58,14 +59,20 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 else if (parent is TECTemplates templates)
                 {
-                    var system = new TECSystem(ToAdd, ToAdd.IsTypical, templates, 
+                    var system = new TECSystem(underlyingTemplate, ToAdd.IsTypical, templates, 
                         synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(templates.EquipmentSynchronizer, templates.SubScopeSynchronizer));
+                    system.CopyPropertiesFromScope(ToAdd);
                     templates.SystemTemplates.Add(system);
                     Added?.Invoke(system);
                 }
             }
             
         }
-        
+
+        internal void SetTemplate(TECSystem system)
+        {
+            underlyingTemplate = system;
+            ToAdd = new TECSystem(system, false, parent);
+        }
     }
 }

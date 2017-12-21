@@ -430,16 +430,16 @@ namespace TECUserControlLibrary.ViewModels
             if (dropped is TECEquipment equipment)
             {
                 SelectedVM = new AddEquipmentVM(SelectedSystem, scopeManager);
-                ((AddEquipmentVM)SelectedVM).ToAdd = equipment;
+                ((AddEquipmentVM)SelectedVM).SetTemplate(equipment);
             } else if (dropped is TECSubScope subScope)
             {
                 SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
-                ((AddSubScopeVM)SelectedVM).ToAdd = subScope;
+                ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
             }
             else if (dropped is TECPoint point)
             {
                 SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
-                ((AddPointVM)SelectedVM).ToAdd = point;
+                ((AddPointVM)SelectedVM).SetTemplate(point);
             }
             else if (dropped is IEndDevice)
             {
@@ -451,12 +451,12 @@ namespace TECUserControlLibrary.ViewModels
                 SelectedVM = new AddMiscVM(SelectedSystem, scopeManager);
                 TECMisc newMisc = misc != null ? new TECMisc(misc, SelectedSystem.IsTypical) :
                     new TECMisc(dropped as TECCost, SelectedSystem.IsTypical);
-                ((AddMiscVM)SelectedVM).ToAdd = newMisc;
+                ((AddMiscVM)SelectedVM).SetTemplate(misc);
             }
             else if (dropped is TECSystem system)
             {
                 SelectedVM = new AddSystemVM(scopeManager);
-                ((AddSystemVM)SelectedVM).ToAdd = system;
+                ((AddSystemVM)SelectedVM).SetTemplate(system);
             }
             
         }
