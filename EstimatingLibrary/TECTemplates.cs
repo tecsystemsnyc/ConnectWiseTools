@@ -342,20 +342,20 @@ namespace EstimatingLibrary
             }
         }
 
-        private void syncSubScope(TECSubScope template, TECSubScope changed, TECChangedEventArgs args)
+        private void syncSubScope(TemplateSynchronizer<TECSubScope> synchronizer, TECSubScope template, TECSubScope changed, TECChangedEventArgs args)
         {
             if (changed != template)
             {
                 syncItem(changed, template);
             }
-            foreach (TECSubScope item in SubScopeSynchronizer.GetFullDictionary()[template].Where(item => item != changed))
+            foreach (TECSubScope item in synchronizer.GetFullDictionary()[template].Where(item => item != changed))
             {
                 syncItem(changed, item);
             }
 
             void syncItem(TECSubScope newItem, TECSubScope subject)
             {
-                subject.CopyPropertiesFromScope(newItem);
+                subject.CopyChildrenFromScope(newItem);
                 
                 subject.Points.ObservablyClear();
                 subject.Devices.ObservablyClear();
@@ -370,7 +370,7 @@ namespace EstimatingLibrary
             }
 
         }
-        private void syncEquipment(TECEquipment template, TECEquipment changed, TECChangedEventArgs args)
+        private void syncEquipment(TemplateSynchronizer<TECEquipment> synchronizer, TECEquipment template, TECEquipment changed, TECChangedEventArgs args)
         {
             if (!(args.Sender is TECEquipment))
             {
@@ -378,13 +378,13 @@ namespace EstimatingLibrary
             }
             TECEquipment item = args.Sender as TECEquipment;
             TECSubScope value = args.Value as TECSubScope;
-            List<TECEquipment> references = EquipmentSynchronizer.GetFullDictionary()[template];
+            List<TECEquipment> references = synchronizer.GetFullDictionary()[template];
             if (value != null && args.Change == Change.Add)
             {
                 TECSubScope newTemplate = value;
                 if (item == template)
                 {
-                    SubScopeSynchronizer.NewGroup(value);
+                    SubScopeSynchronizer.NewGroup(newTemplate);
                 }
                 else
                 {
@@ -401,7 +401,6 @@ namespace EstimatingLibrary
                     template.SubScope.Add(newTemplate);
                     SubScopeSynchronizer.NewGroup(newTemplate);
                     SubScopeSynchronizer.LinkExisting(newTemplate, value);
-                    //item.SubScope.Remove(value);
                 }
                 foreach (TECEquipment reference in references.Where(obj=> obj != item))
                 {
@@ -442,11 +441,11 @@ namespace EstimatingLibrary
             {
                 if(item != template)
                 {
-                    template.CopyPropertiesFromScope(item);
+                    template.CopyChildrenFromScope(item);
                 }
                 foreach (TECEquipment reference in references.Where(obj => obj != item))
                 {
-                    reference.CopyPropertiesFromScope(item);
+                    reference.CopyChildrenFromScope(item);
                 }
             }
         }

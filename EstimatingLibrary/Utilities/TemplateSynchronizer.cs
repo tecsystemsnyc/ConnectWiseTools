@@ -11,7 +11,7 @@ namespace EstimatingLibrary.Utilities
     {
         readonly private Func<T, T> copy;
         readonly private Action<T> remove;
-        readonly private Action<T, T, TECChangedEventArgs> sync;
+        readonly private Action<TemplateSynchronizer<T>, T, T, TECChangedEventArgs> sync;
         readonly private Dictionary<T, List<T>> dictionary;
         readonly private Dictionary<(T item, bool isKey), Action> unsubscribeDictionary;
         private List<T> currentlySyncing = new List<T>();
@@ -23,7 +23,7 @@ namespace EstimatingLibrary.Utilities
         /// <param name="remove">Invoked upon removal of an item</param>
         /// <param name="sync">Writes the properties of the first argument to the second argument</param>
         public TemplateSynchronizer(Func<T, T> copy, Action<T> remove,
-            Action<T, T, TECChangedEventArgs> sync, TECTemplates templates)
+            Action<TemplateSynchronizer<T>, T, T, TECChangedEventArgs> sync, TECTemplates templates)
         {
             this.copy = copy;
             this.sync = sync;
@@ -72,13 +72,12 @@ namespace EstimatingLibrary.Utilities
             List<T> group = new List<T>(dictionary[template]);
             foreach (T item in group)
             {
-                notifyTECChanged(Change.Remove, template, item);
-                unsubscribeDictionary[(item, false)].Invoke();
-                remove.Invoke(item);
+                RemoveItem(template, item);
             }
             unsubscribeDictionary[(template, true)].Invoke();
             dictionary.Remove(template);
             remove.Invoke(template);
+            unsubscribeDictionary.Remove((template, true));
 
         }
         public T NewItem(T template)
@@ -107,12 +106,17 @@ namespace EstimatingLibrary.Utilities
             {
                 if (dictionary[key].Contains(item))
                 {
-                    dictionary[key].Remove(item);
-                    notifyTECChanged(Change.Remove, key, item);
-                    unsubscribeDictionary[(item, false)].Invoke();
-                    remove.Invoke(item);
+                    RemoveItem(key, item);
                 }
             }
+        }
+        public void RemoveItem(T template, T item)
+        {
+            dictionary[template].Remove(item);
+            notifyTECChanged(Change.Remove, template, item);
+            unsubscribeDictionary[(item, false)].Invoke();
+            remove.Invoke(item);
+            unsubscribeDictionary.Remove((item, false));
         }
 
         public Dictionary<T, List<T>> GetFullDictionary()
@@ -155,14 +159,13 @@ namespace EstimatingLibrary.Utilities
             }
             return false;
         }
-
         
         private void handleTChanged(T template, T changed, TECChangedEventArgs args)
         {
             if (!currentlySyncing.Contains(template))
             {
                 currentlySyncing.Add(template);
-                sync(template, changed, args);
+                sync(this, template, changed, args);
                 currentlySyncing.Remove(template);
             }
             

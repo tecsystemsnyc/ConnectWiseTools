@@ -100,16 +100,12 @@ namespace EstimatingLibrary.Utilities
             foreach (TECSystem sys in templates.SystemTemplates)
             {
                 linkSystemToCatalogs(sys, templates.Catalogs);
-
-                ObservableCollection<TECSubScope> allSysSubScope = new ObservableCollection<TECSubScope>();
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        allSysSubScope.Add(ss);
-                    }
-                }
-                linkSubScopeConnections(sys.Controllers, allSysSubScope);
+                
+                linkSubScopeConnections(sys.Controllers, sys.GetAllSubScope());
+                List<INetworkConnectable> allChildren = new List<INetworkConnectable>();
+                allChildren.AddRange(sys.Controllers);
+                allChildren.AddRange(sys.GetAllSubScope());
+                linkNetworkConnections(sys.Controllers, allChildren);
                 linkPanelsToControllers(sys.Panels, sys.Controllers);
 
             }
@@ -458,7 +454,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkSubScopeConnections(IEnumerable<TECController> controllers, ObservableCollection<TECSubScope> subscope,
+        private static void linkSubScopeConnections(IEnumerable<TECController> controllers, IEnumerable<TECSubScope> subscope,
             Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECSubScope subScope in subscope)
@@ -654,8 +650,7 @@ namespace EstimatingLibrary.Utilities
             }
             subScope.Devices = replacements;
         }
-
-
+        
         private static void linkTemplateReferences(TECTemplates templates, Dictionary<Guid, List<Guid>> templateReferences)
         {
             List<TECSubScope> allSubScope = new List<TECSubScope>();
