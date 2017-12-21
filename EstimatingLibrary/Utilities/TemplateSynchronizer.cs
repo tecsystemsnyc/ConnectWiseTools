@@ -148,6 +148,11 @@ namespace EstimatingLibrary.Utilities
                 LinkExisting(template, item);
             }
         }
+        public void LinkNew(T template, T item)
+        {
+            notifyTECChanged(Change.Add, template, item);
+            LinkExisting(template, item);
+        }
         public bool Contains(T item)
         {
             foreach(KeyValuePair<T, List<T>> entry in dictionary)
