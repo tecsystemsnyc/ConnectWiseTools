@@ -67,7 +67,7 @@ namespace EstimatingLibraryTests
 
             Assert.IsTrue(ssSync.Contains(tempSSCopy));
             Assert.IsTrue(ssSync.Contains(equipSSCopy));
-            //Assert.IsTrue(ssSync.GetFullDictionary()[templateSS].Contains(ssSync.tempSSCopy));
+            Assert.IsTrue(ssSync.GetFullDictionary()[templateSS].Contains(ssSync.GetParent(tempSSCopy)));
             Assert.IsTrue(ssSync.GetFullDictionary()[equipSS].Contains(equipSSCopy));
         }
     }
