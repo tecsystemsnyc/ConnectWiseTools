@@ -67,7 +67,22 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var equipment = AsReference ? templates.EquipmentSynchronizer.NewItem(ToAdd) : new TECEquipment(ToAdd, isTypical);
+                TECEquipment equipment = null;
+                if (AsReference)
+                {
+                    equipment = templates.EquipmentSynchronizer.NewItem(ToAdd);
+                }
+                else
+                {
+                    if (templates != null)
+                    {
+                        equipment = new TECEquipment(ToAdd, isTypical, ssSynchronizer: templates.SubScopeSynchronizer);
+                    }
+                    else
+                    {
+                        equipment = new TECEquipment(ToAdd, isTypical);
+                    }
+                }
                 add(equipment);
                 Added?.Invoke(equipment);
             }

@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -57,7 +58,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 else if (parent is TECTemplates templates)
                 {
-                    var system = new TECSystem(ToAdd, ToAdd.IsTypical, templates);
+                    var system = new TECSystem(ToAdd, ToAdd.IsTypical, templates, 
+                        synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(templates.EquipmentSynchronizer, templates.SubScopeSynchronizer));
                     templates.SystemTemplates.Add(system);
                     Added?.Invoke(system);
                 }
