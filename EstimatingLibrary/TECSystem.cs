@@ -47,8 +47,8 @@ namespace EstimatingLibrary
             guidDictionary[_guid] = source.Guid;
             foreach (TECEquipment equipment in source.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference, ssSynchronizer: synchronizers.Item2);
-                if (synchronizers != null)
+                var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference, ssSynchronizer: synchronizers?.Item2);
+                if (synchronizers != null && synchronizers.Item1.Contains(equipment))
                 {
                     synchronizers.Item1.LinkExisting(synchronizers.Item1.GetTemplate(equipment), toAdd);
                 }

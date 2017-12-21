@@ -56,7 +56,6 @@ namespace EstimatingLibraryTests
             TemplateSynchronizer<TECSubScope> ssSync = templates.SubScopeSynchronizer;
 
             Assert.IsTrue(ssSync.Contains(newTempSS));
-            Assert.IsTrue(ssSync.Contains(newEquipSS));
             Assert.IsTrue(ssSync.GetFullDictionary()[tempSS].Contains(newTempSS));
         }
     }

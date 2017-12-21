@@ -60,7 +60,7 @@ namespace EstimatingLibrary
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
                 var toAdd = new TECSubScope(subScope, isTypical, guidDictionary, characteristicReference);
-                if (ssSynchronizer != null)
+                if (ssSynchronizer != null && ssSynchronizer.Contains(subScope))
                 {
                     ssSynchronizer.LinkExisting(ssSynchronizer.GetTemplate(subScope), toAdd);
                 }

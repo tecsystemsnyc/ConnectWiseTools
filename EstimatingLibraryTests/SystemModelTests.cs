@@ -10,7 +10,10 @@ namespace EstimatingLibraryTests
     [TestClass]
     public class SystemModelTests
     {
-        //[TestMethod]
-        //public void 
+        [TestMethod]
+        public void CopyTemplateWithReferences()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
