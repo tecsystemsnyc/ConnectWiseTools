@@ -106,16 +106,13 @@ namespace EstimatingLibrary
         #region Constructors
         public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
         {
-            _children = new ObservableCollection<INetworkConnectable>();
-            _connectionTypes = new ObservableCollection<TECConnectionType>();
-            Children.CollectionChanged += Children_CollectionChanged;
-            ConnectionTypes.CollectionChanged += (sender, args) =>
-                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
+            instantiateCollections();
         }
         public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
         public TECNetworkConnection(TECNetworkConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
         {
-            _children = new ObservableCollection<INetworkConnectable>();
+            instantiateCollections();
+
             foreach (INetworkConnectable item in connectionSource.Children)
             {
                 _children.Add(item.Copy(item, isTypical, guidDictionary));
@@ -229,6 +226,15 @@ namespace EstimatingLibrary
         public override ObservableCollection<TECConnectionType> GetConnectionTypes()
         {
             return ConnectionTypes;
+        }
+
+        private void instantiateCollections()
+        {
+            _children = new ObservableCollection<INetworkConnectable>();
+            _connectionTypes = new ObservableCollection<TECConnectionType>();
+            Children.CollectionChanged += Children_CollectionChanged;
+            ConnectionTypes.CollectionChanged += (sender, args) =>
+                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
         #endregion 
 
