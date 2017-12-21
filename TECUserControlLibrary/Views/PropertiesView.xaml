@@ -153,7 +153,8 @@
         <StackPanel>
             <Grid Visibility="{Binding ElementName=propertiesView, Path=ViewModel.DisplayReferenceProperty, Converter={utilities:BooleanToVisibilityConverter}}" Height="30">
                 <TextBlock Text="{Binding ElementName=propertiesView, Path=ViewModel.TemplateText}" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Center"
-                           Visibility="{Binding ElementName=propertiesView, Path=Selected, Converter={utilities:NullToCollapsedConverter}}"/>
+                           Visibility="{Binding ElementName=propertiesView, Path=Selected, Converter={utilities:NullToCollapsedConverter}}"
+                           TextTrimming="CharacterEllipsis"/>
             </Grid>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>
