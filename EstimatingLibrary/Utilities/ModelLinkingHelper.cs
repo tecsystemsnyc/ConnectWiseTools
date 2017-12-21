@@ -138,7 +138,8 @@ namespace EstimatingLibrary.Utilities
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
-            linkSubScopeConnections(system.Controllers, new ObservableCollection<TECSubScope>(system.GetAllSubScope()), guidDictionary);
+            linkSubScopeConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
+            linkNetworkConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
             if(system is TECTypical typical)
             {
@@ -458,7 +459,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkSubScopeConnections(IEnumerable<TECController> controllers, ObservableCollection<TECSubScope> subscope,
+        private static void linkSubScopeConnections(IEnumerable<TECController> controllers, IEnumerable<TECSubScope> subscope,
             Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECSubScope subScope in subscope)
