@@ -50,7 +50,7 @@ namespace EstimatingLibrary
                 var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference, ssSynchronizer: synchronizers?.Item2);
                 if (synchronizers != null && synchronizers.Item1.Contains(equipment))
                 {
-                    synchronizers.Item1.LinkExisting(synchronizers.Item1.GetTemplate(equipment), toAdd);
+                    synchronizers.Item1.LinkNew(synchronizers.Item1.GetTemplate(equipment), toAdd);
                 }
                 if (characteristicReference != null)
                 {

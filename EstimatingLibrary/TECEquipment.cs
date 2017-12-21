@@ -62,7 +62,7 @@ namespace EstimatingLibrary
                 var toAdd = new TECSubScope(subScope, isTypical, guidDictionary, characteristicReference);
                 if (ssSynchronizer != null && ssSynchronizer.Contains(subScope))
                 {
-                    ssSynchronizer.LinkExisting(ssSynchronizer.GetTemplate(subScope), toAdd);
+                    ssSynchronizer.LinkNew(ssSynchronizer.GetTemplate(subScope), toAdd);
                 }
                 characteristicReference?.AddItem(subScope,toAdd);
                 SubScope.Add(toAdd);
