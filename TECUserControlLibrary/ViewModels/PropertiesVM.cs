@@ -71,7 +71,8 @@ namespace TECUserControlLibrary.ViewModels
             TECTemplates templates = scopeManager as TECTemplates;
             if(templates.IsTemplateObject(item))
             {
-                return "Reference Template";
+                return String.Format("Based on {0}", 
+                    templates);
             }
             return "Instance Template";
         }

@@ -28,8 +28,13 @@
         </Grid.Resources>
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
-
+ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectionChanged="ListView_Selected">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <items:NetworkConnectionItemControl
