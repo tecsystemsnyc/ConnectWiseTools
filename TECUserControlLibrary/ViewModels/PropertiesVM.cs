@@ -71,8 +71,27 @@ namespace TECUserControlLibrary.ViewModels
             TECTemplates templates = scopeManager as TECTemplates;
             if(templates.IsTemplateObject(item))
             {
-                return String.Format("Based on {0}", 
-                    templates);
+                string parentString = "";
+                if(item is TECSubScope subScope)
+                {
+                    TECSubScope parent = templates.SubScopeSynchronizer.GetTemplate(subScope);
+                    if (item != parent)
+                    {
+                        parentString = String.Format(" of {0}",
+                            parent.Name);
+                    }
+                } else if(item is TECEquipment equipment)
+                {
+                    TECEquipment parent = templates.EquipmentSynchronizer.GetTemplate(equipment);
+                    if (item != parent)
+                    {
+                        parentString = String.Format(" of {0}",
+                            parent.Name);
+                    }
+                }
+
+                return String.Format("Reference{0}", 
+                    parentString);
             }
             return "Instance Template";
         }
