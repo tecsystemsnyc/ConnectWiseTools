@@ -83,7 +83,7 @@ namespace TECUserControlLibrary.ViewModels
                 } else if(item is TECEquipment equipment)
                 {
                     TECEquipment parent = templates.EquipmentSynchronizer.GetTemplate(equipment);
-                    if (item != parent)
+                    if (item != parent && parent != null)
                     {
                         parentString = String.Format(" of {0}",
                             parent.Name);
