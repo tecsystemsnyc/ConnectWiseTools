@@ -175,7 +175,7 @@ namespace EstimatingLibrary.Utilities
             TECChanged?.Invoke(new TECChangedEventArgs(change, "TemplateRelationship", template, item, null));
         }
 
-        internal T GetTemplate(T item)
+        public T GetTemplate(T item)
         {
             if (dictionary.ContainsKey(item))
             {
@@ -194,7 +194,7 @@ namespace EstimatingLibrary.Utilities
             return null;
         }
 
-        internal T GetParent(T item)
+        public T GetParent(T item)
         {
             foreach (var pair in dictionary)
             {
