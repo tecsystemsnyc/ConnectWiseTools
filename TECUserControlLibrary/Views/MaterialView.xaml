@@ -82,7 +82,7 @@
                             <TextBox  Grid.Column="1" Margin="2"
                       Text="{Binding DeviceLabor}"/>
                             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="2"/>
+                                       VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Right"/>
                             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
                                       SelectedItem="{Binding DeviceManufacturer}"
                                       DisplayMemberPath="Label" Grid.Column="3"

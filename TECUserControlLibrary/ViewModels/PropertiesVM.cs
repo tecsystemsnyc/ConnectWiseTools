@@ -74,15 +74,15 @@ namespace TECUserControlLibrary.ViewModels
                 string parentString = "";
                 if(item is TECSubScope subScope)
                 {
-                    TECSubScope parent = templates.SubScopeSynchronizer.GetTemplate(subScope);
-                    if (item != parent)
+                    TECSubScope parent = templates.SubScopeSynchronizer.GetParent(subScope);
+                    if (item != parent && parent!= null)
                     {
                         parentString = String.Format(" of {0}",
                             parent.Name);
                     }
                 } else if(item is TECEquipment equipment)
                 {
-                    TECEquipment parent = templates.EquipmentSynchronizer.GetTemplate(equipment);
+                    TECEquipment parent = templates.EquipmentSynchronizer.GetParent(equipment);
                     if (item != parent && parent != null)
                     {
                         parentString = String.Format(" of {0}",

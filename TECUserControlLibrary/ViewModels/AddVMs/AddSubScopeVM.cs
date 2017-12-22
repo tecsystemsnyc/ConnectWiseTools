@@ -148,16 +148,25 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var subScope = AsReference ? templates.SubScopeSynchronizer.NewItem(underlyingTemplate) : new TECSubScope(underlyingTemplate, isTypical);
-                subScope.CopyPropertiesFromScope(ToAdd);
-                foreach(IEndDevice device in ToAdd.Devices.Where(item => !originalDevices.Contains(item)))
+                TECSubScope subScope = null;
+                if(underlyingTemplate != null)
                 {
-                    subScope.Devices.Add(device);
+                    subScope = AsReference ? templates.SubScopeSynchronizer.NewItem(underlyingTemplate) : new TECSubScope(underlyingTemplate, isTypical);
+                    subScope.CopyPropertiesFromScope(ToAdd);
+                    foreach (IEndDevice device in ToAdd.Devices.Where(item => !originalDevices.Contains(item)))
+                    {
+                        subScope.Devices.Add(device);
+                    }
+                    foreach (TECPoint point in ToAdd.Points.Where(item => !originalPoints.Contains(item)))
+                    {
+                        subScope.Points.Add(point);
+                    }
                 }
-                foreach(TECPoint point in ToAdd.Points.Where(item => !originalPoints.Contains(item)))
+                else
                 {
-                    subScope.Points.Add(point);
+                    subScope = new TECSubScope(ToAdd, isTypical);
                 }
+                
                 add(subScope);
                 Added?.Invoke(subScope);
             }

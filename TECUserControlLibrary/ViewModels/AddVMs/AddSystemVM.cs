@@ -59,9 +59,17 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 else if (parent is TECTemplates templates)
                 {
-                    var system = new TECSystem(underlyingTemplate, ToAdd.IsTypical, templates, 
+                    TECSystem system = null;
+                    if(underlyingTemplate != null)
+                    {
+                        system = new TECSystem(underlyingTemplate, ToAdd.IsTypical, templates,
                         synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(templates.EquipmentSynchronizer, templates.SubScopeSynchronizer));
-                    system.CopyPropertiesFromScope(ToAdd);
+                        system.CopyPropertiesFromScope(ToAdd);
+                    } else
+                    {
+                        system = ToAdd;
+                    }
+                    
                     templates.SystemTemplates.Add(system);
                     Added?.Invoke(system);
                 }

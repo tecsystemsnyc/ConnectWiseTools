@@ -70,11 +70,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             for (int x = 0; x < Quantity; x++)
             {
                 TECEquipment equipment = null;
-                if (AsReference)
+                if (AsReference && underlyingTemplate != null)
                 {
                     equipment = templates.EquipmentSynchronizer.NewItem(underlyingTemplate);
                 }
-                else
+                else if (underlyingTemplate != null)
                 {
                     if (templates != null)
                     {
@@ -84,6 +84,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                     {
                         equipment = new TECEquipment(underlyingTemplate, isTypical);
                     }
+                }
+                else
+                {
+                    equipment = new TECEquipment(ToAdd, isTypical);
                 }
                 equipment.CopyPropertiesFromScope(ToAdd);
                 add(equipment);
