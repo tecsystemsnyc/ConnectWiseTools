@@ -108,37 +108,48 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
-                    Margin="5,0,5,0">
-                    <TextBlock Text="Devices" Style="{StaticResource ListHeader}"/>
+                    Margin="35,0,35,0">
+                    <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Devices/Contacts in {0}}"
+                               Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                 SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
                                                 DropHandler="{Binding ViewModel}"
                                                     DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
                                                     IsDragSource="True"/>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1"
-                    Margin="5,0,5,0">
-                        <TextBlock Text="IO" Style="{StaticResource ListHeader}"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
+                    Margin="35,0,35,0" Grid.ColumnSpan="2">
+                        <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=IO in {0}}"
+                                   Style="{StaticResource ListHeader}"/>
                     </Border>
-                    <Grid  Grid.Column="1" >
-                    <Button Content="Add" x:Name="addPoint" Width="50" HorizontalAlignment="Right"
-                            Command="{Binding ViewModel.AddPointCommand}"
-                            CommandParameter="{Binding ViewModel.SelectedSubScope}"
-                            Style="{StaticResource AddButtonStyle}" />
-                </Grid>
-
-            </Grid>
-            <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                    <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
                                            x:Name="pointList"
-                                               Grid.Row="3"
+                                               Grid.Row="2" Grid.ColumnSpan="2"
                                                SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedPoint}"
                                                DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeletePointCommand}"
                                                IsDragSource="True"/>
+                    <Grid  Grid.Column="1" Grid.Row="3"
+                        Visibility="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
+                        <Button Content="Add" x:Name="addPoint" Width="50" HorizontalAlignment="Right"
+                        Command="{Binding ViewModel.AddPointCommand}"
+                        CommandParameter="{Binding ViewModel.SelectedSubScope}"
+                        Style="{StaticResource AddButtonStyle}" />
+                    </Grid>
+
+            </Grid>
+            
         </Grid>
         
     </Grid>

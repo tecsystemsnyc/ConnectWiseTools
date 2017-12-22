@@ -378,7 +378,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
-                    Margin="5,0,5,0">
+                    Margin="35,0,35,0">
                     <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Devices/Contacts in {0}}"
                                Style="{StaticResource ListHeader}"/>
                 </Border>
@@ -390,11 +390,10 @@
                 <TextBlock Text="Select a Point to view its Devices/IO" Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope,
                     Converter={utilities:NullToVisibilityConverter}}"
                            Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Grid Margin="0,2,0,0" Grid.Row="2">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
-
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5"/>
@@ -404,7 +403,7 @@
                     </Grid.RowDefinitions>
                     <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
-                    Margin="5,0,65,0" Grid.ColumnSpan="2">
+                    Margin="35,0,35,0" Grid.ColumnSpan="2">
                         <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=IO in {0}}"
                                    Style="{StaticResource ListHeader}"/>
                     </Border>

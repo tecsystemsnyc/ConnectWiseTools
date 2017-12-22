@@ -161,6 +161,8 @@ namespace TECUserControlLibrary.Utilities
                 {
                     sourceItem = dropObject(dropInfo.Data);
                 }
+
+
                 if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                 {
                     if (sourceItem is IList)

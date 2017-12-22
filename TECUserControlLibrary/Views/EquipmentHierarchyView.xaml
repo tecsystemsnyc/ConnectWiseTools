@@ -116,7 +116,7 @@
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
-                    Margin="5,0,5,0">
+                    Margin="55,0,55,0">
                     <TextBlock Text="Equipment Templates" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:EquipmentListControl x:Name="equipmentList"
@@ -187,25 +187,38 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
-                    Margin="5,0,5,0">
-                    <TextBlock Text="Devices" Style="{StaticResource ListHeader}"/>
+                    Margin="35,0,35,0">
+                    <TextBlock Text="{Binding ViewModel.SelectedSubScope.Name, StringFormat=Devices in {0}}" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
                                                 SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
                                                 DropHandler="{Binding ViewModel}"
                                                     DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
                                                     IsDragSource="True"/>
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="2" Grid.RowSpan="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1"
-                    Margin="5,0,5,0">
-                        <TextBlock Text="IO"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
+                    Margin="35,0,35,0" Grid.ColumnSpan="2">
+                        <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=IO in {0}}"
                                    Style="{StaticResource ListHeader}"/>
                     </Border>
-                    <Grid  Grid.Column="1" 
+                    <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                            x:Name="pointList"
+                                            Grid.Row="2" Grid.ColumnSpan="2"
+                                               SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedPoint}"
+                                               DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeletePointCommand}"
+                                               IsDragSource="True"/>
+                    <Grid  Grid.Column="1" Grid.Row="3"
                            Visibility="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
                         <Button Content="Add" x:Name="addPoint" Width="50" HorizontalAlignment="Right"
                             Command="{Binding ViewModel.AddPointCommand}"
@@ -214,12 +227,7 @@
                     </Grid>
 
                 </Grid>
-                <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                               x:Name="pointList"
-                                               Grid.Row="3"
-                                               SelectedItem="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.SelectedPoint}"
-                                               DeleteCommand="{Binding ElementName=equipmentHierarchyView, Path=ViewModel.DeletePointCommand}"
-                                               IsDragSource="True"/>
+                
             </Grid>
 
         </Grid>
