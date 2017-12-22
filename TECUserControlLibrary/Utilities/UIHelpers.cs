@@ -114,6 +114,90 @@ namespace TECUserControlLibrary.Utilities
             }
         }
 
+        public static void DragOver(IDropInfo dropInfo, Func<object, Type, bool> dropCondition)
+        {
+            if (dropInfo.TargetCollection == dropInfo.DragInfo.SourceCollection)
+            {
+                return;
+            }
+            var sourceItem = dropInfo.Data;
+            Type sourceType;
+            if (sourceItem is IList && ((IList)sourceItem).Count > 0)
+            { sourceType = ((IList)sourceItem)[0].GetType(); }
+            else
+            { sourceType = sourceItem.GetType(); }
+
+            var targetCollection = dropInfo.TargetCollection;
+            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
+            {
+                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+                bool sourceNotNull = sourceItem != null;
+                bool allowDrop = dropCondition(sourceItem, targetType);
+                bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
+                if (sourceNotNull && (allowDrop || sourceMatchesTarget))
+                {
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
+            }
+        }
+        public static void Drop(IDropInfo dropInfo, TECScopeManager scopeManager, Func<object, object> dropObject)
+        {
+            var sourceItem = dropInfo.Data;
+            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
+            {
+                if (sourceItem is IList)
+                {
+                    var outSource = new List<object>();
+                    foreach (object item in ((IList)sourceItem))
+                    {
+                        var toAdd = dropObject(item);
+                        outSource.Add(toAdd);
+                    }
+                    sourceItem = outSource;
+                }
+                else
+                {
+                    sourceItem = dropObject(dropInfo.Data);
+                }
+                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                {
+                    if (sourceItem is IList)
+                    {
+                        foreach (object item in ((IList)sourceItem))
+                        {
+                            ((IList)dropInfo.TargetCollection).Add(item);
+                        }
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
+                    }
+                }
+                else
+                {
+                    if (sourceItem is IList)
+                    {
+                        var x = dropInfo.InsertIndex;
+                        foreach (object item in ((IList)sourceItem))
+                        {
+                            ((IList)dropInfo.TargetCollection).Insert(x, item);
+                            x += 1;
+                        }
+                    }
+                    else
+                    {
+                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
+                    }
+                }
+            }
+            else
+            {
+                handleReorderDrop(dropInfo);
+            }
+        }
+        
         public static void SystemToTypicalDragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
@@ -137,7 +221,6 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-
         public static void SystemToTypicalDrop(IDropInfo dropInfo, TECBid bid)
         {
             TECSystem sourceItem = (TECSystem)dropInfo.Data;
