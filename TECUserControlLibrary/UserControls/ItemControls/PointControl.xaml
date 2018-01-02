@@ -9,7 +9,12 @@
              x:Name="pointControl"
              d:DesignHeight="60" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
-        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=pointControl}"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=pointControl}"/>
+        </ResourceDictionary>
     </local:BaseItemControl.Resources>
     <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
 

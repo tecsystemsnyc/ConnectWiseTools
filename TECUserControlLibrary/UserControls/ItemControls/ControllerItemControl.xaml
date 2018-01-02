@@ -10,7 +10,12 @@
              x:Name="controllerItemControl"
              d:DesignHeight="60" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
-        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerItemControl}"/>
+        <ResourceDictionary>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerItemControl}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </local:BaseItemControl.Resources>
     <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
         <Grid DataContext="{Binding ElementName=controllerItemControl, Path=Controller}" Background="Transparent">

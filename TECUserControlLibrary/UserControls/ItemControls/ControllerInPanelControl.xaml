@@ -9,8 +9,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
-        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerInPanelControl}"/>
-        <utilities:NoneValueConverter x:Key="NoneValueConverter" />
+        <ResourceDictionary>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerInPanelControl}"/>
+            <utilities:NoneValueConverter x:Key="NoneValueConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </local:BaseItemControl.Resources>
     <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
         <Grid DataContext="{Binding ElementName=controllerInPanelControl, Path=Controller}" Background="Transparent">
@@ -30,19 +35,19 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock FontSize="14" Text="{Binding Controller.Name}" Background="Transparent" FontWeight="DemiBold"/>
-            <TextBlock Text="{Binding Controller.Type.Name, StringFormat=Type: {0}}" Grid.Column="1"  Background="Transparent"/>
+            <TextBlock Text="{Binding Controller.Type.Name, StringFormat=Type: {0}}" Grid.Column="1" 
+                       HorizontalAlignment="Right"/>
 
-            <TextBlock Text="{Binding Controller.Description}" Grid.Row="1" Grid.ColumnSpan="2" Background="Transparent"/>
+            <TextBlock Text="{Binding Controller.Description}" Grid.Row="1" Grid.ColumnSpan="2"/>
             
-            
-            <Label Content="Containing Panel: " Grid.Row="2"
+            <TextBlock Text="Containing Panel: " Grid.Row="2"
                     Visibility="{Binding Data.ViewModel.PanelSelectionVisibility, Source={StaticResource proxy}}"/>
             <ComboBox ItemsSource="{Binding Data.ViewModel.PanelSelections, Source={StaticResource proxy}}"
-                                        DisplayMemberPath="Name"
+                      DisplayMemberPath="Name"
                       Grid.Row="2" Grid.Column="1" 
-                                        IsReadOnly="{Binding Data.ViewModel.PanelSelectionReadOnly, Source={StaticResource proxy}}"
-                                        Visibility="{Binding Data.ViewModel.PanelSelectionVisibility, Source={StaticResource proxy}}"
-                      Margin="2" Height="30">
+                      IsReadOnly="{Binding Data.ViewModel.PanelSelectionReadOnly, Source={StaticResource proxy}}"
+                      Visibility="{Binding Data.ViewModel.PanelSelectionVisibility, Source={StaticResource proxy}}"
+                      Margin="2" Height="25">
                 <ComboBox.SelectedItem>
                     <MultiBinding Converter="{StaticResource NoneValueConverter}" UpdateSourceTrigger="PropertyChanged"
                                       StringFormat="{}{0}">

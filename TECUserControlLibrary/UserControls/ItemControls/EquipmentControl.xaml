@@ -7,29 +7,35 @@
                        xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="equipmentControl"
-             d:DesignHeight="60" d:DesignWidth="300">
+             d:DesignHeight="70" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
-        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=equipmentControl}"/>
+        <ResourceDictionary>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=equipmentControl}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </local:BaseItemControl.Resources>
-    <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+    <Border BorderThickness="1"
+            BorderBrush="{StaticResource ItemBorderBrush}" 
+            CornerRadius="4" 
+            Background="{StaticResource ItemBackgroundBrush}">
         <Grid DataContext="{Binding ElementName=equipmentControl, Path=Equipment}">
             <Grid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
+                    <MenuItem Header="Delete"
+                              Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
                               CommandParameter="{Binding}"/>
                 </ContextMenu>
             </Grid.ContextMenu>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="25"/>
+                <RowDefinition MaxHeight="20" Height="Auto"/>
+                <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Description}" Grid.Column="1" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding SubScope.Count, StringFormat=Points: {0}}" Grid.Row="1" />
+            <TextBlock Text="{Binding Description}" Grid.Row="1" VerticalAlignment="Center" Visibility="{Binding Description, Converter={utilities:EmptyStringToCollapsedConverter}}"/>
+            <TextBlock Text="{Binding SubScope.Count, StringFormat=Points: {0}}" Grid.Row="2" />
         </Grid>
     </Border>
 </local:BaseItemControl>

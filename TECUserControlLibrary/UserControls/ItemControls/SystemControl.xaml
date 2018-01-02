@@ -9,13 +9,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="70" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
-        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=systemControl}"/>
+        <ResourceDictionary>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=systemControl}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </local:BaseItemControl.Resources>
-    <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+    <Border BorderThickness="1" 
+            BorderBrush="{StaticResource ItemBorderBrush}" 
+            CornerRadius="4" 
+            Background="{StaticResource ItemBackgroundBrush}">
         <Grid DataContext="{Binding ElementName=systemControl, Path=ControlSystem}">
             <Grid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
+                    <MenuItem Header="Delete" 
+                              Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
                               CommandParameter="{Binding}"/>
                 </ContextMenu>
             </Grid.ContextMenu>

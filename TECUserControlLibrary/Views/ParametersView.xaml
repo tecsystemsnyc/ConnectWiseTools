@@ -21,7 +21,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="Parameters" HorizontalAlignment="Center"/>
+        <TextBlock Text="Parameters" Style="{StaticResource ListHeader}"/>
         <Button Width="40" Content="Add" Command="{Binding ElementName=parametersView, Path=AddCommand}"
                 HorizontalAlignment="Right"/>
         <ListView ItemsSource="{Binding Source}" HorizontalContentAlignment="Stretch" Grid.Row="1">
