@@ -103,10 +103,6 @@ namespace Tests
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Catalogs.Tags[0];
 
-            //expectedDrawing = expectedBid.Drawings[0];
-            //expectedPage = expectedDrawing.Pages[0];
-            //expectedVisualScope = expectedPage.PageScope[0];
-
             expectedController = expectedBid.Controllers.First(item => item.Name == "Test Controller");
 
             path = Path.GetTempFileName();
@@ -115,6 +111,16 @@ namespace Tests
             DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(expectedBid);
             actualBid = manager.Load();
+
+            if (actualBid.Systems.Count == 0)
+            {
+                string failDirectory = Path.GetTempPath() + "Estimating Tools\\";
+                Directory.CreateDirectory(failDirectory);
+                string failPath = failDirectory + "SaveNewBidTestFailed.edb";
+                File.Copy(path, failPath);
+                Assert.Fail(string.Format("No systems loaded into bid. File saved at: {0}", failPath));
+            }
+
             actualLabor = actualBid.ExtraLabor;
             actualBid.Parameters = actualBid.Parameters;
 

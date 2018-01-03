@@ -81,7 +81,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
                 else
                 {
-                    throw new Exception("Generator can only reate bid or template DBs");
+                    throw new Exception("Generator can only create bid or template DBs");
                 }
                 List<UpdateItem> newStack = DatabaseNewStacker.NewStack(scopeManager);
                 bool success = DatabaseUpdater.Update(path, newStack);

@@ -74,6 +74,15 @@ namespace Tests
             manager.New(expectedTemplates);
             actualTemplates = manager.Load();
 
+            if (actualTemplates.SystemTemplates.Count == 0)
+            {
+                string failDirectory = Path.GetTempPath() + "Estimating Tools\\";
+                Directory.CreateDirectory(failDirectory);
+                string failPath = failDirectory + "SaveNewTemplatesTestFailed.tdb";
+                File.Copy(path, failPath);
+                Assert.Fail(string.Format("No systems loaded into templates. File saved at: {0}", failPath));
+            }
+
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {
                 if (sys.Guid == expectedSystem.Guid)
