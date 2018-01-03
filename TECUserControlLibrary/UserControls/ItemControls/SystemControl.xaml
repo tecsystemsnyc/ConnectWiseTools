@@ -34,7 +34,8 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Description}" Grid.Row="1" VerticalAlignment="Center" Visibility="{Binding Description, Converter={utilities:EmptyStringToCollapsedConverter}}"/>
+            <TextBlock Text="{Binding Description}" Grid.Row="1" VerticalAlignment="Center" 
+                       Visibility="{Binding Description, Converter={utilities:EmptyStringToCollapsedConverter}}"/>
             <TextBlock Text="{Binding Equipment.Count,StringFormat=Equipment: {0}}" Grid.Row="2"/>
         </Grid>
     </Border>
