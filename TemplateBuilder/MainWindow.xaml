@@ -137,7 +137,7 @@
                                               DisplayMemberPath="Item1"
                                               SelectedValuePath="Item2"
                                               SelectedValue="0"
-                                              Margin="5" Grid.Row="0" FontSize="16"
+                                              Margin="5" Grid.Row="0" FontSize="14"
                                               VerticalContentAlignment="Center"/>
                                     <ContentPresenter Content="{Binding ElementName=templateComboBox, Path=SelectedValue}"  
                                                       ContentTemplateSelector="{StaticResource ScopeSelector}"
