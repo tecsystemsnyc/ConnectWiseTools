@@ -124,7 +124,65 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool deleteAndReplaceCanExecute()
         {
-            return SelectedReplacement != null;
+            if (SelectedReplacement != null)
+            {
+                bool hasNetworkConnection = false;
+                foreach(TECSystem sys in templates.SystemTemplates)
+                {
+                    foreach(TECEquipment equip in sys.Equipment)
+                    {
+                        foreach(TECSubScope ss in equip.SubScope)
+                        {
+                            if (ss.IsNetwork && ss.Connection != null)
+                            {
+                                hasNetworkConnection = true;
+                                break;
+                            }
+                        }
+                        if (hasNetworkConnection) break;
+                    }
+                    if (hasNetworkConnection) break;
+                }
+
+                if (hasNetworkConnection)
+                {
+                    return connectionTypesAreSame(Device, SelectedReplacement);
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+
+        private bool connectionTypesAreSame(TECDevice dev1, TECDevice dev2)
+        {
+            bool oneContainsTwo = true;
+            foreach (TECConnectionType type in dev2.ConnectionTypes)
+            {
+                if (!dev1.ConnectionTypes.Contains(type))
+                {
+                    oneContainsTwo = false;
+                    break;
+                }
+            }
+            bool twoContainsOne = true;
+            foreach (TECConnectionType type in dev1.ConnectionTypes)
+            {
+                if (!dev2.ConnectionTypes.Contains(type))
+                {
+                    twoContainsOne = false;
+                    break;
+                }
+            }
+
+            return (oneContainsTwo && twoContainsOne);
         }
     }
 }
