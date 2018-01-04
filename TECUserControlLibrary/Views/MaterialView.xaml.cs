@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Animation;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
@@ -89,6 +90,12 @@ namespace TECUserControlLibrary.Views
         private void modalOut_Completed(object sender, EventArgs e)
         {
             ModalHeight = this.ActualHeight;
+        }
+
+        private void Remove_Clicked(object sender, RoutedEventArgs e)
+        {
+            Storyboard moveBack = (Storyboard)FindResource("modalIn");
+            moveBack.Begin();
         }
     }
 }
