@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Button Margin="5" Content="Done" Click="doneButton_Click"/>
     </Grid>
 </UserControl>

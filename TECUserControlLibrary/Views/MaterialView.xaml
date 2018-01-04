@@ -43,6 +43,13 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="views:DeleteDeviceView.Done">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Grid.Triggers>
         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -128,8 +135,8 @@
                                                      DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
                                                      Grid.Row="4"/>
                             <Grid Grid.Row="5">
-                                <Button Content="Remove"
-                                        Command="{Binding RemoveDeviceCommand}"
+                                <Button Content="Delete"
+                                        Command="{Binding ElementName=materialView, Path=ViewModel.DeleteDeviceCommand}"
                                         Click="Remove_Clicked"/>
                             </Grid>
                         </Grid>
