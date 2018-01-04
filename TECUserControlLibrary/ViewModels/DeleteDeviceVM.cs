@@ -157,8 +157,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-
-
         private bool connectionTypesAreSame(TECDevice dev1, TECDevice dev2)
         {
             bool oneContainsTwo = true;
