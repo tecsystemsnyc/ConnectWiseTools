@@ -38,6 +38,7 @@ namespace TECUserControlLibrary.ViewModels
             this.templates = templates;
             Device = device;
             AllDevices = new List<TECDevice>(templates.Catalogs.Devices);
+            AllDevices.Remove(Device);
 
             DeleteCommand = new RelayCommand(deleteExecute);
             DeleteAndReplaceCommand = new RelayCommand(deleteAndReplaceExecute, deleteAndReplaceCanExecute);
