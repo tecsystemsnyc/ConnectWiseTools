@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,6 +38,9 @@ namespace TECUserControlLibrary.ViewModels
             this.templates = templates;
             Device = device;
             AllDevices = new List<TECDevice>(templates.Catalogs.Devices);
+
+            DeleteCommand = new RelayCommand(deleteExecute);
+            DeleteAndReplaceCommand = new RelayCommand(deleteAndReplaceExecute, deleteAndReplaceCanExecute);
         }
 
         private void deleteExecute()
@@ -117,6 +121,10 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             templates.Catalogs.Devices.Remove(Device);
+        }
+        private bool deleteAndReplaceCanExecute()
+        {
+            return SelectedReplacement != null;
         }
     }
 }
