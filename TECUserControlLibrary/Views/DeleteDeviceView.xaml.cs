@@ -21,7 +21,15 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class DeleteDeviceView : UserControl
     {
+        public static readonly RoutedEvent DoneEvent =
+        EventManager.RegisterRoutedEvent("Done", RoutingStrategy.Bubble,
+        typeof(RoutedEventHandler), typeof(DeleteDeviceView));
 
+        public event RoutedEventHandler Done
+        {
+            add { AddHandler(DoneEvent, value); }
+            remove { RemoveHandler(DoneEvent, value); }
+        }
 
         public DeleteDeviceVM ViewModel
         {
@@ -37,6 +45,11 @@ namespace TECUserControlLibrary.Views
         public DeleteDeviceView()
         {
             InitializeComponent();
+        }
+
+        protected void doneButton_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(DoneEvent, this));
         }
     }
 }
