@@ -113,8 +113,6 @@ namespace TECUserControlLibrary.ViewModels
                         {
                             ss.Devices.Remove(Device);
                             ss.Devices.Add(SelectedReplacement);
-                            //To Do: Figure out connection stuff
-                            throw new NotImplementedException();
                         }
                     }
                 }
