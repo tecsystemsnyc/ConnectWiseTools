@@ -11,6 +11,7 @@
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:vms="clr-namespace:TECUserControlLibrary.ViewModels"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="materialView"
@@ -26,14 +27,14 @@
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
             <Storyboard x:Key="modalIn">
-                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
+                <DoubleAnimation Storyboard.TargetName="materialView"
                                  Storyboard.TargetProperty="(views:MaterialView.ModalHeight)" 
                                  Completed="modalIn_Completed"
                                  FillBehavior="Stop"
                                  From="{Binding ElementName=materialView, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
             <Storyboard x:Key="modalOut">
-                <DoubleAnimation Storyboard.TargetName="systemHierarchyView"
+                <DoubleAnimation Storyboard.TargetName="materialView"
                                      Storyboard.TargetProperty="(views:MaterialView.ModalHeight)" 
                                  Completed="modalOut_Completed"
                                  FillBehavior="Stop"
@@ -50,13 +51,6 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid.Triggers>
-                <EventTrigger RoutedEvent="Button.Click" SourceName="removeDevice">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
-                    </EventTrigger.Actions>
-                </EventTrigger>
-            </Grid.Triggers>
             <Grid.Resources>
                 <ResourceDictionary>
                     <DataTemplate x:Key="DevicesTemplate">
@@ -134,9 +128,14 @@
                                                      DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
                                                      Grid.Row="4"/>
                             <Grid Grid.Row="5">
-                                <Button x:Name="removeDevice"
-                                        Content="Remove"
-                                        Command="{Binding RemoveDeviceCommand}"/>
+                                <Button Content="Remove"
+                                        Command="{Binding RemoveDeviceCommand}">
+                                    <Button.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                                        </EventTrigger>
+                                    </Button.Triggers>
+                                </Button>
                             </Grid>
                         </Grid>
                     </DataTemplate>
@@ -766,7 +765,7 @@
             <Grid.Margin>
                 <MultiBinding Converter="{utilities:HeightToGridMarginConverter}">
                     <Binding Source="{StaticResource marginEdge}"/>
-                    <Binding ElementName="systemHierarchyView" Path="ModalHeight"/>
+                    <Binding ElementName="materialView" Path="ModalHeight"/>
                 </MultiBinding>
             </Grid.Margin>
             <Border BorderBrush="DarkGray" Background="{StaticResource SectionBackgroundBrush}" 
