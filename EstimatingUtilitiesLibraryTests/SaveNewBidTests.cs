@@ -117,6 +117,10 @@ namespace Tests
                 string failDirectory = Path.GetTempPath() + "Estimating Tools\\";
                 Directory.CreateDirectory(failDirectory);
                 string failPath = failDirectory + "SaveNewBidTestFailed.edb";
+                if (File.Exists(failPath))
+                {
+                    File.Delete(failPath);
+                }
                 File.Copy(path, failPath);
                 Assert.Fail(string.Format("No systems loaded into bid. File saved at: {0}", failPath));
             }

@@ -229,6 +229,7 @@
     </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
+    <Compile Include="ViewModels\DeleteDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />

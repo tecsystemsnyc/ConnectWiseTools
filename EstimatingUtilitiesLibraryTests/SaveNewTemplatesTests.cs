@@ -68,21 +68,25 @@ namespace Tests
             expectedConduitType = expectedTemplates.Catalogs.ConduitTypes[0];
 
             path = Path.GetTempFileName();
-            Console.WriteLine("Path: " + path);
 
             //Act
             DatabaseManager<TECTemplates> manager = new DatabaseManager<TECTemplates>(path);
-            manager.New(expectedTemplates);
+            bool success = manager.New(expectedTemplates);
+            Assert.IsTrue(success, "New method in DatabaseManager returned false.");
             actualTemplates = manager.Load();
 
-            //if (actualTemplates.SystemTemplates.Count == 0)
-            //{
-            //    string failDirectory = Path.GetTempPath() + "Estimating Tools\\";
-            //    Directory.CreateDirectory(failDirectory);
-            //    string failPath = failDirectory + "SaveNewTemplatesTestFailed.tdb";
-            //    File.Copy(path, failPath);
-            //    Assert.Fail(string.Format("No systems loaded into templates. File saved at: {0}", failPath));
-            //}
+            if (actualTemplates.SystemTemplates.Count == 0)
+            {
+                string failDirectory = Path.GetTempPath() + "Estimating Tools\\";
+                Directory.CreateDirectory(failDirectory);
+                string failPath = failDirectory + "SaveNewTemplatesTestFailed.tdb";
+                if (File.Exists(failPath))
+                {
+                    File.Delete(failPath);
+                }
+                File.Copy(path, failPath);
+                Assert.Fail(string.Format("No systems loaded into templates. File saved at: {0}", failPath));
+            }
 
             foreach (TECSystem sys in actualTemplates.SystemTemplates)
             {
