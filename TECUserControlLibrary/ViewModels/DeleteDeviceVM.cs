@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace TECUserControlLibrary.ViewModels
@@ -46,30 +47,23 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteExecute()
         {
-            foreach(TECSubScope ss in templates.SubScopeTemplates)
-            {
-                while (ss.Devices.Contains(Device))
-                {
-                    ss.Devices.Remove(Device);
-                }
-            }
+            MessageBoxResult result = MessageBox.Show(
+                "Deleting a device will remove it from all template Systems, Equipment and Points. Are you sure?", 
+                "Continue?", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
 
-            foreach(TECEquipment equip in templates.EquipmentTemplates)
+            if (result == MessageBoxResult.Yes)
             {
-                foreach(TECSubScope ss in equip.SubScope)
+                foreach (TECSubScope ss in templates.SubScopeTemplates)
                 {
                     while (ss.Devices.Contains(Device))
                     {
                         ss.Devices.Remove(Device);
                     }
                 }
-            }
 
-            foreach(TECSystem sys in templates.SystemTemplates)
-            {
-                foreach(TECEquipment equip in sys.Equipment)
+                foreach (TECEquipment equip in templates.EquipmentTemplates)
                 {
-                    foreach(TECSubScope ss in equip.SubScope)
+                    foreach (TECSubScope ss in equip.SubScope)
                     {
                         while (ss.Devices.Contains(Device))
                         {
@@ -77,9 +71,23 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                 }
-            }
 
-            templates.Catalogs.Devices.Remove(Device);
+                foreach (TECSystem sys in templates.SystemTemplates)
+                {
+                    foreach (TECEquipment equip in sys.Equipment)
+                    {
+                        foreach (TECSubScope ss in equip.SubScope)
+                        {
+                            while (ss.Devices.Contains(Device))
+                            {
+                                ss.Devices.Remove(Device);
+                            }
+                        }
+                    }
+                }
+
+                templates.Catalogs.Devices.Remove(Device);
+            }
         }
         private void deleteAndReplaceExecute()
         {
