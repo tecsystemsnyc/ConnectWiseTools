@@ -11,15 +11,19 @@
     <Grid DataContext="{Binding ElementName=deleteDeviceView, Path=ViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Device.Name, StringFormat=Delete {0}}"
                    Style="{StaticResource ListHeader}"/>
-        <listControls:EndDeviceListControl Source="{Binding AllDevices}"
+        <TextBlock Text="Compatible Replacements:"
+                   Grid.Row="1"
+                   Foreground="Black"/>
+        <listControls:EndDeviceListControl Source="{Binding PotentialReplacements}"
                                            SelectedItem="{Binding SelectedReplacement}"
-                                           Grid.Row="1"/>
-        <Grid Grid.Row="2">
+                                           Grid.Row="2"/>
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>

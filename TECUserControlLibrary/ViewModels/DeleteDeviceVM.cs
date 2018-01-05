@@ -18,7 +18,7 @@ namespace TECUserControlLibrary.ViewModels
         private readonly TECTemplates templates;
 
         public TECDevice Device { get; }
-        public List<TECDevice> AllDevices { get; }
+        public List<TECDevice> PotentialReplacements { get; }
 
         private TECDevice _selectedReplacement;
         public TECDevice SelectedReplacement
@@ -38,8 +38,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.templates = templates;
             Device = device;
-            AllDevices = new List<TECDevice>(templates.Catalogs.Devices);
-            AllDevices.Remove(Device);
+            PotentialReplacements = new List<TECDevice>();
+            populatePotentialReplacements();
 
             DeleteCommand = new RelayCommand(deleteExecute);
             DeleteAndReplaceCommand = new RelayCommand(deleteAndReplaceExecute, deleteAndReplaceCanExecute);
@@ -131,39 +131,44 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool deleteAndReplaceCanExecute()
         {
-            if (SelectedReplacement != null)
+            return (SelectedReplacement != null);
+        }
+
+        private void populatePotentialReplacements()
+        {
+            bool hasNetworkConnection = false;
+            foreach (TECSystem sys in templates.SystemTemplates)
             {
-                bool hasNetworkConnection = false;
-                foreach(TECSystem sys in templates.SystemTemplates)
+                foreach (TECEquipment equip in sys.Equipment)
                 {
-                    foreach(TECEquipment equip in sys.Equipment)
+                    foreach (TECSubScope ss in equip.SubScope)
                     {
-                        foreach(TECSubScope ss in equip.SubScope)
+                        if (ss.IsNetwork && ss.Connection != null)
                         {
-                            if (ss.IsNetwork && ss.Connection != null)
-                            {
-                                hasNetworkConnection = true;
-                                break;
-                            }
+                            hasNetworkConnection = true;
+                            break;
                         }
-                        if (hasNetworkConnection) break;
                     }
                     if (hasNetworkConnection) break;
                 }
+                if (hasNetworkConnection) break;
+            }
 
+            foreach (TECDevice dev in templates.Catalogs.Devices)
+            {
                 if (hasNetworkConnection)
                 {
-                    return connectionTypesAreSame(Device, SelectedReplacement);
+                    if (connectionTypesAreSame(Device, dev))
+                    {
+                        PotentialReplacements.Add(dev);
+                    }
                 }
                 else
                 {
-                    return true;
+                    PotentialReplacements.Add(dev);
                 }
             }
-            else
-            {
-                return false;
-            }
+            PotentialReplacements.Remove(Device);
         }
 
         private bool connectionTypesAreSame(TECDevice dev1, TECDevice dev2)
