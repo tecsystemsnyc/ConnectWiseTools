@@ -23,7 +23,19 @@ namespace TECUserControlLibraryTests
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), man);
             templates.Catalogs.Devices.Add(dev);
 
+            throw new NotImplementedException();
+        }
 
+        [TestMethod]
+        public void PopulateReplacements()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DeleteAndReplaceDevice()
+        {
+            throw new NotImplementedException();
         }
     }
 }
