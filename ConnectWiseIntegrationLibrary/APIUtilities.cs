@@ -1,0 +1,35 @@
+﻿using ConnectWiseDotNetSDK.ConnectWise.Client;
+using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Api;
+using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConnectWiseIntegrationLibrary
+{
+    public static class APIUtilities
+    {
+        private const string APP_ID = "";
+        private const string SITE = "";
+        private const string COMPANY_NAME = "";
+        private const string PUBLIC_KEY = "";
+        private const string PRIVATE_KEY = "";
+
+        public static List<Opportunity> GetAllOpportunities()
+        {
+            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
+            OpportunitiesApi oppApi = new OpportunitiesApi(connectWiseClient);
+            return oppApi.GetOpportunities().GetResult<List<Opportunity>>();
+        }
+
+        public static void PrintOpportunities(IEnumerable<Opportunity> opps)
+        {
+            foreach(Opportunity opp in opps)
+            {
+                //opp.
+            }
+        }
+    }
+}
