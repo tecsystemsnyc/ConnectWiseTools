@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using EstimatingLibrary;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,15 @@ namespace TECUserControlLibraryTests
         [TestMethod]
         public void DeleteDevice()
         {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+
+            TECManufacturer man = new TECManufacturer();
+            templates.Catalogs.Manufacturers.Add(man);
+
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(), man);
+            templates.Catalogs.Devices.Add(dev);
+
 
         }
     }
