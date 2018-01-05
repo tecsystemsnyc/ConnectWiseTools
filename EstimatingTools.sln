@@ -25,6 +25,8 @@ Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "LaborAnalysis", "LaborAnaly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectWiseIntegrationLibrary", "ConnectWiseIntegrationLibrary\ConnectWiseIntegrationLibrary.csproj", "{EF590B65-7584-4F56-93A5-E4C40865AD98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectWiseInformationInterface", "ConnectWiseInformationInterface\ConnectWiseInformationInterface.csproj", "{CA168D7C-3584-49E9-9821-818C302C9C73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -236,6 +238,24 @@ Global
 		{EF590B65-7584-4F56-93A5-E4C40865AD98}.Working|x64.Build.0 = Release|Any CPU
 		{EF590B65-7584-4F56-93A5-E4C40865AD98}.Working|x86.ActiveCfg = Release|Any CPU
 		{EF590B65-7584-4F56-93A5-E4C40865AD98}.Working|x86.Build.0 = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Debug|x64.Build.0 = Debug|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Debug|x86.Build.0 = Debug|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Release|x64.ActiveCfg = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Release|x64.Build.0 = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Release|x86.Build.0 = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Working|Any CPU.ActiveCfg = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Working|Any CPU.Build.0 = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Working|x64.ActiveCfg = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Working|x64.Build.0 = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Working|x86.ActiveCfg = Release|Any CPU
+		{CA168D7C-3584-49E9-9821-818C302C9C73}.Working|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
