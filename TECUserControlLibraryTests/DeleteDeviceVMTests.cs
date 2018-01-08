@@ -112,6 +112,11 @@ namespace TECUserControlLibraryTests
         [TestMethod]
         public void PopulateReplacements()
         {
+            //Arrange
+            TECTemplates templates = new TECTemplates();
+            
+            //Device with no type
+
             throw new NotImplementedException();
         }
 
