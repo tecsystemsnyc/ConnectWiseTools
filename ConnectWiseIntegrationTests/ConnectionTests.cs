@@ -37,7 +37,7 @@ namespace ConnectWiseIntegrationTests
             ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
             OpportunityTypesApi oppTypesApi = new OpportunityTypesApi(connectWiseClient);
             List<OpportunityType> oppTypes = oppTypesApi.GetTypes().GetResult<List<OpportunityType>>();
-            Assert.IsTrue(oppTypes.Count > 0, "No opportunities found.");
+            Assert.IsTrue(oppTypes.Count > 0, "No opportunity types found.");
         }
     }
 }
