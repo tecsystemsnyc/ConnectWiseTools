@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             for(int i = 0; i < bid.Systems.Count; i++, x++)
             {
                 TECTypical typical = bid.Systems[i];
-                TECEstimator systemEstimate = new TECEstimator(typical, bid.Parameters, bid.ExtraLabor, new ChangeWatcher(typical));
+                TECEstimator systemEstimate = new TECEstimator(typical, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(typical));
                 worksheet.Cell(x, 1).Value = typical.Name;
                 worksheet.Cell(x, 2).Value = typical.Instances.Count;
                 worksheet.Cell(x, 3).Value = systemEstimate.TotalPrice;
@@ -39,7 +39,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             for (int i = 0; i < bid.Controllers.Count; i++, x++)
             {
                 TECController controller= bid.Controllers[i];
-                TECEstimator systemEstimate = new TECEstimator(controller, bid.Parameters, bid.ExtraLabor, new ChangeWatcher(controller));
+                TECEstimator systemEstimate = new TECEstimator(controller, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(controller));
                 worksheet.Cell(x, 1).Value = controller.Name;
                 worksheet.Cell(x, 2).Value = "1";
                 worksheet.Cell(x, 3).Value = systemEstimate.TotalPrice;
@@ -48,7 +48,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             for (int i = 0; i < bid.Panels.Count; i++, x++)
             {
                 TECPanel typical = bid.Panels[i];
-                TECEstimator systemEstimate = new TECEstimator(typical, bid.Parameters, bid.ExtraLabor, new ChangeWatcher(typical));
+                TECEstimator systemEstimate = new TECEstimator(typical, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(typical));
                 worksheet.Cell(x, 1).Value = typical.Name;
                 worksheet.Cell(x, 2).Value = "1";
                 worksheet.Cell(x, 3).Value = systemEstimate.TotalPrice;
@@ -62,13 +62,13 @@ namespace EstimatingUtilitiesLibrary.Exports
             for (int i = 0; i < bid.MiscCosts.Count; i++, x++)
             {
                 TECMisc typical = bid.MiscCosts[i];
-                TECEstimator systemEstimate = new TECEstimator(typical, bid.Parameters, bid.ExtraLabor, new ChangeWatcher(typical));
+                TECEstimator systemEstimate = new TECEstimator(typical, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(typical));
                 worksheet.Cell(x, 1).Value = typical.Name;
                 worksheet.Cell(x, 2).Value = typical.Quantity;
                 worksheet.Cell(x, 3).Value = systemEstimate.TotalPrice;
                 worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
             }
-            TECEstimator extraLaborEstimate = new TECEstimator(bid.ExtraLabor, bid.Parameters, bid.ExtraLabor, new ChangeWatcher(bid.ExtraLabor));
+            TECEstimator extraLaborEstimate = new TECEstimator(bid.ExtraLabor, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
             worksheet.Cell(x, 1).Value = "Other Labor";
             worksheet.Cell(x, 2).Value = "1";
             worksheet.Cell(x, 3).Value = extraLaborEstimate.TotalPrice;

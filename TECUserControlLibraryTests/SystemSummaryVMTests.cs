@@ -55,7 +55,7 @@ namespace TECUserControlLibraryTests
             for (int i = 0; i < x; i++)
             {
                 TECTypical typical1 = createTypical(bid);
-                TECEstimator estimate1 = new TECEstimator(typical1, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(typical1));
+                TECEstimator estimate1 = new TECEstimator(typical1, bid.Parameters, new TECExtraLabor(Guid.NewGuid()), bid.Duration, new ChangeWatcher(typical1));
                 estimates.Add(new Tuple<TECEstimator, TECTypical>(estimate1, typical1));
             }
 

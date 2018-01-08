@@ -15,6 +15,7 @@ namespace EstimatingLibrary
         private DateTime _dueDate;
         private string _salesperson;
         private string _estimator;
+        private double _duration;
         private TECParameters _parameters;
         private TECExtraLabor _extraLabor;
 
@@ -89,6 +90,16 @@ namespace EstimatingLibrary
                 var old = Estimator;
                 _estimator = value;
                 notifyCombinedChanged(Change.Edit, "Estimator", this, value, old);
+            }
+        }
+        public double Duration
+        {
+            get { return _duration; }
+            set
+            {
+                var old = Duration;
+                _duration = value;
+                notifyCombinedChanged(Change.Edit, "Duration", this, value, old);
             }
         }
 
