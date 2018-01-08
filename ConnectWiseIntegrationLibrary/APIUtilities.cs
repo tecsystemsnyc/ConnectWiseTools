@@ -21,6 +21,7 @@ namespace ConnectWiseIntegrationLibrary
         {
             ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
             OpportunityTypesApi oppTypeApi = new OpportunityTypesApi(connectWiseClient);
+            //Might only return first page
             return oppTypeApi.GetTypes().GetResult<List<OpportunityType>>();
         }
 
@@ -28,6 +29,7 @@ namespace ConnectWiseIntegrationLibrary
         {
             ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
             OpportunitiesApi oppApi = new OpportunitiesApi(connectWiseClient);
+            //Might only return first page
             return oppApi.GetOpportunities().GetResult<List<Opportunity>>();
         }
 
