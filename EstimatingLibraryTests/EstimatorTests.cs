@@ -62,6 +62,8 @@ namespace Tests
             parameters.SoftRate = 60;
             parameters.GraphRate = 60;
             parameters.CommRate = 60;
+            parameters.Escalation = 3.0;
+            parameters.SubcontractorEscalation = 3.0;
 
             parameters.DesiredConfidence = Confidence.Fifty;
         }
@@ -1894,7 +1896,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             system.AddController(controller);
             bid.Systems.Add(system);
-            TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(system));
+            TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), 0.0, new ChangeWatcher(system));
 
             var ratedCost = new TECCost(CostType.TEC);
             ratedCost.Cost = 1;
@@ -1928,7 +1930,51 @@ namespace Tests
 
             checkRefresh(bid, estimate);
         }
-        
+
+        [TestMethod]
+        public void Estimate_TECEscalation()
+        {
+            var bid = new TECBid();
+            bid.Parameters = parameters;
+            bid.Duration = 52;
+            var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var manufacturer = new TECManufacturer(); 
+            var connectionType = new TECConnectionType();
+            connectionType.Cost = 1;
+            connectionType.Labor = 0;
+            var system = new TECTypical();
+            bid.Systems.Add(system);
+            system.AddInstance(bid);
+
+            var equipment = new TECEquipment(true);
+            var device = new TECDevice(new ObservableCollection<TECConnectionType> { connectionType }, manufacturer);
+            device.Price = 100;
+            var subScope = new TECSubScope(true);
+            subScope.Devices.Add(device);
+            equipment.SubScope.Add(subScope);
+
+            system.Equipment.Add(equipment);
+
+            Assert.AreEqual(3, estimate.Escalation, 0.0001);
+
+            checkRefresh(bid, estimate);
+        }
+
+        [TestMethod]
+        public void Estimate_ElectricalEscalation()
+        {
+            var bid = new TECBid();
+            bid.Parameters = parameters;
+            bid.Duration = 52;
+            var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            TECMisc misc = new TECMisc(CostType.Electrical, false);
+            misc.Cost = 100.00;
+            bid.MiscCosts.Add(misc);
+
+            Assert.AreEqual(3, estimate.ElectricalEscalation, 0.0001);
+
+            checkRefresh(bid, estimate);
+        }
 
         #region Derived Labor
         [TestMethod]

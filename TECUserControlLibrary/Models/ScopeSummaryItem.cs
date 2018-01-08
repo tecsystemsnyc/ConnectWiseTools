@@ -12,11 +12,11 @@ namespace TECUserControlLibrary.Models
         public TECScope Scope { get; private set; }
         public TECEstimator Estimate { get; private set; }
 
-        public ScopeSummaryItem(TECScope scope, TECParameters parameters)
+        public ScopeSummaryItem(TECScope scope, TECParameters parameters, double duration = 0.0)
         {
             this.Scope = scope;
             watcher = new ChangeWatcher(scope);
-            Estimate = new TECEstimator(scope, parameters, new TECExtraLabor(Guid.NewGuid()), watcher);
+            Estimate = new TECEstimator(scope, parameters, new TECExtraLabor(Guid.NewGuid()), duration, watcher);
         }
         
 

@@ -8,6 +8,7 @@ namespace EstimatingLibrary
     {
         TECParameters parameters;
         TECExtraLabor extraLabor;
+        double duration;
         const double ZERO = 0;
 
         #region Cost Base
@@ -243,9 +244,17 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        public TECEstimator(TECBid Bid, ChangeWatcher watcher) : this(Bid, Bid.Parameters, Bid.ExtraLabor, watcher) { }
-        public TECEstimator(TECObject initalObject, TECParameters parameters, TECExtraLabor extraLabor, ChangeWatcher watcher) : base(Guid.NewGuid())
+        public TECEstimator(TECBid Bid, ChangeWatcher watcher) : this(Bid, Bid.Parameters, Bid.ExtraLabor, Bid.Duration, watcher) { }
+        public TECEstimator(TECObject initalObject, TECParameters parameters, TECExtraLabor extraLabor, Double duration, ChangeWatcher watcher) : base(Guid.NewGuid())
         {
+            this.duration = duration;
+            initalObject.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "Duration")
+                {
+                    raiseAll();
+                }
+            };
             this.parameters = parameters;
             parameters.PropertyChanged += (sender, e) =>
             {
@@ -348,8 +357,12 @@ namespace EstimatingLibrary
         private double getTECEscalation()
         {
             double outCost = getTECLaborCost();
-            outCost += getExtendedMaterialCost();
-            return outCost * parameters.Escalation / 100; ;
+            outCost += TECMaterialCost;
+            //outCost += getExtendedMaterialCost();
+            double rate = parameters.Escalation / 100;
+            double years = duration / 52;
+            Console.WriteLine("Total base cost: " + outCost);
+            return outCost * (Math.Pow((1 + rate), years) - 1);
         }
 
         private double getTECOverhead()
@@ -670,7 +683,11 @@ namespace EstimatingLibrary
         }
         private double getSubcontractorEscalation()
         {
-            return (getSubcontractorLaborCost() + getExtendedElectricalMaterialCost()) * (parameters.SubcontractorEscalation / 100);
+            double rate = parameters.SubcontractorEscalation / 100;
+            //double baseCost = getSubcontractorLaborCost() + getExtendedElectricalMaterialCost();
+            double baseCost = getSubcontractorLaborCost() + ElectricalMaterialCost;
+            double years = duration / 52;
+            return baseCost * (Math.Pow((1 + rate), years) - 1);
         }
         private double getSubcontractorMarkup()
         {
