@@ -8,11 +8,16 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static List<UpdateItem> NewStack(TECObject toSave)
         {
+            DBType type = DBType.Bid;
+            if(toSave is TECTemplates)
+            {
+                type = DBType.Templates;
+            }
             List<UpdateItem> saveStack = new List<UpdateItem>();
             saveStack.AddRange(newStackForObject(toSave));
             if (toSave is IRelatable saveable)
             {
-                saveStack.AddRange(DeltaStacker.ChildStack(Change.Add, saveable));
+                saveStack.AddRange(DeltaStacker.ChildStack(Change.Add, saveable, type));
             }
             return saveStack;
         }

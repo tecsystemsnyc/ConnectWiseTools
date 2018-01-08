@@ -9,7 +9,7 @@ namespace EstimatingUtilitiesLibrary.Database
     public class DeltaStacker
     {
         private List<UpdateItem> stack;
-        private static DBType dbType;
+        private DBType dbType;
 
         public DeltaStacker(ChangeWatcher changeWatcher, TECScopeManager manager)
         {
@@ -26,24 +26,24 @@ namespace EstimatingUtilitiesLibrary.Database
             return stack;
         }
 
-        public static List<UpdateItem> AddStack(string propertyName, TECObject sender, TECObject item)
+        public static List<UpdateItem> AddStack(string propertyName, TECObject sender, TECObject item, DBType type)
         {
             if (item == null)
             {
                 throw new Exception("Add and Remove must have an item which is being added to sender.");
             }
-            return addRemoveStack(Change.Add, propertyName, sender, item);
+            return addRemoveStack(Change.Add, propertyName, sender, item, type);
         }
-        public static List<UpdateItem> ChildStack(Change change, IRelatable item)
+        public static List<UpdateItem> ChildStack(Change change, IRelatable item, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (Tuple<string, TECObject> saveItem in item.PropertyObjects.ChildList())
             {
-                outStack.AddRange(addRemoveStack(change, saveItem.Item1, item as TECObject, saveItem.Item2));
+                outStack.AddRange(addRemoveStack(change, saveItem.Item1, item as TECObject, saveItem.Item2, type));
             }
             if (item is TECTypical system)
             {
-                outStack.AddRange(typicalInstanceStack(change, system));
+                outStack.AddRange(typicalInstanceStack(change, system, type));
             } else if(item is TECTemplates templates)
             {
                 outStack.AddRange(templatesReferencesStack(change, templates));
@@ -59,45 +59,45 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 foreach (TECSubScope item in pair.Value)
                 {
-                    outStack.AddRange(addRemoveStack(change, "TemplateRelationship", pair.Key, item));
+                    outStack.AddRange(addRemoveStack(change, "TemplateRelationship", pair.Key, item, DBType.Templates));
                 }
             }
             foreach (KeyValuePair<TECEquipment, List<TECEquipment>> pair in templates.EquipmentSynchronizer.GetFullDictionary())
             {
                 foreach (TECEquipment item in pair.Value)
                 {
-                    outStack.AddRange(addRemoveStack(change, "TemplateRelationship", pair.Key, item));
+                    outStack.AddRange(addRemoveStack(change, "TemplateRelationship", pair.Key, item, DBType.Templates));
                 }
             }
             return outStack;
         }
-
-        private static List<UpdateItem> addRemoveStack(Change change, string propertyName, TECObject sender, TECObject item)
+        
+        private static List<UpdateItem> addRemoveStack(Change change, string propertyName, TECObject sender, TECObject item, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             List<TableBase> tables;
             if(sender is IRelatable parent && !parent.LinkedObjects.Contains(propertyName) && parent.PropertyObjects.Contains(propertyName))
             {
-                tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, dbType);
+                tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, type);
                 outStack.AddRange(tableObjectStack(change, tables, item));
                 if (item is IRelatable saveable)
                 {
-                    outStack.AddRange(ChildStack(change, saveable));
+                    outStack.AddRange(ChildStack(change, saveable, type));
                 }
             }
-            tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, item }, propertyName, dbType);
+            tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, item }, propertyName, type);
             outStack.AddRange(tableObjectStack(change, tables, sender, item));
 
             return outStack;
         }
         private static List<UpdateItem> editStack(TECObject sender, string propertyName, 
-            object value, object oldValue)
+            object value, object oldValue, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
             if(!(value is TECObject) && !(oldValue is TECObject))
             {
-                List<TableBase> tables = DatabaseHelper.GetTables(sender, dbType);
+                List<TableBase> tables = DatabaseHelper.GetTables(sender, type);
                 foreach (TableBase table in tables)
                 {
                     var fields = table.Fields;
@@ -160,14 +160,14 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return outStack;
         }
-        private static List<UpdateItem> typicalInstanceStack(Change change, TECTypical system)
+        private static List<UpdateItem> typicalInstanceStack(Change change, TECTypical system, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (KeyValuePair<TECObject, List<TECObject>> pair in system.TypicalInstanceDictionary.GetFullDictionary())
             {
                 foreach(TECObject item in pair.Value)
                 {
-                    outStack.AddRange(addRemoveStack(change, "TypicalInstanceDictionary", (TECObject)pair.Key, (TECObject)item));
+                    outStack.AddRange(addRemoveStack(change, "TypicalInstanceDictionary", (TECObject)pair.Key, (TECObject)item, type));
                 }
             }
 
@@ -178,11 +178,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if (e.Change == Change.Add || e.Change == Change.Remove)
             {
-                stack.AddRange(addRemoveStack(e.Change, e.PropertyName, e.Sender as TECObject, e.Value as TECObject));
+                stack.AddRange(addRemoveStack(e.Change, e.PropertyName, e.Sender as TECObject, e.Value as TECObject, dbType));
             }
             else if (e.Change == Change.Edit)
             {
-                stack.AddRange(editStack(e.Sender as TECObject, e.PropertyName, e.Value, e.OldValue));
+                stack.AddRange(editStack(e.Sender as TECObject, e.PropertyName, e.Value, e.OldValue, dbType));
             }
         }
     }

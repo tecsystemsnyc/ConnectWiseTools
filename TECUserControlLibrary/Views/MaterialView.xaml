@@ -10,6 +10,8 @@
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:vms="clr-namespace:TECUserControlLibrary.ViewModels"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="materialView"
@@ -24,709 +26,765 @@
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
+            <Storyboard x:Key="modalIn">
+                <DoubleAnimation Storyboard.TargetName="materialView"
+                                 Storyboard.TargetProperty="(views:MaterialView.ModalHeight)" 
+                                 Completed="modalIn_Completed"
+                                 FillBehavior="Stop"
+                                 From="{Binding ElementName=materialView, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="modalOut">
+                <DoubleAnimation Storyboard.TargetName="materialView"
+                                     Storyboard.TargetProperty="(views:MaterialView.ModalHeight)" 
+                                 Completed="modalOut_Completed"
+                                 FillBehavior="Stop"
+                                     From="0" To="{Binding ElementName=materialView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.Resources>
-            <ResourceDictionary>
-                <DataTemplate x:Key="DevicesTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="60"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding DeviceName}"/>
-                            <TextBlock Text="Description:" Margin="5,0,0,0"
-                       VerticalAlignment="Center" Grid.Column="2"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding DeviceDescription}"/>
-                            <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="5" Margin="2"
-                      Text="{Binding DeviceListPrice, StringFormat={}{0:C}}"/>
-                        </Grid>
-                        <Grid Grid.Row="1" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding DeviceLabor}"/>
-                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Right"/>
-                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                      SelectedItem="{Binding DeviceManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="3"
-                                      Margin="2"/>
+    <Grid>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="views:DeleteDeviceView.Done">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="DevicesTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding DeviceName}"/>
+                                <TextBlock Text="Description:" Margin="5,0,0,0"
+                           VerticalAlignment="Center" Grid.Column="2"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding DeviceDescription}"/>
+                                <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="5" Margin="2" 
+                                          Text="{Binding DeviceListPrice, StringFormat={}{0:C}}"/>
+                            </Grid>
+                            <Grid Grid.Row="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Labor:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding DeviceLabor}"/>
+                                <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                           VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Right"/>
+                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                          SelectedItem="{Binding DeviceManufacturer}"
+                                          DisplayMemberPath="Label" Grid.Column="3"
+                                          Margin="2"/>
 
-                        </Grid>
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Connection Types:" TextWrapping="Wrap"/>
-                            <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
-                                <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
-                                                                        DropHandler="{Binding ReferenceDropHandler}"/>
-                            </Border>
-                            
-                        </Grid>
-                        
-                        <Button Grid.Row="3" Grid.Column="2" 
-                                Content="Add" Margin="2"
-                                Command="{Binding AddDeviceCommand}"/>
-                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.Devices}"
-                                                      Selected="{Binding SelectedDevice}"
-                                                 DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
-                                                 Grid.Row="4"/>
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="ValveTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ValveName}"/>
-                            <TextBlock Text="Description:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ValveDescription}"/>
-                            <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="5" Margin="2"
-                      Text="{Binding ValveListPrice, StringFormat={}{0:C}}"/>
-                            <TextBlock Text="Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center" Grid.Column="6"/>
-                            <TextBox  Grid.Column="7" Margin="2"
-                      Text="{Binding ValveLabor}"/>
-                        </Grid>
-                        <Grid Grid.Row="1" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            
-                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="0"/>
-                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                      SelectedItem="{Binding ValveManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="1"
-                                      Margin="2"/>
-                            <TextBlock Text="Actuator:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="2"/>
-                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Devices}"
-                                      SelectedItem="{Binding ValveActuator}"
-                                      DisplayMemberPath="Name" Grid.Column="3"
-                                      Margin="2"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Connection Types:" TextWrapping="Wrap"/>
+                                <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
+                                    <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
+                                                                            DropHandler="{Binding ReferenceDropHandler}"/>
+                                </Border>
 
-                        </Grid>
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Cv: "/>
-                            <TextBox Text="{Binding ValveCv}" Grid.Column="1"/>
-                            <TextBlock Text="Size: " Grid.Column="2"/>
-                            <TextBox Text="{Binding ValveSize, StringFormat={}{0} inches}" Grid.Column="3"/>
-                            <TextBlock Text="Style: " Grid.Column="4"/>
-                            <TextBox Text="{Binding ValveStyle}" Grid.Column="5"/>
-                        </Grid>
-                        <Button Grid.Row="3" Grid.ColumnSpan="4"
-                                Content="Add" Margin="2"
-                                Command="{Binding AddValveCommand}"/>
-                        <controls:ValveGridControl Source="{Binding Templates.Catalogs.Valves}"
-                                                 DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
-                                                     Selected="{Binding SelectedValve}"
-                                                 Grid.Row="4"/>
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="ConnectionTypeTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="80"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ConnectionTypeName}"/>
-                            <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
-                            <TextBlock Text="Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center" Grid.Column="4"/>
-                            <TextBox  Grid.Column="5" Margin="2"
-                      Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
-                        </Grid>
-                        <Grid Grid.Row="1" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="135"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="85"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="(Marginal) Plenum Cost:" Grid.Column="0" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
-                            <TextBlock Text="Plenum Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center" Grid.Column="2"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
-                            <Button Grid.Column="4"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddConnectionTypeCommand}"/>
-                        </Grid>
-                        <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
-                                         ElectricalMaterialSource="{Binding Templates.Catalogs.ConnectionTypes}"
-                                                            Selected="{Binding SelectedConnectionType, Mode=OneWayToSource}"
-                                         ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="ConduitTypeTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ConduitTypeName}"/>
-                            <TextBlock Text="Cost:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"
-                       Grid.Column="2"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ConduitTypeCost, StringFormat={}{0:C}}"/>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Labor Rate:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ConduitTypeLabor}"/>
-                            <Button Grid.Column="2" Grid.ColumnSpan="2"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddConduitTypeCommand}"/>
-                        </Grid>
-                        <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
-                                      ElectricalMaterialSource="{Binding Templates.Catalogs.ConduitTypes}"
-                                                                Selected="{Binding SelectedConduitType}"
-                                      ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="ControllerTypeTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="120"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ControllerTypeName}"/>
-                            <TextBlock Text="Description:" Margin="5,0,0,0"
-                       VerticalAlignment="Center" Grid.Column="2"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding ControllerTypeDescription}"/>
-                            <TextBlock Text="List Price: " Grid.Column="4" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="5" Margin="2"
-                      Text="{Binding ControllerTypeCost, StringFormat={}{0:C}}"/>
+                            </Grid>
 
+                            <Button Grid.Row="3" Grid.Column="2" 
+                                    Content="Add" Margin="2"
+                                    Command="{Binding AddDeviceCommand}"/>
+                            <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.Devices}"
+                                                          Selected="{Binding SelectedDevice}"
+                                                     DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
+                                                     Grid.Row="4"/>
+                            <Grid Grid.Row="5">
+                                <Button Content="Delete"
+                                        Command="{Binding ElementName=materialView, Path=ViewModel.DeleteDeviceCommand}"
+                                        Click="Remove_Clicked"/>
+                            </Grid>
                         </Grid>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding ControllerTypeLabor}"/>
-                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="2"/>
-                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                      SelectedItem="{Binding ControllerTypeManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="3"
-                                      Margin="2"/>
-                        </Grid>
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ValveTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding ValveName}"/>
+                                <TextBlock Text="Description:" Grid.Column="2" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding ValveDescription}"/>
+                                <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="5" Margin="2"
+                          Text="{Binding ValveListPrice, StringFormat={}{0:C}}"/>
+                                <TextBlock Text="Labor:" Margin="5,0,0,0"
+                           VerticalAlignment="Center" Grid.Column="6"/>
+                                <TextBox  Grid.Column="7" Margin="2"
+                          Text="{Binding ValveLabor}"/>
+                            </Grid>
+                            <Grid Grid.Row="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                           VerticalAlignment="Center" Grid.Column="0"/>
+                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                          SelectedItem="{Binding ValveManufacturer}"
+                                          DisplayMemberPath="Label" Grid.Column="1"
+                                          Margin="2"/>
+                                <TextBlock Text="Actuator:" Margin="5,0,0,0"
+                                           VerticalAlignment="Center" Grid.Column="2"/>
+                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Devices}"
+                                          SelectedItem="{Binding ValveActuator}"
+                                          DisplayMemberPath="Name" Grid.Column="3"
+                                          Margin="2"/>
+
+                            </Grid>
+                            <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <Label Content="IO: "/>
-                                <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
-                                      SelectedValue="{Binding SelectedIO}"
-                                      DisplayMemberPath="Item1"
-                                      SelectedValuePath="Item2"
-                                      Grid.Column="1"
-                                          Margin="2"/>
-                                <Label Content="Qty: " Grid.Column="2"/>
-                                <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3"/>
-                                <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="4"/>
-                                <controls:IOGridControl IOSource="{Binding ControllerTypeIO}"
-                                                    Grid.Row="1" Grid.ColumnSpan="5"/>
+                                <TextBlock Text="Cv: "/>
+                                <TextBox Text="{Binding ValveCv}" Grid.Column="1"/>
+                                <TextBlock Text="Size: " Grid.Column="2"/>
+                                <TextBox Text="{Binding ValveSize, StringFormat={}{0} inches}" Grid.Column="3"/>
+                                <TextBlock Text="Style: " Grid.Column="4"/>
+                                <TextBox Text="{Binding ValveStyle}" Grid.Column="5"/>
                             </Grid>
-                            <Grid Grid.Column="1">
+                            <Button Grid.Row="3" Grid.ColumnSpan="4"
+                                    Content="Add" Margin="2"
+                                    Command="{Binding AddValveCommand}"/>
+                            <controls:ValveGridControl Source="{Binding Templates.Catalogs.Valves}"
+                                                     DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
+                                                         Selected="{Binding SelectedValve}"
+                                                     Grid.Row="4"/>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ConnectionTypeTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding ConnectionTypeName}"/>
+                                <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
+                                <TextBlock Text="Labor:" Margin="5,0,0,0"
+                           VerticalAlignment="Center" Grid.Column="4"/>
+                                <TextBox  Grid.Column="5" Margin="2"
+                          Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
+                            </Grid>
+                            <Grid Grid.Row="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="135"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="85"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="(Marginal) Plenum Cost:" Grid.Column="0" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
+                                <TextBlock Text="Plenum Labor:" Margin="5,0,0,0"
+                           VerticalAlignment="Center" Grid.Column="2"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
+                                <Button Grid.Column="4"
+                        Content="Add" Margin="2"
+                        Command="{Binding AddConnectionTypeCommand}"/>
+                            </Grid>
+                            <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
+                                             ElectricalMaterialSource="{Binding Templates.Catalogs.ConnectionTypes}"
+                                                                Selected="{Binding SelectedConnectionType, Mode=OneWayToSource}"
+                                             ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ConduitTypeTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding ConduitTypeName}"/>
+                                <TextBlock Text="Cost:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"
+                           Grid.Column="2"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding ConduitTypeCost, StringFormat={}{0:C}}"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Labor Rate:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding ConduitTypeLabor}"/>
+                                <Button Grid.Column="2" Grid.ColumnSpan="2"
+                        Content="Add" Margin="2"
+                        Command="{Binding AddConduitTypeCommand}"/>
+                            </Grid>
+                            <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
+                                          ElectricalMaterialSource="{Binding Templates.Catalogs.ConduitTypes}"
+                                                                    Selected="{Binding SelectedConduitType}"
+                                          ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ControllerTypeTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="120"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding ControllerTypeName}"/>
+                                <TextBlock Text="Description:" Margin="5,0,0,0"
+                           VerticalAlignment="Center" Grid.Column="2"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding ControllerTypeDescription}"/>
+                                <TextBlock Text="List Price: " Grid.Column="4" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="5" Margin="2"
+                          Text="{Binding ControllerTypeCost, StringFormat={}{0:C}}"/>
+
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Labor:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding ControllerTypeLabor}"/>
+                                <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                           VerticalAlignment="Center" Grid.Column="2"/>
+                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                          SelectedItem="{Binding ControllerTypeManufacturer}"
+                                          DisplayMemberPath="Label" Grid.Column="3"
+                                          Margin="2"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="IO: "/>
+                                    <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
+                                          SelectedValue="{Binding SelectedIO}"
+                                          DisplayMemberPath="Item1"
+                                          SelectedValuePath="Item2"
+                                          Grid.Column="1"
+                                              Margin="2"/>
+                                    <Label Content="Qty: " Grid.Column="2"/>
+                                    <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3"/>
+                                    <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="4"/>
+                                    <controls:IOGridControl IOSource="{Binding ControllerTypeIO}"
+                                                        Grid.Row="1" Grid.ColumnSpan="5"/>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Max IO Modules: "/>
+                                    <DataGrid Grid.Row="1" 
+                                              ItemsSource="{Binding ControllerTypeModules}"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              dd:DragDrop.DropHandler="{Binding ReferenceDropHandler}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                                            <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
+                                            <DataGridTextColumn Binding="{Binding Item.Price, StringFormat= {} {0:C}}"
+                                                                Header="Price" Width="Auto" IsReadOnly="True" MinWidth="40"
+                                                                ElementStyle="{StaticResource RightCell}"/>
+                                            <DataGridTextColumn Binding="{Binding Item.Cost, StringFormat= {} {0:C}}"
+                                                                Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
+                                                                ElementStyle="{StaticResource RightCell}"/>
+                                            <DataGridTextColumn Binding="{Binding Item.Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
+                                            <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" MinWidth="20"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+
+                            </Grid>
+                            <Button Grid.Row="3" Grid.ColumnSpan="4"
+                                        Content="Add" Margin="2"
+                                        Command="{Binding AddControllerTypeCommand}"/>
+                            <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.ControllerTypes}"
+                                                    Grid.Row="4" Margin="5"
+                                                    DropHandler="{Binding}"
+                                                                Selected="{Binding SelectedControllerType}"/>
+                        </Grid>
+
+                    </DataTemplate>
+                    <DataTemplate x:Key="PanelTypeTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding PanelTypeName}"/>
+                                <TextBlock Text="Description:" Grid.Column="2" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding PanelTypeDescription}"/>
+                                <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="5" Margin="2"
+                          Text="{Binding PanelTypeCost, StringFormat={}{0:C}}"/>
+
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Labor:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding PanelTypeLabor}"/>
+                                <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                                           VerticalAlignment="Center" Grid.Column="2"/>
+                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
+                                          SelectedItem="{Binding PanelTypeManufacturer}"
+                                          DisplayMemberPath="Label" Grid.Column="3"
+                                          Margin="2"/>
+                            </Grid>
+                            <Button Grid.Row="2" Grid.ColumnSpan="4"
+                                    Content="Add" Margin="2"
+                                    Command="{Binding AddPanelTypeCommand}"/>
+                            <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.PanelTypes}"
+                                                          Selected="{Binding SelectedPanelType}"
+                                                    Grid.Row="3" Margin="5"
+                                                    DropHandler="{Binding}"/>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="AssociatedCostTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Name:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding AssociatedCostName}"/>
+
+                                <TextBlock Grid.Column="2" Text="Type:" Margin="5,0,0,0"
+                                       VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="3"
+                                      SelectedItem="{Binding AssociatedCostType}" 
+                                      ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"
+                                          Margin="2"/>
+
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Cost:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding AssociatedCostCost, StringFormat={}{0:C}}"/>
+                                <TextBlock Text="Labor:" Grid.Column="2" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding AssociatedCostLabor}"/>
+                            </Grid>
+
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.ColumnSpan="2"
+                        Content="Add" Margin="2"
+                        Command="{Binding AddAssociatedCostCommand}"/>
+                            </Grid>
+
+                            <controls:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
+                                                                 Selected="{Binding SelectedAssociatedCost}"
+                                                                 DropHandler="{Binding}"
+                                              Grid.Row="3"
+                                              Margin="5"/>
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="IOModuleTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="120"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name:" />
+                                <TextBox  Grid.Column="1" Margin="2"
+                          Text="{Binding IOModuleName}"/>
+                                <TextBlock Text="List Price:" Grid.Column="2" />
+                                <TextBox  Grid.Column="3" Margin="2"
+                          Text="{Binding IOModuleCost, StringFormat={}{0:C}}"/>
+                                <TextBlock Text="Description:" Grid.Column="4" Margin="5,0,0,0"
+                           VerticalAlignment="Center"/>
+                                <TextBox  Grid.Column="5" Margin="2"
+                          Text="{Binding IOModuleDescription}"/>
+
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
+                           VerticalAlignment="Center"
+                                       Grid.Column="0"/>
+                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}" 
+                                      SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="1"
+                                      DisplayMemberPath="Label"
+                                          Margin="2"/>
+
+                                <Button Grid.Column="2" Grid.ColumnSpan="4"
+                        Content="Add" Margin="2"
+                        Command="{Binding AddIOModuleCommand}"/>
+                            </Grid>
+
+                            <Grid Grid.Row="1">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <Label Content="Max IO Modules: "/>
-                                <DataGrid Grid.Row="1" 
-                                          ItemsSource="{Binding ControllerTypeModules}"
-                                          AutoGenerateColumns="False"
-                                          CanUserAddRows="False"
-                                          dd:DragDrop.DropHandler="{Binding ReferenceDropHandler}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
-                                        <DataGridTextColumn Binding="{Binding Item.Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
-                                        <DataGridTextColumn Binding="{Binding Item.Price, StringFormat= {} {0:C}}"
-                                                            Header="Price" Width="Auto" IsReadOnly="True" MinWidth="40"
-                                                            ElementStyle="{StaticResource RightCell}"/>
-                                        <DataGridTextColumn Binding="{Binding Item.Cost, StringFormat= {} {0:C}}"
-                                                            Header="Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
-                                                            ElementStyle="{StaticResource RightCell}"/>
-                                        <DataGridTextColumn Binding="{Binding Item.Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
-                                        <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" MinWidth="20"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="IO: "/>
+                                <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
+                                        SelectedValue="{Binding SelectedIO}"
+                                        DisplayMemberPath="Item1"
+                                        SelectedValuePath="Item2"
+                                        Grid.Column="1"
+                                          Margin="2"/>
+                                <Label Content="Qty: " Grid.Column="2" HorizontalAlignment="Right"/>
+                                <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3" Margin="2"/>
+                                <Button Content="Add IO" Command="{Binding AddIOToModuleCommand}" Grid.Column="4" Margin="2"/>
+                                <controls:IOGridControl IOSource="{Binding ModuleIO}"
+                                                    Grid.Row="1" Grid.ColumnSpan="5"/>
                             </Grid>
-                            
-                        </Grid>
-                        <Button Grid.Row="3" Grid.ColumnSpan="4"
-                                    Content="Add" Margin="2"
-                                    Command="{Binding AddControllerTypeCommand}"/>
-                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.ControllerTypes}"
-                                                Grid.Row="4" Margin="5"
-                                                DropHandler="{Binding}"
-                                                            Selected="{Binding SelectedControllerType}"/>
-                    </Grid>
-                        
-                </DataTemplate>
-                <DataTemplate x:Key="PanelTypeTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding PanelTypeName}"/>
-                            <TextBlock Text="Description:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding PanelTypeDescription}"/>
-                            <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="5" Margin="2"
-                      Text="{Binding PanelTypeCost, StringFormat={}{0:C}}"/>
-
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Labor:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding PanelTypeLabor}"/>
-                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center" Grid.Column="2"/>
-                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                      SelectedItem="{Binding PanelTypeManufacturer}"
-                                      DisplayMemberPath="Label" Grid.Column="3"
-                                      Margin="2"/>
-                        </Grid>
-                        <Button Grid.Row="2" Grid.ColumnSpan="4"
-                                Content="Add" Margin="2"
-                                Command="{Binding AddPanelTypeCommand}"/>
-                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.PanelTypes}"
-                                                      Selected="{Binding SelectedPanelType}"
+                            <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.IOModules}"
+                                                        Selected="{Binding SelectedIOModule}"
                                                 Grid.Row="3" Margin="5"
-                                                DropHandler="{Binding}"/>
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="AssociatedCostTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="Name:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding AssociatedCostName}"/>
-
-                            <TextBlock Grid.Column="2" Text="Type:" Margin="5,0,0,0"
-                                   VerticalAlignment="Center"/>
-                            <ComboBox Grid.Column="3"
-                                  SelectedItem="{Binding AssociatedCostType}" 
-                                  ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"
-                                      Margin="2"/>
-
+                                                        />
                         </Grid>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="Cost:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding AssociatedCostCost, StringFormat={}{0:C}}"/>
-                            <TextBlock Text="Labor:" Grid.Column="2" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding AssociatedCostLabor}"/>
+                    </DataTemplate>
+                    <DataTemplate x:Key="ManufacturerTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0"/>
+                                <TextBox Text="{Binding ManufacturerToAdd.Label}" Grid.Row="0" Grid.Column="1" Margin="2"/>
+                                <TextBlock Text="Multiplier: " Grid.Row="0" Grid.Column="2"/>
+                                <TextBox Text="{Binding ManufacturerToAdd.Multiplier, StringFormat={}{0:F2}}" Grid.Row="0" Grid.Column="3" Margin="2"/>
+                                <Button Content="Add" Command="{Binding AddManufacturerCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
+                                        Margin="2"/>
+                            </Grid>
+                            <controls:ManufacturersGridControl ManufacturersSource="{Binding Templates.Catalogs.Manufacturers}"
+                                                               SelectedItem="{Binding SelectedManufacturer}"
+                                                               Grid.Row="1"/>
                         </Grid>
-
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Button Grid.ColumnSpan="2"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddAssociatedCostCommand}"/>
-                        </Grid>
-
-                        <controls:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
-                                                             Selected="{Binding SelectedAssociatedCost}"
-                                                             DropHandler="{Binding}"
-                                          Grid.Row="3"
-                                          Margin="5"/>
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="IOModuleTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="120"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name:" />
-                            <TextBox  Grid.Column="1" Margin="2"
-                      Text="{Binding IOModuleName}"/>
-                            <TextBlock Text="List Price:" Grid.Column="2" />
-                            <TextBox  Grid.Column="3" Margin="2"
-                      Text="{Binding IOModuleCost, StringFormat={}{0:C}}"/>
-                            <TextBlock Text="Description:" Grid.Column="4" Margin="5,0,0,0"
-                       VerticalAlignment="Center"/>
-                            <TextBox  Grid.Column="5" Margin="2"
-                      Text="{Binding IOModuleDescription}"/>
-
-                        </Grid>
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                       VerticalAlignment="Center"
-                                   Grid.Column="0"/>
-                            <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}" 
-                                  SelectedItem="{Binding IOModuleManufacturer}" Grid.Column="1"
-                                  DisplayMemberPath="Label"
-                                      Margin="2"/>
-
-                            <Button Grid.Column="2" Grid.ColumnSpan="4"
-                    Content="Add" Margin="2"
-                    Command="{Binding AddIOModuleCommand}"/>
-                        </Grid>
-
-                        <Grid Grid.Row="1">
+                    </DataTemplate>
+                    <DataTemplate x:Key="TagTemplate">
+                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
+                            </Grid.Resources>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="IO: "/>
-                            <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
-                                    SelectedValue="{Binding SelectedIO}"
-                                    DisplayMemberPath="Item1"
-                                    SelectedValuePath="Item2"
-                                    Grid.Column="1"
-                                      Margin="2"/>
-                            <Label Content="Qty: " Grid.Column="2" HorizontalAlignment="Right"/>
-                            <TextBox Text="{Binding SelectedIOQty}" Grid.Column="3" Margin="2"/>
-                            <Button Content="Add IO" Command="{Binding AddIOToModuleCommand}" Grid.Column="4" Margin="2"/>
-                            <controls:IOGridControl IOSource="{Binding ModuleIO}"
-                                                Grid.Row="1" Grid.ColumnSpan="5"/>
+                            <Grid Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Label: " Grid.Row="0" Grid.Column="0"/>
+                                <TextBox Text="{Binding TagToAdd.Label, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="2">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Key="Return" 
+                                                    Command="{Binding AddTagCommand}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Margin="2"/>
+                            </Grid>
+                            <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Tags}"
+                                                               Grid.Row="1"/>
                         </Grid>
-                        <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.IOModules}"
-                                                    Selected="{Binding SelectedIOModule}"
-                                            Grid.Row="3" Margin="5"
-                                                    />
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="ManufacturerTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="60"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0"/>
-                            <TextBox Text="{Binding ManufacturerToAdd.Label}" Grid.Row="0" Grid.Column="1" Margin="2"/>
-                            <TextBlock Text="Multiplier: " Grid.Row="0" Grid.Column="2"/>
-                            <TextBox Text="{Binding ManufacturerToAdd.Multiplier, StringFormat={}{0:F2}}" Grid.Row="0" Grid.Column="3" Margin="2"/>
-                            <Button Content="Add" Command="{Binding AddManufacturerCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
-                                    Margin="2"/>
-                        </Grid>
-                        <controls:ManufacturersGridControl ManufacturersSource="{Binding Templates.Catalogs.Manufacturers}"
-                                                           SelectedItem="{Binding SelectedManufacturer}"
-                                                           Grid.Row="1"/>
-                    </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="TagTemplate">
-                    <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="80"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Label: " Grid.Row="0" Grid.Column="0"/>
-                            <TextBox Text="{Binding TagToAdd.Label, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="2">
-                                <TextBox.InputBindings>
-                                    <KeyBinding Key="Return" 
-                                                Command="{Binding AddTagCommand}"/>
-                                </TextBox.InputBindings>
-                            </TextBox>
-                            <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Margin="2"/>
-                        </Grid>
-                        <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Tags}"
-                                                           Grid.Row="1"/>
-                    </Grid>
-                </DataTemplate>
-                <utilities:MaterialTypeSelector x:Key="materialTypeSelector"
-                                                DeviceTemplate="{StaticResource DevicesTemplate}"
-                                                ConnectionTypeTemplate="{StaticResource ConnectionTypeTemplate}"
-                                                ConduitTypeTemplate="{StaticResource ConduitTypeTemplate}"
-                                                ControllerTypeTemplate="{StaticResource ControllerTypeTemplate}"
-                                                PanelTypeTemplate="{StaticResource PanelTypeTemplate}"
-                                                AssociatedCostTemplate="{StaticResource AssociatedCostTemplate}"
-                                                IOModuleTemplate="{StaticResource IOModuleTemplate}"
-                                                ValveTemplate="{StaticResource ValveTemplate}"
-                                                ManufacturerTemplate="{StaticResource ManufacturerTemplate}"
-                                                TagTemplate="{StaticResource TagTemplate}"/>
-            </ResourceDictionary>
-        </Grid.Resources>
-        <ComboBox x:Name="MaterialComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.MaterialSelectorList}}"
-                  DisplayMemberPath="Item1"    
-                  SelectedValuePath="Item2"
-                  SelectedIndex="0"
-                  Margin="5"
-                  Grid.Row="0"
-                  FontSize="16"
-                  VerticalContentAlignment="Center"/>
-        <ContentPresenter Content="{Binding ElementName=MaterialComboBox, Path=SelectedValue}"
-                          ContentTemplateSelector="{StaticResource materialTypeSelector}"
-                          Grid.Row="1"/>
+                    </DataTemplate>
+                    <utilities:MaterialTypeSelector x:Key="materialTypeSelector"
+                                                    DeviceTemplate="{StaticResource DevicesTemplate}"
+                                                    ConnectionTypeTemplate="{StaticResource ConnectionTypeTemplate}"
+                                                    ConduitTypeTemplate="{StaticResource ConduitTypeTemplate}"
+                                                    ControllerTypeTemplate="{StaticResource ControllerTypeTemplate}"
+                                                    PanelTypeTemplate="{StaticResource PanelTypeTemplate}"
+                                                    AssociatedCostTemplate="{StaticResource AssociatedCostTemplate}"
+                                                    IOModuleTemplate="{StaticResource IOModuleTemplate}"
+                                                    ValveTemplate="{StaticResource ValveTemplate}"
+                                                    ManufacturerTemplate="{StaticResource ManufacturerTemplate}"
+                                                    TagTemplate="{StaticResource TagTemplate}"/>
+                </ResourceDictionary>
+            </Grid.Resources>
+            <ComboBox x:Name="MaterialComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.MaterialSelectorList}}"
+                      DisplayMemberPath="Item1"    
+                      SelectedValuePath="Item2"
+                      SelectedIndex="0"
+                      Margin="5"
+                      Grid.Row="0"
+                      FontSize="14"
+                      VerticalContentAlignment="Center"/>
+            <ContentPresenter Content="{Binding ElementName=MaterialComboBox, Path=SelectedValue}"
+                              ContentTemplateSelector="{StaticResource materialTypeSelector}"
+                              Grid.Row="1"/>
+        </Grid>
+        <Grid Width="{Binding ElementName=materialView, Path=ActualWidth}"
+              Height="{Binding ElementName=materialView, Path=ActualHeight}">
+            <Grid.Resources>
+                <sys:Double x:Key="marginEdge">0.0</sys:Double>
+            </Grid.Resources>
+            <Grid.Margin>
+                <MultiBinding Converter="{utilities:HeightToGridMarginConverter}">
+                    <Binding Source="{StaticResource marginEdge}"/>
+                    <Binding ElementName="materialView" Path="ModalHeight"/>
+                </MultiBinding>
+            </Grid.Margin>
+            <Border BorderBrush="DarkGray" Background="{StaticResource SectionBackgroundBrush}" 
+                    BorderThickness="2" CornerRadius="8" Margin="20">
+                <Border.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" Softness="1" 
+                                            Opacity="0.5"/>
+                </Border.BitmapEffect>
+                <ContentPresenter Content="{Binding ElementName=materialView, Path=ViewModel.DeleteDeviceVM}">
+                    <ContentPresenter.Resources>
+                        <DataTemplate DataType="{x:Type vms:DeleteDeviceVM}">
+                            <views:DeleteDeviceView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
+            </Border>
+        </Grid>
+
     </Grid>
 </UserControl>

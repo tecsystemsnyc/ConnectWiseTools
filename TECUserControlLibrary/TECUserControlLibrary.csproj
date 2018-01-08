@@ -229,9 +229,13 @@
     </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
+    <Compile Include="ViewModels\DeleteDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\DeleteDeviceView.xaml.cs">
+      <DependentUpon>DeleteDeviceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EquipmentHierarchyView.xaml.cs">
       <DependentUpon>EquipmentHierarchyView.xaml</DependentUpon>
     </Compile>
@@ -634,6 +638,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeleteDeviceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

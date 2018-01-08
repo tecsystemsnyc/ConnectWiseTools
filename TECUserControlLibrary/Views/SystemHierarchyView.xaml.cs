@@ -227,11 +227,7 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for IsChild.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsChildProperty =
             DependencyProperty.Register("IsChild", typeof(bool), typeof(SystemHierarchyView), new PropertyMetadata(false));
-
-
-
-
-
+        
         public SystemHierarchyView()
         {
             InitializeComponent();

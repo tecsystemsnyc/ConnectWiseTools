@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeleteDeviceVMTests.cs" />
     <Compile Include="ItemSummaryVMTests.cs" />
     <Compile Include="MaterialSummaryVMTests.cs" />
     <Compile Include="NetworkVMTests.cs" />

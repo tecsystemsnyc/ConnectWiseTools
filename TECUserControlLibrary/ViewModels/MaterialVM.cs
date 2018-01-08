@@ -419,6 +419,18 @@ namespace TECUserControlLibrary.ViewModels
                 Selected = value;
             }
         }
+        public ICommand DeleteDeviceCommand { get; private set; }
+
+        private DeleteDeviceVM _deleteDeviceVM;
+        public DeleteDeviceVM DeleteDeviceVM
+        {
+            get { return _deleteDeviceVM; }
+            set
+            {
+                _deleteDeviceVM = value;
+                RaisePropertyChanged("DeleteDeviceVM");
+            }
+        }
         #endregion
         #region Valve
         private string _valveName;
@@ -736,6 +748,8 @@ namespace TECUserControlLibrary.ViewModels
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
             AddIOCommand = new RelayCommand(addIOToControllerTypeExecute, canAddIOToControllerType);
             AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
+
+            DeleteDeviceCommand = new RelayCommand(deleteDeviceExecute, canDeleteDevice);
         }
 
         private void addIOToControllerTypeExecute()
@@ -987,6 +1001,15 @@ namespace TECUserControlLibrary.ViewModels
         {
             Templates.Catalogs.Manufacturers.Add(ManufacturerToAdd);
             ManufacturerToAdd = new TECManufacturer();
+        }
+
+        private void deleteDeviceExecute()
+        {
+            DeleteDeviceVM = new DeleteDeviceVM(SelectedDevice, Templates);
+        }
+        private bool canDeleteDevice()
+        {
+            return SelectedDevice != null;
         }
 
         private bool canAddManufacturer()
