@@ -90,17 +90,14 @@ namespace TECUserControlLibrary.ViewModels
                 else
                 {
                     string checkUpdateString = "Some connections haven't been updated. Would you like to update these connections?";
-                    bool? result = ConfirmationObject.Show(checkUpdateString);
-                    if (result.HasValue)
+                    MessageBoxResult result = ConfirmationObject.Show(checkUpdateString, "Update?", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
                     {
-                        if (result.Value)
-                        {
-                            updateWhatNeedsUpdate();
-                        }
-                        else
-                        {
-                            setController();
-                        }
+                        updateWhatNeedsUpdate();
+                    }
+                    else if (result == MessageBoxResult.No)
+                    {
+                        setController();
                     }
                     else
                     {

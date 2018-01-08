@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.ObjectModel;
+using System.Windows;
 using TECUserControlLibrary.Interfaces;
 using TECUserControlLibrary.ViewModels;
 using Tests;
@@ -74,7 +75,7 @@ namespace TECUserControlLibraryTests
             //Arrange
             Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
             confirmable
-                .Setup(x => x.Show(It.IsAny<string>()))
+                .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
                 .Callback(() => Assert.Fail("Confirmable should not have been shown."));
 
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
@@ -110,8 +111,8 @@ namespace TECUserControlLibraryTests
             //Arrange
             Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
             confirmable
-                .Setup(x => x.Show(It.IsAny<string>()))
-                .Returns((bool?)null);
+                .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
+                .Returns(MessageBoxResult.Cancel);
 
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
@@ -146,8 +147,8 @@ namespace TECUserControlLibraryTests
             //Arrange
             Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
             confirmable
-                .Setup(x => x.Show(It.IsAny<string>()))
-                .Returns(true);
+                .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
+                .Returns(MessageBoxResult.Yes);
 
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 
@@ -183,8 +184,8 @@ namespace TECUserControlLibraryTests
             //Arrange
             Mock<IUserConfirmable> confirmable = new Mock<IUserConfirmable>();
             confirmable
-                .Setup(x => x.Show(It.IsAny<string>()))
-                .Returns(false);
+                .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
+                .Returns(MessageBoxResult.No);
 
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
 

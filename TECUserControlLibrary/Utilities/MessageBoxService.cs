@@ -7,20 +7,23 @@ namespace TECUserControlLibrary.Utilities
     {
         public MessageBoxService() { }
 
-        public bool? Show(string message)
+        public MessageBoxResult Show(string message, string caption = null, MessageBoxButton? button = null, MessageBoxImage? icon = null)
         {
-            MessageBoxResult result = MessageBox.Show(message, "Confirm", MessageBoxButton.YesNoCancel);
-            if (result == MessageBoxResult.Yes)
+            if (icon.HasValue)
             {
-                return true;
+                return MessageBox.Show(message, caption, button.Value, icon.Value);
             }
-            else if (result == MessageBoxResult.No)
+            else if (button.HasValue)
             {
-                return false;
+                return MessageBox.Show(message, caption, button.Value);
+            }
+            else if (caption != null)
+            {
+                return MessageBox.Show(message, caption);
             }
             else
             {
-                return null;
+                return MessageBox.Show(message);
             }
         }
     }
