@@ -17,6 +17,13 @@ namespace ConnectWiseIntegrationLibrary
         private const string PUBLIC_KEY = "";
         private const string PRIVATE_KEY = "";
 
+        public static List<OpportunityType> GetAllOpportunityTypes()
+        {
+            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
+            OpportunityTypesApi oppTypeApi = new OpportunityTypesApi(connectWiseClient);
+            return oppTypeApi.GetTypes().GetResult<List<OpportunityType>>();
+        }
+
         public static List<Opportunity> GetAllOpportunities()
         {
             ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
