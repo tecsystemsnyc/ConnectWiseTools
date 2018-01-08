@@ -11,9 +11,9 @@ namespace ConnectWiseIntegrationLibrary
 {
     public static class APIUtilities
     {
-        private const string APP_ID = "";
-        private const string SITE = "";
-        private const string COMPANY_NAME = "";
+        private const string APP_ID = "TECSystemsInc";      //Cookie Value
+        private const string SITE = "na.myconnectwise.net"; //ConnectWise Site (Login Info)
+        private const string COMPANY_NAME = "tecsystems";   //Company Name (Login Info)
         private const string PUBLIC_KEY = "";
         private const string PRIVATE_KEY = "";
 
