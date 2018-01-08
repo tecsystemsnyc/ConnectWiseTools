@@ -10,10 +10,10 @@ namespace TECUserControlLibrary.Models
         public TECTypical Typical { get; }
         public TECEstimator Estimate { get; }
 
-        public SystemSummaryItem(TECTypical typical, TECParameters parameters)
+        public SystemSummaryItem(TECTypical typical, TECParameters parameters, double duration = 0.0)
         {
             this.Typical = typical;
-            Estimate = new TECEstimator(Typical, parameters, new TECExtraLabor(Guid.NewGuid()), new ChangeWatcher(Typical));
+            Estimate = new TECEstimator(Typical, parameters, new TECExtraLabor(Guid.NewGuid()), duration, new ChangeWatcher(Typical));
             Console.WriteLine(string.Format("New SystemSummaryItem guid: {0}", Typical.Guid));
         }
         

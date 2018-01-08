@@ -39,7 +39,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     int version = infoRow[MetadataTable.Version.Name].ToString().ToInt();
                     if(currentVersion < version)
                     {
-                        throw new Exception("File version if higher than software version.");
+                        throw new Exception("File version is higher than software version.");
                     }
                     return (version == currentVersion);
                 }

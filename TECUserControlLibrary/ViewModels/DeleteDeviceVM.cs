@@ -10,12 +10,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TECUserControlLibrary.Interfaces;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
     public class DeleteDeviceVM : ViewModelBase
     {
         private readonly TECTemplates templates;
+        internal IUserConfirmable messageBox;
 
         public TECDevice Device { get; }
         public List<TECDevice> PotentialReplacements { get; }
@@ -36,6 +39,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public DeleteDeviceVM(TECDevice device, TECTemplates templates)
         {
+            messageBox = new MessageBoxService();
             this.templates = templates;
             Device = device;
             PotentialReplacements = new List<TECDevice>();
@@ -47,7 +51,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteExecute()
         {
-            MessageBoxResult result = MessageBox.Show(
+            MessageBoxResult result = messageBox.Show(
                 "Deleting a device will remove it from all template Systems, Equipment and Points. Are you sure?", 
                 "Continue?", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
 

@@ -228,14 +228,17 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1.1*" />
+                    <ColumnDefinition Width="1.9*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Tax Exempt:"/>
                 <CheckBox IsChecked="{Binding Bid.Parameters.IsTaxExempt}"
                   HorizontalAlignment="Right" VerticalAlignment="Center"
                  Grid.Column="1" Margin="0,0,5,0"/>
-                
+                <TextBlock Text="Duration:" Grid.Column="2"/>
+                <TextBox Text="{Binding Bid.Duration, StringFormat={}{0} Weeks}" Grid.Column="3"
+                         HorizontalContentAlignment="Right" Margin="2"/>
+
             </Grid>
 
             <Grid  Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2">

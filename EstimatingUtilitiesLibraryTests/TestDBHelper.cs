@@ -183,6 +183,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("1969-07-20T00:00:00.0000000");
             values.Add("Mrs. Salesperson");
             values.Add("Mr. Estimator");
+            values.Add("52");
             addDataToTable(new BidInfoTable(), values);
 
         }

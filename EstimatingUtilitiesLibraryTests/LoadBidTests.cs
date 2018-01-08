@@ -57,6 +57,9 @@ namespace Tests
 
             string expectedEstimator = "Mr. Estimator";
             Assert.AreEqual(expectedEstimator, actualBid.Estimator, "Estimator didn't load properly.");
+
+            double expectedDuration = 52.0;
+            Assert.AreEqual(expectedDuration, actualBid.Duration, "Duration did not load properly.");
         }
 
         [TestMethod]
