@@ -44,6 +44,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField DueDate = new TableField("DueDate", "TEXT", ObjectType.GetProperty("DueDate"));
         public static TableField Salesperson = new TableField("Salesperson", "TEXT", ObjectType.GetProperty("Salesperson"));
         public static TableField Estimator = new TableField("Estimator", "TEXT", ObjectType.GetProperty("Estimator"));
+        public static TableField Duration = new TableField("Duration", "REAL", ObjectType.GetProperty("Duration"), defaultValue: "0");
         #endregion
 
         private List<TableField> fields = new List<TableField>()
@@ -53,7 +54,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Number,
             DueDate,
             Salesperson,
-            Estimator
+            Estimator,
+            Duration
         };
         private List<TableField> primaryKeys = new List<TableField>()
         {
