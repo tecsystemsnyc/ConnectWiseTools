@@ -110,12 +110,50 @@ namespace TECUserControlLibraryTests
         }
 
         [TestMethod]
-        public void PopulateReplacements()
+        public void PopulateReplacementsWithNetworkConnection()
         {
             //Arrange
             TECTemplates templates = new TECTemplates();
+
+            TECConnectionType type = new TECConnectionType();
+            templates.Catalogs.ConnectionTypes.Add(type);
             
-            //Device with no type
+            TECManufacturer man = new TECManufacturer();
+            templates.Catalogs.Manufacturers.Add(man);
+
+            TECIO controllerIO = new TECIO(IOType.BACnetIP);
+            controllerIO.Quantity = 5;
+
+            TECControllerType controllerType = new TECControllerType(man);
+            controllerType.IO.Add(controllerIO);
+            templates.Catalogs.ControllerTypes.Add(controllerType);
+
+            List<TECConnectionType> deviceTypes = new List<TECConnectionType>();
+            deviceTypes.Add(type);
+            TECDevice dev = new TECDevice(deviceTypes, man);
+            templates.Catalogs.Devices.Add(dev);
+
+            TECSystem sys = new TECSystem(false);
+            templates.SystemTemplates.Add(sys);
+
+            TECEquipment sysEquip = new TECEquipment(false);
+            sys.Equipment.Add(sysEquip);
+            
+
+            
+            //Device with no connection types
+
+
+            //Device with wrong connection types
+            //Device with right connection types
+
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void PopulateReplacementsWithoutNetworkConnection()
+        {
+            //Arrange
 
             throw new NotImplementedException();
         }
