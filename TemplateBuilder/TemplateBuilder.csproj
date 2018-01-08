@@ -18,7 +18,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>\\tec-ny-fs01\F-General\Internal Software\Estimating Tools\Versions\1.7\Template Builder\x64\</PublishUrl>
+    <PublishUrl>\\tec-ny-fs01\F-General\Internal Software\Estimating Tools\Versions\1.7\Template Builder\x86\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -31,7 +31,7 @@
     <ProductName>Template Builder</ProductName>
     <PublisherName>TEC Systems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
-    <ApplicationRevision>73</ApplicationRevision>
+    <ApplicationRevision>75</ApplicationRevision>
     <ApplicationVersion>1.7.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
