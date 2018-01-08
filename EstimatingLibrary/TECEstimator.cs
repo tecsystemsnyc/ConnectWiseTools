@@ -252,6 +252,7 @@ namespace EstimatingLibrary
             {
                 if (e.PropertyName == "Duration")
                 {
+                    this.duration = (sender as TECBid).Duration;
                     raiseAll();
                 }
             };
@@ -387,7 +388,7 @@ namespace EstimatingLibrary
             double outCost = 0;
             outCost += getTECLaborCost();
             outCost += getExtendedMaterialCost();
-            outCost += outCost * parameters.Escalation / 100;
+            outCost += getTECEscalation();
             outCost += getTax();
 
             return outCost;
@@ -675,9 +676,9 @@ namespace EstimatingLibrary
         {
             double subcontractorLaborCost = getSubcontractorLaborCost();
             double extendedElectricalMaterialCost = getExtendedElectricalMaterialCost();
-            double subcontractorEscalation = parameters.SubcontractorEscalation;
+            double subcontractorEscalation = getSubcontractorEscalation();
 
-            double outCost = (subcontractorLaborCost + extendedElectricalMaterialCost) * (1 + (subcontractorEscalation) / 100);
+            double outCost = (subcontractorLaborCost + extendedElectricalMaterialCost + subcontractorEscalation);
 
             return outCost;
         }
