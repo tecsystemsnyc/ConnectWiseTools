@@ -65,8 +65,10 @@
 
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Length:"/>
                 <Grid Grid.Column="1">
@@ -78,6 +80,12 @@
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                          Margin="2"/>
                 </Grid>
+                <TextBlock Text="Plenum:" Grid.Column="2"/>
+                <CheckBox IsChecked="{Binding SubScopeConnectionItem.SubScope.Connection.IsPlenum}" 
+                          Grid.Column="3"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          IsEnabled="{Binding ReadOnly, Converter={converters:InvertBoolConverter}}"/>
             </Grid>
             
 
