@@ -75,7 +75,7 @@
                     <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.Length}" 
                    Visibility="{Binding ReadOnly, 
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length}"
+                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length, StringFormat={}{0} ft.}"
                      Visibility="{Binding ReadOnly,
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                          Margin="2"/>
@@ -99,7 +99,7 @@
                     <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
                        Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
+                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength, StringFormat={}{0} ft.}"
                          Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                          Margin="2"/>
