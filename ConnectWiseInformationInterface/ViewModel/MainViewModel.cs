@@ -1,7 +1,11 @@
+using ConnectWiseDotNetSDK.ConnectWise.Client;
+using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Api;
 using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
 using ConnectWiseInformationInterface.Models;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -22,6 +26,13 @@ namespace ConnectWiseInformationInterface.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private const string APP_ID = "TECSystemsInc";      //Cookie Value
+        private const string SITE = "na.myconnectwise.net"; //ConnectWise Site (Login Info)
+        private const string COMPANY_NAME = "tecsystems";   //Company Name (Login Info)
+        private const string PUBLIC_KEY = "";               //Public Key for GHanson (from ConnectWise)
+        private const string PRIVATE_KEY = "";              //Private Key for GHanson (from ConnectWise)
+
+
         public enum Quarter { Q1 = 1, Q2, Q3, Q4 }
 
         private Quarter _startCloseDate;
@@ -87,18 +98,29 @@ namespace ConnectWiseInformationInterface.ViewModel
             addOppType(allBool);
             updatingOppTypeBools = false;
 
-            //For testing
-            addOppType(new OppTypeBool("Test 1"));
-            addOppType(new OppTypeBool("Test 2"));
+            LoadOpportunitiesCommand = new RelayCommand(loadOpportunitiesExecute);
+            ExportOpportunitiesCommand = new RelayCommand(exportOpportunitiesExecute, exportOpportunitiesCanExecute);
         }
 
         private void loadOpportunitiesExecute()
         {
-            throw new NotImplementedException();
-        }
-        private bool loadOpportunitiesCanExecute()
-        {
-            throw new NotImplementedException();
+            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
+
+            List<OpportunityType> oppTypes = new OpportunityTypesApi(connectWiseClient)
+                .GetTypes()
+                .GetResult<List<OpportunityType>>();
+            foreach(OpportunityType oppType in oppTypes)
+            {
+                addOppType(new OppTypeBool(oppType.Description));
+            }
+
+            List<Opportunity> opps = new OpportunitiesApi(connectWiseClient)
+                .GetOpportunities()
+                .GetResult<List<Opportunity>>();
+            foreach(Opportunity opp in opps)
+            {
+                _loadedOpportunities.Add(opp);
+            }
         }
 
         private void exportOpportunitiesExecute()
@@ -107,7 +129,7 @@ namespace ConnectWiseInformationInterface.ViewModel
         }
         private bool exportOpportunitiesCanExecute()
         {
-            throw new NotImplementedException();
+            return ApplicableOpportunities > 0;
         }
 
         private void addOppType(OppTypeBool oppType)

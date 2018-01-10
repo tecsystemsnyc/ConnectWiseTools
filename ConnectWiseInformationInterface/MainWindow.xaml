@@ -83,12 +83,7 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <!--Number of Opportunities-->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="# of Applicable Opportunities:"/>
-                    <TextBlock Grid.Column="1" Text="12"/>
+                    <TextBlock Text="{Binding ApplicableOpportunities, StringFormat=Applicable Opportunities: {0}}"/>
                 </Grid>
             </Grid>
         </Border>
@@ -100,14 +95,14 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Content="Load Opportunities"/>
+                <Button Content="Load Opportunities" Command="{Binding LoadOpportunitiesCommand}"/>
                 <TextBlock Grid.Row="1" Text="{Binding LoadedOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
             </Grid>
         </Border>
 
         <!--Export Opportunities-->
         <Border Grid.Row="1" Grid.Column="1">
-            <Button Content="Export Opporunities"/>
+            <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"/>
         </Border>
         
     </Grid>
