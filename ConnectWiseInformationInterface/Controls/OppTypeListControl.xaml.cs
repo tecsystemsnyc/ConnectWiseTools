@@ -1,6 +1,7 @@
 ﻿using ConnectWiseInformationInterface.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +21,22 @@ namespace ConnectWiseInformationInterface.Controls
     /// <summary>
     /// Interaction logic for OppTypeListControl.xaml
     /// </summary>
-    public partial class OppTypeListControl : BaseListControl<OppTypeBool>
+    public partial class OppTypeListControl : UserControl
     {
+
+
+        public IEnumerable<OppTypeBool> ItemsSource
+        {
+            get { return (IEnumerable<OppTypeBool>)GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<OppTypeBool>), typeof(OppTypeListControl));
+
+
+
         public OppTypeListControl()
         {
             InitializeComponent();

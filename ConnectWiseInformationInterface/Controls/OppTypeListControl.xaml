@@ -1,18 +1,14 @@
-﻿<listControls:BaseListControl
-    x:TypeArguments="models:OppTypeBool"
-    x:Class="ConnectWiseInformationInterface.Controls.OppTypeListControl"
-    x:Name="oppTypeListControl"
+﻿<UserControl x:Class="ConnectWiseInformationInterface.Controls.OppTypeListControl"
+             x:Name="oppTypeListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ConnectWiseInformationInterface.Controls"
-             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls;assembly=TECUserControlLibrary"
-    xmlns:models="clr-namespace:ConnectWiseInformationInterface.Models"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=oppTypeListcontrol}">
-        <ListView ItemsSource="{Binding Source}">
+        <ListView ItemsSource="{Binding ItemsSource}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="5" BorderBrush="Black" BorderThickness="1">
@@ -22,11 +18,11 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Name}"/>
-                            <CheckBox IsChecked="{Binding Included}"/>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding Included}"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
-</listControls:BaseListControl>
+</UserControl>

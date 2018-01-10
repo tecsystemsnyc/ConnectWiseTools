@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConnectWiseInformationInterface"
-        xmlns:controls="controls"
+        xmlns:controls="clr-namespace:ConnectWiseInformationInterface.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -35,7 +35,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Border Grid.RowSpan="2">
-            <Grid IsEnabled="False">
+            <!--Is Enabled should be false until opportunities are loaded-->
+            <Grid IsEnabled="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
@@ -58,7 +59,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <!--Opportunity Types-->
-                    
+                    <controls:OppTypeListControl ItemsSource="{Binding OppTypes}"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <!--Number of Opportunities-->
