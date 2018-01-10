@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConnectWiseInformationInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
+        Title="MainWindow" Height="350" Width="700"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.Resources>
         <Style TargetType="Border">
@@ -31,16 +31,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Border Grid.RowSpan="2">
-            <!--Is Enabled should be false until opportunities are loaded-->
-            <Grid IsEnabled="True">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!--Filters-->
@@ -48,14 +46,14 @@
                     <!--Close Date-->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    
                     <TextBlock Text="Expected Close Date:"/>
-                    <ComboBox Grid.Column="1"/>
-                    <TextBlock Grid.Column="2" Text="to"/>
-                    <ComboBox Grid.Column="3"/>
+
+                    <DatePicker Grid.Column="1" SelectedDate="{Binding StartCloseDate}"/>
+                    <DatePicker Grid.Column="2" SelectedDate="{Binding EndCloseDate}"/>
                 </Grid>
                 <Grid Grid.Row="1">
                     <!--Opportunity Types-->
@@ -81,10 +79,6 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </Grid>
-                <Grid Grid.Row="2">
-                    <!--Number of Opportunities-->
-                    <TextBlock Text="{Binding ApplicableOpportunities, StringFormat=Applicable Opportunities: {0}}"/>
-                </Grid>
             </Grid>
         </Border>
         
@@ -102,7 +96,14 @@
 
         <!--Export Opportunities-->
         <Border Grid.Row="1" Grid.Column="1">
-            <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"/>
+                <TextBlock Grid.Row="1" Text="{Binding ApplicableOpportunities.Count, StringFormat=Applicable Opportunities: {0}}"/>
+            </Grid>
         </Border>
         
     </Grid>

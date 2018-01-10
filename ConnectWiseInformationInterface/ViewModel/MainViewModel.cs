@@ -2,6 +2,7 @@ using ConnectWiseDotNetSDK.ConnectWise.Client;
 using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Api;
 using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
 using ConnectWiseInformationInterface.Models;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
@@ -32,35 +33,33 @@ namespace ConnectWiseInformationInterface.ViewModel
         private const string PUBLIC_KEY = "";               //Public Key for GHanson (from ConnectWise)
         private const string PRIVATE_KEY = "";              //Private Key for GHanson (from ConnectWise)
 
-
-        public enum Quarter { Q1 = 1, Q2, Q3, Q4 }
-
-        private Quarter _startCloseDate;
-        private Quarter _endCloseDate;
+        private DateTime _startCloseDate;
+        private DateTime _endCloseDate;
 
         private bool updatingOppTypeBools;
         private readonly OppTypeBool allBool;
         private readonly ObservableCollection<OppTypeBool> _oppTypes;
         private readonly ObservableCollection<Opportunity> _loadedOpportunities;
+        private readonly ObservableCollection<Opportunity> _applicableOpportunities;
 
-        private int _applicableOpportunities;
-
-        public Quarter StartCloseDate
+        public DateTime StartCloseDate
         {
             get { return _startCloseDate; }
             set
             {
                 _startCloseDate = value;
                 RaisePropertyChanged("StartCloseDate");
+                updateApplicableOpportunities();
             }
         }
-        public Quarter EndCloseDate
+        public DateTime EndCloseDate
         {
             get { return _endCloseDate; }
             set
             {
                 _endCloseDate = value;
                 RaisePropertyChanged("EndCloseDate");
+                updateApplicableOpportunities();
             }
         }
 
@@ -75,15 +74,9 @@ namespace ConnectWiseInformationInterface.ViewModel
         {
             get { return new ReadOnlyObservableCollection<Opportunity>(_loadedOpportunities); }
         }
-
-        public int ApplicableOpportunities
+        public ReadOnlyObservableCollection<Opportunity> ApplicableOpportunities
         {
-            get { return _applicableOpportunities; }
-            set
-            {
-                _applicableOpportunities = value;
-                RaisePropertyChanged("ApplicableOpportunities");
-            }
+            get { return new ReadOnlyObservableCollection<Opportunity>(_applicableOpportunities); }
         }
 
         public ICommand LoadOpportunitiesCommand { get; private set; }
@@ -93,6 +86,10 @@ namespace ConnectWiseInformationInterface.ViewModel
         {
             _oppTypes = new ObservableCollection<OppTypeBool>();
             _loadedOpportunities = new ObservableCollection<Opportunity>();
+            _applicableOpportunities = new ObservableCollection<Opportunity>();
+
+            _startCloseDate = DateTime.Now;
+            _endCloseDate = DateTime.Now;
 
             allBool = new OppTypeBool("All");
             addOppType(allBool);
@@ -105,7 +102,7 @@ namespace ConnectWiseInformationInterface.ViewModel
         private void loadOpportunitiesExecute()
         {
             ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
-
+            
             List<OpportunityType> oppTypes = new OpportunityTypesApi(connectWiseClient)
                 .GetTypes()
                 .GetResult<List<OpportunityType>>();
@@ -129,7 +126,7 @@ namespace ConnectWiseInformationInterface.ViewModel
         }
         private bool exportOpportunitiesCanExecute()
         {
-            return ApplicableOpportunities > 0;
+            return ApplicableOpportunities.Count > 0;
         }
 
         private void addOppType(OppTypeBool oppType)
@@ -164,12 +161,38 @@ namespace ConnectWiseInformationInterface.ViewModel
                     }
                 }
                 updatingOppTypeBools = false;
+                updateApplicableOpportunities();
             }
         }
 
         private void updateApplicableOpportunities()
         {
-            throw new NotImplementedException();
+            _applicableOpportunities.ObservablyClear();
+            foreach(Opportunity opp in LoadedOpportunities)
+            {
+                if (oppTypeSelected(opp.Type.Name) && closeDateInRange(opp.ExpectedCloseDate.Value))
+                {
+                    _applicableOpportunities.Add(opp);
+                }
+            }
+        }
+
+        private bool oppTypeSelected(string name)
+        {
+            foreach(OppTypeBool oppType in OppTypes)
+            {
+                if (oppType.Name == name && oppType.Include)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private bool closeDateInRange(DateTime date)
+        {
+            bool afterStart = DateTime.Compare(date, StartCloseDate) >= 0;
+            bool beforeEnd = DateTime.Compare(date, EndCloseDate) <= 0;
+            return (afterStart && beforeEnd);
         }
     }
 }
