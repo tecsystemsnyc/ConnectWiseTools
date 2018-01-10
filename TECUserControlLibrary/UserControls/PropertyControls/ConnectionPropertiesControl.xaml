@@ -25,17 +25,27 @@
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{Binding Length, StringFormat=Distance: {0} (ft)}"/>
             <TextBlock Text="{Binding ConduitType.Name, StringFormat=Conduit Type: {0}}" Grid.Row="1"/>
             <TextBlock Text="{Binding ConduitLength, StringFormat=Conduit Length: {0} (ft)}" Grid.Row="2"/>
-            <Expander Header="IO" Grid.Row="3">
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Plenum:"/>
+                <CheckBox IsChecked="{Binding IsPlenum}" IsEnabled="False" Grid.Column="1"
+                          VerticalAlignment="Center"/>
+            </Grid>
+            <Expander Header="IO" Grid.Row="4">
                 <listControls:IOListControl Source="{Binding IOList}"
                                             Height="100"/>
             </Expander>
-            <Expander Header="Connection Types" Grid.Row="4">
+            <Expander Header="Connection Types" Grid.Row="5">
                 <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"
                                                             Height="100"/>
             </Expander>

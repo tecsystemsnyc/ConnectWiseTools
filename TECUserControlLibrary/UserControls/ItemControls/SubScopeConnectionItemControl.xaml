@@ -65,19 +65,27 @@
 
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Length:"/>
                 <Grid Grid.Column="1">
                     <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.Length}" 
                    Visibility="{Binding ReadOnly, 
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length}"
+                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length, StringFormat={}{0} ft.}"
                      Visibility="{Binding ReadOnly,
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                          Margin="2"/>
                 </Grid>
+                <TextBlock Text="Plenum:" Grid.Column="2"/>
+                <CheckBox IsChecked="{Binding SubScopeConnectionItem.SubScope.Connection.IsPlenum}" 
+                          Grid.Column="3"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          IsEnabled="{Binding ReadOnly, Converter={converters:InvertBoolConverter}}"/>
             </Grid>
             
 
@@ -91,7 +99,7 @@
                     <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
                        Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
+                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength, StringFormat={}{0} ft.}"
                          Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                          Margin="2"/>

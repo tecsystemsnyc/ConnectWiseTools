@@ -362,7 +362,6 @@ namespace EstimatingLibrary
             //outCost += getExtendedMaterialCost();
             double rate = parameters.Escalation / 100;
             double years = duration / 52;
-            Console.WriteLine("Total base cost: " + outCost);
             return outCost * (Math.Pow((1 + rate), years) - 1);
         }
 
