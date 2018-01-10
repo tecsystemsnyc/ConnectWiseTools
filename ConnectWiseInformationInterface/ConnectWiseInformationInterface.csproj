@@ -120,11 +120,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TECUserControlLibrary\TECUserControlLibrary.csproj">
-      <Project>{22639a06-a7ba-483d-80dc-c9bd7157f0ba}</Project>
-      <Name>TECUserControlLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
