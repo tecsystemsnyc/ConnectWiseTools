@@ -16,19 +16,16 @@ namespace ConnectWiseInformationInterface.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
+        public enum Quarter { Q1 = 1, Q2, Q3, Q4 }
+
+        private Quarter _startCloseDate;
+        private Quarter _endCloseDate;
+
+        //public Quarter
+
         public MainViewModel()
         {
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
+            
         }
     }
 }

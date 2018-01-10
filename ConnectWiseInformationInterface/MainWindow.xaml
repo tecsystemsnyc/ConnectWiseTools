@@ -5,8 +5,82 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConnectWiseInformationInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <Style TargetType="Border">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.RowSpan="2">
+            <Grid IsEnabled="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!--Filters-->
+                <Grid>
+                    <!--Close Date-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Expected Close Date:"/>
+                    <ComboBox Grid.Column="1"/>
+                    <TextBlock Grid.Column="2" Text="to"/>
+                    <ComboBox Grid.Column="3"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <!--Opportunity Types-->
+                    <DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type"/>
+                            <DataGridComboBoxColumn Header="Include"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <!--Number of Opportunities-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="# of Applicable Opportunities:"/>
+                    <TextBlock Grid.Column="2" Text="12"/>
+                </Grid>
+            </Grid>
+        </Border>
         
+        <!--Load Opportunities-->
+        <Button Grid.Column="1" Content="Load Opportunities"/>
+        
+        <!--Export Opportunities-->
+        <Button Grid.Column="1" Grid.Row="1" Content="Export Opporunities"/>
     </Grid>
 </Window>
