@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConnectWiseInformationInterface"
+        xmlns:controls="controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -57,12 +58,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <!--Opportunity Types-->
-                    <DataGrid>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Type"/>
-                            <DataGridComboBoxColumn Header="Include"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    
                 </Grid>
                 <Grid Grid.Row="2">
                     <!--Number of Opportunities-->

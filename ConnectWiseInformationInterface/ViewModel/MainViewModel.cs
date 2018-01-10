@@ -1,4 +1,9 @@
+using ConnectWiseInformationInterface.Models;
 using GalaSoft.MvvmLight;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace ConnectWiseInformationInterface.ViewModel
 {
@@ -21,11 +26,115 @@ namespace ConnectWiseInformationInterface.ViewModel
         private Quarter _startCloseDate;
         private Quarter _endCloseDate;
 
-        //public Quarter
+        private bool updatingOppTypeBools;
+        private readonly OppTypeBool allBool;
+        private readonly ObservableCollection<OppTypeBool> _oppTypes;
+
+        private int _applicableOpportunities;
+
+        public Quarter StartCloseDate
+        {
+            get { return _startCloseDate; }
+            set
+            {
+                _startCloseDate = value;
+                RaisePropertyChanged("StartCloseDate");
+            }
+        }
+        public Quarter EndCloseDate
+        {
+            get { return _endCloseDate; }
+            set
+            {
+                _endCloseDate = value;
+                RaisePropertyChanged("EndCloseDate");
+            }
+        }
+
+        public ReadOnlyObservableCollection<OppTypeBool> OppTypes
+        {
+            get
+            {
+                return new ReadOnlyObservableCollection<OppTypeBool>(_oppTypes);
+            }
+        }
+
+        public int ApplicableOpportunities
+        {
+            get { return _applicableOpportunities; }
+            set
+            {
+                _applicableOpportunities = value;
+                RaisePropertyChanged("ApplicableOpportunities");
+            }
+        }
+
+        public ICommand LoadOpportunitiesCommand { get; private set; }
+        public ICommand ExportOpportunitiesCommand { get; private set; }
 
         public MainViewModel()
         {
-            
+            _oppTypes = new ObservableCollection<OppTypeBool>();
+            allBool = new OppTypeBool("All");
+            allBool.PropertyChanged += oppTypeBoolChanged; ;
+            _oppTypes.Add(allBool);
+            updatingOppTypeBools = false;
+
+            //For testing
+            _oppTypes.Add(new OppTypeBool("Test 1"));
+            _oppTypes.Add(new OppTypeBool("Test 2"));
+        }
+
+        private void loadOpportunitiesExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool loadOpportunitiesCanExecute()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void exportOpportunitiesExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool exportOpportunitiesCanExecute()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void oppTypeBoolChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OppTypeBool typeBool = sender as OppTypeBool;
+            if (!updatingOppTypeBools)
+            {
+                updatingOppTypeBools = true;
+                if (typeBool == allBool)
+                {
+                    //Set all bools equal to allBool value.
+                    foreach(OppTypeBool oppType in _oppTypes)
+                    {
+                        if (oppType != allBool)
+                        {
+                            oppType.Include = allBool.Include;
+                        }
+                    }
+                }
+                else
+                {
+                    //Set allBool to false if any bool gets set false;
+                    if (!typeBool.Include)
+                    {
+                        allBool.Include = false;
+                    }
+                }
+                updatingOppTypeBools = false;
+            }
+        }
+
+        private void updateApplicableOpportunities()
+        {
+            throw new NotImplementedException();
         }
     }
 }
