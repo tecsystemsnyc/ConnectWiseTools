@@ -18,8 +18,11 @@ namespace ConnectWiseInformationInterface.Models
             }
             set
             {
-                _include = value;
-                notifyPropertyChanged("Include");
+                if (Include != value)
+                {
+                    _include = value;
+                    notifyPropertyChanged("Include");
+                }
             }
         }
 
@@ -30,6 +33,7 @@ namespace ConnectWiseInformationInterface.Models
         public OppTypeBool(string name)
         {
             this.Name = name;
+            _include = false;
         }
 
         private void notifyPropertyChanged(string propertyName)

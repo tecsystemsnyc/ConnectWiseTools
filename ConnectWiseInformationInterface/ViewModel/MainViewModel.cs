@@ -1,3 +1,4 @@
+using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
 using ConnectWiseInformationInterface.Models;
 using GalaSoft.MvvmLight;
 using System;
@@ -29,6 +30,7 @@ namespace ConnectWiseInformationInterface.ViewModel
         private bool updatingOppTypeBools;
         private readonly OppTypeBool allBool;
         private readonly ObservableCollection<OppTypeBool> _oppTypes;
+        private readonly ObservableCollection<Opportunity> _loadedOpportunities;
 
         private int _applicableOpportunities;
 
@@ -58,6 +60,10 @@ namespace ConnectWiseInformationInterface.ViewModel
                 return new ReadOnlyObservableCollection<OppTypeBool>(_oppTypes);
             }
         }
+        public ReadOnlyObservableCollection<Opportunity> LoadedOpportunities
+        {
+            get { return new ReadOnlyObservableCollection<Opportunity>(_loadedOpportunities); }
+        }
 
         public int ApplicableOpportunities
         {
@@ -75,14 +81,15 @@ namespace ConnectWiseInformationInterface.ViewModel
         public MainViewModel()
         {
             _oppTypes = new ObservableCollection<OppTypeBool>();
+            _loadedOpportunities = new ObservableCollection<Opportunity>();
+
             allBool = new OppTypeBool("All");
-            allBool.PropertyChanged += oppTypeBoolChanged; ;
-            _oppTypes.Add(allBool);
+            addOppType(allBool);
             updatingOppTypeBools = false;
 
             //For testing
-            _oppTypes.Add(new OppTypeBool("Test 1"));
-            _oppTypes.Add(new OppTypeBool("Test 2"));
+            addOppType(new OppTypeBool("Test 1"));
+            addOppType(new OppTypeBool("Test 2"));
         }
 
         private void loadOpportunitiesExecute()
@@ -103,6 +110,12 @@ namespace ConnectWiseInformationInterface.ViewModel
             throw new NotImplementedException();
         }
 
+        private void addOppType(OppTypeBool oppType)
+        {
+            oppType.PropertyChanged += oppTypeBoolChanged;
+            _oppTypes.Add(oppType);
+
+        }
         private void oppTypeBoolChanged(object sender, PropertyChangedEventArgs e)
         {
             OppTypeBool typeBool = sender as OppTypeBool;

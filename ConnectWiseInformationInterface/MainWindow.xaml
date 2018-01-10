@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConnectWiseInformationInterface"
-        xmlns:controls="clr-namespace:ConnectWiseInformationInterface.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -23,6 +22,7 @@
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -59,25 +59,56 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <!--Opportunity Types-->
-                    <controls:OppTypeListControl ItemsSource="{Binding OppTypes}"/>
+                    <ListView ItemsSource="{Binding OppTypes}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="5" BorderBrush="Black" BorderThickness="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <CheckBox Grid.Column="1" IsChecked="{Binding Include}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Grid>
                 <Grid Grid.Row="2">
                     <!--Number of Opportunities-->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="# of Applicable Opportunities:"/>
-                    <TextBlock Grid.Column="2" Text="12"/>
+                    <TextBlock Grid.Column="1" Text="12"/>
                 </Grid>
             </Grid>
         </Border>
         
         <!--Load Opportunities-->
-        <Button Grid.Column="1" Content="Load Opportunities"/>
-        
+        <Border Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Content="Load Opportunities"/>
+                <TextBlock Grid.Row="1" Text="{Binding LoadedOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
+            </Grid>
+        </Border>
+
         <!--Export Opportunities-->
-        <Button Grid.Column="1" Grid.Row="1" Content="Export Opporunities"/>
+        <Border Grid.Row="1" Grid.Column="1">
+            <Button Content="Export Opporunities"/>
+        </Border>
+        
     </Grid>
 </Window>
