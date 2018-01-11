@@ -354,11 +354,17 @@ namespace EstimatingLibrary
             {
                 foreach(TECSubScope item in args.OldItems)
                 {
-                    foreach(TECController controller in this.Controllers)
-                    {
-                        controller.RemoveSubScope(item);
-                    }
+                    handleSubScopeRemoval(item);
                 }
+            }
+        }
+
+        private void handleSubScopeRemoval(TECSubScope removed)
+        {
+            TECController controller = removed.Connection?.ParentController;
+            if(controller != null)
+            {
+                controller.RemoveSubScope(removed);
             }
         }
         #endregion
