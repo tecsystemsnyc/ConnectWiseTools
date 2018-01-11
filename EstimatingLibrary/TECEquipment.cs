@@ -12,6 +12,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECSubScope> _subScope;
 
         public event Action<int> PointChanged;
+        public event Action<object, System.Collections.Specialized.NotifyCollectionChangedEventArgs> SubScopeCollectionChanged;
 
         public ObservableCollection<TECSubScope> SubScope
         {
@@ -72,7 +73,6 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-
         public object DragDropCopy(TECScopeManager scopeManager)
         {
             TECEquipment outEquip = new TECEquipment(this, this.IsTypical);
@@ -82,6 +82,7 @@ namespace EstimatingLibrary
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            SubScopeChanged?.Invoke(sender, e);
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 int pointNumber = 0;
