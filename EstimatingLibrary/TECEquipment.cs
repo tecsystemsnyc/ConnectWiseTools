@@ -82,7 +82,7 @@ namespace EstimatingLibrary
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            SubScopeChanged?.Invoke(sender, e);
+            SubScopeCollectionChanged?.Invoke(sender, e);
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 int pointNumber = 0;
