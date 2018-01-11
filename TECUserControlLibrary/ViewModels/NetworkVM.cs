@@ -344,6 +344,10 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectableItem(INetworkConnectable connectable)
         {
+            if (connectableDictionary.ContainsKey(connectable))
+            {
+                return;
+            }
             if (connectable is TECSubScope sub && !sub.IsNetwork)
             {
                 return;
@@ -368,7 +372,10 @@ namespace TECUserControlLibrary.ViewModels
             bool isConnected = (parentConnected || isServer);
 
             ConnectableItem item = new ConnectableItem(connectable, isConnected);
-            connectableDictionary.Add(connectable, item);
+            if (!connectableDictionary.ContainsKey(connectable))
+            {
+                connectableDictionary.Add(connectable, item);
+            }
             if (connectable is INetworkParentable)
             {
                 _parentables.Add(item);
@@ -552,6 +559,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddConnection()
         {
+            if (SelectedParentable == null) { return false; }
             if (SelectedParentable.Item is INetworkParentable parentable)
             {
                 bool parentCanAdd = parentable.CanAddNetworkConnection(SelectedIOType);
