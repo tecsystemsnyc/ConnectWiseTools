@@ -333,6 +333,14 @@ namespace EstimatingLibrary
                         if (item is TECEquipment equip)
                         {
                             equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                            foreach(TECSubScope ss in equip.SubScope)
+                            {
+                                TECController parent = ss.Connection?.ParentController;
+                                if (parent != null)
+                                {
+                                    parent.RemoveSubScope(ss);
+                                }
+                            }
                         }
                     }
                 }
@@ -354,9 +362,10 @@ namespace EstimatingLibrary
             {
                 foreach(TECSubScope item in args.OldItems)
                 {
-                    foreach(TECController controller in this.Controllers)
+                    TECController parent = item.Connection?.ParentController;
+                    if (parent != null)
                     {
-                        controller.RemoveSubScope(item);
+                        parent.RemoveSubScope(item);
                     }
                 }
             }
