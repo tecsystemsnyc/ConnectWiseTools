@@ -141,6 +141,7 @@ namespace EstimateBuilder.MVVM
             doStack = new DoStacker(watcher);
             deltaStack = new DeltaStacker(watcher, bid);
             bid.Catalogs.Unionize(templates.Catalogs);
+            ModelLinkingHelper.LinkBidToCatalogs(bid);
 
             estimate = new TECEstimator(bid, watcher);
 
@@ -152,6 +153,7 @@ namespace EstimateBuilder.MVVM
         {
             this.templates = templates;
             bid.Catalogs.Unionize(templates.Catalogs);
+            ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
             editorVM.Refresh(bid, this.templates, watcher, estimate);
         }

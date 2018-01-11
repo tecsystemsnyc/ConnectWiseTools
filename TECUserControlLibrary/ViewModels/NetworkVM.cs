@@ -49,7 +49,6 @@ namespace TECUserControlLibrary.ViewModels
             IsTypical = false;
             setupCommands();
             Refresh(bid, cw);
-            ConduitTypes = new List<TECElectricalMaterial>(bid.Catalogs.ConduitTypes);
         }
         public NetworkVM(TECSystem system, TECCatalogs catalogs)
         {
@@ -57,7 +56,6 @@ namespace TECUserControlLibrary.ViewModels
             typical = system is TECTypical ? system as TECTypical : null;
             setupCommands();
             Refresh(system, catalogs);
-            ConduitTypes = new List<TECElectricalMaterial>(catalogs.ConduitTypes);
         }
 
         public event Action<TECObject> Selected;
@@ -144,7 +142,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return new ReadOnlyObservableCollection<TECConnectionType>(selectedConnectionTypes); }
         }
-        public List<TECElectricalMaterial> ConduitTypes { get; }
+        public List<TECElectricalMaterial> ConduitTypes { get; private set; }
 
         public TECConnectionType SelectedPotentialConnectionType
         {
@@ -254,6 +252,7 @@ namespace TECUserControlLibrary.ViewModels
             _parentables = new ObservableCollection<ConnectableItem>();
             _nonParentables = new ObservableCollection<ConnectableItem>();
             AllConnectionTypes = new ReadOnlyObservableCollection<TECConnectionType>(catalogs.ConnectionTypes);
+            ConduitTypes = new List<TECElectricalMaterial>(catalogs.ConduitTypes);
             IOTypes = new List<IOType>(TECIO.NetworkIO);
             selectedConnectionTypes = new ObservableCollection<TECConnectionType>();
             RaisePropertyChanged("Parentables");
