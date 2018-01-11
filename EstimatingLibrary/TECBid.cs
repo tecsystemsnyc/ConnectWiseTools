@@ -146,7 +146,6 @@ namespace EstimatingLibrary
                 var old = Systems;
                 Systems.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Systems");
                 _systems = value;
-                registerSystems();
                 Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
                 notifyCombinedChanged(Change.Edit, "Systems", this, value, old);
             }
@@ -275,7 +274,6 @@ namespace EstimatingLibrary
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
 
-            registerSystems();
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -352,7 +350,6 @@ namespace EstimatingLibrary
                     notifyCombinedChanged(Change.Add, collectionName, this, item);
                     if (item is TECTypical typical)
                     {
-                        typical.PropertyChanged += system_PropertyChanged;
                         costChanged = false;
                         pointChanged = false;
                     }
@@ -382,8 +379,6 @@ namespace EstimatingLibrary
                     if (item is TECTypical typ)
                     {
                         var sys = item as TECSystem;
-                        sys.PropertyChanged -= system_PropertyChanged;
-                        handleSystemSubScopeRemoval(item as TECSystem);
                         if (typ.Instances.Count == 0)
                         {
                             costChanged = false;
@@ -406,22 +401,6 @@ namespace EstimatingLibrary
                 foreach (TECLabeled location in e.OldItems)
                 {
                     removeLocationFromScope(location);
-                }
-            }
-        }
-        
-        private void system_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "RemovedSubScope")
-            {
-                var args = e as TECChangedEventArgs;
-                if (args.Sender is TECEquipment)
-                {
-                    handleEquipmentSubScopeRemoval(args.Value as TECEquipment);
-                }
-                else
-                {
-                    handleSubScopeRemovalInConnections(args.Value as TECSubScope);
                 }
             }
         }
@@ -473,51 +452,6 @@ namespace EstimatingLibrary
                 totalPoints += sys.PointNumber;
             }
             return totalPoints;
-        }
-        
-        private void registerSystems()
-        {
-            foreach (TECSystem system in Systems)
-            {
-                system.PropertyChanged += system_PropertyChanged;
-            }
-        }
-
-        private void handleSystemSubScopeRemoval(TECSystem system)
-        {
-            foreach (TECEquipment equipment in system.Equipment)
-            {
-                handleEquipmentSubScopeRemoval(equipment);
-            }
-        }
-        private void handleEquipmentSubScopeRemoval(TECEquipment equipment)
-        {
-            foreach (TECSubScope subScope in equipment.SubScope)
-            {
-                handleSubScopeRemovalInConnections(subScope);
-            }
-        }
-        private void handleSubScopeRemovalInConnections(TECSubScope subScope)
-        {
-            foreach (TECController controller in Controllers)
-            {
-                ObservableCollection<TECSubScope> subScopeToRemove = new ObservableCollection<TECSubScope>();
-                foreach (TECConnection connection in controller.ChildrenConnections)
-                {
-                    if (connection is TECSubScopeConnection)
-                    {
-                        if ((connection as TECSubScopeConnection).SubScope == subScope)
-                        {
-                            subScopeToRemove.Add(subScope as TECSubScope);
-                        }
-                    }
-
-                }
-                foreach (TECSubScope sub in subScopeToRemove)
-                {
-                    controller.RemoveSubScope(sub);
-                }
-            }
         }
         
         private void removeLocationFromScope(TECLabeled location)
