@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ConnectWiseInformationInterface.ViewModel
@@ -41,6 +43,8 @@ namespace ConnectWiseInformationInterface.ViewModel
         private readonly ObservableCollection<OppTypeBool> _oppTypes;
         private readonly ObservableCollection<Opportunity> _loadedOpportunities;
         private readonly ObservableCollection<Opportunity> _applicableOpportunities;
+
+        private string _username;
 
         public DateTime StartCloseDate
         {
@@ -79,6 +83,16 @@ namespace ConnectWiseInformationInterface.ViewModel
             get { return new ReadOnlyObservableCollection<Opportunity>(_applicableOpportunities); }
         }
 
+        public string Username
+        {
+            get { return _username; }
+            set
+            {
+                _username = value;
+                RaisePropertyChanged("Username");
+            }
+        }
+
         public ICommand LoadOpportunitiesCommand { get; private set; }
         public ICommand ExportOpportunitiesCommand { get; private set; }
 
@@ -91,21 +105,38 @@ namespace ConnectWiseInformationInterface.ViewModel
             _startCloseDate = DateTime.Now;
             _endCloseDate = DateTime.Now;
 
+            _username = "";
+
             allBool = new OppTypeBool("All");
             addOppType(allBool);
             updatingOppTypeBools = false;
 
-            LoadOpportunitiesCommand = new RelayCommand(loadOpportunitiesExecute);
+            LoadOpportunitiesCommand = new RelayCommand<object>(loadOpportunitiesExecute, loadOpportunitiesCanExecute);
             ExportOpportunitiesCommand = new RelayCommand(exportOpportunitiesExecute, exportOpportunitiesCanExecute);
         }
 
-        private void loadOpportunitiesExecute()
+        private void loadOpportunitiesExecute(object passwordBox)
         {
-            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
-            
+            PasswordBox box = passwordBox as PasswordBox;
+            string password = box.Password;
+
+            //Using Keys
+            //ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
+
+            //Using Username/Password
+            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetCookieAuthenticatieon(Username, password);
+
             List<OpportunityType> oppTypes = new OpportunityTypesApi(connectWiseClient)
                 .GetTypes()
                 .GetResult<List<OpportunityType>>();
+
+            if (oppTypes == null)
+            {
+                MessageBox.Show("Could not connect to ConnectWise.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            _oppTypes.ObservablyClear();
             foreach(OpportunityType oppType in oppTypes)
             {
                 addOppType(new OppTypeBool(oppType.Description));
@@ -114,10 +145,25 @@ namespace ConnectWiseInformationInterface.ViewModel
             List<Opportunity> opps = new OpportunitiesApi(connectWiseClient)
                 .GetOpportunities()
                 .GetResult<List<Opportunity>>();
+
+            if (opps == null)
+            {
+                MessageBox.Show("Could not connect to ConnectWise.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            _loadedOpportunities.ObservablyClear();
             foreach(Opportunity opp in opps)
             {
                 _loadedOpportunities.Add(opp);
             }
+        }
+        private bool loadOpportunitiesCanExecute(object passwordBox)
+        {
+            PasswordBox box = passwordBox as PasswordBox;
+            if (box == null) return false;
+            string password = box.Password;
+            return (Username != "" && password != "");
         }
 
         private void exportOpportunitiesExecute()

@@ -20,9 +20,15 @@
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="5"/>
         </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -88,9 +94,25 @@
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Content="Load Opportunities" Command="{Binding LoadOpportunitiesCommand}"/>
-                <TextBlock Grid.Row="1" Text="{Binding LoadedOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Username:"/>
+                <TextBox Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+                
+                <TextBlock Grid.Row="1" Text="Password:"/>
+                <PasswordBox Grid.Row="1" Grid.Column="1" Name="passwordBox"/>
+
+                <Button Grid.Row="2" Grid.ColumnSpan="2" 
+                        Content="Load Opportunities" 
+                        Command="{Binding LoadOpportunitiesCommand}" 
+                        CommandParameter="{Binding ElementName=passwordBox}"/>
+                <TextBlock Grid.Row="3" Grid.ColumnSpan="3" 
+                           Text="{Binding LoadedOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
             </Grid>
         </Border>
 
