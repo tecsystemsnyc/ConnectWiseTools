@@ -335,11 +335,7 @@ namespace EstimatingLibrary
                             equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
                             foreach(TECSubScope ss in equip.SubScope)
                             {
-                                TECController parent = ss.Connection?.ParentController;
-                                if (parent != null)
-                                {
-                                    parent.RemoveSubScope(ss);
-                                }
+                                handleSubScopeRemoval(ss);
                             }
                         }
                     }
@@ -367,7 +363,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private void handleSubScopeRemoval(TECSubScope removed)
+        protected void handleSubScopeRemoval(TECSubScope removed)
         {
             TECController controller = removed.Connection?.ParentController;
             if(controller != null)

@@ -293,6 +293,10 @@ namespace EstimatingLibrary
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
                         }
+                        else if (item is TECEquipment equip)
+                        {
+                            equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
+                        }
                         notifyTECChanged(Change.Add, propertyName, this, item);
                     }
                 }
@@ -317,6 +321,14 @@ namespace EstimatingLibrary
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
                             handleInstanceRemoved(sys);
+                        }
+                        else if (item is TECEquipment equip)
+                        {
+                            equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                            foreach (TECSubScope ss in equip.SubScope)
+                            {
+                                handleSubScopeRemoval(ss);
+                            }
                         }
                         notifyTECChanged(Change.Remove, propertyName, this, item);
                     }
