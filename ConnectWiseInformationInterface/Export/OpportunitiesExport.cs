@@ -3,52 +3,111 @@ using ConnectWiseDotNetSDK.ConnectWise.Client.Common.Model;
 using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ConnectWiseInformationInterface.Export
 {
     public static class OpportunitiesExport
     {
-        public static void ExportOpportunities(string filePath, IEnumerable<Opportunity> opps)
+        public static void ExportOpportunities(string filePath, IEnumerable<Opportunity> opps, IEnumerable<SalesProbability> probs)
         {
             XLWorkbook workbook = new XLWorkbook();
             IXLWorksheet worksheet = workbook.Worksheets.Add("SALES LOG");
 
             worksheet.insertHeaders(1);
 
-            int i = 1;
+            int i = 2;
             foreach(Opportunity opp in opps)
             {
                 IXLRow row = worksheet.Row(i);
 
-                double probability = opp.Probability.Name.CastTo<double>();
+                int probability = 0;
+                bool probabilityFound = false;
+                foreach(SalesProbability prob in probs)
+                {
+                    if (prob.Id == opp.Probability.Id)
+                    {
+                        probability = (int)prob.Probability;
+                        probabilityFound = true;
+                    }
+                }
+                if (!probabilityFound) { Console.WriteLine(string.Format("Probability not found in {0}", opp.Name)); }
 
-                int engineering = opp.CustomFields[0].Value.CastTo<int>();
-                int programming = opp.CustomFields[1].Value.CastTo<int>();
-                int graphics = opp.CustomFields[2].Value.CastTo<int>();
-                int technician = opp.CustomFields[3].Value.CastTo<int>();
-                int pm = opp.CustomFields[4].Value.CastTo<int>();
+                int engineering = 0, programming = 0, graphics = 0, technician = 0, pm = 0;
+
+                foreach(CustomFieldValue custom in opp.CustomFields)
+                {
+                    switch (custom.Caption) {
+                        case "FC: Graphics":
+                            if (custom.Value != null)
+                            {
+                                graphics = custom.Value.CastTo<int>();
+                            }
+                            break;
+                        case "FC: Software":
+                            if (custom.Value != null)
+                            {
+                                programming = custom.Value.CastTo<int>();
+                            }
+                            break;
+                        case "FC:TechLabor":
+                            if (custom.Value != null)
+                            {
+                                technician = custom.Value.CastTo<int>();
+                            }
+                            break;
+                        case "FC:PrjctMgmt":
+                            if (custom.Value != null)
+                            {
+                                pm = custom.Value.CastTo<int>();
+                            }
+                            break;
+                        case "FC: Engineer":
+                            if (custom.Value != null)
+                            {
+                                engineering = custom.Value.CastTo<int>();
+                            }
+                            break;
+                        default:
+                            Console.WriteLine(string.Format("Unknown custom field: {0}", custom.Caption));
+                            break;
+                    }
+                }
 
                 row.Cell("A").Value = opp.Id;
                 row.Cell("B").Value = opp.Name;
                 row.Cell("C").Value = opp.PrimarySalesRep.Name;
                 row.Cell("D").Value = opp.Type.Name;
-                row.Cell("E").Value = probability;
-                row.Cell("F").Value = opp.ExpectedCloseDate;
+                row.Cell("E").Value = string.Format("{0}%", probability);
+                row.Cell("F").Value = opp.ExpectedCloseDate.Value.Date;
                 row.Cell("G").Value = engineering;
-                row.Cell("H").Value = engineering * probability;
+                row.Cell("H").Value = engineering * probability/100;
                 row.Cell("I").Value = programming;
-                row.Cell("J").Value = programming * probability;
+                row.Cell("J").Value = programming * probability/100;
                 row.Cell("K").Value = graphics;
-                row.Cell("L").Value = graphics * probability;
+                row.Cell("L").Value = graphics * probability/100;
                 row.Cell("M").Value = technician;
-                row.Cell("N").Value = technician * probability;
+                row.Cell("N").Value = technician * probability/100;
                 row.Cell("O").Value = pm;
-                row.Cell("P").Value = pm * probability;
+                row.Cell("P").Value = pm * probability/100;
 
                 i++;
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            try
+            {
+                workbook.SaveAs(filePath);
+                Process.Start(filePath);
+            }
+            catch
+            {
+                MessageBox.Show("Excel file couldn't save. File may be open elsewhere.");
             }
         }
 

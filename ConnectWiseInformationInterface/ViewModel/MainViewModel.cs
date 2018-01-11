@@ -1,14 +1,17 @@
 using ConnectWiseDotNetSDK.ConnectWise.Client;
 using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Api;
 using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
+using ConnectWiseInformationInterface.Export;
 using ConnectWiseInformationInterface.Models;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -32,8 +35,8 @@ namespace ConnectWiseInformationInterface.ViewModel
         private const string APP_ID = "TECSystemsInc";      //Cookie Value
         private const string SITE = "na.myconnectwise.net"; //ConnectWise Site (Login Info)
         private const string COMPANY_NAME = "tecsystems";   //Company Name (Login Info)
-        private const string PUBLIC_KEY = "";               //Public Key for GHanson (from ConnectWise)
-        private const string PRIVATE_KEY = "";              //Private Key for GHanson (from ConnectWise)
+        private const string PUBLIC_KEY = "8vAUgWONMsBxf89Z";               //Public Key for GHanson (from ConnectWise)
+        private const string PRIVATE_KEY = "iTvZUXzksv1BNj6u";              //Private Key for GHanson (from ConnectWise)
 
         private DateTime _startCloseDate;
         private DateTime _endCloseDate;
@@ -43,6 +46,8 @@ namespace ConnectWiseInformationInterface.ViewModel
         private readonly ObservableCollection<OppTypeBool> _oppTypes;
         private readonly ObservableCollection<Opportunity> _loadedOpportunities;
         private readonly ObservableCollection<Opportunity> _applicableOpportunities;
+
+        private List<SalesProbability> probabilities;
 
         private string _username;
 
@@ -117,14 +122,14 @@ namespace ConnectWiseInformationInterface.ViewModel
 
         private void loadOpportunitiesExecute(object passwordBox)
         {
-            PasswordBox box = passwordBox as PasswordBox;
-            string password = box.Password;
+            //PasswordBox box = passwordBox as PasswordBox;
+            //string password = box.Password;
 
             //Using Keys
-            //ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
+            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
 
             //Using Username/Password
-            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetCookieAuthenticatieon(Username, password);
+            //ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetCookieAuthenticatieon(Username, password);
 
             List<OpportunityType> oppTypes = new OpportunityTypesApi(connectWiseClient)
                 .GetTypes()
@@ -137,6 +142,7 @@ namespace ConnectWiseInformationInterface.ViewModel
             }
 
             _oppTypes.ObservablyClear();
+            addOppType(allBool);
             foreach(OpportunityType oppType in oppTypes)
             {
                 addOppType(new OppTypeBool(oppType.Description));
@@ -157,29 +163,55 @@ namespace ConnectWiseInformationInterface.ViewModel
             {
                 _loadedOpportunities.Add(opp);
             }
+
+            probabilities = new SalesProbabilitiesApi(connectWiseClient)
+                .GetProbabilities()
+                .GetResult<List<SalesProbability>>();
+
+            if (probabilities == null)
+            {
+                MessageBox.Show("Could not connect to ConnectWise.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
         }
         private bool loadOpportunitiesCanExecute(object passwordBox)
         {
-            PasswordBox box = passwordBox as PasswordBox;
-            if (box == null) return false;
-            string password = box.Password;
-            return (Username != "" && password != "");
+            return true;
+            //PasswordBox box = passwordBox as PasswordBox;
+            //if (box == null) return false;
+            //string password = box.Password;
+            //return (Username != "" && password != "");
         }
 
         private void exportOpportunitiesExecute()
         {
-            throw new NotImplementedException();
+            string userRoot = System.Environment.GetEnvironmentVariable("USERPROFILE");
+            string downloadFolder = Path.Combine(userRoot, "Downloads");
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = downloadFolder;
+            saveFileDialog.FileName = "SalesLog";
+            saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+            saveFileDialog.DefaultExt = "xlsx";
+            saveFileDialog.AddExtension = true;
+
+            string savePath = null;
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                savePath = saveFileDialog.FileName;
+            }
+
+            OpportunitiesExport.ExportOpportunities(savePath, ApplicableOpportunities, probabilities);
         }
         private bool exportOpportunitiesCanExecute()
         {
-            return ApplicableOpportunities.Count > 0;
+            return (ApplicableOpportunities.Count > 0 && probabilities != null);
         }
 
         private void addOppType(OppTypeBool oppType)
         {
             oppType.PropertyChanged += oppTypeBoolChanged;
             _oppTypes.Add(oppType);
-
         }
         private void oppTypeBoolChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -216,7 +248,7 @@ namespace ConnectWiseInformationInterface.ViewModel
             _applicableOpportunities.ObservablyClear();
             foreach(Opportunity opp in LoadedOpportunities)
             {
-                if (oppTypeSelected(opp.Type.Name) && closeDateInRange(opp.ExpectedCloseDate.Value))
+                if (opp.Type != null && oppTypeSelected(opp.Type.Name) && closeDateInRange(opp.ExpectedCloseDate.Value))
                 {
                     _applicableOpportunities.Add(opp);
                 }
