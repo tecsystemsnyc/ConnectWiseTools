@@ -352,6 +352,10 @@ namespace TECUserControlLibrary.ViewModels
             if (connectable.ParentConnection != null && connectable.ParentConnection.ParentController != null)
             {
                 INetworkConnectable parentNetConnectable = connectable.ParentConnection.ParentController;
+                if (!connectableDictionary.ContainsKey(parentNetConnectable))
+                {
+                    addConnectableItem(parentNetConnectable);
+                }
                 parentConnected = connectableDictionary[parentNetConnectable].IsConnected;
             }
 
