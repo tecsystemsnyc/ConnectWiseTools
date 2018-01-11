@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using ConnectWiseDotNetSDK.ConnectWise.Client.Common.Model;
 using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,30 @@ namespace ConnectWiseInformationInterface.Export
             {
                 IXLRow row = worksheet.Row(i);
 
-                double probability = opp.Probability;
+                double probability = opp.Probability.Name.CastTo<double>();
 
-                row.Cell("A").Value = opp.
+                int engineering = opp.CustomFields[0].Value.CastTo<int>();
+                int programming = opp.CustomFields[1].Value.CastTo<int>();
+                int graphics = opp.CustomFields[2].Value.CastTo<int>();
+                int technician = opp.CustomFields[3].Value.CastTo<int>();
+                int pm = opp.CustomFields[4].Value.CastTo<int>();
+
+                row.Cell("A").Value = opp.Id;
+                row.Cell("B").Value = opp.Name;
+                row.Cell("C").Value = opp.PrimarySalesRep.Name;
+                row.Cell("D").Value = opp.Type.Name;
+                row.Cell("E").Value = probability;
+                row.Cell("F").Value = opp.ExpectedCloseDate;
+                row.Cell("G").Value = engineering;
+                row.Cell("H").Value = engineering * probability;
+                row.Cell("I").Value = programming;
+                row.Cell("J").Value = programming * probability;
+                row.Cell("K").Value = graphics;
+                row.Cell("L").Value = graphics * probability;
+                row.Cell("M").Value = technician;
+                row.Cell("N").Value = technician * probability;
+                row.Cell("O").Value = pm;
+                row.Cell("P").Value = pm * probability;
 
                 i++;
             }
