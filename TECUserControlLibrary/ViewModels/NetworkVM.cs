@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -614,31 +615,65 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             CannotConnectMessage = "";
-            bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
-            if (dropInfo.Data is ConnectableItem connectable && targetIsChildren)
+
+            UIHelpers.DragOver(dropInfo, (sourceItem, sourceType, targetType) =>
             {
-                if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
+                bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
+                if (sourceItem is IList sourceList)
                 {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
+                    bool itemsCompatible = false;
+                    foreach (var item in sourceList)
+                    {
+                        if (item is ConnectableItem connectable && targetIsChildren)
+                        {
+                            if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
+                            {
+                                itemsCompatible = true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    return itemsCompatible;
                 }
                 else
                 {
-                    CannotConnectMessage = "Connectable isn't compatible with connection.";
+                    if (sourceItem is ConnectableItem connectable && targetIsChildren)
+                    {
+                        if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
+                        {
+                            return true;
+                        }
+                    }
                 }
+                return false;
+
+            }, () =>
+            {
+                CannotConnectMessage = "Connectable isn't compatible with connection.";
             }
+            );
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is ConnectableItem connectable)
-            {
-                SelectedConnection.AddINetworkConnectable(connectable.Item);
-            }
-            else
-            {
-                throw new DataMisalignedException("Data misalignment between DragOver and Drop.");
-            }
+            UIHelpers.Drop(dropInfo,
+                (item) =>
+                {
+                    if (item is ConnectableItem connectable)
+                    {
+                        SelectedConnection.AddINetworkConnectable(connectable.Item);
+                    }
+                    else
+                    {
+                        throw new DataMisalignedException("Data misalignment between DragOver and Drop.");
+                    }
+                    return null;
+                },
+                false
+            );
         }
 
         private void updateInstances()
