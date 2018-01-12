@@ -65,17 +65,17 @@
 
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="65"/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Length:"/>
+                <TextBlock Text="Length (ft.):"/>
                 <Grid Grid.Column="1">
                     <Label Content="{Binding SubScopeConnectionItem.SubScope.Connection.Length}" 
                    Visibility="{Binding ReadOnly, 
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length, StringFormat={}{0} ft.}"
+                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.Length}"
                      Visibility="{Binding ReadOnly,
                 Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                          Margin="2"/>
@@ -94,12 +94,12 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Conduit Length:" />
+                <TextBlock Text="Conduit Length (ft.):" />
                 <Grid Grid.Column="1" MinWidth="40">
                     <TextBlock Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
                        Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource True}}"/>
-                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength, StringFormat={}{0} ft.}"
+                    <TextBox Text="{Binding SubScopeConnectionItem.SubScope.Connection.ConduitLength}"
                          Visibility="{Binding ReadOnly,
                     Converter={converters:BooleanToVisibilityConverter}, ConverterParameter={StaticResource False}}"
                          Margin="2"/>
