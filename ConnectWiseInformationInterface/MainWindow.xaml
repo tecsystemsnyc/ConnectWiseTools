@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConnectWiseInformationInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="700"
+        Title="MainWindow" Height="500" Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.Resources>
         <Style TargetType="Border">
@@ -30,108 +30,174 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Border Grid.RowSpan="2">
+    <TabControl>
+        <TabItem Header="Opportunities">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.RowSpan="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                <!--Filters-->
-                <Grid>
-                    <!--Close Date-->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Text="Expected Close Date:"/>
+                        <!--Filters-->
+                        <Grid>
+                            <!--Close Date-->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                    <DatePicker Grid.Column="1" SelectedDate="{Binding OppManager.StartDate}"/>
-                    <DatePicker Grid.Column="2" SelectedDate="{Binding OppManager.EndDate}"/>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <!--Filter Buttons-->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Button Content="Clear Dates"
+                            <TextBlock Text="Expected Close Date:"/>
+
+                            <DatePicker Grid.Column="1" SelectedDate="{Binding OppManager.StartDate}"/>
+                            <DatePicker Grid.Column="2" SelectedDate="{Binding OppManager.EndDate}"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <!--Filter Buttons-->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Content="Clear Dates"
                             Command="{Binding ClearDatesCommand}"/>
-                    <Button Content="Clear Types"
+                            <Button Content="Clear Types"
                             Command="{Binding ClearTypesCommand}"
                             Grid.Column="1"/>
-                </Grid>
-                <Grid Grid.Row="2">
-                    <!--Opportunity Types-->
-                    <ListView ItemsSource="{Binding OppTypeBools}">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="Focusable" Value="False"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="Black" BorderThickness="1">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Name}"/>
-                                        <CheckBox Grid.Column="1" IsChecked="{Binding Include}" />
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
-            </Grid>
-        </Border>
-        
-        <!--Load Opportunities-->
-        <Border Grid.Column="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <!--Opportunity Types-->
+                            <ListView ItemsSource="{Binding OppTypeBools}">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Focusable" Value="False"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Black" BorderThickness="1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}"/>
+                                                <CheckBox Grid.Column="1" IsChecked="{Binding Include}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Grid>
+                </Border>
 
-                <Button Grid.Row="0"
+                <!--Load Opportunities-->
+                <Border Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0"
                         Width="120"
                         Height="30"
                         Content="Load Opportunities" 
                         Command="{Binding LoadOpportunitiesCommand}"/>
-                <TextBlock Grid.Row="1"
+                        <TextBlock Grid.Row="1"
                            Text="{Binding OppManager.AllOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
-            </Grid>
-        </Border>
+                    </Grid>
+                </Border>
 
-        <!--Export Opportunities-->
-        <Border Grid.Row="1" Grid.Column="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"
+                <!--Export Opportunities-->
+                <Border Grid.Row="1" Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"
                         Width="120"
                         Height="30"/>
-                <TextBlock Grid.Row="1" Text="{Binding OppManager.FilteredOpportunities.Count, StringFormat=Applicable Opportunities: {0}}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding OppManager.FilteredOpportunities.Count, StringFormat=Applicable Opportunities: {0}}"/>
+                    </Grid>
+                </Border>
+
             </Grid>
-        </Border>
-        
-    </Grid>
+        </TabItem>
+        <TabItem Header="Settings">
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextAlignment" Value="Right"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Width" Value="200"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="App ID (Cookie Value):"/>
+                <TextBox Text="{Binding SettingsVM.AppID, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Column="1"/>
+
+                <TextBlock Text="Site:"
+                           Grid.Row="1"/>
+                <TextBox Text="{Binding SettingsVM.Site, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="1"
+                         Grid.Column="1"/>
+
+                <TextBlock Text="Company Name:"
+                           Grid.Row="2"/>
+                <TextBox Text="{Binding SettingsVM.CompanyName, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="2"
+                         Grid.Column="1"/>
+
+                <TextBlock Text="Public Key:"
+                           Grid.Row="3"/>
+                <TextBox Text="{Binding SettingsVM.PublicKey, UpdateSourceTrigger=PropertyChanged}"
+                           Grid.Row="3"
+                           Grid.Column="1"/>
+
+                <TextBlock Text="Private Key:"
+                           Grid.Row="4"/>
+                <TextBox Text="{Binding SettingsVM.PrivateKey, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="4"
+                         Grid.Column="1"/>
+
+                <Button Content="Save Settings" 
+                        Command="{Binding SettingsVM.SaveSettingsCommand}"
+                        Grid.Row="5"
+                        Grid.Column="1"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+    
 </Window>

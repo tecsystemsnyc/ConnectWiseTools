@@ -32,12 +32,6 @@ namespace ConnectWiseInformationInterface.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        private const string APP_ID = "TECSystemsInc";      //Cookie Value
-        private const string SITE = "na.myconnectwise.net"; //ConnectWise Site (Login Info)
-        private const string COMPANY_NAME = "tecsystems";   //Company Name (Login Info)
-        private const string PUBLIC_KEY = "8vAUgWONMsBxf89Z";
-        private const string PRIVATE_KEY = "iTvZUXzksv1BNj6u";
-
         private readonly OppTypeBool allTypeBool;
 
         private OppFilterManager _oppManager;
@@ -68,6 +62,8 @@ namespace ConnectWiseInformationInterface.ViewModel
         public ICommand ClearDatesCommand { get; private set; }
         public ICommand ClearTypesCommand { get; private set; }
 
+        public SettingsVM SettingsVM { get; private set; }
+
         public MainViewModel()
         {
             _oppManager = new OppFilterManager(new List<Opportunity>(), new List<SalesProbability>());
@@ -84,6 +80,8 @@ namespace ConnectWiseInformationInterface.ViewModel
             ExportOpportunitiesCommand = new RelayCommand(exportOpportunitiesExecute, exportOpportunitiesCanExecute);
             ClearDatesCommand = new RelayCommand(clearDatesExecute, clearDatesCanExecute);
             ClearTypesCommand = new RelayCommand(clearTypesExecute, clearTypesCanExecute);
+
+            SettingsVM = new SettingsVM();
         }
 
         private void resetOppTypes()
@@ -95,7 +93,8 @@ namespace ConnectWiseInformationInterface.ViewModel
         private void loadOpportunitiesExecute()
         {
             //Using Keys
-            ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
+            ApiClient connectWiseClient = new ApiClient(SettingsVM.AppID, SettingsVM.Site, SettingsVM.CompanyName)
+                .SetPublicPrivateKey(SettingsVM.PublicKey, SettingsVM.PrivateKey);
 
             //Load Opportunity Types
             List<OpportunityType> oppTypes = new OpportunityTypesApi(connectWiseClient)
@@ -104,7 +103,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
             if (oppTypes == null)
             {
-                MessageBox.Show("Could not connect to ConnectWise.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                showCantConnect();
                 return;
             }
 
@@ -121,7 +120,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
             if (opps == null)
             {
-                MessageBox.Show("Could not connect to ConnectWise.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                showCantConnect();
                 return;
             }
 
@@ -132,7 +131,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
             if (probabilities == null)
             {
-                MessageBox.Show("Could not connect to ConnectWise.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                showCantConnect();
                 return;
             }
 
@@ -141,7 +140,7 @@ namespace ConnectWiseInformationInterface.ViewModel
         }
         private bool loadOpportunitiesCanExecute()
         {
-            return true;
+            return SettingsVM.CanLoad();
         }
 
         private void exportOpportunitiesExecute()
@@ -243,6 +242,11 @@ namespace ConnectWiseInformationInterface.ViewModel
                     }
                 }
             }
+        }
+
+        private void showCantConnect()
+        {
+            MessageBox.Show("Could not connect to ConnectWise. Check your settings and try again.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
     }
 }

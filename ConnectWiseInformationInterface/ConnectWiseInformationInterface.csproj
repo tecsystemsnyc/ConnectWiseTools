@@ -123,6 +123,7 @@
     <Compile Include="Models\OppFilterManager.cs" />
     <Compile Include="Models\OppTypeBool.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\SettingsVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
