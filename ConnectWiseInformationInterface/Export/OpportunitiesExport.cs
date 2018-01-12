@@ -42,7 +42,16 @@ namespace ConnectWiseInformationInterface.Export
             col.Cell(1).Value = "Opportunity Types Included:";
             col.Cell(1).Style.Font.SetBold();
             int row = 2;
-            foreach(OpportunityType type in manager.OpportunityTypes)
+
+            List<OpportunityType> typeList = new List<OpportunityType>(manager.OpportunityTypes);
+            typeList.Sort(oppTypeAlphaComparer);
+
+            int oppTypeAlphaComparer(OpportunityType type1, OpportunityType type2)
+            {
+                return string.Compare(type1.Description, type2.Description);
+            }
+
+            foreach (OpportunityType type in manager.OpportunityTypes)
             {
                 col.Cell(row).Value = type.Description;
                 row++;

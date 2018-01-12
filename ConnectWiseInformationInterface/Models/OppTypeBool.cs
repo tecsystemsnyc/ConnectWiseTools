@@ -38,7 +38,7 @@ namespace ConnectWiseInformationInterface.Models
         public OppTypeBool(OpportunityType oppType)
         {
             this.Type = oppType;
-            _include = false;
+            _include = true;
         }
 
         private void notifyPropertyChanged(string propertyName)

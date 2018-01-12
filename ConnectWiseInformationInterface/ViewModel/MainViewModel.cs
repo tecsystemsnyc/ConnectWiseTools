@@ -106,6 +106,15 @@ namespace ConnectWiseInformationInterface.ViewModel
                 showCantConnect();
                 return;
             }
+            else
+            {
+                oppTypes.Sort(oppTypeAlphaComparer);
+
+                int oppTypeAlphaComparer(OpportunityType type1, OpportunityType type2)
+                {
+                    return string.Compare(type1.Description, type2.Description);
+                }
+            }
 
             resetOppTypes();
             foreach(OpportunityType oppType in oppTypes)
