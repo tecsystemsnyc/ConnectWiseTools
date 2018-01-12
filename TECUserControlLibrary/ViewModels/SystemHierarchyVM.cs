@@ -240,6 +240,8 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECScopeManager scopeManager)
         {
             catalogs = scopeManager.Catalogs;
+            this.scopeManager = scopeManager;
+
         }
 
         private void addSystemExecute()
