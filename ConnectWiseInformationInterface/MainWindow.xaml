@@ -14,8 +14,7 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
         </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="5"/>
@@ -44,6 +43,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
@@ -58,23 +58,36 @@
                     
                     <TextBlock Text="Expected Close Date:"/>
 
-                    <DatePicker Grid.Column="1" SelectedDate="{Binding StartCloseDate}"/>
-                    <DatePicker Grid.Column="2" SelectedDate="{Binding EndCloseDate}"/>
+                    <DatePicker Grid.Column="1" SelectedDate="{Binding OppManager.StartDate}"/>
+                    <DatePicker Grid.Column="2" SelectedDate="{Binding OppManager.EndDate}"/>
                 </Grid>
                 <Grid Grid.Row="1">
+                    <!--Filter Buttons-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Clear Dates"
+                            Command="{Binding ClearDatesCommand}"/>
+                    <Button Content="Clear Types"
+                            Command="{Binding ClearTypesCommand}"
+                            Grid.Column="1"/>
+                </Grid>
+                <Grid Grid.Row="2">
                     <!--Opportunity Types-->
-                    <ListView ItemsSource="{Binding OppTypes}">
+                    <ListView ItemsSource="{Binding OppTypeBools}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="Focusable" Value="False"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="5" BorderBrush="Black" BorderThickness="1">
+                                <Border BorderBrush="Black" BorderThickness="1">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding Name}"/>
@@ -94,25 +107,15 @@
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
-                    <!--<RowDefinition/>
-                    <RowDefinition/>-->
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <!--<TextBlock Text="Username:"/>
-                <TextBox Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
-                
-                <TextBlock Grid.Row="1" Text="Password:"/>
-                <PasswordBox Grid.Row="1" Grid.Column="1" Name="passwordBox"/>-->
 
-                <Button Grid.Row="0" Grid.ColumnSpan="2" 
+                <Button Grid.Row="0"
+                        Width="120"
+                        Height="30"
                         Content="Load Opportunities" 
-                        Command="{Binding LoadOpportunitiesCommand}" 
-                        CommandParameter="{Binding ElementName=passwordBox}"/>
-                <TextBlock Grid.Row="1" Grid.ColumnSpan="3" 
-                           Text="{Binding LoadedOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
+                        Command="{Binding LoadOpportunitiesCommand}"/>
+                <TextBlock Grid.Row="1"
+                           Text="{Binding OppManager.AllOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
             </Grid>
         </Border>
 
@@ -123,8 +126,10 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"/>
-                <TextBlock Grid.Row="1" Text="{Binding ApplicableOpportunities.Count, StringFormat=Applicable Opportunities: {0}}"/>
+                <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"
+                        Width="120"
+                        Height="30"/>
+                <TextBlock Grid.Row="1" Text="{Binding OppManager.FilteredOpportunities.Count, StringFormat=Applicable Opportunities: {0}}"/>
             </Grid>
         </Border>
         

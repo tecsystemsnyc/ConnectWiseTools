@@ -120,6 +120,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Export\OpportunitiesExport.cs" />
+    <Compile Include="Models\OppFilterManager.cs" />
     <Compile Include="Models\OppTypeBool.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

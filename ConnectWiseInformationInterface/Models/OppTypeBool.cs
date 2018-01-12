@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConnectWiseDotNetSDK.ConnectWise.Client.Sales.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -26,13 +27,17 @@ namespace ConnectWiseInformationInterface.Models
             }
         }
 
-        public string Name { get; }
+        public OpportunityType Type { get; } 
+        public string Name
+        {
+            get { return Type.Description; }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public OppTypeBool(string name)
+        public OppTypeBool(OpportunityType oppType)
         {
-            this.Name = name;
+            this.Type = oppType;
             _include = false;
         }
 

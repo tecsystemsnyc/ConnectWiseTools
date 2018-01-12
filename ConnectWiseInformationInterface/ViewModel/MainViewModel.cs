@@ -35,102 +35,69 @@ namespace ConnectWiseInformationInterface.ViewModel
         private const string APP_ID = "TECSystemsInc";      //Cookie Value
         private const string SITE = "na.myconnectwise.net"; //ConnectWise Site (Login Info)
         private const string COMPANY_NAME = "tecsystems";   //Company Name (Login Info)
-        private const string PUBLIC_KEY = "8vAUgWONMsBxf89Z";               //Public Key for GHanson (from ConnectWise)
-        private const string PRIVATE_KEY = "iTvZUXzksv1BNj6u";              //Private Key for GHanson (from ConnectWise)
+        private const string PUBLIC_KEY = "8vAUgWONMsBxf89Z";
+        private const string PRIVATE_KEY = "iTvZUXzksv1BNj6u";
 
-        private DateTime _startCloseDate;
-        private DateTime _endCloseDate;
+        private readonly OppTypeBool allTypeBool;
 
-        private bool updatingOppTypeBools;
-        private readonly OppTypeBool allBool;
-        private readonly ObservableCollection<OppTypeBool> _oppTypes;
-        private readonly ObservableCollection<Opportunity> _loadedOpportunities;
-        private readonly ObservableCollection<Opportunity> _applicableOpportunities;
+        private OppFilterManager _oppManager;
+        private readonly ObservableCollection<OppTypeBool> _oppTypeBools;
 
-        private List<SalesProbability> probabilities;
-
-        private string _username;
-
-        public DateTime StartCloseDate
+        public OppFilterManager OppManager
         {
-            get { return _startCloseDate; }
-            set
+            get { return _oppManager; }
+            private set
             {
-                _startCloseDate = value;
-                RaisePropertyChanged("StartCloseDate");
-                updateApplicableOpportunities();
+                if (OppManager != value)
+                {
+                    _oppManager = value;
+                    RaisePropertyChanged("OppManager");
+                }
             }
         }
-        public DateTime EndCloseDate
-        {
-            get { return _endCloseDate; }
-            set
-            {
-                _endCloseDate = value;
-                RaisePropertyChanged("EndCloseDate");
-                updateApplicableOpportunities();
-            }
-        }
-
-        public ReadOnlyObservableCollection<OppTypeBool> OppTypes
+        public ReadOnlyObservableCollection<OppTypeBool> OppTypeBools
         {
             get
             {
-                return new ReadOnlyObservableCollection<OppTypeBool>(_oppTypes);
-            }
-        }
-        public ReadOnlyObservableCollection<Opportunity> LoadedOpportunities
-        {
-            get { return new ReadOnlyObservableCollection<Opportunity>(_loadedOpportunities); }
-        }
-        public ReadOnlyObservableCollection<Opportunity> ApplicableOpportunities
-        {
-            get { return new ReadOnlyObservableCollection<Opportunity>(_applicableOpportunities); }
-        }
-
-        public string Username
-        {
-            get { return _username; }
-            set
-            {
-                _username = value;
-                RaisePropertyChanged("Username");
+                return new ReadOnlyObservableCollection<OppTypeBool>(_oppTypeBools);
             }
         }
 
         public ICommand LoadOpportunitiesCommand { get; private set; }
         public ICommand ExportOpportunitiesCommand { get; private set; }
+        public ICommand ClearDatesCommand { get; private set; }
+        public ICommand ClearTypesCommand { get; private set; }
 
         public MainViewModel()
         {
-            _oppTypes = new ObservableCollection<OppTypeBool>();
-            _loadedOpportunities = new ObservableCollection<Opportunity>();
-            _applicableOpportunities = new ObservableCollection<Opportunity>();
+            _oppManager = new OppFilterManager(new List<Opportunity>(), new List<SalesProbability>());
 
-            _startCloseDate = DateTime.Now;
-            _endCloseDate = DateTime.Now;
+            OpportunityType allType = new OpportunityType();
+            allType.Description = "All";
+            allTypeBool = new OppTypeBool(allType);
+            allTypeBool.PropertyChanged += oppTypeBoolChanged;
 
-            _username = "";
+            _oppTypeBools = new ObservableCollection<OppTypeBool>();
+            resetOppTypes();
 
-            allBool = new OppTypeBool("All");
-            addOppType(allBool);
-            updatingOppTypeBools = false;
-
-            LoadOpportunitiesCommand = new RelayCommand<object>(loadOpportunitiesExecute, loadOpportunitiesCanExecute);
+            LoadOpportunitiesCommand = new RelayCommand(loadOpportunitiesExecute, loadOpportunitiesCanExecute);
             ExportOpportunitiesCommand = new RelayCommand(exportOpportunitiesExecute, exportOpportunitiesCanExecute);
+            ClearDatesCommand = new RelayCommand(clearDatesExecute, clearDatesCanExecute);
+            ClearTypesCommand = new RelayCommand(clearTypesExecute, clearTypesCanExecute);
         }
 
-        private void loadOpportunitiesExecute(object passwordBox)
+        private void resetOppTypes()
         {
-            //PasswordBox box = passwordBox as PasswordBox;
-            //string password = box.Password;
+            _oppTypeBools.ObservablyClear();
+            _oppTypeBools.Add(allTypeBool);
+        }
 
+        private void loadOpportunitiesExecute()
+        {
             //Using Keys
             ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetPublicPrivateKey(PUBLIC_KEY, PRIVATE_KEY);
 
-            //Using Username/Password
-            //ApiClient connectWiseClient = new ApiClient(APP_ID, SITE, COMPANY_NAME).SetCookieAuthenticatieon(Username, password);
-
+            //Load Opportunity Types
             List<OpportunityType> oppTypes = new OpportunityTypesApi(connectWiseClient)
                 .GetTypes()
                 .GetResult<List<OpportunityType>>();
@@ -141,13 +108,13 @@ namespace ConnectWiseInformationInterface.ViewModel
                 return;
             }
 
-            _oppTypes.ObservablyClear();
-            addOppType(allBool);
+            resetOppTypes();
             foreach(OpportunityType oppType in oppTypes)
             {
-                addOppType(new OppTypeBool(oppType.Description));
+                addOppType(oppType);
             }
 
+            //Load Opportunities
             List<Opportunity> opps = new OpportunitiesApi(connectWiseClient)
                 .GetOpportunities()
                 .GetResult<List<Opportunity>>();
@@ -158,13 +125,8 @@ namespace ConnectWiseInformationInterface.ViewModel
                 return;
             }
 
-            _loadedOpportunities.ObservablyClear();
-            foreach(Opportunity opp in opps)
-            {
-                _loadedOpportunities.Add(opp);
-            }
-
-            probabilities = new SalesProbabilitiesApi(connectWiseClient)
+            //Load Probabilities
+            List<SalesProbability> probabilities = new SalesProbabilitiesApi(connectWiseClient)
                 .GetProbabilities()
                 .GetResult<List<SalesProbability>>();
 
@@ -173,19 +135,18 @@ namespace ConnectWiseInformationInterface.ViewModel
                 MessageBox.Show("Could not connect to ConnectWise.", "Can't connect!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
+
+            //Reset OppFilterManager
+            OppManager = new OppFilterManager(opps, probabilities);
         }
-        private bool loadOpportunitiesCanExecute(object passwordBox)
+        private bool loadOpportunitiesCanExecute()
         {
             return true;
-            //PasswordBox box = passwordBox as PasswordBox;
-            //if (box == null) return false;
-            //string password = box.Password;
-            //return (Username != "" && password != "");
         }
 
         private void exportOpportunitiesExecute()
         {
-            string userRoot = System.Environment.GetEnvironmentVariable("USERPROFILE");
+            string userRoot = Environment.GetEnvironmentVariable("USERPROFILE");
             string downloadFolder = Path.Combine(userRoot, "Downloads");
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -201,76 +162,87 @@ namespace ConnectWiseInformationInterface.ViewModel
                 savePath = saveFileDialog.FileName;
             }
 
-            OpportunitiesExport.ExportOpportunities(savePath, ApplicableOpportunities, probabilities);
+            OpportunitiesExport.ExportOpportunities(savePath, OppManager);
         }
         private bool exportOpportunitiesCanExecute()
         {
-            return (ApplicableOpportunities.Count > 0 && probabilities != null);
+            return (OppManager.FilteredOpportunities.Count > 0);
         }
 
-        private void addOppType(OppTypeBool oppType)
+        private void clearDatesExecute()
         {
-            oppType.PropertyChanged += oppTypeBoolChanged;
-            _oppTypes.Add(oppType);
+            OppManager.StartDate = null;
+            OppManager.EndDate = null;
         }
-        private void oppTypeBoolChanged(object sender, PropertyChangedEventArgs e)
+        private bool clearDatesCanExecute()
         {
-            OppTypeBool typeBool = sender as OppTypeBool;
-            if (!updatingOppTypeBools)
+            return (OppManager.StartDate.HasValue || OppManager.EndDate.HasValue);
+        }
+
+        private void clearTypesExecute()
+        {
+            foreach(OppTypeBool oppTypeBool in OppTypeBools)
             {
-                updatingOppTypeBools = true;
-                if (typeBool == allBool)
-                {
-                    //Set all bools equal to allBool value.
-                    foreach(OppTypeBool oppType in _oppTypes)
-                    {
-                        if (oppType != allBool)
-                        {
-                            oppType.Include = allBool.Include;
-                        }
-                    }
-                }
-                else
-                {
-                    //Set allBool to false if any bool gets set false;
-                    if (!typeBool.Include)
-                    {
-                        allBool.Include = false;
-                    }
-                }
-                updatingOppTypeBools = false;
-                updateApplicableOpportunities();
+                oppTypeBool.Include = false;
             }
         }
-
-        private void updateApplicableOpportunities()
+        private bool clearTypesCanExecute()
         {
-            _applicableOpportunities.ObservablyClear();
-            foreach(Opportunity opp in LoadedOpportunities)
+            foreach(OppTypeBool oppTypeBool in OppTypeBools)
             {
-                if (opp.Type != null && oppTypeSelected(opp.Type.Name) && closeDateInRange(opp.ExpectedCloseDate.Value))
-                {
-                    _applicableOpportunities.Add(opp);
-                }
-            }
-        }
-
-        private bool oppTypeSelected(string name)
-        {
-            foreach(OppTypeBool oppType in OppTypes)
-            {
-                if (oppType.Name == name && oppType.Include)
+                if (oppTypeBool.Include)
                 {
                     return true;
                 }
             }
             return false;
         }
-        private bool closeDateInRange(DateTime date)
+
+        private void addOppType(OpportunityType type)
         {
-            bool afterStart = DateTime.Compare(date, StartCloseDate) >= 0;
-            bool beforeEnd = DateTime.Compare(date, EndCloseDate) <= 0;
-            return (afterStart && beforeEnd);
+            OppTypeBool oppTypeBool = new OppTypeBool(type);
+            oppTypeBool.PropertyChanged += oppTypeBoolChanged;
+            _oppTypeBools.Add(oppTypeBool);
+        }
+
+        private void oppTypeBoolChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Include")
+            {
+                OppTypeBool changed = sender as OppTypeBool;
+                //Set all to include if allTypeBool is included.
+                if (changed == allTypeBool)
+                {
+                    if (allTypeBool.Include)
+                    {
+                        foreach (OppTypeBool oppTypeBool in OppTypeBools)
+                        {
+                            oppTypeBool.Include = true;
+                        }
+                    }
+                }
+                //Add or remove type from OppFilterManager
+                else
+                {
+                    if (changed.Include)
+                    {
+                        if (!OppManager.OpportunityTypes.Contains(changed.Type))
+                        {
+                            OppManager.AddOpportunityType(changed.Type);
+                        }
+                    }
+                    else
+                    {
+                        if (OppManager.OpportunityTypes.Contains(changed.Type))
+                        {
+                            OppManager.RemoveOpportunityType(changed.Type);
+                        }
+
+                        //Set allTypeBool to not included if any are not included
+                        allTypeBool.Include = false;
+                    }
+                }
+            }
         }
     }
 }
