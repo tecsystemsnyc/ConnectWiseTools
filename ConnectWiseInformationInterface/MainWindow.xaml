@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConnectWiseInformationInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800"
+        Title="Opportunities Export Utility" Height="500" Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.Resources>
         <Style TargetType="Border">
