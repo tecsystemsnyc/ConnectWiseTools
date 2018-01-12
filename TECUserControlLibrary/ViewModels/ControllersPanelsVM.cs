@@ -468,7 +468,15 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (!PanelSelectionReadOnly)
             {
-                UIHelpers.ControllerInPanelDragOver(dropInfo);
+                UIHelpers.DragOver(dropInfo, (item, sourceType, targetType) =>
+                {
+                    bool controllerDrag = (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel));
+                    bool typesMatch = sourceType == targetType;
+                    bool controllerTypeDrag = (sourceType == typeof(TECControllerType) && targetType == typeof(ControllerInPanel));
+                    bool panelTypeDrag = (sourceType == typeof(TECPanelType) && targetType == typeof(TECPanel));
+                    return controllerDrag || typesMatch || controllerTypeDrag || panelTypeDrag;
+                },
+                () => { });
             }
         }
         public void Drop(IDropInfo dropInfo)
@@ -482,36 +490,70 @@ namespace TECUserControlLibrary.ViewModels
             {
                 scopeManager = Bid;
             }
-            if (dropInfo.Data is TECController controller)
+            UIHelpers.Drop(dropInfo, (item) =>
             {
-                var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+                if (item is TECController controller)
+                {
+                    var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
 
-                if (addControllerMethod != null)
-                {
-                    SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes,scopeManager);
+                    if (addControllerMethod != null)
+                    {
+                        SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes, scopeManager);
+                    }
+                    else
+                    {
+                        SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
+                    }
+                    TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
+                    ((AddControllerVM)SelectedVM).SetTemplate(dropped);
+                    ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
                 }
-                else
+                else if (item is TECPanel panel)
                 {
-                    SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
-                }
-                TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
-                ((AddControllerVM)SelectedVM).SetTemplate(dropped);
-                ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
-            }
-            else if (dropInfo.Data is TECPanel panel)
-            {
-                var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
+                    var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
 
-                if (addPanelMethod != null)
-                {
-                    SelectedVM = new AddPanelVM(addPanelMethod, panelTypes, scopeManager);
+                    if (addPanelMethod != null)
+                    {
+                        SelectedVM = new AddPanelVM(addPanelMethod, panelTypes, scopeManager);
+                    }
+                    else
+                    {
+                        SelectedVM = new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
+                    }
+                    ((AddPanelVM)SelectedVM).SetTemplate(panel);
                 }
-                else
+                else if (item is TECControllerType controllerType)
                 {
-                    SelectedVM = new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
+                    var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+
+                    if (addControllerMethod != null)
+                    {
+                        SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes, scopeManager);
+                    }
+                    else
+                    {
+                        SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
+                    }
+                    ((AddControllerVM)SelectedVM).SelectedType = controllerType;
                 }
-                ((AddPanelVM)SelectedVM).SetTemplate(panel);
-            }
+                else if (item is TECPanelType panelType)
+                {
+                    var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
+
+                    if (addPanelMethod != null)
+                    {
+                        SelectedVM = new AddPanelVM(addPanelMethod, panelTypes, scopeManager);
+                    }
+                    else
+                    {
+                        SelectedVM = new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
+                    }
+                    ((AddPanelVM)SelectedVM).ToAdd.Type = panelType;
+                }
+                return null;
+            },
+            false);
+            
         }
 
         private void addController(TECController controller)

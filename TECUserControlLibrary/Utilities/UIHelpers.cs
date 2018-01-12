@@ -147,7 +147,7 @@ namespace TECUserControlLibrary.Utilities
                 bool allowDrop = dropCondition(sourceItem, sourceType, targetType);
                 if(sourceItem is IList listItems)
                 {
-                    allowDrop = true;
+                    allowDrop = listItems.Count > 0 ? true : false;
                     foreach(var item in listItems)
                     {
                         if(!dropCondition(item, sourceType, targetType))
@@ -310,46 +310,7 @@ namespace TECUserControlLibrary.Utilities
                 handleReorderDrop(dropInfo);
             }
         }
-
-        public static void ControllerInPanelDragOver(IDropInfo dropInfo)
-        {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
-            {
-                Type sourceType = sourceItem.GetType();
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                if (sourceItem != null && sourceType == targetType ||
-                    (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
-        }
-        public static void ControllerInPanelDrop(IDropInfo dropInfo, Action<TECController> addMethod, TECScopeManager scopeManager, bool isGlobal = true)
-        {
-            var sourceItem = (dropInfo.Data as IDragDropable).DragDropCopy(scopeManager);
-            Type sourceType = dropInfo.Data.GetType();
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    var controller = sourceItem as TECController;
-                    var controllerInPanel = new ControllerInPanel(controller, null);
-                    addMethod(sourceItem as TECController);
-                    sourceItem = controllerInPanel;
-                }
-            }
-            else
-            {
-                handleReorderDrop(dropInfo);
-            }
-        }
-
+        
         public static void FileDragOver(IDropInfo dropInfo)
         {
             if (dropInfo.Data is DataObject)
