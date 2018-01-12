@@ -17,7 +17,11 @@ namespace EstimateBuilder.MVVM
         #region Fields and Properties
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private TECBid bid;
+        private TECBid bid
+        {
+            get;
+            set;
+        }
         private TECTemplates templates;
         private TECEstimator estimate;
 
@@ -119,6 +123,7 @@ namespace EstimateBuilder.MVVM
 
             void assignData(TECTemplates loadedTemplates)
             {
+                templatesDatabaseManager.LoadComplete -= assignData;
                 templates = loadedTemplates;
                 if (bidFilePath != "")
                 {
