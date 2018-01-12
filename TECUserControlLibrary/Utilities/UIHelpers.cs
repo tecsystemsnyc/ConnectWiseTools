@@ -121,7 +121,7 @@ namespace TECUserControlLibrary.Utilities
         /// DropInfo passed into the DragOver method in the IDropTarget interface from GongSolutions DragDrop.
         /// </param>
         /// <param name="dropCondition">
-        /// A method which takes the soure item, sourec type, and target type and returns a bool indicating if the drop can occur.
+        /// A method which takes the soure item, source type, and target type and returns a bool indicating if the drop can occur.
         /// </param>
         /// <param name="failAction">
         /// An Action invoked when the drop is determined to be illegal.
@@ -145,6 +145,18 @@ namespace TECUserControlLibrary.Utilities
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
                 bool sourceNotNull = sourceItem != null;
                 bool allowDrop = dropCondition(sourceItem, sourceType, targetType);
+                if(sourceItem is IList listItems)
+                {
+                    allowDrop = true;
+                    foreach(var item in listItems)
+                    {
+                        if(!dropCondition(item, sourceType, targetType))
+                        {
+                            allowDrop = false;
+                            break;
+                        }
+                    }
+                }
                 bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
                 if (sourceNotNull && (allowDrop || sourceMatchesTarget))
                 {

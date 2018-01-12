@@ -619,33 +619,11 @@ namespace TECUserControlLibrary.ViewModels
             UIHelpers.DragOver(dropInfo, (sourceItem, sourceType, targetType) =>
             {
                 bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
-                if (sourceItem is IList sourceList)
+                if (sourceItem is ConnectableItem connectable && targetIsChildren)
                 {
-                    bool itemsCompatible = false;
-                    foreach (var item in sourceList)
+                    if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
                     {
-                        if (item is ConnectableItem connectable && targetIsChildren)
-                        {
-                            if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
-                            {
-                                itemsCompatible = true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    return itemsCompatible;
-                }
-                else
-                {
-                    if (sourceItem is ConnectableItem connectable && targetIsChildren)
-                    {
-                        if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
                 return false;
