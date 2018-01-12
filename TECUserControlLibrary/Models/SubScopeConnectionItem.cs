@@ -69,7 +69,7 @@ namespace TECUserControlLibrary.Models
 
         private void Connection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            List<string> properties = new List<string>() { "Length", "ConduitLength", "ConduitType" };
+            List<string> properties = new List<string>() { "Length", "ConduitLength", "ConduitType", "IsPlenum" };
             if (properties.Contains(e.PropertyName))
             {
                 PropagationPropertyChanged?.Invoke(this);
