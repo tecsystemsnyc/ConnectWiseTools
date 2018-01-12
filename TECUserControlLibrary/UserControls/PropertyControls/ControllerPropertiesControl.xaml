@@ -21,6 +21,7 @@
             <RowDefinition/>
             <RowDefinition Height="30"/>
             <RowDefinition/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -101,6 +102,9 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
+        <Grid Grid.Row="7" Grid.ColumnSpan="2">
+            <Button Content="Optimize Modules" Command="{Binding OptimizeModulesCommand}"
+                    Margin="2"/>
+        </Grid>
     </Grid>
 </UserControl>

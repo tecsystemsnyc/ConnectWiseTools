@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -48,15 +49,28 @@ namespace TECUserControlLibrary.Models
         
         public RelayCommand<TECIOModule> AddModuleCommand { get; private set; }
         public RelayCommand<TECIOModule> RemoveModuleCommand { get; private set; }
+        public RelayCommand OptimizeModulesCommand { get; private set; }
 
         public ControllerPropertiesItem(TECController controller)
         {
             Controller = controller;
             AddModuleCommand = new RelayCommand<TECIOModule>(addModuleExecute, canAddModule);
             RemoveModuleCommand = new RelayCommand<TECIOModule>(removeModuleExecute, canRemoveModule);
+            OptimizeModulesCommand = new RelayCommand(optimizeModulesExecute);
             populateIO();
             populateModules();
 
+        }
+
+        private void optimizeModulesExecute()
+        {
+            foreach(ModuleGroup item in Modules)
+            {
+                while (canRemoveModule(item.Module))
+                {
+                    removeModuleExecute(item.Module);
+                }
+            }
         }
 
         private void addModuleExecute(TECIOModule obj)
