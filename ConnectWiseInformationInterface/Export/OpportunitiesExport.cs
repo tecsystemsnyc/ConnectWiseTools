@@ -36,95 +36,136 @@ namespace ConnectWiseInformationInterface.Export
         {
             IXLWorksheet ws = book.Worksheets.Add("Summary");
 
+            //Column A
             IXLColumn col = ws.Column("A");
+            
+            col.Cell(1).Value = "Opportunity Types Included:";
+            col.Cell(1).Style.Font.SetBold();
+            int row = 2;
+            foreach(OpportunityType type in manager.OpportunityTypes)
+            {
+                col.Cell(row).Value = type.Description;
+                row++;
+            }
+
+            //Column B
+            col = ws.Column("B");
+            col.Width = 50;
+
+            //Column C
+            col = ws.Column("C");
 
             col.Cell(1).Value = "From Date:";
             col.Cell(2).Value = "To Date:";
-            col.Cell(3);
+
+            col.Cell(4).Value = "# of Opportunities:";
+
+            col.Style.Font.SetBold();
+
+            //Column D
+            col = ws.Column("D");
+
+            if (manager.StartDate.HasValue)
+            {
+                col.Cell(1).Value = manager.StartDate;
+            }
+            else
+            {
+                col.Cell(1).Value = "Any";
+            }
+
+            if (manager.EndDate.HasValue)
+            {
+                col.Cell(2).Value = manager.EndDate;
+            }
+            else
+            {
+                col.Cell(2).Value = "Any";
+            }
+
+            col.Cell(4).Value = manager.FilteredOpportunities.Count;
+
+            //Column E
+            col = ws.Column("E");
+            col.Width = 50;
+
+            //Column F
+            col = ws.Column("F");
+
+            col.Cell(1).Value = "Forecasted Hours";
+
+            col.Cell(3).Value = "Engineering:";
+            col.Cell(4).Value = "Software:";
+            col.Cell(5).Value = "Graphics:";
+            col.Cell(6).Value = "Technician:";
+            col.Cell(7).Value = "Project Management:";
+
+            col.Style.Font.SetBold();
+
+            //Column G
+            col = ws.Column("G");
+            
+            double engineering = 0, programming = 0, graphics = 0, technician = 0, pm = 0;
+            foreach (Opportunity opp in manager.FilteredOpportunities)
+            {
+                double probability = (opp.GetProbability(manager.Probabilities) / 100.0);
+                engineering += (opp.GetEngineeringHours() * probability);
+                programming += (opp.GetProgrammingHours() * probability);
+                graphics += (opp.GetGraphicsHours() * probability);
+                technician += (opp.GetTechnicianHours() * probability);
+                pm += (opp.GetPMHours() * probability);
+            }
+
+            col.Cell(3).Value = engineering;
+            col.Cell(4).Value = programming;
+            col.Cell(5).Value = graphics;
+            col.Cell(6).Value = technician;
+            col.Cell(7).Value = pm;
+
+            ws.Columns().AdjustToContents();
         }
         private static void addDetailsSheet(this XLWorkbook book, OppFilterManager manager)
         {
-            //IXLWorksheet worksheet = workbook.Worksheets.Add("SALES LOG");
+            IXLWorksheet worksheet = book.Worksheets.Add("Details");
 
             worksheet.insertHeaders(1);
 
             int i = 2;
-            //foreach(Opportunity opp in opps)
-            //{
-            //    IXLRow row = worksheet.Row(i);
+            foreach(Opportunity opp in manager.FilteredOpportunities)
+            {
+                IXLRow row = worksheet.Row(i);
 
-            //    int probability = 0;
-            //    bool probabilityFound = false;
-            //    foreach(SalesProbability prob in oppManager.p)
-            //    {
-            //        if (prob.Id == opp.Probability.Id)
-            //        {
-            //            probability = (int)prob.Probability;
-            //            probabilityFound = true;
-            //        }
-            //    }
-            //    if (!probabilityFound) { Console.WriteLine(string.Format("Probability not found in {0}", opp.Name)); }
+                string typeName = "None";
+                if (opp.Type != null)
+                {
+                    typeName = opp.Type.Name;
+                }
 
-            //    int engineering = 0, programming = 0, graphics = 0, technician = 0, pm = 0;
+                int probability = opp.GetProbability(manager.Probabilities);
+                int engineering = opp.GetEngineeringHours();
+                int programming = opp.GetProgrammingHours();
+                int graphics = opp.GetGraphicsHours();
+                int technician = opp.GetTechnicianHours();
+                int pm = opp.GetProgrammingHours();
+                
+                row.Cell("A").Value = opp.Name;
+                row.Cell("B").Value = opp.PrimarySalesRep.Name;
+                row.Cell("C").Value = typeName;
+                row.Cell("D").Value = string.Format("{0}%", probability);
+                row.Cell("E").Value = opp.ExpectedCloseDate.Value.Date;
+                row.Cell("F").Value = opp.GetEngineeringHours();
+                row.Cell("G").Value = engineering * (probability / 100.0);
+                row.Cell("H").Value = programming;
+                row.Cell("I").Value = programming * (probability / 100.0);
+                row.Cell("J").Value = graphics;
+                row.Cell("K").Value = graphics * (probability / 100.0);
+                row.Cell("L").Value = technician;
+                row.Cell("M").Value = technician * (probability / 100.0);
+                row.Cell("N").Value = pm;
+                row.Cell("O").Value = pm * (probability / 100.0);
 
-            //    foreach(CustomFieldValue custom in opp.CustomFields)
-            //    {
-            //        switch (custom.Caption) {
-            //            case "FC: Graphics":
-            //                if (custom.Value != null)
-            //                {
-            //                    graphics = custom.Value.CastTo<int>();
-            //                }
-            //                break;
-            //            case "FC: Software":
-            //                if (custom.Value != null)
-            //                {
-            //                    programming = custom.Value.CastTo<int>();
-            //                }
-            //                break;
-            //            case "FC:TechLabor":
-            //                if (custom.Value != null)
-            //                {
-            //                    technician = custom.Value.CastTo<int>();
-            //                }
-            //                break;
-            //            case "FC:PrjctMgmt":
-            //                if (custom.Value != null)
-            //                {
-            //                    pm = custom.Value.CastTo<int>();
-            //                }
-            //                break;
-            //            case "FC: Engineer":
-            //                if (custom.Value != null)
-            //                {
-            //                    engineering = custom.Value.CastTo<int>();
-            //                }
-            //                break;
-            //            default:
-            //                Console.WriteLine(string.Format("Unknown custom field: {0}", custom.Caption));
-            //                break;
-            //        }
-            //    }
-
-            //    row.Cell("A").Value = opp.Id;
-            //    row.Cell("B").Value = opp.Name;
-            //    row.Cell("C").Value = opp.PrimarySalesRep.Name;
-            //    row.Cell("D").Value = opp.Type.Name;
-            //    row.Cell("E").Value = string.Format("{0}%", probability);
-            //    row.Cell("F").Value = opp.ExpectedCloseDate.Value.Date;
-            //    row.Cell("G").Value = engineering;
-            //    row.Cell("H").Value = engineering * probability/100;
-            //    row.Cell("I").Value = programming;
-            //    row.Cell("J").Value = programming * probability/100;
-            //    row.Cell("K").Value = graphics;
-            //    row.Cell("L").Value = graphics * probability/100;
-            //    row.Cell("M").Value = technician;
-            //    row.Cell("N").Value = technician * probability/100;
-            //    row.Cell("O").Value = pm;
-            //    row.Cell("P").Value = pm * probability/100;
-
-            //    i++;
-            //}
+                i++;
+            }
 
             worksheet.Columns().AdjustToContents();
         }
@@ -134,22 +175,21 @@ namespace ConnectWiseInformationInterface.Export
             IXLRow headerRow = ws.Row(row);
             headerRow.Style.Font.SetBold();
 
-            headerRow.Cell("A").Value = "Opportunity Number";
-            headerRow.Cell("B").Value = "Opportunity Name";
-            headerRow.Cell("C").Value = "Sales Person";
-            headerRow.Cell("D").Value = "Opportunity Type";
-            headerRow.Cell("E").Value = "Probability";
-            headerRow.Cell("F").Value = "Expected Close Date";
-            headerRow.Cell("G").Value = "Engineering Estimate";
-            headerRow.Cell("H").Value = "Engineering Forecast";
-            headerRow.Cell("I").Value = "Programming Estimate";
-            headerRow.Cell("J").Value = "Programming Forecast";
-            headerRow.Cell("K").Value = "Graphics Estimate";
-            headerRow.Cell("L").Value = "Graphics Forecast";
-            headerRow.Cell("M").Value = "Technician Estimate";
-            headerRow.Cell("N").Value = "Technician Forecast";
-            headerRow.Cell("O").Value = "PM Estimate";
-            headerRow.Cell("P").Value = "PM Forecast";
+            headerRow.Cell("A").Value = "Opportunity Name";
+            headerRow.Cell("B").Value = "Sales Person";
+            headerRow.Cell("C").Value = "Opportunity Type";
+            headerRow.Cell("D").Value = "Probability";
+            headerRow.Cell("E").Value = "Expected Close Date";
+            headerRow.Cell("F").Value = "Engineering Estimate";
+            headerRow.Cell("G").Value = "Engineering Forecast";
+            headerRow.Cell("H").Value = "Programming Estimate";
+            headerRow.Cell("I").Value = "Programming Forecast";
+            headerRow.Cell("J").Value = "Graphics Estimate";
+            headerRow.Cell("K").Value = "Graphics Forecast";
+            headerRow.Cell("L").Value = "Technician Estimate";
+            headerRow.Cell("M").Value = "Technician Forecast";
+            headerRow.Cell("N").Value = "PM Estimate";
+            headerRow.Cell("O").Value = "PM Forecast";
         }
     }
 }
