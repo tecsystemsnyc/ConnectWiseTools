@@ -48,16 +48,21 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Typical.Name, Mode=OneWay}"/>
                                 <TextBlock Text="{Binding Typical.Instances.Count, StringFormat=Qty. {0}, Mode=OneWay}" Grid.Column="1"/>
-                                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}, Mode=OneWay}" Grid.Column="2"
-                                       HorizontalAlignment="Right"/>
+                                <TextBlock Text="Unit: " Grid.Column="2" HorizontalAlignment="Right"/>
                                 <TextBlock Text="{Binding UnitPrice, StringFormat={}{0:C}, Mode=OneWay}" Grid.Column="3"
                                        HorizontalAlignment="Right"/>
+                                <TextBlock Text="Total: " Grid.Column="4" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat={}{0:C}, Mode=OneWay}" Grid.Column="5"
+                                       HorizontalAlignment="Right"/>
+                                
                             </Grid>
                         </Border>
                         
