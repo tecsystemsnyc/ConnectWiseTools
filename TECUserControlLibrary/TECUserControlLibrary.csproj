@@ -228,10 +228,12 @@
       <DependentUpon>ValveGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
+    <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\DeleteDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
+    <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\DeleteDeviceView.xaml.cs">
       <DependentUpon>DeleteDeviceView.xaml</DependentUpon>
@@ -306,7 +308,7 @@
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
     <Compile Include="ViewModels\PropertiesVM.cs" />
     <Compile Include="ViewModels\SplashVM.cs" />
-    <Compile Include="ViewModels\NetworkVM.cs" />
+    <Compile Include="ViewModels\NetworkVM1.cs" />
     <Compile Include="ViewModels\SubScopeHierarchyVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\ItemizedSummaryVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\SystemSummaryVM.cs" />
