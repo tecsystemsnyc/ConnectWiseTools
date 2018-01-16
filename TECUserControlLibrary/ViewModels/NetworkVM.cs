@@ -18,16 +18,25 @@ namespace TECUserControlLibrary.ViewModels
     public class NetworkVM : ViewModelBase, IDropTarget
     {
         #region Properties and Fields
-        private readonly TECCatalogs catalogs;
         private readonly List<ConnectableItem> allParentables;
         private readonly List<ConnectableItem> allNonParentables;
         private readonly Dictionary<INetworkConnectable, ConnectableItem> connectableDictionary;
 
+        //Used to determine whether or not to allow selecting of a connectable.
+        private bool isConnecting;
+
         private ObservableCollection<ConnectableItem> _filteredParentables;
+        private ObservableCollection<ConnectableItem> _filteredNonParentables;
         private ConnectableItem _selectedConnectable;
+        private ConnectableItem _selectedParentable;
+        private ConnectableItem _selectedNonParentable;
+        private TECNetworkConnection _selectedConnection;
+        private INetworkConnectable _selectedChild;
         private string _cannotConnectMessage;
 
         private AddNetworkConnectionVM _addNetConnectVM;
+
+        public TECCatalogs Catalogs { get; }
 
         public ObservableCollection<ConnectableItem> FilteredParentables
         {
@@ -41,6 +50,18 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
+        public ObservableCollection<ConnectableItem> FilteredNonParentables
+        {
+            get { return _filteredNonParentables; }
+            set
+            {
+                if (FilteredNonParentables != value)
+                {
+                    _filteredNonParentables = value;
+                    RaisePropertyChanged("FilteredNonParentables");
+                }
+            }
+        }
         public ConnectableItem SelectedConnectable
         {
             get { return _selectedConnectable; }
@@ -50,6 +71,77 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     _selectedConnectable = value;
                     RaisePropertyChanged("SelectedConnectable");
+                    ObjectSelected?.Invoke(value.Item as TECObject);
+                }
+            }
+        }
+        //Properties to bind to to handle selecting connectables
+        public ConnectableItem SelectedParentable
+        {
+            get { return _selectedParentable; }
+            set
+            {
+                //Must not allow Selected Item to change while connecting
+                if (!isConnecting && SelectedParentable != value)
+                {
+                    _selectedParentable = value;
+                    RaisePropertyChanged("SelectedParentable");
+                    //Unselect NonParentable
+                    _selectedNonParentable = null;
+                    RaisePropertyChanged("SelectedNonParentable");
+                    SelectedConnectable = SelectedParentable;
+                    if (SelectedParentable.Item is INetworkParentable parentable)
+                    {
+                        AddNetConnectVM = new AddNetworkConnectionVM(parentable, Catalogs.ConnectionTypes);
+                    }
+                    else
+                    {
+                        throw new DataMisalignedException("A ConnectableItem exists in ParentableItems that isn't an INetworkParentable.");
+                    }
+                }
+            }
+        }
+        public ConnectableItem SelectedNonParentable
+        {
+            get { return _selectedNonParentable; }
+            set
+            {
+                //Must not allow Selected Item to change while connecting
+                if (!isConnecting && SelectedNonParentable != value)
+                {
+                    _selectedNonParentable = value;
+                    RaisePropertyChanged("SelectedNonParentable");
+                    //Unselect Parentable
+                    _selectedParentable = null;
+                    RaisePropertyChanged("SelectedParentable");
+                    SelectedConnectable = SelectedNonParentable;
+                }
+            }
+        }
+        public TECNetworkConnection SelectedConnection
+        {
+            get { return _selectedConnection; }
+            set
+            {
+                if (SelectedConnection != value)
+                {
+                    _selectedConnection = value;
+                    RaisePropertyChanged("SelectedConnection");
+                    isConnecting = (SelectedConnection != null);
+                    ObjectSelected?.Invoke(SelectedConnection);
+                }
+            }
+        }
+        public INetworkConnectable SelectedChild
+        {
+            get { return _selectedChild; }
+            set
+            {
+                if (SelectedChild != value)
+                {
+                    _selectedChild = value;
+                    RaisePropertyChanged("SelectedChild");
+                    ObjectSelected?.Invoke(SelectedChild as TECObject);
                 }
             }
         }
@@ -84,6 +176,8 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand RemoveChildCommand { get; }
         public ICommand UpdateInstancesCommand { get; }
         public ICommand RemoveConnectionCommand { get; }
+
+        public event Action<TECObject> ObjectSelected;
         #endregion
         
         #region Constructors
@@ -108,7 +202,7 @@ namespace TECUserControlLibrary.ViewModels
         
         public NetworkVM(TECBid bid, ChangeWatcher cw) : this()
         {
-            catalogs = bid.Catalogs;
+            this.Catalogs = bid.Catalogs;
 
             cw.InstanceChanged += handleChange;
             cw.InstanceConstituentChanged += handleConstituentChange;
@@ -126,7 +220,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public NetworkVM(TECSystem system, TECCatalogs catalogs) : this()
         {
-            this.catalogs = catalogs;
+            this.Catalogs = catalogs;
 
             ChangeWatcher cw = new ChangeWatcher(system);
 
@@ -214,13 +308,63 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Event Handlers
-        private void handleChange(TECChangedEventArgs obj)
+        private void handleChange(TECChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.Change == Change.Add)
+            {
+                if (e.Sender is TECNetworkConnection netConnection)
+                {
+                    if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
+                    {
+                        ConnectableItem parentConnectable = connectableDictionary[netConnection.ParentController];
+                        bool parentIsConnected = parentConnectable.IsConnected;
+                        updateIsConnected(childConnectable, parentIsConnected);
+                    }
+                }
+                else if (e.Sender is TECSubScope ss && e.Value is TECPoint)
+                {
+                    if (!connectableDictionary.ContainsKey(ss))
+                    {
+                        addNetworkConnectable(ss);
+                    }
+                }
+            }
+            else if (e.Change == Change.Remove)
+            {
+                if (e.Sender is TECNetworkConnection netConnection)
+                {
+                    if (e.PropertyName == "Children" && e.Value is INetworkConnectable childConnectable)
+                    {
+                        updateIsConnected(childConnectable, false);
+                    }
+                }
+                else if (e.Sender is TECSubScope ss && e.Value is TECPoint)
+                {
+                    removeNetworkConnectable(ss);
+                }
+            }
+            else if (e.Change == Change.Edit)
+            {
+                if (e.Sender is INetworkConnectable networkConnectable &&
+                    e.PropertyName == "IsServer" && e.Value is bool isServer)
+                {
+                    updateIsConnected(networkConnectable, isServer);
+                }
+            }
         }
-        private void handleConstituentChange(Change arg1, TECObject arg2)
+        private void handleConstituentChange(Change change, TECObject obj)
         {
-            throw new NotImplementedException();
+            if (obj is INetworkConnectable networkConnectable)
+            {
+                if (change == Change.Add)
+                {
+                    addNetworkConnectable(networkConnectable);
+                }
+                else if (change == Change.Remove)
+                {
+                    removeNetworkConnectable(networkConnectable);
+                }
+            }
         }
         #endregion
 
