@@ -259,7 +259,7 @@ namespace EstimatingLibrary
 
 
         }
-        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems)
+        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems) where T : TECObject
         {
             ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
 
@@ -267,7 +267,7 @@ namespace EstimatingLibrary
             {
                 foreach (T item in bidItems)
                 {
-                    if ((item as TECObject).Guid == (templateItem as TECObject).Guid)
+                    if (item.Guid == templateItem.Guid)
                     {
                         itemsToRemove.Add(item);
                     }

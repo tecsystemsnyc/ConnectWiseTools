@@ -112,15 +112,15 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             else
             {
-                if(value != null)
-                {
-                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, value as TECObject }, propertyName);
-                    outStack.AddRange(tableObjectStack(Change.Add, tables, sender, value as TECObject));
-                }
                 if (oldValue != null)
                 {
                     List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, oldValue as TECObject }, propertyName);
                     outStack.AddRange(tableObjectStack(Change.Remove, tables, sender, oldValue as TECObject));
+                }
+                if (value != null)
+                {
+                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, value as TECObject }, propertyName);
+                    outStack.AddRange(tableObjectStack(Change.Add, tables, sender, value as TECObject));
                 }
                 return outStack;
             }
@@ -176,8 +176,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private void handleChange(TECChangedEventArgs e)
         {
+            Console.WriteLine(String.Format("_____Change: {0}, Sender: {1}, Value: {2}_____", e.Change, e.Sender, e.Value));
             if (e.Change == Change.Add || e.Change == Change.Remove)
-            {
+            {               
                 stack.AddRange(addRemoveStack(e.Change, e.PropertyName, e.Sender as TECObject, e.Value as TECObject, dbType));
             }
             else if (e.Change == Change.Edit)
