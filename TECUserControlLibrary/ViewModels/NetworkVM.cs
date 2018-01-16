@@ -218,6 +218,39 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("CannotConnectMessage");
             }
         }
+
+        //Filter Properties
+        private bool _hideConnected;
+        public bool HideConnected
+        {
+            get { return _hideConnected; }
+            set
+            {
+                if (HideConnected != value)
+                {
+                    _hideConnected = value;
+                    RaisePropertyChanged("HideConnected");
+
+                }
+            }
+        }
+
+        private string _searchQuery;
+        public string SearchQuery
+        {
+            get { return _searchQuery; }
+            set
+            {
+                if (SearchQuery != value)
+                {
+                    _searchQuery = value;
+                    RaisePropertyChanged("SearchQuery");
+                }
+            }
+        }
+
+        public ICommand SearchCommand { get; private set; }
+        public ICommand ResetFiltersCommand { get; private set; }
         #endregion
 
         #region Methods
