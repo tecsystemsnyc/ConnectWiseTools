@@ -42,13 +42,16 @@ namespace TECUserControlLibrary.ViewModels
             get{ return _selectedParentable; }
             set
             {
-                _selectedParentable = value;
-                RaisePropertyChanged("SelectedParentable");
-                if(value is TECObject obj)
+                if (SelectedParentable != value)
                 {
-                    Selected?.Invoke(obj);
+                    _selectedParentable = value;
+                    RaisePropertyChanged("SelectedParentable");
+                    if(value is TECObject obj)
+                    {
+                        Selected?.Invoke(obj);
+                    }
+                    AddNetConnectVM = value != null ? new AddNetworkConnectionVM(value, catalogs.ConnectionTypes) : null;
                 }
-                AddNetConnectVM = new AddNetworkConnectionVM(value, catalogs.ConnectionTypes);
             }
         }
         public INetworkConnectable SelectedConnectable
