@@ -63,10 +63,38 @@
                 <listControls:NetworkConnectableListControl Source="{Binding Children}"/>
             </Grid>
         </Grid>
-        <Grid>
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
+            <Grid>
+                <TextBlock Text="{Binding SelectedParent.Name}"/>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <TextBlock Text="Add Connection"/>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding SelectedParent.Name, StringFormat=Connections in {0}}"/>
+                <listControls:NetworkConnectionListControl Source="{Binding SelectedParent.ChildrenConnections}"
+                                                           Grid.Row="1"/>
+            </Grid>
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Connected to Selected Connection"/>
+                <listControls:NetworkConnectableListControl Source="{Binding SelectedConnection.Children}"
+                                                            Grid.Row="1"/>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
