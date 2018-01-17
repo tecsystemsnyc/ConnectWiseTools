@@ -140,9 +140,6 @@
     <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ListControls\ConnectableItemListControl.xaml.cs">
-      <DependentUpon>ConnectableItemListControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ItemControls\DeviceControl.xaml.cs">
       <DependentUpon>DeviceControl.xaml</DependentUpon>
     </Compile>
@@ -527,10 +524,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\TypicalControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ListControls\ConnectableItemListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
