@@ -18,9 +18,12 @@ namespace TECUserControlLibrary.ViewModels
         public ObservableCollection<T> FilteredConnectables { get; }
 
         #region Filter Fields and Properties
+        public ReadOnlyCollection<IOType> IOTypes { get; }
+
         private string _searchQuery;
         private bool _includeConnected;
-        private IOType _ioType;
+        private IOType _selectedIOType;
+        private bool _filterByIO;
 
         public string SearchQuery
         {
@@ -48,26 +51,40 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        public IOType IOType
+        public IOType SelectedIOType
         {
-            get { return _ioType; }
+            get { return _selectedIOType; }
             set 
             {
-                if (IOType != value)
+                if (SelectedIOType != value)
                 {
-                    _ioType = value;
+                    _selectedIOType = value;
                     RaisePropertyChanged("IOType");
+                    refilter();
+                }
+            }
+        }
+        public bool FilterByIO
+        {
+            get { return _filterByIO; }
+            set
+            {
+                if (FilterByIO != value)
+                {
+                    _filterByIO = value;
+                    RaisePropertyChanged("FilterByIO");
                     refilter();
                 }
             }
         }
         #endregion
 
-        public ConnectableFilterVM(ObservableCollection<T> connectables)
+        public ConnectableFilterVM(ObservableCollection<T> connectables, IEnumerable<IOType> ioTypes)
         {
             allConnectables = new ReadOnlyObservableCollection<T>(connectables);
             (allConnectables as INotifyCollectionChanged).CollectionChanged += allConnectablesCollectionChanged;
             FilteredConnectables = new ObservableCollection<T>();
+            IOTypes = new ReadOnlyCollection<IOType>(new List<IOType>(ioTypes));
             refilter();
         }
 
@@ -125,7 +142,23 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool passesFilter(T connectable)
         {
+            //Search filter
             throw new NotImplementedException();
+
+            //Connected filter
+            if (!IncludeConnected && connectable.ParentConnection != null)
+            {
+                return false;
+            }
+
+            //IOType filter
+            if (FilterByIO && !(connectable.AvailableNetworkIO.Contains(SelectedIOType)))
+            {
+                return false;
+            }
+
+            //All filters passed
+            return true;
         }
     }
 }
