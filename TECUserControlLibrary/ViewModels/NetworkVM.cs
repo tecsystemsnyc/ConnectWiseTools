@@ -104,13 +104,15 @@ namespace TECUserControlLibrary.ViewModels
         {
             get;
         }
+
+        public ICommand UpdateCommand { get; private set; }
         #endregion
 
         private NetworkVM(
             IEnumerable<INetworkConnectable> connectables,
             TECCatalogs catalogs,
-            Action<TECController> updateExecute = null,
-            Func<TECController, bool> updateCanExecute = null)
+            Action<INetworkParentable> updateExecute = null,
+            Func<INetworkParentable, bool> updateCanExecute = null)
         {
             this.catalogs = catalogs;
             this.allParentables = new ObservableCollection<INetworkParentable>();
@@ -124,6 +126,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             ParentableFilterVM = new ConnectableFilterVM<INetworkParentable>(allParentables);
             ConnectableFilterVM = new ConnectableFilterVM<INetworkConnectable>(allConnectables);
+            UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
         }
 
         public event Action<TECObject> Selected;
@@ -240,14 +243,57 @@ namespace TECUserControlLibrary.ViewModels
             watcher.Changed += netVM.handleChange;
             return netVM;
 
-            void updateExecute(TECController controller)
+            void updateExecute(INetworkParentable controller)
             {
-                throw new NotImplementedException();
+                foreach(TECController instance in typ.TypicalInstanceDictionary.GetInstances(controller as TECObject))
+                {
+                    instance.RemoveAllChildNetworkConnections();
+                    foreach (TECNetworkConnection connection in controller.ChildNetworkConnections)
+                    {
+                        TECNetworkConnection instanceConnection = instance.AddNetworkConnection(false, connection.ConnectionTypes, connection.IOType);
+                        instanceConnection.Length = connection.Length;
+                        instanceConnection.ConduitType = connection.ConduitType;
+                        instanceConnection.ConduitLength = connection.ConduitLength;
+                        foreach (INetworkConnectable child in connection.Children)
+                        {
+                            if (child is TECController childController)
+                            {
+                                foreach (TECController instanceChild in typ.TypicalInstanceDictionary.GetInstances(childController))
+                                {
+                                    foreach (TECSystem system in typ.Instances)
+                                    {
+                                        if (system.Controllers.Contains(instanceChild))
+                                        {
+                                            instanceConnection.AddINetworkConnectable(instanceChild);
+                                        }
+                                    }
+                                }
+                            }
+                            else if (child is TECSubScope childSubScope)
+                            {
+                                foreach (TECSubScope instanceChild in typ.TypicalInstanceDictionary.GetInstances(childSubScope))
+                                {
+                                    foreach (TECSystem system in typ.Instances)
+                                    {
+                                        if (system.GetAllSubScope().Contains(instanceChild))
+                                        {
+                                            instanceConnection.AddINetworkConnectable(instanceChild);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
-            bool updateCanExecute(TECController controller)
+            bool updateCanExecute(INetworkParentable controller)
             {
-                throw new NotImplementedException();
+                bool canExecute =
+                    (controller != null) &&
+                    (typ.TypicalInstanceDictionary.GetInstances(controller as TECObject).Count > 0);
+
+                return canExecute;
             }
         }
 
