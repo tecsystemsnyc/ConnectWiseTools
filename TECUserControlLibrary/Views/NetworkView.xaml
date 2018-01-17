@@ -70,77 +70,89 @@
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid>
-                <TextBlock Text="{Binding SelectedParent.Name}"/>
+                <TextBlock Text="{Binding SelectedParentable.Name}"/>
             </Grid>
-            <Grid Grid.Row="1" DataContext="{Binding AddNetConnectVM}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="Add Connection" Style="{StaticResource ListHeader}"/>
-                <Grid Grid.Row="1">
+            <Expander Header="Add Connection" Grid.Row="1">
+                <Grid DataContext="{Binding AddNetConnectVM}" Height="200">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition/>
+                        <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="30"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Possible Connection Types"
-                               Style="{StaticResource ListHeader}"/>
-                    <TextBlock Text="Chosen Connection Types" Grid.Column="2"
-                               Style="{StaticResource ListHeader}"/>
-                    <listControls:ElectricalMaterialListControl Source="{Binding AllConnectionTypes}"
-                                                                SelectedItem="{Binding SelectedAllConnectionType}"
-                                                                Grid.Row="1"/>
-                    <listControls:ElectricalMaterialListControl Source="{Binding ChosenConnectionTypes}"
-                                                                SelectedItem="{Binding SelectedChosenConnectionType}"
-                                                                Grid.Row="1" Grid.Column="2"/>
-                    <Grid Grid.Row="1"
-                          Grid.Column="1">
+                    <TextBlock Text="Add Connection" Style="{StaticResource ListHeader}"/>
+                    <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
+                            <RowDefinition Height="20"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button Content="Add"
-                                Command="{Binding AddConnectionTypeCommand}"/>
-                        <Button Content="Remove"
-                                Command="{Binding RemoveConnectionTypeCommand}"
-                                Grid.Row="1"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Possible Connection Types"
+                               Style="{StaticResource ListHeader}"/>
+                        <TextBlock Text="Chosen Connection Types" Grid.Column="2"
+                               Style="{StaticResource ListHeader}"/>
+                        <listControls:ElectricalMaterialListControl Source="{Binding AllConnectionTypes}"
+                                                                SelectedItem="{Binding SelectedAllConnectionType}"
+                                                                Grid.Row="1"/>
+                        <listControls:ElectricalMaterialListControl Source="{Binding ChosenConnectionTypes}"
+                                                                SelectedItem="{Binding SelectedChosenConnectionType}"
+                                                                Grid.Row="1" Grid.Column="2"/>
+                        <Grid Grid.Row="1"
+                          Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Button Content="->"
+                                Command="{Binding AddConnectionTypeCommand}"
+                                Height="30" Width="30" 
+                                Margin="0,2,0,2"
+                                VerticalAlignment="Bottom"/>
+                            <Button Command="{Binding RemoveConnectionTypeCommand}"
+                                Grid.Row="1"
+                                Height="30" Width="30"
+                                Margin="0,2,0,2"
+                                VerticalAlignment="Top">
+                                <Button.Content>
+                                    &lt;-
+                                </Button.Content>
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="IO Type:"/>
-                    <ComboBox ItemsSource="{Binding IOTypes}"
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="IO Type:"/>
+                        <ComboBox ItemsSource="{Binding IOTypes}"
                               SelectedItem="{Binding SelectedIOType}"
                               Grid.Column="1"
                               Margin="2"/>
-                    <Button Content="Add Connection"
+                        <Button Content="Add Connection"
                             Grid.Column="2"
                             Command="{Binding AddConnectionCommand}" Margin="2"/>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Expander>
+            
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding SelectedParent.Name, StringFormat=Connections in {0}}"
+                <TextBlock Text="{Binding SelectedParentable.Name, StringFormat=Connections in {0}}"
                            Style="{StaticResource ListHeader}"/>
-                <listControls:NetworkConnectionListControl Source="{Binding SelectedParent.ChildrenConnections}"
+                <listControls:NetworkConnectionListControl Source="{Binding SelectedParentable.ChildrenConnections}"
                                                            SelectedItem="{Binding SelectedConnection}"
                                                            Grid.Row="1"/>
             </Grid>
