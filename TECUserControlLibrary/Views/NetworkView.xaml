@@ -163,6 +163,7 @@
                            Style="{StaticResource ListHeader}"/>
                 <listControls:NetworkConnectionListControl Source="{Binding SelectedParentable.ChildrenConnections}"
                                                            SelectedItem="{Binding SelectedConnection}"
+                                                           ConduitTypes="{Binding Catalogs.ConduitTypes}"
                                                            Grid.Row="1"/>
             </Grid>
             <Grid Grid.Row="3">

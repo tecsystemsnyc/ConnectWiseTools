@@ -26,7 +26,7 @@ namespace TECUserControlLibrary.ViewModels
         private INetworkConnectable _selectedConnectable;
         private AddNetworkConnectionVM _addNetConnectVM;
         private TECNetworkConnection _selectedConnection;
-        private readonly TECCatalogs catalogs;
+        private TECCatalogs _catalogs;
         private string _cannotConnectMessage;
 
         public ObservableCollection<INetworkParentable> FilteredParentables
@@ -50,7 +50,7 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         Selected?.Invoke(obj);
                     }
-                    AddNetConnectVM = value != null ? new AddNetworkConnectionVM(value, catalogs.ConnectionTypes) : null;
+                    AddNetConnectVM = value != null ? new AddNetworkConnectionVM(value, Catalogs.ConnectionTypes) : null;
                 }
             }
         }
@@ -107,6 +107,18 @@ namespace TECUserControlLibrary.ViewModels
         {
             get;
         }
+        public TECCatalogs Catalogs
+        {
+            get { return _catalogs; }
+            set
+            {
+                if(Catalogs != value)
+                {
+                    _catalogs = value;
+                    RaisePropertyChanged("Catalogs");
+                }
+            }
+        }
 
         public ICommand UpdateCommand { get; private set; }
         #endregion
@@ -117,7 +129,7 @@ namespace TECUserControlLibrary.ViewModels
             Action<INetworkParentable> updateExecute = null,
             Func<INetworkParentable, bool> updateCanExecute = null)
         {
-            this.catalogs = catalogs;
+            this.Catalogs = catalogs;
             this.allParentables = new ObservableCollection<INetworkParentable>();
             this.allConnectables = new ObservableCollection<INetworkConnectable>(connectables);
             foreach(INetworkConnectable connectable in connectables)
