@@ -716,7 +716,7 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #endregion
-
+        
         public MaterialVM(TECTemplates templates)
         {
             ReferenceDropHandler = new ReferenceDropper(templates);
