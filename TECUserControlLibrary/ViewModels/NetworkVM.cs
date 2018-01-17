@@ -18,6 +18,7 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class NetworkVM : ViewModelBase, IDropTarget
     {
+        #region Fields and Properties
         private readonly List<INetworkParentable> parentables;
         private readonly List<INetworkConnectable> connectables;
 
@@ -48,8 +49,11 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
+        #endregion
 
-        private NetworkVM(IEnumerable<INetworkConnectable> connectables,
+
+        private NetworkVM(
+            IEnumerable<INetworkConnectable> connectables,
             TECCatalogs catalogs,
             Action<TECController> updateExecute = null,
             Func<TECController, bool> updateCanExecute = null)
@@ -67,7 +71,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void handleChange(TECChangedEventArgs e)
         {
-
+            throw new NotImplementedException();
         }
 
         #region Static Constructors
@@ -77,9 +81,9 @@ namespace TECUserControlLibrary.ViewModels
             connectables.AddRange(bid.GetAllInstanceControllers());
             connectables.AddRange(bid.GetAllInstanceSubScope());
 
-            NetworkVM networkVM = new NetworkVM(connectables, bid.Catalogs);
-            watcher.InstanceChanged += networkVM.handleChange;
-            return networkVM;
+            NetworkVM netVM = new NetworkVM(connectables, bid.Catalogs);
+            watcher.InstanceChanged += netVM.handleChange;
+            return netVM;
         }
 
         public static NetworkVM GetNetworkVMFromTypical(TECTypical typ, TECCatalogs catalogs)
@@ -90,7 +94,9 @@ namespace TECUserControlLibrary.ViewModels
 
             ChangeWatcher watcher = new ChangeWatcher(typ);
 
-            return new NetworkVM(connectables, watcher, catalogs, updateExecute, updateCanExecute);
+            NetworkVM netVM = new NetworkVM(connectables, catalogs, updateExecute, updateCanExecute);
+            watcher.Changed += netVM.handleChange;
+            return netVM;
 
             void updateExecute(TECController controller)
             {
@@ -111,7 +117,9 @@ namespace TECUserControlLibrary.ViewModels
 
             ChangeWatcher watcher = new ChangeWatcher(sys);
 
-            return new NetworkVM(connectables, watcher, catalogs);
+            NetworkVM netVM = new NetworkVM(connectables, catalogs);
+            watcher.InstanceChanged += netVM.handleChange;
+            return netVM;
         }
         #endregion
     }
