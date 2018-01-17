@@ -8,10 +8,11 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TECUserControlLibrary.Interfaces;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectableFilterVM<T> : ViewModelBase where T : INetworkConnectable
+    public class ConnectableFilterVM<T> : ViewModelBase, IConnectableFilterVM where T : INetworkConnectable
     {
         private readonly ReadOnlyObservableCollection<T> allConnectables;
 

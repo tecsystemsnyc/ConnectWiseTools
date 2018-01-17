@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Interfaces;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
@@ -20,18 +21,19 @@ namespace TECUserControlLibrary.Views
     /// <summary>
     /// Interaction logic for ConnectableFilterView.xaml
     /// </summary>
-    public partial class ConnectableFilterView<T> : UserControl where T : INetworkConnectable
+    public partial class ConnectableFilterView : UserControl
     {
-        public ConnectableFilterVM<T> VM
+
+
+        public IConnectableFilterVM VM
         {
-            get { return (ConnectableFilterVM<T>)GetValue(VMProperty); }
+            get { return (IConnectableFilterVM)GetValue(VMProperty); }
             set { SetValue(VMProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for VM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VMProperty =
-            DependencyProperty.Register("VM", typeof(ConnectableFilterVM<T>), typeof(ConnectableFilterView));
-
+            DependencyProperty.Register("VM", typeof(IConnectableFilterVM), typeof(ConnectableFilterView));
 
 
         public ConnectableFilterView()
