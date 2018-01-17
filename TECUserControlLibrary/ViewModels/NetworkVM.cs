@@ -112,6 +112,8 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public event Action<TECObject> Selected;
+
         public void DragOver(IDropInfo dropInfo)
         {
             throw new NotImplementedException();
