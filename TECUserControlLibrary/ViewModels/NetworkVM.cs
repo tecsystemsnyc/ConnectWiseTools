@@ -21,6 +21,11 @@ namespace TECUserControlLibrary.ViewModels
         #region Fields and Properties
         private readonly ObservableCollection<INetworkParentable> allParentables;
         private readonly ObservableCollection<INetworkConnectable> allConnectables;
+        private INetworkParentable _selectedParentable;
+        private INetworkConnectable _selectedConnectable;
+        private AddNetworkConnectionVM _addNetConnectVM;
+        private TECNetworkConnection _selectedConnection;
+        private readonly TECCatalogs catalogs;
 
         public ObservableCollection<INetworkParentable> FilteredParentables
         {
@@ -30,8 +35,43 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return ConnectableFilterVM.FilteredConnectables; }
         }
-
-        private AddNetworkConnectionVM _addNetConnectVM;
+        public INetworkParentable SelectedParentable
+        {
+            get{ return _selectedParentable; }
+            set
+            {
+                _selectedParentable = value;
+                RaisePropertyChanged("SelectedParentable");
+                if(value is TECObject obj)
+                {
+                    Selected?.Invoke(obj);
+                }
+                AddNetConnectVM = new AddNetworkConnectionVM(value, catalogs.ConnectionTypes);
+            }
+        }
+        public INetworkConnectable SelectedConnectable
+        {
+            get { return _selectedConnectable; }
+            set
+            {
+                _selectedConnectable = value;
+                RaisePropertyChanged("SelectedConnectable");
+                if(value is TECObject obj)
+                {
+                    Selected?.Invoke(obj);
+                }
+            }
+        }
+        public TECNetworkConnection SelectedConnection
+        {
+            get { return _selectedConnection; }
+            set
+            {
+                _selectedConnection = value;
+                RaisePropertyChanged("SelectedConnection");
+                Selected?.Invoke(value);
+            }
+        }
 
         public AddNetworkConnectionVM AddNetConnectVM
         {
@@ -61,6 +101,7 @@ namespace TECUserControlLibrary.ViewModels
             Action<TECController> updateExecute = null,
             Func<TECController, bool> updateCanExecute = null)
         {
+            this.catalogs = catalogs;
             this.allParentables = new ObservableCollection<INetworkParentable>();
             this.allConnectables = new ObservableCollection<INetworkConnectable>(connectables);
             foreach(INetworkConnectable connectable in connectables)

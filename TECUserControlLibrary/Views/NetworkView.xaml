@@ -48,7 +48,9 @@
                     <TextBlock Text="Parents" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <TextBlock Text="FILTERS GO HERE" Grid.Row="1"/>
-                <listControls:NetworkParentableListControl Source="{Binding FilteredParentables}"/>
+                <listControls:NetworkParentableListControl Source="{Binding FilteredParentables}"
+                                                           SelectedItem="{Binding SelectedParentable}"
+                                                           Grid.Row="2"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
@@ -60,12 +62,14 @@
                     <TextBlock Text="Children" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <TextBlock Text="FILTERS GO HERE" Grid.Row="1"/>
-                <listControls:NetworkConnectableListControl Source="{Binding FilteredConnectables}"/>
+                <listControls:NetworkConnectableListControl Source="{Binding FilteredConnectables}"
+                                                            SelectedItem="{Binding SelectedConnectable}"
+                                                            Grid.Row="2"/>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="30"/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -73,14 +77,13 @@
             <Grid>
                 <TextBlock Text="{Binding SelectedParent.Name}"/>
             </Grid>
-
             <Grid Grid.Row="1" DataContext="{Binding AddNetConnectVM}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Add Connection"/>
+                <TextBlock Text="Add Connection" Style="{StaticResource ListHeader}"/>
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
@@ -91,8 +94,10 @@
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Possible Connection Types"/>
-                    <TextBlock Text="Chosen Connection Types" Grid.Column="2"/>
+                    <TextBlock Text="Possible Connection Types"
+                               Style="{StaticResource ListHeader}"/>
+                    <TextBlock Text="Chosen Connection Types" Grid.Column="2"
+                               Style="{StaticResource ListHeader}"/>
                     <listControls:ElectricalMaterialListControl Source="{Binding AllConnectionTypes}"
                                                                 SelectedItem="{Binding SelectedAllConnectionType}"
                                                                 Grid.Row="1"/>
@@ -114,17 +119,18 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="50"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="IO Type:"/>
                     <ComboBox ItemsSource="{Binding IOTypes}"
                               SelectedItem="{Binding SelectedIOType}"
-                              Grid.Column="1"/>
+                              Grid.Column="1"
+                              Margin="2"/>
                     <Button Content="Add Connection"
                             Grid.Column="2"
-                            Command="{Binding AddConnectionCommand}"/>
+                            Command="{Binding AddConnectionCommand}" Margin="2"/>
                 </Grid>
             </Grid>
             <Grid Grid.Row="2">
@@ -132,8 +138,10 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding SelectedParent.Name, StringFormat=Connections in {0}}"/>
+                <TextBlock Text="{Binding SelectedParent.Name, StringFormat=Connections in {0}}"
+                           Style="{StaticResource ListHeader}"/>
                 <listControls:NetworkConnectionListControl Source="{Binding SelectedParent.ChildrenConnections}"
+                                                           SelectedItem="{Binding SelectedConnection}"
                                                            Grid.Row="1"/>
             </Grid>
             <Grid Grid.Row="3">
@@ -141,7 +149,8 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Connected to Selected Connection"/>
+                <TextBlock Text="Connected to Selected Connection"
+                           Style="{StaticResource ListHeader}"/>
                 <listControls:NetworkConnectableListControl Source="{Binding SelectedConnection.Children}"
                                                             Grid.Row="1"/>
             </Grid>
