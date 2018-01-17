@@ -236,6 +236,9 @@
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\ConnectableFilterView.xaml.cs">
+      <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DeleteDeviceView.xaml.cs">
       <DependentUpon>DeleteDeviceView.xaml</DependentUpon>
     </Compile>
@@ -640,6 +643,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectableFilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
