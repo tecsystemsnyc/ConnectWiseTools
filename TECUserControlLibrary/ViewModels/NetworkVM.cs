@@ -49,8 +49,51 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        #endregion
 
+        private AddNetworkConnectionVM _addNetConnectVM;
+        private ConnectableFilterVM _parentableFilterVM;
+        private ConnectableFilterVM _connectableFilterVM;
+
+        public AddNetworkConnectionVM AddNetConnectVM
+        {
+            get { return _addNetConnectVM; }
+            set
+            {
+                if (AddNetConnectVM != value)
+                {
+                    _addNetConnectVM = value;
+                    RaisePropertyChanged("AddNetConnectVM");
+                }
+            }
+        }
+        public ConnectableFilterVM ParentableFilterVM
+        {
+            get { return _parentableFilterVM; }
+            set
+            {
+                if (ParentableFilterVM != value)
+                {
+                    _parentableFilterVM = value;
+                    RaisePropertyChanged("ParentableFilterVM");
+                }
+            }
+        }
+        public ConnectableFilterVM ConnectableFilterVM
+        {
+            get
+            {
+                return _connectableFilterVM;
+            }
+            set
+            {
+                if (ConnectableFilterVM != value)
+                {
+                    _connectableFilterVM = value;
+                    RaisePropertyChanged("ConnectableFilterVM");
+                }
+            }
+        }
+        #endregion
 
         private NetworkVM(
             IEnumerable<INetworkConnectable> connectables,
@@ -67,6 +110,16 @@ namespace TECUserControlLibrary.ViewModels
                     parentables.Add(parentable);
                 }
             }
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
         }
 
         private void handleChange(TECChangedEventArgs e)
