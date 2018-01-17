@@ -54,7 +54,7 @@ namespace TECUserControlLibrary.ViewModels
                 ConnectionsVM = new SystemConnectionsVM(value, catalogs.ConduitTypes);
                 MiscVM = new MiscCostsVM(value);
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
-                NetworkVM = new NetworkVM(value, scopeManager.Catalogs);
+                NetworkVM = NetworkVM.GetNetworkVMFromSystem(value, scopeManager.Catalogs);
             }
         }
 

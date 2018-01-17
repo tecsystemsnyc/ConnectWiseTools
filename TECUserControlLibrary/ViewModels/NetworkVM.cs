@@ -74,6 +74,8 @@ namespace TECUserControlLibrary.ViewModels
             ConnectableFilterVM = new ConnectableFilterVM<INetworkConnectable>(allConnectables);
         }
 
+        public event Action<TECObject> Selected;
+
         public void DragOver(IDropInfo dropInfo)
         {
             throw new NotImplementedException();

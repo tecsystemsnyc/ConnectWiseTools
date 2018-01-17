@@ -33,7 +33,7 @@ namespace TECUserControlLibrary.ViewModels
             InstanceEditVM.Selected += item => {
                 Selected = item;
             };
-            NetworkVM = new NetworkVM(bid, watcher);
+            NetworkVM = NetworkVM.GetNetworkVMFromBid(bid, watcher);
             NetworkVM.Selected += item =>
             {
                 Selected = item;
@@ -75,12 +75,21 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Extensions
+        private NetworkVM _networkVM;
+
         public ScopeCollectionsTabVM ScopeCollection { get; set; }
         public ControllersPanelsVM ControllersPanelsTab { get; set; }
         public MiscCostsVM MiscVM { get; set; }
         public SystemHierarchyVM TypicalEditVM { get; set; }
         public TypicalHierarchyVM InstanceEditVM { get; set; }
-        public NetworkVM NetworkVM { get; }
+        public NetworkVM NetworkVM {
+            get { return _networkVM; }
+            private set
+            {
+                _networkVM = value;
+                RaisePropertyChanged("NetworkVM");
+            }
+        }
         public PropertiesVM PropertiesVM { get; }
         public WorkBoxVM WorkBoxVM { get; }
         public GlobalConnectionsVM GlobalConnectionsVM { get; }
@@ -141,7 +150,7 @@ namespace TECUserControlLibrary.ViewModels
             ControllersPanelsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
             TypicalEditVM.Refresh(Bid);
-            NetworkVM.Refresh(bid, watcher);
+            NetworkVM = NetworkVM.GetNetworkVMFromBid(bid, watcher);
             PropertiesVM.Refresh(bid.Catalogs, bid);
             WorkBoxVM.Refresh(bid);
         }
