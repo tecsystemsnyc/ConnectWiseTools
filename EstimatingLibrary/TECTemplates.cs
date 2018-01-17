@@ -363,7 +363,7 @@ namespace EstimatingLibrary
                 {
                     subject.Points.Add(new TECPoint(point, false));
                 }
-                foreach (TECDevice device in newItem.Devices)
+                foreach (IEndDevice device in newItem.Devices)
                 {
                     subject.Devices.Add(device);
                 }
