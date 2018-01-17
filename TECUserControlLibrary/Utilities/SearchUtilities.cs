@@ -14,6 +14,7 @@ namespace TECUserControlLibrary.Utilities
         public static List<T> GetSearchResult<T>(this IEnumerable<T> source, string searchString)
             where T : ITECObject
         {
+            searchString = searchString != null ? searchString : "";
             bool isOr = false;
             if (searchString.Length > 0 && searchString[0] == '*')
             {

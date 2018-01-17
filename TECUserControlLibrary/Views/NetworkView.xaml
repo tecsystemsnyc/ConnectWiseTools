@@ -77,7 +77,14 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding SelectedParentable.Name}"/>
+                <Button Content="Update" Command="{Binding UpdateCommand}"
+                        Visibility="{Binding ShowUpdate}"
+                        Grid.Column="1" Margin="2"/>
             </Grid>
             <Expander Header="Add Connection" Grid.Row="1">
                 <Grid DataContext="{Binding AddNetConnectVM}" Height="200">

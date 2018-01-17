@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -26,6 +27,7 @@ namespace TECUserControlLibrary.ViewModels
         private AddNetworkConnectionVM _addNetConnectVM;
         private TECNetworkConnection _selectedConnection;
         private readonly TECCatalogs catalogs;
+        private string _cannotConnectMessage;
 
         public ObservableCollection<INetworkParentable> FilteredParentables
         {
@@ -70,6 +72,15 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedConnection = value;
                 RaisePropertyChanged("SelectedConnection");
                 Selected?.Invoke(value);
+            }
+        }
+        public string CannotConnectMessage
+        {
+            get { return _cannotConnectMessage; }
+            set
+            {
+                _cannotConnectMessage = value;
+                RaisePropertyChanged("CannotConnectMessage");
             }
         }
 
@@ -122,17 +133,90 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
+            CannotConnectMessage = "";
+
+            UIHelpers.DragOver(dropInfo, (sourceItem, sourceType, targetType) =>
+            {
+                bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
+                if (sourceItem is INetworkConnectable connectable && targetIsChildren)
+                {
+                    if (SelectedConnection.CanAddINetworkConnectable(connectable) && connectable.ParentConnection == null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            }, () =>
+            {
+                CannotConnectMessage = "Connectable isn't compatible with connection.";
+            }
+            );
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
+            UIHelpers.Drop(dropInfo,
+                (item) =>
+                {
+                    if (item is INetworkConnectable connectable)
+                    {
+                        SelectedConnection.AddINetworkConnectable(connectable);
+                    }
+                    else
+                    {
+                        throw new DataMisalignedException("Data misalignment between DragOver and Drop.");
+                    }
+                    return null;
+                },
+                false
+            );
         }
 
         private void handleChange(TECChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if(e.Change == Change.Add || e.Change == Change.Remove)
+            {
+                if(e.Value is TECObject item)
+                {
+                    foreach(INetworkConnectable connectable in getConnectables(item))
+                    {
+                        if(e.Change == Change.Add)
+                        {
+                            allConnectables.Add(connectable);
+                            if(connectable is INetworkParentable parentable)
+                            {
+                                allParentables.Add(parentable);
+                            }
+                        }
+                        else if (e.Change == Change.Remove)
+                        {
+                            allConnectables.Remove(connectable);
+                            if(connectable is INetworkParentable parentable)
+                            {
+                                allParentables.Remove(parentable);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private List<INetworkConnectable> getConnectables(TECObject item)
+        {
+            List<INetworkConnectable> connectables = new List<INetworkConnectable>();
+            if(item is INetworkConnectable connectable)
+            {
+                connectables.Add(connectable);
+            }
+            if(item is IRelatable relatable)
+            {
+                foreach(TECObject child in relatable.PropertyObjects.Objects)
+                {
+                    connectables.AddRange(getConnectables(child));
+                }
+            }
+            return connectables;
         }
 
         #region Static Constructors
