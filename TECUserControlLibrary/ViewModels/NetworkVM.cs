@@ -49,7 +49,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private NetworkVM(IEnumerable<INetworkConnectable> connectables, ARGS, TECCatalogs catalogs, Action<TECController> updateExecute = null, Func<TECController, bool> updateCanExecute = null)
+        private NetworkVM(IEnumerable<INetworkConnectable> connectables, Action<TECChangedEventArgs> changeEvent, TECCatalogs catalogs, Action<TECController> updateExecute = null, Func<TECController, bool> updateCanExecute = null)
         {
             this.connectables = new List<INetworkConnectable>(connectables);
             this.parentables = new List<INetworkParentable>();
@@ -62,15 +62,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        #region Static Constructors
         public static NetworkVM GetNetworkVMFromBid(TECBid bid, ChangeWatcher watcher)
         {
             List<INetworkConnectable> connectables = new List<INetworkConnectable>();
             connectables.AddRange(bid.GetAllInstanceControllers());
             connectables.AddRange(bid.GetAllInstanceSubScope());
-            
 
-
-            return new NetworkVM(connectables, watcher, bid.Catalogs);
+            return new NetworkVM(connectables, , bid.Catalogs);
         }
 
         public static NetworkVM GetNetworkVMFromTypical(TECTypical typ, TECCatalogs catalogs)
@@ -104,5 +103,6 @@ namespace TECUserControlLibrary.ViewModels
 
             return new NetworkVM(connectables, watcher, catalogs);
         }
+        #endregion
     }
 }
