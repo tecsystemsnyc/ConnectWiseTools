@@ -54,7 +54,6 @@
         <Setter Property="Background" Value="{StaticResource ActionBackgroundBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
         <Setter Property="Template" Value="{DynamicResource ButtonBaseControlTemplate}"/>
-        <Setter Property="Margin" Value="5"/>
     </Style>
     <Style TargetType="Button" x:Key="CollapseAll">
         <Setter Property="Background" Value="{StaticResource ActionBackgroundBrush}"/>

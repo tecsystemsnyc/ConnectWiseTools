@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -76,6 +77,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 IOTypes.Add(io.Type);
             }
+
+            AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute, addConnectionTypeCanExecute);
+            RemoveConnectionTypeCommand = new RelayCommand(removeConnectionTypeExecute, removeConnectionTypeCanExecute);
+            AddConnectionCommand = new RelayCommand(addConnectionExecute, addConnectionCanExecute);
         }
 
         #region Methods
