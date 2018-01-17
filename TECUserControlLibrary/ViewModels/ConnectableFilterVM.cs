@@ -18,7 +18,7 @@ namespace TECUserControlLibrary.ViewModels
         public ObservableCollection<T> FilteredConnectables { get; }
 
         #region Filter Fields and Properties
-        public ReadOnlyCollection<IOType> IOTypes { get; }
+        public ReadOnlyCollection<IOType> NetworkIOTypes { get; }
 
         private string _searchQuery;
         private bool _includeConnected;
@@ -79,12 +79,12 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
-        public ConnectableFilterVM(ObservableCollection<T> connectables, IEnumerable<IOType> ioTypes)
+        public ConnectableFilterVM(ObservableCollection<T> connectables)
         {
             allConnectables = new ReadOnlyObservableCollection<T>(connectables);
             (allConnectables as INotifyCollectionChanged).CollectionChanged += allConnectablesCollectionChanged;
             FilteredConnectables = new ObservableCollection<T>();
-            IOTypes = new ReadOnlyCollection<IOType>(new List<IOType>(ioTypes));
+            NetworkIOTypes = new ReadOnlyCollection<IOType>(TECIO.NetworkIO);
             refilter();
         }
 
