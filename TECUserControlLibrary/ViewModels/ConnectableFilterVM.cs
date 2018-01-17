@@ -98,7 +98,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (value is T connectable && passesFilter(connectable))
                     {
                         FilteredConnectables.Add(connectable);
-                    } 
+                    }
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
