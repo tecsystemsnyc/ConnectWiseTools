@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Interfaces;
+﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,52 @@ namespace TECUserControlLibrary.ViewModels
         private readonly ReadOnlyObservableCollection<T> allConnectables;
 
         public ObservableCollection<T> FilteredConnectables { get; }
+
+        #region Filter Fields and Properties
+        private string _searchQuery;
+        private bool _includeConnected;
+        private IOType _ioType;
+
+        public string SearchQuery
+        {
+            get { return _searchQuery; }
+            set
+            {
+                if (SearchQuery != value)
+                {
+                    _searchQuery = value;
+                    RaisePropertyChanged("SearchQuery");
+                    refilter();
+                }
+            }
+        }
+        public bool IncludeConnected
+        {
+            get { return _includeConnected; }
+            set
+            {
+                if (IncludeConnected != value)
+                {
+                    _includeConnected = value;
+                    RaisePropertyChanged("IncludeConnected");
+                    refilter();
+                }
+            }
+        }
+        public IOType IOType
+        {
+            get { return _ioType; }
+            set 
+            {
+                if (IOType != value)
+                {
+                    _ioType = value;
+                    RaisePropertyChanged("IOType");
+                    refilter();
+                }
+            }
+        }
+        #endregion
 
         public ConnectableFilterVM(ObservableCollection<T> connectables)
         {
