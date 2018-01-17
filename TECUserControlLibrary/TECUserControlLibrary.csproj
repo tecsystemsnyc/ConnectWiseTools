@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -101,6 +102,7 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IConnectableFilterVM.cs" />
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
@@ -228,6 +230,7 @@
       <DependentUpon>ValveGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
+    <Compile Include="Utilities\SearchUtilities.cs" />
     <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
@@ -236,6 +239,9 @@
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\ConnectableFilterView.xaml.cs">
+      <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DeleteDeviceView.xaml.cs">
       <DependentUpon>DeleteDeviceView.xaml</DependentUpon>
     </Compile>
@@ -640,6 +646,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectableFilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

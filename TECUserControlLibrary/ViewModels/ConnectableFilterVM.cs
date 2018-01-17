@@ -8,10 +8,13 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using TECUserControlLibrary.Interfaces;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectableFilterVM<T> : ViewModelBase where T : INetworkConnectable
+    public class ConnectableFilterVM<T> : ViewModelBase, IConnectableFilterVM where T : ITECObject, INetworkConnectable
     {
         private readonly ReadOnlyObservableCollection<T> allConnectables;
 
@@ -143,7 +146,11 @@ namespace TECUserControlLibrary.ViewModels
         private bool passesFilter(T connectable)
         {
             //Search filter
-            throw new NotImplementedException();
+            List<T> results = allConnectables.GetSearchResult(SearchQuery);
+            if (!results.Contains(connectable))
+            {
+                return false;
+            }
 
             //Connected filter
             if (!IncludeConnected && connectable.ParentConnection != null)

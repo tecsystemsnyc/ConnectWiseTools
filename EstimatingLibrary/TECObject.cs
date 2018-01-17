@@ -6,7 +6,7 @@ namespace EstimatingLibrary
 {
     public enum Change { Add, Remove, Edit }
 
-    public abstract class TECObject : INotifyPropertyChanged, INotifyTECChanged
+    public abstract class TECObject : INotifyPropertyChanged, INotifyTECChanged, ITECObject
     {
         #region Properties
         protected Guid _guid;
