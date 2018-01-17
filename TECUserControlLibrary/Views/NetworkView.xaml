@@ -47,7 +47,8 @@
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                     <TextBlock Text="Parents" Style="{StaticResource ListHeader}"/>
                 </Border>
-                <TextBlock Text="FILTERS GO HERE" Grid.Row="1"/>
+                <local:ConnectableFilterView Grid.Row="1"
+                                             VM="{Binding ParentableFilterVM}"/>
                 <listControls:NetworkParentableListControl Source="{Binding FilteredParentables}"
                                                            SelectedItem="{Binding SelectedParentable}"
                                                            Grid.Row="2"/>
@@ -61,7 +62,8 @@
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                     <TextBlock Text="Children" Style="{StaticResource ListHeader}"/>
                 </Border>
-                <TextBlock Text="FILTERS GO HERE" Grid.Row="1"/>
+                <local:ConnectableFilterView Grid.Row="1"
+                                             VM="{Binding ConnectableFilterVM}"/>
                 <listControls:NetworkConnectableListControl Source="{Binding FilteredConnectables}"
                                                             SelectedItem="{Binding SelectedConnectable}"
                                                             Grid.Row="2"/>

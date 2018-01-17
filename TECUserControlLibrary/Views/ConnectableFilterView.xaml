@@ -24,33 +24,33 @@
             <!--Search Filter-->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Column="1" Content="Search" Command=""/>
+                <TextBlock Text="Search:"/>
+                <TextBox Grid.Column="1" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             
             <!--Connected Filter-->
-            <Grid>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Include Connected:"/>
-                <CheckBox Grid.Column="1"/>
+                <CheckBox Grid.Column="1" IsChecked="{Binding IncludeConnected}"/>
             </Grid>
             
             <!--IOType Filter-->
-            <Grid>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Filter IO:"/>
-                <CheckBox Grid.Column="1"/>
-                <ComboBox Grid.Column="2"/>
+                <CheckBox Grid.Column="1" IsChecked="{Binding FilterByIO}"/>
+                <ComboBox Grid.Column="2" ItemsSource="{Binding NetworkIOTypes}" SelectedItem="{Binding SelectedIOType}"/>
             </Grid>
         </Grid>
     </Expander>
