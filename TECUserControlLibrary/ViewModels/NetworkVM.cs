@@ -126,7 +126,10 @@ namespace TECUserControlLibrary.ViewModels
             }
             ParentableFilterVM = new ConnectableFilterVM<INetworkParentable>(allParentables);
             ConnectableFilterVM = new ConnectableFilterVM<INetworkConnectable>(allConnectables);
-            UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
+            if (updateExecute != null && updateCanExecute != null)
+            {
+                UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
+            }
         }
 
         public event Action<TECObject> Selected;
