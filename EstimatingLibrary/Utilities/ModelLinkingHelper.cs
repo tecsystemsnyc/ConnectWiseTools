@@ -216,9 +216,13 @@ namespace EstimatingLibrary.Utilities
         }
         #endregion
 
+
+        /// <summary>
+        /// Links scope items in a bid to a catalog which is already linked
+        /// </summary>
+        /// <param name="bid"></param>
         public static void LinkBidToCatalogs(TECBid bid)
         {
-            linkCatalogs(bid.Catalogs);
             foreach(TECSystem typical in bid.Systems)
             {
                 linkSystemToCatalogs(typical, bid.Catalogs);
@@ -361,9 +365,9 @@ namespace EstimatingLibrary.Utilities
 
         private static void linkValveToCatalogs(TECValve valve, TECCatalogs catalogs)
         {
+            linkValveToActuators(valve, catalogs.Devices);
             linkHardwareToManufacturers(valve, catalogs.Manufacturers);
             linkScopeChildrenToCatalogs(valve, catalogs);
-            linkValveToActuators(valve, catalogs.Devices);
         }
 
         private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)

@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -49,7 +50,6 @@ namespace TECUserControlLibrary.ViewModels
             IsTypical = false;
             setupCommands();
             Refresh(bid, cw);
-            ConduitTypes = new List<TECElectricalMaterial>(bid.Catalogs.ConduitTypes);
         }
         public NetworkVM(TECSystem system, TECCatalogs catalogs)
         {
@@ -57,7 +57,6 @@ namespace TECUserControlLibrary.ViewModels
             typical = system is TECTypical ? system as TECTypical : null;
             setupCommands();
             Refresh(system, catalogs);
-            ConduitTypes = new List<TECElectricalMaterial>(catalogs.ConduitTypes);
         }
 
         public event Action<TECObject> Selected;
@@ -144,7 +143,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return new ReadOnlyObservableCollection<TECConnectionType>(selectedConnectionTypes); }
         }
-        public List<TECElectricalMaterial> ConduitTypes { get; }
+        public List<TECElectricalMaterial> ConduitTypes { get; private set; }
 
         public TECConnectionType SelectedPotentialConnectionType
         {
@@ -219,6 +218,39 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("CannotConnectMessage");
             }
         }
+
+        //Filter Properties
+        private bool _hideConnected;
+        public bool HideConnected
+        {
+            get { return _hideConnected; }
+            set
+            {
+                if (HideConnected != value)
+                {
+                    _hideConnected = value;
+                    RaisePropertyChanged("HideConnected");
+
+                }
+            }
+        }
+
+        private string _searchQuery;
+        public string SearchQuery
+        {
+            get { return _searchQuery; }
+            set
+            {
+                if (SearchQuery != value)
+                {
+                    _searchQuery = value;
+                    RaisePropertyChanged("SearchQuery");
+                }
+            }
+        }
+
+        public ICommand SearchCommand { get; private set; }
+        public ICommand ResetFiltersCommand { get; private set; }
         #endregion
 
         #region Methods
@@ -254,6 +286,7 @@ namespace TECUserControlLibrary.ViewModels
             _parentables = new ObservableCollection<ConnectableItem>();
             _nonParentables = new ObservableCollection<ConnectableItem>();
             AllConnectionTypes = new ReadOnlyObservableCollection<TECConnectionType>(catalogs.ConnectionTypes);
+            ConduitTypes = new List<TECElectricalMaterial>(catalogs.ConduitTypes);
             IOTypes = new List<IOType>(TECIO.NetworkIO);
             selectedConnectionTypes = new ObservableCollection<TECConnectionType>();
             RaisePropertyChanged("Parentables");
@@ -344,6 +377,10 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectableItem(INetworkConnectable connectable)
         {
+            if (connectableDictionary.ContainsKey(connectable))
+            {
+                return;
+            }
             if (connectable is TECSubScope sub && !sub.IsNetwork)
             {
                 return;
@@ -352,6 +389,10 @@ namespace TECUserControlLibrary.ViewModels
             if (connectable.ParentConnection != null && connectable.ParentConnection.ParentController != null)
             {
                 INetworkConnectable parentNetConnectable = connectable.ParentConnection.ParentController;
+                if (!connectableDictionary.ContainsKey(parentNetConnectable))
+                {
+                    addConnectableItem(parentNetConnectable);
+                }
                 parentConnected = connectableDictionary[parentNetConnectable].IsConnected;
             }
 
@@ -364,7 +405,10 @@ namespace TECUserControlLibrary.ViewModels
             bool isConnected = (parentConnected || isServer);
 
             ConnectableItem item = new ConnectableItem(connectable, isConnected);
-            connectableDictionary.Add(connectable, item);
+            if (!connectableDictionary.ContainsKey(connectable))
+            {
+                connectableDictionary.Add(connectable, item);
+            }
             if (connectable is INetworkParentable)
             {
                 _parentables.Add(item);
@@ -548,6 +592,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddConnection()
         {
+            if (SelectedParentable == null) { return false; }
             if (SelectedParentable.Item is INetworkParentable parentable)
             {
                 bool parentCanAdd = parentable.CanAddNetworkConnection(SelectedIOType);
@@ -603,31 +648,43 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             CannotConnectMessage = "";
-            bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
-            if (dropInfo.Data is ConnectableItem connectable && targetIsChildren)
+
+            UIHelpers.DragOver(dropInfo, (sourceItem, sourceType, targetType) =>
             {
-                if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
+                bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
+                if (sourceItem is ConnectableItem connectable && targetIsChildren)
                 {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
+                    if (SelectedConnection.CanAddINetworkConnectable(connectable.Item) && connectable.Item.ParentConnection == null)
+                    {
+                        return true;
+                    }
                 }
-                else
-                {
-                    CannotConnectMessage = "Connectable isn't compatible with connection.";
-                }
+                return false;
+
+            }, () =>
+            {
+                CannotConnectMessage = "Connectable isn't compatible with connection.";
             }
+            );
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is ConnectableItem connectable)
-            {
-                SelectedConnection.AddINetworkConnectable(connectable.Item);
-            }
-            else
-            {
-                throw new DataMisalignedException("Data misalignment between DragOver and Drop.");
-            }
+            UIHelpers.Drop(dropInfo,
+                (item) =>
+                {
+                    if (item is ConnectableItem connectable)
+                    {
+                        SelectedConnection.AddINetworkConnectable(connectable.Item);
+                    }
+                    else
+                    {
+                        throw new DataMisalignedException("Data misalignment between DragOver and Drop.");
+                    }
+                    return null;
+                },
+                false
+            );
         }
 
         private void updateInstances()

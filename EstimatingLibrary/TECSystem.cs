@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace EstimatingLibrary
 {
@@ -101,11 +102,22 @@ namespace EstimatingLibrary
             get { return _equipment; }
             set
             {
-                var old = _equipment;
-                _equipment.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Equipment");
-                _equipment = value;
-                notifyTECChanged(Change.Edit, "Equipment", this, value, old);
-                _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
+                if (value != Equipment)
+                {
+                    var old = _equipment;
+                    foreach(TECEquipment equip in old)
+                    {
+                        equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                    }
+                    _equipment.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Equipment");
+                    _equipment = value;
+                    notifyTECChanged(Change.Edit, "Equipment", this, value, old);
+                    _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
+                    foreach(TECEquipment equip in Equipment)
+                    {
+                        equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
+                    }
+                }
             }
         }
         public ReadOnlyObservableCollection<TECController> Controllers
@@ -295,6 +307,10 @@ namespace EstimatingLibrary
                             pointNum += pointItem.PointNumber;
                         }
                         notifyTECChanged(Change.Add, propertyName, this, item);
+                        if (item is TECEquipment equip)
+                        {
+                            equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
+                        }
                     }
                 }
                 notifyCostChanged(costs);
@@ -314,6 +330,14 @@ namespace EstimatingLibrary
                         if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
                         if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
                         notifyTECChanged(Change.Remove, propertyName, this, item);
+                        if (item is TECEquipment equip)
+                        {
+                            equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                            foreach(TECSubScope ss in equip.SubScope)
+                            {
+                                handleSubScopeRemoval(ss);
+                            }
+                        }
                     }
                 }
                 notifyCostChanged(costs * -1);
@@ -325,6 +349,26 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 notifyTECChanged(Change.Edit, propertyName, this, sender);
+            }
+        }
+
+        protected virtual void handleSubScopeCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (args.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach(TECSubScope item in args.OldItems)
+                {
+                    handleSubScopeRemoval(item);
+                }
+            }
+        }
+
+        protected void handleSubScopeRemoval(TECSubScope removed)
+        {
+            TECController controller = removed.Connection?.ParentController;
+            if(controller != null)
+            {
+                controller.RemoveSubScope(removed);
             }
         }
         #endregion

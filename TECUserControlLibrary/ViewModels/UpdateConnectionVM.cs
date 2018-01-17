@@ -75,7 +75,8 @@ namespace TECUserControlLibrary.ViewModels
                         ((instanceController != equivalentInstanceController) ||
                         (instance.Connection?.Length != typ.SubScope.Connection?.Length) ||
                         (instance.Connection?.ConduitLength != typ.SubScope.Connection?.ConduitLength) ||
-                        (instance.Connection?.ConduitType != typ.SubScope.Connection?.ConduitType));
+                        (instance.Connection?.ConduitType != typ.SubScope.Connection?.ConduitType) ||
+                        (instance.Connection?.IsPlenum != typ.SubScope.Connection?.IsPlenum));
                     SubScopeUpdatedWrapper wrapped = new SubScopeUpdatedWrapper(instance, needsUpdate);
                     instances.Add(wrapped);
                 }
@@ -150,7 +151,8 @@ namespace TECUserControlLibrary.ViewModels
                             TECConnection typicalConnection = SelectedTypical.Connection;
                             if ((instanceConnection.Length != typicalConnection.Length) ||
                                 (instanceConnection.ConduitLength != typicalConnection.ConduitLength) ||
-                                (instanceConnection.ConduitType != typicalConnection.ConduitType))
+                                (instanceConnection.ConduitType != typicalConnection.ConduitType) ||
+                                (instanceConnection.IsPlenum != typicalConnection.IsPlenum))
                             {
                                 propertiesEqual = false;
                             }
@@ -207,6 +209,7 @@ namespace TECUserControlLibrary.ViewModels
                 toUpdate.Connection.Length = typical.Connection.Length;
                 toUpdate.Connection.ConduitLength = typical.Connection.ConduitLength;
                 toUpdate.Connection.ConduitType = typical.Connection.ConduitType;
+                toUpdate.Connection.IsPlenum = typical.Connection.IsPlenum;
             }
         }
         private bool canUpdate()

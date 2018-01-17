@@ -9,6 +9,13 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static bool Update(string dataBasePath, List<UpdateItem> updates)
         {
+            List<string> omitErrors = new List<string> {
+                "Note",
+                "Exclusion",
+                "ProposalScope",
+                "Location"
+            };
+
             SQLiteDatabase db = new SQLiteDatabase(dataBasePath);
             db.NonQueryCommand("BEGIN TRANSACTION");
             bool success = true;
@@ -33,7 +40,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 else if (item.Change == Change.Edit)
                 {
                     bool editSuccess = edit(item, db);
-                    if (!editSuccess)
+                    if (!editSuccess && !(omitErrors.Contains(item.Table)))
                     {
                         success = false;
                     }

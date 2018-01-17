@@ -43,23 +43,42 @@
             </Grid.RowDefinitions>
 
             <!--Controller Selection Grid-->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
-                Margin="10,0,10,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+            Margin="10,0,10,0">
                     <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
-                    </Border>
-                    <!--Controller List-->
+                </Border>
+                <!--Filters Grid-->
+                <Expander Grid.Row="1" Header="Filters">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Hide Connected"/>
+                        <CheckBox Grid.Column="1" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Row="1" Margin="5"/>
+                        <Button Content="Search" Grid.Row="1" Grid.Column="1" Margin="5"/>
+                        <Button Content="Reset Filters" Grid.Row="2" Grid.ColumnSpan="2" Margin="5"/>
+                    </Grid>
+                </Expander>
+                <!--Controller List-->
                     <listControls:ConnectableItemListControl
                         Source="{Binding Parentables}"
                         SelectedItem="{Binding SelectedParentable}"
                         DropHandler="{Binding}"
                         IsDragSource="True"
-                        Grid.Row="1"/>
+                        Grid.Row="2"/>
                 </Grid>
             
 

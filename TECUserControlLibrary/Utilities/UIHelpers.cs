@@ -114,7 +114,19 @@ namespace TECUserControlLibrary.Utilities
             }
         }
 
-        public static void DragOver(IDropInfo dropInfo, Func<object, Type, bool> dropCondition)
+        /// <summary>
+        /// Standard method for applying drop adorners if the sourceitem and targetcollection are compatible.
+        /// </summary>
+        /// <param name="dropInfo">
+        /// DropInfo passed into the DragOver method in the IDropTarget interface from GongSolutions DragDrop.
+        /// </param>
+        /// <param name="dropCondition">
+        /// A method which takes the soure item, source type, and target type and returns a bool indicating if the drop can occur.
+        /// </param>
+        /// <param name="failAction">
+        /// An Action invoked when the drop is determined to be illegal.
+        /// </param>
+        public static void DragOver(IDropInfo dropInfo, Func<object, Type, Type, bool> dropCondition, Action failAction)
         {
             if (dropInfo.TargetCollection == dropInfo.DragInfo.SourceCollection)
             {
@@ -122,8 +134,8 @@ namespace TECUserControlLibrary.Utilities
             }
             var sourceItem = dropInfo.Data;
             Type sourceType;
-            if (sourceItem is IList && ((IList)sourceItem).Count > 0)
-            { sourceType = ((IList)sourceItem)[0].GetType(); }
+            if (sourceItem is IList sourceList && sourceList.Count > 0)
+            { sourceType = sourceList[0].GetType(); }
             else
             { sourceType = sourceItem.GetType(); }
 
@@ -132,16 +144,41 @@ namespace TECUserControlLibrary.Utilities
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
                 bool sourceNotNull = sourceItem != null;
-                bool allowDrop = dropCondition(sourceItem, targetType);
+                bool allowDrop = dropCondition(sourceItem, sourceType, targetType);
+                if(sourceItem is IList listItems)
+                {
+                    allowDrop = listItems.Count > 0 ? true : false;
+                    foreach(var item in listItems)
+                    {
+                        if(!dropCondition(item, sourceType, targetType))
+                        {
+                            allowDrop = false;
+                            break;
+                        }
+                    }
+                }
                 bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
                 if (sourceNotNull && (allowDrop || sourceMatchesTarget))
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;
                 }
+                else
+                {
+                    failAction?.Invoke();
+                }
             }
         }
-        public static void Drop(IDropInfo dropInfo, TECScopeManager scopeManager, Func<object, object> dropObject)
+        /// <summary>
+        /// Standard method for performing drop operations after DragOver has allowed such a drop.
+        /// </summary>
+        /// <param name="dropInfo">
+        /// DropInfo passed into the DragOver method in the IDropTarget interface from GongSolutions DragDrop.
+        /// </param>
+        /// <param name="dropObject">
+        /// A Method which takes a dropped object and return the object to add to the target collection.
+        /// </param>
+        public static void Drop(IDropInfo dropInfo, Func<object, object> dropObject, bool addObjectToCollection = true)
         {
             var sourceItem = dropInfo.Data;
             Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
@@ -162,37 +199,40 @@ namespace TECUserControlLibrary.Utilities
                     sourceItem = dropObject(dropInfo.Data);
                 }
 
-
-                if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
+                if (addObjectToCollection)
                 {
-                    if (sourceItem is IList)
+                    if (dropInfo.InsertIndex > ((IList)dropInfo.TargetCollection).Count)
                     {
-                        foreach (object item in ((IList)sourceItem))
+                        if (sourceItem is IList)
                         {
-                            ((IList)dropInfo.TargetCollection).Add(item);
+                            foreach (object item in ((IList)sourceItem))
+                            {
+                                ((IList)dropInfo.TargetCollection).Add(item);
+                            }
+                        }
+                        else
+                        {
+                            ((IList)dropInfo.TargetCollection).Add(sourceItem);
                         }
                     }
                     else
                     {
-                        ((IList)dropInfo.TargetCollection).Add(sourceItem);
-                    }
-                }
-                else
-                {
-                    if (sourceItem is IList)
-                    {
-                        var x = dropInfo.InsertIndex;
-                        foreach (object item in ((IList)sourceItem))
+                        if (sourceItem is IList)
                         {
-                            ((IList)dropInfo.TargetCollection).Insert(x, item);
-                            x += 1;
+                            var x = dropInfo.InsertIndex;
+                            foreach (object item in ((IList)sourceItem))
+                            {
+                                ((IList)dropInfo.TargetCollection).Insert(x, item);
+                                x += 1;
+                            }
+                        }
+                        else
+                        {
+                            ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
                         }
                     }
-                    else
-                    {
-                        ((IList)dropInfo.TargetCollection).Insert(dropInfo.InsertIndex, sourceItem);
-                    }
                 }
+                
             }
             else
             {
@@ -270,46 +310,7 @@ namespace TECUserControlLibrary.Utilities
                 handleReorderDrop(dropInfo);
             }
         }
-
-        public static void ControllerInPanelDragOver(IDropInfo dropInfo)
-        {
-            var sourceItem = dropInfo.Data;
-            var targetCollection = dropInfo.TargetCollection;
-            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
-            {
-                Type sourceType = sourceItem.GetType();
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-                if (sourceItem != null && sourceType == targetType ||
-                    (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
-            }
-        }
-        public static void ControllerInPanelDrop(IDropInfo dropInfo, Action<TECController> addMethod, TECScopeManager scopeManager, bool isGlobal = true)
-        {
-            var sourceItem = (dropInfo.Data as IDragDropable).DragDropCopy(scopeManager);
-            Type sourceType = dropInfo.Data.GetType();
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
-
-            if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
-            {
-                if ((sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel)))
-                {
-                    var controller = sourceItem as TECController;
-                    var controllerInPanel = new ControllerInPanel(controller, null);
-                    addMethod(sourceItem as TECController);
-                    sourceItem = controllerInPanel;
-                }
-            }
-            else
-            {
-                handleReorderDrop(dropInfo);
-            }
-        }
-
+        
         public static void FileDragOver(IDropInfo dropInfo)
         {
             if (dropInfo.Data is DataObject)

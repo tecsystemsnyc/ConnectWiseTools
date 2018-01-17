@@ -117,6 +117,7 @@ namespace EstimatingLibrary
 
             _length = connectionSource.Length;
             _conduitLength = connectionSource.ConduitLength;
+            _isPlenum = connectionSource.IsPlenum;
             if (connectionSource.ConduitType != null)
             { _conduitType = connectionSource.ConduitType; }
         }

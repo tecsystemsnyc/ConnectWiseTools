@@ -295,15 +295,18 @@ namespace EstimatingLibrary
                         connectionToRemove = subConnect;
                     }
                 }
+                else if (connection is TECNetworkConnection netConnect)
+                {
+                    if (netConnect.Children.Contains(subScope))
+                    {
+                        netConnect.RemoveINetworkConnectable(subScope);
+                    }
+                }
             }
             if (connectionToRemove != null)
             {
                 removeChildConnection(connectionToRemove);
                 subScope.Connection = null;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException("Passed subscope does not exist in any connection in controller.");
             }
         }
 

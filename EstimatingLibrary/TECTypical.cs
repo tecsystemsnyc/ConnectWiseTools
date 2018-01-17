@@ -293,6 +293,10 @@ namespace EstimatingLibrary
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
                         }
+                        else if (item is TECEquipment equip)
+                        {
+                            equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
+                        }
                         notifyTECChanged(Change.Add, propertyName, this, item);
                     }
                 }
@@ -317,6 +321,14 @@ namespace EstimatingLibrary
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
                             handleInstanceRemoved(sys);
+                        }
+                        else if (item is TECEquipment equip)
+                        {
+                            equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                            foreach (TECSubScope ss in equip.SubScope)
+                            {
+                                handleSubScopeRemoval(ss);
+                            }
                         }
                         notifyTECChanged(Change.Remove, propertyName, this, item);
                     }
@@ -776,39 +788,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-        private void handleSystemSubScopeRemoval(TECSystem system)
-        {
-            foreach (TECEquipment equipment in system.Equipment)
-            {
-                handleEquipmentSubScopeRemoval(equipment);
-            }
-        }
-        private void handleEquipmentSubScopeRemoval(TECEquipment equipment)
-        {
-            foreach (TECSubScope subScope in equipment.SubScope)
-            {
-                handleSubScopeRemovalInConnections(subScope);
-            }
-        }
-        private void handleSubScopeRemovalInConnections(TECSubScope subScope)
-        {
-            foreach (TECController controller in Controllers)
-            {
-                ObservableCollection<TECSubScope> subScopeToRemove = new ObservableCollection<TECSubScope>();
-                foreach (TECSubScopeConnection connection in controller.ChildrenConnections)
-                {
-                    if (connection.SubScope == subScope)
-                    {
-                        subScopeToRemove.Add(subScope as TECSubScope);
-                    }
-                }
-                foreach (TECSubScope sub in subScopeToRemove)
-                {
-                    controller.RemoveSubScope(sub);
-                }
-            }
-        }
+        
         #endregion
         #endregion
     }
