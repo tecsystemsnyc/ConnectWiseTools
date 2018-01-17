@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             x:Name="connectableFilterView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -13,7 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Expander Header="Filters">
+    <Expander DataContext="{Binding ElementName=connectableFilterView, Path=VM}" Header="Filters">
         <Grid Height="Auto">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -26,8 +27,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBox/>
-                <Button Grid.Column="1" Content="Search"/>
+                <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Column="1" Content="Search" Command=""/>
             </Grid>
             
             <!--Connected Filter-->

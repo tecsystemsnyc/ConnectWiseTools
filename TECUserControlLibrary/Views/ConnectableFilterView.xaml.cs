@@ -23,8 +23,6 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class ConnectableFilterView : UserControl
     {
-
-
         public IConnectableFilterVM VM
         {
             get { return (IConnectableFilterVM)GetValue(VMProperty); }

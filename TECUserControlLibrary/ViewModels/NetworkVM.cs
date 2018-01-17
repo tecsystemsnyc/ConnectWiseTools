@@ -111,8 +111,8 @@ namespace TECUserControlLibrary.ViewModels
                     allParentables.Add(parentable);
                 }
             }
-            ParentableFilterVM = new ConnectableFilterVM<INetworkParentable>(allParentables, TECIO.NetworkIO);
-            ConnectableFilterVM = new ConnectableFilterVM<INetworkConnectable>(allConnectables, TECIO.NetworkIO);
+            ParentableFilterVM = new ConnectableFilterVM<INetworkParentable>(allParentables);
+            ConnectableFilterVM = new ConnectableFilterVM<INetworkConnectable>(allConnectables);
         }
 
         public event Action<TECObject> Selected;

@@ -96,64 +96,55 @@ namespace TECUserControlLibrary.ViewModels
         #region Commands
         private void SearchCollectionExecute()
         {
-            bool isOr = false;
-            string searchString = SearchString;
-            if (searchString.Length > 0 && searchString[0] == '*')
-            {
-                isOr = true;
-                searchString = searchString.Remove(0,1);
-            }
-            char[] dilemeters = { ',', ' ' };
-            string[] searchCriteria = searchString.ToUpper().Split(dilemeters, StringSplitOptions.RemoveEmptyEntries);
             switch (ChosenType)
             {
                 case AllSearchableObjects.System:
-                    ResultCollection = getResultCollection(Templates.SystemTemplates, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(Templates.SystemTemplates, SearchString);
                     break;
                 case AllSearchableObjects.Equipment:
-                    ResultCollection = getResultCollection(Templates.EquipmentTemplates, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(Templates.EquipmentTemplates, SearchString);
                     break;
                 case AllSearchableObjects.SubScope:
-                    ResultCollection = getResultCollection(Templates.SubScopeTemplates, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(Templates.SubScopeTemplates, SearchString);
                     break;
                 case AllSearchableObjects.Devices:
-                    ResultCollection = getResultCollection(catalogs.Devices, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.Devices, SearchString);
                     break;
                 case AllSearchableObjects.Controllers:
-                    ResultCollection = getResultCollection(Templates.ControllerTemplates, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(Templates.ControllerTemplates, SearchString);
                     break;
                 case AllSearchableObjects.AssociatedCosts:
-                    ResultCollection = getResultCollection(catalogs.AssociatedCosts, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.AssociatedCosts, SearchString);
                     break;
                 case AllSearchableObjects.Panels:
-                    ResultCollection = getResultCollection(Templates.PanelTemplates, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(Templates.PanelTemplates, SearchString);
                     break;
                 case AllSearchableObjects.MiscCosts:
-                    ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.TEC), searchCriteria, isOr);
+                    ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.TEC), SearchString);
                     break;
                 case AllSearchableObjects.MiscWiring:
-                    ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.Electrical), searchCriteria, isOr);
+                    ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.Electrical), SearchString);
                     break;
                 case AllSearchableObjects.ControllerTypes:
-                    ResultCollection = getResultCollection(catalogs.ControllerTypes, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.ControllerTypes, SearchString);
                     break;
                 case AllSearchableObjects.PanelTypes:
-                    ResultCollection = getResultCollection(catalogs.PanelTypes, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.PanelTypes, SearchString);
                     break;
                 case AllSearchableObjects.Tags:
-                    ResultCollection = getResultCollection(catalogs.Tags, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.Tags, SearchString);
                     break;
                 case AllSearchableObjects.Wires:
-                    ResultCollection = getResultCollection(catalogs.ConnectionTypes, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.ConnectionTypes, SearchString);
                     break;
                 case AllSearchableObjects.Conduits:
-                    ResultCollection = getResultCollection(catalogs.ConduitTypes, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.ConduitTypes, SearchString);
                     break;
                 case AllSearchableObjects.Valves:
-                    ResultCollection = getResultCollection(catalogs.Valves, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.Valves, SearchString);
                     break;
                 case AllSearchableObjects.IOModules:
-                    ResultCollection = getResultCollection(catalogs.IOModules, searchCriteria, isOr);
+                    ResultCollection = getResultCollection(catalogs.IOModules, SearchString);
                     break;
                 default:
                     break;
@@ -180,57 +171,9 @@ namespace TECUserControlLibrary.ViewModels
             DropHandler(dropInfo);
         }
         
-        private ObservableCollection<TECObject> getResultCollection(IEnumerable<TECObject> source, string[] searchCriteria, bool isOr)
+        private ObservableCollection<TECObject> getResultCollection(IEnumerable<TECObject> source, string searchString)
         {
-            var outCollection = new ObservableCollection<TECObject>();
-            foreach (TECObject item in source)
-            {
-                if(item is TECScope scope)
-                {
-                    string[] references = { scope.Name.ToUpper(), scope.Description.ToUpper() };
-                    foreach(TECTag tag in scope.Tags)
-                    {
-                        references.Append(tag.Label);
-                    }
-                    if (scope is TECHardware hardware)
-                    {
-                        references.Append(hardware.Manufacturer.Label.ToUpper());
-                    }
-                    if (isOr)
-                    {
-                        if(UtilitiesMethods.StringsContainsAnyStrings(references, searchCriteria))
-                        {
-                            outCollection.Add(item);
-                        }
-                    }
-                    else
-                    {
-                        if (UtilitiesMethods.StringsContainStrings(references, searchCriteria))
-                        {
-                            outCollection.Add(item);
-                        }
-                    }
-                }
-                else if (item is TECLabeled labeled)
-                {
-                    string[] references = { labeled.Label.ToUpper() };
-                    if (isOr)
-                    {
-                        if (UtilitiesMethods.StringsContainsAnyStrings(references, searchCriteria))
-                        {
-                            outCollection.Add(item);
-                        }
-                    }
-                    else
-                    {
-                        if (UtilitiesMethods.StringsContainStrings(references, searchCriteria))
-                        {
-                            outCollection.Add(item);
-                        }
-                    }
-                }
-            }
-            return outCollection;
+            return new ObservableCollection<TECObject>(source.GetSearchResult(searchString));
         }
         #endregion
         
