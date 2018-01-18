@@ -2889,9 +2889,8 @@ namespace Tests
         }
 
         #endregion
-
         #endregion
-        
+
         private void resetRaised()
         {
             changedRaised = false;
