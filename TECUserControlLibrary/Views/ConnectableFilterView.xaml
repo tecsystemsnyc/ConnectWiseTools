@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="connectableFilterView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -49,8 +50,12 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Filter IO:"/>
-                <CheckBox Grid.Column="1" IsChecked="{Binding FilterByIO}"/>
-                <ComboBox Grid.Column="2" ItemsSource="{Binding NetworkIOTypes}" SelectedItem="{Binding SelectedIOType}"/>
+                <CheckBox Grid.Column="1" IsChecked="{Binding FilterByIO}"
+                          x:Name="ioFilterCheckBox"/>
+                <ComboBox Grid.Column="2" ItemsSource="{Binding NetworkIOTypes}" 
+                          SelectedItem="{Binding SelectedIOType}"
+                          SelectedIndex="0"
+                          IsEnabled="{Binding ElementName=ioFilterCheckBox, Path=IsChecked}"/>
             </Grid>
         </Grid>
     </Expander>
