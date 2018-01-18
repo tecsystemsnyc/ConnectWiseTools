@@ -163,6 +163,7 @@
                 <listControls:NetworkConnectionListControl Source="{Binding SelectedParentable.ChildNetworkConnections}"
                                                            SelectedItem="{Binding SelectedConnection}"
                                                            ConduitTypes="{Binding Catalogs.ConduitTypes}"
+                                                           RemoveConnectionCommand="{Binding RemoveConnectionCommand}"
                                                            Grid.Row="1"/>
             </Grid>
             <Grid Grid.Row="3">
