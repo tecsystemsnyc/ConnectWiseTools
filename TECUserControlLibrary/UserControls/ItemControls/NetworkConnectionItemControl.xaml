@@ -18,21 +18,19 @@
     <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" Background="{StaticResource ItemBackgroundBrush}" CornerRadius="5">
         <Grid DataContext="{Binding ElementName=networkConnectionItemControl, Path=NetworkConnection}">
             <Grid.RowDefinitions>
-                <RowDefinition MinHeight="30"/>
-                <RowDefinition MinHeight="30"/>
-                <RowDefinition MinHeight="30"/>
-                <RowDefinition MinHeight="30"/>
-                <RowDefinition MinHeight="30"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="75"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
             <TextBlock Text="# Connected:" HorizontalAlignment="Right"/>
             <TextBlock Text="{Binding Connection.Children.Count}"
                        Grid.Column="1"/>
-
             
             <Grid Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
@@ -41,7 +39,7 @@
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Length (ft.):"/>
-                <TextBox Text="{Binding Connection.Length}" Margin="5" Grid.Column="1"/>
+                <TextBox Text="{Binding Connection.Length}" Margin="2" Grid.Column="1"/>
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50"/>
@@ -61,7 +59,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Conduit:" />
                 <ComboBox ItemsSource="{Binding ConduitTypes}" SelectedItem="{Binding SelectedConduitType}"
-                      DisplayMemberPath="Name" Margin="5"
+                      DisplayMemberPath="Name" Margin="2"
                       Grid.Row="2" Grid.Column="1"/>
             </Grid>
             <Grid Grid.Row="3" Grid.ColumnSpan="2">
@@ -70,13 +68,13 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Conduit Length (ft.):"/>
-                <TextBox Text="{Binding Connection.ConduitLength}" Margin="5" 
+                <TextBox Text="{Binding Connection.ConduitLength}" Margin="2" 
                          Grid.Column="1"/>
             </Grid>
 
             
 
-            <Button Content="Remove Connection" Margin="5" Grid.Row="4" Grid.ColumnSpan="2"
+            <Button Content="Remove Connection" Margin="2" Grid.Row="4" Grid.ColumnSpan="2"
                     Background="{StaticResource AlertActionBrush}"
                     Command="{Binding ElementName=networkConnectionItemControl, Path=RemoveConnectionCommand}"
                     CommandParameter="{Binding Connection}"/>

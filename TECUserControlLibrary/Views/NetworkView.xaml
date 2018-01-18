@@ -87,14 +87,12 @@
                         Visibility="{Binding UpdateCommand, Converter={utilities:NullToCollapsedConverter}, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             <Expander Header="Add Connection" Grid.Row="1">
-                <Grid DataContext="{Binding AddNetConnectVM}" Height="200">
+                <Grid DataContext="{Binding AddNetConnectVM}" Height="160">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
                         <RowDefinition/>
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Add Connection" Style="{StaticResource ListHeader}"/>
-                    <Grid Grid.Row="1">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
                             <RowDefinition/>
@@ -136,7 +134,7 @@
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition/>
@@ -161,7 +159,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding SelectedParentable.Name, StringFormat=Connections in {0}}"
                            Style="{StaticResource ListHeader}"/>
-                <listControls:NetworkConnectionListControl Source="{Binding SelectedParentable.ChildrenConnections}"
+                <listControls:NetworkConnectionListControl Source="{Binding SelectedParentable.ChildNetworkConnections}"
                                                            SelectedItem="{Binding SelectedConnection}"
                                                            ConduitTypes="{Binding Catalogs.ConduitTypes}"
                                                            Grid.Row="1"/>
