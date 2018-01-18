@@ -11,7 +11,6 @@ namespace Tests
     [TestClass]
     public class BidStackTests
     {
-
         #region Undo
 
         #region Bid Properties

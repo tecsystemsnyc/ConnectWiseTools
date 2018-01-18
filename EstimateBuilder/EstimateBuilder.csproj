@@ -32,8 +32,8 @@
     <PublisherName>TEC Systems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>59</ApplicationRevision>
-    <ApplicationVersion>1.7.5.%2a</ApplicationVersion>
+    <ApplicationRevision>63</ApplicationRevision>
+    <ApplicationVersion>1.7.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>

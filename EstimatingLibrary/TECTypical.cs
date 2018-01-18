@@ -466,17 +466,17 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECDevice && sender is TECSubScope)
+            else if (value is IEndDevice && sender is TECSubScope)
             {
                 var characteristicSubScope = sender as TECSubScope;
-                var device = value as TECDevice;
+                var device = value as IEndDevice;
                 if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
                     foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
                     {
                         subScope.Devices.Add(device);
                     }
-                }
+                }   
             }
             else if (value is TECPoint && sender is TECSubScope)
             {
@@ -535,7 +535,7 @@ namespace EstimatingLibrary
                 }
             }
             else if (value is TECCost && sender is TECScope && !(value is TECMisc)
-                && !(value is TECController) && !(value is TECDevice))
+                && !(value is TECController) && !(value is IEndDevice))
             {
                 if (sender is TECTypical)
                 {
@@ -682,10 +682,10 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECDevice && sender is TECSubScope)
+            else if (value is IEndDevice && sender is TECSubScope)
             {
                 var characteristicSubScope = sender as TECSubScope;
-                var device = value as TECDevice;
+                var device = value as IEndDevice;
                 if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
                 {
                     foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
@@ -765,7 +765,7 @@ namespace EstimatingLibrary
                 }
             }
             else if (value is TECCost && sender is TECScope && !(value is TECMisc)
-                && !(value is TECController) && !(value is TECDevice))
+                && !(value is TECController) && !(value is IEndDevice))
             {
                 if (sender is TECTypical)
                 {

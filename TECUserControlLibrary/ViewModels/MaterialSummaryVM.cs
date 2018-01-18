@@ -1,7 +1,9 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using System;
+using System.Linq;
 using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels.Interfaces;
 
@@ -249,7 +251,7 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch addSubScope(TECSubScope ss)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECDevice dev in ss.Devices)
+            foreach (TECHardware dev in ss.Devices.Where(item => item is TECHardware))
             {
                 deltas += (DeviceSummaryVM.AddHardware(dev));
             }

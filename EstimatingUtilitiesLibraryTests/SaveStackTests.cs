@@ -1023,6 +1023,158 @@ namespace EstimatingUtilitiesLibraryTests
             CheckUpdateItems(expectedItems, stack);
         }
         #endregion
+        #region Valve
+        [TestMethod]
+        public void Bid_AddValveToTypicalWithout()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECValve valve = new TECValve(new TECManufacturer(), device);
+            subScope.Devices.Add(valve);
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = subScope.Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
+            data[SubScopeDeviceTable.Quantity.Name] = "1";
+            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            UpdateItem expectedItem = new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data);
+            int expectedCount = 1;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+        }
+
+        [TestMethod]
+        public void Bid_AddValveToTypicalWith()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECSystem instance = system.AddInstance(bid);
+
+            //Act
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECValve valve = new TECValve(new TECManufacturer(), device);
+            subScope.Devices.Add(valve);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
+            data[SubScopeDeviceTable.Quantity.Name] = "1";
+            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = system.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
+            data[SubScopeDeviceTable.Quantity.Name] = "1";
+            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddInstanceToSystemWithValve()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECValve valve = new TECValve(new TECManufacturer(), device);
+            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Valves.Add(valve);
+            subScope.Devices.Add(valve);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            TECSystem instance = system.AddInstance(bid);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data;
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = subScope.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = equipment.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SystemTable.ID.Name] = instance.Guid.ToString();
+            data[SystemTable.Name.Name] = instance.Name.ToString();
+            data[SystemTable.Description.Name] = instance.Description.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentTable.Name.Name] = instance.Equipment[0].Name.ToString();
+            data[EquipmentTable.Description.Name] = instance.Equipment[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeTable.Name.Name] = instance.Equipment[0].SubScope[0].Name.ToString();
+            data[SubScopeTable.Description.Name] = instance.Equipment[0].SubScope[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
+            data[SubScopeDeviceTable.Quantity.Name] = "1";
+            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+
+            expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
+            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+        #endregion
         #region Controller
         [TestMethod]
         public void Bid_AddControllerToTypicalWithout()
@@ -2853,6 +3005,145 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SystemHierarchyTable.TableName, data));
             
             
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+        #endregion
+        #region Device
+        [TestMethod]
+        public void Bid_RemoveValveFromTypicalWithout()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECValve valve = new TECValve(new TECManufacturer(), device);
+            subScope.Devices.Add(valve);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            subScope.Devices.Remove(valve);
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = subScope.Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
+            UpdateItem expectedItem = new UpdateItem(Change.Remove, SubScopeDeviceTable.TableName, data);
+            int expectedCount = 1;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveValveFromTypicalWith()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECSystem instance = system.AddInstance(bid);
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECValve valve = new TECValve(new TECManufacturer(), device);
+            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Valves.Add(valve);
+            subScope.Devices.Add(valve);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            subScope.Devices.Remove(valve);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeDeviceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = system.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeDeviceTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveInstanceFromSystemWithValve()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECValve valve = new TECValve(new TECManufacturer(), device);
+            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Valves.Add(valve);
+            subScope.Devices.Add(valve);
+            TECSystem instance = system.AddInstance(bid);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            system.Instances.Remove(instance);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data;
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = equipment.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = subScope.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SystemTable.ID.Name] = instance.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, EquipmentTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString(); ;
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeDeviceTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemEquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
+            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemHierarchyTable.TableName, data));
+
+
             int expectedCount = expectedItems.Count;
 
             //Assert
