@@ -119,7 +119,6 @@ namespace Tests
             Assert.IsTrue(instanceSS.Connection == null, "Instance subscope connection wasn't removed.");
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Bid controller still contains connections.");
         }
-
-        [TestMethod]
+        
     }
 }
