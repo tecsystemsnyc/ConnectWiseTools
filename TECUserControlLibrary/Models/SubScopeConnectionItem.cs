@@ -30,13 +30,13 @@ namespace TECUserControlLibrary.Models
         {
             get
             {
-                if (SubScope.Connection.ConduitType == null)
+                if (SubScope.Connection?.ConduitType == null)
                 {
                     return noneConduit;
                 }
                 else
                 {
-                    return SubScope.Connection.ConduitType;
+                    return SubScope.Connection?.ConduitType;
                 }
             }
             set

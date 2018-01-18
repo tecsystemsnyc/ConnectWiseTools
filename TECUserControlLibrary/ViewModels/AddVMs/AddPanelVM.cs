@@ -59,8 +59,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             AddCommand = new RelayCommand(addExecute, addCanExecute);
 
         }
-
-
+        
         private bool addCanExecute()
         {
             return true;
@@ -73,6 +72,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 add(panel);
                 Added?.Invoke(panel);
             }
+            ToAdd = null;
         }
 
         internal void SetTemplate(TECPanel panel)

@@ -176,7 +176,6 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private void handleChange(TECChangedEventArgs e)
         {
-            Console.WriteLine(String.Format("_____Change: {0}, Sender: {1}, Value: {2}_____", e.Change, e.Sender, e.Value));
             if (e.Change == Change.Add || e.Change == Change.Remove)
             {               
                 stack.AddRange(addRemoveStack(e.Change, e.PropertyName, e.Sender as TECObject, e.Value as TECObject, dbType));

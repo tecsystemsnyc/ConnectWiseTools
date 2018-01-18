@@ -28,7 +28,7 @@
         </Grid.Resources>
         <ListView ItemsSource="{Binding Source}"
                   SelectedItem="{Binding SelectedItem}"
-ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectionChanged="ListView_Selected">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -49,6 +49,5 @@ ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-            
     </Grid>
 </local:BaseListControl>

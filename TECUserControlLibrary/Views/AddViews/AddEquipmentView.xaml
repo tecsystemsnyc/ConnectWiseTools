@@ -30,7 +30,9 @@
             <Label Content="Quantity: " Grid.Row="1"/>
             <TextBox Text="{Binding ElementName=addEquipmentView, Path=ViewModel.Quantity}" Grid.Row="1" Grid.Column="1"
                      Margin="2"/>
-            <Grid Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding ElementName=addEquipmentView, Path=ViewModel.DisplayReferenceProperty, Converter={utilities:BooleanToVisibilityConverter}}">
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding ElementName=addEquipmentView, 
+                Path=ViewModel.DisplayReferenceProperty, 
+                Converter={utilities:BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>

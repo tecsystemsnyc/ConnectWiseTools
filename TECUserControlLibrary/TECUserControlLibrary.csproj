@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -101,6 +102,7 @@
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IConnectableFilterVM.cs" />
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
@@ -139,9 +141,6 @@
     </Compile>
     <Compile Include="UserControls\AssociatedCostsGridControl.xaml.cs">
       <DependentUpon>AssociatedCostsGridControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ListControls\ConnectableItemListControl.xaml.cs">
-      <DependentUpon>ConnectableItemListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemControls\DeviceControl.xaml.cs">
       <DependentUpon>DeviceControl.xaml</DependentUpon>
@@ -184,6 +183,9 @@
     </Compile>
     <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
       <DependentUpon>ControllerListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListControls\NetworkParentableListControl.xaml.cs">
+      <DependentUpon>NetworkParentableListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PropertyControls\ConnectionPropertiesControl.xaml.cs">
       <DependentUpon>ConnectionPropertiesControl.xaml</DependentUpon>
@@ -228,11 +230,18 @@
       <DependentUpon>ValveGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
+    <Compile Include="Utilities\SearchUtilities.cs" />
+    <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
+    <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\DeleteDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
+    <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\ConnectableFilterView.xaml.cs">
+      <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DeleteDeviceView.xaml.cs">
       <DependentUpon>DeleteDeviceView.xaml</DependentUpon>
     </Compile>
@@ -306,7 +315,6 @@
     <Compile Include="ViewModels\MaterialSummaryVM.cs" />
     <Compile Include="ViewModels\PropertiesVM.cs" />
     <Compile Include="ViewModels\SplashVM.cs" />
-    <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\SubScopeHierarchyVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\ItemizedSummaryVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\SystemSummaryVM.cs" />
@@ -525,10 +533,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ListControls\ConnectableItemListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ItemControls\DeviceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -585,6 +589,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ListControls\NetworkParentableListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\PropertyControls\ConnectionPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -638,6 +646,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectableFilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

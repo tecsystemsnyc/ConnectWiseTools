@@ -6,7 +6,6 @@ namespace Tests
     [TestClass]
     public class TypicalTests
     {
-
         private TestContext testContextInstance;
         
         public TestContext TestContext
@@ -93,34 +92,6 @@ namespace Tests
             Assert.AreEqual(1, bidController.ChildrenConnections.Count, "Connection not removed");
         }
 
-        //Deprecated
-        //[TestMethod]
-        //public void AddTypicalSubScopeToBidController()
-        //{
-        //    //Arrange
-        //    TECBid bid = new TECBid();
-        //    TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
-        //    bid.AddController(controller);
-
-        //    TECTypical typical = new TECTypical();
-        //    TECEquipment equip = new TECEquipment(true);
-        //    TECSubScope ss = new TECSubScope(true);
-        //    typical.Equipment.Add(equip);
-        //    equip.SubScope.Add(ss);
-        //    bid.Systems.Add(typical);
-
-        //    TECSystem instance = typical.AddInstance(bid);
-        //    TECSubScope instanceSS = instance.Equipment[0].SubScope[0];
-
-        //    //Act
-        //    controller.AddSubScope(ss);
-
-        //    //Assert
-        //    Assert.IsTrue(instanceSS.Connection != null, "Instance subscope did not create a connection.");
-        //    Assert.AreEqual(controller, instanceSS.Connection.ParentController, "Instance subscope did not connect to bid controller.");
-        //    Assert.IsTrue(controller.ChildrenConnections.Contains(instanceSS.Connection), "Bid controller doesn't contain instance connection.");
-        //}
-
         [TestMethod]
         public void RemoveTypicalSubScopeFromBidController()
         {
@@ -148,5 +119,6 @@ namespace Tests
             Assert.IsTrue(instanceSS.Connection == null, "Instance subscope connection wasn't removed.");
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Bid controller still contains connections.");
         }
+        
     }
 }

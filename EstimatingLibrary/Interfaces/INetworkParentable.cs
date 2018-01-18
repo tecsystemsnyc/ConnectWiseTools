@@ -2,9 +2,10 @@
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface INetworkParentable
+    public interface INetworkParentable : INetworkConnectable
     {
         bool IsServer { get; }
+        bool IsTypical { get; }
         string Name { get; }
         
         IEnumerable<TECNetworkConnection> ChildNetworkConnections { get; }
@@ -12,5 +13,6 @@ namespace EstimatingLibrary.Interfaces
         bool CanAddNetworkConnection(IOType ioType);
         TECNetworkConnection AddNetworkConnection(bool isTypical, IEnumerable<TECConnectionType> connectionTypes, IOType ioType);
         void RemoveNetworkConnection(TECNetworkConnection connection);
+        
     }
 }

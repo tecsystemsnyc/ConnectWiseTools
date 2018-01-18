@@ -26,7 +26,8 @@
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
-                  dd:DragDrop.DragAdornerTemplate="{Binding DragAdornerTemplate}">
+                  dd:DragDrop.DragAdornerTemplate="{Binding DragAdornerTemplate}"
+                  HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ContentPresenter Content="{Binding}">

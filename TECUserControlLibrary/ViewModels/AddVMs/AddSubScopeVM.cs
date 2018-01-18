@@ -25,6 +25,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECSubScope underlyingTemplate;
         private List<TECPoint> originalPoints = new List<TECPoint>();
         private List<IEndDevice> originalDevices = new List<IEndDevice>();
+        private bool _displayReferenceProperty = false;
 
         public TECSubScope ToAdd
         {
@@ -74,7 +75,15 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public ICommand AddPointCommand { get; private set; }
         public RelayCommand<IEndDevice> DeleteDeviceCommand { get; private set; }
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
-        public bool DisplayReferenceProperty { get; }
+        public bool DisplayReferenceProperty
+        {
+            get { return _displayReferenceProperty; }
+            private set
+            {
+                _displayReferenceProperty = value;
+                RaisePropertyChanged("DisplayReferenceProperty");
+            }
+        }
 
         public AddSubScopeVM(TECEquipment parentEquipment, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -87,7 +96,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
             };
             setup();
-            DisplayReferenceProperty = IsTemplates;
         }
 
         public AddSubScopeVM(Action<TECSubScope> addMethod, TECScopeManager scopeManager): base(scopeManager)
@@ -96,7 +104,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             toAdd = new TECSubScope(false);
             setup();
             PropertiesVM.DisplayReferenceProperty = false;
-            DisplayReferenceProperty = false;
         }
         private void setup()
         {
@@ -178,6 +185,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             originalDevices = new List<IEndDevice>(ToAdd.Devices);
             originalPoints = new List<TECPoint>(ToAdd.Points);
             underlyingTemplate = subScope;
+            DisplayReferenceProperty = true;
         }
     }
 }
