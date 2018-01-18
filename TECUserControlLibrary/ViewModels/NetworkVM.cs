@@ -200,7 +200,7 @@ namespace TECUserControlLibrary.ViewModels
                 && e.PropertyName != "TypicalInstanceDictionary")
             {
                 //Looks for INetworkConnectable children of item
-                if(e.Value is TECObject item)
+                if(e.Value is TECObject item && isProperty(e.Sender, item))
                 {
                     foreach(INetworkConnectable connectable in getConnectables(item))
                     {
@@ -255,6 +255,15 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
             }
+        }
+
+        private bool isProperty(TECObject sender, TECObject item)
+        {
+            if (sender is IRelatable parent && !parent.LinkedObjects.Contains(item))
+            {
+                return true;
+            }
+            return false;
         }
 
         private List<INetworkConnectable> getConnectables(TECObject item)
