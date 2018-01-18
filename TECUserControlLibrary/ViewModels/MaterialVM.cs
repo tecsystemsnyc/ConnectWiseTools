@@ -363,7 +363,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _deviceDescription = value;
-                RaisePropertyChanged("DeviceDescripiton");
+                RaisePropertyChanged("DeviceDescription");
             }
         }
         private double _deviceListPrice;
@@ -450,7 +450,7 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _valveDescription = value;
-                RaisePropertyChanged("ValveDescripiton");
+                RaisePropertyChanged("ValveDescription");
             }
         }
         private double _valveListPrice;
@@ -820,7 +820,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddDevice()
         {
-            if(DeviceManufacturer != null)
+            if(DeviceManufacturer != null 
+                && DeviceConnectionTypes.Count > 0)
             {
                 return true;
             } else

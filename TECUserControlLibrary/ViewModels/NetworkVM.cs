@@ -124,6 +124,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand UpdateCommand { get; private set; }
+        public RelayCommand<TECNetworkConnection> RemoveConnectionCommand { get; private set; }
         #endregion
 
         private NetworkVM(
@@ -148,6 +149,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
             }
+            RemoveConnectionCommand = new RelayCommand<TECNetworkConnection>(removeConnectionExecute);
         }
 
         public event Action<TECObject> Selected;
@@ -200,7 +202,7 @@ namespace TECUserControlLibrary.ViewModels
                 && e.PropertyName != "TypicalInstanceDictionary")
             {
                 //Looks for INetworkConnectable children of item
-                if(e.Value is TECObject item)
+                if(e.Value is TECObject item && isProperty(e.Sender, item))
                 {
                     foreach(INetworkConnectable connectable in getConnectables(item))
                     {
@@ -257,6 +259,15 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private bool isProperty(TECObject sender, TECObject item)
+        {
+            if (sender is IRelatable parent && !parent.LinkedObjects.Contains(item))
+            {
+                return true;
+            }
+            return false;
+        }
+
         private List<INetworkConnectable> getConnectables(TECObject item)
         {
             List<INetworkConnectable> connectables = new List<INetworkConnectable>();
@@ -275,6 +286,15 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
             return connectables;
+        }
+
+        private void removeConnectionExecute(TECNetworkConnection netConnection)
+        {
+            MessageBoxResult result = MessageBox.Show("Remove this connection and disconnect all connected devices?", "Are you sure?", MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
+            {
+                SelectedParentable.RemoveNetworkConnection(netConnection);
+            }
         }
 
         #region Static Constructors

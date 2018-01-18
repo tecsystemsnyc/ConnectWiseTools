@@ -335,7 +335,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (obj is TECSubScopeConnection ssConnect)
                 {
-                    if (SelectedEquipment.SubScope.Contains(ssConnect.SubScope))
+                    if (SelectedEquipment != null && SelectedEquipment.SubScope.Contains(ssConnect.SubScope))
                     {
                         UnconnectedSubScope.Add(ssConnect.SubScope);
                     }
