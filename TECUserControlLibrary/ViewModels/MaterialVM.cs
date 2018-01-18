@@ -820,7 +820,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddDevice()
         {
-            if(DeviceManufacturer != null)
+            if(DeviceManufacturer != null 
+                && DeviceConnectionTypes.Count > 0)
             {
                 return true;
             } else

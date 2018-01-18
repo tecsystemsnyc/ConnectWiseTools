@@ -17,6 +17,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private Action<TECEquipment> add;
         private bool isTypical = false;
         private TECEquipment underlyingTemplate;
+        private bool _displayReferenceProperty = false;
 
         public TECEquipment ToAdd
         {
@@ -36,7 +37,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Quantity");
             }
         }
-        public bool DisplayReferenceProperty { get; }
+        public bool DisplayReferenceProperty {
+            get { return _displayReferenceProperty; }
+            private set
+            {
+                _displayReferenceProperty = value;
+                RaisePropertyChanged("DisplayReferenceProperty");
+            }
+        }
 
         public AddEquipmentVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -49,7 +57,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             };
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
-            DisplayReferenceProperty = IsTemplates;
         }
         public AddEquipmentVM(Action<TECEquipment> addMethod, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -58,7 +65,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
             PropertiesVM.DisplayReferenceProperty = false;
-            DisplayReferenceProperty = false;
         }
 
         private bool addCanExecute()
@@ -99,6 +105,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             underlyingTemplate = template;
             ToAdd = new TECEquipment(template, isTypical);
+            DisplayReferenceProperty = true;
         }
         
     }
