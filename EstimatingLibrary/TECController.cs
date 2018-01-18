@@ -104,6 +104,14 @@ namespace EstimatingLibrary
         {
             get { return getAvailableIO(); }
         }
+
+        public bool IsNetwork
+        {
+            get
+            {
+                return AllNetworkIOList.Count > 0;
+            }
+        }
         #endregion
 
         #region Constructors

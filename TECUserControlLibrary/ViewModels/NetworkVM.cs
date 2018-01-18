@@ -131,10 +131,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.Catalogs = catalogs;
             this.allParentables = new ObservableCollection<INetworkParentable>();
-            this.allConnectables = new ObservableCollection<INetworkConnectable>(connectables);
+            this.allConnectables = new ObservableCollection<INetworkConnectable>(connectables.Where(item => item.IsNetwork));
             foreach(INetworkConnectable connectable in connectables)
             {
-                if (connectable is INetworkParentable parentable)
+                if (connectable is INetworkParentable parentable && parentable.IsNetwork)
                 {
                     allParentables.Add(parentable);
                 }
@@ -199,7 +199,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach(INetworkConnectable connectable in getConnectables(item))
                     {
-                        if(e.Change == Change.Add)
+                        if(e.Change == Change.Add && connectable.IsNetwork)
                         {
                             allConnectables.Add(connectable);
                             if(connectable is INetworkParentable parentable)

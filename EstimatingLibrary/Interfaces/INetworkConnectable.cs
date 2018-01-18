@@ -10,6 +10,7 @@ namespace EstimatingLibrary.Interfaces
         List<TECIO> AllNetworkIOList { get; }
         IOCollection AvailableNetworkIO { get; }
         TECNetworkConnection ParentConnection { get; set; }
+        bool IsNetwork { get; }
 
         INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary);
 
