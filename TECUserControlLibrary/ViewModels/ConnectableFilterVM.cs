@@ -27,6 +27,7 @@ namespace TECUserControlLibrary.ViewModels
         private bool _includeConnected;
         private IOType _selectedIOType;
         private bool _filterByIO;
+        private readonly List<T> _exclusions;
 
         public string SearchQuery
         {
@@ -80,6 +81,10 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
+        public ReadOnlyCollection<T> Exclusions
+        {
+            get { return new ReadOnlyCollection<T>(_exclusions); }
+        }
         #endregion
 
         public ConnectableFilterVM(ObservableCollection<T> connectables)
@@ -88,7 +93,26 @@ namespace TECUserControlLibrary.ViewModels
             (allConnectables as INotifyCollectionChanged).CollectionChanged += allConnectablesCollectionChanged;
             FilteredConnectables = new ObservableCollection<T>();
             NetworkIOTypes = new ReadOnlyCollection<IOType>(TECIO.NetworkIO);
+            _exclusions = new List<T>();
+
             refilter();
+        }
+
+        public void AddExclusion(T exclusion)
+        {
+            if (exclusion != null)
+            {
+                _exclusions.Add(exclusion);
+                refilter();
+            }
+        }
+        public void RemoveExclusion(T exclusion)
+        {
+            if (exclusion != null && Exclusions.Contains(exclusion))
+            {
+                _exclusions.Remove(exclusion);
+                refilter();
+            }
         }
 
         private void allConnectablesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -160,6 +184,12 @@ namespace TECUserControlLibrary.ViewModels
 
             //IOType filter
             if (FilterByIO && !(connectable.AvailableNetworkIO.Contains(SelectedIOType)))
+            {
+                return false;
+            }
+
+            //Exclusions filter
+            if (Exclusions.Contains(connectable))
             {
                 return false;
             }
