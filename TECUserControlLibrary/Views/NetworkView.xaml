@@ -78,13 +78,13 @@
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding SelectedParentable.Name}"/>
                 <Button Content="Update" Command="{Binding UpdateCommand}"
-                        Visibility="{Binding ShowUpdate}"
-                        Grid.Column="1" Margin="2"/>
+                        Grid.Column="1" Margin="2"
+                        Visibility="{Binding UpdateCommand, Converter={utilities:NullToCollapsedConverter}, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             <Expander Header="Add Connection" Grid.Row="1">
                 <Grid DataContext="{Binding AddNetConnectVM}" Height="200">

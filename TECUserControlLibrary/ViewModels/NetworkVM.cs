@@ -317,15 +317,23 @@ namespace TECUserControlLibrary.ViewModels
 
         public static NetworkVM GetNetworkVMFromSystem(TECSystem sys, TECCatalogs catalogs)
         {
-            List<INetworkConnectable> connectables = new List<INetworkConnectable>();
-            connectables.AddRange(sys.Controllers);
-            connectables.AddRange(sys.GetAllSubScope());
+            if(sys is TECTypical typical)
+            {
+                return GetNetworkVMFromTypical(typical, catalogs);
+            }
+            else
+            {
+                List<INetworkConnectable> connectables = new List<INetworkConnectable>();
+                connectables.AddRange(sys.Controllers);
+                connectables.AddRange(sys.GetAllSubScope());
 
-            ChangeWatcher watcher = new ChangeWatcher(sys);
+                ChangeWatcher watcher = new ChangeWatcher(sys);
 
-            NetworkVM netVM = new NetworkVM(connectables, catalogs);
-            watcher.InstanceChanged += netVM.handleChange;
-            return netVM;
+                NetworkVM netVM = new NetworkVM(connectables, catalogs);
+                watcher.InstanceChanged += netVM.handleChange;
+                return netVM;
+            }
+            
         }
         #endregion
     }
