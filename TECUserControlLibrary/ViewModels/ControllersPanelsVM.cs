@@ -26,6 +26,8 @@ namespace TECUserControlLibrary.ViewModels
         private Action<TECController> deleteControllerMethod;
         private Action<TECPanel> deletePanelMethod;
 
+        private TECObject parent;
+
         private TECBid _bid;
         public TECBid Bid
         {
@@ -231,24 +233,24 @@ namespace TECUserControlLibrary.ViewModels
             populateControllerCollection();
             populatePanelSelections();
             registerChanges();
-
-            parent.TECChanged += args => parentChanged(args, parent);
+            this.parent = parent;
+            parent.TECChanged += parentChanged;
         }
         public void Refresh(TECBid bid)
         {
-            Bid.TECChanged -= args => parentChanged(args, Bid);
+            Bid.TECChanged -= parentChanged;
             Bid = bid;
             Refresh(bid, bid.Controllers, bid.Panels);
         }
         public void Refresh(TECTemplates templates)
         {
-            Templates.TECChanged -= args => parentChanged(args, Templates);
+            Templates.TECChanged -= parentChanged;
             Templates = templates;
             Refresh(templates, templates.ControllerTemplates, templates.PanelTemplates);
         }
         public void Refresh(TECSystem system, TECScopeManager manager = null)
         {
-            SelectedSystem.TECChanged -= args => parentChanged(args, SelectedSystem);
+            parent.TECChanged -= parentChanged;
             if (manager != null)
             {
                 if (manager is TECBid)
@@ -452,7 +454,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        private void parentChanged(TECChangedEventArgs e, TECObject parent)
+        private void parentChanged(TECChangedEventArgs e)
         {
             if (e.Change == Change.Add && e.Value is TECController controller && e.Sender == parent)
             {
