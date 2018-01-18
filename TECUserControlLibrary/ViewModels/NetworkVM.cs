@@ -196,7 +196,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private void handleChange(TECChangedEventArgs e)
         {
-            if(e.Change == Change.Add || e.Change == Change.Remove)
+            if((e.Change == Change.Add || e.Change == Change.Remove)
+                && e.PropertyName != "TypicalInstanceDictionary")
             {
                 //Looks for INetworkConnectable children of item
                 if(e.Value is TECObject item)
@@ -265,9 +266,12 @@ namespace TECUserControlLibrary.ViewModels
             }
             if(item is IRelatable relatable)
             {
-                foreach(TECObject child in relatable.PropertyObjects.Objects)
+                foreach(var pair in relatable.PropertyObjects.ChildList().Where(child => !relatable.LinkedObjects.ChildList().Contains(child)))
                 {
-                    connectables.AddRange(getConnectables(child));
+                    if(pair.Item1 != "TypicalInstances")
+                    {
+                        connectables.AddRange(getConnectables(pair.Item2));
+                    }
                 }
             }
             return connectables;
