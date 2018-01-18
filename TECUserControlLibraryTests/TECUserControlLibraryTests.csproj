@@ -93,11 +93,8 @@
     <Compile Include="SystemConnectionVMTests.cs" />
     <Compile Include="SystemSummaryVMTests.cs" />
     <Compile Include="ViewModelTests.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
