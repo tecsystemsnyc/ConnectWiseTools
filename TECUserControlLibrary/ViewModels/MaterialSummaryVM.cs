@@ -361,7 +361,7 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeSubScope(TECSubScope ss)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECDevice dev in ss.Devices)
+            foreach (TECHardware dev in ss.Devices.Where(item => item is TECHardware))
             {
                 deltas += (DeviceSummaryVM.RemoveHardware(dev));
             }
@@ -457,9 +457,9 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(addConnection(connection));
                 }
-                else if (args.Value is TECDevice dev && args.Sender is TECSubScope sub)
+                else if (args.Value is IEndDevice dev && args.Sender is TECSubScope sub)
                 {
-                    updateTotals(DeviceSummaryVM.AddHardware(dev));
+                    updateTotals(DeviceSummaryVM.AddHardware(dev as TECHardware));
                     if (sub.Connection != null)
                     {
                         foreach(TECElectricalMaterial connectionType in dev.ConnectionTypes)
@@ -514,9 +514,9 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(removeConnection(connection));
                 }
-                else if (args.Value is TECDevice dev && args.Sender is TECSubScope sub)
+                else if (args.Value is IEndDevice dev && args.Sender is TECSubScope sub)
                 {
-                    updateTotals(DeviceSummaryVM.RemoveHardware(dev));
+                    updateTotals(DeviceSummaryVM.RemoveHardware(dev as TECHardware));
                     if (sub.Connection != null)
                     {
                         foreach(TECElectricalMaterial connectionType in dev.ConnectionTypes)
