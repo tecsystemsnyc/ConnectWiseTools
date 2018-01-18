@@ -44,8 +44,11 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (SelectedParentable != value)
                 {
+                    ConnectableFilterVM.RemoveExclusion(SelectedParentable);
                     _selectedParentable = value;
                     RaisePropertyChanged("SelectedParentable");
+                    ConnectableFilterVM.AddExclusion(SelectedParentable);
+
                     if(value is TECObject obj)
                     {
                         Selected?.Invoke(obj);
