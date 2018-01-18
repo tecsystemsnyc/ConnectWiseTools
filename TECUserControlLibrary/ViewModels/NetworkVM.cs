@@ -195,6 +195,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(e.Change == Change.Add || e.Change == Change.Remove)
             {
+                //Looks for INetworkConnectable children of item
                 if(e.Value is TECObject item)
                 {
                     foreach(INetworkConnectable connectable in getConnectables(item))
@@ -214,6 +215,38 @@ namespace TECUserControlLibrary.ViewModels
                             {
                                 allParentables.Remove(parentable);
                             }
+                        }
+                    }
+                }
+
+                //Looks to see if sender IsNetwork changed
+                if (e.Sender is INetworkConnectable connectableSender)
+                {
+                    INetworkParentable parentableSender = connectableSender as INetworkParentable;
+                    if (connectableSender.IsNetwork)
+                    {
+                        if (!allConnectables.Contains(connectableSender))
+                        {
+                            allConnectables.Add(connectableSender);
+                        }
+
+                        if (parentableSender != null
+                            && !allParentables.Contains(parentableSender))
+                        {
+                            allParentables.Add(parentableSender);
+                        }
+                    }
+                    else
+                    {
+                        if (allConnectables.Contains(connectableSender))
+                        {
+                            allConnectables.Remove(connectableSender);
+                        }
+                        
+                        if (parentableSender != null
+                            && allParentables.Contains(parentableSender))
+                        {
+                            allParentables.Remove(parentableSender);
                         }
                     }
                 }
