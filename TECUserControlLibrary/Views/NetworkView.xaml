@@ -175,5 +175,11 @@
                                                             Grid.Row="1"/>
             </Grid>
         </Grid>
+        <Grid Grid.Column="1" Background="{StaticResource SectionBackgroundBrush}"
+              Visibility="{Binding SelectedParentable, Converter={utilities:NullToVisibilityConverter}}">
+            <TextBlock Text="Please select a parent to create connections." 
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+        </Grid>
     </Grid>
 </UserControl>
