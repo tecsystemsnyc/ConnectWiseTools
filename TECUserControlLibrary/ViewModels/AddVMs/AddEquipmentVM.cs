@@ -105,7 +105,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             underlyingTemplate = template;
             ToAdd = new TECEquipment(template, isTypical);
-            DisplayReferenceProperty = true;
+            if (IsTemplates)
+            {
+                DisplayReferenceProperty = true;
+            }
         }
         
     }

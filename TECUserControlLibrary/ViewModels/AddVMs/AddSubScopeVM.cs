@@ -185,7 +185,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             originalDevices = new List<IEndDevice>(ToAdd.Devices);
             originalPoints = new List<TECPoint>(ToAdd.Points);
             underlyingTemplate = subScope;
-            DisplayReferenceProperty = true;
+            if (IsTemplates)
+            {
+                DisplayReferenceProperty = true;
+            }
         }
     }
 }
