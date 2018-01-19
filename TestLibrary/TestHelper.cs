@@ -616,6 +616,13 @@ namespace Tests
             device.Tags.Add(catalogs.Tags[0]);
             return device;
         }
+        public static TECValve CreateTestValve(TECCatalogs catalogs)
+        {
+            TECValve valve = new TECValve(catalogs.Manufacturers[0], catalogs.Devices[0]);
+            valve.Price = 52.62;
+
+            throw new NotImplementedException();
+        }
         public static TECSubScope CreateTestSubScope(bool isTypical, TECCatalogs catalogs)
         {
             var device = catalogs.Devices[0];

@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.ObjectModel;
 using TECUserControlLibrary.ViewModels;
 using static Tests.CostTestingUtilities;
@@ -288,6 +289,17 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
             checkRefresh(matVM, bid, cw);
+        }
+
+        [TestMethod]
+        public void AddValve()
+        {
+            //Arrange
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+            ChangeWatcher cw = new ChangeWatcher(bid);
+            TECValve valve = TestHelper.CreateTestValve(bid.Catalogs);
+
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -698,6 +710,12 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
             checkRefresh(matVM, bid, cw);
+        }
+
+        [TestMethod]
+        public void RemoveValve()
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]

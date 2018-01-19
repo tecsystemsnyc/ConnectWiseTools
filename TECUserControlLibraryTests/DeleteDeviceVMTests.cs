@@ -138,9 +138,12 @@ namespace TECUserControlLibraryTests
 
             TECEquipment sysEquip = new TECEquipment(false);
             sys.Equipment.Add(sysEquip);
-            
 
-            
+            TECSubScope equipSS = new TECSubScope(false);
+            sysEquip.SubScope.Add(equipSS);
+
+            equipSS.Devices.Add(dev);
+
             //Device with no connection types
 
 
