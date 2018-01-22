@@ -144,13 +144,13 @@ namespace ConnectWiseInformationInterface.Export
             {
                 IXLRow row = worksheet.Row(i);
 
-                string typeName = "None";
-                if (opp.Type != null)
-                {
-                    typeName = opp.Type.Name;
-                }
-
                 int probability = opp.GetProbability(manager.Probabilities);
+
+                string salesRep = (opp.PrimarySalesRep?.Name == null ? "None" : opp.PrimarySalesRep.Name);
+                string typeName = (opp.Type?.Name == null ? "None" : opp.Type.Name);
+                string probString = string.Format("{0}%", probability);
+                string closeDate = (opp.ExpectedCloseDate.HasValue ? opp.ExpectedCloseDate.Value.ToShortDateString() : "None");
+                
                 int engineering = opp.GetEngineeringHours();
                 int programming = opp.GetProgrammingHours();
                 int graphics = opp.GetGraphicsHours();
@@ -158,11 +158,11 @@ namespace ConnectWiseInformationInterface.Export
                 int pm = opp.GetProgrammingHours();
                 
                 row.Cell("A").Value = opp.Name;
-                row.Cell("B").Value = opp.PrimarySalesRep.Name;
+                row.Cell("B").Value = salesRep;
                 row.Cell("C").Value = typeName;
-                row.Cell("D").Value = string.Format("{0}%", probability);
-                row.Cell("E").Value = opp.ExpectedCloseDate.Value.Date;
-                row.Cell("F").Value = opp.GetEngineeringHours();
+                row.Cell("D").Value = probString;
+                row.Cell("E").Value = closeDate;
+                row.Cell("F").Value = engineering;
                 row.Cell("G").Value = engineering * (probability / 100.0);
                 row.Cell("H").Value = programming;
                 row.Cell("I").Value = programming * (probability / 100.0);
