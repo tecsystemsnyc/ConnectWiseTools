@@ -167,12 +167,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">
-      <Project>{B0F44768-5B48-47B3-BBE8-0DCBD4B0B0C0}</Project>
-      <Name>EstimatingLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.1 %28x86 and x64%29</ProductName>
