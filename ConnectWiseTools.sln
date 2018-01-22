@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateBuilder", "Template
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectWiseIntegrationLibrary", "ConnectWiseIntegrationLibrary\ConnectWiseIntegrationLibrary.csproj", "{EF590B65-7584-4F56-93A5-E4C40865AD98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectWiseInformationInterface", "ConnectWiseInformationInterface\ConnectWiseInformationInterface.csproj", "{CA168D7C-3584-49E9-9821-818C302C9C73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpporunityExportUtility", "ConnectWiseInformationInterface\OpporunityExportUtility.csproj", "{CA168D7C-3584-49E9-9821-818C302C9C73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
