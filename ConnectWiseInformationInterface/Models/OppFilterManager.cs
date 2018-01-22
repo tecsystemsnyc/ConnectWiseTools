@@ -84,12 +84,13 @@ namespace ConnectWiseInformationInterface.Models
 
         public OppFilterManager(
             IEnumerable<Opportunity> allOpps,
-            IEnumerable<SalesProbability> probs)
+            IEnumerable<SalesProbability> probs,
+            IEnumerable<OpportunityType> types)
         {
             _allOpportunities = new List<Opportunity>(allOpps);
             _probabilities = new List<SalesProbability>(probs);
 
-            _opportunityTypes = new ObservableCollection<OpportunityType>();
+            _opportunityTypes = new ObservableCollection<OpportunityType>(types);
             _filteredOpportunities = new ObservableCollection<Opportunity>();
 
             StartDate = null;
@@ -115,9 +116,7 @@ namespace ConnectWiseInformationInterface.Models
             List<Opportunity> oppsToRemove = new List<Opportunity>();
             foreach(Opportunity opp in _filteredOpportunities)
             {
-                bool removeOpp = (!closeDateInRange(opp.ExpectedCloseDate))
-                    || (!typeInRange(opp.Type));
-                if (removeOpp)
+                if (!oppPassesFilters(opp))
                 {
                     oppsToRemove.Add(opp);
                 }
@@ -130,35 +129,44 @@ namespace ConnectWiseInformationInterface.Models
             //Add Opportunities in range
             foreach(Opportunity opp in AllOpportunities)
             {
-                bool addOpp = (!FilteredOpportunities.Contains(opp))
-                    && closeDateInRange(opp.ExpectedCloseDate)
-                    && typeInRange(opp.Type);
-                if (addOpp)
+                if (!FilteredOpportunities.Contains(opp) && oppPassesFilters(opp))
                 {
                     _filteredOpportunities.Add(opp);
                 }
             }
+        }
 
-            bool closeDateInRange(DateTime? date)
+        private bool oppPassesFilters(Opportunity opp)
+        {
+            //Date Filter
+            DateTime? date = opp.ExpectedCloseDate;
+
+            bool passesDateFilter = true;
+            if (date.HasValue)
             {
-                if (!date.HasValue) return true;
                 bool afterStart = (!StartDate.HasValue) || (DateTime.Compare(date.Value, StartDate.Value) >= 0);
                 bool beforeEnd = (!EndDate.HasValue) || (DateTime.Compare(date.Value, EndDate.Value) <= 0);
-                return (afterStart && beforeEnd);
+                passesDateFilter = (afterStart && beforeEnd);
             }
 
-            bool typeInRange(OpportunityTypeReference typeRef)
+            //Type Filter
+            OpportunityTypeReference typeRef = opp.Type;
+
+            bool passesTypeFilter = true;
+            if (typeRef != null)
             {
-                if (typeRef == null) return true;
-                foreach(OpportunityType oppType in OpportunityTypes)
+                bool foundType = false;
+                foreach (OpportunityType oppType in OpportunityTypes)
                 {
                     if (typeRef.Name == oppType.Description)
                     {
-                        return true;
+                        foundType = true;
                     }
                 }
-                return false;
+                passesTypeFilter = foundType;
             }
+
+            return (passesDateFilter && passesTypeFilter);
         }
 
         private void raisePropertyChanged(string propertyName)

@@ -66,7 +66,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
         public MainViewModel()
         {
-            _oppManager = new OppFilterManager(new List<Opportunity>(), new List<SalesProbability>());
+            _oppManager = new OppFilterManager(new List<Opportunity>(), new List<SalesProbability>(), new List<OpportunityType>());
 
             OpportunityType allType = new OpportunityType();
             allType.Description = "All";
@@ -145,7 +145,7 @@ namespace ConnectWiseInformationInterface.ViewModel
             }
 
             //Reset OppFilterManager
-            OppManager = new OppFilterManager(opps, probabilities);
+            OppManager = new OppFilterManager(opps, probabilities, oppTypes);
         }
         private bool loadOpportunitiesCanExecute()
         {
