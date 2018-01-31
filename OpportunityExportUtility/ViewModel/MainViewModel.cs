@@ -98,7 +98,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
             //Load Opportunity Types
             List<OpportunityType> oppTypes = new OpportunityTypesApi(connectWiseClient)
-                .GetTypes()
+                .GetTypes(pageSize: 1000)
                 .GetResult<List<OpportunityType>>();
 
             if (oppTypes == null)
@@ -124,7 +124,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
             //Load Opportunities
             List<Opportunity> opps = new OpportunitiesApi(connectWiseClient)
-                .GetOpportunities()
+                .GetOpportunities(pageSize: 1000)
                 .GetResult<List<Opportunity>>();
 
             if (opps == null)
