@@ -20,6 +20,8 @@ namespace ConnectWiseInformationInterface.Models
 
         private DateTime? _startDate;
         private DateTime? _endDate;
+
+        private bool _includeNoType;
         #endregion
 
         #region Properties
@@ -74,6 +76,19 @@ namespace ConnectWiseInformationInterface.Models
                 {
                     _endDate = value;
                     raisePropertyChanged("EndDate");
+                    refilter();
+                }
+            }
+        }
+
+        public bool IncludeNoType
+        {
+            get { return _includeNoType; }
+            set
+            {
+                if (_includeNoType != value)
+                {
+                    _includeNoType = value;
                     refilter();
                 }
             }
@@ -152,7 +167,9 @@ namespace ConnectWiseInformationInterface.Models
             //Type Filter
             OpportunityTypeReference typeRef = opp.Type;
 
-            bool passesTypeFilter = true;
+            //Passes type filter should default to whether or not we should include opportunities with no type.
+            bool passesTypeFilter = IncludeNoType;
+
             if (typeRef != null)
             {
                 bool foundType = false;

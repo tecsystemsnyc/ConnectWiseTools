@@ -38,6 +38,7 @@ namespace ConnectWiseInformationInterface.ViewModel
         private readonly ObservableCollection<OppTypeBool> _oppTypeBools;
         private string _status;
         private int _numOppTypes;
+        private bool _includeNoType;
 
         public OppFilterManager OppManager
         {
@@ -82,6 +83,19 @@ namespace ConnectWiseInformationInterface.ViewModel
                 }
             }
         }
+        public bool IncludeNoType
+        {
+            get { return _includeNoType; }
+            set
+            {
+                if (_includeNoType != value)
+                {
+                    _includeNoType = value;
+                    OppManager.IncludeNoType = value;
+                    RaisePropertyChanged("IncludeNoType");
+                }
+            }
+        }
 
         public ICommand LoadOpportunitiesCommand { get; private set; }
         public ICommand RefreshOpportunitiesCommand { get; private set; }
@@ -105,6 +119,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
             Status = "Not Loaded";
             NumOppTypes = 0;
+            IncludeNoType = false;
 
             LoadOpportunitiesCommand = new RelayCommand(loadOpportunitiesExecute, loadOpportunitiesCanExecute);
             RefreshOpportunitiesCommand = new RelayCommand(loadOpportunitiesExecute, refreshOpportunitiesCanExecute);

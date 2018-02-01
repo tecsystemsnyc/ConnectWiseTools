@@ -46,6 +46,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
@@ -76,6 +77,16 @@
                             Grid.Column="1"/>
                         </Grid>
                         <Grid Grid.Row="2">
+                            <!--Include No Opp Types-->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Include Opportunities with no Opportunity Type:"/>
+                            <CheckBox Grid.Column="1" Margin="5"
+                                      IsChecked="{Binding IncludeNoType}"/>
+                        </Grid>
+                        <Grid Grid.Row="3">
                             <!--Opportunity Types-->
                             <ListView ItemsSource="{Binding OppTypeBools}">
                                 <ListView.ItemContainerStyle>
