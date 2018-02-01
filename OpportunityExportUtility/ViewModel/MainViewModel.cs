@@ -36,6 +36,8 @@ namespace ConnectWiseInformationInterface.ViewModel
 
         private OppFilterManager _oppManager;
         private readonly ObservableCollection<OppTypeBool> _oppTypeBools;
+        private string _status;
+        private int _numOppTypes;
 
         public OppFilterManager OppManager
         {
@@ -56,8 +58,33 @@ namespace ConnectWiseInformationInterface.ViewModel
                 return new ReadOnlyObservableCollection<OppTypeBool>(_oppTypeBools);
             }
         }
+        public string Status
+        {
+            get { return _status; }
+            set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    RaisePropertyChanged("Status");
+                }
+            }
+        }
+        public int NumOppTypes
+        {
+            get { return _numOppTypes; }
+            set
+            {
+                if (_numOppTypes != value)
+                {
+                    _numOppTypes = value;
+                    RaisePropertyChanged("NumOppTypes");
+                }
+            }
+        }
 
         public ICommand LoadOpportunitiesCommand { get; private set; }
+        public ICommand RefreshOpportunitiesCommand { get; private set; }
         public ICommand ExportOpportunitiesCommand { get; private set; }
         public ICommand ClearDatesCommand { get; private set; }
         public ICommand ClearTypesCommand { get; private set; }
@@ -76,7 +103,11 @@ namespace ConnectWiseInformationInterface.ViewModel
             _oppTypeBools = new ObservableCollection<OppTypeBool>();
             resetOppTypes();
 
+            Status = "Not Loaded";
+            NumOppTypes = 0;
+
             LoadOpportunitiesCommand = new RelayCommand(loadOpportunitiesExecute, loadOpportunitiesCanExecute);
+            RefreshOpportunitiesCommand = new RelayCommand(loadOpportunitiesExecute, refreshOpportunitiesCanExecute);
             ExportOpportunitiesCommand = new RelayCommand(exportOpportunitiesExecute, exportOpportunitiesCanExecute);
             ClearDatesCommand = new RelayCommand(clearDatesExecute, clearDatesCanExecute);
             ClearTypesCommand = new RelayCommand(clearTypesExecute, clearTypesCanExecute);
@@ -92,6 +123,7 @@ namespace ConnectWiseInformationInterface.ViewModel
 
         private void loadOpportunitiesExecute()
         {
+            Status = "Loading...";
             //Using Keys
             ApiClient connectWiseClient = new ApiClient(SettingsVM.AppID, SettingsVM.Site, SettingsVM.CompanyName)
                 .SetPublicPrivateKey(SettingsVM.PublicKey, SettingsVM.PrivateKey);
@@ -101,9 +133,12 @@ namespace ConnectWiseInformationInterface.ViewModel
                 .GetTypes(pageSize: 1000)
                 .GetResult<List<OpportunityType>>();
 
+            NumOppTypes = oppTypes.Count;
+
             if (oppTypes == null)
             {
                 showCantConnect();
+                Status = "Load Failed";
                 return;
             }
             else
@@ -130,6 +165,7 @@ namespace ConnectWiseInformationInterface.ViewModel
             if (opps == null)
             {
                 showCantConnect();
+                Status = "Load Failed";
                 return;
             }
 
@@ -146,10 +182,16 @@ namespace ConnectWiseInformationInterface.ViewModel
 
             //Reset OppFilterManager
             OppManager = new OppFilterManager(opps, probabilities, oppTypes);
+
+            Status = "Loaded Successfully";
         }
         private bool loadOpportunitiesCanExecute()
         {
-            return SettingsVM.CanLoad();
+            return SettingsVM.CanLoad() && OppManager.AllOpportunities.Count == 0;
+        }
+        private bool refreshOpportunitiesCanExecute()
+        {
+            return SettingsVM.CanLoad() && OppManager.AllOpportunities.Count > 0;
         }
 
         private void exportOpportunitiesExecute()

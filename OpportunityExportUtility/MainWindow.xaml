@@ -116,7 +116,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.RowSpan="2"
+                        <TextBlock Grid.ColumnSpan="2"
                                    Text="{Binding Status, StringFormat=ConnectWise Status: {0}}"/>
 
                         <Button Grid.Row="1"
@@ -136,7 +136,7 @@
                                    Text="{Binding OppManager.AllOpportunities.Count, StringFormat=Total Opportunities: {0}}"/>
 
                         <TextBlock Grid.Row="2" Grid.Column="1"
-                                   Text="{Binding OppManager.OpportunityTypes.Count, StringFormat=Total Opportunity Types: {0}}"/>
+                                   Text="{Binding NumOppTypes, StringFormat=Total Opportunity Types: {0}}"/>
                     </Grid>
                 </Border>
 
