@@ -109,15 +109,34 @@
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
+                            <RowDefinition/>
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                        <Button Grid.Row="0"
-                        Width="120"
+                        <TextBlock Grid.RowSpan="2"
+                                   Text="{Binding Status, StringFormat=ConnectWise Status: {0}}"/>
+
+                        <Button Grid.Row="1"
+                        Width="150"
                         Height="30"
-                        Content="Load Opportunities" 
+                        Content="Load ConnectWise Data" 
                         Command="{Binding LoadOpportunitiesCommand}"/>
-                        <TextBlock Grid.Row="1"
-                           Text="{Binding OppManager.AllOpportunities.Count, StringFormat=Loaded Opportunities: {0}}"/>
+
+                        <Button Grid.Row="1"
+                                Grid.Column="1"
+                                Width="150"
+                                Height="30"
+                                Content="Refresh ConnectWise Data"
+                                Command="{Binding RefreshOpportunitiesCommand}"/>
+
+                        <TextBlock Grid.Row="2"
+                                   Text="{Binding OppManager.AllOpportunities.Count, StringFormat=Total Opportunities: {0}}"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding OppManager.OpportunityTypes.Count, StringFormat=Total Opportunity Types: {0}}"/>
                     </Grid>
                 </Border>
 
@@ -128,10 +147,10 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button Content="Export Opporunities" Command="{Binding ExportOpportunitiesCommand}"
-                        Width="120"
+                        <Button Content="Export to Excel" Command="{Binding ExportOpportunitiesCommand}"
+                        Width="150"
                         Height="30"/>
-                        <TextBlock Grid.Row="1" Text="{Binding OppManager.FilteredOpportunities.Count, StringFormat=Applicable Opportunities: {0}}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding OppManager.FilteredOpportunities.Count, StringFormat=Opportunities to Export: {0}}"/>
                     </Grid>
                 </Border>
 
